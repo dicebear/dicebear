@@ -1,0 +1,24 @@
+{
+  "name": "dicebear-avatars",
+  "description": "JavaScript Avatar Generator",
+  "main": "dist/avatars.js",
+  "authors": [
+    "Florian Körner <contact@dicebear.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "avatar",
+    "generator",
+    "javascript",
+    "typescript"
+  ],
+  "homepage": "https://github.com/DiceBear/avatars",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "lib",
+    "examples"
+  ]
+}

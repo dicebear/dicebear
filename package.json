@@ -2,17 +2,19 @@
   "name": "dicebear-avatars",
   "version": "0.0.1",
   "description": "JavaScript Avatar Generator",
-  "main": "dist/avatars.js",
+  "main": "lib/avatars.js",
   "dependencies": {
-    "async-each-series": "^1.1.0"
+    "async-each-series": "^1.1.0",
+    "canvas": "^1.6.5"
   },
   "devDependencies": {
     "browserify": "^14.1.0",
-    "tsify": "^3.0.1",
-    "typescript": "^2.2.1"
+    "typescript": "^2.2.1",
+    "@types/node": "^7.0.12"
   },
   "scripts": {
-    "build": "browserify -p tsify index.js -s Avatars > dist/avatars.js"
+    "prebuild": "rm -r dist/* lib/*",
+    "build": "tsc; browserify lib/index.js -s Avatars > dist/avatars.js"
   },
   "author": "Florian Körner <contact@dicebear.com>",
   "license": "MIT",
@@ -29,5 +31,9 @@
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
-  "homepage": "https://github.com/DiceBear/avatars#readme"
+  "homepage": "https://github.com/DiceBear/avatars#readme",
+  "browser": {
+    "./lib/index.js": "./lib/index.browser.js",
+    "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"
+  }
 }

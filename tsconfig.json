@@ -1,7 +1,9 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "allowJs": false,
-        "module": "commonjs"
+        "allowJs": true,
+        "module": "commonjs",
+        "outDir": "./lib/",
+        "rootDir": "./src/"
     }
 }

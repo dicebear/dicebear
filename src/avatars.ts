@@ -1,4 +1,7 @@
 import * as eachSeries from 'async-each-series';
+import { createCanvas } from './helper/canvas';
+
+createCanvas();
 
 interface ISprite {
     src: string,
