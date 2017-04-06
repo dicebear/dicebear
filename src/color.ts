@@ -1,17 +1,17 @@
-import ColorInterface from './colorInterface';
-import * as process from 'process';
-import { pickone } from './helper/chance';
+export interface ColorInterface {
+    create(chance: Chance.Chance, callback: (err, color) => void);
+}
 
-class Color implements ColorInterface {
-    private color;
+export default class Color implements ColorInterface {
+    private colors: [number, number, number][];
 
-    constructor(colors) {
-        this.color = pickone(colors);
+    constructor(colors: [number, number, number][]) {
+        this.colors = colors;
     }
 
-    public getColor(callback) {
-        process.nextTick(() => {
-            callback(undefined, this.color);
-        });
+    create(chance: Chance.Chance, callback) {
+        let color = chance.pickone(this.colors);
+
+        process.nextTick(() => callback(undefined, color));
     }
 }

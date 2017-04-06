@@ -1,0 +1,74 @@
+export default class Avatars {
+    create(gender, token, callback) {
+        let canvas = this.createCanvas();
+        let canvasContext = canvas.getContext('2d');
+
+        if (undefined === this.options.sprites[gender]) {
+            callback(new Error('Unconfigured gender'));
+
+            return;
+        }
+
+        eachSeries(this.options.order, (sprite, next) => {
+            let spriteOptions: ISprite|undefined = this.options.sprites[gender][sprite];
+
+            if (spriteOptions && this.rand(1, 100) <= spriteOptions.chance) {
+                let canvasLayer = this.createCanvas();
+                let canvasLayerContext = canvasLayer.getContext('2d');
+                let layerImage = new Image();
+
+                layerImage.onload = () => {
+                    let sprites = layerImage.width / this.options.size;
+                    let randSprite = this.rand(0, sprites - 1);
+                    let color = spriteOptions.colors[this.rand(0, spriteOptions.colors.length - 1)];
+
+                    canvasLayerContext
+                        .drawImage(
+                            layerImage,
+                            this.options.size * randSprite * -1,
+                            0
+                        );
+
+                    let buffer = canvasLayerContext.getImageData(0, 0, canvasLayer.width, canvasLayer.height);
+
+                    for(let i = 0; i < buffer.data.length; i += 4) {
+                        let r = i;
+                        let g = i + 1;
+                        let b = i + 2;
+                        let a = i + 3;
+
+                        if (a > 0) {
+                            buffer.data[r] = Math.round((buffer.data[r]-color[0])*(buffer.data[r]/255)+color[0]);
+                            buffer.data[g] = Math.round((buffer.data[g]-color[1])*(buffer.data[g]/255)+color[1]);
+                            buffer.data[b] = Math.round((buffer.data[b]-color[2])*(buffer.data[b]/255)+color[2]);
+                        }
+                    }
+
+                    canvasLayerContext.putImageData(buffer, 0, 0);
+
+                    canvasContext.drawImage(canvasLayer, 0, 0);
+
+                    next();
+                }
+
+                layerImage.onerror = err => {
+                    next(err);
+                }
+
+                layerImage.src = spriteOptions.src;
+            } else {
+                next();
+            }
+        }, (err) => {
+            callback(err, canvas.toDataURL());
+        });
+    }
+
+    private createCanvas() {
+        let canvas = document.createElement('canvas');
+        canvas.width = this.options.size;
+        canvas.height = this.options.size;
+
+        return canvas;
+    }
+}

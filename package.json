@@ -4,13 +4,16 @@
   "description": "JavaScript Avatar Generator",
   "main": "lib/avatars.js",
   "dependencies": {
-    "async-each-series": "^1.1.0",
+    "async": "^2.3.0",
     "canvas": "^1.6.5"
   },
   "devDependencies": {
+    "@types/async": "^2.0.40",
+    "@types/chance": "^0.7.32",
+    "@types/node": "^7.0.12",
     "browserify": "^14.1.0",
-    "typescript": "^2.2.1",
-    "@types/node": "^7.0.12"
+    "browserify-shim": "^3.8.14",
+    "typescript": "^2.2.1"
   },
   "scripts": {
     "prebuild": "rm -r dist/* lib/*",
@@ -35,5 +38,13 @@
   "browser": {
     "./lib/index.js": "./lib/index.browser.js",
     "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jQuery": "global:jQuery"
   }
 }
