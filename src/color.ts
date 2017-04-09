@@ -1,5 +1,5 @@
 export interface ColorInterface {
-    create(chance: Chance.Chance, callback: (err, color) => void);
+    getColor(chance: Chance.Chance): [number, number, number];
 }
 
 export default class Color implements ColorInterface {
@@ -9,9 +9,7 @@ export default class Color implements ColorInterface {
         this.colors = colors;
     }
 
-    create(chance: Chance.Chance, callback) {
-        let color = chance.pickone(this.colors);
-
-        process.nextTick(() => callback(undefined, color));
+    getColor(chance: Chance.Chance): [number, number, number] {
+        return chance.pickone(this.colors);
     }
 }

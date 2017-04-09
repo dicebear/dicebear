@@ -1,3 +1,3 @@
-export default Avatars;
+import Avatars from './avatars';
 
-new Avatars.Color
+export default Avatars;

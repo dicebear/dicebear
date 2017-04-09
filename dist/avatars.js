@@ -1,210 +1,90 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Avatars = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var eachSeries = require("async-each-series");
 var canvas_1 = require("./helper/canvas");
-canvas_1.createCanvas();
+var objectAssign = require("object-assign");
+var async = (typeof window !== "undefined" ? window['async'] : typeof global !== "undefined" ? global['async'] : null);
+var chance_1 = (typeof window !== "undefined" ? window['window'] : typeof global !== "undefined" ? global['window'] : null);
 var Avatars = (function () {
-    function Avatars(options) {
-        if (options === void 0) { options = Avatars.DEFAULT_OPTIONS; }
-        this.options = options;
+    function Avatars(spriteSet, options) {
+        if (options === void 0) { options = {}; }
+        this.spriteSet = spriteSet;
     }
-    Avatars.prototype.create = function (gender, token, callback) {
+    Avatars.prototype.create = function (token, callback, options) {
         var _this = this;
-        var canvas = this.createCanvas();
-        var canvasContext = canvas.getContext('2d');
-        if (undefined === this.options.sprites[gender]) {
-            callback(new Error('Unconfigured gender'));
-            return;
-        }
-        eachSeries(this.options.order, function (sprite, next) {
-            var spriteOptions = _this.options.sprites[gender][sprite];
-            if (spriteOptions && _this.rand(1, 100) <= spriteOptions.chance) {
-                var canvasLayer_1 = _this.createCanvas();
-                var canvasLayerContext_1 = canvasLayer_1.getContext('2d');
-                var layerImage_1 = new Image();
-                layerImage_1.onload = function () {
-                    var sprites = layerImage_1.width / _this.options.size;
-                    var randSprite = _this.rand(0, sprites - 1);
-                    var color = spriteOptions.colors[_this.rand(0, spriteOptions.colors.length - 1)];
-                    canvasLayerContext_1
-                        .drawImage(layerImage_1, _this.options.size * randSprite * -1, 0);
-                    var buffer = canvasLayerContext_1.getImageData(0, 0, canvasLayer_1.width, canvasLayer_1.height);
-                    for (var i = 0; i < buffer.data.length; i += 4) {
-                        var r = i;
-                        var g = i + 1;
-                        var b = i + 2;
-                        var a = i + 3;
-                        if (a > 0) {
-                            buffer.data[r] = Math.round((buffer.data[r] - color[0]) * (buffer.data[r] / 255) + color[0]);
-                            buffer.data[g] = Math.round((buffer.data[g] - color[1]) * (buffer.data[g] / 255) + color[1]);
-                            buffer.data[b] = Math.round((buffer.data[b] - color[2]) * (buffer.data[b] / 255) + color[2]);
-                        }
-                    }
-                    canvasLayerContext_1.putImageData(buffer, 0, 0);
-                    canvasContext.drawImage(canvasLayer_1, 0, 0);
-                    next();
-                };
-                layerImage_1.onerror = function (err) {
-                    next(err);
-                };
-                layerImage_1.src = spriteOptions.src;
-            }
-            else {
-                next();
-            }
+        if (options === void 0) { options = {}; }
+        async.each(this.spriteSet, function (sprite, next) {
+            sprite.load(next);
         }, function (err) {
-            callback(err, canvas.toDataURL());
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            var avatarOptions = objectAssign({
+                size: 20,
+                order: Object.keys(_this.spriteSet)
+            }, _this.options, options);
+            var chance = new chance_1.Chance(token);
+            var canvas = canvas_1.createCanvas();
+            var context = canvas.getContext('2d');
+            canvas.width = avatarOptions.size;
+            canvas.height = avatarOptions.size;
+            // Disable image smoothing
+            context.imageSmoothingEnabled = false;
+            context.mozImageSmoothingEnabled = false;
+            context.oImageSmoothingEnabled = false;
+            context.webkitImageSmoothingEnabled = false;
+            async.eachSeries(avatarOptions.order, function (spriteName, next) {
+                var sprite = _this.spriteSet[spriteName];
+                if (sprite) {
+                    sprite.create(chance, function (err, image) {
+                        if (err) {
+                            next(err);
+                            return;
+                        }
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                        next();
+                    });
+                }
+                else {
+                    next(new Error('Sprite ' + spriteName + ' does not exist.'));
+                }
+            }, function (err) {
+                if (err) {
+                    callback(err, null);
+                }
+                var image = new Image;
+                image.addEventListener('load', function () {
+                    callback(null, image);
+                });
+                image.addEventListener('error', function (err) {
+                    callback(err.error, image);
+                });
+                image.src = canvas.toDataURL('image/png');
+            });
         });
-    };
-    Avatars.prototype.createCanvas = function () {
-        var canvas = document.createElement('canvas');
-        canvas.width = this.options.size;
-        canvas.height = this.options.size;
-        return canvas;
-    };
-    Avatars.prototype.rand = function (min, max) {
-        return Math.floor(Math.random() * (max - min + 1) + min);
     };
     return Avatars;
 }());
-Avatars.DEFAULT_OPTIONS = {
-    size: 20,
-    order: [
-        'face',
-        'mouth',
-        'eyes',
-        'eyebrows',
-        'accessories',
-        'glasses',
-        'clothes',
-        'hair'
-    ],
-    sprites: {
-        male: {},
-        female: {
-            accessories: {
-                src: './assets/female/accessories.png',
-                chance: 15,
-                colors: [
-                    [218, 165, 32],
-                    [255, 215, 0],
-                    [238, 232, 170],
-                    [250, 250, 210],
-                    [211, 211, 211],
-                    [169, 169, 169]
-                ]
-            },
-            clothes: {
-                src: './assets/female/clothes.png',
-                chance: 100,
-                colors: [
-                    [209, 17, 65],
-                    [0, 177, 89],
-                    [0, 174, 219],
-                    [243, 119, 53],
-                    [255, 196, 37],
-                    [116, 0, 1],
-                    [174, 0, 1],
-                    [238, 186, 48],
-                    [150, 206, 180],
-                    [255, 238, 173],
-                    [255, 111, 105],
-                    [255, 204, 92],
-                    [136, 216, 176]
-                ]
-            },
-            eyebrows: {
-                src: './assets/female/eyebrows.png',
-                chance: 100,
-                colors: [
-                    [50, 50, 50]
-                ]
-            },
-            eyes: {
-                src: './assets/female/eyes.png',
-                chance: 100,
-                colors: [
-                    [118, 119, 139],
-                    [105, 123, 148],
-                    [100, 123, 144],
-                    [91, 124, 139],
-                    [88, 131, 135]
-                ]
-            },
-            face: {
-                src: './assets/female/face.png',
-                chance: 100,
-                colors: [
-                    [255, 219, 172],
-                    [241, 194, 125],
-                    [224, 172, 105],
-                    [198, 134, 66],
-                    [141, 85, 36]
-                ]
-            },
-            glasses: {
-                src: './assets/female/glasses.png',
-                chance: 25,
-                colors: [
-                    [95, 112, 92],
-                    [67, 103, 125],
-                    [94, 23, 45],
-                    [255, 182, 122],
-                    [160, 75, 93],
-                    [25, 25, 25],
-                    [50, 50, 50],
-                    [75, 75, 75]
-                ]
-            },
-            hair: {
-                src: './assets/female/hair.png',
-                chance: 95,
-                colors: [
-                    [9, 8, 6],
-                    [44, 34, 43],
-                    [113, 99, 90],
-                    [183, 166, 158],
-                    [214, 196, 194],
-                    [202, 191, 177],
-                    [220, 208, 186],
-                    [255, 245, 225],
-                    [230, 206, 168],
-                    [229, 200, 168],
-                    [222, 188, 153],
-                    [184, 151, 120],
-                    [165, 107, 70],
-                    [181, 82, 57],
-                    [141, 74, 67],
-                    [145, 85, 61],
-                    [83, 61, 50],
-                    [59, 48, 36],
-                    [85, 72, 56],
-                    [78, 67, 63],
-                    [80, 68, 68],
-                    [106, 78, 66],
-                    [167, 133, 106],
-                    [151, 121, 97]
-                ]
-            },
-            mouth: {
-                src: './assets/female/mouth.png',
-                chance: 100,
-                colors: [
-                    [219, 172, 152],
-                    [210, 153, 133],
-                    [201, 130, 118],
-                    [227, 93, 106],
-                    [227, 33, 83],
-                    [222, 15, 13],
-                ]
-            }
-        }
-    }
-};
 exports.default = Avatars;
 
-},{"./helper/canvas":2,"async-each-series":4}],2:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./helper/canvas":3,"object-assign":7}],2:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Color = (function () {
+    function Color(colors) {
+        this.colors = colors;
+    }
+    Color.prototype.getColor = function (chance) {
+        return chance.pickone(this.colors);
+    };
+    return Color;
+}());
+exports.default = Color;
+
+},{}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function createCanvas() {
@@ -216,42 +96,308 @@ function createImage() {
 }
 exports.createImage = createImage;
 
-},{}],3:[function(require,module,exports){
-module.exports = require('./avatars').default;
+},{}],4:[function(require,module,exports){
+var avatars = require('./avatars').default;
+avatars.SPRITE_SETS = {
+    female: require('./spriteSets/female').default
+};
+module.exports = avatars;
 
-},{"./avatars":1}],4:[function(require,module,exports){
+},{"./avatars":1,"./spriteSets/female":6}],5:[function(require,module,exports){
 (function (process){
-module.exports = function (arr, iterator, callback) {
-  callback = callback || function () {};
-  if (!Array.isArray(arr) || !arr.length) {
-      return callback();
-  }
-  var completed = 0;
-  var iterate = function () {
-    iterator(arr[completed], function (err) {
-      if (err) {
-        callback(err);
-        callback = function () {};
-      }
-      else {
-        ++completed;
-        if (completed >= arr.length) { callback(); }
-        else { nextTick(iterate); }
-      }
-    });
-  };
-  iterate();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var canvas_1 = require("./helper/canvas");
+var Sprite = (function () {
+    function Sprite(options) {
+        this.image = null;
+        this.imageError = null;
+        this.imageSprites = null;
+        // Set default options
+        options.size = options.size || 20;
+        options.chance = options.chance || 100;
+        this.options = options;
+    }
+    Sprite.prototype.load = function (callback) {
+        var _this = this;
+        if (null === this.image) {
+            // Create HTMLImageElement
+            this.image = canvas_1.createImage();
+            this.image.addEventListener('load', function () {
+                _this.imageSprites = Math.floor(_this.image.width / _this.options.size);
+            });
+            this.image.addEventListener('error', function (err) {
+                _this.imageError = err.error;
+            });
+        }
+        if (this.image.src && this.image.complete) {
+            process.nextTick(function () { return callback(_this.imageError, _this.image); });
+        }
+        else {
+            this.image.addEventListener('load', function () {
+                callback(null, _this.image);
+            });
+            this.image.addEventListener('error', function (err) {
+                callback(err.error, _this.image);
+            });
+        }
+        if (!this.image.src) {
+            this.image.src = this.options.src;
+        }
+    };
+    Sprite.prototype.create = function (chance, callback) {
+        if (!this.image.complete) {
+            process.nextTick(function () { return callback(new Error('Sprite image not loaded.'), null); });
+            return;
+        }
+        var canvas = canvas_1.createCanvas();
+        var context = canvas.getContext('2d');
+        canvas.width = this.options.size;
+        canvas.height = this.options.size;
+        if (chance.bool({ likelihood: this.options.chance })) {
+            context.drawImage(this.image, chance.natural({ min: 0, max: this.imageSprites - 1 }) * this.options.size * -1, 0);
+            var color = this.options.color.getColor(chance);
+            var buffer = context.getImageData(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < buffer.data.length; i += 4) {
+                var r = i;
+                var g = i + 1;
+                var b = i + 2;
+                var a = i + 3;
+                if (a > 0) {
+                    buffer.data[r] = Math.round((buffer.data[r] - color[0]) * (buffer.data[r] / 255) + color[0]);
+                    buffer.data[g] = Math.round((buffer.data[g] - color[1]) * (buffer.data[g] / 255) + color[1]);
+                    buffer.data[b] = Math.round((buffer.data[b] - color[2]) * (buffer.data[b] / 255) + color[2]);
+                }
+            }
+            context.putImageData(buffer, 0, 0);
+        }
+        var sprite = canvas_1.createImage();
+        sprite.addEventListener('load', function () {
+            callback(null, sprite);
+        });
+        sprite.addEventListener('error', function (err) {
+            callback(err.error, sprite);
+        });
+        sprite.src = canvas.toDataURL('image/png');
+    };
+    return Sprite;
+}());
+exports.default = Sprite;
+
+}).call(this,require('_process'))
+},{"./helper/canvas":3,"_process":8}],6:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var sprite_1 = require("../sprite");
+var color_1 = require("../color");
+var spriteSet = {
+    face: new sprite_1.default({
+        src: './assets/female/face.png',
+        color: new color_1.default([
+            [255, 219, 172],
+            [241, 194, 125],
+            [224, 172, 105],
+            [198, 134, 66],
+            [141, 85, 36]
+        ])
+    }),
+    mouth: new sprite_1.default({
+        src: './assets/female/mouth.png',
+        color: new color_1.default([
+            [219, 172, 152],
+            [210, 153, 133],
+            [201, 130, 118],
+            [227, 93, 106],
+            [227, 33, 83],
+            [222, 15, 13]
+        ])
+    }),
+    eyes: new sprite_1.default({
+        src: './assets/female/eyes.png',
+        color: new color_1.default([
+            [118, 119, 139],
+            [105, 123, 148],
+            [100, 123, 144],
+            [91, 124, 139],
+            [88, 131, 135]
+        ])
+    }),
+    eyebrows: new sprite_1.default({
+        src: './assets/female/eyebrows.png',
+        color: new color_1.default([
+            [50, 50, 50]
+        ])
+    }),
+    accessories: new sprite_1.default({
+        src: './assets/female/accessories.png',
+        chance: 15,
+        color: new color_1.default([
+            [218, 165, 32],
+            [255, 215, 0],
+            [238, 232, 170],
+            [250, 250, 210],
+            [211, 211, 211],
+            [169, 169, 169]
+        ])
+    }),
+    glasses: new sprite_1.default({
+        src: './assets/female/glasses.png',
+        chance: 25,
+        color: new color_1.default([
+            [95, 112, 92],
+            [67, 103, 125],
+            [94, 23, 45],
+            [255, 182, 122],
+            [160, 75, 93],
+            [25, 25, 25],
+            [50, 50, 50],
+            [75, 75, 75]
+        ])
+    }),
+    clothes: new sprite_1.default({
+        src: './assets/female/clothes.png',
+        color: new color_1.default([
+            [209, 17, 65],
+            [0, 177, 89],
+            [0, 174, 219],
+            [243, 119, 53],
+            [255, 196, 37],
+            [116, 0, 1],
+            [174, 0, 1],
+            [238, 186, 48],
+            [150, 206, 180],
+            [255, 238, 173],
+            [255, 111, 105],
+            [255, 204, 92],
+            [136, 216, 176]
+        ])
+    }),
+    hair: new sprite_1.default({
+        src: './assets/female/hair.png',
+        chance: 95,
+        color: new color_1.default([
+            [9, 8, 6],
+            [44, 34, 43],
+            [113, 99, 90],
+            [183, 166, 158],
+            [214, 196, 194],
+            [202, 191, 177],
+            [220, 208, 186],
+            [255, 245, 225],
+            [230, 206, 168],
+            [229, 200, 168],
+            [222, 188, 153],
+            [184, 151, 120],
+            [165, 107, 70],
+            [181, 82, 57],
+            [141, 74, 67],
+            [145, 85, 61],
+            [83, 61, 50],
+            [59, 48, 36],
+            [85, 72, 56],
+            [78, 67, 63],
+            [80, 68, 68],
+            [106, 78, 66],
+            [167, 133, 106],
+            [151, 121, 97]
+        ])
+    }),
+};
+exports.default = spriteSet;
+
+},{"../color":2,"../sprite":5}],7:[function(require,module,exports){
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+'use strict';
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
 };
 
-function nextTick (cb) {
-  if (typeof setImmediate === 'function') {
-    setImmediate(cb);
-  } else {
-    process.nextTick(cb);
-  }
-}
-}).call(this,require('_process'))
-},{"_process":5}],5:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -433,5 +579,5 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}]},{},[3])(3)
+},{}]},{},[4])(4)
 });

@@ -4,8 +4,10 @@
   "description": "JavaScript Avatar Generator",
   "main": "lib/avatars.js",
   "dependencies": {
+    "@types/object-assign": "^4.0.30",
     "async": "^2.3.0",
-    "canvas": "^1.6.5"
+    "canvas": "^1.6.5",
+    "object-assign": "^4.1.1"
   },
   "devDependencies": {
     "@types/async": "^2.0.40",
@@ -45,6 +47,7 @@
     ]
   },
   "browserify-shim": {
-    "jQuery": "global:jQuery"
+    "chance": "global:window",
+    "async": "global:async"
   }
 }
