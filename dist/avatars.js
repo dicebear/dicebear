@@ -78,7 +78,7 @@ var Color = (function () {
         this.colors = colors;
     }
     Color.prototype.getColor = function (chance) {
-        return chance.pickone(this.colors);
+        return this.pickedColors[chance.seed] = this.pickedColors[chance.seed] || chance.pickone(this.colors);
     };
     return Color;
 }());
@@ -146,8 +146,13 @@ var Sprite = (function () {
         }
     };
     Sprite.prototype.create = function (chance, callback) {
+        var _this = this;
         if (!this.image.complete) {
             process.nextTick(function () { return callback(new Error('Sprite image not loaded.'), null); });
+            return;
+        }
+        if (this.createdImages[chance.seed]) {
+            process.nextTick(function () { return callback(null, _this.createdImages[chance.seed]); });
             return;
         }
         var canvas = canvas_1.createCanvas();
@@ -173,6 +178,7 @@ var Sprite = (function () {
         }
         var sprite = canvas_1.createImage();
         sprite.addEventListener('load', function () {
+            _this.createdImages[chance.seed] = sprite;
             callback(null, sprite);
         });
         sprite.addEventListener('error', function (err) {
