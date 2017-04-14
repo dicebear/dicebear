@@ -18,6 +18,7 @@ export default class Sprite implements SpriteInterface {
     protected image: HTMLImageElement = null;
     protected imageError: Error = null;
     protected imageSprites: number = null;
+    protected createdImages: { [key: number]: HTMLImageElement };
 
     constructor(options: SpriteOptions) {
         // Set default options
@@ -65,6 +66,12 @@ export default class Sprite implements SpriteInterface {
             return;
         }
 
+        if (this.createdImages[chance.seed]) {
+            process.nextTick(() => callback(null, this.createdImages[chance.seed]));
+
+            return;
+        }
+
         var canvas = createCanvas();
         var context = canvas.getContext('2d');
 
@@ -100,6 +107,8 @@ export default class Sprite implements SpriteInterface {
         var sprite = createImage();
 
         sprite.addEventListener('load', () => {
+            this.createdImages[chance.seed] = sprite;
+
             callback(null, sprite);
         });
 
