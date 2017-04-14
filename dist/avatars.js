@@ -75,6 +75,7 @@ exports.default = Avatars;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Color = (function () {
     function Color(colors) {
+        this.pickedColors = {};
         this.colors = colors;
     }
     Color.prototype.getColor = function (chance) {
@@ -113,6 +114,7 @@ var Sprite = (function () {
         this.image = null;
         this.imageError = null;
         this.imageSprites = null;
+        this.createdImages = {};
         // Set default options
         options.size = options.size || 20;
         options.chance = options.chance || 100;

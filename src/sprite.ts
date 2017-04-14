@@ -18,7 +18,7 @@ export default class Sprite implements SpriteInterface {
     protected image: HTMLImageElement = null;
     protected imageError: Error = null;
     protected imageSprites: number = null;
-    protected createdImages: { [key: number]: HTMLImageElement };
+    protected createdImages: { [key: number]: HTMLImageElement } = {};
 
     constructor(options: SpriteOptions) {
         // Set default options

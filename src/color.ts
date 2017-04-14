@@ -4,7 +4,7 @@ export interface ColorInterface {
 
 export default class Color implements ColorInterface {
     private colors: [number, number, number][];
-    private pickedColors: { [key: number]: [number, number, number] };
+    private pickedColors: { [key: number]: [number, number, number] } = {};
 
     constructor(colors: [number, number, number][]) {
         this.colors = colors;
