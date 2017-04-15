@@ -7,7 +7,8 @@
     "@types/object-assign": "^4.0.30",
     "async": "^2.3.0",
     "canvas": "^1.6.5",
-    "object-assign": "^4.1.1"
+    "object-assign": "^4.1.1",
+    "onecolor": "^3.0.4"
   },
   "devDependencies": {
     "@types/async": "^2.0.40",
@@ -48,6 +49,7 @@
   },
   "browserify-shim": {
     "chance": "global:window",
-    "async": "global:async"
+    "async": "global:async",
+    "onecolor": "global:one"
   }
 }

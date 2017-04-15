@@ -1,16 +1,22 @@
+import { RgbInterface } from './helper/color';
+
 export interface ColorInterface {
-    getColor(chance: Chance.Chance): [number, number, number];
+    getColor(chance: Chance.Chance, callback: (err, color: RgbInterface) => void);
 }
 
 export default class Color implements ColorInterface {
-    private colors: [number, number, number][];
-    private pickedColors: { [key: number]: [number, number, number] } = {};
+    private colors: RgbInterface[];
+    private pickedColors: { [key: number]: RgbInterface } = {};
 
-    constructor(colors: [number, number, number][]) {
+    constructor(colors: RgbInterface[]) {
         this.colors = colors;
     }
 
-    getColor(chance: Chance.Chance): [number, number, number] {
-        return this.pickedColors[chance.seed] = this.pickedColors[chance.seed] || chance.pickone(this.colors);
+    getColor(chance: Chance.Chance, callback: (err, color: RgbInterface) => void) {
+        process.nextTick(() => {
+            this.pickedColors[chance.seed] = this.pickedColors[chance.seed] || chance.pickone(this.colors);
+
+            callback(null, this.pickedColors[chance.seed]);
+        });
     }
 }

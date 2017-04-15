@@ -1,28 +1,31 @@
 import { SpriteSetInterface } from '../spriteSet';
 import Sprite from '../sprite';
 import Color from '../color';
+import DarkerThanColor from '../color/modifier/darkerThan';
+
+let skinColor = new Color([
+    [255,219,172],
+    [241,194,125],
+    [224,172,105],
+    [198,134,66],
+    [141,85,36]
+]);
 
 let spriteSet: SpriteSetInterface = {
     face: new Sprite({
         src: './assets/female/face.png',
-        color: new Color([
-            [255,219,172],
-            [241,194,125],
-            [224,172,105],
-            [198,134,66],
-            [141,85,36]
-        ])
+        color: skinColor
     }),
     mouth: new Sprite({
         src: './assets/female/mouth.png',
-        color: new Color([
+        color: new DarkerThanColor([
             [219,172,152],
             [210,153,133],
             [201,130,118],
             [227,93,106],
             [227, 33, 83],
             [222, 15, 13]
-        ])
+        ], skinColor, .05)
     }),
     eyes: new Sprite({
         src: './assets/female/eyes.png',

@@ -1,4 +1,5 @@
-import ColorInterface from './color';
+import { RgbInterface } from './helper/color';
+import { ColorInterface } from './color';
 import { createImage, createCanvas } from './helper/canvas';
 
 export interface SpriteInterface {
@@ -78,32 +79,6 @@ export default class Sprite implements SpriteInterface {
         canvas.width = this.options.size;
         canvas.height = this.options.size;
 
-        if (chance.bool({likelihood: this.options.chance})) {
-            context.drawImage(
-                this.image,
-                chance.natural({min: 0, max: this.imageSprites - 1}) * this.options.size * -1,
-                0
-            );
-
-            let color = this.options.color.getColor(chance);
-            let buffer = context.getImageData(0, 0, canvas.width, canvas.height);
-
-            for(let i = 0; i < buffer.data.length; i += 4) {
-                let r = i;
-                let g = i + 1;
-                let b = i + 2;
-                let a = i + 3;
-
-                if (a > 0) {
-                    buffer.data[r] = Math.round((buffer.data[r]-color[0])*(buffer.data[r]/255)+color[0]);
-                    buffer.data[g] = Math.round((buffer.data[g]-color[1])*(buffer.data[g]/255)+color[1]);
-                    buffer.data[b] = Math.round((buffer.data[b]-color[2])*(buffer.data[b]/255)+color[2]);
-                }
-            }
-
-            context.putImageData(buffer, 0, 0);
-        }
-
         var sprite = createImage();
 
         sprite.addEventListener('load', () => {
@@ -116,6 +91,42 @@ export default class Sprite implements SpriteInterface {
             callback(err.error, sprite);
         });
 
-        sprite.src = canvas.toDataURL('image/png');
+        if (chance.bool({likelihood: this.options.chance})) {
+            this.options.color.getColor(chance, (err, color) => {
+                context.drawImage(
+                    this.image,
+                    chance.natural({min: 0, max: this.imageSprites - 1}) * this.options.size * -1,
+                    0
+                );
+
+                this.tintCanvas(canvas, color, err => {
+                    sprite.src = canvas.toDataURL('image/png');
+                });
+            });
+        } else {
+            sprite.src = canvas.toDataURL('image/png');
+        }
+    }
+
+    private tintCanvas(canvas: HTMLCanvasElement, color: RgbInterface, callback: (err) => void) {
+        let context = canvas.getContext('2d');
+        let buffer = context.getImageData(0, 0, canvas.width, canvas.height);
+
+        for(let i = 0; i < buffer.data.length; i += 4) {
+            let r = i;
+            let g = i + 1;
+            let b = i + 2;
+            let a = i + 3;
+
+            if (a > 0) {
+                buffer.data[r] = Math.round((buffer.data[r]-color[0])*(buffer.data[r]/255)+color[0]);
+                buffer.data[g] = Math.round((buffer.data[g]-color[1])*(buffer.data[g]/255)+color[1]);
+                buffer.data[b] = Math.round((buffer.data[b]-color[2])*(buffer.data[b]/255)+color[2]);
+            }
+        }
+
+        context.putImageData(buffer, 0, 0);
+
+        process.nextTick(() => callback(null));
     }
 }

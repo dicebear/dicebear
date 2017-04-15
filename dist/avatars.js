@@ -70,7 +70,8 @@ var Avatars = (function () {
 exports.default = Avatars;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./helper/canvas":3,"object-assign":7}],2:[function(require,module,exports){
+},{"./helper/canvas":4,"object-assign":8}],2:[function(require,module,exports){
+(function (process){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Color = (function () {
@@ -78,14 +79,62 @@ var Color = (function () {
         this.pickedColors = {};
         this.colors = colors;
     }
-    Color.prototype.getColor = function (chance) {
-        return this.pickedColors[chance.seed] = this.pickedColors[chance.seed] || chance.pickone(this.colors);
+    Color.prototype.getColor = function (chance, callback) {
+        var _this = this;
+        process.nextTick(function () {
+            _this.pickedColors[chance.seed] = _this.pickedColors[chance.seed] || chance.pickone(_this.colors);
+            callback(null, _this.pickedColors[chance.seed]);
+        });
     };
     return Color;
 }());
 exports.default = Color;
 
-},{}],3:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":9}],3:[function(require,module,exports){
+(function (global){
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var color_1 = require("../../color");
+var OneColor = (typeof window !== "undefined" ? window['one'] : typeof global !== "undefined" ? global['one'] : null);
+var DarkerThan = (function (_super) {
+    __extends(DarkerThan, _super);
+    function DarkerThan(colors, referenceColor, difference) {
+        var _this = _super.call(this, colors) || this;
+        _this.referenceColor = referenceColor;
+        _this.difference = difference;
+        return _this;
+    }
+    DarkerThan.prototype.getColor = function (chance, callback) {
+        var _this = this;
+        _super.prototype.getColor.call(this, chance, function (err, color) {
+            _this.referenceColor.getColor(chance, function (err, referenceColor) {
+                var hslColor = new OneColor.color([color[0], color[1], color[2], 255]).hsl();
+                var hslReferenceColor = new OneColor.color([referenceColor[0], referenceColor[1], referenceColor[2], 255]).hsl();
+                if (hslReferenceColor.lightness() - _this.difference < hslColor.lightness()) {
+                    hslColor = hslColor.lightness(hslReferenceColor.lightness() - _this.difference);
+                }
+                var rgbColor = hslColor.rgb();
+                callback(err, [rgbColor.red() * 255, rgbColor.green() * 255, rgbColor.blue() * 255]);
+            });
+        });
+    };
+    return DarkerThan;
+}(color_1.default));
+exports.default = DarkerThan;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../../color":2}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function createCanvas() {
@@ -97,14 +146,14 @@ function createImage() {
 }
 exports.createImage = createImage;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var avatars = require('./avatars').default;
 avatars.SPRITE_SETS = {
     female: require('./spriteSets/female').default
 };
 module.exports = avatars;
 
-},{"./avatars":1,"./spriteSets/female":6}],5:[function(require,module,exports){
+},{"./avatars":1,"./spriteSets/female":7}],6:[function(require,module,exports){
 (function (process){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -161,23 +210,6 @@ var Sprite = (function () {
         var context = canvas.getContext('2d');
         canvas.width = this.options.size;
         canvas.height = this.options.size;
-        if (chance.bool({ likelihood: this.options.chance })) {
-            context.drawImage(this.image, chance.natural({ min: 0, max: this.imageSprites - 1 }) * this.options.size * -1, 0);
-            var color = this.options.color.getColor(chance);
-            var buffer = context.getImageData(0, 0, canvas.width, canvas.height);
-            for (var i = 0; i < buffer.data.length; i += 4) {
-                var r = i;
-                var g = i + 1;
-                var b = i + 2;
-                var a = i + 3;
-                if (a > 0) {
-                    buffer.data[r] = Math.round((buffer.data[r] - color[0]) * (buffer.data[r] / 255) + color[0]);
-                    buffer.data[g] = Math.round((buffer.data[g] - color[1]) * (buffer.data[g] / 255) + color[1]);
-                    buffer.data[b] = Math.round((buffer.data[b] - color[2]) * (buffer.data[b] / 255) + color[2]);
-                }
-            }
-            context.putImageData(buffer, 0, 0);
-        }
         var sprite = canvas_1.createImage();
         sprite.addEventListener('load', function () {
             _this.createdImages[chance.seed] = sprite;
@@ -186,39 +218,68 @@ var Sprite = (function () {
         sprite.addEventListener('error', function (err) {
             callback(err.error, sprite);
         });
-        sprite.src = canvas.toDataURL('image/png');
+        if (chance.bool({ likelihood: this.options.chance })) {
+            this.options.color.getColor(chance, function (err, color) {
+                context.drawImage(_this.image, chance.natural({ min: 0, max: _this.imageSprites - 1 }) * _this.options.size * -1, 0);
+                _this.tintCanvas(canvas, color, function (err) {
+                    sprite.src = canvas.toDataURL('image/png');
+                });
+            });
+        }
+        else {
+            sprite.src = canvas.toDataURL('image/png');
+        }
+    };
+    Sprite.prototype.tintCanvas = function (canvas, color, callback) {
+        var context = canvas.getContext('2d');
+        var buffer = context.getImageData(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < buffer.data.length; i += 4) {
+            var r = i;
+            var g = i + 1;
+            var b = i + 2;
+            var a = i + 3;
+            if (a > 0) {
+                buffer.data[r] = Math.round((buffer.data[r] - color[0]) * (buffer.data[r] / 255) + color[0]);
+                buffer.data[g] = Math.round((buffer.data[g] - color[1]) * (buffer.data[g] / 255) + color[1]);
+                buffer.data[b] = Math.round((buffer.data[b] - color[2]) * (buffer.data[b] / 255) + color[2]);
+            }
+        }
+        context.putImageData(buffer, 0, 0);
+        process.nextTick(function () { return callback(null); });
     };
     return Sprite;
 }());
 exports.default = Sprite;
 
 }).call(this,require('_process'))
-},{"./helper/canvas":3,"_process":8}],6:[function(require,module,exports){
+},{"./helper/canvas":4,"_process":9}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sprite_1 = require("../sprite");
 var color_1 = require("../color");
+var darkerThan_1 = require("../color/modifier/darkerThan");
+var skinColor = new color_1.default([
+    [255, 219, 172],
+    [241, 194, 125],
+    [224, 172, 105],
+    [198, 134, 66],
+    [141, 85, 36]
+]);
 var spriteSet = {
     face: new sprite_1.default({
         src: './assets/female/face.png',
-        color: new color_1.default([
-            [255, 219, 172],
-            [241, 194, 125],
-            [224, 172, 105],
-            [198, 134, 66],
-            [141, 85, 36]
-        ])
+        color: skinColor
     }),
     mouth: new sprite_1.default({
         src: './assets/female/mouth.png',
-        color: new color_1.default([
+        color: new darkerThan_1.default([
             [219, 172, 152],
             [210, 153, 133],
             [201, 130, 118],
             [227, 93, 106],
             [227, 33, 83],
             [222, 15, 13]
-        ])
+        ], skinColor, .05)
     }),
     eyes: new sprite_1.default({
         src: './assets/female/eyes.png',
@@ -313,7 +374,7 @@ var spriteSet = {
 };
 exports.default = spriteSet;
 
-},{"../color":2,"../sprite":5}],7:[function(require,module,exports){
+},{"../color":2,"../color/modifier/darkerThan":3,"../sprite":6}],8:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -405,7 +466,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -587,5 +648,5 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}]},{},[4])(4)
+},{}]},{},[5])(5)
 });
