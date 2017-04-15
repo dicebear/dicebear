@@ -52,7 +52,7 @@ let spriteSet: SpriteSetInterface = {
             [227,93,106],
             [227, 33, 83],
             [222, 15, 13]
-        ], skinColor, .05)
+        ], skinColor, 5)
     }),
     eyes: new Sprite({
         src: './assets/female/eyes.png',
@@ -70,10 +70,10 @@ let spriteSet: SpriteSetInterface = {
             new DarkerThanColor(
                 hairColor,
                 skinColor,
-                .05
+                5
             ),
             hairColor,
-            .1
+            10
         )
     }),
     accessories: new Sprite({
