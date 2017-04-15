@@ -7,11 +7,11 @@ export default class DarkerThan extends Color {
     private referenceColor: ColorInterface;
     private difference: number;
 
-    constructor(colors: RgbInterface[], referenceColor: ColorInterface, difference: number) {
+    constructor(colors: RgbInterface[]|ColorInterface, referenceColor: ColorInterface, difference: number) {
         super(colors);
 
         this.referenceColor = referenceColor;
-        this.difference = difference;
+        this.difference = difference / 100;
     }
 
     getColor(chance: Chance.Chance, callback: (err, color: RgbInterface) => void) {

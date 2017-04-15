@@ -11,6 +11,33 @@ let skinColor = new Color([
     [141,85,36]
 ]);
 
+let hairColor = new Color([
+    [9,8,6],
+    [44,34,43],
+    [113,99,90],
+    [183,166,158],
+    [214,196,194],
+    [202,191,177],
+    [220,208,186],
+    [255,245,225],
+    [230,206,168],
+    [229,200,168],
+    [222,188,153],
+    [184,151,120],
+    [165,107,70],
+    [181,82,57],
+    [141,74,67],
+    [145,85,61],
+    [83,61,50],
+    [59,48,36],
+    [85,72,56],
+    [78,67,63],
+    [80,68,68],
+    [106,78,66],
+    [167,133,106],
+    [151,121,97]
+]);
+
 let spriteSet: SpriteSetInterface = {
     face: new Sprite({
         src: './assets/female/face.png',
@@ -39,9 +66,15 @@ let spriteSet: SpriteSetInterface = {
     }),
     eyebrows: new Sprite({
         src: './assets/female/eyebrows.png',
-        color: new Color([
-            [50,50,50]
-        ])
+        color: new DarkerThanColor(
+            new DarkerThanColor(
+                hairColor,
+                skinColor,
+                .05
+            ),
+            hairColor,
+            .1
+        )
     }),
     accessories: new Sprite({
         src: './assets/female/accessories.png',
@@ -90,32 +123,7 @@ let spriteSet: SpriteSetInterface = {
     hair: new Sprite({
         src: './assets/female/hair.png',
         chance: 95,
-        color: new Color([
-            [9,8,6],
-            [44,34,43],
-            [113,99,90],
-            [183,166,158],
-            [214,196,194],
-            [202,191,177],
-            [220,208,186],
-            [255,245,225],
-            [230,206,168],
-            [229,200,168],
-            [222,188,153],
-            [184,151,120],
-            [165,107,70],
-            [181,82,57],
-            [141,74,67],
-            [145,85,61],
-            [83,61,50],
-            [59,48,36],
-            [85,72,56],
-            [78,67,63],
-            [80,68,68],
-            [106,78,66],
-            [167,133,106],
-            [151,121,97]
-        ])
+        color: hairColor
     }),
 }
 

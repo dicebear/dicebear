@@ -81,10 +81,15 @@ var Color = (function () {
     }
     Color.prototype.getColor = function (chance, callback) {
         var _this = this;
-        process.nextTick(function () {
-            _this.pickedColors[chance.seed] = _this.pickedColors[chance.seed] || chance.pickone(_this.colors);
-            callback(null, _this.pickedColors[chance.seed]);
-        });
+        if (this.colors instanceof Array) {
+            process.nextTick(function () {
+                _this.pickedColors[chance.seed] = _this.pickedColors[chance.seed] || chance.pickone(_this.colors);
+                callback(null, _this.pickedColors[chance.seed]);
+            });
+        }
+        else {
+            this.colors.getColor(chance, callback);
+        }
     };
     return Color;
 }());
@@ -112,7 +117,7 @@ var DarkerThan = (function (_super) {
     function DarkerThan(colors, referenceColor, difference) {
         var _this = _super.call(this, colors) || this;
         _this.referenceColor = referenceColor;
-        _this.difference = difference;
+        _this.difference = difference / 100;
         return _this;
     }
     DarkerThan.prototype.getColor = function (chance, callback) {
@@ -265,6 +270,32 @@ var skinColor = new color_1.default([
     [198, 134, 66],
     [141, 85, 36]
 ]);
+var hairColor = new color_1.default([
+    [9, 8, 6],
+    [44, 34, 43],
+    [113, 99, 90],
+    [183, 166, 158],
+    [214, 196, 194],
+    [202, 191, 177],
+    [220, 208, 186],
+    [255, 245, 225],
+    [230, 206, 168],
+    [229, 200, 168],
+    [222, 188, 153],
+    [184, 151, 120],
+    [165, 107, 70],
+    [181, 82, 57],
+    [141, 74, 67],
+    [145, 85, 61],
+    [83, 61, 50],
+    [59, 48, 36],
+    [85, 72, 56],
+    [78, 67, 63],
+    [80, 68, 68],
+    [106, 78, 66],
+    [167, 133, 106],
+    [151, 121, 97]
+]);
 var spriteSet = {
     face: new sprite_1.default({
         src: './assets/female/face.png',
@@ -293,9 +324,7 @@ var spriteSet = {
     }),
     eyebrows: new sprite_1.default({
         src: './assets/female/eyebrows.png',
-        color: new color_1.default([
-            [50, 50, 50]
-        ])
+        color: new darkerThan_1.default(new darkerThan_1.default(hairColor, skinColor, .05), hairColor, .1)
     }),
     accessories: new sprite_1.default({
         src: './assets/female/accessories.png',
@@ -344,32 +373,7 @@ var spriteSet = {
     hair: new sprite_1.default({
         src: './assets/female/hair.png',
         chance: 95,
-        color: new color_1.default([
-            [9, 8, 6],
-            [44, 34, 43],
-            [113, 99, 90],
-            [183, 166, 158],
-            [214, 196, 194],
-            [202, 191, 177],
-            [220, 208, 186],
-            [255, 245, 225],
-            [230, 206, 168],
-            [229, 200, 168],
-            [222, 188, 153],
-            [184, 151, 120],
-            [165, 107, 70],
-            [181, 82, 57],
-            [141, 74, 67],
-            [145, 85, 61],
-            [83, 61, 50],
-            [59, 48, 36],
-            [85, 72, 56],
-            [78, 67, 63],
-            [80, 68, 68],
-            [106, 78, 66],
-            [167, 133, 106],
-            [151, 121, 97]
-        ])
+        color: hairColor
     }),
 };
 exports.default = spriteSet;
