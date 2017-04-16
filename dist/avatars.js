@@ -112,31 +112,41 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var color_1 = require("../../color");
 var OneColor = (typeof window !== "undefined" ? window['one'] : typeof global !== "undefined" ? global['one'] : null);
-var DarkerThan = (function (_super) {
-    __extends(DarkerThan, _super);
-    function DarkerThan(colors, referenceColor, difference) {
+var BrighterOrDarkerThan = (function (_super) {
+    __extends(BrighterOrDarkerThan, _super);
+    function BrighterOrDarkerThan(colors, referenceColor, differenceBrightness, differenceDarkness) {
         var _this = _super.call(this, colors) || this;
         _this.referenceColor = referenceColor;
-        _this.difference = difference / 100;
+        _this.differenceBrightness = differenceBrightness ? differenceBrightness / 100 : 0;
+        _this.differenceDarkness = differenceDarkness ? differenceDarkness / 100 : 0;
         return _this;
     }
-    DarkerThan.prototype.getColor = function (chance, callback) {
+    BrighterOrDarkerThan.prototype.getColor = function (chance, callback) {
         var _this = this;
         _super.prototype.getColor.call(this, chance, function (err, color) {
             _this.referenceColor.getColor(chance, function (err, referenceColor) {
-                var hslColor = new OneColor.color([color[0], color[1], color[2], 255]).hsl();
-                var hslReferenceColor = new OneColor.color([referenceColor[0], referenceColor[1], referenceColor[2], 255]).hsl();
-                if (hslReferenceColor.lightness() - _this.difference < hslColor.lightness()) {
-                    hslColor = hslColor.lightness(hslReferenceColor.lightness() - _this.difference);
+                var hslColor = new OneColor.color([color[0], color[1], color[2], 255]).hsl(); // 50
+                var hslReferenceColor = new OneColor.color([referenceColor[0], referenceColor[1], referenceColor[2], 255]).hsl(); // 45
+                var minBrightness = hslReferenceColor.lightness() + _this.differenceBrightness; // 55
+                var minDarkness = hslReferenceColor.lightness() - _this.differenceDarkness; // 35
+                if (_this.differenceBrightness &&
+                    minBrightness > hslColor.lightness() &&
+                    (0 == _this.differenceDarkness || hslReferenceColor.lightness() < hslColor.lightness())) {
+                    hslColor = hslColor.lightness(minBrightness);
+                }
+                if (_this.differenceDarkness &&
+                    minDarkness < hslColor.lightness() &&
+                    (0 == _this.differenceBrightness || hslReferenceColor.lightness() > hslColor.lightness())) {
+                    hslColor = hslColor.lightness(minDarkness);
                 }
                 var rgbColor = hslColor.rgb();
                 callback(err, [rgbColor.red() * 255, rgbColor.green() * 255, rgbColor.blue() * 255]);
             });
         });
     };
-    return DarkerThan;
+    return BrighterOrDarkerThan;
 }(color_1.default));
-exports.default = DarkerThan;
+exports.default = BrighterOrDarkerThan;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../../color":2}],4:[function(require,module,exports){
@@ -262,7 +272,7 @@ exports.default = Sprite;
 Object.defineProperty(exports, "__esModule", { value: true });
 var sprite_1 = require("../sprite");
 var color_1 = require("../color");
-var darkerThan_1 = require("../color/modifier/darkerThan");
+var brighterOrDarkerThan_1 = require("../color/modifier/brighterOrDarkerThan");
 var skinColor = new color_1.default([
     [255, 219, 172],
     [241, 194, 125],
@@ -270,7 +280,7 @@ var skinColor = new color_1.default([
     [198, 134, 66],
     [141, 85, 36]
 ]);
-var hairColor = new color_1.default([
+var hairColor = new brighterOrDarkerThan_1.default([
     [9, 8, 6],
     [44, 34, 43],
     [113, 99, 90],
@@ -295,7 +305,7 @@ var hairColor = new color_1.default([
     [106, 78, 66],
     [167, 133, 106],
     [151, 121, 97]
-]);
+], skinColor, 12, 12);
 var spriteSet = {
     face: new sprite_1.default({
         src: './assets/female/face.png',
@@ -303,14 +313,14 @@ var spriteSet = {
     }),
     mouth: new sprite_1.default({
         src: './assets/female/mouth.png',
-        color: new darkerThan_1.default([
+        color: new brighterOrDarkerThan_1.default([
             [219, 172, 152],
             [210, 153, 133],
             [201, 130, 118],
             [227, 93, 106],
             [227, 33, 83],
             [222, 15, 13]
-        ], skinColor, 5)
+        ], skinColor, 0, 5)
     }),
     eyes: new sprite_1.default({
         src: './assets/female/eyes.png',
@@ -324,7 +334,7 @@ var spriteSet = {
     }),
     eyebrows: new sprite_1.default({
         src: './assets/female/eyebrows.png',
-        color: new darkerThan_1.default(new darkerThan_1.default(hairColor, skinColor, 5), hairColor, 10)
+        color: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, skinColor, 0, 5), hairColor, 0, 7)
     }),
     accessories: new sprite_1.default({
         src: './assets/female/accessories.png',
@@ -378,7 +388,7 @@ var spriteSet = {
 };
 exports.default = spriteSet;
 
-},{"../color":2,"../color/modifier/darkerThan":3,"../sprite":6}],8:[function(require,module,exports){
+},{"../color":2,"../color/modifier/brighterOrDarkerThan":3,"../sprite":6}],8:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus

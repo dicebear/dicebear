@@ -1,7 +1,7 @@
 import { SpriteSetInterface } from '../spriteSet';
 import Sprite from '../sprite';
 import Color from '../color';
-import DarkerThanColor from '../color/modifier/darkerThan';
+import BrighterOrDarkerThan from '../color/modifier/brighterOrDarkerThan';
 
 let skinColor = new Color([
     [255,219,172],
@@ -11,7 +11,7 @@ let skinColor = new Color([
     [141,85,36]
 ]);
 
-let hairColor = new Color([
+let hairColor = new BrighterOrDarkerThan([
     [9,8,6],
     [44,34,43],
     [113,99,90],
@@ -36,7 +36,7 @@ let hairColor = new Color([
     [106,78,66],
     [167,133,106],
     [151,121,97]
-]);
+], skinColor, 12, 12);
 
 let spriteSet: SpriteSetInterface = {
     face: new Sprite({
@@ -45,14 +45,14 @@ let spriteSet: SpriteSetInterface = {
     }),
     mouth: new Sprite({
         src: './assets/female/mouth.png',
-        color: new DarkerThanColor([
+        color: new BrighterOrDarkerThan([
             [219,172,152],
             [210,153,133],
             [201,130,118],
             [227,93,106],
             [227, 33, 83],
             [222, 15, 13]
-        ], skinColor, 5)
+        ], skinColor, 0, 5)
     }),
     eyes: new Sprite({
         src: './assets/female/eyes.png',
@@ -66,14 +66,16 @@ let spriteSet: SpriteSetInterface = {
     }),
     eyebrows: new Sprite({
         src: './assets/female/eyebrows.png',
-        color: new DarkerThanColor(
-            new DarkerThanColor(
+        color: new BrighterOrDarkerThan(
+            new BrighterOrDarkerThan(
                 hairColor,
                 skinColor,
+                0,
                 5
             ),
             hairColor,
-            10
+            0,
+            7
         )
     }),
     accessories: new Sprite({
