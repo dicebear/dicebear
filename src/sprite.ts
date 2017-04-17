@@ -7,7 +7,7 @@ export interface SpriteInterface {
     create(chance: Chance.Chance, callback: (err: Error|null, image: HTMLImageElement|null) => void);
 }
 
-interface SpriteOptions {
+export interface SpriteOptions {
     src: string,
     color: ColorInterface,
     size?: number,

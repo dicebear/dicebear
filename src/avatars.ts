@@ -4,7 +4,7 @@ import * as objectAssign from 'object-assign';
 import * as async from 'async';
 import { Chance } from 'chance';
 
-interface AvatarsOptions {
+export interface AvatarsOptions {
     size?: number,
     order?: string[]
 }

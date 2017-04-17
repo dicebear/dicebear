@@ -1,10 +1,10 @@
 {
-  "name": "dicebear-avatars",
-  "version": "0.0.1",
+  "name": "@dicebear/avatars",
+  "version": "0.0.2",
   "description": "JavaScript Avatar Generator",
   "main": "lib/avatars.js",
+  "types": "src/avatars.ts",
   "dependencies": {
-    "@types/object-assign": "^4.0.30",
     "async": "^2.3.0",
     "canvas": "^1.6.5",
     "object-assign": "^4.1.1",
@@ -14,12 +14,13 @@
     "@types/async": "^2.0.40",
     "@types/chance": "^0.7.32",
     "@types/node": "^7.0.12",
+    "@types/object-assign": "^4.0.30",
     "browserify": "^14.1.0",
     "browserify-shim": "^3.8.14",
     "typescript": "^2.2.1"
   },
   "scripts": {
-    "prebuild": "rm -r dist/* lib/*",
+    "prebuild": "rm -r dist/* lib/* || true",
     "build": "./node_modules/.bin/tsc; ./node_modules/.bin/browserify lib/index.js -s Avatars > dist/avatars.js"
   },
   "author": "Florian Körner <contact@dicebear.com>",
