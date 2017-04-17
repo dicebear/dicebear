@@ -16,6 +16,7 @@
     "onecolor": "^3.0.4"
   },
   "devDependencies": {
+    "brfs": "^1.4.3",
     "browserify": "^14.1.0",
     "browserify-shim": "^3.8.14",
     "typescript": "^2.2.1"
@@ -46,12 +47,13 @@
   },
   "browserify": {
     "transform": [
-      "browserify-shim"
+      "browserify-shim",
+      "brfs"
     ]
   },
   "browserify-shim": {
     "chance": "global:window",
     "async": "global:async",
-    "onecolor": "global:one"
+    "onecolor": "global:one.color"
   }
 }

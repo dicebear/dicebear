@@ -1,3 +1,5 @@
+declare function one(color: string|[number, number, number, number]|[string, number, number, number, number]): one.Color;
+
 declare namespace one {
     interface ExporterInterface {
         hex(): string;
@@ -55,20 +57,8 @@ declare namespace one {
         alpha(alpha: number, newInstance?: boolean): HsvInterface;
     }
 
-    class color implements ConverterInterface, ExporterInterface {
-        constructor(color: string|[number, number, number, number]|[string, number, number, number, number]);
-
-        hex(): string;
-        css(): string;
-        cssa(): string;
-        toString(): string;
-        toJSON(): [string, number, number, number, number];
-
-        rgb(): RgbInterface;
-        hsl(): HslInterface;
-        hsv(): HsvInterface;
-
-        equals(otherColor: color, epsilon?: number): boolean;
+    interface Color extends ConverterInterface, ExporterInterface {
+        equals(otherColor: Color, epsilon?: number): boolean;
     }
 }
 

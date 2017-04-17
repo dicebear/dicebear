@@ -1,7 +1,10 @@
+import * as fs from 'fs';
 import { SpriteSetInterface } from '../spriteSet';
 import Sprite from '../sprite';
 import Color from '../color';
 import BrighterOrDarkerThan from '../color/modifier/brighterOrDarkerThan';
+
+let base64Prefix = 'data:image/png;base64,';
 
 let skinColor = new Color([
     [255,219,172],
@@ -40,11 +43,11 @@ let hairColor = new BrighterOrDarkerThan([
 
 let spriteSet: SpriteSetInterface = {
     face: new Sprite({
-        src: './assets/female/face.png',
+        src: base64Prefix+fs.readFileSync('./assets/female/face.png', 'base64'),
         color: skinColor
     }),
     eyes: new Sprite({
-        src: './assets/female/eyes.png',
+        src: base64Prefix+fs.readFileSync('./assets/female/eyes.png', 'base64'),
         color: new Color([
             [118,119,139],
             [105,123,148],
@@ -54,7 +57,7 @@ let spriteSet: SpriteSetInterface = {
         ])
     }),
     eyebrows: new Sprite({
-        src: './assets/female/eyebrows.png',
+        src: base64Prefix+fs.readFileSync('./assets/female/eyebrows.png', 'base64'),
         color: new BrighterOrDarkerThan(
             new BrighterOrDarkerThan(
                 hairColor,
@@ -68,7 +71,7 @@ let spriteSet: SpriteSetInterface = {
         )
     }),
     mouth: new Sprite({
-        src: './assets/female/mouth.png',
+        src: base64Prefix+fs.readFileSync('./assets/female/mouth.png', 'base64'),
         color: new BrighterOrDarkerThan([
             [219,172,152],
             [210,153,133],
@@ -79,7 +82,7 @@ let spriteSet: SpriteSetInterface = {
         ], skinColor, 0, 5)
     }),
     accessories: new Sprite({
-        src: './assets/female/accessories.png',
+        src: base64Prefix+fs.readFileSync('./assets/female/accessories.png', 'base64'),
         chance: 15,
         color: new Color([
             [218,165,32],
@@ -91,7 +94,7 @@ let spriteSet: SpriteSetInterface = {
         ])
     }),
     glasses: new Sprite({
-        src: './assets/female/glasses.png',
+        src: base64Prefix+fs.readFileSync('./assets/female/glasses.png', 'base64'),
         chance: 25,
         color: new Color([
             [95,112,92],
@@ -105,7 +108,7 @@ let spriteSet: SpriteSetInterface = {
         ])
     }),
     clothes: new Sprite({
-        src: './assets/female/clothes.png',
+        src: base64Prefix+fs.readFileSync('./assets/female/clothes.png', 'base64'),
         color: new Color([
             [209,17,65],
             [0,177,89],
@@ -123,7 +126,7 @@ let spriteSet: SpriteSetInterface = {
         ])
     }),
     hair: new Sprite({
-        src: './assets/female/hair.png',
+        src: base64Prefix+fs.readFileSync('./assets/female/hair.png', 'base64'),
         chance: 95,
         color: hairColor
     }),

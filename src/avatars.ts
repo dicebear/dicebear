@@ -1,5 +1,5 @@
 import { SpriteSetInterface } from './spriteSet';
-import { createCanvas } from './helper/canvas';
+import { createCanvas, createImage } from './helper/canvas';
 import * as objectAssign from 'object-assign';
 import * as async from 'async';
 import { Chance } from 'chance';
@@ -69,7 +69,7 @@ export default class Avatars {
                     callback(err, null);
                 }
 
-                let image = new Image;
+                let image = createImage();
 
                 image.addEventListener('load', () => {
                     callback(null, image);
@@ -77,7 +77,7 @@ export default class Avatars {
 
                 image.addEventListener('error', err => {
                     callback(err.error, image);
-                })
+                });
 
                 image.src = canvas.toDataURL('image/png');
             });

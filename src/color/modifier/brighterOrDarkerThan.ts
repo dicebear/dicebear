@@ -25,8 +25,8 @@ export default class BrighterOrDarkerThan extends Color {
     getColor(chance: Chance.Chance, callback: (err, color: RgbInterface) => void) {
         super.getColor(chance, (err, color) => {
             this.referenceColor.getColor(chance, (err, referenceColor) => {
-                let hslColor = new OneColor.color([color[0], color[1], color[2], 255]).hsl(); // 50
-                let hslReferenceColor = new OneColor.color([referenceColor[0], referenceColor[1], referenceColor[2], 255]).hsl(); // 45
+                let hslColor = OneColor([color[0], color[1], color[2], 255]).hsl(); // 50
+                let hslReferenceColor = OneColor([referenceColor[0], referenceColor[1], referenceColor[2], 255]).hsl(); // 45
 
                 let minBrightness = hslReferenceColor.lightness() + this.differenceBrightness; // 55
                 let minDarkness = hslReferenceColor.lightness() - this.differenceDarkness; // 35

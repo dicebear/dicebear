@@ -54,7 +54,7 @@ var Avatars = (function () {
                 if (err) {
                     callback(err, null);
                 }
-                var image = new Image;
+                var image = canvas_1.createImage();
                 image.addEventListener('load', function () {
                     callback(null, image);
                 });
@@ -111,7 +111,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var color_1 = require("../../color");
-var OneColor = (typeof window !== "undefined" ? window['one'] : typeof global !== "undefined" ? global['one'] : null);
+var OneColor = (typeof window !== "undefined" ? window['one']['color'] : typeof global !== "undefined" ? global['one']['color'] : null);
 var BrighterOrDarkerThan = (function (_super) {
     __extends(BrighterOrDarkerThan, _super);
     function BrighterOrDarkerThan(colors, referenceColor, differenceBrightness, differenceDarkness) {
@@ -125,8 +125,8 @@ var BrighterOrDarkerThan = (function (_super) {
         var _this = this;
         _super.prototype.getColor.call(this, chance, function (err, color) {
             _this.referenceColor.getColor(chance, function (err, referenceColor) {
-                var hslColor = new OneColor.color([color[0], color[1], color[2], 255]).hsl(); // 50
-                var hslReferenceColor = new OneColor.color([referenceColor[0], referenceColor[1], referenceColor[2], 255]).hsl(); // 45
+                var hslColor = OneColor([color[0], color[1], color[2], 255]).hsl(); // 50
+                var hslReferenceColor = OneColor([referenceColor[0], referenceColor[1], referenceColor[2], 255]).hsl(); // 45
                 var minBrightness = hslReferenceColor.lightness() + _this.differenceBrightness; // 55
                 var minDarkness = hslReferenceColor.lightness() - _this.differenceDarkness; // 35
                 if (_this.differenceBrightness &&
@@ -271,9 +271,11 @@ exports.default = Sprite;
 },{"./helper/canvas":4,"_process":10}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
 var sprite_1 = require("../sprite");
 var color_1 = require("../color");
 var brighterOrDarkerThan_1 = require("../color/modifier/brighterOrDarkerThan");
+var base64Prefix = 'data:image/png;base64,';
 var skinColor = new color_1.default([
     [255, 219, 172],
     [241, 194, 125],
@@ -309,11 +311,11 @@ var hairColor = new brighterOrDarkerThan_1.default([
 ], skinColor, 12, 12);
 var spriteSet = {
     face: new sprite_1.default({
-        src: './assets/female/face.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAVElEQVQ4jdXTQQoAIAgEwK3//7muZSoqCuYx2CFRge41hPcVzXOgFWMNCnqxx5lBQKx08Gw52u5llf4Q6DiU8j30oqZLsaJsVgMlWM38N5R+e5gObtcgCxr27O7iAAAAAElFTkSuQmCC",
         color: skinColor
     }),
     eyes: new sprite_1.default({
-        src: './assets/female/eyes.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAAAyElEQVR4nO3UQYqEMBAF0Mpl607eyTtlNgZcpII2Ts8I722E/lT6G6MRAAAAAAAAAM/rJ3eyt6435u78/ma9956Z5f5V2bdkZtlhlVV+4/xlZt/3vdy/WfatfmNu27byTFfZsmBElAVn2Wq9MXon+6TfKb57oKuZjx7Gk/s3RouZ22tlZo+IflwvZ2Wxh59vHPdUdPjzfmNm1mGVVY6Px7TDKlv1O174ab8qi4hoV/8E3ur8MrXW2tXsresBAAAAAAAAAAAA/E8/TXqYj63Qaq8AAAAASUVORK5CYII=",
         color: new color_1.default([
             [118, 119, 139],
             [105, 123, 148],
@@ -323,11 +325,11 @@ var spriteSet = {
         ])
     }),
     eyebrows: new sprite_1.default({
-        src: './assets/female/eyebrows.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAAAjUlEQVR4nO3UWwqEMAwAQO9/6for4qN5uKswAyKYtKY1dlkAAAAAgC8Zk89+bqaITKEdCx6bq5JzlJ+Nn43JxKI1ZGq7q+GfTTi7nsz3vdq/jj6szpWNR/LD9UVfHLXfwMr4jtwn1jt299lYtIbKHJ0/SGdDv73/np6v6q0HPQAAAAAAAAAAAAAAAMC5FfyBT7GLnPoYAAAAAElFTkSuQmCC",
         color: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, skinColor, 0, 5), hairColor, 0, 7)
     }),
     mouth: new sprite_1.default({
-        src: './assets/female/mouth.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAAAdElEQVR4nO3UQQqAMAxFQe+U+5+trgoiuvIXg86A20fSSrcNAAAAAAAAAAAAAODTxtsD3Bin77GqSu8am+2i26Fx1Ux2V51fSvt9u//Q7XvhR6H9vsHemELNUVXzPmIzLmjF9g00oJXOD9axCQAAAAAA8FM7aHY9KjKubf4AAAAASUVORK5CYII=",
         color: new brighterOrDarkerThan_1.default([
             [219, 172, 152],
             [210, 153, 133],
@@ -338,7 +340,7 @@ var spriteSet = {
         ], skinColor, 0, 5)
     }),
     accessories: new sprite_1.default({
-        src: './assets/female/accessories.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAFAAAAAUCAYAAAAa2LrXAAAAUUlEQVRYhe3QsQ3AMAgEQLKs99+AtC6SAkOT6E6isfSPRQQAANCSw9nRvrXWcd9DNrep6mTLiyazk3358l7pyoiI6/RHH7cfrnqDThYAgJ+4ASmZGFLEUrkXAAAAAElFTkSuQmCC",
         chance: 15,
         color: new color_1.default([
             [218, 165, 32],
@@ -350,7 +352,7 @@ var spriteSet = {
         ])
     }),
     glasses: new sprite_1.default({
-        src: './assets/female/glasses.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAIwAAAAUCAYAAABf9dUQAAAApklEQVRoge3TUQ6DIBCEYfZK7pW8Vc/UM40vPFCKsE0Rm/T/EhJxYJQYUwIAAAAArKXGiGTRzk+yFWafd2qfu5frlOfDbFT2MtxdvWzUJ2nLY6/7WtnqPs4bP681eiXJ8/VmZo9iXS87U+5JZvY86auzO/r+4ryNexbI3iczChf01fvq9b1sRd/sDzz7/b7qiz4AcVf8IFdQ59m9DAAAAAAAAMCvOQDYlS61XG8FjAAAAABJRU5ErkJggg==",
         chance: 25,
         color: new color_1.default([
             [95, 112, 92],
@@ -364,7 +366,7 @@ var spriteSet = {
         ])
     }),
     clothes: new sprite_1.default({
-        src: './assets/female/clothes.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAABlUlEQVR4nO3XQXLDIAyFYWWmN9KdlDOZO3EmurEcTAGDQzpZ/N9MN+RZTpGRWxEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDv8qispQU1DqqaRERijK182nOy57r19vxVZjY7kpu5r+elck1rvSrfP1X1ffRrk6+N7p+ZnfobQnjMfN76fn7/Vj3v/2B/XSs7kimzX5lT1aSqoqryfD6r2W3bUoxR9p+Z/XOPgc+qX3Z2GLTqiMjrYRE5DYQ8n7KsZNneL726cZ5dPYhyrYYMHTaXH/yLtWrd8rCP6gyFUz0zO+X9fiGE8rqheo3sSKaVfTeXZ99+/lQ1ef9aQ6EYBv5S+Fh/f+4UuCN7u4kUDSgf6EG9A3pnY1bVq2Vb13eHjKpKCOHYn2IPjzUXYxQz+5MpVQ5olR/wUSEEMbPTgzl6r458j+6+sGq18rVVtW7VzPu1bVvyoVAOgysL9vr/BoLI7YPfs7LBn6j3NjM7DlrtrwGR1+CYPcCfUHsos39n7pZd2YOvHDDlUPC10WEgMj/AXd6zX//a6/txl4UqAAAAAElFTkSuQmCC",
         color: new color_1.default([
             [209, 17, 65],
             [0, 177, 89],
@@ -382,7 +384,7 @@ var spriteSet = {
         ])
     }),
     hair: new sprite_1.default({
-        src: './assets/female/hair.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAACE0lEQVR4nO2a23LDIAxEk0z+/5fdlybjUoNuKxDjPS+ZKWi9ICzjmseDEEJ+ea424OAw9pfGeBe9Q9EHEROl6vzdQq8Vt4r1dFq0uujBSrqH0G7tn+VPimn7ofI6uqZHe1V+rdeukN8leqNF5RZtyHrCHZ3fUcxVm/XJ14tDz5+2GPT6Z/vzakbWSS/vV7roHdGs/GrnJ8Xf22Cox8iIx+TVjX3mKfy2fa03lgRaE1UwNb7Oc6spqA/h71pv5/6jwq2Zu16+ez4t+ZDm0Krb07IWg0/bOU57n4z45+OqIKDJvkHuhDSXngU9KqgWNN4yGI15dcHX5kOrqdEL+XsZglfCIlH7H8CVvSHxFphRm1UzuisYxryaBq9g9oJA6EvvYBZm3wCo66EXtFcTrRN9VVihhwbib5cdAoJdn2KVfVf2RhycC0JkW569pc/QrzzeO4LORyW9GUDGu8sOIeOVgcSovDtA5PqW66UtCN7PhDuA+o6+y3h3BJ0PpJ7lC070Wp4Yr78/ny9n7BAsJjV9q+uRGNXzu7IopI83+xwC6pNKa1w6lHEVI/XNOlZL7ETz4X2d0RysynhVQqw/j7/PruJ7/RkHkxBcbYesR4jbSUd+//XoSXEZi3onso6IR6g+t+GDWO+mYZYJK4hFUD2ZpC6aJ7gF9HmQqL/R0fWyfLY2s+LIPI7md1YsIYQQQgghhBA9P5+4njKanBJ6AAAAAElFTkSuQmCC",
         chance: 95,
         color: hairColor
     }),
@@ -392,9 +394,11 @@ exports.default = spriteSet;
 },{"../color":2,"../color/modifier/brighterOrDarkerThan":3,"../sprite":6}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
 var sprite_1 = require("../sprite");
 var color_1 = require("../color");
 var brighterOrDarkerThan_1 = require("../color/modifier/brighterOrDarkerThan");
+var base64Prefix = 'data:image/png;base64,';
 var skinColor = new color_1.default([
     [255, 219, 172],
     [241, 194, 125],
@@ -423,11 +427,11 @@ var hairColor = new brighterOrDarkerThan_1.default([
 ], skinColor, 12, 12);
 var spriteSet = {
     face: new sprite_1.default({
-        src: './assets/male/face.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAS0lEQVQ4jWNgGOyAEYf4f3L1YzOQWMOwmoFuIKmGYZjDRKYBOAHVDUT2MrneRTFraHmZgWHExTIMUDWnkGooUXmZkOF49YwWDpQDANohChvs8TZPAAAAAElFTkSuQmCC",
         color: skinColor
     }),
     eyes: new sprite_1.default({
-        src: './assets/male/eyes.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAAAyElEQVR4nO3UQYqEMBAF0Mpl607eyTtlNgZcpII2Ts8I722E/lT6G6MRAAAAAAAAAM/rJ3eyt6435u78/ma9956Z5f5V2bdkZtlhlVV+4/xlZt/3vdy/WfatfmNu27byTFfZsmBElAVn2Wq9MXon+6TfKb57oKuZjx7Gk/s3RouZ22tlZo+IflwvZ2Wxh59vHPdUdPjzfmNm1mGVVY6Px7TDKlv1O174ab8qi4hoV/8E3ur8MrXW2tXsresBAAAAAAAAAAAA/E8/TXqYj63Qaq8AAAAASUVORK5CYII=",
         color: new color_1.default([
             [118, 119, 139],
             [105, 123, 148],
@@ -437,16 +441,16 @@ var spriteSet = {
         ])
     }),
     eyebrows: new sprite_1.default({
-        src: './assets/male/eyebrows.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAHUlEQVQ4jWNgGAVDBvynkhrSFJKodhSMglEwkgEAp6ED/bRBxw4AAAAASUVORK5CYII=",
         color: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, skinColor, 0, 5), hairColor, 0, 7)
     }),
     mustache: new sprite_1.default({
-        src: './assets/male/mustache.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAANwAAAAUCAYAAADm4VNYAAAA+ElEQVR4nO3ZwQ7CIAyA4Wp8bI+89zzNzM1BC4UV/b9kJ6FjQFcyRQAAAAAAAAAAABDAMqjPr0qD+qjdewYH8ImEi89SsahuR5aK1bW6iRwTbtlcJZq2HIl8aNejJG0uj7bhjmwN9xwyrkfmN6+Nv4jIzdB2ZrXj18yP99x4bbAkIs/B96zhce/aGO/5ySWcp9kTCXlXJtJUvr1ZrclRejt7x4su+vxZk6NUvbzjeQv1vGeLo11k76NibbKt8VuT9Wyc1rjR50+7abyPirXJtsZv7V/S/XmvqCb7zROtojG+NvvNOLqilUQf31/SfqkFTPgfDgAAAI1ePdA5SBvHuo0AAAAASUVORK5CYII=",
         chance: 50,
         color: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, hairColor, 15, 0), skinColor, 0, 5)
     }),
     mouth: new sprite_1.default({
-        src: './assets/male/mouth.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAANwAAAAUCAYAAADm4VNYAAAAdklEQVR4nO3UywqAIBAF0Ab6/1+eNi2kRc8xg87ZiCDXK4rTBAAAAAAAAAAAAPBfMXDvHLz/G3qdMdexV/Zn7iUzs51HxNNubV7VOU9nzhcCKy8hj5fcyqvouO32JDOK83qo7tfjQVdqO1W86099UAAAAAAA+xYj7xMHNiFSXAAAAABJRU5ErkJggg==",
         color: new brighterOrDarkerThan_1.default([
             [238, 193, 173],
             [219, 172, 152],
@@ -454,7 +458,7 @@ var spriteSet = {
         ], skinColor, 0, 5)
     }),
     glasses: new sprite_1.default({
-        src: './assets/male/glasses.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAHgAAAAUCAYAAABGUvnzAAAAmElEQVRoge3V0Q3DIAxFUbxSvFK36kyd6fWHjxQ5Tqu6pEL3SEgRhkcQEWkNAAAAwGdswhpK1s1q72aO47PaDNX7rctzd/VJL83dldXO8iRtvd3GvKg2O2/l/UanLUnenzczu+/GZbUj+znNzB4HeWPtirzl9hsecND3H1dMnFlxRVfmVR/wV+93xT9qdb/4oAEAAAAAAPAEmLbyGT/XnVYAAAAASUVORK5CYII=",
         chance: 25,
         color: new color_1.default([
             [95, 112, 92],
@@ -468,7 +472,7 @@ var spriteSet = {
         ])
     }),
     clothes: new sprite_1.default({
-        src: './assets/male/clothes.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAABe0lEQVR4nO3XbY7CIBCA4WmyN4Iz9VCcCc6EP7YY5GugsmtM3icxahmHj8KoIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfFycvIbvFYvH0NFJsKKVY5SvjNfa/yWfMUZEREIIzXyD9iqfMUZCCHI9V/mU9hfe+2itFe+9WGubsTMxiTEmXvPIL6fPxCxOrrjp+9GajzEmdvrqjk9bm5mY5DzPaj8751JbFe+cm1q/JIQgMf5eOo7juW5Z++p+1iyNT1OOTztMs3qD3JpvdbKJtrGu1yl25n13vsVhn33uHnQRkXTYR/KYXlForV9xWKsNfcUs3Y8Ur7X38q0UhFG+UTHIYqrP9YpCqxh04qSIU89Ha90Hff3Z+fi5k+BTejfgnXyLheB5kFtuFoOpsVpr7090IB+DtikXcm7527ErT+48z+EvhBX5fRR53U+reWb7elfeVyvfVxWEuxt2dyEZ9bO7KIwKQb6hnXNTvySwV74n3y2o2pfSDtpZeAAqEzJHfLIZ6QAAAABJRU5ErkJggg==",
         color: new color_1.default([
             [91, 192, 222],
             [92, 184, 92],
@@ -486,7 +490,7 @@ var spriteSet = {
         ])
     }),
     hair: new sprite_1.default({
-        src: './assets/male/hair.png',
+        src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAABkklEQVR4nO2XWW7DMAwFlaL3v7L70aQIVIqbaFluZ4AgiS0/UgsXtwZQz/H8/FXe53cMrvf3JA1rjOd+KY+VxiDF0b736fXdBr9fB+fqPe0P8NX+VBMNUG3+Ea0l6ygZqZxwVNM76Z31+sCUtL0B3Ae7hZQwLHYM4B33Nxq8R/e/14rsq6Q94+tQQ3JUum4ZrlpIj+2+OmoansA4K+Nba6uN1Z7L2LbYpbtoTU5Q2h6t2t9R4tTOmOc8eGxbWpZub2OoNcpcEbwLIjk2GqvpWQsbmVP2/czTWUUPqqWZ6U7uhjVfqwCcxUwXJc0pmgx6rVGFjyaDX7Y/E04NxSbHz7RQM2SrqaQTCUhrfCa4s2u4E9p8rc7wbLLxUeXvS8ujp8VZG2l8JJyK0DtlLejs/apnsjyC9rTxd63yK4iuc4W9Ko1sd9CP9SROjw68kcncd6/AcD1H81d67flyzu4Qdmf3jgNgKf89IQBcyXbFhYQAAD+QEADuySndBQkBYD3bvSoAAAAAAAAAAAAAAAAAABTxBbb7ZiKCSz60AAAAAElFTkSuQmCC",
         chance: 95,
         color: hairColor
     }),

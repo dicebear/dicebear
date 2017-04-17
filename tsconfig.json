@@ -4,6 +4,10 @@
         "allowJs": true,
         "module": "commonjs",
         "outDir": "./lib/",
-        "rootDir": "./src/"
+        "rootDir": "./src/",
+        "typeRoots": [
+            "./node_modules/@types/",
+            "./typings/"
+        ]
     }
 }
