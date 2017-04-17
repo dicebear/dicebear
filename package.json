@@ -1,20 +1,21 @@
 {
   "name": "@dicebear/avatars",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "JavaScript Avatar Generator",
   "main": "lib/index.js",
   "types": "src/index.ts",
   "dependencies": {
-    "async": "^2.3.0",
-    "canvas": "^1.6.5",
-    "object-assign": "^4.1.1",
-    "onecolor": "^3.0.4"
-  },
-  "devDependencies": {
     "@types/async": "^2.0.40",
     "@types/chance": "^0.7.32",
     "@types/node": "^7.0.12",
     "@types/object-assign": "^4.0.30",
+    "async": "^2.3.0",
+    "canvas": "^1.6.5",
+    "chance": "^1.0.6",
+    "object-assign": "^4.1.1",
+    "onecolor": "^3.0.4"
+  },
+  "devDependencies": {
     "browserify": "^14.1.0",
     "browserify-shim": "^3.8.14",
     "typescript": "^2.2.1"
