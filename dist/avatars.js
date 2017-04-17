@@ -70,7 +70,7 @@ var Avatars = (function () {
 exports.default = Avatars;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./helper/canvas":4,"object-assign":8}],2:[function(require,module,exports){
+},{"./helper/canvas":4,"object-assign":9}],2:[function(require,module,exports){
 (function (process){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -96,7 +96,7 @@ var Color = (function () {
 exports.default = Color;
 
 }).call(this,require('_process'))
-},{"_process":9}],3:[function(require,module,exports){
+},{"_process":10}],3:[function(require,module,exports){
 (function (global){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -164,11 +164,12 @@ exports.createImage = createImage;
 },{}],5:[function(require,module,exports){
 var avatars = require('./avatars').default;
 avatars.SPRITE_SETS = {
-    female: require('./spriteSets/female').default
+    female: require('./spriteSets/female').default,
+    male: require('./spriteSets/male').default
 };
 module.exports = avatars;
 
-},{"./avatars":1,"./spriteSets/female":7}],6:[function(require,module,exports){
+},{"./avatars":1,"./spriteSets/female":7,"./spriteSets/male":8}],6:[function(require,module,exports){
 (function (process){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -267,7 +268,7 @@ var Sprite = (function () {
 exports.default = Sprite;
 
 }).call(this,require('_process'))
-},{"./helper/canvas":4,"_process":9}],7:[function(require,module,exports){
+},{"./helper/canvas":4,"_process":10}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sprite_1 = require("../sprite");
@@ -311,17 +312,6 @@ var spriteSet = {
         src: './assets/female/face.png',
         color: skinColor
     }),
-    mouth: new sprite_1.default({
-        src: './assets/female/mouth.png',
-        color: new brighterOrDarkerThan_1.default([
-            [219, 172, 152],
-            [210, 153, 133],
-            [201, 130, 118],
-            [227, 93, 106],
-            [227, 33, 83],
-            [222, 15, 13]
-        ], skinColor, 0, 5)
-    }),
     eyes: new sprite_1.default({
         src: './assets/female/eyes.png',
         color: new color_1.default([
@@ -335,6 +325,17 @@ var spriteSet = {
     eyebrows: new sprite_1.default({
         src: './assets/female/eyebrows.png',
         color: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, skinColor, 0, 5), hairColor, 0, 7)
+    }),
+    mouth: new sprite_1.default({
+        src: './assets/female/mouth.png',
+        color: new brighterOrDarkerThan_1.default([
+            [219, 172, 152],
+            [210, 153, 133],
+            [201, 130, 118],
+            [227, 93, 106],
+            [227, 33, 83],
+            [222, 15, 13]
+        ], skinColor, 0, 5)
     }),
     accessories: new sprite_1.default({
         src: './assets/female/accessories.png',
@@ -389,6 +390,110 @@ var spriteSet = {
 exports.default = spriteSet;
 
 },{"../color":2,"../color/modifier/brighterOrDarkerThan":3,"../sprite":6}],8:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var sprite_1 = require("../sprite");
+var color_1 = require("../color");
+var brighterOrDarkerThan_1 = require("../color/modifier/brighterOrDarkerThan");
+var skinColor = new color_1.default([
+    [255, 219, 172],
+    [241, 194, 125],
+    [224, 172, 105],
+    [198, 134, 66],
+    [141, 85, 36]
+]);
+var hairColor = new brighterOrDarkerThan_1.default([
+    [9, 8, 6],
+    [44, 34, 43],
+    [113, 99, 90],
+    [183, 166, 158],
+    [184, 151, 120],
+    [165, 107, 70],
+    [181, 82, 57],
+    [141, 74, 67],
+    [145, 85, 61],
+    [83, 61, 50],
+    [59, 48, 36],
+    [85, 72, 56],
+    [78, 67, 63],
+    [80, 68, 68],
+    [106, 78, 66],
+    [167, 133, 106],
+    [151, 121, 97]
+], skinColor, 12, 12);
+var spriteSet = {
+    face: new sprite_1.default({
+        src: './assets/male/face.png',
+        color: skinColor
+    }),
+    eyes: new sprite_1.default({
+        src: './assets/male/eyes.png',
+        color: new color_1.default([
+            [118, 119, 139],
+            [105, 123, 148],
+            [100, 123, 144],
+            [91, 124, 139],
+            [88, 131, 135]
+        ])
+    }),
+    eyebrows: new sprite_1.default({
+        src: './assets/male/eyebrows.png',
+        color: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, skinColor, 0, 5), hairColor, 0, 7)
+    }),
+    mustache: new sprite_1.default({
+        src: './assets/male/mustache.png',
+        chance: 50,
+        color: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, hairColor, 15, 0), skinColor, 0, 5)
+    }),
+    mouth: new sprite_1.default({
+        src: './assets/male/mouth.png',
+        color: new brighterOrDarkerThan_1.default([
+            [238, 193, 173],
+            [219, 172, 152],
+            [210, 153, 133]
+        ], skinColor, 0, 5)
+    }),
+    glasses: new sprite_1.default({
+        src: './assets/male/glasses.png',
+        chance: 25,
+        color: new color_1.default([
+            [95, 112, 92],
+            [67, 103, 125],
+            [94, 23, 45],
+            [255, 182, 122],
+            [160, 75, 93],
+            [25, 25, 25],
+            [50, 50, 50],
+            [75, 75, 75]
+        ])
+    }),
+    clothes: new sprite_1.default({
+        src: './assets/male/clothes.png',
+        color: new color_1.default([
+            [91, 192, 222],
+            [92, 184, 92],
+            [66, 139, 202],
+            [3, 57, 108],
+            [0, 91, 150],
+            [100, 151, 177],
+            [27, 133, 184],
+            [90, 82, 85],
+            [85, 158, 131],
+            [174, 90, 65],
+            [195, 203, 113],
+            [102, 101, 71],
+            [255, 226, 138]
+        ])
+    }),
+    hair: new sprite_1.default({
+        src: './assets/male/hair.png',
+        chance: 95,
+        color: hairColor
+    }),
+};
+exports.default = spriteSet;
+
+},{"../color":2,"../color/modifier/brighterOrDarkerThan":3,"../sprite":6}],9:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -480,7 +585,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

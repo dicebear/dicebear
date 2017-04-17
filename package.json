@@ -20,7 +20,7 @@
   },
   "scripts": {
     "prebuild": "rm -r dist/* lib/*",
-    "build": "tsc; browserify lib/index.js -s Avatars > dist/avatars.js"
+    "build": "./node_modules/.bin/tsc; ./node_modules/.bin/browserify lib/index.js -s Avatars > dist/avatars.js"
   },
   "author": "Florian Körner <contact@dicebear.com>",
   "license": "MIT",

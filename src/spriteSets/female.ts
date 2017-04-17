@@ -43,17 +43,6 @@ let spriteSet: SpriteSetInterface = {
         src: './assets/female/face.png',
         color: skinColor
     }),
-    mouth: new Sprite({
-        src: './assets/female/mouth.png',
-        color: new BrighterOrDarkerThan([
-            [219,172,152],
-            [210,153,133],
-            [201,130,118],
-            [227,93,106],
-            [227, 33, 83],
-            [222, 15, 13]
-        ], skinColor, 0, 5)
-    }),
     eyes: new Sprite({
         src: './assets/female/eyes.png',
         color: new Color([
@@ -77,6 +66,17 @@ let spriteSet: SpriteSetInterface = {
             0,
             7
         )
+    }),
+    mouth: new Sprite({
+        src: './assets/female/mouth.png',
+        color: new BrighterOrDarkerThan([
+            [219,172,152],
+            [210,153,133],
+            [201,130,118],
+            [227,93,106],
+            [227, 33, 83],
+            [222, 15, 13]
+        ], skinColor, 0, 5)
     }),
     accessories: new Sprite({
         src: './assets/female/accessories.png',
