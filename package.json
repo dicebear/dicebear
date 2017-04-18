@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "JavaScript Avatar Generator",
   "main": "lib/index.js",
   "types": "src/index.ts",
