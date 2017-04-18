@@ -15,71 +15,60 @@ export default class Avatars {
     
     public constructor(spriteSet: SpriteSetInterface, options: AvatarsOptions = {}) {
         this.spriteSet = spriteSet;
+        this.options = options;
     }
 
-    public create(token: string|number, callback: (err, image: HTMLImageElement) => void, options: AvatarsOptions = {}) {
-        async.each(this.spriteSet, (sprite, next) => {
-            sprite.load(next);
-        }, err => {
-            if (err) {
-                callback(err, null);
+    public create(token: string|number, callback: (err, canvas: HTMLCanvasElement) => void, options: AvatarsOptions = {}) {
+        let chance = new Chance(token);
 
-                return;
-            }
-
-            let avatarOptions = objectAssign({
-                size: 20,
-                order: Object.keys(this.spriteSet)
-            }, this.options, options);
-
-            let chance = new Chance(<any>token);
-
-            let canvas = createCanvas();
-            let context = canvas.getContext('2d');
-
-            canvas.width = avatarOptions.size;
-            canvas.height = avatarOptions.size;
-
-            // Disable image smoothing
-            context.imageSmoothingEnabled = false;
-            context.mozImageSmoothingEnabled = false;
-            context.oImageSmoothingEnabled = false;
-            context.webkitImageSmoothingEnabled = false;
-
-            async.eachSeries(avatarOptions.order, (spriteName, next) => {
-                let sprite = this.spriteSet[spriteName];
-
-                if (sprite) {
-                    sprite.create(chance, (err, image) => {
-                        if (err) {
-                            next(err);
-
-                            return;
-                        }
-
-                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-                        next();
-                    });
-                } else {
-                    next(new Error('Sprite '+spriteName+' does not exist.'));
-                }
+        this.spriteSet(chance, (err, spriteSet) => {
+            async.each(spriteSet, (sprite, next) => {
+                sprite.load(next);
             }, err => {
                 if (err) {
                     callback(err, null);
+
+                    return;
                 }
 
-                let image = createImage();
+                let avatarOptions = objectAssign({
+                    size: 20,
+                    order: Object.keys(spriteSet)
+                }, this.options, options);
 
-                image.addEventListener('load', () => {
-                    callback(null, image);
+                let canvas = createCanvas();
+                let context = canvas.getContext('2d');
+
+                canvas.width = avatarOptions.size;
+                canvas.height = avatarOptions.size;
+
+                // Disable image smoothing
+                context.imageSmoothingEnabled = false;
+                context.mozImageSmoothingEnabled = false;
+                context.oImageSmoothingEnabled = false;
+                context.webkitImageSmoothingEnabled = false;
+
+                async.eachSeries(avatarOptions.order, (spriteName, next) => {
+                    let sprite = spriteSet[spriteName];
+
+                    if (sprite) {
+                        sprite.create(chance, (err, spriteCanvas) => {
+                            if (err) {
+                                next(err);
+
+                                return;
+                            }
+
+                            context.drawImage(spriteCanvas, 0, 0, canvas.width, canvas.height);
+
+                            next();
+                        });
+                    } else {
+                        next(new Error('Sprite '+spriteName+' does not exist.'));
+                    }
+                }, err => {
+                    callback(err, canvas);
                 });
-
-                image.addEventListener('error', err => {
-                    callback(err.error, image);
-                });
-
-                image.src = canvas.toDataURL('image/png');
             });
         });
     }

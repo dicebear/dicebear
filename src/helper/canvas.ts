@@ -20,12 +20,16 @@ export function createImage() : HTMLImageElement {
         image.eventListener.load.forEach(callback => {
             callback();
         });
+
+        image.eventListener.load = [];
     }
 
     image.onerror = function(err) {
         image.eventListener.error.forEach(callback => {
             callback(err);
         });
+
+        image.eventListener.error = [];
     }
 
     return image;

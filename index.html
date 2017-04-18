@@ -20,7 +20,7 @@
     </style>
   </head>
   <body>
-    <div id="avatar"><img id="avatar-image" /></div>
+    <img id="avatar" />
 
     <label for="sprite-set">Sprite Set</label>
     <select id="sprite-set"></select>
@@ -55,9 +55,9 @@
         var seedValue = seed.value;
 
         avatars[spriteSets.value].create(
-          seedValue, function(err, image) {
+          seedValue, function(err, canvas) {
             if (seed.value === seedValue) {
-              avatar.replaceChild(image, document.getElementsByTagName('img')[0]);
+              avatar.setAttribute('src', canvas.toDataURL());
             }
           },
           {size: size.value}
