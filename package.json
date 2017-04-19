@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "JavaScript Avatar Generator",
   "main": "lib/index.js",
   "types": "src/index.ts",
@@ -10,6 +10,7 @@
     "@types/node": "^7.0.12",
     "@types/object-assign": "^4.0.30",
     "async": "^2.3.0",
+    "brfs": "^1.4.3",
     "canvas": "^1.6.5",
     "chance": "^1.0.6",
     "object-assign": "^4.1.1",

@@ -4,7 +4,7 @@ import { createImage, createCanvas } from './helper/canvas';
 
 export interface SpriteInterface {
     load(callback: (err: Error|null, image: HTMLImageElement|null) => void);
-    create(chance: Chance.Chance, callback: (err: Error|null, image: HTMLImageElement|null) => void);
+    create(chance: Chance.Chance, callback: (err: Error|null, canvas: HTMLCanvasElement|null) => void);
 }
 
 export interface SpriteOptions {
@@ -19,7 +19,7 @@ export default class Sprite implements SpriteInterface {
     protected image: HTMLImageElement = null;
     protected imageError: Error = null;
     protected imageSprites: number = null;
-    protected createdImages: { [key: number]: HTMLImageElement } = {};
+    protected createdCanvases: { [key: number]: HTMLCanvasElement } = {};
 
     constructor(options: SpriteOptions) {
         // Set default options
@@ -60,15 +60,15 @@ export default class Sprite implements SpriteInterface {
         }
     }
 
-    create(chance: Chance.Chance, callback: (err: Error|null, image: HTMLImageElement|null) => void) {
+    create(chance: Chance.Chance, callback: (err: Error|null, canvas: HTMLCanvasElement|null) => void) {
         if (!this.image.complete) {
             process.nextTick(() => callback(new Error('Sprite image not loaded.'), null));
 
             return;
         }
 
-        if (this.createdImages[chance.seed]) {
-            process.nextTick(() => callback(null, this.createdImages[chance.seed]));
+        if (this.createdCanvases[chance.seed]) {
+            process.nextTick(() => callback(null, this.createdCanvases[chance.seed]));
 
             return;
         }
@@ -79,18 +79,6 @@ export default class Sprite implements SpriteInterface {
         canvas.width = this.options.size;
         canvas.height = this.options.size;
 
-        var sprite = createImage();
-
-        sprite.addEventListener('load', () => {
-            this.createdImages[chance.seed] = sprite;
-
-            callback(null, sprite);
-        });
-
-        sprite.addEventListener('error', err => {
-            callback(err.error, sprite);
-        });
-
         if (chance.bool({likelihood: this.options.chance})) {
             this.options.color.getColor(chance, (err, color) => {
                 context.drawImage(
@@ -100,11 +88,11 @@ export default class Sprite implements SpriteInterface {
                 );
 
                 this.tintCanvas(canvas, color, err => {
-                    sprite.src = canvas.toDataURL('image/png');
+                    callback(null, canvas);
                 });
             });
         } else {
-            sprite.src = canvas.toDataURL('image/png');
+            process.nextTick(() => callback(null, canvas));
         }
     }
 
