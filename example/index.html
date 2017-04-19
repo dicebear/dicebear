@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>JavaScript Avatar Generator | OpenSource by DiceBear</title>
+    <meta name="description" content="JavaScript 8bit OpenSource Avatar Generator for Browsers and NodeJS by DiceBear.com">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+
+    <script src="https://cdn.jsdelivr.net/g/async@2.3.0(async.min.js),chance@1.0.6,one-color@2.4.0,jquery@3.2.1"></script>
+    <script src="https://cdn.rawgit.com/DiceBear/avatars/master/dist/avatars.js"></script>
+    <script src="./script.js"></script>
+  </head>
+  <body>
+    <a href="https://github.com/DiceBear/avatars">
+      <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png">
+    </a>
+
+    <div class="container">
+      <h1 class="text-center pt-5 pb-5">
+        <small class="text-muted">DiceBear</small><br />
+        <strong class="display-1">avatars</strong>
+      </h1>
+
+      <div class="pt-5 pb-4">
+        <div class="row">
+          <div class="col-6 col-lg-3 offset-lg-3">
+            <div class="card text-center">
+              <div class="card-block text-center p-1">
+                <img id="avatar-male" class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Male Avatar">
+                <p class="card-text"><strong>Male</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card text-center">
+              <div class="card-block text-center p-1">
+                <img id="avatar-female" class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Female Avatar">
+                <p class="card-text"><strong>Female</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row pb-5">
+        <div class="col-12 col-lg-6 offset-lg-3">
+          <div class="form-group">
+            <input type="text" class="form-control text-center" id="seed" placeholder="Seed (e.g. name, e-mail-address,...)" />
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-center pt-4">
+        More Examples<br />
+        <span class="h5">
+          <small class="text-muted">
+            provided by <a href="https://github.com/DiceBear/avatars-server" target="_blank">avatars.dicebear.com</a>
+          </small>
+        </span>
+      </h2>
+      <div id="infinite" class="row">
+          <div class="col-6 col-sm-4 col-lg-3 mt-3">
+            <div class="card text-center">
+              <div class="card-block text-center p-1">
+                <a href="#" target="_blank">
+                  <img class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Avatar">
+                </a>
+                <p class="card-text"><strong class="name">Please wait...</strong></p>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
