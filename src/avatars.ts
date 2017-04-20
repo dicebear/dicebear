@@ -12,13 +12,28 @@ export interface AvatarsOptions {
 export default class Avatars {
     protected spriteSet: SpriteSetInterface;
     protected options: AvatarsOptions;
-    
+
+    /**
+     * @param spriteSet 
+     * @param options 
+     */
     public constructor(spriteSet: SpriteSetInterface, options: AvatarsOptions = {}) {
         this.spriteSet = spriteSet;
         this.options = options;
     }
 
-    public create(token: string|number, callback: (err, canvas: HTMLCanvasElement) => void, options: AvatarsOptions = {}) {
+    /**
+     * Creates an avatar
+     * 
+     * @param token
+     * @param options
+     * @param callback
+     */
+    public create(
+        token: string|number,
+        options: AvatarsOptions,
+        callback: (err, canvas: HTMLCanvasElement, chance: Chance.Chance) => void
+    ) {
         let chance = new Chance(token);
 
         this.spriteSet(chance, (err, spriteSet) => {
@@ -26,7 +41,7 @@ export default class Avatars {
                 sprite.load(next);
             }, err => {
                 if (err) {
-                    callback(err, null);
+                    callback(err, null, chance);
 
                     return;
                 }
@@ -67,7 +82,7 @@ export default class Avatars {
                         next(new Error('Sprite '+spriteName+' does not exist.'));
                     }
                 }, err => {
-                    callback(err, canvas);
+                    callback(err, canvas, chance);
                 });
             });
         });

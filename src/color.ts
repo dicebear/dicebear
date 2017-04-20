@@ -8,10 +8,19 @@ export default class Color implements ColorInterface {
     private colors: RgbInterface[]|ColorInterface;
     private pickedColors: { [key: number]: RgbInterface } = {};
 
+    /**
+     * @param colors
+     */
     constructor(colors: RgbInterface[]|ColorInterface) {
         this.colors = colors;
     }
 
+    /**
+     * Returns a color
+     * 
+     * @param chance
+     * @param callback
+     */
     getColor(chance: Chance.Chance, callback: (err, color: RgbInterface) => void) {
         if (this.colors instanceof Array) {
             process.nextTick(() => {

@@ -7,7 +7,7 @@
   "dependencies": {
     "@types/async": "^2.0.40",
     "@types/chance": "^0.7.32",
-    "@types/node": "^7.0.12",
+    "@types/node": "^7.0.13",
     "@types/object-assign": "^4.0.30",
     "async": "^2.3.0",
     "brfs": "^1.4.3",

@@ -8,6 +8,12 @@ export default class BrighterOrDarkerThan extends Color {
     private differenceBrightness: number;
     private differenceDarkness: number;
 
+    /**
+     * @param colors
+     * @param referenceColor
+     * @param differenceBrightness
+     * @param differenceDarkness
+     */
     constructor(
         colors: RgbInterface[]|ColorInterface,
         referenceColor: ColorInterface,
@@ -22,6 +28,12 @@ export default class BrighterOrDarkerThan extends Color {
         this.differenceDarkness = differenceDarkness ? differenceDarkness / 100 : 0;
     }
 
+    /**
+     * Returns a color
+     * 
+     * @param chance
+     * @param callback
+     */
     getColor(chance: Chance.Chance, callback: (err, color: RgbInterface) => void) {
         super.getColor(chance, (err, color) => {
             this.referenceColor.getColor(chance, (err, referenceColor) => {

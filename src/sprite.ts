@@ -21,6 +21,9 @@ export default class Sprite implements SpriteInterface {
     protected imageSprites: number = null;
     protected createdCanvases: { [key: number]: HTMLCanvasElement } = {};
 
+    /**
+     * @param options 
+     */
     constructor(options: SpriteOptions) {
         // Set default options
         options.size = options.size || 20;
@@ -29,6 +32,11 @@ export default class Sprite implements SpriteInterface {
         this.options = options;
     }
 
+    /**
+     * Loads sprite Image
+     *
+     * @param callback 
+     */
     load(callback: (err: Error|null, image: HTMLImageElement|null) => void) {
         if (null === this.image) {
             // Create HTMLImageElement
@@ -60,6 +68,12 @@ export default class Sprite implements SpriteInterface {
         }
     }
 
+    /**
+     * Creates an sprite
+     * 
+     * @param chance
+     * @param callback
+     */
     create(chance: Chance.Chance, callback: (err: Error|null, canvas: HTMLCanvasElement|null) => void) {
         if (!this.image.complete) {
             process.nextTick(() => callback(new Error('Sprite image not loaded.'), null));
@@ -96,6 +110,13 @@ export default class Sprite implements SpriteInterface {
         }
     }
 
+    /**
+     * Tints an sprite
+     *
+     * @param canvas
+     * @param color
+     * @param callback
+     */
     private tintCanvas(canvas: HTMLCanvasElement, color: RgbInterface, callback: (err) => void) {
         let context = canvas.getContext('2d');
         let buffer = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -107,9 +128,9 @@ export default class Sprite implements SpriteInterface {
             let a = i + 3;
 
             if (a > 0) {
-                buffer.data[r] = Math.round((buffer.data[r]-color[0])*(buffer.data[r]/255)+color[0]);
-                buffer.data[g] = Math.round((buffer.data[g]-color[1])*(buffer.data[g]/255)+color[1]);
-                buffer.data[b] = Math.round((buffer.data[b]-color[2])*(buffer.data[b]/255)+color[2]);
+                buffer.data[r] = Math.round((buffer.data[r] - color[0]) * (buffer.data[r] / 255) + color[0]);
+                buffer.data[g] = Math.round((buffer.data[g] - color[1]) * (buffer.data[g] / 255) + color[1]);
+                buffer.data[b] = Math.round((buffer.data[b] - color[2]) * (buffer.data[b] / 255) + color[2]);
             }
         }
 
