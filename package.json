@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "JavaScript Avatar Generator",
   "main": "lib/index.js",
   "types": "src/index.ts",
@@ -20,11 +20,17 @@
     "brfs": "^1.4.3",
     "browserify": "^14.1.0",
     "browserify-shim": "^3.8.14",
-    "typescript": "^2.2.1"
+    "licensify": "^3.1.2",
+    "typescript": "^2.2.1",
+    "uglify-js": "^2.8.22"
   },
   "scripts": {
     "prebuild": "rm -r dist/* lib/* || true",
-    "build": "./node_modules/.bin/tsc; ./node_modules/.bin/browserify lib/index.js -s Avatars > dist/avatars.js"
+    "build": "./node_modules/.bin/tsc && npm run build-standalone && npm run build-standalone-minify && npm run build-pack && npm run build-pack-minify",
+    "build-standalone": "./node_modules/.bin/browserify lib/index.js -p licensify -s Avatars -t browserify-shim > dist/avatars.js",
+    "build-standalone-minify": "./node_modules/.bin/uglifyjs -m --comments -o dist/avatars.min.js -- dist/avatars.js",
+    "build-pack": "./node_modules/.bin/browserify lib/index.js -p licensify -s Avatars > dist/avatars.pack.js",
+    "build-pack-minify": "./node_modules/.bin/uglifyjs -m --comments -o dist/avatars.pack.min.js -- dist/avatars.pack.js"
   },
   "author": "Florian Körner <contact@dicebear.com>",
   "license": "MIT",
@@ -48,7 +54,6 @@
   },
   "browserify": {
     "transform": [
-      "browserify-shim",
       "brfs"
     ]
   },

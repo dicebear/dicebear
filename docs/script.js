@@ -11,13 +11,13 @@ $(document).ready(function() {
     var createAvatars = function() {
         var seed = seedInput.val();
 
-        maleAvatar.create(seedInput.val(), function (err, canvas) {
+        maleAvatar.create(seedInput.val(), {}, function (err, canvas) {
             if (seed == seedInput.val()) {
                 maleAvatarImage.attr('src', canvas.toDataURL());
             }
         });
 
-        femaleAvatar.create(seedInput.val(), function (err, canvas) {
+        femaleAvatar.create(seedInput.val(), {}, function (err, canvas) {
             if (seed == seedInput.val()) {
                 femaleAvatarImage.attr('src', canvas.toDataURL());
             }
