@@ -30,11 +30,11 @@ export default class Avatars {
      * @param callback
      */
     public create(
-        token: string|number,
+        token: string|number|Chance.Chance,
         options: AvatarsOptions,
         callback: (err, canvas: HTMLCanvasElement, chance: Chance.Chance) => void
     ) {
-        let chance = new Chance(token);
+        let chance = typeof token in ['string', 'number'] ? new Chance(<string|number>token) : <Chance.Chance>token;
 
         this.spriteSet(chance, (err, spriteSet) => {
             async.each(spriteSet, (sprite, next) => {
