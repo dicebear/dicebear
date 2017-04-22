@@ -25,5 +25,9 @@
     "async": "^2.3.0",
     "chance": "^1.0.6",
     "color": "^3.0.4"
+  },
+  "devDependencies": {
+    "bootstrap": "v4.0.0-alpha.6",
+    "jquery": "^3.2.1"
   }
 }

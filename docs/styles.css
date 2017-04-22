@@ -5,3 +5,7 @@ h1 {
 h2 {
     line-height: .8em;
 }
+
+.mb-6 {
+    margin-bottom: 7rem!important;
+}

@@ -6,7 +6,7 @@
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: Florian Körner <contact@dicebear.com>
  *   homepage: https://github.com/DiceBear/avatars#readme
- *   version: 0.2.0
+ *   version: 0.2.1
  *
  * object-assign:
  *   license: MIT (http://opensource.org/licenses/MIT)
@@ -51,7 +51,7 @@ var Avatars = (function () {
      */
     Avatars.prototype.create = function (token, options, callback) {
         var _this = this;
-        var chance = typeof token in ['string', 'number'] ? new chance_1.Chance(token) : token;
+        var chance = ['string', 'number'].indexOf(typeof token) > -1 ? new chance_1.Chance(token) : token;
         this.spriteSet(chance, function (err, spriteSet) {
             async.each(spriteSet, function (sprite, next) {
                 sprite.load(next);

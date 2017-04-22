@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $('.api-endpoint').text(API_ENDPOINT);
+
     var maleAvatar = new Avatars(Avatars.SPRITE_SETS.male, { size: 200 });
     var femaleAvatar = new Avatars(Avatars.SPRITE_SETS.female, { size: 200 });
 
@@ -7,6 +9,7 @@ $(document).ready(function() {
     var femaleAvatarImage = $('#avatar-female');
 
     var seedInput = $('#seed');
+    var seedSpan = $('.seed');
 
     var createAvatars = function() {
         var seed = seedInput.val();
@@ -22,6 +25,8 @@ $(document).ready(function() {
                 femaleAvatarImage.attr('src', canvas.toDataURL());
             }
         });
+
+        seedSpan.text(seed || 'custom-seed');
     }
 
     seedInput.on('input', createAvatars);
@@ -41,7 +46,7 @@ $(document).ready(function() {
             var newAvatar = infiniteDummy.clone();
             var newAvatarGender = infiniteChance.pickone(['male', 'female']);
             var newAvatarName = infiniteChance.name({ gender: newAvatarGender });
-            var newAvatarUrl = 'https://avatars.dicebear.com/'+encodeURIComponent(newAvatarName)+'/'+newAvatarGender+'/200/';
+            var newAvatarUrl = API_ENDPOINT+'v1/'+newAvatarGender+'/'+encodeURIComponent(newAvatarName)+'/200.png';
 
             newAvatar
                 .find('a')

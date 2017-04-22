@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "JavaScript Avatar Generator",
   "main": "lib/index.js",
   "types": "src/index.ts",
@@ -25,12 +25,16 @@
     "uglify-js": "^2.8.22"
   },
   "scripts": {
-    "prebuild": "rm -r dist/* lib/* || true",
-    "build": "./node_modules/.bin/tsc && npm run build-standalone && npm run build-standalone-minify && npm run build-pack && npm run build-pack-minify",
+    "prebuild": "rm -r dist/* lib/* docs/assets/* || true",
+    "build": "./node_modules/.bin/tsc && npm run build-standalone && npm run build-standalone-minify && npm run build-pack && npm run build-pack-minify && npm run build-assets",
     "build-standalone": "./node_modules/.bin/browserify lib/index.js -p licensify -s Avatars -t browserify-shim > dist/avatars.js",
     "build-standalone-minify": "./node_modules/.bin/uglifyjs -m --comments -o dist/avatars.min.js -- dist/avatars.js",
     "build-pack": "./node_modules/.bin/browserify lib/index.js -p licensify -s Avatars > dist/avatars.pack.js",
-    "build-pack-minify": "./node_modules/.bin/uglifyjs -m --comments -o dist/avatars.pack.min.js -- dist/avatars.pack.js"
+    "build-pack-minify": "./node_modules/.bin/uglifyjs -m --comments -o dist/avatars.pack.min.js -- dist/avatars.pack.js",
+    "build-assets": "npm run build-jquery && npm run build-bootstrap-css && npm run build-bootstrap-js",
+    "build-jquery": "cp ./bower_components/jquery/dist/jquery.min.js ./docs/assets/",
+    "build-bootstrap-css": "cp ./bower_components/bootstrap/dist/css/bootstrap.min.css ./docs/assets/",
+    "build-bootstrap-js": "cp ./bower_components/bootstrap/dist/js/bootstrap.min.js ./docs/assets/"
   },
   "author": "Florian Körner <contact@dicebear.com>",
   "license": "MIT",
