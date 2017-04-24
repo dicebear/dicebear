@@ -16,7 +16,7 @@ Test in your Browser: <https://avatars.dicebear.com/>
 ## Use the API
 
 ```
-GET https://avatars.dicebear.com/:spriteSet/:seed/:size.png
+GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png
 ```
 
 ```
