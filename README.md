@@ -36,7 +36,7 @@ GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png
 
 
 ### Host your own API-Server
-[Checkout our OpenSource API-Server](https://github.com/DiceBear/avatars-server)
+[Check out our OpenSource API-Server](https://github.com/DiceBear/avatars-server)
 
 
 ## Use the library
