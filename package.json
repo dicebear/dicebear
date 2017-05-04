@@ -1,7 +1,7 @@
 {
   "name": "@dicebear/avatars",
-  "version": "0.2.4",
-  "description": "JavaScript Avatar Generator",
+  "version": "1.0.0",
+  "description": "Pixel-Art Avatar Generator by Identifier",
   "main": "lib/index.js",
   "types": "src/index.ts",
   "dependencies": {
@@ -34,7 +34,7 @@
     "build-assets": "npm run build-jquery && npm run build-bootstrap-css && npm run build-bootstrap-js",
     "build-jquery": "cp ./bower_components/jquery/dist/jquery.min.js ./docs/assets/",
     "build-bootstrap-css": "cp ./bower_components/bootstrap/dist/css/bootstrap.min.css ./docs/assets/",
-    "build-bootstrap-js": "cp ./bower_components/bootstrap/dist/js/bootstrap.min.js ./docs/assets/"
+    "build-bootstrap-js": "cp ./bower_components/bootstrap/dist/js/bootstrap.min.js ./docs/assets/; cp ./bower_components/tether/dist/js/tether.min.js ./docs/assets/;"
   },
   "author": "Florian Körner <contact@dicebear.com>",
   "license": "MIT",

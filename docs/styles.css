@@ -17,3 +17,11 @@ h2 {
     border: 0;
     z-index: 1;
 }
+
+button {
+    cursor: pointer;
+}
+
+img {
+    image-rendering: pixelated;
+}

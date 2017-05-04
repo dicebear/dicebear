@@ -1,6 +1,10 @@
 # DiceBear Avatars
 
-Seeded Avatars in JavScript for Browsers and NodeJS.  
+![license](https://img.shields.io/github/license/dicebear/avatars.svg)
+[![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg)](https://www.npmjs.com/package/@dicebear/avatars)
+![Bower](https://img.shields.io/bower/v/dicebear-avatars.svg)
+
+Pixel-Art Avatar Generator by Identifier in JavaScript for Browsers and NodeJS.  
 Test in your Browser: <https://avatars.dicebear.com/>
 
 ![](http://avatars.dicebear.com/v1/female/1/60.png)
@@ -13,7 +17,7 @@ Test in your Browser: <https://avatars.dicebear.com/>
 ![](http://avatars.dicebear.com/v1/male/88/60.png)
 
 
-## Use the API
+## Use the HTTP-API
 
 ```
 GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Seeded JavaScript Avatar Generator | OpenSource by DiceBear</title>
-    <meta name="description" content="Seeded JavaScript OpenSource Avatar Generator for Browsers and NodeJS by DiceBear.com">
+    <title>Pixel-Art Avatar Generator in JavaScript with HTTP-API</title>
+    <meta name="description" content="Pixel-Art Avatar Generator by Identifier in JavaScript for Browsers and NodeJS">
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,6 +34,7 @@
     </script>
 
     <script src="./assets/jquery.min.js"></script>
+    <script src="./assets/tether.min.js"></script>
     <script src="./assets/bootstrap.min.js"></script>
     <script src="./script.js"></script>
   </head>
@@ -56,6 +57,15 @@
             <p class="mb-1"><strong>Install via npm</strong></p>
             <p>
               <code>npm install @dicebear/avatars</code>
+            </p>
+
+            <p class="small">
+              DiceBear Avatars requires <a href="https://github.com/caolan/async">async</a>,
+              <a href="https://github.com/chancejs/chancejs">chance</a> and
+              <a href="https://github.com/One-com/one-color">one-color</a>. Load this libraries
+              from a CDN, from bower or use the
+              <a href="https://github.com/DiceBear/avatars/blob/master/dist/avatars.pack.min.js">avatars.pack.min.js</a>
+              bundled within this Repository.
             </p>
 
             <hr />
@@ -92,7 +102,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">REST-API</h5>
+            <h5 class="modal-title" id="exampleModalLabel">HTTP-API (recommended)</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -160,7 +170,7 @@
               <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#installModal">Installation</button>
             </div>
             <div class="col-md-6">
-              <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#restModal">REST-API</button>
+              <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#restModal">HTTP-API (recommended)</button>
             </div>
           </div>
         </div>
@@ -170,7 +180,7 @@
         More Examples<br />
         <span class="h5">
           <small class="text-muted">
-            provided via REST-API
+            provided via HTTP-API
           </small>
         </span>
       </h2>

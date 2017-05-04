@@ -6,14 +6,14 @@
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: Florian Körner <contact@dicebear.com>
  *   homepage: https://github.com/DiceBear/avatars#readme
- *   version: 0.2.1
+ *   version: 1.0.0
  *
  * async:
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: Caolan McMahon
  *   maintainers: caolan <caolan.mcmahon@gmail.com>, beaugunderson <beau@beaugunderson.com>, aearly <alexander.early@gmail.com>, megawac <megawac@gmail.com>
  *   homepage: https://github.com/caolan/async#readme
- *   version: 2.3.0
+ *   version: 2.4.0
  *
  * base64-js:
  *   license: MIT (http://opensource.org/licenses/MIT)
@@ -35,7 +35,7 @@
  *   author: Victor Quinn <mail@victorquinn.com>
  *   maintainers: victorquinn <mail@victorquinn.com>
  *   homepage: http://chancejs.com
- *   version: 1.0.6
+ *   version: 1.0.8
  *
  * ieee754:
  *   license: BSD-3-Clause (http://opensource.org/licenses/BSD-3-Clause)
@@ -74,6 +74,8 @@ var canvas_1 = require("./helper/canvas");
 var objectAssign = require("object-assign");
 var async = require("async");
 var chance_1 = require("chance");
+var male_1 = require("./spriteSets/male");
+var female_1 = require("./spriteSets/female");
 var Avatars = (function () {
     /**
      * @param spriteSet
@@ -138,9 +140,13 @@ var Avatars = (function () {
     };
     return Avatars;
 }());
+Avatars.SPRITE_SETS = {
+    male: male_1.default,
+    female: female_1.default
+};
 exports.default = Avatars;
 
-},{"./helper/canvas":4,"async":9,"chance":12,"object-assign":14}],2:[function(require,module,exports){
+},{"./helper/canvas":4,"./spriteSets/female":7,"./spriteSets/male":8,"async":9,"chance":12,"object-assign":14}],2:[function(require,module,exports){
 (function (process){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -252,13 +258,9 @@ exports.createImage = createImage;
 
 },{}],5:[function(require,module,exports){
 var avatars = require('./avatars').default;
-avatars.SPRITE_SETS = {
-    female: require('./spriteSets/female').default,
-    male: require('./spriteSets/male').default
-};
 module.exports = avatars;
 
-},{"./avatars":1,"./spriteSets/female":7,"./spriteSets/male":8}],6:[function(require,module,exports){
+},{"./avatars":1}],6:[function(require,module,exports){
 (function (process){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -616,95 +618,27 @@ exports.default = maleSpriteSet;
 },{"../color":2,"../color/modifier/brighterOrDarkerThan":3,"../sprite":6,"_process":34}],9:[function(require,module,exports){
 (function (process,global){
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (factory((global.async = global.async || {})));
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (factory((global.async = global.async || {})));
 }(this, (function (exports) { 'use strict';
 
-/**
- * A faster alternative to `Function#apply`, this function invokes `func`
- * with the `this` binding of `thisArg` and the arguments of `args`.
- *
- * @private
- * @param {Function} func The function to invoke.
- * @param {*} thisArg The `this` binding of `func`.
- * @param {Array} args The arguments to invoke `func` with.
- * @returns {*} Returns the result of `func`.
- */
-function apply(func, thisArg, args) {
-  switch (args.length) {
-    case 0: return func.call(thisArg);
-    case 1: return func.call(thisArg, args[0]);
-    case 2: return func.call(thisArg, args[0], args[1]);
-    case 3: return func.call(thisArg, args[0], args[1], args[2]);
-  }
-  return func.apply(thisArg, args);
-}
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeMax = Math.max;
-
-/**
- * A specialized version of `baseRest` which transforms the rest array.
- *
- * @private
- * @param {Function} func The function to apply a rest parameter to.
- * @param {number} [start=func.length-1] The start position of the rest parameter.
- * @param {Function} transform The rest array transform.
- * @returns {Function} Returns the new function.
- */
-function overRest$1(func, start, transform) {
-  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);
-  return function() {
-    var args = arguments,
-        index = -1,
-        length = nativeMax(args.length - start, 0),
-        array = Array(length);
-
-    while (++index < length) {
-      array[index] = args[start + index];
+function slice(arrayLike, start) {
+    start = start|0;
+    var newLen = Math.max(arrayLike.length - start, 0);
+    var newArr = Array(newLen);
+    for(var idx = 0; idx < newLen; idx++)  {
+        newArr[idx] = arrayLike[start + idx];
     }
-    index = -1;
-    var otherArgs = Array(start + 1);
-    while (++index < start) {
-      otherArgs[index] = args[index];
-    }
-    otherArgs[start] = transform(array);
-    return apply(func, this, otherArgs);
-  };
-}
-
-/**
- * This method returns the first argument it receives.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Util
- * @param {*} value Any value.
- * @returns {*} Returns `value`.
- * @example
- *
- * var object = { 'a': 1 };
- *
- * console.log(_.identity(object) === object);
- * // => true
- */
-function identity(value) {
-  return value;
-}
-
-// Lodash rest function without function.toString()
-// remappings
-function rest(func, start) {
-    return overRest$1(func, start, identity);
+    return newArr;
 }
 
 var initialParams = function (fn) {
-    return rest(function (args /*..., callback*/) {
+    return function (/*...args, callback*/) {
+        var args = slice(arguments);
         var callback = args.pop();
         fn.call(this, args, callback);
-    });
+    };
 };
 
 /**
@@ -737,6 +671,34 @@ function isObject(value) {
   return value != null && (type == 'object' || type == 'function');
 }
 
+var hasSetImmediate = typeof setImmediate === 'function' && setImmediate;
+var hasNextTick = typeof process === 'object' && typeof process.nextTick === 'function';
+
+function fallback(fn) {
+    setTimeout(fn, 0);
+}
+
+function wrap(defer) {
+    return function (fn/*, ...args*/) {
+        var args = slice(arguments, 1);
+        defer(function () {
+            fn.apply(null, args);
+        });
+    };
+}
+
+var _defer;
+
+if (hasSetImmediate) {
+    _defer = setImmediate;
+} else if (hasNextTick) {
+    _defer = process.nextTick;
+} else {
+    _defer = fallback;
+}
+
+var setImmediate$1 = wrap(_defer);
+
 /**
  * Take a sync function and make it async, passing its return value to a
  * callback. This is useful for plugging sync functions into a waterfall,
@@ -756,7 +718,7 @@ function isObject(value) {
  * @method
  * @alias wrapSync
  * @category Util
- * @param {Function} func - The synchronous funuction, or Promise-returning
+ * @param {Function} func - The synchronous function, or Promise-returning
  * function to convert to an {@link AsyncFunction}.
  * @returns {AsyncFunction} An asynchronous wrapper of the `func`. To be
  * invoked with `(args..., callback)`.
@@ -803,10 +765,10 @@ function asyncify(func) {
         }
         // if result is Promise object
         if (isObject(result) && typeof result.then === 'function') {
-            result.then(function (value) {
-                callback(null, value);
-            }, function (err) {
-                callback(err.message ? err : new Error(err));
+            result.then(function(value) {
+                invokeCallback(callback, null, value);
+            }, function(err) {
+                invokeCallback(callback, err.message ? err : new Error(err));
             });
         } else {
             callback(null, result);
@@ -814,18 +776,19 @@ function asyncify(func) {
     });
 }
 
-var supportsSymbol = typeof Symbol === 'function';
-
-function supportsAsync() {
-    var supported;
+function invokeCallback(callback, error, value) {
     try {
-        /* eslint no-eval: 0 */
-        supported = isAsync(eval('(async function () {})'));
+        callback(error, value);
     } catch (e) {
-        supported = false;
+        setImmediate$1(rethrow, e);
     }
-    return supported;
 }
+
+function rethrow(error) {
+    throw error;
+}
+
+var supportsSymbol = typeof Symbol === 'function';
 
 function isAsync(fn) {
     return supportsSymbol && fn[Symbol.toStringTag] === 'AsyncFunction';
@@ -835,22 +798,22 @@ function wrapAsync(asyncFn) {
     return isAsync(asyncFn) ? asyncify(asyncFn) : asyncFn;
 }
 
-var wrapAsync$1 = supportsAsync() ? wrapAsync : identity;
-
 function applyEach$1(eachfn) {
-    return rest(function (fns, args) {
-        var go = initialParams(function (args, callback) {
+    return function(fns/*, ...args*/) {
+        var args = slice(arguments, 1);
+        var go = initialParams(function(args, callback) {
             var that = this;
             return eachfn(fns, function (fn, cb) {
-                wrapAsync$1(fn).apply(that, args.concat(cb));
+                wrapAsync(fn).apply(that, args.concat(cb));
             }, callback);
         });
         if (args.length) {
             return go.apply(this, args);
-        } else {
+        }
+        else {
             return go;
         }
-    });
+    };
 }
 
 /** Detect free variable `global` from Node.js. */
@@ -1520,18 +1483,19 @@ function createArrayIterator(coll) {
     var i = -1;
     var len = coll.length;
     return function next() {
-        return ++i < len ? { value: coll[i], key: i } : null;
-    };
+        return ++i < len ? {value: coll[i], key: i} : null;
+    }
 }
 
 function createES2015Iterator(iterator) {
     var i = -1;
     return function next() {
         var item = iterator.next();
-        if (item.done) return null;
+        if (item.done)
+            return null;
         i++;
-        return { value: item.value, key: i };
-    };
+        return {value: item.value, key: i};
+    }
 }
 
 function createObjectIterator(obj) {
@@ -1540,7 +1504,7 @@ function createObjectIterator(obj) {
     var len = okeys.length;
     return function next() {
         var key = okeys[++i];
-        return i < len ? { value: obj[key], key: key } : null;
+        return i < len ? {value: obj[key], key: key} : null;
     };
 }
 
@@ -1554,7 +1518,7 @@ function iterator(coll) {
 }
 
 function onlyOnce(fn) {
-    return function () {
+    return function() {
         if (fn === null) throw new Error("Callback was already called.");
         var callFn = fn;
         fn = null;
@@ -1577,15 +1541,17 @@ function _eachOfLimit(limit) {
             if (err) {
                 done = true;
                 callback(err);
-            } else if (value === breakLoop || done && running <= 0) {
+            }
+            else if (value === breakLoop || (done && running <= 0)) {
                 done = true;
                 return callback(null);
-            } else {
+            }
+            else {
                 replenish();
             }
         }
 
-        function replenish() {
+        function replenish () {
             while (running < limit && !done) {
                 var elem = nextElem();
                 if (elem === null) {
@@ -1625,7 +1591,7 @@ function _eachOfLimit(limit) {
  * `iteratee` functions have finished, or an error occurs. Invoked with (err).
  */
 function eachOfLimit(coll, limit, iteratee, callback) {
-  _eachOfLimit(limit)(coll, wrapAsync$1(iteratee), callback);
+    _eachOfLimit(limit)(coll, wrapAsync(iteratee), callback);
 }
 
 function doLimit(fn, limit) {
@@ -1647,7 +1613,7 @@ function eachOfArrayLike(coll, iteratee, callback) {
     function iteratorCallback(err, value) {
         if (err) {
             callback(err);
-        } else if (++completed === length || value === breakLoop) {
+        } else if ((++completed === length) || value === breakLoop) {
             callback(null);
         }
     }
@@ -1699,14 +1665,14 @@ var eachOfGeneric = doLimit(eachOfLimit, Infinity);
  *     doSomethingWith(configs);
  * });
  */
-var eachOf = function (coll, iteratee, callback) {
+var eachOf = function(coll, iteratee, callback) {
     var eachOfImplementation = isArrayLike(coll) ? eachOfArrayLike : eachOfGeneric;
-    eachOfImplementation(coll, wrapAsync$1(iteratee), callback);
+    eachOfImplementation(coll, wrapAsync(iteratee), callback);
 };
 
 function doParallel(fn) {
     return function (obj, iteratee, callback) {
-        return fn(eachOf, obj, wrapAsync$1(iteratee), callback);
+        return fn(eachOf, obj, wrapAsync(iteratee), callback);
     };
 }
 
@@ -1715,7 +1681,7 @@ function _asyncMap(eachfn, arr, iteratee, callback) {
     arr = arr || [];
     var results = [];
     var counter = 0;
-    var _iteratee = wrapAsync$1(iteratee);
+    var _iteratee = wrapAsync(iteratee);
 
     eachfn(arr, function (value, _, callback) {
         var index = counter++;
@@ -1803,7 +1769,7 @@ var applyEach = applyEach$1(map);
 
 function doParallelLimit(fn) {
     return function (obj, limit, iteratee, callback) {
-        return fn(_eachOfLimit(limit), obj, wrapAsync$1(iteratee), callback);
+        return fn(_eachOfLimit(limit), obj, wrapAsync(iteratee), callback);
     };
 }
 
@@ -1881,10 +1847,11 @@ var applyEachSeries = applyEach$1(mapSeries);
  * @memberOf module:Utils
  * @method
  * @category Util
- * @param {Function} function - The function you want to eventually apply all
+ * @param {Function} fn - The function you want to eventually apply all
  * arguments to. Invokes with (arguments...).
  * @param {...*} arguments... - Any number of arguments to automatically apply
  * when the continuation is called.
+ * @returns {Function} the partially-applied function
  * @example
  *
  * // using apply
@@ -1913,11 +1880,13 @@ var applyEachSeries = applyEach$1(mapSeries);
  * two
  * three
  */
-var apply$2 = rest(function (fn, args) {
-    return rest(function (callArgs) {
+var apply = function(fn/*, ...args*/) {
+    var args = slice(arguments, 1);
+    return function(/*callArgs*/) {
+        var callArgs = slice(arguments);
         return fn.apply(null, args.concat(callArgs));
-    });
-});
+    };
+};
 
 /**
  * A specialized version of `_.forEach` for arrays without support for
@@ -2187,7 +2156,10 @@ var auto = function (tasks, concurrency, callback) {
 
         arrayEach(dependencies, function (dependencyName) {
             if (!tasks[dependencyName]) {
-                throw new Error('async.auto task `' + key + '` has a non-existent dependency `' + dependencyName + '` in ' + dependencies.join(', '));
+                throw new Error('async.auto task `' + key +
+                    '` has a non-existent dependency `' +
+                    dependencyName + '` in ' +
+                    dependencies.join(', '));
             }
             addListener(dependencyName, function () {
                 remainingDependencies--;
@@ -2211,10 +2183,11 @@ var auto = function (tasks, concurrency, callback) {
         if (readyTasks.length === 0 && runningTasks === 0) {
             return callback(null, results);
         }
-        while (readyTasks.length && runningTasks < concurrency) {
+        while(readyTasks.length && runningTasks < concurrency) {
             var run = readyTasks.shift();
             run();
         }
+
     }
 
     function addListener(taskName, fn) {
@@ -2234,32 +2207,33 @@ var auto = function (tasks, concurrency, callback) {
         processQueue();
     }
 
+
     function runTask(key, task) {
         if (hasError) return;
 
-        var taskCallback = onlyOnce(rest(function (err, args) {
+        var taskCallback = onlyOnce(function(err, result) {
             runningTasks--;
-            if (args.length <= 1) {
-                args = args[0];
+            if (arguments.length > 2) {
+                result = slice(arguments, 1);
             }
             if (err) {
                 var safeResults = {};
-                baseForOwn(results, function (val, rkey) {
+                baseForOwn(results, function(val, rkey) {
                     safeResults[rkey] = val;
                 });
-                safeResults[key] = args;
+                safeResults[key] = result;
                 hasError = true;
                 listeners = Object.create(null);
 
                 callback(err, safeResults);
             } else {
-                results[key] = args;
+                results[key] = result;
                 taskComplete(key);
             }
-        }));
+        });
 
         runningTasks++;
-        var taskFn = wrapAsync$1(task[task.length - 1]);
+        var taskFn = wrapAsync(task[task.length - 1]);
         if (task.length > 1) {
             taskFn(results, taskCallback);
         } else {
@@ -2284,7 +2258,9 @@ var auto = function (tasks, concurrency, callback) {
         }
 
         if (counter !== numTasks) {
-            throw new Error('async.auto cannot execute tasks due to a recursive dependency');
+            throw new Error(
+                'async.auto cannot execute tasks due to a recursive dependency'
+            );
         }
     }
 
@@ -2612,7 +2588,7 @@ function parseParams(func) {
     func = func.toString().replace(STRIP_COMMENTS, '');
     func = func.match(FN_ARGS)[2].replace(' ', '');
     func = func ? func.split(FN_ARG_SPLIT) : [];
-    func = func.map(function (arg) {
+    func = func.map(function (arg){
         return trim(arg.replace(FN_ARG, ''));
     });
     return func;
@@ -2706,7 +2682,9 @@ function autoInject(tasks, callback) {
     baseForOwn(tasks, function (taskFn, key) {
         var params;
         var fnIsAsync = isAsync(taskFn);
-        var hasNoDeps = !fnIsAsync && taskFn.length === 1 || fnIsAsync && taskFn.length === 0;
+        var hasNoDeps =
+            (!fnIsAsync && taskFn.length === 1) ||
+            (fnIsAsync && taskFn.length === 0);
 
         if (isArray(taskFn)) {
             params = taskFn.slice(0, -1);
@@ -2733,39 +2711,12 @@ function autoInject(tasks, callback) {
                 return results[name];
             });
             newArgs.push(taskCb);
-            wrapAsync$1(taskFn).apply(null, newArgs);
+            wrapAsync(taskFn).apply(null, newArgs);
         }
     });
 
     auto(newTasks, callback);
 }
-
-var hasSetImmediate = typeof setImmediate === 'function' && setImmediate;
-var hasNextTick = typeof process === 'object' && typeof process.nextTick === 'function';
-
-function fallback(fn) {
-    setTimeout(fn, 0);
-}
-
-function wrap(defer) {
-    return rest(function (fn, args) {
-        defer(function () {
-            fn.apply(null, args);
-        });
-    });
-}
-
-var _defer;
-
-if (hasSetImmediate) {
-    _defer = setImmediate;
-} else if (hasNextTick) {
-    _defer = process.nextTick;
-} else {
-    _defer = fallback;
-}
-
-var setImmediate$1 = wrap(_defer);
 
 // Simple doubly linked list (https://en.wikipedia.org/wiki/Doubly_linked_list) implementation
 // used for queues. This implementation assumes that the node provided by the user can be modified
@@ -2781,57 +2732,89 @@ function setInitial(dll, node) {
     dll.head = dll.tail = node;
 }
 
-DLL.prototype.removeLink = function (node) {
-    if (node.prev) node.prev.next = node.next;else this.head = node.next;
-    if (node.next) node.next.prev = node.prev;else this.tail = node.prev;
+DLL.prototype.removeLink = function(node) {
+    if (node.prev) node.prev.next = node.next;
+    else this.head = node.next;
+    if (node.next) node.next.prev = node.prev;
+    else this.tail = node.prev;
 
     node.prev = node.next = null;
     this.length -= 1;
     return node;
 };
 
-DLL.prototype.empty = DLL;
+DLL.prototype.empty = function () {
+    while(this.head) this.shift();
+    return this;
+};
 
-DLL.prototype.insertAfter = function (node, newNode) {
+DLL.prototype.insertAfter = function(node, newNode) {
     newNode.prev = node;
     newNode.next = node.next;
-    if (node.next) node.next.prev = newNode;else this.tail = newNode;
+    if (node.next) node.next.prev = newNode;
+    else this.tail = newNode;
     node.next = newNode;
     this.length += 1;
 };
 
-DLL.prototype.insertBefore = function (node, newNode) {
+DLL.prototype.insertBefore = function(node, newNode) {
     newNode.prev = node.prev;
     newNode.next = node;
-    if (node.prev) node.prev.next = newNode;else this.head = newNode;
+    if (node.prev) node.prev.next = newNode;
+    else this.head = newNode;
     node.prev = newNode;
     this.length += 1;
 };
 
-DLL.prototype.unshift = function (node) {
-    if (this.head) this.insertBefore(this.head, node);else setInitial(this, node);
+DLL.prototype.unshift = function(node) {
+    if (this.head) this.insertBefore(this.head, node);
+    else setInitial(this, node);
 };
 
-DLL.prototype.push = function (node) {
-    if (this.tail) this.insertAfter(this.tail, node);else setInitial(this, node);
+DLL.prototype.push = function(node) {
+    if (this.tail) this.insertAfter(this.tail, node);
+    else setInitial(this, node);
 };
 
-DLL.prototype.shift = function () {
+DLL.prototype.shift = function() {
     return this.head && this.removeLink(this.head);
 };
 
-DLL.prototype.pop = function () {
+DLL.prototype.pop = function() {
     return this.tail && this.removeLink(this.tail);
+};
+
+DLL.prototype.toArray = function () {
+    var arr = Array(this.length);
+    var curr = this.head;
+    for(var idx = 0; idx < this.length; idx++) {
+        arr[idx] = curr.data;
+        curr = curr.next;
+    }
+    return arr;
+};
+
+DLL.prototype.remove = function (testFn) {
+    var curr = this.head;
+    while(!!curr) {
+        var next = curr.next;
+        if (testFn(curr)) {
+            this.removeLink(curr);
+        }
+        curr = next;
+    }
+    return this;
 };
 
 function queue(worker, concurrency, payload) {
     if (concurrency == null) {
         concurrency = 1;
-    } else if (concurrency === 0) {
+    }
+    else if(concurrency === 0) {
         throw new Error('Concurrency must not be zero');
     }
 
-    var _worker = wrapAsync$1(worker);
+    var _worker = wrapAsync(worker);
     var numRunning = 0;
     var workersList = [];
 
@@ -2845,7 +2828,7 @@ function queue(worker, concurrency, payload) {
         }
         if (data.length === 0 && q.idle()) {
             // call drain immediately if there are no tasks
-            return setImmediate$1(function () {
+            return setImmediate$1(function() {
                 q.drain();
             });
         }
@@ -2866,7 +2849,7 @@ function queue(worker, concurrency, payload) {
     }
 
     function _next(tasks) {
-        return rest(function (args) {
+        return function(err){
             numRunning -= 1;
 
             for (var i = 0, l = tasks.length; i < l; i++) {
@@ -2876,14 +2859,14 @@ function queue(worker, concurrency, payload) {
                     workersList.splice(index);
                 }
 
-                task.callback.apply(task, args);
+                task.callback.apply(task, arguments);
 
-                if (args[0] != null) {
-                    q.error(args[0], task.data);
+                if (err != null) {
+                    q.error(err, task.data);
                 }
             }
 
-            if (numRunning <= q.concurrency - q.buffer) {
+            if (numRunning <= (q.concurrency - q.buffer) ) {
                 q.unsaturated();
             }
 
@@ -2891,7 +2874,7 @@ function queue(worker, concurrency, payload) {
                 q.drain();
             }
             q.process();
-        });
+        };
     }
 
     var isProcessing = false;
@@ -2900,7 +2883,7 @@ function queue(worker, concurrency, payload) {
         concurrency: concurrency,
         payload: payload,
         saturated: noop,
-        unsaturated: noop,
+        unsaturated:noop,
         buffer: concurrency / 4,
         empty: noop,
         drain: noop,
@@ -2917,6 +2900,9 @@ function queue(worker, concurrency, payload) {
         unshift: function (data, callback) {
             _insert(data, true, callback);
         },
+        remove: function (testFn) {
+            q._tasks.remove(testFn);
+        },
         process: function () {
             // Avoid trying to start too many processing operations. This can occur
             // when callbacks resolve synchronously (#1267).
@@ -2924,9 +2910,8 @@ function queue(worker, concurrency, payload) {
                 return;
             }
             isProcessing = true;
-            while (!q.paused && numRunning < q.concurrency && q._tasks.length) {
-                var tasks = [],
-                    data = [];
+            while(!q.paused && numRunning < q.concurrency && q._tasks.length){
+                var tasks = [], data = [];
                 var l = q._tasks.length;
                 if (q.payload) l = Math.min(l, q.payload);
                 for (var i = 0; i < l; i++) {
@@ -2935,11 +2920,12 @@ function queue(worker, concurrency, payload) {
                     data.push(node.data);
                 }
 
+                numRunning += 1;
+                workersList.push(tasks[0]);
+
                 if (q._tasks.length === 0) {
                     q.empty();
                 }
-                numRunning += 1;
-                workersList.push(tasks[0]);
 
                 if (numRunning === q.concurrency) {
                     q.saturated();
@@ -2959,16 +2945,14 @@ function queue(worker, concurrency, payload) {
         workersList: function () {
             return workersList;
         },
-        idle: function () {
+        idle: function() {
             return q._tasks.length + numRunning === 0;
         },
         pause: function () {
             q.paused = true;
         },
         resume: function () {
-            if (q.paused === false) {
-                return;
-            }
+            if (q.paused === false) { return; }
             q.paused = false;
             setImmediate$1(q.process);
         }
@@ -3054,7 +3038,7 @@ function queue(worker, concurrency, payload) {
  * });
  */
 function cargo(worker, payload) {
-  return queue(worker, 1, payload);
+    return queue(worker, 1, payload);
 }
 
 /**
@@ -3118,13 +3102,13 @@ var eachOfSeries = doLimit(eachOfLimit, 1);
  */
 function reduce(coll, memo, iteratee, callback) {
     callback = once(callback || noop);
-    var _iteratee = wrapAsync$1(iteratee);
-    eachOfSeries(coll, function (x, i, callback) {
-        _iteratee(memo, x, function (err, v) {
+    var _iteratee = wrapAsync(iteratee);
+    eachOfSeries(coll, function(x, i, callback) {
+        _iteratee(memo, x, function(err, v) {
             memo = v;
             callback(err);
         });
-    }, function (err) {
+    }, function(err) {
         callback(err, memo);
     });
 }
@@ -3167,9 +3151,10 @@ function reduce(coll, memo, iteratee, callback) {
  *     });
  * });
  */
-var seq$1 = rest(function seq(functions) {
-    var _functions = arrayMap(functions, wrapAsync$1);
-    return rest(function (args) {
+function seq(/*...functions*/) {
+    var _functions = arrayMap(arguments, wrapAsync);
+    return function(/*...args*/) {
+        var args = slice(arguments);
         var that = this;
 
         var cb = args[args.length - 1];
@@ -3179,15 +3164,17 @@ var seq$1 = rest(function seq(functions) {
             cb = noop;
         }
 
-        reduce(_functions, args, function (newargs, fn, cb) {
-            fn.apply(that, newargs.concat(rest(function (err, nextargs) {
+        reduce(_functions, args, function(newargs, fn, cb) {
+            fn.apply(that, newargs.concat(function(err/*, ...nextargs*/) {
+                var nextargs = slice(arguments, 1);
                 cb(err, nextargs);
-            })));
-        }, function (err, results) {
+            }));
+        },
+        function(err, results) {
             cb.apply(that, [err].concat(results));
         });
-    });
-});
+    };
+}
 
 /**
  * Creates a function which is a composition of the passed asynchronous
@@ -3224,9 +3211,9 @@ var seq$1 = rest(function seq(functions) {
  *     // result now equals 15
  * });
  */
-var compose = rest(function (args) {
-  return seq$1.apply(null, args.reverse());
-});
+var compose = function(/*...args*/) {
+    return seq.apply(null, slice(arguments).reverse());
+};
 
 function concat$1(eachfn, arr, fn, callback) {
     var result = [];
@@ -3269,7 +3256,7 @@ var concat = doParallel(concat$1);
 
 function doSeries(fn) {
     return function (obj, iteratee, callback) {
-        return fn(eachOfSeries, obj, wrapAsync$1(iteratee), callback);
+        return fn(eachOfSeries, obj, wrapAsync(iteratee), callback);
     };
 }
 
@@ -3335,20 +3322,42 @@ var concatSeries = doSeries(concat$1);
  *     //...
  * }, callback);
  */
-var constant = rest(function (values) {
+var constant = function(/*...values*/) {
+    var values = slice(arguments);
     var args = [null].concat(values);
-    return initialParams(function (ignoredArgs, callback) {
+    return function (/*...ignoredArgs, callback*/) {
+        var callback = arguments[arguments.length - 1];
         return callback.apply(this, args);
-    });
-});
+    };
+};
+
+/**
+ * This method returns the first argument it receives.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {*} value Any value.
+ * @returns {*} Returns `value`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ *
+ * console.log(_.identity(object) === object);
+ * // => true
+ */
+function identity(value) {
+  return value;
+}
 
 function _createTester(check, getResult) {
-    return function (eachfn, arr, iteratee, cb) {
+    return function(eachfn, arr, iteratee, cb) {
         cb = cb || noop;
         var testPassed = false;
         var testResult;
-        eachfn(arr, function (value, _, callback) {
-            iteratee(value, function (err, result) {
+        eachfn(arr, function(value, _, callback) {
+            iteratee(value, function(err, result) {
                 if (err) {
                     callback(err);
                 } else if (check(result) && !testResult) {
@@ -3359,7 +3368,7 @@ function _createTester(check, getResult) {
                     callback();
                 }
             });
-        }, function (err) {
+        }, function(err) {
             if (err) {
                 cb(err);
             } else {
@@ -3457,8 +3466,10 @@ var detectLimit = doParallelLimit(_createTester(identity, _findGetResult));
 var detectSeries = doLimit(detectLimit, 1);
 
 function consoleFunc(name) {
-    return rest(function (fn, args) {
-        wrapAsync$1(fn).apply(null, args.concat(rest(function (err, args) {
+    return function (fn/*, ...args*/) {
+        var args = slice(arguments, 1);
+        args.push(function (err/*, ...args*/) {
+            var args = slice(arguments, 1);
             if (typeof console === 'object') {
                 if (err) {
                     if (console.error) {
@@ -3470,8 +3481,9 @@ function consoleFunc(name) {
                     });
                 }
             }
-        })));
-    });
+        });
+        wrapAsync(fn).apply(null, args);
+    };
 }
 
 /**
@@ -3527,14 +3539,15 @@ var dir = consoleFunc('dir');
  */
 function doDuring(fn, test, callback) {
     callback = onlyOnce(callback || noop);
-    var _fn = wrapAsync$1(fn);
-    var _test = wrapAsync$1(test);
+    var _fn = wrapAsync(fn);
+    var _test = wrapAsync(test);
 
-    var next = rest(function (err, args) {
+    function next(err/*, ...args*/) {
         if (err) return callback(err);
+        var args = slice(arguments, 1);
         args.push(check);
         _test.apply(this, args);
-    });
+    }
 
     function check(err, truth) {
         if (err) return callback(err);
@@ -3543,6 +3556,7 @@ function doDuring(fn, test, callback) {
     }
 
     check(null, true);
+
 }
 
 /**
@@ -3569,12 +3583,13 @@ function doDuring(fn, test, callback) {
  */
 function doWhilst(iteratee, test, callback) {
     callback = onlyOnce(callback || noop);
-    var _iteratee = wrapAsync$1(iteratee);
-    var next = rest(function (err, args) {
+    var _iteratee = wrapAsync(iteratee);
+    var next = function(err/*, ...args*/) {
         if (err) return callback(err);
+        var args = slice(arguments, 1);
         if (test.apply(this, args)) return _iteratee(next);
         callback.apply(null, [null].concat(args));
-    });
+    };
     _iteratee(next);
 }
 
@@ -3599,7 +3614,7 @@ function doWhilst(iteratee, test, callback) {
  * callback. Invoked with (err, [results]);
  */
 function doUntil(iteratee, test, callback) {
-    doWhilst(iteratee, function () {
+    doWhilst(iteratee, function() {
         return !test.apply(this, arguments);
     }, callback);
 }
@@ -3642,8 +3657,8 @@ function doUntil(iteratee, test, callback) {
  */
 function during(test, fn, callback) {
     callback = onlyOnce(callback || noop);
-    var _fn = wrapAsync$1(fn);
-    var _test = wrapAsync$1(test);
+    var _fn = wrapAsync(fn);
+    var _test = wrapAsync(test);
 
     function next(err) {
         if (err) return callback(err);
@@ -3723,7 +3738,7 @@ function _withoutIndex(iteratee) {
  * });
  */
 function eachLimit(coll, iteratee, callback) {
-  eachOf(coll, _withoutIndex(wrapAsync$1(iteratee)), callback);
+    eachOf(coll, _withoutIndex(wrapAsync(iteratee)), callback);
 }
 
 /**
@@ -3747,7 +3762,7 @@ function eachLimit(coll, iteratee, callback) {
  * `iteratee` functions have finished, or an error occurs. Invoked with (err).
  */
 function eachLimit$1(coll, limit, iteratee, callback) {
-  _eachOfLimit(limit)(coll, _withoutIndex(wrapAsync$1(iteratee)), callback);
+    _eachOfLimit(limit)(coll, _withoutIndex(wrapAsync(iteratee)), callback);
 }
 
 /**
@@ -3940,7 +3955,7 @@ function filterGeneric(eachfn, coll, iteratee, callback) {
                 callback(err);
             } else {
                 if (v) {
-                    results.push({ index: index, value: x });
+                    results.push({index: index, value: x});
                 }
                 callback();
             }
@@ -3958,7 +3973,7 @@ function filterGeneric(eachfn, coll, iteratee, callback) {
 
 function _filter(eachfn, coll, iteratee, callback) {
     var filter = isArrayLike(coll) ? filterArray : filterGeneric;
-    filter(eachfn, coll, wrapAsync$1(iteratee), callback || noop);
+    filter(eachfn, coll, wrapAsync(iteratee), callback || noop);
 }
 
 /**
@@ -4061,7 +4076,7 @@ var filterSeries = doLimit(filterLimit, 1);
  */
 function forever(fn, errback) {
     var done = onlyOnce(errback || noop);
-    var task = wrapAsync$1(ensureAsync(fn));
+    var task = wrapAsync(ensureAsync(fn));
 
     function next(err) {
         if (err) return done(err);
@@ -4089,15 +4104,15 @@ function forever(fn, errback) {
  * functions have finished, or an error occurs. Result is an `Object` whoses
  * properties are arrays of values which returned the corresponding key.
  */
-var groupByLimit = function (coll, limit, iteratee, callback) {
+var groupByLimit = function(coll, limit, iteratee, callback) {
     callback = callback || noop;
-    var _iteratee = wrapAsync$1(iteratee);
-    mapLimit(coll, limit, function (val, callback) {
-        _iteratee(val, function (err, key) {
+    var _iteratee = wrapAsync(iteratee);
+    mapLimit(coll, limit, function(val, callback) {
+        _iteratee(val, function(err, key) {
             if (err) return callback(err);
-            return callback(null, { key: key, val: val });
+            return callback(null, {key: key, val: val});
         });
-    }, function (err, mapResults) {
+    }, function(err, mapResults) {
         var result = {};
         // from MDN, handle object having an `hasOwnProperty` prop
         var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -4231,8 +4246,8 @@ var log = consoleFunc('log');
 function mapValuesLimit(obj, limit, iteratee, callback) {
     callback = once(callback || noop);
     var newObj = {};
-    var _iteratee = wrapAsync$1(iteratee);
-    eachOfLimit(obj, limit, function (val, key, next) {
+    var _iteratee = wrapAsync(iteratee);
+    eachOfLimit(obj, limit, function(val, key, next) {
         _iteratee(val, key, function (err, result) {
             if (err) return next(err);
             newObj[key] = result;
@@ -4356,25 +4371,26 @@ function memoize(fn, hasher) {
     var memo = Object.create(null);
     var queues = Object.create(null);
     hasher = hasher || identity;
-    var _fn = wrapAsync$1(fn);
+    var _fn = wrapAsync(fn);
     var memoized = initialParams(function memoized(args, callback) {
         var key = hasher.apply(null, args);
         if (has(memo, key)) {
-            setImmediate$1(function () {
+            setImmediate$1(function() {
                 callback.apply(null, memo[key]);
             });
         } else if (has(queues, key)) {
             queues[key].push(callback);
         } else {
             queues[key] = [callback];
-            _fn.apply(null, args.concat(rest(function (args) {
+            _fn.apply(null, args.concat(function(/*args*/) {
+                var args = slice(arguments);
                 memo[key] = args;
                 var q = queues[key];
                 delete queues[key];
                 for (var i = 0, l = q.length; i < l; i++) {
                     q[i].apply(null, args);
                 }
-            })));
+            }));
         }
     });
     memoized.memo = memo;
@@ -4430,13 +4446,13 @@ function _parallel(eachfn, tasks, callback) {
     var results = isArrayLike(tasks) ? [] : {};
 
     eachfn(tasks, function (task, key, callback) {
-        wrapAsync$1(task)(rest(function (err, args) {
-            if (args.length <= 1) {
-                args = args[0];
+        wrapAsync(task)(function (err, result) {
+            if (arguments.length > 2) {
+                result = slice(arguments, 1);
             }
-            results[key] = args;
+            results[key] = result;
             callback(err);
-        }));
+        });
     }, function (err) {
         callback(err, results);
     });
@@ -4512,7 +4528,7 @@ function _parallel(eachfn, tasks, callback) {
  * });
  */
 function parallelLimit(tasks, callback) {
-  _parallel(eachOf, tasks, callback);
+    _parallel(eachOf, tasks, callback);
 }
 
 /**
@@ -4535,7 +4551,7 @@ function parallelLimit(tasks, callback) {
  * Invoked with (err, results).
  */
 function parallelLimit$1(tasks, limit, callback) {
-  _parallel(_eachOfLimit(limit), tasks, callback);
+    _parallel(_eachOfLimit(limit), tasks, callback);
 }
 
 /**
@@ -4561,6 +4577,12 @@ function parallelLimit$1(tasks, limit, callback) {
  * task in the list. Invoke with `queue.push(task, [callback])`,
  * @property {Function} unshift - add a new task to the front of the `queue`.
  * Invoke with `queue.unshift(task, [callback])`.
+ * @property {Function} remove - remove items from the queue that match a test
+ * function.  The test function will be passed an object with a `data` property,
+ * and a `priority` property, if this is a
+ * [priorityQueue]{@link module:ControlFlow.priorityQueue} object.
+ * Invoked with `queue.remove(testFn)`, where `testFn` is of the form
+ * `function ({data, priority}) {}` and returns a Boolean.
  * @property {Function} saturated - a callback that is called when the number of
  * running workers hits the `concurrency` limit, and further tasks will be
  * queued.
@@ -4637,10 +4659,10 @@ function parallelLimit$1(tasks, limit, callback) {
  * });
  */
 var queue$1 = function (worker, concurrency) {
-  var _worker = wrapAsync$1(worker);
-  return queue(function (items, cb) {
-    _worker(items[0], cb);
-  }, concurrency, 1);
+    var _worker = wrapAsync(worker);
+    return queue(function (items, cb) {
+        _worker(items[0], cb);
+    }, concurrency, 1);
 };
 
 /**
@@ -4666,12 +4688,12 @@ var queue$1 = function (worker, concurrency) {
  *   array of `tasks` is given, all tasks will be assigned the same priority.
  * * The `unshift` method was removed.
  */
-var priorityQueue = function (worker, concurrency) {
+var priorityQueue = function(worker, concurrency) {
     // Start with a normal queue
     var q = queue$1(worker, concurrency);
 
     // Override push to accept second parameter representing priority
-    q.push = function (data, priority, callback) {
+    q.push = function(data, priority, callback) {
         if (callback == null) callback = noop;
         if (typeof callback !== 'function') {
             throw new Error('task callback must be a function');
@@ -4682,7 +4704,7 @@ var priorityQueue = function (worker, concurrency) {
         }
         if (data.length === 0) {
             // call drain immediately if there are no tasks
-            return setImmediate$1(function () {
+            return setImmediate$1(function() {
                 q.drain();
             });
         }
@@ -4756,11 +4778,9 @@ function race(tasks, callback) {
     if (!isArray(tasks)) return callback(new TypeError('First argument to race must be an array of functions'));
     if (!tasks.length) return callback();
     for (var i = 0, l = tasks.length; i < l; i++) {
-        wrapAsync$1(tasks[i])(callback);
+        wrapAsync(tasks[i])(callback);
     }
 }
-
-var slice = Array.prototype.slice;
 
 /**
  * Same as [`reduce`]{@link module:Collections.reduce}, only operates on `array` in reverse order.
@@ -4784,9 +4804,9 @@ var slice = Array.prototype.slice;
  * `iteratee` functions have finished. Result is the reduced value. Invoked with
  * (err, result).
  */
-function reduceRight(array, memo, iteratee, callback) {
-  var reversed = slice.call(array).reverse();
-  reduce(reversed, memo, iteratee, callback);
+function reduceRight (array, memo, iteratee, callback) {
+    var reversed = slice(array).reverse();
+    reduce(reversed, memo, iteratee, callback);
 }
 
 /**
@@ -4829,33 +4849,29 @@ function reduceRight(array, memo, iteratee, callback) {
  * });
  */
 function reflect(fn) {
-    var _fn = wrapAsync$1(fn);
+    var _fn = wrapAsync(fn);
     return initialParams(function reflectOn(args, reflectCallback) {
-        args.push(rest(function callback(err, cbArgs) {
-            if (err) {
-                reflectCallback(null, {
-                    error: err
-                });
+        args.push(function callback(error, cbArg) {
+            if (error) {
+                reflectCallback(null, { error: error });
             } else {
-                var value = null;
-                if (cbArgs.length === 1) {
-                    value = cbArgs[0];
-                } else if (cbArgs.length > 1) {
-                    value = cbArgs;
+                var value;
+                if (arguments.length <= 2) {
+                    value = cbArg;
+                } else {
+                    value = slice(arguments, 1);
                 }
-                reflectCallback(null, {
-                    value: value
-                });
+                reflectCallback(null, { value: value });
             }
-        }));
+        });
 
         return _fn.apply(this, args);
     });
 }
 
 function reject$1(eachfn, arr, iteratee, callback) {
-    _filter(eachfn, arr, function (value, cb) {
-        iteratee(value, function (err, v) {
+    _filter(eachfn, arr, function(value, cb) {
+        iteratee(value, function(err, v) {
             cb(err, !v);
         });
     }, callback);
@@ -4963,7 +4979,7 @@ function reflectAll(tasks) {
         results = arrayMap(tasks, reflect);
     } else {
         results = {};
-        baseForOwn(tasks, function (task, key) {
+        baseForOwn(tasks, function(task, key) {
             results[key] = reflect.call(this, task);
         });
     }
@@ -5132,7 +5148,9 @@ function retry(opts, task, callback) {
         if (typeof t === 'object') {
             acc.times = +t.times || DEFAULT_TIMES;
 
-            acc.intervalFunc = typeof t.interval === 'function' ? t.interval : constant$1(+t.interval || DEFAULT_INTERVAL);
+            acc.intervalFunc = typeof t.interval === 'function' ?
+                t.interval :
+                constant$1(+t.interval || DEFAULT_INTERVAL);
 
             acc.errorFilter = t.errorFilter;
         } else if (typeof t === 'number' || typeof t === 'string') {
@@ -5154,12 +5172,14 @@ function retry(opts, task, callback) {
         throw new Error("Invalid arguments for async.retry");
     }
 
-    var _task = wrapAsync$1(task);
+    var _task = wrapAsync(task);
 
     var attempt = 1;
     function retryAttempt() {
-        _task(function (err) {
-            if (err && attempt++ < options.times && (typeof options.errorFilter != 'function' || options.errorFilter(err))) {
+        _task(function(err) {
+            if (err && attempt++ < options.times &&
+                (typeof options.errorFilter != 'function' ||
+                    options.errorFilter(err))) {
                 setTimeout(retryAttempt, options.intervalFunc(attempt));
             } else {
                 callback.apply(null, arguments);
@@ -5203,13 +5223,15 @@ var retryable = function (opts, task) {
         task = opts;
         opts = null;
     }
-    var _task = wrapAsync$1(task);
+    var _task = wrapAsync(task);
     return initialParams(function (args, callback) {
         function taskFn(cb) {
             _task.apply(null, args.concat(cb));
         }
 
-        if (opts) retry(opts, taskFn, callback);else retry(taskFn, callback);
+        if (opts) retry(opts, taskFn, callback);
+        else retry(taskFn, callback);
+
     });
 };
 
@@ -5278,7 +5300,7 @@ var retryable = function (opts, task) {
  * });
  */
 function series(tasks, callback) {
-  _parallel(eachOfSeries, tasks, callback);
+    _parallel(eachOfSeries, tasks, callback);
 }
 
 /**
@@ -5405,12 +5427,12 @@ var someSeries = doLimit(someLimit, 1);
  *     // result callback
  * });
  */
-function sortBy(coll, iteratee, callback) {
-    var _iteratee = wrapAsync$1(iteratee);
+function sortBy (coll, iteratee, callback) {
+    var _iteratee = wrapAsync(iteratee);
     map(coll, function (x, callback) {
         _iteratee(x, function (err, criteria) {
             if (err) return callback(err);
-            callback(null, { value: x, criteria: criteria });
+            callback(null, {value: x, criteria: criteria});
         });
     }, function (err, results) {
         if (err) return callback(err);
@@ -5418,8 +5440,7 @@ function sortBy(coll, iteratee, callback) {
     });
 
     function comparator(left, right) {
-        var a = left.criteria,
-            b = right.criteria;
+        var a = left.criteria, b = right.criteria;
         return a < b ? -1 : a > b ? 1 : 0;
     }
 }
@@ -5478,7 +5499,7 @@ function timeout(asyncFn, milliseconds, info) {
 
     function timeoutCallback() {
         var name = asyncFn.name || 'anonymous';
-        var error = new Error('Callback function "' + name + '" timed out.');
+        var error  = new Error('Callback function "' + name + '" timed out.');
         error.code = 'ETIMEDOUT';
         if (info) {
             error.info = info;
@@ -5487,7 +5508,7 @@ function timeout(asyncFn, milliseconds, info) {
         originalCallback(error);
     }
 
-    var fn = wrapAsync$1(asyncFn);
+    var fn = wrapAsync(asyncFn);
 
     return initialParams(function (args, origCallback) {
         originalCallback = origCallback;
@@ -5499,7 +5520,7 @@ function timeout(asyncFn, milliseconds, info) {
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeCeil = Math.ceil;
-var nativeMax$1 = Math.max;
+var nativeMax = Math.max;
 
 /**
  * The base implementation of `_.range` and `_.rangeRight` which doesn't
@@ -5514,7 +5535,7 @@ var nativeMax$1 = Math.max;
  */
 function baseRange(start, end, step, fromRight) {
   var index = -1,
-      length = nativeMax$1(nativeCeil((end - start) / (step || 1)), 0),
+      length = nativeMax(nativeCeil((end - start) / (step || 1)), 0),
       result = Array(length);
 
   while (length--) {
@@ -5541,8 +5562,8 @@ function baseRange(start, end, step, fromRight) {
  * @param {Function} callback - see [async.map]{@link module:Collections.map}.
  */
 function timeLimit(count, limit, iteratee, callback) {
-  var _iteratee = wrapAsync$1(iteratee);
-  mapLimit(baseRange(0, count, 1), limit, _iteratee, callback);
+    var _iteratee = wrapAsync(iteratee);
+    mapLimit(baseRange(0, count, 1), limit, _iteratee, callback);
 }
 
 /**
@@ -5637,19 +5658,75 @@ var timesSeries = doLimit(timeLimit, 1);
  *     // result is equal to {a: 2, b: 4, c: 6}
  * })
  */
-function transform(coll, accumulator, iteratee, callback) {
+function transform (coll, accumulator, iteratee, callback) {
     if (arguments.length <= 3) {
         callback = iteratee;
         iteratee = accumulator;
         accumulator = isArray(coll) ? [] : {};
     }
     callback = once(callback || noop);
-    var _iteratee = wrapAsync$1(iteratee);
+    var _iteratee = wrapAsync(iteratee);
 
-    eachOf(coll, function (v, k, cb) {
+    eachOf(coll, function(v, k, cb) {
         _iteratee(accumulator, v, k, cb);
-    }, function (err) {
+    }, function(err) {
         callback(err, accumulator);
+    });
+}
+
+/**
+ * It runs each task in series but stops whenever any of the functions were
+ * successful. If one of the tasks were successful, the `callback` will be
+ * passed the result of the successful task. If all tasks fail, the callback
+ * will be passed the error and result (if any) of the final attempt.
+ *
+ * @name tryEach
+ * @static
+ * @memberOf module:ControlFlow
+ * @method
+ * @category Control Flow
+ * @param {Array|Iterable|Object} tasks - A collection containing functions to
+ * run, each function is passed a `callback(err, result)` it must call on
+ * completion with an error `err` (which can be `null`) and an optional `result`
+ * value.
+ * @param {Function} [callback] - An optional callback which is called when one
+ * of the tasks has succeeded, or all have failed. It receives the `err` and
+ * `result` arguments of the last attempt at completing the `task`. Invoked with
+ * (err, results).
+ * @example
+ * async.try([
+ *     function getDataFromFirstWebsite(callback) {
+ *         // Try getting the data from the first website
+ *         callback(err, data);
+ *     },
+ *     function getDataFromSecondWebsite(callback) {
+ *         // First website failed,
+ *         // Try getting the data from the backup website
+ *         callback(err, data);
+ *     }
+ * ],
+ * // optional callback
+ * function(err, results) {
+ *     Now do something with the data.
+ * });
+ *
+ */
+function tryEach(tasks, callback) {
+    var error = null;
+    var result;
+    callback = callback || noop;
+    eachSeries(tasks, function(task, callback) {
+        wrapAsync(task)(function (err, res/*, ...args*/) {
+            if (arguments.length > 2) {
+                result = slice(arguments, 1);
+            } else {
+                result = res;
+            }
+            error = err;
+            callback(!err);
+        });
+    }, function () {
+        callback(error, result);
     });
 }
 
@@ -5708,13 +5785,14 @@ function unmemoize(fn) {
  */
 function whilst(test, iteratee, callback) {
     callback = onlyOnce(callback || noop);
-    var _iteratee = wrapAsync$1(iteratee);
+    var _iteratee = wrapAsync(iteratee);
     if (!test()) return callback(null);
-    var next = rest(function (err, args) {
+    var next = function(err/*, ...args*/) {
         if (err) return callback(err);
         if (test()) return _iteratee(next);
+        var args = slice(arguments, 1);
         callback.apply(null, [null].concat(args));
-    });
+    };
     _iteratee(next);
 }
 
@@ -5741,7 +5819,7 @@ function whilst(test, iteratee, callback) {
  * callback. Invoked with (err, [results]);
  */
 function until(test, iteratee, callback) {
-    whilst(function () {
+    whilst(function() {
         return !test.apply(this, arguments);
     }, iteratee, callback);
 }
@@ -5803,28 +5881,23 @@ function until(test, iteratee, callback) {
  *     callback(null, 'done');
  * }
  */
-var waterfall = function (tasks, callback) {
+var waterfall = function(tasks, callback) {
     callback = once(callback || noop);
     if (!isArray(tasks)) return callback(new Error('First argument to waterfall must be an array of functions'));
     if (!tasks.length) return callback();
     var taskIndex = 0;
 
     function nextTask(args) {
-        if (taskIndex === tasks.length) {
-            return callback.apply(null, [null].concat(args));
-        }
-
-        var taskCallback = onlyOnce(rest(function (err, args) {
-            if (err) {
-                return callback.apply(null, [err].concat(args));
-            }
-            nextTask(args);
-        }));
-
-        args.push(taskCallback);
-
-        var task = wrapAsync$1(tasks[taskIndex++]);
+        var task = wrapAsync(tasks[taskIndex++]);
+        args.push(onlyOnce(next));
         task.apply(null, args);
+    }
+
+    function next(err/*, ...args*/) {
+        if (err || taskIndex === tasks.length) {
+            return callback.apply(null, arguments);
+        }
+        nextTask(slice(arguments, 1));
     }
 
     nextTask([]);
@@ -5878,6 +5951,7 @@ var waterfall = function (tasks, callback) {
  * @see AsyncFunction
  */
 
+
 /**
  * A collection of `async` functions for manipulating collections, such as
  * arrays and objects.
@@ -5895,104 +5969,105 @@ var waterfall = function (tasks, callback) {
  */
 
 var index = {
-  applyEach: applyEach,
-  applyEachSeries: applyEachSeries,
-  apply: apply$2,
-  asyncify: asyncify,
-  auto: auto,
-  autoInject: autoInject,
-  cargo: cargo,
-  compose: compose,
-  concat: concat,
-  concatSeries: concatSeries,
-  constant: constant,
-  detect: detect,
-  detectLimit: detectLimit,
-  detectSeries: detectSeries,
-  dir: dir,
-  doDuring: doDuring,
-  doUntil: doUntil,
-  doWhilst: doWhilst,
-  during: during,
-  each: eachLimit,
-  eachLimit: eachLimit$1,
-  eachOf: eachOf,
-  eachOfLimit: eachOfLimit,
-  eachOfSeries: eachOfSeries,
-  eachSeries: eachSeries,
-  ensureAsync: ensureAsync,
-  every: every,
-  everyLimit: everyLimit,
-  everySeries: everySeries,
-  filter: filter,
-  filterLimit: filterLimit,
-  filterSeries: filterSeries,
-  forever: forever,
-  groupBy: groupBy,
-  groupByLimit: groupByLimit,
-  groupBySeries: groupBySeries,
-  log: log,
-  map: map,
-  mapLimit: mapLimit,
-  mapSeries: mapSeries,
-  mapValues: mapValues,
-  mapValuesLimit: mapValuesLimit,
-  mapValuesSeries: mapValuesSeries,
-  memoize: memoize,
-  nextTick: nextTick,
-  parallel: parallelLimit,
-  parallelLimit: parallelLimit$1,
-  priorityQueue: priorityQueue,
-  queue: queue$1,
-  race: race,
-  reduce: reduce,
-  reduceRight: reduceRight,
-  reflect: reflect,
-  reflectAll: reflectAll,
-  reject: reject,
-  rejectLimit: rejectLimit,
-  rejectSeries: rejectSeries,
-  retry: retry,
-  retryable: retryable,
-  seq: seq$1,
-  series: series,
-  setImmediate: setImmediate$1,
-  some: some,
-  someLimit: someLimit,
-  someSeries: someSeries,
-  sortBy: sortBy,
-  timeout: timeout,
-  times: times,
-  timesLimit: timeLimit,
-  timesSeries: timesSeries,
-  transform: transform,
-  unmemoize: unmemoize,
-  until: until,
-  waterfall: waterfall,
-  whilst: whilst,
+    applyEach: applyEach,
+    applyEachSeries: applyEachSeries,
+    apply: apply,
+    asyncify: asyncify,
+    auto: auto,
+    autoInject: autoInject,
+    cargo: cargo,
+    compose: compose,
+    concat: concat,
+    concatSeries: concatSeries,
+    constant: constant,
+    detect: detect,
+    detectLimit: detectLimit,
+    detectSeries: detectSeries,
+    dir: dir,
+    doDuring: doDuring,
+    doUntil: doUntil,
+    doWhilst: doWhilst,
+    during: during,
+    each: eachLimit,
+    eachLimit: eachLimit$1,
+    eachOf: eachOf,
+    eachOfLimit: eachOfLimit,
+    eachOfSeries: eachOfSeries,
+    eachSeries: eachSeries,
+    ensureAsync: ensureAsync,
+    every: every,
+    everyLimit: everyLimit,
+    everySeries: everySeries,
+    filter: filter,
+    filterLimit: filterLimit,
+    filterSeries: filterSeries,
+    forever: forever,
+    groupBy: groupBy,
+    groupByLimit: groupByLimit,
+    groupBySeries: groupBySeries,
+    log: log,
+    map: map,
+    mapLimit: mapLimit,
+    mapSeries: mapSeries,
+    mapValues: mapValues,
+    mapValuesLimit: mapValuesLimit,
+    mapValuesSeries: mapValuesSeries,
+    memoize: memoize,
+    nextTick: nextTick,
+    parallel: parallelLimit,
+    parallelLimit: parallelLimit$1,
+    priorityQueue: priorityQueue,
+    queue: queue$1,
+    race: race,
+    reduce: reduce,
+    reduceRight: reduceRight,
+    reflect: reflect,
+    reflectAll: reflectAll,
+    reject: reject,
+    rejectLimit: rejectLimit,
+    rejectSeries: rejectSeries,
+    retry: retry,
+    retryable: retryable,
+    seq: seq,
+    series: series,
+    setImmediate: setImmediate$1,
+    some: some,
+    someLimit: someLimit,
+    someSeries: someSeries,
+    sortBy: sortBy,
+    timeout: timeout,
+    times: times,
+    timesLimit: timeLimit,
+    timesSeries: timesSeries,
+    transform: transform,
+    tryEach: tryEach,
+    unmemoize: unmemoize,
+    until: until,
+    waterfall: waterfall,
+    whilst: whilst,
 
-  // aliases
-  all: every,
-  any: some,
-  forEach: eachLimit,
-  forEachSeries: eachSeries,
-  forEachLimit: eachLimit$1,
-  forEachOf: eachOf,
-  forEachOfSeries: eachOfSeries,
-  forEachOfLimit: eachOfLimit,
-  inject: reduce,
-  foldl: reduce,
-  foldr: reduceRight,
-  select: filter,
-  selectLimit: filterLimit,
-  selectSeries: filterSeries,
-  wrapSync: asyncify
+    // aliases
+    all: every,
+    any: some,
+    forEach: eachLimit,
+    forEachSeries: eachSeries,
+    forEachLimit: eachLimit$1,
+    forEachOf: eachOf,
+    forEachOfSeries: eachOfSeries,
+    forEachOfLimit: eachOfLimit,
+    inject: reduce,
+    foldl: reduce,
+    foldr: reduceRight,
+    select: filter,
+    selectLimit: filterLimit,
+    selectSeries: filterSeries,
+    wrapSync: asyncify
 };
 
 exports['default'] = index;
 exports.applyEach = applyEach;
 exports.applyEachSeries = applyEachSeries;
-exports.apply = apply$2;
+exports.apply = apply;
 exports.asyncify = asyncify;
 exports.auto = auto;
 exports.autoInject = autoInject;
@@ -6049,7 +6124,7 @@ exports.rejectLimit = rejectLimit;
 exports.rejectSeries = rejectSeries;
 exports.retry = retry;
 exports.retryable = retryable;
-exports.seq = seq$1;
+exports.seq = seq;
 exports.series = series;
 exports.setImmediate = setImmediate$1;
 exports.some = some;
@@ -6061,6 +6136,7 @@ exports.times = times;
 exports.timesLimit = timeLimit;
 exports.timesSeries = timesSeries;
 exports.transform = transform;
+exports.tryEach = tryEach;
 exports.unmemoize = unmemoize;
 exports.until = until;
 exports.waterfall = waterfall;
@@ -7919,7 +7995,7 @@ function numberIsNaN (obj) {
 
 },{"base64-js":10,"ieee754":13}],12:[function(require,module,exports){
 (function (Buffer){
-//  Chance.js 1.0.6
+//  Chance.js 1.0.8
 //  http://chancejs.com
 //  (c) 2013 Victor Quinn
 //  Chance may be freely distributed or modified under the MIT license.
@@ -7983,7 +8059,7 @@ function numberIsNaN (obj) {
         return this;
     }
 
-    Chance.prototype.VERSION = "1.0.6";
+    Chance.prototype.VERSION = "1.0.8";
 
     // Random helper functions
     function initOptions(options, defaults) {
@@ -8629,9 +8705,18 @@ function numberIsNaN (obj) {
         return this.pick(this.get("firstNames")[options.gender.toLowerCase()][options.nationality.toLowerCase()]);
     };
 
-    Chance.prototype.profession = function () {
-        return this.pick(this.get("professions"));
+    Chance.prototype.profession = function (options) {
+        options = initOptions(options);
+        if(options.rank){
+            return this.pick(['Apprentice ', 'Junior ', 'Senior ', 'Lead ']) + this.pick(this.get("profession"));
+        } else{
+            return this.pick(this.get("profession"));
+        }
     };
+    
+    Chance.prototype.company = function (){
+        return this.pick(this.get("company"));
+    }; 
 
     Chance.prototype.gender = function (options) {
         options = initOptions(options, {extraGenders: []});
@@ -9209,6 +9294,24 @@ function numberIsNaN (obj) {
 
     Chance.prototype.port = function() {
         return this.integer({min: 0, max: 65535});
+    };
+    
+    Chance.prototype.locale = function (options) {
+        options = initOptions(options);
+        if (options.region){
+          return this.pick(this.get("locale_regions"));
+        } else {
+          return this.pick(this.get("locale_languages"));
+        }
+    };
+    
+    Chance.prototype.locales = function (options) {
+      options = initOptions(options);
+      if (options.region){
+        return this.get("locale_regions");
+      } else {
+        return this.get("locale_languages");
+      }
     };
 
     // -- End Web --
@@ -10677,6 +10780,698 @@ function numberIsNaN (obj) {
            {name: 'Zambia'},
            {name: 'Zimbabwe'},
         ],
+          // http://www.loc.gov/standards/iso639-2/php/code_list.php (ISO-639-1 codes)
+        locale_languages: [
+          "aa",
+          "ab",
+          "ae",
+          "af",
+          "ak",
+          "am",
+          "an",
+          "ar",
+          "as",
+          "av",
+          "ay",
+          "az",
+          "ba",
+          "be",
+          "bg",
+          "bh",
+          "bi",
+          "bm",
+          "bn",
+          "bo",
+          "br",
+          "bs",
+          "ca",
+          "ce",
+          "ch",
+          "co",
+          "cr",
+          "cs",
+          "cu",
+          "cv",
+          "cy",
+          "da",
+          "de",
+          "dv",
+          "dz",
+          "ee",
+          "el",
+          "en",
+          "eo",
+          "es",
+          "et",
+          "eu",
+          "fa",
+          "ff",
+          "fi",
+          "fj",
+          "fo",
+          "fr",
+          "fy",
+          "ga",
+          "gd",
+          "gl",
+          "gn",
+          "gu",
+          "gv",
+          "ha",
+          "he",
+          "hi",
+          "ho",
+          "hr",
+          "ht",
+          "hu",
+          "hy",
+          "hz",
+          "ia",
+          "id",
+          "ie",
+          "ig",
+          "ii",
+          "ik",
+          "io",
+          "is",
+          "it",
+          "iu",
+          "ja",
+          "jv",
+          "ka",
+          "kg",
+          "ki",
+          "kj",
+          "kk",
+          "kl",
+          "km",
+          "kn",
+          "ko",
+          "kr",
+          "ks",
+          "ku",
+          "kv",
+          "kw",
+          "ky",
+          "la",
+          "lb",
+          "lg",
+          "li",
+          "ln",
+          "lo",
+          "lt",
+          "lu",
+          "lv",
+          "mg",
+          "mh",
+          "mi",
+          "mk",
+          "ml",
+          "mn",
+          "mr",
+          "ms",
+          "mt",
+          "my",
+          "na",
+          "nb",
+          "nd",
+          "ne",
+          "ng",
+          "nl",
+          "nn",
+          "no",
+          "nr",
+          "nv",
+          "ny",
+          "oc",
+          "oj",
+          "om",
+          "or",
+          "os",
+          "pa",
+          "pi",
+          "pl",
+          "ps",
+          "pt",
+          "qu",
+          "rm",
+          "rn",
+          "ro",
+          "ru",
+          "rw",
+          "sa",
+          "sc",
+          "sd",
+          "se",
+          "sg",
+          "si",
+          "sk",
+          "sl",
+          "sm",
+          "sn",
+          "so",
+          "sq",
+          "sr",
+          "ss",
+          "st",
+          "su",
+          "sv",
+          "sw",
+          "ta",
+          "te",
+          "tg",
+          "th",
+          "ti",
+          "tk",
+          "tl",
+          "tn",
+          "to",
+          "tr",
+          "ts",
+          "tt",
+          "tw",
+          "ty",
+          "ug",
+          "uk",
+          "ur",
+          "uz",
+          "ve",
+          "vi",
+          "vo",
+          "wa",
+          "wo",
+          "xh",
+          "yi",
+          "yo",
+          "za",
+          "zh",
+          "zu"
+        ],
+        
+        // From http://data.okfn.org/data/core/language-codes#resource-language-codes-full (IETF language tags)
+        locale_regions: [
+          "agq-CM",
+          "asa-TZ",
+          "ast-ES",
+          "bas-CM",
+          "bem-ZM",
+          "bez-TZ",
+          "brx-IN",
+          "cgg-UG",
+          "chr-US",
+          "dav-KE",
+          "dje-NE",
+          "dsb-DE",
+          "dua-CM",
+          "dyo-SN",
+          "ebu-KE",
+          "ewo-CM",
+          "fil-PH",
+          "fur-IT",
+          "gsw-CH",
+          "gsw-FR",
+          "gsw-LI",
+          "guz-KE",
+          "haw-US",
+          "hsb-DE",
+          "jgo-CM",
+          "jmc-TZ",
+          "kab-DZ",
+          "kam-KE",
+          "kde-TZ",
+          "kea-CV",
+          "khq-ML",
+          "kkj-CM",
+          "kln-KE",
+          "kok-IN",
+          "ksb-TZ",
+          "ksf-CM",
+          "ksh-DE",
+          "lag-TZ",
+          "lkt-US",
+          "luo-KE",
+          "luy-KE",
+          "mas-KE",
+          "mas-TZ",
+          "mer-KE",
+          "mfe-MU",
+          "mgh-MZ",
+          "mgo-CM",
+          "mua-CM",
+          "naq-NA",
+          "nmg-CM",
+          "nnh-CM",
+          "nus-SD",
+          "nyn-UG",
+          "rof-TZ",
+          "rwk-TZ",
+          "sah-RU",
+          "saq-KE",
+          "sbp-TZ",
+          "seh-MZ",
+          "ses-ML",
+          "shi-Latn",
+          "shi-Latn-MA",
+          "shi-Tfng",
+          "shi-Tfng-MA",
+          "smn-FI",
+          "teo-KE",
+          "teo-UG",
+          "twq-NE",
+          "tzm-Latn",
+          "tzm-Latn-MA",
+          "vai-Latn",
+          "vai-Latn-LR",
+          "vai-Vaii",
+          "vai-Vaii-LR",
+          "vun-TZ",
+          "wae-CH",
+          "xog-UG",
+          "yav-CM",
+          "zgh-MA",
+          "af-NA",
+          "af-ZA",
+          "ak-GH",
+          "am-ET",
+          "ar-001",
+          "ar-AE",
+          "ar-BH",
+          "ar-DJ",
+          "ar-DZ",
+          "ar-EG",
+          "ar-EH",
+          "ar-ER",
+          "ar-IL",
+          "ar-IQ",
+          "ar-JO",
+          "ar-KM",
+          "ar-KW",
+          "ar-LB",
+          "ar-LY",
+          "ar-MA",
+          "ar-MR",
+          "ar-OM",
+          "ar-PS",
+          "ar-QA",
+          "ar-SA",
+          "ar-SD",
+          "ar-SO",
+          "ar-SS",
+          "ar-SY",
+          "ar-TD",
+          "ar-TN",
+          "ar-YE",
+          "as-IN",
+          "az-Cyrl",
+          "az-Cyrl-AZ",
+          "az-Latn",
+          "az-Latn-AZ",
+          "be-BY",
+          "bg-BG",
+          "bm-Latn",
+          "bm-Latn-ML",
+          "bn-BD",
+          "bn-IN",
+          "bo-CN",
+          "bo-IN",
+          "br-FR",
+          "bs-Cyrl",
+          "bs-Cyrl-BA",
+          "bs-Latn",
+          "bs-Latn-BA",
+          "ca-AD",
+          "ca-ES",
+          "ca-ES-VALENCIA",
+          "ca-FR",
+          "ca-IT",
+          "cs-CZ",
+          "cy-GB",
+          "da-DK",
+          "da-GL",
+          "de-AT",
+          "de-BE",
+          "de-CH",
+          "de-DE",
+          "de-LI",
+          "de-LU",
+          "dz-BT",
+          "ee-GH",
+          "ee-TG",
+          "el-CY",
+          "el-GR",
+          "en-001",
+          "en-150",
+          "en-AG",
+          "en-AI",
+          "en-AS",
+          "en-AU",
+          "en-BB",
+          "en-BE",
+          "en-BM",
+          "en-BS",
+          "en-BW",
+          "en-BZ",
+          "en-CA",
+          "en-CC",
+          "en-CK",
+          "en-CM",
+          "en-CX",
+          "en-DG",
+          "en-DM",
+          "en-ER",
+          "en-FJ",
+          "en-FK",
+          "en-FM",
+          "en-GB",
+          "en-GD",
+          "en-GG",
+          "en-GH",
+          "en-GI",
+          "en-GM",
+          "en-GU",
+          "en-GY",
+          "en-HK",
+          "en-IE",
+          "en-IM",
+          "en-IN",
+          "en-IO",
+          "en-JE",
+          "en-JM",
+          "en-KE",
+          "en-KI",
+          "en-KN",
+          "en-KY",
+          "en-LC",
+          "en-LR",
+          "en-LS",
+          "en-MG",
+          "en-MH",
+          "en-MO",
+          "en-MP",
+          "en-MS",
+          "en-MT",
+          "en-MU",
+          "en-MW",
+          "en-MY",
+          "en-NA",
+          "en-NF",
+          "en-NG",
+          "en-NR",
+          "en-NU",
+          "en-NZ",
+          "en-PG",
+          "en-PH",
+          "en-PK",
+          "en-PN",
+          "en-PR",
+          "en-PW",
+          "en-RW",
+          "en-SB",
+          "en-SC",
+          "en-SD",
+          "en-SG",
+          "en-SH",
+          "en-SL",
+          "en-SS",
+          "en-SX",
+          "en-SZ",
+          "en-TC",
+          "en-TK",
+          "en-TO",
+          "en-TT",
+          "en-TV",
+          "en-TZ",
+          "en-UG",
+          "en-UM",
+          "en-US",
+          "en-US-POSIX",
+          "en-VC",
+          "en-VG",
+          "en-VI",
+          "en-VU",
+          "en-WS",
+          "en-ZA",
+          "en-ZM",
+          "en-ZW",
+          "eo-001",
+          "es-419",
+          "es-AR",
+          "es-BO",
+          "es-CL",
+          "es-CO",
+          "es-CR",
+          "es-CU",
+          "es-DO",
+          "es-EA",
+          "es-EC",
+          "es-ES",
+          "es-GQ",
+          "es-GT",
+          "es-HN",
+          "es-IC",
+          "es-MX",
+          "es-NI",
+          "es-PA",
+          "es-PE",
+          "es-PH",
+          "es-PR",
+          "es-PY",
+          "es-SV",
+          "es-US",
+          "es-UY",
+          "es-VE",
+          "et-EE",
+          "eu-ES",
+          "fa-AF",
+          "fa-IR",
+          "ff-CM",
+          "ff-GN",
+          "ff-MR",
+          "ff-SN",
+          "fi-FI",
+          "fo-FO",
+          "fr-BE",
+          "fr-BF",
+          "fr-BI",
+          "fr-BJ",
+          "fr-BL",
+          "fr-CA",
+          "fr-CD",
+          "fr-CF",
+          "fr-CG",
+          "fr-CH",
+          "fr-CI",
+          "fr-CM",
+          "fr-DJ",
+          "fr-DZ",
+          "fr-FR",
+          "fr-GA",
+          "fr-GF",
+          "fr-GN",
+          "fr-GP",
+          "fr-GQ",
+          "fr-HT",
+          "fr-KM",
+          "fr-LU",
+          "fr-MA",
+          "fr-MC",
+          "fr-MF",
+          "fr-MG",
+          "fr-ML",
+          "fr-MQ",
+          "fr-MR",
+          "fr-MU",
+          "fr-NC",
+          "fr-NE",
+          "fr-PF",
+          "fr-PM",
+          "fr-RE",
+          "fr-RW",
+          "fr-SC",
+          "fr-SN",
+          "fr-SY",
+          "fr-TD",
+          "fr-TG",
+          "fr-TN",
+          "fr-VU",
+          "fr-WF",
+          "fr-YT",
+          "fy-NL",
+          "ga-IE",
+          "gd-GB",
+          "gl-ES",
+          "gu-IN",
+          "gv-IM",
+          "ha-Latn",
+          "ha-Latn-GH",
+          "ha-Latn-NE",
+          "ha-Latn-NG",
+          "he-IL",
+          "hi-IN",
+          "hr-BA",
+          "hr-HR",
+          "hu-HU",
+          "hy-AM",
+          "id-ID",
+          "ig-NG",
+          "ii-CN",
+          "is-IS",
+          "it-CH",
+          "it-IT",
+          "it-SM",
+          "ja-JP",
+          "ka-GE",
+          "ki-KE",
+          "kk-Cyrl",
+          "kk-Cyrl-KZ",
+          "kl-GL",
+          "km-KH",
+          "kn-IN",
+          "ko-KP",
+          "ko-KR",
+          "ks-Arab",
+          "ks-Arab-IN",
+          "kw-GB",
+          "ky-Cyrl",
+          "ky-Cyrl-KG",
+          "lb-LU",
+          "lg-UG",
+          "ln-AO",
+          "ln-CD",
+          "ln-CF",
+          "ln-CG",
+          "lo-LA",
+          "lt-LT",
+          "lu-CD",
+          "lv-LV",
+          "mg-MG",
+          "mk-MK",
+          "ml-IN",
+          "mn-Cyrl",
+          "mn-Cyrl-MN",
+          "mr-IN",
+          "ms-Latn",
+          "ms-Latn-BN",
+          "ms-Latn-MY",
+          "ms-Latn-SG",
+          "mt-MT",
+          "my-MM",
+          "nb-NO",
+          "nb-SJ",
+          "nd-ZW",
+          "ne-IN",
+          "ne-NP",
+          "nl-AW",
+          "nl-BE",
+          "nl-BQ",
+          "nl-CW",
+          "nl-NL",
+          "nl-SR",
+          "nl-SX",
+          "nn-NO",
+          "om-ET",
+          "om-KE",
+          "or-IN",
+          "os-GE",
+          "os-RU",
+          "pa-Arab",
+          "pa-Arab-PK",
+          "pa-Guru",
+          "pa-Guru-IN",
+          "pl-PL",
+          "ps-AF",
+          "pt-AO",
+          "pt-BR",
+          "pt-CV",
+          "pt-GW",
+          "pt-MO",
+          "pt-MZ",
+          "pt-PT",
+          "pt-ST",
+          "pt-TL",
+          "qu-BO",
+          "qu-EC",
+          "qu-PE",
+          "rm-CH",
+          "rn-BI",
+          "ro-MD",
+          "ro-RO",
+          "ru-BY",
+          "ru-KG",
+          "ru-KZ",
+          "ru-MD",
+          "ru-RU",
+          "ru-UA",
+          "rw-RW",
+          "se-FI",
+          "se-NO",
+          "se-SE",
+          "sg-CF",
+          "si-LK",
+          "sk-SK",
+          "sl-SI",
+          "sn-ZW",
+          "so-DJ",
+          "so-ET",
+          "so-KE",
+          "so-SO",
+          "sq-AL",
+          "sq-MK",
+          "sq-XK",
+          "sr-Cyrl",
+          "sr-Cyrl-BA",
+          "sr-Cyrl-ME",
+          "sr-Cyrl-RS",
+          "sr-Cyrl-XK",
+          "sr-Latn",
+          "sr-Latn-BA",
+          "sr-Latn-ME",
+          "sr-Latn-RS",
+          "sr-Latn-XK",
+          "sv-AX",
+          "sv-FI",
+          "sv-SE",
+          "sw-CD",
+          "sw-KE",
+          "sw-TZ",
+          "sw-UG",
+          "ta-IN",
+          "ta-LK",
+          "ta-MY",
+          "ta-SG",
+          "te-IN",
+          "th-TH",
+          "ti-ER",
+          "ti-ET",
+          "to-TO",
+          "tr-CY",
+          "tr-TR",
+          "ug-Arab",
+          "ug-Arab-CN",
+          "uk-UA",
+          "ur-IN",
+          "ur-PK",
+          "uz-Arab",
+          "uz-Arab-AF",
+          "uz-Cyrl",
+          "uz-Cyrl-UZ",
+          "uz-Latn",
+          "uz-Latn-UZ",
+          "vi-VN",
+          "yi-001",
+          "yo-BJ",
+          "yo-NG",
+          "zh-Hans",
+          "zh-Hans-CN",
+          "zh-Hans-HK",
+          "zh-Hans-MO",
+          "zh-Hans-SG",
+          "zh-Hant",
+          "zh-Hant-HK",
+          "zh-Hant-MO",
+          "zh-Hant-TW",
+          "zu-ZA"
+        ],
 
         us_states_and_dc: [
             {name: 'Alabama', abbreviation: 'AL'},
@@ -11119,6 +11914,956 @@ function numberIsNaN (obj) {
             "MintCream", "GhostWhite", "Salmon", "AntiqueWhite", "Linen", "LightGoldenRodYellow", "OldLace", "Red", "Fuchsia", "Magenta", "DeepPink", "OrangeRed", "Tomato", "HotPink", "Coral", "DarkOrange", "LightSalmon", "Orange",
             "LightPink", "Pink", "Gold", "PeachPuff", "NavajoWhite", "Moccasin", "Bisque", "MistyRose", "BlanchedAlmond", "PapayaWhip", "LavenderBlush", "SeaShell", "Cornsilk", "LemonChiffon", "FloralWhite", "Snow", "Yellow", "LightYellow"
         ],
+        
+        // Data taken from https://www.sec.gov/rules/other/4-460list.htm
+        company: [ "3Com Corp",
+        "3M Company",
+        "A.G. Edwards Inc.",
+        "Abbott Laboratories",
+        "Abercrombie & Fitch Co.",
+        "ABM Industries Incorporated",
+        "Ace Hardware Corporation",
+        "ACT Manufacturing Inc.",
+        "Acterna Corp.",
+        "Adams Resources & Energy, Inc.",
+        "ADC Telecommunications, Inc.",
+        "Adelphia Communications Corporation",
+        "Administaff, Inc.",
+        "Adobe Systems Incorporated",
+        "Adolph Coors Company",
+        "Advance Auto Parts, Inc.",
+        "Advanced Micro Devices, Inc.",
+        "AdvancePCS, Inc.",
+        "Advantica Restaurant Group, Inc.",
+        "The AES Corporation",
+        "Aetna Inc.",
+        "Affiliated Computer Services, Inc.",
+        "AFLAC Incorporated",
+        "AGCO Corporation",
+        "Agilent Technologies, Inc.",
+        "Agway Inc.",
+        "Apartment Investment and Management Company",
+        "Air Products and Chemicals, Inc.",
+        "Airborne, Inc.",
+        "Airgas, Inc.",
+        "AK Steel Holding Corporation",
+        "Alaska Air Group, Inc.",
+        "Alberto-Culver Company",
+        "Albertson's, Inc.",
+        "Alcoa Inc.",
+        "Alleghany Corporation",
+        "Allegheny Energy, Inc.",
+        "Allegheny Technologies Incorporated",
+        "Allergan, Inc.",
+        "ALLETE, Inc.",
+        "Alliant Energy Corporation",
+        "Allied Waste Industries, Inc.",
+        "Allmerica Financial Corporation",
+        "The Allstate Corporation",
+        "ALLTEL Corporation",
+        "The Alpine Group, Inc.",
+        "Amazon.com, Inc.",
+        "AMC Entertainment Inc.",
+        "American Power Conversion Corporation",
+        "Amerada Hess Corporation",
+        "AMERCO",
+        "Ameren Corporation",
+        "America West Holdings Corporation",
+        "American Axle & Manufacturing Holdings, Inc.",
+        "American Eagle Outfitters, Inc.",
+        "American Electric Power Company, Inc.",
+        "American Express Company",
+        "American Financial Group, Inc.",
+        "American Greetings Corporation",
+        "American International Group, Inc.",
+        "American Standard Companies Inc.",
+        "American Water Works Company, Inc.",
+        "AmerisourceBergen Corporation",
+        "Ames Department Stores, Inc.",
+        "Amgen Inc.",
+        "Amkor Technology, Inc.",
+        "AMR Corporation",
+        "AmSouth Bancorp.",
+        "Amtran, Inc.",
+        "Anadarko Petroleum Corporation",
+        "Analog Devices, Inc.",
+        "Anheuser-Busch Companies, Inc.",
+        "Anixter International Inc.",
+        "AnnTaylor Inc.",
+        "Anthem, Inc.",
+        "AOL Time Warner Inc.",
+        "Aon Corporation",
+        "Apache Corporation",
+        "Apple Computer, Inc.",
+        "Applera Corporation",
+        "Applied Industrial Technologies, Inc.",
+        "Applied Materials, Inc.",
+        "Aquila, Inc.",
+        "ARAMARK Corporation",
+        "Arch Coal, Inc.",
+        "Archer Daniels Midland Company",
+        "Arkansas Best Corporation",
+        "Armstrong Holdings, Inc.",
+        "Arrow Electronics, Inc.",
+        "ArvinMeritor, Inc.",
+        "Ashland Inc.",
+        "Astoria Financial Corporation",
+        "AT&T Corp.",
+        "Atmel Corporation",
+        "Atmos Energy Corporation",
+        "Audiovox Corporation",
+        "Autoliv, Inc.",
+        "Automatic Data Processing, Inc.",
+        "AutoNation, Inc.",
+        "AutoZone, Inc.",
+        "Avaya Inc.",
+        "Avery Dennison Corporation",
+        "Avista Corporation",
+        "Avnet, Inc.",
+        "Avon Products, Inc.",
+        "Baker Hughes Incorporated",
+        "Ball Corporation",
+        "Bank of America Corporation",
+        "The Bank of New York Company, Inc.",
+        "Bank One Corporation",
+        "Banknorth Group, Inc.",
+        "Banta Corporation",
+        "Barnes & Noble, Inc.",
+        "Bausch & Lomb Incorporated",
+        "Baxter International Inc.",
+        "BB&T Corporation",
+        "The Bear Stearns Companies Inc.",
+        "Beazer Homes USA, Inc.",
+        "Beckman Coulter, Inc.",
+        "Becton, Dickinson and Company",
+        "Bed Bath & Beyond Inc.",
+        "Belk, Inc.",
+        "Bell Microproducts Inc.",
+        "BellSouth Corporation",
+        "Belo Corp.",
+        "Bemis Company, Inc.",
+        "Benchmark Electronics, Inc.",
+        "Berkshire Hathaway Inc.",
+        "Best Buy Co., Inc.",
+        "Bethlehem Steel Corporation",
+        "Beverly Enterprises, Inc.",
+        "Big Lots, Inc.",
+        "BJ Services Company",
+        "BJ's Wholesale Club, Inc.",
+        "The Black & Decker Corporation",
+        "Black Hills Corporation",
+        "BMC Software, Inc.",
+        "The Boeing Company",
+        "Boise Cascade Corporation",
+        "Borders Group, Inc.",
+        "BorgWarner Inc.",
+        "Boston Scientific Corporation",
+        "Bowater Incorporated",
+        "Briggs & Stratton Corporation",
+        "Brightpoint, Inc.",
+        "Brinker International, Inc.",
+        "Bristol-Myers Squibb Company",
+        "Broadwing, Inc.",
+        "Brown Shoe Company, Inc.",
+        "Brown-Forman Corporation",
+        "Brunswick Corporation",
+        "Budget Group, Inc.",
+        "Burlington Coat Factory Warehouse Corporation",
+        "Burlington Industries, Inc.",
+        "Burlington Northern Santa Fe Corporation",
+        "Burlington Resources Inc.",
+        "C. H. Robinson Worldwide Inc.",
+        "Cablevision Systems Corp",
+        "Cabot Corp",
+        "Cadence Design Systems, Inc.",
+        "Calpine Corp.",
+        "Campbell Soup Co.",
+        "Capital One Financial Corp.",
+        "Cardinal Health Inc.",
+        "Caremark Rx Inc.",
+        "Carlisle Cos. Inc.",
+        "Carpenter Technology Corp.",
+        "Casey's General Stores Inc.",
+        "Caterpillar Inc.",
+        "CBRL Group Inc.",
+        "CDI Corp.",
+        "CDW Computer Centers Inc.",
+        "CellStar Corp.",
+        "Cendant Corp",
+        "Cenex Harvest States Cooperatives",
+        "Centex Corp.",
+        "CenturyTel Inc.",
+        "Ceridian Corp.",
+        "CH2M Hill Cos. Ltd.",
+        "Champion Enterprises Inc.",
+        "Charles Schwab Corp.",
+        "Charming Shoppes Inc.",
+        "Charter Communications Inc.",
+        "Charter One Financial Inc.",
+        "ChevronTexaco Corp.",
+        "Chiquita Brands International Inc.",
+        "Chubb Corp",
+        "Ciena Corp.",
+        "Cigna Corp",
+        "Cincinnati Financial Corp.",
+        "Cinergy Corp.",
+        "Cintas Corp.",
+        "Circuit City Stores Inc.",
+        "Cisco Systems Inc.",
+        "Citigroup, Inc",
+        "Citizens Communications Co.",
+        "CKE Restaurants Inc.",
+        "Clear Channel Communications Inc.",
+        "The Clorox Co.",
+        "CMGI Inc.",
+        "CMS Energy Corp.",
+        "CNF Inc.",
+        "Coca-Cola Co.",
+        "Coca-Cola Enterprises Inc.",
+        "Colgate-Palmolive Co.",
+        "Collins & Aikman Corp.",
+        "Comcast Corp.",
+        "Comdisco Inc.",
+        "Comerica Inc.",
+        "Comfort Systems USA Inc.",
+        "Commercial Metals Co.",
+        "Community Health Systems Inc.",
+        "Compass Bancshares Inc",
+        "Computer Associates International Inc.",
+        "Computer Sciences Corp.",
+        "Compuware Corp.",
+        "Comverse Technology Inc.",
+        "ConAgra Foods Inc.",
+        "Concord EFS Inc.",
+        "Conectiv, Inc",
+        "Conoco Inc",
+        "Conseco Inc.",
+        "Consolidated Freightways Corp.",
+        "Consolidated Edison Inc.",
+        "Constellation Brands Inc.",
+        "Constellation Emergy Group Inc.",
+        "Continental Airlines Inc.",
+        "Convergys Corp.",
+        "Cooper Cameron Corp.",
+        "Cooper Industries Ltd.",
+        "Cooper Tire & Rubber Co.",
+        "Corn Products International Inc.",
+        "Corning Inc.",
+        "Costco Wholesale Corp.",
+        "Countrywide Credit Industries Inc.",
+        "Coventry Health Care Inc.",
+        "Cox Communications Inc.",
+        "Crane Co.",
+        "Crompton Corp.",
+        "Crown Cork & Seal Co. Inc.",
+        "CSK Auto Corp.",
+        "CSX Corp.",
+        "Cummins Inc.",
+        "CVS Corp.",
+        "Cytec Industries Inc.",
+        "D&K Healthcare Resources, Inc.",
+        "D.R. Horton Inc.",
+        "Dana Corporation",
+        "Danaher Corporation",
+        "Darden Restaurants Inc.",
+        "DaVita Inc.",
+        "Dean Foods Company",
+        "Deere & Company",
+        "Del Monte Foods Co",
+        "Dell Computer Corporation",
+        "Delphi Corp.",
+        "Delta Air Lines Inc.",
+        "Deluxe Corporation",
+        "Devon Energy Corporation",
+        "Di Giorgio Corporation",
+        "Dial Corporation",
+        "Diebold Incorporated",
+        "Dillard's Inc.",
+        "DIMON Incorporated",
+        "Dole Food Company, Inc.",
+        "Dollar General Corporation",
+        "Dollar Tree Stores, Inc.",
+        "Dominion Resources, Inc.",
+        "Domino's Pizza LLC",
+        "Dover Corporation, Inc.",
+        "Dow Chemical Company",
+        "Dow Jones & Company, Inc.",
+        "DPL Inc.",
+        "DQE Inc.",
+        "Dreyer's Grand Ice Cream, Inc.",
+        "DST Systems, Inc.",
+        "DTE Energy Co.",
+        "E.I. Du Pont de Nemours and Company",
+        "Duke Energy Corp",
+        "Dun & Bradstreet Inc.",
+        "DURA Automotive Systems Inc.",
+        "DynCorp",
+        "Dynegy Inc.",
+        "E*Trade Group, Inc.",
+        "E.W. Scripps Company",
+        "Earthlink, Inc.",
+        "Eastman Chemical Company",
+        "Eastman Kodak Company",
+        "Eaton Corporation",
+        "Echostar Communications Corporation",
+        "Ecolab Inc.",
+        "Edison International",
+        "EGL Inc.",
+        "El Paso Corporation",
+        "Electronic Arts Inc.",
+        "Electronic Data Systems Corp.",
+        "Eli Lilly and Company",
+        "EMC Corporation",
+        "Emcor Group Inc.",
+        "Emerson Electric Co.",
+        "Encompass Services Corporation",
+        "Energizer Holdings Inc.",
+        "Energy East Corporation",
+        "Engelhard Corporation",
+        "Enron Corp.",
+        "Entergy Corporation",
+        "Enterprise Products Partners L.P.",
+        "EOG Resources, Inc.",
+        "Equifax Inc.",
+        "Equitable Resources Inc.",
+        "Equity Office Properties Trust",
+        "Equity Residential Properties Trust",
+        "Estee Lauder Companies Inc.",
+        "Exelon Corporation",
+        "Exide Technologies",
+        "Expeditors International of Washington Inc.",
+        "Express Scripts Inc.",
+        "ExxonMobil Corporation",
+        "Fairchild Semiconductor International Inc.",
+        "Family Dollar Stores Inc.",
+        "Farmland Industries Inc.",
+        "Federal Mogul Corp.",
+        "Federated Department Stores Inc.",
+        "Federal Express Corp.",
+        "Felcor Lodging Trust Inc.",
+        "Ferro Corp.",
+        "Fidelity National Financial Inc.",
+        "Fifth Third Bancorp",
+        "First American Financial Corp.",
+        "First Data Corp.",
+        "First National of Nebraska Inc.",
+        "First Tennessee National Corp.",
+        "FirstEnergy Corp.",
+        "Fiserv Inc.",
+        "Fisher Scientific International Inc.",
+        "FleetBoston Financial Co.",
+        "Fleetwood Enterprises Inc.",
+        "Fleming Companies Inc.",
+        "Flowers Foods Inc.",
+        "Flowserv Corp",
+        "Fluor Corp",
+        "FMC Corp",
+        "Foamex International Inc",
+        "Foot Locker Inc",
+        "Footstar Inc.",
+        "Ford Motor Co",
+        "Forest Laboratories Inc.",
+        "Fortune Brands Inc.",
+        "Foster Wheeler Ltd.",
+        "FPL Group Inc.",
+        "Franklin Resources Inc.",
+        "Freeport McMoran Copper & Gold Inc.",
+        "Frontier Oil Corp",
+        "Furniture Brands International Inc.",
+        "Gannett Co., Inc.",
+        "Gap Inc.",
+        "Gateway Inc.",
+        "GATX Corporation",
+        "Gemstar-TV Guide International Inc.",
+        "GenCorp Inc.",
+        "General Cable Corporation",
+        "General Dynamics Corporation",
+        "General Electric Company",
+        "General Mills Inc",
+        "General Motors Corporation",
+        "Genesis Health Ventures Inc.",
+        "Gentek Inc.",
+        "Gentiva Health Services Inc.",
+        "Genuine Parts Company",
+        "Genuity Inc.",
+        "Genzyme Corporation",
+        "Georgia Gulf Corporation",
+        "Georgia-Pacific Corporation",
+        "Gillette Company",
+        "Gold Kist Inc.",
+        "Golden State Bancorp Inc.",
+        "Golden West Financial Corporation",
+        "Goldman Sachs Group Inc.",
+        "Goodrich Corporation",
+        "The Goodyear Tire & Rubber Company",
+        "Granite Construction Incorporated",
+        "Graybar Electric Company Inc.",
+        "Great Lakes Chemical Corporation",
+        "Great Plains Energy Inc.",
+        "GreenPoint Financial Corp.",
+        "Greif Bros. Corporation",
+        "Grey Global Group Inc.",
+        "Group 1 Automotive Inc.",
+        "Guidant Corporation",
+        "H&R Block Inc.",
+        "H.B. Fuller Company",
+        "H.J. Heinz Company",
+        "Halliburton Co.",
+        "Harley-Davidson Inc.",
+        "Harman International Industries Inc.",
+        "Harrah's Entertainment Inc.",
+        "Harris Corp.",
+        "Harsco Corp.",
+        "Hartford Financial Services Group Inc.",
+        "Hasbro Inc.",
+        "Hawaiian Electric Industries Inc.",
+        "HCA Inc.",
+        "Health Management Associates Inc.",
+        "Health Net Inc.",
+        "Healthsouth Corp",
+        "Henry Schein Inc.",
+        "Hercules Inc.",
+        "Herman Miller Inc.",
+        "Hershey Foods Corp.",
+        "Hewlett-Packard Company",
+        "Hibernia Corp.",
+        "Hillenbrand Industries Inc.",
+        "Hilton Hotels Corp.",
+        "Hollywood Entertainment Corp.",
+        "Home Depot Inc.",
+        "Hon Industries Inc.",
+        "Honeywell International Inc.",
+        "Hormel Foods Corp.",
+        "Host Marriott Corp.",
+        "Household International Corp.",
+        "Hovnanian Enterprises Inc.",
+        "Hub Group Inc.",
+        "Hubbell Inc.",
+        "Hughes Supply Inc.",
+        "Humana Inc.",
+        "Huntington Bancshares Inc.",
+        "Idacorp Inc.",
+        "IDT Corporation",
+        "IKON Office Solutions Inc.",
+        "Illinois Tool Works Inc.",
+        "IMC Global Inc.",
+        "Imperial Sugar Company",
+        "IMS Health Inc.",
+        "Ingles Market Inc",
+        "Ingram Micro Inc.",
+        "Insight Enterprises Inc.",
+        "Integrated Electrical Services Inc.",
+        "Intel Corporation",
+        "International Paper Co.",
+        "Interpublic Group of Companies Inc.",
+        "Interstate Bakeries Corporation",
+        "International Business Machines Corp.",
+        "International Flavors & Fragrances Inc.",
+        "International Multifoods Corporation",
+        "Intuit Inc.",
+        "IT Group Inc.",
+        "ITT Industries Inc.",
+        "Ivax Corp.",
+        "J.B. Hunt Transport Services Inc.",
+        "J.C. Penny Co.",
+        "J.P. Morgan Chase & Co.",
+        "Jabil Circuit Inc.",
+        "Jack In The Box Inc.",
+        "Jacobs Engineering Group Inc.",
+        "JDS Uniphase Corp.",
+        "Jefferson-Pilot Co.",
+        "John Hancock Financial Services Inc.",
+        "Johnson & Johnson",
+        "Johnson Controls Inc.",
+        "Jones Apparel Group Inc.",
+        "KB Home",
+        "Kellogg Company",
+        "Kellwood Company",
+        "Kelly Services Inc.",
+        "Kemet Corp.",
+        "Kennametal Inc.",
+        "Kerr-McGee Corporation",
+        "KeyCorp",
+        "KeySpan Corp.",
+        "Kimball International Inc.",
+        "Kimberly-Clark Corporation",
+        "Kindred Healthcare Inc.",
+        "KLA-Tencor Corporation",
+        "K-Mart Corp.",
+        "Knight-Ridder Inc.",
+        "Kohl's Corp.",
+        "KPMG Consulting Inc.",
+        "Kroger Co.",
+        "L-3 Communications Holdings Inc.",
+        "Laboratory Corporation of America Holdings",
+        "Lam Research Corporation",
+        "LandAmerica Financial Group Inc.",
+        "Lands' End Inc.",
+        "Landstar System Inc.",
+        "La-Z-Boy Inc.",
+        "Lear Corporation",
+        "Legg Mason Inc.",
+        "Leggett & Platt Inc.",
+        "Lehman Brothers Holdings Inc.",
+        "Lennar Corporation",
+        "Lennox International Inc.",
+        "Level 3 Communications Inc.",
+        "Levi Strauss & Co.",
+        "Lexmark International Inc.",
+        "Limited Inc.",
+        "Lincoln National Corporation",
+        "Linens 'n Things Inc.",
+        "Lithia Motors Inc.",
+        "Liz Claiborne Inc.",
+        "Lockheed Martin Corporation",
+        "Loews Corporation",
+        "Longs Drug Stores Corporation",
+        "Louisiana-Pacific Corporation",
+        "Lowe's Companies Inc.",
+        "LSI Logic Corporation",
+        "The LTV Corporation",
+        "The Lubrizol Corporation",
+        "Lucent Technologies Inc.",
+        "Lyondell Chemical Company",
+        "M & T Bank Corporation",
+        "Magellan Health Services Inc.",
+        "Mail-Well Inc.",
+        "Mandalay Resort Group",
+        "Manor Care Inc.",
+        "Manpower Inc.",
+        "Marathon Oil Corporation",
+        "Mariner Health Care Inc.",
+        "Markel Corporation",
+        "Marriott International Inc.",
+        "Marsh & McLennan Companies Inc.",
+        "Marsh Supermarkets Inc.",
+        "Marshall & Ilsley Corporation",
+        "Martin Marietta Materials Inc.",
+        "Masco Corporation",
+        "Massey Energy Company",
+        "MasTec Inc.",
+        "Mattel Inc.",
+        "Maxim Integrated Products Inc.",
+        "Maxtor Corporation",
+        "Maxxam Inc.",
+        "The May Department Stores Company",
+        "Maytag Corporation",
+        "MBNA Corporation",
+        "McCormick & Company Incorporated",
+        "McDonald's Corporation",
+        "The McGraw-Hill Companies Inc.",
+        "McKesson Corporation",
+        "McLeodUSA Incorporated",
+        "M.D.C. Holdings Inc.",
+        "MDU Resources Group Inc.",
+        "MeadWestvaco Corporation",
+        "Medtronic Inc.",
+        "Mellon Financial Corporation",
+        "The Men's Wearhouse Inc.",
+        "Merck & Co., Inc.",
+        "Mercury General Corporation",
+        "Merrill Lynch & Co. Inc.",
+        "Metaldyne Corporation",
+        "Metals USA Inc.",
+        "MetLife Inc.",
+        "Metris Companies Inc",
+        "MGIC Investment Corporation",
+        "MGM Mirage",
+        "Michaels Stores Inc.",
+        "Micron Technology Inc.",
+        "Microsoft Corporation",
+        "Milacron Inc.",
+        "Millennium Chemicals Inc.",
+        "Mirant Corporation",
+        "Mohawk Industries Inc.",
+        "Molex Incorporated",
+        "The MONY Group Inc.",
+        "Morgan Stanley Dean Witter & Co.",
+        "Motorola Inc.",
+        "MPS Group Inc.",
+        "Murphy Oil Corporation",
+        "Nabors Industries Inc",
+        "Nacco Industries Inc",
+        "Nash Finch Company",
+        "National City Corp.",
+        "National Commerce Financial Corporation",
+        "National Fuel Gas Company",
+        "National Oilwell Inc",
+        "National Rural Utilities Cooperative Finance Corporation",
+        "National Semiconductor Corporation",
+        "National Service Industries Inc",
+        "Navistar International Corporation",
+        "NCR Corporation",
+        "The Neiman Marcus Group Inc.",
+        "New Jersey Resources Corporation",
+        "New York Times Company",
+        "Newell Rubbermaid Inc",
+        "Newmont Mining Corporation",
+        "Nextel Communications Inc",
+        "Nicor Inc",
+        "Nike Inc",
+        "NiSource Inc",
+        "Noble Energy Inc",
+        "Nordstrom Inc",
+        "Norfolk Southern Corporation",
+        "Nortek Inc",
+        "North Fork Bancorporation Inc",
+        "Northeast Utilities System",
+        "Northern Trust Corporation",
+        "Northrop Grumman Corporation",
+        "NorthWestern Corporation",
+        "Novellus Systems Inc",
+        "NSTAR",
+        "NTL Incorporated",
+        "Nucor Corp",
+        "Nvidia Corp",
+        "NVR Inc",
+        "Northwest Airlines Corp",
+        "Occidental Petroleum Corp",
+        "Ocean Energy Inc",
+        "Office Depot Inc.",
+        "OfficeMax Inc",
+        "OGE Energy Corp",
+        "Oglethorpe Power Corp.",
+        "Ohio Casualty Corp.",
+        "Old Republic International Corp.",
+        "Olin Corp.",
+        "OM Group Inc",
+        "Omnicare Inc",
+        "Omnicom Group",
+        "On Semiconductor Corp",
+        "ONEOK Inc",
+        "Oracle Corp",
+        "Oshkosh Truck Corp",
+        "Outback Steakhouse Inc.",
+        "Owens & Minor Inc.",
+        "Owens Corning",
+        "Owens-Illinois Inc",
+        "Oxford Health Plans Inc",
+        "Paccar Inc",
+        "PacifiCare Health Systems Inc",
+        "Packaging Corp. of America",
+        "Pactiv Corp",
+        "Pall Corp",
+        "Pantry Inc",
+        "Park Place Entertainment Corp",
+        "Parker Hannifin Corp.",
+        "Pathmark Stores Inc.",
+        "Paychex Inc",
+        "Payless Shoesource Inc",
+        "Penn Traffic Co.",
+        "Pennzoil-Quaker State Company",
+        "Pentair Inc",
+        "Peoples Energy Corp.",
+        "PeopleSoft Inc",
+        "Pep Boys Manny, Moe & Jack",
+        "Potomac Electric Power Co.",
+        "Pepsi Bottling Group Inc.",
+        "PepsiAmericas Inc.",
+        "PepsiCo Inc.",
+        "Performance Food Group Co.",
+        "Perini Corp",
+        "PerkinElmer Inc",
+        "Perot Systems Corp",
+        "Petco Animal Supplies Inc.",
+        "Peter Kiewit Sons', Inc.",
+        "PETsMART Inc",
+        "Pfizer Inc",
+        "Pacific Gas & Electric Corp.",
+        "Pharmacia Corp",
+        "Phar Mor Inc.",
+        "Phelps Dodge Corp.",
+        "Philip Morris Companies Inc.",
+        "Phillips Petroleum Co",
+        "Phillips Van Heusen Corp.",
+        "Phoenix Companies Inc",
+        "Pier 1 Imports Inc.",
+        "Pilgrim's Pride Corporation",
+        "Pinnacle West Capital Corp",
+        "Pioneer-Standard Electronics Inc.",
+        "Pitney Bowes Inc.",
+        "Pittston Brinks Group",
+        "Plains All American Pipeline LP",
+        "PNC Financial Services Group Inc.",
+        "PNM Resources Inc",
+        "Polaris Industries Inc.",
+        "Polo Ralph Lauren Corp",
+        "PolyOne Corp",
+        "Popular Inc",
+        "Potlatch Corp",
+        "PPG Industries Inc",
+        "PPL Corp",
+        "Praxair Inc",
+        "Precision Castparts Corp",
+        "Premcor Inc.",
+        "Pride International Inc",
+        "Primedia Inc",
+        "Principal Financial Group Inc.",
+        "Procter & Gamble Co.",
+        "Pro-Fac Cooperative Inc.",
+        "Progress Energy Inc",
+        "Progressive Corporation",
+        "Protective Life Corp",
+        "Provident Financial Group",
+        "Providian Financial Corp.",
+        "Prudential Financial Inc.",
+        "PSS World Medical Inc",
+        "Public Service Enterprise Group Inc.",
+        "Publix Super Markets Inc.",
+        "Puget Energy Inc.",
+        "Pulte Homes Inc",
+        "Qualcomm Inc",
+        "Quanta Services Inc.",
+        "Quantum Corp",
+        "Quest Diagnostics Inc.",
+        "Questar Corp",
+        "Quintiles Transnational",
+        "Qwest Communications Intl Inc",
+        "R.J. Reynolds Tobacco Company",
+        "R.R. Donnelley & Sons Company",
+        "Radio Shack Corporation",
+        "Raymond James Financial Inc.",
+        "Raytheon Company",
+        "Reader's Digest Association Inc.",
+        "Reebok International Ltd.",
+        "Regions Financial Corp.",
+        "Regis Corporation",
+        "Reliance Steel & Aluminum Co.",
+        "Reliant Energy Inc.",
+        "Rent A Center Inc",
+        "Republic Services Inc",
+        "Revlon Inc",
+        "RGS Energy Group Inc",
+        "Rite Aid Corp",
+        "Riverwood Holding Inc.",
+        "RoadwayCorp",
+        "Robert Half International Inc.",
+        "Rock-Tenn Co",
+        "Rockwell Automation Inc",
+        "Rockwell Collins Inc",
+        "Rohm & Haas Co.",
+        "Ross Stores Inc",
+        "RPM Inc.",
+        "Ruddick Corp",
+        "Ryder System Inc",
+        "Ryerson Tull Inc",
+        "Ryland Group Inc.",
+        "Sabre Holdings Corp",
+        "Safeco Corp",
+        "Safeguard Scientifics Inc.",
+        "Safeway Inc",
+        "Saks Inc",
+        "Sanmina-SCI Inc",
+        "Sara Lee Corp",
+        "SBC Communications Inc",
+        "Scana Corp.",
+        "Schering-Plough Corp",
+        "Scholastic Corp",
+        "SCI Systems Onc.",
+        "Science Applications Intl. Inc.",
+        "Scientific-Atlanta Inc",
+        "Scotts Company",
+        "Seaboard Corp",
+        "Sealed Air Corp",
+        "Sears Roebuck & Co",
+        "Sempra Energy",
+        "Sequa Corp",
+        "Service Corp. International",
+        "ServiceMaster Co",
+        "Shaw Group Inc",
+        "Sherwin-Williams Company",
+        "Shopko Stores Inc",
+        "Siebel Systems Inc",
+        "Sierra Health Services Inc",
+        "Sierra Pacific Resources",
+        "Silgan Holdings Inc.",
+        "Silicon Graphics Inc",
+        "Simon Property Group Inc",
+        "SLM Corporation",
+        "Smith International Inc",
+        "Smithfield Foods Inc",
+        "Smurfit-Stone Container Corp",
+        "Snap-On Inc",
+        "Solectron Corp",
+        "Solutia Inc",
+        "Sonic Automotive Inc.",
+        "Sonoco Products Co.",
+        "Southern Company",
+        "Southern Union Company",
+        "SouthTrust Corp.",
+        "Southwest Airlines Co",
+        "Southwest Gas Corp",
+        "Sovereign Bancorp Inc.",
+        "Spartan Stores Inc",
+        "Spherion Corp",
+        "Sports Authority Inc",
+        "Sprint Corp.",
+        "SPX Corp",
+        "St. Jude Medical Inc",
+        "St. Paul Cos.",
+        "Staff Leasing Inc.",
+        "StanCorp Financial Group Inc",
+        "Standard Pacific Corp.",
+        "Stanley Works",
+        "Staples Inc",
+        "Starbucks Corp",
+        "Starwood Hotels & Resorts Worldwide Inc",
+        "State Street Corp.",
+        "Stater Bros. Holdings Inc.",
+        "Steelcase Inc",
+        "Stein Mart Inc",
+        "Stewart & Stevenson Services Inc",
+        "Stewart Information Services Corp",
+        "Stilwell Financial Inc",
+        "Storage Technology Corporation",
+        "Stryker Corp",
+        "Sun Healthcare Group Inc.",
+        "Sun Microsystems Inc.",
+        "SunGard Data Systems Inc.",
+        "Sunoco Inc.",
+        "SunTrust Banks Inc",
+        "Supervalu Inc",
+        "Swift Transportation, Co., Inc",
+        "Symbol Technologies Inc",
+        "Synovus Financial Corp.",
+        "Sysco Corp",
+        "Systemax Inc.",
+        "Target Corp.",
+        "Tech Data Corporation",
+        "TECO Energy Inc",
+        "Tecumseh Products Company",
+        "Tektronix Inc",
+        "Teleflex Incorporated",
+        "Telephone & Data Systems Inc",
+        "Tellabs Inc.",
+        "Temple-Inland Inc",
+        "Tenet Healthcare Corporation",
+        "Tenneco Automotive Inc.",
+        "Teradyne Inc",
+        "Terex Corp",
+        "Tesoro Petroleum Corp.",
+        "Texas Industries Inc.",
+        "Texas Instruments Incorporated",
+        "Textron Inc",
+        "Thermo Electron Corporation",
+        "Thomas & Betts Corporation",
+        "Tiffany & Co",
+        "Timken Company",
+        "TJX Companies Inc",
+        "TMP Worldwide Inc",
+        "Toll Brothers Inc",
+        "Torchmark Corporation",
+        "Toro Company",
+        "Tower Automotive Inc.",
+        "Toys 'R' Us Inc",
+        "Trans World Entertainment Corp.",
+        "TransMontaigne Inc",
+        "Transocean Inc",
+        "TravelCenters of America Inc.",
+        "Triad Hospitals Inc",
+        "Tribune Company",
+        "Trigon Healthcare Inc.",
+        "Trinity Industries Inc",
+        "Trump Hotels & Casino Resorts Inc.",
+        "TruServ Corporation",
+        "TRW Inc",
+        "TXU Corp",
+        "Tyson Foods Inc",
+        "U.S. Bancorp",
+        "U.S. Industries Inc.",
+        "UAL Corporation",
+        "UGI Corporation",
+        "Unified Western Grocers Inc",
+        "Union Pacific Corporation",
+        "Union Planters Corp",
+        "Unisource Energy Corp",
+        "Unisys Corporation",
+        "United Auto Group Inc",
+        "United Defense Industries Inc.",
+        "United Parcel Service Inc",
+        "United Rentals Inc",
+        "United Stationers Inc",
+        "United Technologies Corporation",
+        "UnitedHealth Group Incorporated",
+        "Unitrin Inc",
+        "Universal Corporation",
+        "Universal Forest Products Inc",
+        "Universal Health Services Inc",
+        "Unocal Corporation",
+        "Unova Inc",
+        "UnumProvident Corporation",
+        "URS Corporation",
+        "US Airways Group Inc",
+        "US Oncology Inc",
+        "USA Interactive",
+        "USFreighways Corporation",
+        "USG Corporation",
+        "UST Inc",
+        "Valero Energy Corporation",
+        "Valspar Corporation",
+        "Value City Department Stores Inc",
+        "Varco International Inc",
+        "Vectren Corporation",
+        "Veritas Software Corporation",
+        "Verizon Communications Inc",
+        "VF Corporation",
+        "Viacom Inc",
+        "Viad Corp",
+        "Viasystems Group Inc",
+        "Vishay Intertechnology Inc",
+        "Visteon Corporation",
+        "Volt Information Sciences Inc",
+        "Vulcan Materials Company",
+        "W.R. Berkley Corporation",
+        "W.R. Grace & Co",
+        "W.W. Grainger Inc",
+        "Wachovia Corporation",
+        "Wakenhut Corporation",
+        "Walgreen Co",
+        "Wallace Computer Services Inc",
+        "Wal-Mart Stores Inc",
+        "Walt Disney Co",
+        "Walter Industries Inc",
+        "Washington Mutual Inc",
+        "Washington Post Co.",
+        "Waste Management Inc",
+        "Watsco Inc",
+        "Weatherford International Inc",
+        "Weis Markets Inc.",
+        "Wellpoint Health Networks Inc",
+        "Wells Fargo & Company",
+        "Wendy's International Inc",
+        "Werner Enterprises Inc",
+        "WESCO International Inc",
+        "Western Digital Inc",
+        "Western Gas Resources Inc",
+        "WestPoint Stevens Inc",
+        "Weyerhauser Company",
+        "WGL Holdings Inc",
+        "Whirlpool Corporation",
+        "Whole Foods Market Inc",
+        "Willamette Industries Inc.",
+        "Williams Companies Inc",
+        "Williams Sonoma Inc",
+        "Winn Dixie Stores Inc",
+        "Wisconsin Energy Corporation",
+        "Wm Wrigley Jr Company",
+        "World Fuel Services Corporation",
+        "WorldCom Inc",
+        "Worthington Industries Inc",
+        "WPS Resources Corporation",
+        "Wyeth",
+        "Wyndham International Inc",
+        "Xcel Energy Inc",
+        "Xerox Corp",
+        "Xilinx Inc",
+        "XO Communications Inc",
+        "Yellow Corporation",
+        "York International Corp",
+        "Yum Brands Inc.",
+        "Zale Corporation",
+        "Zions Bancorporation" 
+      ],
 
         fileExtension : {
             "raster"    : ["bmp", "gif", "gpl", "ico", "jpeg", "psd", "png", "psp", "raw", "tiff"],
@@ -13044,6 +14789,48 @@ function numberIsNaN (obj) {
     };
 
     // Mersenne Twister from https://gist.github.com/banksean/300494
+    /*
+       A C-program for MT19937, with initialization improved 2002/1/26.
+       Coded by Takuji Nishimura and Makoto Matsumoto.
+
+       Before using, initialize the state by using init_genrand(seed)
+       or init_by_array(init_key, key_length).
+
+       Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
+       All rights reserved.
+
+       Redistribution and use in source and binary forms, with or without
+       modification, are permitted provided that the following conditions
+       are met:
+
+       1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+
+       2. Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the distribution.
+
+       3. The names of its contributors may not be used to endorse or promote
+       products derived from this software without specific prior written
+       permission.
+
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+       "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+       LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+       A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+       CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+       EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+       PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+       PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+       LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+       NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+       SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+       Any feedback is very welcome.
+       http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
+       email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
+     */
     var MersenneTwister = function (seed) {
         if (seed === undefined) {
             // kept random number same size as time used previously to ensure no unexpected results downstream

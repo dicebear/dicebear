@@ -26,7 +26,7 @@ $(document).ready(function() {
             }
         });
 
-        seedSpan.text(seed || 'custom-seed');
+        seedSpan.text(encodeURIComponent(seed || 'custom-seed'));
     }
 
     seedInput.on('input', createAvatars);

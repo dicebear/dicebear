@@ -6,7 +6,7 @@
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: Florian Körner <contact@dicebear.com>
  *   homepage: https://github.com/DiceBear/avatars#readme
- *   version: 0.2.1
+ *   version: 1.0.0
  *
  * object-assign:
  *   license: MIT (http://opensource.org/licenses/MIT)
@@ -32,6 +32,8 @@ var canvas_1 = require("./helper/canvas");
 var objectAssign = require("object-assign");
 var async = (typeof window !== "undefined" ? window['async'] : typeof global !== "undefined" ? global['async'] : null);
 var chance_1 = (typeof window !== "undefined" ? window['window'] : typeof global !== "undefined" ? global['window'] : null);
+var male_1 = require("./spriteSets/male");
+var female_1 = require("./spriteSets/female");
 var Avatars = (function () {
     /**
      * @param spriteSet
@@ -96,10 +98,14 @@ var Avatars = (function () {
     };
     return Avatars;
 }());
+Avatars.SPRITE_SETS = {
+    male: male_1.default,
+    female: female_1.default
+};
 exports.default = Avatars;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./helper/canvas":4,"object-assign":9}],2:[function(require,module,exports){
+},{"./helper/canvas":4,"./spriteSets/female":7,"./spriteSets/male":8,"object-assign":9}],2:[function(require,module,exports){
 (function (process){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -213,13 +219,9 @@ exports.createImage = createImage;
 
 },{}],5:[function(require,module,exports){
 var avatars = require('./avatars').default;
-avatars.SPRITE_SETS = {
-    female: require('./spriteSets/female').default,
-    male: require('./spriteSets/male').default
-};
 module.exports = avatars;
 
-},{"./avatars":1,"./spriteSets/female":7,"./spriteSets/male":8}],6:[function(require,module,exports){
+},{"./avatars":1}],6:[function(require,module,exports){
 (function (process){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
