@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pixel-Art Avatar Generator by Identifier",
   "main": "lib/index.js",
   "types": "src/index.ts",

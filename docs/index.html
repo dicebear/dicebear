@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Pixel-Art Avatar Generator in JavaScript with HTTP-API</title>
-    <meta name="description" content="Pixel-Art Avatar Generator by Identifier in JavaScript for Browsers and NodeJS">
+    <title>Pixel-Art Avatar Placeholder with JS- and HTTP-API</title>
+    <meta name="description" content="Pixel-Art Avatar Placeholder by Identifier in JavaScript for Browsers and NodeJS">
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,6 +39,80 @@
     <script src="./script.js"></script>
   </head>
   <body>
+    <a href="https://github.com/DiceBear/avatars">
+      <img class="fork-me" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png">
+    </a>
+
+    <div class="container">
+      <h1 class="text-center mt-5 mb-4">
+        <small class="text-muted">DiceBear</small><br />
+        <strong class="display-1">avatars</strong>
+      </h1>
+
+      <p class="text-center mb-5">
+        DiceBear Avatars is an free to use avatar placeholder service and library.<br>
+        The service renders a unique pixel-art avatar based on a seed.
+      </p>
+
+      <div class="mb-4">
+        <div class="row">
+          <div class="col-6 col-lg-3 offset-lg-3">
+            <div class="card text-center">
+              <div class="card-block text-center p-1">
+                <img id="avatar-male" class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Male Avatar">
+                <p class="card-text"><strong>Male</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card text-center">
+              <div class="card-block text-center p-1">
+                <img id="avatar-female" class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Female Avatar">
+                <p class="card-text"><strong>Female</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <div class="col-12 col-lg-6 offset-lg-3">
+          <div class="form-group input-group-lg">
+            <input type="text" class="form-control text-center" id="seed" placeholder="Seed (e.g. name, e-mail-address,...)" autofocus />
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#installModal">Installation</button>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#restModal">HTTP-API (recommended)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-center mt-4">
+        More Examples<br />
+        <span class="h5">
+          <small class="text-muted">
+            provided via HTTP-API
+          </small>
+        </span>
+      </h2>
+      <div id="infinite" class="row">
+          <div class="col-6 col-sm-4 col-lg-3 mt-3">
+            <div class="card text-center">
+              <div class="card-block text-center p-1">
+                <a href="#" target="_blank">
+                  <img class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Avatar">
+                </a>
+                <p class="card-text"><strong class="name">Please wait...</strong></p>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="installModal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -126,75 +200,6 @@
             </p>
           </div>
         </div>
-      </div>
-    </div>
-
-    <a href="https://github.com/DiceBear/avatars">
-      <img class="fork-me" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png">
-    </a>
-
-    <div class="container">
-      <h1 class="text-center mt-5 mb-5">
-        <small class="text-muted">DiceBear</small><br />
-        <strong class="display-1">avatars</strong>
-      </h1>
-
-      <div class="mb-4">
-        <div class="row">
-          <div class="col-6 col-lg-3 offset-lg-3">
-            <div class="card text-center">
-              <div class="card-block text-center p-1">
-                <img id="avatar-male" class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Male Avatar">
-                <p class="card-text"><strong>Male</strong></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-lg-3">
-            <div class="card text-center">
-              <div class="card-block text-center p-1">
-                <img id="avatar-female" class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Female Avatar">
-                <p class="card-text"><strong>Female</strong></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row mb-6">
-        <div class="col-12 col-lg-6 offset-lg-3">
-          <div class="form-group input-group-lg">
-            <input type="text" class="form-control text-center" id="seed" placeholder="Seed (e.g. name, e-mail-address,...)" autofocus />
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#installModal">Installation</button>
-            </div>
-            <div class="col-md-6">
-              <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#restModal">HTTP-API (recommended)</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h2 class="text-center mt-4">
-        More Examples<br />
-        <span class="h5">
-          <small class="text-muted">
-            provided via HTTP-API
-          </small>
-        </span>
-      </h2>
-      <div id="infinite" class="row">
-          <div class="col-6 col-sm-4 col-lg-3 mt-3">
-            <div class="card text-center">
-              <div class="card-block text-center p-1">
-                <a href="#" target="_blank">
-                  <img class="img-fluid mb-2" src="https://dummyimage.com/200x200/bdbdbd/ffffff.png&text=please+wait..." alt="Avatar">
-                </a>
-                <p class="card-text"><strong class="name">Please wait...</strong></p>
-              </div>
-            </div>
-          </div>
       </div>
     </div>
   </body>
