@@ -16,10 +16,6 @@ Test in your Browser: <https://avatars.dicebear.com/>
 ![](http://avatars.dicebear.com/v1/female/33/60.png)
 ![](http://avatars.dicebear.com/v1/male/88/60.png)
 
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/UqtCGv9Y6wP1d3YMVMHEYETu/DiceBear/avatars'>
-  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/UqtCGv9Y6wP1d3YMVMHEYETu/DiceBear/avatars.svg' />
-</a>
-
 
 ## Use the HTTP-API
 
