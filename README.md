@@ -29,6 +29,11 @@ GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png
 :size => 20 - 200 (px)
 ```
 
+Accelerated by  
+<a href="https://www.keycdn.com/?a=42254">
+    <img src="https://logos.keycdn.com/keycdn-logo.svg" alt="KeyCDN" height="55">
+</a>
+
 ### Examples
 
 | Image                                                       | URL                                                      |
