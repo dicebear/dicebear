@@ -132,6 +132,18 @@ let femaleSpriteSet: SpriteSetInterface = (chance, callback) => {
                 chance: 95,
                 color: hairColor
             }),
+            hat: new Sprite({
+                src: base64Prefix+fs.readFileSync(__dirname+'/../../assets/female/hats.png', 'base64'),
+                chance: 5,
+                color: new Color([
+                    [204,97,146],
+                    [38,99,163],
+                    [166,33,22],
+                    [61,138,107],
+                    [97,79,138],
+                    [61,138,107]
+                ])
+            }),
         };
 
         callback(null, spriteSet);
