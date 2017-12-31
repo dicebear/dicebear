@@ -1,0 +1,121 @@
+import Color from './color';
+import ColorSet from './colorSet';
+import { createImage, createCanvas } from '../helper/canvas';
+import Random from '../helper/random';
+
+export interface SpriteOptions {
+  src: string;
+  colorSet: ColorSet;
+  size?: number;
+  chance?: number;
+}
+
+export default class Sprite {
+  protected options: SpriteOptions;
+  protected image: HTMLImageElement = null;
+  protected imageError: Error = null;
+  protected imageSprites: number = null;
+
+  /**
+   * @param options
+   */
+  constructor(options: SpriteOptions) {
+    // Set default options
+    options.size = options.size || 20;
+    options.chance = options.chance || 100;
+
+    this.options = options;
+  }
+
+  /**
+   * Loads sprite Image
+   */
+  load(): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      if (null === this.image) {
+        // Create HTMLImageElement
+        this.image = createImage();
+
+        this.image.addEventListener('load', () => {
+          this.imageSprites = Math.floor(this.image.width / this.options.size);
+        });
+
+        this.image.addEventListener('error', err => {
+          this.imageError = err.error;
+        });
+      }
+
+      if (this.image.src && this.image.complete) {
+        this.imageError ? reject(this.imageError) : resolve(this.image);
+      } else {
+        this.image.src = this.options.src;
+
+        this.image.addEventListener('load', () => resolve(this.image));
+        this.image.addEventListener('error', err => reject(err.error));
+      }
+    });
+  }
+
+  /**
+   * Creates an sprite
+   *
+   * @param random
+   */
+  create(random: Random): Promise<HTMLCanvasElement> {
+    if (!this.image.complete) {
+      return Promise.reject(new Error('Sprite image not loaded.'));
+    }
+
+    var canvas = createCanvas();
+    var context = canvas.getContext('2d');
+
+    canvas.width = this.options.size;
+    canvas.height = this.options.size;
+
+    if (random.bool(this.options.chance)) {
+      return this.options.colorSet.getColor(random).then(color => {
+        context.drawImage(this.image, random.integer(0, this.imageSprites - 1) * this.options.size * -1, 0);
+
+        this.tintCanvas(canvas, color);
+
+        return canvas;
+      });
+    } else {
+      return Promise.resolve(canvas);
+    }
+  }
+
+  /**
+   * Tints an sprite
+   *
+   * @param canvas
+   * @param color
+   */
+  private tintCanvas(canvas: HTMLCanvasElement, color: Color) {
+    let context = canvas.getContext('2d');
+    let buffer = context.getImageData(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < buffer.data.length; i += 4) {
+      let r = i;
+      let g = i + 1;
+      let b = i + 2;
+      let a = i + 3;
+
+      if (a > 0) {
+        buffer.data[r] = Math.round(
+          (buffer.data[r] - color.rgb().red() * 255) * (buffer.data[r] / 255) + color.rgb().red() * 255
+        );
+
+        buffer.data[g] = Math.round(
+          (buffer.data[g] - color.rgb().green() * 255) * (buffer.data[g] / 255) + color.rgb().green() * 255
+        );
+
+        buffer.data[b] = Math.round(
+          (buffer.data[b] - color.rgb().blue() * 255) * (buffer.data[b] / 255) + color.rgb().blue() * 255
+        );
+      }
+    }
+
+    context.putImageData(buffer, 0, 0);
+  }
+}

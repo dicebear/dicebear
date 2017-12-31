@@ -1,5 +1,6 @@
-import { SpriteInterface } from './sprite';
+import Random from './helper/random';
+import Sprite from './model/sprite';
 
 export interface SpriteSetInterface {
-    (chance: Chance.Chance, callback: (err: Error, spriteSet: { [key: string]: SpriteInterface }) => void): void;
+  (random: Random): Promise<{ [key: string]: Sprite }>;
 }
