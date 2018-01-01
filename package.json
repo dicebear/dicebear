@@ -21,11 +21,9 @@
   },
   "scripts": {
     "prebuild": "rm -r dist/* lib/* || true",
-    "build": "tsc && npm run build-standalone && npm run build-standalone-minify && npm run build-pack && npm run build-pack-minify",
-    "build-standalone": "browserify lib/index.js -p licensify -s Avatars -t browserify-shim > dist/avatars.js",
-    "build-standalone-minify": "uglifyjs -m --comments -o dist/avatars.min.js -- dist/avatars.js",
-    "build-pack": "browserify lib/index.js -p licensify -s Avatars > dist/avatars.pack.js",
-    "build-pack-minify": "uglifyjs -m --comments -o dist/avatars.pack.min.js -- dist/avatars.pack.js"
+    "build": "tsc && npm run build-pack && npm run build-pack-minify",
+    "build-pack": "browserify lib/index.js -p licensify -s Avatars > dist/avatars.js",
+    "build-pack-minify": "uglifyjs -m --comments -o dist/avatars.min.js -- dist/avatars.js"
   },
   "author": "Florian Körner <contact@dicebear.com>",
   "license": "MIT",
@@ -33,12 +31,7 @@
     "type": "git",
     "url": "git+https://github.com/DiceBear/avatars.git"
   },
-  "keywords": [
-    "avatar",
-    "generator",
-    "javascript",
-    "typescript"
-  ],
+  "keywords": ["avatar", "generator", "javascript", "typescript"],
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
@@ -48,11 +41,6 @@
     "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"
   },
   "browserify": {
-    "transform": [
-      "brfs"
-    ]
-  },
-  "browserify-shim": {
-    "onecolor": "global:one.color"
+    "transform": ["brfs"]
   }
 }

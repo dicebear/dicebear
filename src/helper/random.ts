@@ -1,4 +1,4 @@
-import seedrandom = require('seedrandom');
+import seedrandom = require('seedrandom/seedrandom');
 
 export default class Random {
   private prng: seedrandom.prng;

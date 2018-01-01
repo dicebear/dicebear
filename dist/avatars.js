@@ -8,6 +8,12 @@
  *   homepage: https://github.com/DiceBear/avatars#readme
  *   version: 1.0.1
  *
+ * onecolor:
+ *   license: BSD-2-Clause (http://opensource.org/licenses/BSD-2-Clause)
+ *   maintainers: Peter Müller <munter@fumle.dk>, Andreas Lind <andreas@one.com>
+ *   homepage: https://github.com/One-com/one-color#readme
+ *   version: 3.0.5
+ *
  * seedrandom:
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: David Bau
@@ -189,7 +195,7 @@ exports.createImage = createImage;
 },{}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var seedrandom = require("seedrandom");
+var seedrandom = require("seedrandom/seedrandom");
 var Random = /** @class */ (function () {
     function Random(seed) {
         this.seed = seed;
@@ -209,7 +215,7 @@ var Random = /** @class */ (function () {
 }());
 exports.default = Random;
 
-},{"seedrandom":13}],5:[function(require,module,exports){
+},{"seedrandom/seedrandom":17}],5:[function(require,module,exports){
 var avatars = require('./avatars').default;
 module.exports = avatars;
 
@@ -232,10 +238,9 @@ var Avatar = /** @class */ (function () {
 exports.default = Avatar;
 
 },{}],7:[function(require,module,exports){
-(function (global){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var oneColor = (typeof window !== "undefined" ? window['one']['color'] : typeof global !== "undefined" ? global['one']['color'] : null);
+var oneColor = require("onecolor/minimal");
 var Color = /** @class */ (function () {
     function Color(color) {
         this.color = oneColor(color);
@@ -253,8 +258,7 @@ var Color = /** @class */ (function () {
 }());
 exports.default = Color;
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],8:[function(require,module,exports){
+},{"onecolor/minimal":16}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ColorSet = /** @class */ (function () {
@@ -558,7 +562,7 @@ var maleSpriteSet = function (random) {
             colorSet: skinColor
         }),
         eyes: new sprite_1.default({
-            src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAAAvElEQVR4nO3VQQqFMAwFwJ62d/JO3ql/Y8FFk0+lisLM0kdCwERLAQAAAAAAAFivncxkX+3X62aec5+370trrdVa277vw35R9tR8vW7btnCnoywdsJQSDjjKsn69dCa7Mt8pnj3kqOZKr1frSxu9jyh7ULYTl/Ylqrm6f6WUVmsN+42yyPHxGM6QZdl8x8EP54sybrL6g9rrgprp4z2Wdbi0WfZvtlUHt1r2l82yr/YDAAAAAAAAAAAAeKcfVfnZAg0GzeAAAAAASUVORK5CYII=",
+            src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAAAxElEQVR4nO3UwQ2DMAwFUGfZ7MRO7JQeSiQOOCWIVkV674LEl4NxAhEAAAAAAAAA92s7M9lT1+t1M/efrLXWaq3p/LLsV/79vPQZreuazu8o+1V/vW5ZlvRMZ9mwwYhIGzzKRuv10pnsSn+7ePZAZzWXNuPO+fW6pGa6v1pri4i2XU9nn3q7a3/j/Z7pfsyu943zF8mMRllm+3kc9jDKRv1tH/xhf1kWEVHOPgSeav8xlVLK2eyp6wEAAAAAAAAAAAD8pxdjf6lL3r4/CwAAAABJRU5ErkJggg==",
             colorSet: new colorSet_1.default([
                 new color_1.default('#76778b'),
                 new color_1.default('#697b94'),
@@ -637,707 +641,393 @@ exports.default = maleSpriteSet;
 },{"../color/modifier/brighterOrDarkerThan":2,"../model/color":7,"../model/colorSet":8,"../model/sprite":9}],12:[function(require,module,exports){
 
 },{}],13:[function(require,module,exports){
-// A library of seedable RNGs implemented in Javascript.
-//
-// Usage:
-//
-// var seedrandom = require('seedrandom');
-// var random = seedrandom(1); // or any seed.
-// var x = random();       // 0 <= x < 1.  Every bit is random.
-// var x = random.quick(); // 0 <= x < 1.  32 bits of randomness.
+module.exports = function HSL(color) {
+    color.use(require('./HSV'));
 
-// alea, a 53-bit multiply-with-carry generator by Johannes Baagøe.
-// Period: ~2^116
-// Reported to pass all BigCrush tests.
-var alea = require('./lib/alea');
+    color.installColorSpace('HSL', ['hue', 'saturation', 'lightness', 'alpha'], {
+        hsv: function () {
+            // Algorithm adapted from http://wiki.secondlife.com/wiki/Color_conversion_scripts
+            var l = this._lightness * 2,
+                s = this._saturation * ((l <= 1) ? l : 2 - l),
+                saturation;
 
-// xor128, a pure xor-shift generator by George Marsaglia.
-// Period: 2^128-1.
-// Reported to fail: MatrixRank and LinearComp.
-var xor128 = require('./lib/xor128');
+            // Avoid division by zero when l + s is very small (approaching black):
+            if (l + s < 1e-9) {
+                saturation = 0;
+            } else {
+                saturation = (2 * s) / (l + s);
+            }
 
-// xorwow, George Marsaglia's 160-bit xor-shift combined plus weyl.
-// Period: 2^192-2^32
-// Reported to fail: CollisionOver, SimpPoker, and LinearComp.
-var xorwow = require('./lib/xorwow');
+            return new color.HSV(this._hue, saturation, (l + s) / 2, this._alpha);
+        },
 
-// xorshift7, by François Panneton and Pierre L'ecuyer, takes
-// a different approach: it adds robustness by allowing more shifts
-// than Marsaglia's original three.  It is a 7-shift generator
-// with 256 bits, that passes BigCrush with no systmatic failures.
-// Period 2^256-1.
-// No systematic BigCrush failures reported.
-var xorshift7 = require('./lib/xorshift7');
+        rgb: function () {
+            return this.hsv().rgb();
+        },
 
-// xor4096, by Richard Brent, is a 4096-bit xor-shift with a
-// very long period that also adds a Weyl generator. It also passes
-// BigCrush with no systematic failures.  Its long period may
-// be useful if you have many generators and need to avoid
-// collisions.
-// Period: 2^4128-2^32.
-// No systematic BigCrush failures reported.
-var xor4096 = require('./lib/xor4096');
+        fromRgb: function () { // Becomes one.color.RGB.prototype.hsv
+            return this.hsv().hsl();
+        }
+    });
+};
 
-// Tyche-i, by Samuel Neves and Filipe Araujo, is a bit-shifting random
-// number generator derived from ChaCha, a modern stream cipher.
-// https://eden.dei.uc.pt/~sneves/pubs/2011-snfa2.pdf
-// Period: ~2^127
-// No systematic BigCrush failures reported.
-var tychei = require('./lib/tychei');
+},{"./HSV":14}],14:[function(require,module,exports){
+module.exports = function HSV(color) {
+    color.installColorSpace('HSV', ['hue', 'saturation', 'value', 'alpha'], {
+        rgb: function () {
+            var hue = this._hue,
+                saturation = this._saturation,
+                value = this._value,
+                i = Math.min(5, Math.floor(hue * 6)),
+                f = hue * 6 - i,
+                p = value * (1 - saturation),
+                q = value * (1 - f * saturation),
+                t = value * (1 - (1 - f) * saturation),
+                red,
+                green,
+                blue;
+            switch (i) {
+            case 0:
+                red = value;
+                green = t;
+                blue = p;
+                break;
+            case 1:
+                red = q;
+                green = value;
+                blue = p;
+                break;
+            case 2:
+                red = p;
+                green = value;
+                blue = t;
+                break;
+            case 3:
+                red = p;
+                green = q;
+                blue = value;
+                break;
+            case 4:
+                red = t;
+                green = p;
+                blue = value;
+                break;
+            case 5:
+                red = value;
+                green = p;
+                blue = q;
+                break;
+            }
+            return new color.RGB(red, green, blue, this._alpha);
+        },
 
-// The original ARC4-based prng included in this library.
-// Period: ~2^1600
-var sr = require('./seedrandom');
+        hsl: function () {
+            var l = (2 - this._saturation) * this._value,
+                sv = this._saturation * this._value,
+                svDivisor = l <= 1 ? l : (2 - l),
+                saturation;
 
-sr.alea = alea;
-sr.xor128 = xor128;
-sr.xorwow = xorwow;
-sr.xorshift7 = xorshift7;
-sr.xor4096 = xor4096;
-sr.tychei = tychei;
+            // Avoid division by zero when lightness approaches zero:
+            if (svDivisor < 1e-9) {
+                saturation = 0;
+            } else {
+                saturation = sv / svDivisor;
+            }
+            return new color.HSL(this._hue, saturation, l / 2, this._alpha);
+        },
 
-module.exports = sr;
-
-},{"./lib/alea":14,"./lib/tychei":15,"./lib/xor128":16,"./lib/xor4096":17,"./lib/xorshift7":18,"./lib/xorwow":19,"./seedrandom":20}],14:[function(require,module,exports){
-// A port of an algorithm by Johannes Baagøe <baagoe@baagoe.com>, 2010
-// http://baagoe.com/en/RandomMusings/javascript/
-// https://github.com/nquinlan/better-random-numbers-for-javascript-mirror
-// Original work is under MIT license -
-
-// Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-
-
-(function(global, module, define) {
-
-function Alea(seed) {
-  var me = this, mash = Mash();
-
-  me.next = function() {
-    var t = 2091639 * me.s0 + me.c * 2.3283064365386963e-10; // 2^-32
-    me.s0 = me.s1;
-    me.s1 = me.s2;
-    return me.s2 = t - (me.c = t | 0);
-  };
-
-  // Apply the seeding algorithm from Baagoe.
-  me.c = 1;
-  me.s0 = mash(' ');
-  me.s1 = mash(' ');
-  me.s2 = mash(' ');
-  me.s0 -= mash(seed);
-  if (me.s0 < 0) { me.s0 += 1; }
-  me.s1 -= mash(seed);
-  if (me.s1 < 0) { me.s1 += 1; }
-  me.s2 -= mash(seed);
-  if (me.s2 < 0) { me.s2 += 1; }
-  mash = null;
-}
-
-function copy(f, t) {
-  t.c = f.c;
-  t.s0 = f.s0;
-  t.s1 = f.s1;
-  t.s2 = f.s2;
-  return t;
-}
-
-function impl(seed, opts) {
-  var xg = new Alea(seed),
-      state = opts && opts.state,
-      prng = xg.next;
-  prng.int32 = function() { return (xg.next() * 0x100000000) | 0; }
-  prng.double = function() {
-    return prng() + (prng() * 0x200000 | 0) * 1.1102230246251565e-16; // 2^-53
-  };
-  prng.quick = prng;
-  if (state) {
-    if (typeof(state) == 'object') copy(state, xg);
-    prng.state = function() { return copy(xg, {}); }
-  }
-  return prng;
-}
-
-function Mash() {
-  var n = 0xefc8249d;
-
-  var mash = function(data) {
-    data = data.toString();
-    for (var i = 0; i < data.length; i++) {
-      n += data.charCodeAt(i);
-      var h = 0.02519603282416938 * n;
-      n = h >>> 0;
-      h -= n;
-      h *= n;
-      n = h >>> 0;
-      h -= n;
-      n += h * 0x100000000; // 2^32
-    }
-    return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
-  };
-
-  return mash;
-}
-
-
-if (module && module.exports) {
-  module.exports = impl;
-} else if (define && define.amd) {
-  define(function() { return impl; });
-} else {
-  this.alea = impl;
-}
-
-})(
-  this,
-  (typeof module) == 'object' && module,    // present in node.js
-  (typeof define) == 'function' && define   // present with an AMD loader
-);
-
-
+        fromRgb: function () { // Becomes one.color.RGB.prototype.hsv
+            var red = this._red,
+                green = this._green,
+                blue = this._blue,
+                max = Math.max(red, green, blue),
+                min = Math.min(red, green, blue),
+                delta = max - min,
+                hue,
+                saturation = (max === 0) ? 0 : (delta / max),
+                value = max;
+            if (delta === 0) {
+                hue = 0;
+            } else {
+                switch (max) {
+                case red:
+                    hue = (green - blue) / delta / 6 + (green < blue ? 1 : 0);
+                    break;
+                case green:
+                    hue = (blue - red) / delta / 6 + 1 / 3;
+                    break;
+                case blue:
+                    hue = (red - green) / delta / 6 + 2 / 3;
+                    break;
+                }
+            }
+            return new color.HSV(hue, saturation, value, this._alpha);
+        }
+    });
+};
 
 },{}],15:[function(require,module,exports){
-// A Javascript implementaion of the "Tyche-i" prng algorithm by
-// Samuel Neves and Filipe Araujo.
-// See https://eden.dei.uc.pt/~sneves/pubs/2011-snfa2.pdf
+var installedColorSpaces = [],
+    undef = function (obj) {
+        return typeof obj === 'undefined';
+    },
+    channelRegExp = /\s*(\.\d+|\d+(?:\.\d+)?)(%)?\s*/,
+    percentageChannelRegExp = /\s*(\.\d+|100|\d?\d(?:\.\d+)?)%\s*/,
+    alphaChannelRegExp = /\s*(\.\d+|\d+(?:\.\d+)?)\s*/,
+    cssColorRegExp = new RegExp(
+                         '^(rgb|hsl|hsv)a?' +
+                         '\\(' +
+                             channelRegExp.source + ',' +
+                             channelRegExp.source + ',' +
+                             channelRegExp.source +
+                             '(?:,' + alphaChannelRegExp.source + ')?' +
+                         '\\)$', 'i');
 
-(function(global, module, define) {
+function color(obj) {
+    if (Array.isArray(obj)) {
+        if (typeof obj[0] === 'string' && typeof color[obj[0]] === 'function') {
+            // Assumed array from .toJSON()
+            return new color[obj[0]](obj.slice(1, obj.length));
+        } else if (obj.length === 4) {
+            // Assumed 4 element int RGB array from canvas with all channels [0;255]
+            return new color.RGB(obj[0] / 255, obj[1] / 255, obj[2] / 255, obj[3] / 255);
+        }
+    } else if (typeof obj === 'string') {
+        var lowerCased = obj.toLowerCase();
+        if (color.namedColors[lowerCased]) {
+            obj = '#' + color.namedColors[lowerCased];
+        }
+        if (lowerCased === 'transparent') {
+            obj = 'rgba(0,0,0,0)';
+        }
+        // Test for CSS rgb(....) string
+        var matchCssSyntax = obj.match(cssColorRegExp);
+        if (matchCssSyntax) {
+            var colorSpaceName = matchCssSyntax[1].toUpperCase(),
+                alpha = undef(matchCssSyntax[8]) ? matchCssSyntax[8] : parseFloat(matchCssSyntax[8]),
+                hasHue = colorSpaceName[0] === 'H',
+                firstChannelDivisor = matchCssSyntax[3] ? 100 : (hasHue ? 360 : 255),
+                secondChannelDivisor = (matchCssSyntax[5] || hasHue) ? 100 : 255,
+                thirdChannelDivisor = (matchCssSyntax[7] || hasHue) ? 100 : 255;
+            if (undef(color[colorSpaceName])) {
+                throw new Error('color.' + colorSpaceName + ' is not installed.');
+            }
+            return new color[colorSpaceName](
+                parseFloat(matchCssSyntax[2]) / firstChannelDivisor,
+                parseFloat(matchCssSyntax[4]) / secondChannelDivisor,
+                parseFloat(matchCssSyntax[6]) / thirdChannelDivisor,
+                alpha
+            );
+        }
+        // Assume hex syntax
+        if (obj.length < 6) {
+            // Allow CSS shorthand
+            obj = obj.replace(/^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i, '$1$1$2$2$3$3');
+        }
+        // Split obj into red, green, and blue components
+        var hexMatch = obj.match(/^#?([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])$/i);
+        if (hexMatch) {
+            return new color.RGB(
+                parseInt(hexMatch[1], 16) / 255,
+                parseInt(hexMatch[2], 16) / 255,
+                parseInt(hexMatch[3], 16) / 255
+            );
+        }
 
-function XorGen(seed) {
-  var me = this, strseed = '';
-
-  // Set up generator function.
-  me.next = function() {
-    var b = me.b, c = me.c, d = me.d, a = me.a;
-    b = (b << 25) ^ (b >>> 7) ^ c;
-    c = (c - d) | 0;
-    d = (d << 24) ^ (d >>> 8) ^ a;
-    a = (a - b) | 0;
-    me.b = b = (b << 20) ^ (b >>> 12) ^ c;
-    me.c = c = (c - d) | 0;
-    me.d = (d << 16) ^ (c >>> 16) ^ a;
-    return me.a = (a - b) | 0;
-  };
-
-  /* The following is non-inverted tyche, which has better internal
-   * bit diffusion, but which is about 25% slower than tyche-i in JS.
-  me.next = function() {
-    var a = me.a, b = me.b, c = me.c, d = me.d;
-    a = (me.a + me.b | 0) >>> 0;
-    d = me.d ^ a; d = d << 16 ^ d >>> 16;
-    c = me.c + d | 0;
-    b = me.b ^ c; b = b << 12 ^ d >>> 20;
-    me.a = a = a + b | 0;
-    d = d ^ a; me.d = d = d << 8 ^ d >>> 24;
-    me.c = c = c + d | 0;
-    b = b ^ c;
-    return me.b = (b << 7 ^ b >>> 25);
-  }
-  */
-
-  me.a = 0;
-  me.b = 0;
-  me.c = 2654435769 | 0;
-  me.d = 1367130551;
-
-  if (seed === Math.floor(seed)) {
-    // Integer seed.
-    me.a = (seed / 0x100000000) | 0;
-    me.b = seed | 0;
-  } else {
-    // String seed.
-    strseed += seed;
-  }
-
-  // Mix in string seed, then discard an initial batch of 64 values.
-  for (var k = 0; k < strseed.length + 20; k++) {
-    me.b ^= strseed.charCodeAt(k) | 0;
-    me.next();
-  }
+        // No match so far. Lets try the less likely ones
+        if (color.CMYK) {
+            var cmykMatch = obj.match(new RegExp(
+                             '^cmyk' +
+                             '\\(' +
+                                 percentageChannelRegExp.source + ',' +
+                                 percentageChannelRegExp.source + ',' +
+                                 percentageChannelRegExp.source + ',' +
+                                 percentageChannelRegExp.source +
+                             '\\)$', 'i'));
+            if (cmykMatch) {
+                return new color.CMYK(
+                    parseFloat(cmykMatch[1]) / 100,
+                    parseFloat(cmykMatch[2]) / 100,
+                    parseFloat(cmykMatch[3]) / 100,
+                    parseFloat(cmykMatch[4]) / 100
+                );
+            }
+        }
+    } else if (typeof obj === 'object' && obj.isColor) {
+        return obj;
+    }
+    return false;
 }
 
-function copy(f, t) {
-  t.a = f.a;
-  t.b = f.b;
-  t.c = f.c;
-  t.d = f.d;
-  return t;
+color.namedColors = {};
+
+color.installColorSpace = function (colorSpaceName, propertyNames, config) {
+    color[colorSpaceName] = function (a1) { // ...
+        var args = Array.isArray(a1) ? a1 : arguments;
+        propertyNames.forEach(function (propertyName, i) {
+            var propertyValue = args[i];
+            if (propertyName === 'alpha') {
+                this._alpha = (isNaN(propertyValue) || propertyValue > 1) ? 1 : (propertyValue < 0 ? 0 : propertyValue);
+            } else {
+                if (isNaN(propertyValue)) {
+                    throw new Error('[' + colorSpaceName + ']: Invalid color: (' + propertyNames.join(',') + ')');
+                }
+                if (propertyName === 'hue') {
+                    this._hue = propertyValue < 0 ? propertyValue - Math.floor(propertyValue) : propertyValue % 1;
+                } else {
+                    this['_' + propertyName] = propertyValue < 0 ? 0 : (propertyValue > 1 ? 1 : propertyValue);
+                }
+            }
+        }, this);
+    };
+    color[colorSpaceName].propertyNames = propertyNames;
+
+    var prototype = color[colorSpaceName].prototype;
+
+    ['valueOf', 'hex', 'hexa', 'css', 'cssa'].forEach(function (methodName) {
+        prototype[methodName] = prototype[methodName] || (colorSpaceName === 'RGB' ? prototype.hex : function () {
+            return this.rgb()[methodName]();
+        });
+    });
+
+    prototype.isColor = true;
+
+    prototype.equals = function (otherColor, epsilon) {
+        if (undef(epsilon)) {
+            epsilon = 1e-10;
+        }
+
+        otherColor = otherColor[colorSpaceName.toLowerCase()]();
+
+        for (var i = 0; i < propertyNames.length; i = i + 1) {
+            if (Math.abs(this['_' + propertyNames[i]] - otherColor['_' + propertyNames[i]]) > epsilon) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    prototype.toJSON = function () {
+        return [colorSpaceName].concat(propertyNames.map(function (propertyName) {
+            return this['_' + propertyName];
+        }, this));
+    };
+
+    for (var propertyName in config) {
+        if (config.hasOwnProperty(propertyName)) {
+            var matchFromColorSpace = propertyName.match(/^from(.*)$/);
+            if (matchFromColorSpace) {
+                color[matchFromColorSpace[1].toUpperCase()].prototype[colorSpaceName.toLowerCase()] = config[propertyName];
+            } else {
+                prototype[propertyName] = config[propertyName];
+            }
+        }
+    }
+
+    // It is pretty easy to implement the conversion to the same color space:
+    prototype[colorSpaceName.toLowerCase()] = function () {
+        return this;
+    };
+    prototype.toString = function () {
+        return '[' + colorSpaceName + ' ' + propertyNames.map(function (propertyName) {
+            return this['_' + propertyName];
+        }, this).join(', ') + ']';
+    };
+
+    // Generate getters and setters
+    propertyNames.forEach(function (propertyName) {
+        var shortName = propertyName === 'black' ? 'k' : propertyName.charAt(0);
+        prototype[propertyName] = prototype[shortName] = function (value, isDelta) {
+            // Simple getter mode: color.red()
+            if (typeof value === 'undefined') {
+                return this['_' + propertyName];
+            } else if (isDelta) {
+                // Adjuster: color.red(+.2, true)
+                return new this.constructor(propertyNames.map(function (otherPropertyName) {
+                    return this['_' + otherPropertyName] + (propertyName === otherPropertyName ? value : 0);
+                }, this));
+            } else {
+                // Setter: color.red(.2);
+                return new this.constructor(propertyNames.map(function (otherPropertyName) {
+                    return (propertyName === otherPropertyName) ? value : this['_' + otherPropertyName];
+                }, this));
+            }
+        };
+    });
+
+    function installForeignMethods(targetColorSpaceName, sourceColorSpaceName) {
+        var obj = {};
+        obj[sourceColorSpaceName.toLowerCase()] = function () {
+            return this.rgb()[sourceColorSpaceName.toLowerCase()]();
+        };
+        color[sourceColorSpaceName].propertyNames.forEach(function (propertyName) {
+            var shortName = propertyName === 'black' ? 'k' : propertyName.charAt(0);
+            obj[propertyName] = obj[shortName] = function (value, isDelta) {
+                return this[sourceColorSpaceName.toLowerCase()]()[propertyName](value, isDelta);
+            };
+        });
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop) && color[targetColorSpaceName].prototype[prop] === undefined) {
+                color[targetColorSpaceName].prototype[prop] = obj[prop];
+            }
+        }
+    }
+
+    installedColorSpaces.forEach(function (otherColorSpaceName) {
+        installForeignMethods(colorSpaceName, otherColorSpaceName);
+        installForeignMethods(otherColorSpaceName, colorSpaceName);
+    });
+
+    installedColorSpaces.push(colorSpaceName);
+    return color;
 };
 
-function impl(seed, opts) {
-  var xg = new XorGen(seed),
-      state = opts && opts.state,
-      prng = function() { return (xg.next() >>> 0) / 0x100000000; };
-  prng.double = function() {
-    do {
-      var top = xg.next() >>> 11,
-          bot = (xg.next() >>> 0) / 0x100000000,
-          result = (top + bot) / (1 << 21);
-    } while (result === 0);
-    return result;
-  };
-  prng.int32 = xg.next;
-  prng.quick = prng;
-  if (state) {
-    if (typeof(state) == 'object') copy(state, xg);
-    prng.state = function() { return copy(xg, {}); }
-  }
-  return prng;
-}
+color.pluginList = [];
 
-if (module && module.exports) {
-  module.exports = impl;
-} else if (define && define.amd) {
-  define(function() { return impl; });
-} else {
-  this.tychei = impl;
-}
+color.use = function (plugin) {
+    if (color.pluginList.indexOf(plugin) === -1) {
+        this.pluginList.push(plugin);
+        plugin(color);
+    }
+    return color;
+};
 
-})(
-  this,
-  (typeof module) == 'object' && module,    // present in node.js
-  (typeof define) == 'function' && define   // present with an AMD loader
-);
+color.installMethod = function (name, fn) {
+    installedColorSpaces.forEach(function (colorSpace) {
+        color[colorSpace].prototype[name] = fn;
+    });
+    return this;
+};
 
+color.installColorSpace('RGB', ['red', 'green', 'blue', 'alpha'], {
+    hex: function () {
+        var hexString = (Math.round(255 * this._red) * 0x10000 + Math.round(255 * this._green) * 0x100 + Math.round(255 * this._blue)).toString(16);
+        return '#' + ('00000'.substr(0, 6 - hexString.length)) + hexString;
+    },
 
+    hexa: function () {
+        var alphaString = Math.round(this._alpha * 255).toString(16);
+        return '#' + '00'.substr(0, 2 - alphaString.length) + alphaString + this.hex().substr(1, 6);
+    },
+
+    css: function () {
+        return 'rgb(' + Math.round(255 * this._red) + ',' + Math.round(255 * this._green) + ',' + Math.round(255 * this._blue) + ')';
+    },
+
+    cssa: function () {
+        return 'rgba(' + Math.round(255 * this._red) + ',' + Math.round(255 * this._green) + ',' + Math.round(255 * this._blue) + ',' + this._alpha + ')';
+    }
+});
+
+module.exports = color;
 
 },{}],16:[function(require,module,exports){
-// A Javascript implementaion of the "xor128" prng algorithm by
-// George Marsaglia.  See http://www.jstatsoft.org/v08/i14/paper
+module.exports = require('./lib/color')
+    .use(require('./lib/HSV'))
+    .use(require('./lib/HSL'));
 
-(function(global, module, define) {
-
-function XorGen(seed) {
-  var me = this, strseed = '';
-
-  me.x = 0;
-  me.y = 0;
-  me.z = 0;
-  me.w = 0;
-
-  // Set up generator function.
-  me.next = function() {
-    var t = me.x ^ (me.x << 11);
-    me.x = me.y;
-    me.y = me.z;
-    me.z = me.w;
-    return me.w ^= (me.w >>> 19) ^ t ^ (t >>> 8);
-  };
-
-  if (seed === (seed | 0)) {
-    // Integer seed.
-    me.x = seed;
-  } else {
-    // String seed.
-    strseed += seed;
-  }
-
-  // Mix in string seed, then discard an initial batch of 64 values.
-  for (var k = 0; k < strseed.length + 64; k++) {
-    me.x ^= strseed.charCodeAt(k) | 0;
-    me.next();
-  }
-}
-
-function copy(f, t) {
-  t.x = f.x;
-  t.y = f.y;
-  t.z = f.z;
-  t.w = f.w;
-  return t;
-}
-
-function impl(seed, opts) {
-  var xg = new XorGen(seed),
-      state = opts && opts.state,
-      prng = function() { return (xg.next() >>> 0) / 0x100000000; };
-  prng.double = function() {
-    do {
-      var top = xg.next() >>> 11,
-          bot = (xg.next() >>> 0) / 0x100000000,
-          result = (top + bot) / (1 << 21);
-    } while (result === 0);
-    return result;
-  };
-  prng.int32 = xg.next;
-  prng.quick = prng;
-  if (state) {
-    if (typeof(state) == 'object') copy(state, xg);
-    prng.state = function() { return copy(xg, {}); }
-  }
-  return prng;
-}
-
-if (module && module.exports) {
-  module.exports = impl;
-} else if (define && define.amd) {
-  define(function() { return impl; });
-} else {
-  this.xor128 = impl;
-}
-
-})(
-  this,
-  (typeof module) == 'object' && module,    // present in node.js
-  (typeof define) == 'function' && define   // present with an AMD loader
-);
-
-
-
-},{}],17:[function(require,module,exports){
-// A Javascript implementaion of Richard Brent's Xorgens xor4096 algorithm.
-//
-// This fast non-cryptographic random number generator is designed for
-// use in Monte-Carlo algorithms. It combines a long-period xorshift
-// generator with a Weyl generator, and it passes all common batteries
-// of stasticial tests for randomness while consuming only a few nanoseconds
-// for each prng generated.  For background on the generator, see Brent's
-// paper: "Some long-period random number generators using shifts and xors."
-// http://arxiv.org/pdf/1004.3115v1.pdf
-//
-// Usage:
-//
-// var xor4096 = require('xor4096');
-// random = xor4096(1);                        // Seed with int32 or string.
-// assert.equal(random(), 0.1520436450538547); // (0, 1) range, 53 bits.
-// assert.equal(random.int32(), 1806534897);   // signed int32, 32 bits.
-//
-// For nonzero numeric keys, this impelementation provides a sequence
-// identical to that by Brent's xorgens 3 implementaion in C.  This
-// implementation also provides for initalizing the generator with
-// string seeds, or for saving and restoring the state of the generator.
-//
-// On Chrome, this prng benchmarks about 2.1 times slower than
-// Javascript's built-in Math.random().
-
-(function(global, module, define) {
-
-function XorGen(seed) {
-  var me = this;
-
-  // Set up generator function.
-  me.next = function() {
-    var w = me.w,
-        X = me.X, i = me.i, t, v;
-    // Update Weyl generator.
-    me.w = w = (w + 0x61c88647) | 0;
-    // Update xor generator.
-    v = X[(i + 34) & 127];
-    t = X[i = ((i + 1) & 127)];
-    v ^= v << 13;
-    t ^= t << 17;
-    v ^= v >>> 15;
-    t ^= t >>> 12;
-    // Update Xor generator array state.
-    v = X[i] = v ^ t;
-    me.i = i;
-    // Result is the combination.
-    return (v + (w ^ (w >>> 16))) | 0;
-  };
-
-  function init(me, seed) {
-    var t, v, i, j, w, X = [], limit = 128;
-    if (seed === (seed | 0)) {
-      // Numeric seeds initialize v, which is used to generates X.
-      v = seed;
-      seed = null;
-    } else {
-      // String seeds are mixed into v and X one character at a time.
-      seed = seed + '\0';
-      v = 0;
-      limit = Math.max(limit, seed.length);
-    }
-    // Initialize circular array and weyl value.
-    for (i = 0, j = -32; j < limit; ++j) {
-      // Put the unicode characters into the array, and shuffle them.
-      if (seed) v ^= seed.charCodeAt((j + 32) % seed.length);
-      // After 32 shuffles, take v as the starting w value.
-      if (j === 0) w = v;
-      v ^= v << 10;
-      v ^= v >>> 15;
-      v ^= v << 4;
-      v ^= v >>> 13;
-      if (j >= 0) {
-        w = (w + 0x61c88647) | 0;     // Weyl.
-        t = (X[j & 127] ^= (v + w));  // Combine xor and weyl to init array.
-        i = (0 == t) ? i + 1 : 0;     // Count zeroes.
-      }
-    }
-    // We have detected all zeroes; make the key nonzero.
-    if (i >= 128) {
-      X[(seed && seed.length || 0) & 127] = -1;
-    }
-    // Run the generator 512 times to further mix the state before using it.
-    // Factoring this as a function slows the main generator, so it is just
-    // unrolled here.  The weyl generator is not advanced while warming up.
-    i = 127;
-    for (j = 4 * 128; j > 0; --j) {
-      v = X[(i + 34) & 127];
-      t = X[i = ((i + 1) & 127)];
-      v ^= v << 13;
-      t ^= t << 17;
-      v ^= v >>> 15;
-      t ^= t >>> 12;
-      X[i] = v ^ t;
-    }
-    // Storing state as object members is faster than using closure variables.
-    me.w = w;
-    me.X = X;
-    me.i = i;
-  }
-
-  init(me, seed);
-}
-
-function copy(f, t) {
-  t.i = f.i;
-  t.w = f.w;
-  t.X = f.X.slice();
-  return t;
-};
-
-function impl(seed, opts) {
-  if (seed == null) seed = +(new Date);
-  var xg = new XorGen(seed),
-      state = opts && opts.state,
-      prng = function() { return (xg.next() >>> 0) / 0x100000000; };
-  prng.double = function() {
-    do {
-      var top = xg.next() >>> 11,
-          bot = (xg.next() >>> 0) / 0x100000000,
-          result = (top + bot) / (1 << 21);
-    } while (result === 0);
-    return result;
-  };
-  prng.int32 = xg.next;
-  prng.quick = prng;
-  if (state) {
-    if (state.X) copy(state, xg);
-    prng.state = function() { return copy(xg, {}); }
-  }
-  return prng;
-}
-
-if (module && module.exports) {
-  module.exports = impl;
-} else if (define && define.amd) {
-  define(function() { return impl; });
-} else {
-  this.xor4096 = impl;
-}
-
-})(
-  this,                                     // window object or global
-  (typeof module) == 'object' && module,    // present in node.js
-  (typeof define) == 'function' && define   // present with an AMD loader
-);
-
-},{}],18:[function(require,module,exports){
-// A Javascript implementaion of the "xorshift7" algorithm by
-// François Panneton and Pierre L'ecuyer:
-// "On the Xorgshift Random Number Generators"
-// http://saluc.engr.uconn.edu/refs/crypto/rng/panneton05onthexorshift.pdf
-
-(function(global, module, define) {
-
-function XorGen(seed) {
-  var me = this;
-
-  // Set up generator function.
-  me.next = function() {
-    // Update xor generator.
-    var X = me.x, i = me.i, t, v, w;
-    t = X[i]; t ^= (t >>> 7); v = t ^ (t << 24);
-    t = X[(i + 1) & 7]; v ^= t ^ (t >>> 10);
-    t = X[(i + 3) & 7]; v ^= t ^ (t >>> 3);
-    t = X[(i + 4) & 7]; v ^= t ^ (t << 7);
-    t = X[(i + 7) & 7]; t = t ^ (t << 13); v ^= t ^ (t << 9);
-    X[i] = v;
-    me.i = (i + 1) & 7;
-    return v;
-  };
-
-  function init(me, seed) {
-    var j, w, X = [];
-
-    if (seed === (seed | 0)) {
-      // Seed state array using a 32-bit integer.
-      w = X[0] = seed;
-    } else {
-      // Seed state using a string.
-      seed = '' + seed;
-      for (j = 0; j < seed.length; ++j) {
-        X[j & 7] = (X[j & 7] << 15) ^
-            (seed.charCodeAt(j) + X[(j + 1) & 7] << 13);
-      }
-    }
-    // Enforce an array length of 8, not all zeroes.
-    while (X.length < 8) X.push(0);
-    for (j = 0; j < 8 && X[j] === 0; ++j);
-    if (j == 8) w = X[7] = -1; else w = X[j];
-
-    me.x = X;
-    me.i = 0;
-
-    // Discard an initial 256 values.
-    for (j = 256; j > 0; --j) {
-      me.next();
-    }
-  }
-
-  init(me, seed);
-}
-
-function copy(f, t) {
-  t.x = f.x.slice();
-  t.i = f.i;
-  return t;
-}
-
-function impl(seed, opts) {
-  if (seed == null) seed = +(new Date);
-  var xg = new XorGen(seed),
-      state = opts && opts.state,
-      prng = function() { return (xg.next() >>> 0) / 0x100000000; };
-  prng.double = function() {
-    do {
-      var top = xg.next() >>> 11,
-          bot = (xg.next() >>> 0) / 0x100000000,
-          result = (top + bot) / (1 << 21);
-    } while (result === 0);
-    return result;
-  };
-  prng.int32 = xg.next;
-  prng.quick = prng;
-  if (state) {
-    if (state.x) copy(state, xg);
-    prng.state = function() { return copy(xg, {}); }
-  }
-  return prng;
-}
-
-if (module && module.exports) {
-  module.exports = impl;
-} else if (define && define.amd) {
-  define(function() { return impl; });
-} else {
-  this.xorshift7 = impl;
-}
-
-})(
-  this,
-  (typeof module) == 'object' && module,    // present in node.js
-  (typeof define) == 'function' && define   // present with an AMD loader
-);
-
-
-},{}],19:[function(require,module,exports){
-// A Javascript implementaion of the "xorwow" prng algorithm by
-// George Marsaglia.  See http://www.jstatsoft.org/v08/i14/paper
-
-(function(global, module, define) {
-
-function XorGen(seed) {
-  var me = this, strseed = '';
-
-  // Set up generator function.
-  me.next = function() {
-    var t = (me.x ^ (me.x >>> 2));
-    me.x = me.y; me.y = me.z; me.z = me.w; me.w = me.v;
-    return (me.d = (me.d + 362437 | 0)) +
-       (me.v = (me.v ^ (me.v << 4)) ^ (t ^ (t << 1))) | 0;
-  };
-
-  me.x = 0;
-  me.y = 0;
-  me.z = 0;
-  me.w = 0;
-  me.v = 0;
-
-  if (seed === (seed | 0)) {
-    // Integer seed.
-    me.x = seed;
-  } else {
-    // String seed.
-    strseed += seed;
-  }
-
-  // Mix in string seed, then discard an initial batch of 64 values.
-  for (var k = 0; k < strseed.length + 64; k++) {
-    me.x ^= strseed.charCodeAt(k) | 0;
-    if (k == strseed.length) {
-      me.d = me.x << 10 ^ me.x >>> 4;
-    }
-    me.next();
-  }
-}
-
-function copy(f, t) {
-  t.x = f.x;
-  t.y = f.y;
-  t.z = f.z;
-  t.w = f.w;
-  t.v = f.v;
-  t.d = f.d;
-  return t;
-}
-
-function impl(seed, opts) {
-  var xg = new XorGen(seed),
-      state = opts && opts.state,
-      prng = function() { return (xg.next() >>> 0) / 0x100000000; };
-  prng.double = function() {
-    do {
-      var top = xg.next() >>> 11,
-          bot = (xg.next() >>> 0) / 0x100000000,
-          result = (top + bot) / (1 << 21);
-    } while (result === 0);
-    return result;
-  };
-  prng.int32 = xg.next;
-  prng.quick = prng;
-  if (state) {
-    if (typeof(state) == 'object') copy(state, xg);
-    prng.state = function() { return copy(xg, {}); }
-  }
-  return prng;
-}
-
-if (module && module.exports) {
-  module.exports = impl;
-} else if (define && define.amd) {
-  define(function() { return impl; });
-} else {
-  this.xorwow = impl;
-}
-
-})(
-  this,
-  (typeof module) == 'object' && module,    // present in node.js
-  (typeof define) == 'function' && define   // present with an AMD loader
-);
-
-
-
-},{}],20:[function(require,module,exports){
+},{"./lib/HSL":13,"./lib/HSV":14,"./lib/color":15}],17:[function(require,module,exports){
 /*
 Copyright 2014 David Bau.
 

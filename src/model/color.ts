@@ -1,4 +1,4 @@
-import * as oneColor from 'onecolor';
+import * as oneColor from 'onecolor/minimal';
 
 export default class Color {
   private color: oneColor.Color;
