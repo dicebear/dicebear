@@ -6,7 +6,6 @@ import Random from '../helper/random';
 export interface SpriteOptions {
   src: string;
   colorSet: ColorSet;
-  size?: number;
   chance?: number;
 }
 
@@ -21,7 +20,6 @@ export default class Sprite {
    */
   constructor(options: SpriteOptions) {
     // Set default options
-    options.size = options.size || 20;
     options.chance = options.chance || 100;
 
     this.options = options;
@@ -37,7 +35,7 @@ export default class Sprite {
         this.image = createImage();
 
         this.image.addEventListener('load', () => {
-          this.imageSprites = Math.floor(this.image.width / this.options.size);
+          this.imageSprites = Math.floor(this.image.width / this.image.height);
         });
 
         this.image.addEventListener('error', err => {
@@ -69,12 +67,12 @@ export default class Sprite {
     var canvas = createCanvas();
     var context = canvas.getContext('2d');
 
-    canvas.width = this.options.size;
-    canvas.height = this.options.size;
+    canvas.width = this.image.height;
+    canvas.height = this.image.height;
 
     if (random.bool(this.options.chance)) {
       return this.options.colorSet.getColor(random).then(color => {
-        context.drawImage(this.image, random.integer(0, this.imageSprites - 1) * this.options.size * -1, 0);
+        context.drawImage(this.image, random.integer(0, this.imageSprites - 1) * this.image.height * -1, 0);
 
         this.tintCanvas(canvas, color);
 

@@ -65,6 +65,7 @@ var canvas_1 = require("./helper/canvas");
 var random_1 = require("./helper/random");
 var male_1 = require("./spriteSet/male");
 var female_1 = require("./spriteSet/female");
+var identicon_1 = require("./spriteSet/identicon");
 var Avatars = /** @class */ (function () {
     /**
      * @param spriteSet
@@ -96,7 +97,7 @@ var Avatars = /** @class */ (function () {
                         images = _a.sent();
                         canvas = canvas_1.createCanvas();
                         context = canvas.getContext('2d');
-                        canvas.width = images[0].width;
+                        canvas.width = images[0].height;
                         canvas.height = images[0].height;
                         return [4 /*yield*/, Promise.all(spriteSetKeys.map(function (key) { return spriteSet[key].create(random); }))];
                     case 3:
@@ -111,13 +112,14 @@ var Avatars = /** @class */ (function () {
     };
     Avatars.SPRITE_SETS = {
         male: male_1.default,
-        female: female_1.default
+        female: female_1.default,
+        identicon: identicon_1.default
     };
     return Avatars;
 }());
 exports.default = Avatars;
 
-},{"./helper/canvas":3,"./helper/random":4,"./model/avatar":6,"./spriteSet/female":10,"./spriteSet/male":11}],2:[function(require,module,exports){
+},{"./helper/canvas":3,"./helper/random":4,"./model/avatar":6,"./spriteSet/female":10,"./spriteSet/identicon":11,"./spriteSet/male":12}],2:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -215,7 +217,7 @@ var Random = /** @class */ (function () {
 }());
 exports.default = Random;
 
-},{"seedrandom/seedrandom":17}],5:[function(require,module,exports){
+},{"seedrandom/seedrandom":18}],5:[function(require,module,exports){
 var avatars = require('./avatars').default;
 module.exports = avatars;
 
@@ -258,7 +260,7 @@ var Color = /** @class */ (function () {
 }());
 exports.default = Color;
 
-},{"onecolor/minimal":16}],8:[function(require,module,exports){
+},{"onecolor/minimal":17}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ColorSet = /** @class */ (function () {
@@ -301,7 +303,6 @@ var Sprite = /** @class */ (function () {
         this.imageError = null;
         this.imageSprites = null;
         // Set default options
-        options.size = options.size || 20;
         options.chance = options.chance || 100;
         this.options = options;
     }
@@ -315,7 +316,7 @@ var Sprite = /** @class */ (function () {
                 // Create HTMLImageElement
                 _this.image = canvas_1.createImage();
                 _this.image.addEventListener('load', function () {
-                    _this.imageSprites = Math.floor(_this.image.width / _this.options.size);
+                    _this.imageSprites = Math.floor(_this.image.width / _this.image.height);
                 });
                 _this.image.addEventListener('error', function (err) {
                     _this.imageError = err.error;
@@ -343,11 +344,11 @@ var Sprite = /** @class */ (function () {
         }
         var canvas = canvas_1.createCanvas();
         var context = canvas.getContext('2d');
-        canvas.width = this.options.size;
-        canvas.height = this.options.size;
+        canvas.width = this.image.height;
+        canvas.height = this.image.height;
         if (random.bool(this.options.chance)) {
             return this.options.colorSet.getColor(random).then(function (color) {
-                context.drawImage(_this.image, random.integer(0, _this.imageSprites - 1) * _this.options.size * -1, 0);
+                context.drawImage(_this.image, random.integer(0, _this.imageSprites - 1) * _this.image.height * -1, 0);
                 _this.tintCanvas(canvas, color);
                 return canvas;
             });
@@ -527,6 +528,74 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sprite_1 = require("../model/sprite");
 var color_1 = require("../model/color");
 var colorSet_1 = require("../model/colorSet");
+var identiconSpriteSet = function (random) {
+    var base64Prefix = 'data:image/png;base64,';
+    // Thanks to [Andrew Kensler](http://eastfarthing.com/blog/2016-05-06-palette/)
+    var color = new colorSet_1.default([
+        new color_1.default('#d6a090'),
+        new color_1.default('#fe3b1e'),
+        new color_1.default('#a12c32'),
+        new color_1.default('#fa2f7a'),
+        new color_1.default('#fb9fda'),
+        new color_1.default('#e61cf7'),
+        new color_1.default('#992f7c'),
+        new color_1.default('#47011f'),
+        new color_1.default('#051155'),
+        new color_1.default('#4f02ec'),
+        new color_1.default('#2d69cb'),
+        new color_1.default('#00a6ee'),
+        new color_1.default('#6febff'),
+        new color_1.default('#08a29a'),
+        new color_1.default('#2a666a'),
+        new color_1.default('#063619'),
+        new color_1.default('#4a4957'),
+        new color_1.default('#8e7ba4'),
+        new color_1.default('#b7c0ff'),
+        new color_1.default('#acbe9c'),
+        new color_1.default('#827c70'),
+        new color_1.default('#5a3b1c'),
+        new color_1.default('#ae6507'),
+        new color_1.default('#f7aa30'),
+        new color_1.default('#f4ea5c'),
+        new color_1.default('#9b9500'),
+        new color_1.default('#566204'),
+        new color_1.default('#11963b'),
+        new color_1.default('#51e113'),
+        new color_1.default('#08fdcc')
+    ]);
+    var spriteSet = {
+        1: new sprite_1.default({
+            src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAACMAAAAFCAYAAADPLFVyAAAAJklEQVQokWNgGAWjgDTAyMDA8B9Kw8B/NHFc8sh8dPMI2QdjowAA0ygIAg1NKAIAAAAASUVORK5CYII=",
+            colorSet: color
+        }),
+        2: new sprite_1.default({
+            src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAACMAAAAFCAYAAADPLFVyAAAAJklEQVQokWNgGAVDADAyMDD8h9Iw8B9NHJc8Mh/dPEL2wdiDFwAAPAAIArVXVZkAAAAASUVORK5CYII=",
+            colorSet: color
+        }),
+        3: new sprite_1.default({
+            src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAACMAAAAFCAYAAADPLFVyAAAAJklEQVQokWNgGAXYASMDA8N/KA0D/9HEcckj89HNI2QfjD0KiAIApMkIAqp2PYAAAAAASUVORK5CYII=",
+            colorSet: color
+        }),
+        4: new sprite_1.default({
+            src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAACMAAAAFCAYAAADPLFVyAAAAJklEQVQokWNgGESAkYGB4T+UhoH/aOK45JH56OYRsg/GHgVDDwAADaEIAgrqvcEAAAAASUVORK5CYII=",
+            colorSet: color
+        }),
+        5: new sprite_1.default({
+            src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAACMAAAAFCAYAAADPLFVyAAAAK0lEQVQokWNkYGD4z8DAwMiAADA+Oo0uj8yHAUY0PjpAlmfEo24UjAKiAAB2aggCS7GwbAAAAABJRU5ErkJggg==",
+            colorSet: color
+        })
+    };
+    return Promise.resolve(spriteSet);
+};
+exports.default = identiconSpriteSet;
+
+},{"../model/color":7,"../model/colorSet":8,"../model/sprite":9}],12:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+var sprite_1 = require("../model/sprite");
+var color_1 = require("../model/color");
+var colorSet_1 = require("../model/colorSet");
 var brighterOrDarkerThan_1 = require("../color/modifier/brighterOrDarkerThan");
 var maleSpriteSet = function (random) {
     var base64Prefix = 'data:image/png;base64,';
@@ -638,9 +707,9 @@ var maleSpriteSet = function (random) {
 };
 exports.default = maleSpriteSet;
 
-},{"../color/modifier/brighterOrDarkerThan":2,"../model/color":7,"../model/colorSet":8,"../model/sprite":9}],12:[function(require,module,exports){
+},{"../color/modifier/brighterOrDarkerThan":2,"../model/color":7,"../model/colorSet":8,"../model/sprite":9}],13:[function(require,module,exports){
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports = function HSL(color) {
     color.use(require('./HSV'));
 
@@ -671,7 +740,7 @@ module.exports = function HSL(color) {
     });
 };
 
-},{"./HSV":14}],14:[function(require,module,exports){
+},{"./HSV":15}],15:[function(require,module,exports){
 module.exports = function HSV(color) {
     color.installColorSpace('HSV', ['hue', 'saturation', 'value', 'alpha'], {
         rgb: function () {
@@ -766,7 +835,7 @@ module.exports = function HSV(color) {
     });
 };
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var installedColorSpaces = [],
     undef = function (obj) {
         return typeof obj === 'undefined';
@@ -1022,12 +1091,12 @@ color.installColorSpace('RGB', ['red', 'green', 'blue', 'alpha'], {
 
 module.exports = color;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 module.exports = require('./lib/color')
     .use(require('./lib/HSV'))
     .use(require('./lib/HSL'));
 
-},{"./lib/HSL":13,"./lib/HSV":14,"./lib/color":15}],17:[function(require,module,exports){
+},{"./lib/HSL":14,"./lib/HSV":15,"./lib/color":16}],18:[function(require,module,exports){
 /*
 Copyright 2014 David Bau.
 
@@ -1276,5 +1345,5 @@ if ((typeof module) == 'object' && module.exports) {
   Math    // math: package containing random, pow, and seedrandom
 );
 
-},{"crypto":12}]},{},[5])(5)
+},{"crypto":13}]},{},[5])(5)
 });
