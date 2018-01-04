@@ -7,38 +7,24 @@ import ColorSet from '../model/colorSet';
 let identiconSpriteSet: SpriteSetInterface = random => {
   let base64Prefix = 'data:image/png;base64,';
 
-  // Thanks to [Andrew Kensler](http://eastfarthing.com/blog/2016-05-06-palette/)
+  // Thanks to [materialui.co](https://www.materialui.co/colors)
   let color = new ColorSet([
-    new Color('#d6a090'),
-    new Color('#fe3b1e'),
-    new Color('#a12c32'),
-    new Color('#fa2f7a'),
-    new Color('#fb9fda'),
-    new Color('#e61cf7'),
-    new Color('#992f7c'),
-    new Color('#47011f'),
-    new Color('#051155'),
-    new Color('#4f02ec'),
-    new Color('#2d69cb'),
-    new Color('#00a6ee'),
-    new Color('#6febff'),
-    new Color('#08a29a'),
-    new Color('#2a666a'),
-    new Color('#063619'),
-    new Color('#4a4957'),
-    new Color('#8e7ba4'),
-    new Color('#b7c0ff'),
-    new Color('#acbe9c'),
-    new Color('#827c70'),
-    new Color('#5a3b1c'),
-    new Color('#ae6507'),
-    new Color('#f7aa30'),
-    new Color('#f4ea5c'),
-    new Color('#9b9500'),
-    new Color('#566204'),
-    new Color('#11963b'),
-    new Color('#51e113'),
-    new Color('#08fdcc')
+    new Color('#e57373'),
+    new Color('#F06292'),
+    new Color('#BA68C8'),
+    new Color('#9575CD'),
+    new Color('#7986CB'),
+    new Color('#64B5F6'),
+    new Color('#4FC3F7'),
+    new Color('#4DD0E1'),
+    new Color('#4DB6AC'),
+    new Color('#81C784'),
+    new Color('#AED581'),
+    new Color('#DCE775'),
+    new Color('#FFF176'),
+    new Color('#FFD54F'),
+    new Color('#FFB74D'),
+    new Color('#FF8A65')
   ]);
 
   let spriteSet = {

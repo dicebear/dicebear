@@ -530,38 +530,24 @@ var color_1 = require("../model/color");
 var colorSet_1 = require("../model/colorSet");
 var identiconSpriteSet = function (random) {
     var base64Prefix = 'data:image/png;base64,';
-    // Thanks to [Andrew Kensler](http://eastfarthing.com/blog/2016-05-06-palette/)
+    // Thanks to [materialui.co](https://www.materialui.co/colors)
     var color = new colorSet_1.default([
-        new color_1.default('#d6a090'),
-        new color_1.default('#fe3b1e'),
-        new color_1.default('#a12c32'),
-        new color_1.default('#fa2f7a'),
-        new color_1.default('#fb9fda'),
-        new color_1.default('#e61cf7'),
-        new color_1.default('#992f7c'),
-        new color_1.default('#47011f'),
-        new color_1.default('#051155'),
-        new color_1.default('#4f02ec'),
-        new color_1.default('#2d69cb'),
-        new color_1.default('#00a6ee'),
-        new color_1.default('#6febff'),
-        new color_1.default('#08a29a'),
-        new color_1.default('#2a666a'),
-        new color_1.default('#063619'),
-        new color_1.default('#4a4957'),
-        new color_1.default('#8e7ba4'),
-        new color_1.default('#b7c0ff'),
-        new color_1.default('#acbe9c'),
-        new color_1.default('#827c70'),
-        new color_1.default('#5a3b1c'),
-        new color_1.default('#ae6507'),
-        new color_1.default('#f7aa30'),
-        new color_1.default('#f4ea5c'),
-        new color_1.default('#9b9500'),
-        new color_1.default('#566204'),
-        new color_1.default('#11963b'),
-        new color_1.default('#51e113'),
-        new color_1.default('#08fdcc')
+        new color_1.default('#e57373'),
+        new color_1.default('#F06292'),
+        new color_1.default('#BA68C8'),
+        new color_1.default('#9575CD'),
+        new color_1.default('#7986CB'),
+        new color_1.default('#64B5F6'),
+        new color_1.default('#4FC3F7'),
+        new color_1.default('#4DD0E1'),
+        new color_1.default('#4DB6AC'),
+        new color_1.default('#81C784'),
+        new color_1.default('#AED581'),
+        new color_1.default('#DCE775'),
+        new color_1.default('#FFF176'),
+        new color_1.default('#FFD54F'),
+        new color_1.default('#FFB74D'),
+        new color_1.default('#FF8A65')
     ]);
     var spriteSet = {
         1: new sprite_1.default({
