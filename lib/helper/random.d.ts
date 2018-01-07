@@ -1,6 +1,6 @@
 export default class Random {
     private prng;
-    readonly seed: any;
+    readonly seed: string;
     constructor(seed: string);
     bool(likelihood?: number): boolean;
     integer(min: number, max: number): number;

@@ -3,7 +3,7 @@ import Random from '../helper/random';
 
 export default class ColorSet {
   private colors: Color[] | ColorSet;
-  private pickedColors: { [key: number]: Color } = {};
+  private pickedColors: { [key: string]: Color } = {};
 
   /**
    * @param colors

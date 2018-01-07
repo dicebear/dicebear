@@ -1,8 +1,8 @@
-import seedrandom = require('seedrandom/seedrandom');
+import * as seedrandom from 'seedrandom/seedrandom';
 
 export default class Random {
   private prng: seedrandom.prng;
-  public readonly seed;
+  public readonly seed: string;
 
   constructor(seed: string) {
     this.seed = seed;

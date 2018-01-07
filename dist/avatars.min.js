@@ -6,7 +6,7 @@
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: Florian Körner <contact@dicebear.com>
  *   homepage: https://github.com/DiceBear/avatars#readme
- *   version: 1.0.1
+ *   version: 2.0.0
  *
  * onecolor:
  *   license: BSD-2-Clause (http://opensource.org/licenses/BSD-2-Clause)

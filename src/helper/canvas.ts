@@ -17,15 +17,15 @@ export function createImage(): HTMLImageElement {
   };
 
   image.onload = function() {
-    image.eventListener.load.forEach(callback => {
+    image.eventListener.load.forEach((callback: Function) => {
       callback();
     });
 
     image.eventListener.load = [];
   };
 
-  image.onerror = function(err) {
-    image.eventListener.error.forEach(callback => {
+  image.onerror = function(err: Error) {
+    image.eventListener.error.forEach((callback: Function) => {
       callback(err);
     });
 

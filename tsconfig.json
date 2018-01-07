@@ -8,6 +8,11 @@
         "lib": [
             "es6",
             "dom"
+        ],
+        "noImplicitAny": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "typings"
         ]
     },
     "include": [
