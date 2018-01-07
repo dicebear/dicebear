@@ -62,7 +62,7 @@ yarn add @dicebear/avatars
 #### Use a CDN
 
 ```
-<script type="text/javascript" src="//rawgit.com/DiceBear/avatars/1.0.1/dist/avatars.min.js"></script>
+<script type="text/javascript" src="//rawgit.com/DiceBear/avatars/2.0.0/dist/avatars.min.js"></script>
 ```
 
 #### Download archive
