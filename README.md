@@ -16,7 +16,6 @@ Test in your Browser: <https://avatars.dicebear.com/>
 ![](http://avatars.dicebear.com/v1/female/33/60.png)
 ![](http://avatars.dicebear.com/v1/male/88/60.png)
 
-
 ## Use the HTTP-API
 
 ```
@@ -38,10 +37,9 @@ GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png
 | ![](http://avatars.dicebear.com/v1/female/jane-doe/100.png) | <http://avatars.dicebear.com/v1/female/jane-doe/100.png> |
 | ![](http://avatars.dicebear.com/v1/female/jane-doe/60.png)  | <http://avatars.dicebear.com/v1/female/jane-doe/60.png>  |
 
-
 ### Host your own API-Server
-[Check out our OpenSource API-Server](https://github.com/DiceBear/avatars-server)
 
+[Check out our OpenSource API-Server](https://github.com/DiceBear/avatars-server)
 
 ## Use the library
 
@@ -64,18 +62,18 @@ npm install @dicebear/avatars
 ##### Without Dependencies
 
 ```
-<script type="text/javascript" src="https://rawgit.com/DiceBear/avatars/master/dist/avatars.min.js"></script>
+<script type="text/javascript" src="//rawgit.com/DiceBear/avatars/1.0.1/dist/avatars.min.js"></script>
 ```
 
 ##### With dependencies
 
 ```
-<script type="text/javascript" src="https://rawgit.com/DiceBear/avatars/master/dist/avatars.pack.min.js"></script>
+<script type="text/javascript" src="//rawgit.com/DiceBear/avatars/1.0.1/dist/avatars.pack.min.js"></script>
 ```
 
 #### Download archive
 
-- [Master build](https://github.com/DiceBear/avatars/archive/master.zip)
+* [Master build](https://github.com/DiceBear/avatars/archive/master.zip)
 
 ### Dependencies
 
@@ -107,9 +105,8 @@ avatars.create(seed, { size: 200 }, function(err, canvas) {
 
 #### Options
 
-- **size:** number
-- **order:** sprite order as array
-
+* **size:** number
+* **order:** sprite order as array
 
 ### Create your own sprite sets
 
@@ -123,5 +120,6 @@ Sprite parts must be arranged horizontally. The library will detect the dimensio
 
 See examples: <https://github.com/DiceBear/avatars/tree/master/src/spriteSets>
 
---------
+---
+
 _Inspired by [8biticon](https://github.com/matveyco/8biticon)_
