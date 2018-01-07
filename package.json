@@ -1,9 +1,9 @@
 {
   "name": "@dicebear/avatars",
-  "version": "1.0.1",
-  "description": "Pixel-Art Avatar Generator by Identifier",
-  "main": "lib/index.js",
-  "types": "src/index.ts",
+  "version": "2.0.0",
+  "description": "Pixel-Art Avatar and Identicon Generator by Identifier",
+  "main": "lib/index",
+  "types": "lib/index",
   "dependencies": {
     "canvas": "^1.6.5",
     "onecolor": "^3.0.4",
@@ -20,6 +20,7 @@
     "uglify-js": "^2.8.22"
   },
   "scripts": {
+    "prepublishOnly": "npm run build",
     "prebuild": "rm -r dist/* lib/* || true",
     "build": "tsc && npm run build-pack && npm run build-pack-minify",
     "build-pack": "browserify lib/index.js -p licensify -s Avatars > dist/avatars.js",
@@ -31,11 +32,12 @@
     "type": "git",
     "url": "git+https://github.com/DiceBear/avatars.git"
   },
-  "keywords": ["avatar", "generator", "javascript", "typescript"],
+  "keywords": ["avatar", "generator", "identicon", "javascript", "typescript"],
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
+  "files": ["dist", "lib"],
   "browser": {
     "./lib/index.js": "./lib/index.browser.js",
     "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"

@@ -1,16 +1,13 @@
 {
     "compilerOptions": {
+        "module": "commonjs",
         "target": "es5",
-        "allowJs": true,
+        "outDir": "./lib",
+        "moduleResolution": "node",
+        "declaration": true,
         "lib": [
             "es6",
             "dom"
-        ],
-        "outDir": "./lib/",
-        "rootDir": "./src/",
-        "typeRoots": [
-            "./typings/",
-            "./node_modules/@types/"
         ]
     },
     "include": [

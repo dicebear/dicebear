@@ -4,17 +4,17 @@
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg)](https://www.npmjs.com/package/@dicebear/avatars)
 ![Bower](https://img.shields.io/bower/v/dicebear-avatars.svg)
 
-Pixel-Art Avatar Generator by Identifier in JavaScript for Browsers and NodeJS.  
+Pixel-Art Avatar and Identicon Generator by Identifier in JavaScript for Browsers and NodeJS.  
 Test in your Browser: <https://avatars.dicebear.com/>
 
 ![](http://avatars.dicebear.com/v1/female/1/60.png)
-![](http://avatars.dicebear.com/v1/male/3/60.png)
+![](http://avatars.dicebear.com/v1/male/2/60.png)
 ![](http://avatars.dicebear.com/v1/female/3/60.png)
+![](http://avatars.dicebear.com/v1/male/4/60.png)
+![](http://avatars.dicebear.com/v1/female/5/60.png)
+![](http://avatars.dicebear.com/v1/male/6/60.png)
+![](http://avatars.dicebear.com/v1/female/7/60.png)
 ![](http://avatars.dicebear.com/v1/male/8/60.png)
-![](http://avatars.dicebear.com/v1/female/31/60.png)
-![](http://avatars.dicebear.com/v1/male/83/60.png)
-![](http://avatars.dicebear.com/v1/female/33/60.png)
-![](http://avatars.dicebear.com/v1/male/88/60.png)
 
 ## Use the HTTP-API
 
@@ -23,7 +23,7 @@ GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png
 ```
 
 ```
-:spriteSet => male|female
+:spriteSet => male|female|identicon
 :seed => string|number
 :size => 20 - 200 (px)
 ```
@@ -36,6 +36,8 @@ GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png
 | ![](http://avatars.dicebear.com/v1/male/john-doe/60.png)    | <http://avatars.dicebear.com/v1/male/john-doe/60.png>    |
 | ![](http://avatars.dicebear.com/v1/female/jane-doe/100.png) | <http://avatars.dicebear.com/v1/female/jane-doe/100.png> |
 | ![](http://avatars.dicebear.com/v1/female/jane-doe/60.png)  | <http://avatars.dicebear.com/v1/female/jane-doe/60.png>  |
+| ![](http://avatars.dicebear.com/v1/identicon/doe/100.png)   | <http://avatars.dicebear.com/v1/identicon/doe/100.png>   |
+| ![](http://avatars.dicebear.com/v1/identicon/doe/60.png)    | <http://avatars.dicebear.com/v1/identicon/doe/60.png>    |
 
 ### Host your own API-Server
 
@@ -45,68 +47,40 @@ GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png
 
 ### Installation
 
-#### Using bower
-
-```
-bower install dicebear-avatars
-```
-
 #### Using npm
 
 ```
 npm install @dicebear/avatars
 ```
 
-#### Use a CDN
+#### Using yarn
 
-##### Without Dependencies
+```
+yarn add @dicebear/avatars
+```
+
+#### Use a CDN
 
 ```
 <script type="text/javascript" src="//rawgit.com/DiceBear/avatars/1.0.1/dist/avatars.min.js"></script>
-```
-
-##### With dependencies
-
-```
-<script type="text/javascript" src="//rawgit.com/DiceBear/avatars/1.0.1/dist/avatars.pack.min.js"></script>
 ```
 
 #### Download archive
 
 * [Master build](https://github.com/DiceBear/avatars/archive/master.zip)
 
-### Dependencies
-
-DiceBear Avatars requires [async](https://github.com/caolan/async), [chance](https://github.com/chancejs/chancejs) and [one-color](https://github.com/One-com/one-color). Load this libraries from a CDN, from bower or use the [avatars.pack.min.js](https://github.com/DiceBear/avatars/blob/master/dist/avatars.pack.min.js) bundled within this Repository.
-
 ### Create an avatar
 
-#### Male avatar
+```js
+var avatars = new Avatars(Avatars.SPRITE_SETS.male); // male, female, identicon
 
-```
-var avatars = var Avatars(Avatars.SPRITE_SETS.male);
-var seed = 'custom-seed';
+avatars.create('custom-seed').then(function(avatar) {
+  // Resize avatar and get data url
+  let dataUrl = avatar.resize(200).dataUrl;
 
-avatars.create(seed, { size: 200 }, function(err, canvas) {
-  // canvas.toDataURL()
+  console.log(dataUrl);
 });
 ```
-
-#### Female avatar
-
-```
-var avatars = var Avatars(Avatars.SPRITE_SETS.female);
-var seed = 'custom-seed';
-
-avatars.create(seed, { size: 200 }, function(err, canvas) {
-  // canvas.toDataURL()
-});
-```
-
-#### Options
-
-* **size:** number
-* **order:** sprite order as array
 
 ### Create your own sprite sets
 
@@ -118,7 +92,7 @@ Sprite parts must be arranged horizontally. The library will detect the dimensio
 
 #### 2. Step - Create your sprite set object
 
-See examples: <https://github.com/DiceBear/avatars/tree/master/src/spriteSets>
+See examples: <https://github.com/DiceBear/avatars/tree/master/src/spriteSet>
 
 ---
 
