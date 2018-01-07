@@ -10,8 +10,7 @@
     "seedrandom": "^2.4.3"
   },
   "devDependencies": {
-    "@types/node": "^7.0.13",
-    "@types/seedrandom": "^2.4.27",
+    "@types/node": "^7.0.52",
     "brfs": "^1.4.3",
     "browserify": "^14.1.0",
     "browserify-shim": "^3.8.14",
@@ -32,17 +31,29 @@
     "type": "git",
     "url": "git+https://github.com/DiceBear/avatars.git"
   },
-  "keywords": ["avatar", "generator", "identicon", "javascript", "typescript"],
+  "keywords": [
+    "avatar",
+    "generator",
+    "identicon",
+    "javascript",
+    "typescript"
+  ],
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
-  "files": ["dist", "lib", "typings"],
+  "files": [
+    "dist",
+    "lib",
+    "typings"
+  ],
   "browser": {
     "./lib/index.js": "./lib/index.browser.js",
     "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"
   },
   "browserify": {
-    "transform": ["brfs"]
+    "transform": [
+      "brfs"
+    ]
   }
 }
