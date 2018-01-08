@@ -2,8 +2,8 @@
   "name": "@dicebear/avatars",
   "version": "2.0.0",
   "description": "Pixel-Art Avatar and Identicon Generator by Identifier",
-  "main": "lib/index",
-  "types": "lib/index",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "dependencies": {
     "canvas": "^1.6.5",
     "onecolor": "^3.0.4",
@@ -31,29 +31,17 @@
     "type": "git",
     "url": "git+https://github.com/DiceBear/avatars.git"
   },
-  "keywords": [
-    "avatar",
-    "generator",
-    "identicon",
-    "javascript",
-    "typescript"
-  ],
+  "keywords": ["avatar", "generator", "identicon", "javascript", "typescript"],
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
-  "files": [
-    "dist",
-    "lib",
-    "typings"
-  ],
+  "files": ["dist", "lib", "typings"],
   "browser": {
     "./lib/index.js": "./lib/index.browser.js",
     "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"
   },
   "browserify": {
-    "transform": [
-      "brfs"
-    ]
+    "transform": ["brfs"]
   }
 }

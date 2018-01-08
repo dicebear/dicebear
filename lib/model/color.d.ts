@@ -1,4 +1,3 @@
-/// <reference types="onecolor" />
 import * as oneColor from 'onecolor/minimal';
 export default class Color {
     private color;
