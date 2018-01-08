@@ -8,12 +8,6 @@
  *   homepage: https://github.com/DiceBear/avatars#readme
  *   version: 2.0.0
  *
- * onecolor:
- *   license: BSD-2-Clause (http://opensource.org/licenses/BSD-2-Clause)
- *   maintainers: Peter Müller <munter@fumle.dk>, Andreas Lind <andreas@one.com>
- *   homepage: https://github.com/One-com/one-color#readme
- *   version: 3.0.5
- *
  * seedrandom:
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: David Bau
@@ -132,7 +126,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var color_1 = require("../../model/color");
 var colorSet_1 = require("../../model/colorSet");
 var BrighterOrDarkerThan = /** @class */ (function (_super) {
     __extends(BrighterOrDarkerThan, _super);
@@ -153,36 +146,37 @@ var BrighterOrDarkerThan = /** @class */ (function (_super) {
      * Returns a color
      *
      * @param random
-     * @param callback
      */
     BrighterOrDarkerThan.prototype.getColor = function (random) {
         var _this = this;
         return Promise.all([_super.prototype.getColor.call(this, random), this.referenceColor.getColor(random)]).then(function (_a) {
             var color = _a[0], referenceColor = _a[1];
-            var hslColor = color.hsl();
-            var hslReferenceColor = color.clone().hsl();
-            var lightness = hslColor.lightness();
-            var referenceLightness = hslReferenceColor.lightness();
+            var hslColor = color.hsl;
+            var hslReferenceColor = referenceColor.hsl;
+            var lightness = hslColor[2];
+            var referenceLightness = hslReferenceColor[2];
             var minBrightness = referenceLightness + _this.differenceBrightness;
             var minDarkness = referenceLightness - _this.differenceDarkness;
             if (_this.differenceBrightness &&
                 minBrightness > lightness &&
                 (0 == _this.differenceDarkness || referenceLightness < lightness)) {
-                hslColor = hslColor.lightness(minBrightness);
+                hslColor[2] = minBrightness;
             }
             if (_this.differenceDarkness &&
                 minDarkness < lightness &&
                 (0 == _this.differenceBrightness || referenceLightness > lightness)) {
-                hslColor = hslColor.lightness(minDarkness);
+                hslColor[2] = minDarkness;
             }
-            return new color_1.default(hslColor.hex());
+            var newColor = color.clone();
+            newColor.hsl = hslColor;
+            return newColor;
         });
     };
     return BrighterOrDarkerThan;
 }(colorSet_1.default));
 exports.default = BrighterOrDarkerThan;
 
-},{"../../model/color":7,"../../model/colorSet":8}],3:[function(require,module,exports){
+},{"../../model/colorSet":8}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function createCanvas() {
@@ -217,7 +211,7 @@ var Random = /** @class */ (function () {
 }());
 exports.default = Random;
 
-},{"seedrandom/seedrandom":18}],5:[function(require,module,exports){
+},{"seedrandom/seedrandom":14}],5:[function(require,module,exports){
 var avatars = require('./avatars').default;
 module.exports = avatars;
 
@@ -254,26 +248,166 @@ exports.default = Avatar;
 
 },{"../helper/canvas":3}],7:[function(require,module,exports){
 "use strict";
+/**
+ * This file includes Parts of https://github.com/Qix-/color-convert
+ *
+ * Copyright (c) 2011-2016 Heather Arthur <fayearthur@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
-var oneColor = require("onecolor/minimal");
 var Color = /** @class */ (function () {
     function Color(color) {
-        this.color = oneColor(color);
+        if (color instanceof Array) {
+            this.rgb = color;
+        }
+        else {
+            this.hex = color;
+        }
     }
-    Color.prototype.rgb = function () {
-        return this.color.rgb();
-    };
-    Color.prototype.hsl = function () {
-        return this.color.hsl();
-    };
+    Object.defineProperty(Color.prototype, "hsl", {
+        /**
+         * Get color hsl value
+         */
+        get: function () {
+            var r = this.rgb[0] / 255;
+            var g = this.rgb[1] / 255;
+            var b = this.rgb[2] / 255;
+            var min = Math.min(r, g, b);
+            var max = Math.max(r, g, b);
+            var delta = max - min;
+            var h, s, l;
+            if (max === min) {
+                h = 0;
+            }
+            else if (r === max) {
+                h = (g - b) / delta;
+            }
+            else if (g === max) {
+                h = 2 + (b - r) / delta;
+            }
+            else if (b === max) {
+                h = 4 + (r - g) / delta;
+            }
+            h = Math.min(h * 60, 360);
+            if (h < 0) {
+                h += 360;
+            }
+            l = (min + max) / 2;
+            if (max === min) {
+                s = 0;
+            }
+            else if (l <= 0.5) {
+                s = delta / (max + min);
+            }
+            else {
+                s = delta / (2 - max - min);
+            }
+            return [h, s * 100, l * 100];
+        },
+        /**
+         * Set color hsl value and calculate rgb
+         */
+        set: function (hsl) {
+            var h = hsl[0] / 360;
+            var s = hsl[1] / 100;
+            var l = hsl[2] / 100;
+            var t1, t2, t3, rgb, val;
+            if (s === 0) {
+                val = l * 255;
+                this.rgb = [val, val, val];
+            }
+            else {
+                if (l < 0.5) {
+                    t2 = l * (1 + s);
+                }
+                else {
+                    t2 = l + s - l * s;
+                }
+                t1 = 2 * l - t2;
+                this.rgb = [0, 0, 0];
+                for (var i = 0; i < 3; i++) {
+                    t3 = h + 1 / 3 * -(i - 1);
+                    if (t3 < 0) {
+                        t3++;
+                    }
+                    if (t3 > 1) {
+                        t3--;
+                    }
+                    if (6 * t3 < 1) {
+                        val = t1 + (t2 - t1) * 6 * t3;
+                    }
+                    else if (2 * t3 < 1) {
+                        val = t2;
+                    }
+                    else if (3 * t3 < 2) {
+                        val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
+                    }
+                    else {
+                        val = t1;
+                    }
+                    this.rgb[i] = val * 255;
+                }
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Color.prototype, "hex", {
+        /**
+         * Set color hex value and calculate rgb
+         */
+        set: function (hex) {
+            var match = hex.match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
+            if (!match) {
+                this.rgb = [0, 0, 0];
+            }
+            var colorString = match[0];
+            if (match[0].length === 3) {
+                colorString = colorString
+                    .split('')
+                    .map(function (char) {
+                    return char + char;
+                })
+                    .join('');
+            }
+            var integer = parseInt(colorString, 16);
+            var r = (integer >> 16) & 0xff;
+            var g = (integer >> 8) & 0xff;
+            var b = integer & 0xff;
+            this.rgb = [r, g, b];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Create new color object with same rgb value
+     */
     Color.prototype.clone = function () {
-        return new Color(this.color.hex());
+        return new Color(this.rgb);
     };
     return Color;
 }());
 exports.default = Color;
 
-},{"onecolor/minimal":17}],8:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ColorSet = /** @class */ (function () {
@@ -385,9 +519,9 @@ var Sprite = /** @class */ (function () {
             var b = i + 2;
             var a = i + 3;
             if (a > 0) {
-                buffer.data[r] = Math.round((buffer.data[r] - color.rgb().red() * 255) * (buffer.data[r] / 255) + color.rgb().red() * 255);
-                buffer.data[g] = Math.round((buffer.data[g] - color.rgb().green() * 255) * (buffer.data[g] / 255) + color.rgb().green() * 255);
-                buffer.data[b] = Math.round((buffer.data[b] - color.rgb().blue() * 255) * (buffer.data[b] / 255) + color.rgb().blue() * 255);
+                buffer.data[r] = Math.round((buffer.data[r] - color.rgb[0] * 255) * (buffer.data[r] / 255) + color.rgb[0] * 255);
+                buffer.data[g] = Math.round((buffer.data[g] - color.rgb[1] * 255) * (buffer.data[g] / 255) + color.rgb[1] * 255);
+                buffer.data[b] = Math.round((buffer.data[b] - color.rgb[2] * 255) * (buffer.data[b] / 255) + color.rgb[2] * 255);
             }
         }
         context.putImageData(buffer, 0, 0);
@@ -709,393 +843,6 @@ exports.default = maleSpriteSet;
 },{"../color/modifier/brighterOrDarkerThan":2,"../model/color":7,"../model/colorSet":8,"../model/sprite":9}],13:[function(require,module,exports){
 
 },{}],14:[function(require,module,exports){
-module.exports = function HSL(color) {
-    color.use(require('./HSV'));
-
-    color.installColorSpace('HSL', ['hue', 'saturation', 'lightness', 'alpha'], {
-        hsv: function () {
-            // Algorithm adapted from http://wiki.secondlife.com/wiki/Color_conversion_scripts
-            var l = this._lightness * 2,
-                s = this._saturation * ((l <= 1) ? l : 2 - l),
-                saturation;
-
-            // Avoid division by zero when l + s is very small (approaching black):
-            if (l + s < 1e-9) {
-                saturation = 0;
-            } else {
-                saturation = (2 * s) / (l + s);
-            }
-
-            return new color.HSV(this._hue, saturation, (l + s) / 2, this._alpha);
-        },
-
-        rgb: function () {
-            return this.hsv().rgb();
-        },
-
-        fromRgb: function () { // Becomes one.color.RGB.prototype.hsv
-            return this.hsv().hsl();
-        }
-    });
-};
-
-},{"./HSV":15}],15:[function(require,module,exports){
-module.exports = function HSV(color) {
-    color.installColorSpace('HSV', ['hue', 'saturation', 'value', 'alpha'], {
-        rgb: function () {
-            var hue = this._hue,
-                saturation = this._saturation,
-                value = this._value,
-                i = Math.min(5, Math.floor(hue * 6)),
-                f = hue * 6 - i,
-                p = value * (1 - saturation),
-                q = value * (1 - f * saturation),
-                t = value * (1 - (1 - f) * saturation),
-                red,
-                green,
-                blue;
-            switch (i) {
-            case 0:
-                red = value;
-                green = t;
-                blue = p;
-                break;
-            case 1:
-                red = q;
-                green = value;
-                blue = p;
-                break;
-            case 2:
-                red = p;
-                green = value;
-                blue = t;
-                break;
-            case 3:
-                red = p;
-                green = q;
-                blue = value;
-                break;
-            case 4:
-                red = t;
-                green = p;
-                blue = value;
-                break;
-            case 5:
-                red = value;
-                green = p;
-                blue = q;
-                break;
-            }
-            return new color.RGB(red, green, blue, this._alpha);
-        },
-
-        hsl: function () {
-            var l = (2 - this._saturation) * this._value,
-                sv = this._saturation * this._value,
-                svDivisor = l <= 1 ? l : (2 - l),
-                saturation;
-
-            // Avoid division by zero when lightness approaches zero:
-            if (svDivisor < 1e-9) {
-                saturation = 0;
-            } else {
-                saturation = sv / svDivisor;
-            }
-            return new color.HSL(this._hue, saturation, l / 2, this._alpha);
-        },
-
-        fromRgb: function () { // Becomes one.color.RGB.prototype.hsv
-            var red = this._red,
-                green = this._green,
-                blue = this._blue,
-                max = Math.max(red, green, blue),
-                min = Math.min(red, green, blue),
-                delta = max - min,
-                hue,
-                saturation = (max === 0) ? 0 : (delta / max),
-                value = max;
-            if (delta === 0) {
-                hue = 0;
-            } else {
-                switch (max) {
-                case red:
-                    hue = (green - blue) / delta / 6 + (green < blue ? 1 : 0);
-                    break;
-                case green:
-                    hue = (blue - red) / delta / 6 + 1 / 3;
-                    break;
-                case blue:
-                    hue = (red - green) / delta / 6 + 2 / 3;
-                    break;
-                }
-            }
-            return new color.HSV(hue, saturation, value, this._alpha);
-        }
-    });
-};
-
-},{}],16:[function(require,module,exports){
-var installedColorSpaces = [],
-    undef = function (obj) {
-        return typeof obj === 'undefined';
-    },
-    channelRegExp = /\s*(\.\d+|\d+(?:\.\d+)?)(%)?\s*/,
-    percentageChannelRegExp = /\s*(\.\d+|100|\d?\d(?:\.\d+)?)%\s*/,
-    alphaChannelRegExp = /\s*(\.\d+|\d+(?:\.\d+)?)\s*/,
-    cssColorRegExp = new RegExp(
-                         '^(rgb|hsl|hsv)a?' +
-                         '\\(' +
-                             channelRegExp.source + ',' +
-                             channelRegExp.source + ',' +
-                             channelRegExp.source +
-                             '(?:,' + alphaChannelRegExp.source + ')?' +
-                         '\\)$', 'i');
-
-function color(obj) {
-    if (Array.isArray(obj)) {
-        if (typeof obj[0] === 'string' && typeof color[obj[0]] === 'function') {
-            // Assumed array from .toJSON()
-            return new color[obj[0]](obj.slice(1, obj.length));
-        } else if (obj.length === 4) {
-            // Assumed 4 element int RGB array from canvas with all channels [0;255]
-            return new color.RGB(obj[0] / 255, obj[1] / 255, obj[2] / 255, obj[3] / 255);
-        }
-    } else if (typeof obj === 'string') {
-        var lowerCased = obj.toLowerCase();
-        if (color.namedColors[lowerCased]) {
-            obj = '#' + color.namedColors[lowerCased];
-        }
-        if (lowerCased === 'transparent') {
-            obj = 'rgba(0,0,0,0)';
-        }
-        // Test for CSS rgb(....) string
-        var matchCssSyntax = obj.match(cssColorRegExp);
-        if (matchCssSyntax) {
-            var colorSpaceName = matchCssSyntax[1].toUpperCase(),
-                alpha = undef(matchCssSyntax[8]) ? matchCssSyntax[8] : parseFloat(matchCssSyntax[8]),
-                hasHue = colorSpaceName[0] === 'H',
-                firstChannelDivisor = matchCssSyntax[3] ? 100 : (hasHue ? 360 : 255),
-                secondChannelDivisor = (matchCssSyntax[5] || hasHue) ? 100 : 255,
-                thirdChannelDivisor = (matchCssSyntax[7] || hasHue) ? 100 : 255;
-            if (undef(color[colorSpaceName])) {
-                throw new Error('color.' + colorSpaceName + ' is not installed.');
-            }
-            return new color[colorSpaceName](
-                parseFloat(matchCssSyntax[2]) / firstChannelDivisor,
-                parseFloat(matchCssSyntax[4]) / secondChannelDivisor,
-                parseFloat(matchCssSyntax[6]) / thirdChannelDivisor,
-                alpha
-            );
-        }
-        // Assume hex syntax
-        if (obj.length < 6) {
-            // Allow CSS shorthand
-            obj = obj.replace(/^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i, '$1$1$2$2$3$3');
-        }
-        // Split obj into red, green, and blue components
-        var hexMatch = obj.match(/^#?([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])$/i);
-        if (hexMatch) {
-            return new color.RGB(
-                parseInt(hexMatch[1], 16) / 255,
-                parseInt(hexMatch[2], 16) / 255,
-                parseInt(hexMatch[3], 16) / 255
-            );
-        }
-
-        // No match so far. Lets try the less likely ones
-        if (color.CMYK) {
-            var cmykMatch = obj.match(new RegExp(
-                             '^cmyk' +
-                             '\\(' +
-                                 percentageChannelRegExp.source + ',' +
-                                 percentageChannelRegExp.source + ',' +
-                                 percentageChannelRegExp.source + ',' +
-                                 percentageChannelRegExp.source +
-                             '\\)$', 'i'));
-            if (cmykMatch) {
-                return new color.CMYK(
-                    parseFloat(cmykMatch[1]) / 100,
-                    parseFloat(cmykMatch[2]) / 100,
-                    parseFloat(cmykMatch[3]) / 100,
-                    parseFloat(cmykMatch[4]) / 100
-                );
-            }
-        }
-    } else if (typeof obj === 'object' && obj.isColor) {
-        return obj;
-    }
-    return false;
-}
-
-color.namedColors = {};
-
-color.installColorSpace = function (colorSpaceName, propertyNames, config) {
-    color[colorSpaceName] = function (a1) { // ...
-        var args = Array.isArray(a1) ? a1 : arguments;
-        propertyNames.forEach(function (propertyName, i) {
-            var propertyValue = args[i];
-            if (propertyName === 'alpha') {
-                this._alpha = (isNaN(propertyValue) || propertyValue > 1) ? 1 : (propertyValue < 0 ? 0 : propertyValue);
-            } else {
-                if (isNaN(propertyValue)) {
-                    throw new Error('[' + colorSpaceName + ']: Invalid color: (' + propertyNames.join(',') + ')');
-                }
-                if (propertyName === 'hue') {
-                    this._hue = propertyValue < 0 ? propertyValue - Math.floor(propertyValue) : propertyValue % 1;
-                } else {
-                    this['_' + propertyName] = propertyValue < 0 ? 0 : (propertyValue > 1 ? 1 : propertyValue);
-                }
-            }
-        }, this);
-    };
-    color[colorSpaceName].propertyNames = propertyNames;
-
-    var prototype = color[colorSpaceName].prototype;
-
-    ['valueOf', 'hex', 'hexa', 'css', 'cssa'].forEach(function (methodName) {
-        prototype[methodName] = prototype[methodName] || (colorSpaceName === 'RGB' ? prototype.hex : function () {
-            return this.rgb()[methodName]();
-        });
-    });
-
-    prototype.isColor = true;
-
-    prototype.equals = function (otherColor, epsilon) {
-        if (undef(epsilon)) {
-            epsilon = 1e-10;
-        }
-
-        otherColor = otherColor[colorSpaceName.toLowerCase()]();
-
-        for (var i = 0; i < propertyNames.length; i = i + 1) {
-            if (Math.abs(this['_' + propertyNames[i]] - otherColor['_' + propertyNames[i]]) > epsilon) {
-                return false;
-            }
-        }
-
-        return true;
-    };
-
-    prototype.toJSON = function () {
-        return [colorSpaceName].concat(propertyNames.map(function (propertyName) {
-            return this['_' + propertyName];
-        }, this));
-    };
-
-    for (var propertyName in config) {
-        if (config.hasOwnProperty(propertyName)) {
-            var matchFromColorSpace = propertyName.match(/^from(.*)$/);
-            if (matchFromColorSpace) {
-                color[matchFromColorSpace[1].toUpperCase()].prototype[colorSpaceName.toLowerCase()] = config[propertyName];
-            } else {
-                prototype[propertyName] = config[propertyName];
-            }
-        }
-    }
-
-    // It is pretty easy to implement the conversion to the same color space:
-    prototype[colorSpaceName.toLowerCase()] = function () {
-        return this;
-    };
-    prototype.toString = function () {
-        return '[' + colorSpaceName + ' ' + propertyNames.map(function (propertyName) {
-            return this['_' + propertyName];
-        }, this).join(', ') + ']';
-    };
-
-    // Generate getters and setters
-    propertyNames.forEach(function (propertyName) {
-        var shortName = propertyName === 'black' ? 'k' : propertyName.charAt(0);
-        prototype[propertyName] = prototype[shortName] = function (value, isDelta) {
-            // Simple getter mode: color.red()
-            if (typeof value === 'undefined') {
-                return this['_' + propertyName];
-            } else if (isDelta) {
-                // Adjuster: color.red(+.2, true)
-                return new this.constructor(propertyNames.map(function (otherPropertyName) {
-                    return this['_' + otherPropertyName] + (propertyName === otherPropertyName ? value : 0);
-                }, this));
-            } else {
-                // Setter: color.red(.2);
-                return new this.constructor(propertyNames.map(function (otherPropertyName) {
-                    return (propertyName === otherPropertyName) ? value : this['_' + otherPropertyName];
-                }, this));
-            }
-        };
-    });
-
-    function installForeignMethods(targetColorSpaceName, sourceColorSpaceName) {
-        var obj = {};
-        obj[sourceColorSpaceName.toLowerCase()] = function () {
-            return this.rgb()[sourceColorSpaceName.toLowerCase()]();
-        };
-        color[sourceColorSpaceName].propertyNames.forEach(function (propertyName) {
-            var shortName = propertyName === 'black' ? 'k' : propertyName.charAt(0);
-            obj[propertyName] = obj[shortName] = function (value, isDelta) {
-                return this[sourceColorSpaceName.toLowerCase()]()[propertyName](value, isDelta);
-            };
-        });
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop) && color[targetColorSpaceName].prototype[prop] === undefined) {
-                color[targetColorSpaceName].prototype[prop] = obj[prop];
-            }
-        }
-    }
-
-    installedColorSpaces.forEach(function (otherColorSpaceName) {
-        installForeignMethods(colorSpaceName, otherColorSpaceName);
-        installForeignMethods(otherColorSpaceName, colorSpaceName);
-    });
-
-    installedColorSpaces.push(colorSpaceName);
-    return color;
-};
-
-color.pluginList = [];
-
-color.use = function (plugin) {
-    if (color.pluginList.indexOf(plugin) === -1) {
-        this.pluginList.push(plugin);
-        plugin(color);
-    }
-    return color;
-};
-
-color.installMethod = function (name, fn) {
-    installedColorSpaces.forEach(function (colorSpace) {
-        color[colorSpace].prototype[name] = fn;
-    });
-    return this;
-};
-
-color.installColorSpace('RGB', ['red', 'green', 'blue', 'alpha'], {
-    hex: function () {
-        var hexString = (Math.round(255 * this._red) * 0x10000 + Math.round(255 * this._green) * 0x100 + Math.round(255 * this._blue)).toString(16);
-        return '#' + ('00000'.substr(0, 6 - hexString.length)) + hexString;
-    },
-
-    hexa: function () {
-        var alphaString = Math.round(this._alpha * 255).toString(16);
-        return '#' + '00'.substr(0, 2 - alphaString.length) + alphaString + this.hex().substr(1, 6);
-    },
-
-    css: function () {
-        return 'rgb(' + Math.round(255 * this._red) + ',' + Math.round(255 * this._green) + ',' + Math.round(255 * this._blue) + ')';
-    },
-
-    cssa: function () {
-        return 'rgba(' + Math.round(255 * this._red) + ',' + Math.round(255 * this._green) + ',' + Math.round(255 * this._blue) + ',' + this._alpha + ')';
-    }
-});
-
-module.exports = color;
-
-},{}],17:[function(require,module,exports){
-module.exports = require('./lib/color')
-    .use(require('./lib/HSV'))
-    .use(require('./lib/HSL'));
-
-},{"./lib/HSL":14,"./lib/HSV":15,"./lib/color":16}],18:[function(require,module,exports){
 /*
 Copyright 2014 David Bau.
 

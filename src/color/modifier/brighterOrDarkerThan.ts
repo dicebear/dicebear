@@ -31,16 +31,15 @@ export default class BrighterOrDarkerThan extends ColorSet {
    * Returns a color
    *
    * @param random
-   * @param callback
    */
   getColor(random: Random) {
     return Promise.all([super.getColor(random), this.referenceColor.getColor(random)]).then(
       ([color, referenceColor]) => {
-        let hslColor = color.hsl();
-        let hslReferenceColor = color.clone().hsl();
+        let hslColor = color.hsl;
+        let hslReferenceColor = referenceColor.hsl;
 
-        let lightness = hslColor.lightness();
-        let referenceLightness = hslReferenceColor.lightness();
+        let lightness = hslColor[2];
+        let referenceLightness = hslReferenceColor[2];
         let minBrightness = referenceLightness + this.differenceBrightness;
         let minDarkness = referenceLightness - this.differenceDarkness;
 
@@ -49,7 +48,7 @@ export default class BrighterOrDarkerThan extends ColorSet {
           minBrightness > lightness &&
           (0 == this.differenceDarkness || referenceLightness < lightness)
         ) {
-          hslColor = hslColor.lightness(minBrightness);
+          hslColor[2] = minBrightness;
         }
 
         if (
@@ -57,10 +56,13 @@ export default class BrighterOrDarkerThan extends ColorSet {
           minDarkness < lightness &&
           (0 == this.differenceBrightness || referenceLightness > lightness)
         ) {
-          hslColor = hslColor.lightness(minDarkness);
+          hslColor[2] = minDarkness;
         }
 
-        return new Color(hslColor.hex());
+        let newColor = color.clone();
+        newColor.hsl = hslColor;
+
+        return newColor;
       }
     );
   }

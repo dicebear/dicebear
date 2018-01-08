@@ -16,7 +16,6 @@ export default class BrighterOrDarkerThan extends ColorSet {
      * Returns a color
      *
      * @param random
-     * @param callback
      */
     getColor(random: Random): Promise<Color>;
 }

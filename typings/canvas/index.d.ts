@@ -1,4 +1,1 @@
-declare module 'canvas' {
-  var canvas: any;
-  export = canvas;
-}
+declare module 'canvas';
