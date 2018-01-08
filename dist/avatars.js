@@ -519,9 +519,9 @@ var Sprite = /** @class */ (function () {
             var b = i + 2;
             var a = i + 3;
             if (a > 0) {
-                buffer.data[r] = Math.round((buffer.data[r] - color.rgb[0] * 255) * (buffer.data[r] / 255) + color.rgb[0] * 255);
-                buffer.data[g] = Math.round((buffer.data[g] - color.rgb[1] * 255) * (buffer.data[g] / 255) + color.rgb[1] * 255);
-                buffer.data[b] = Math.round((buffer.data[b] - color.rgb[2] * 255) * (buffer.data[b] / 255) + color.rgb[2] * 255);
+                buffer.data[r] = Math.round((buffer.data[r] - color.rgb[0]) * (buffer.data[r] / 255) + color.rgb[0]);
+                buffer.data[g] = Math.round((buffer.data[g] - color.rgb[1]) * (buffer.data[g] / 255) + color.rgb[1]);
+                buffer.data[b] = Math.round((buffer.data[b] - color.rgb[2]) * (buffer.data[b] / 255) + color.rgb[2]);
             }
         }
         context.putImageData(buffer, 0, 0);
