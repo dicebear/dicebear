@@ -113,7 +113,7 @@ var Avatars = /** @class */ (function () {
 }());
 exports.default = Avatars;
 
-},{"./helper/canvas":3,"./helper/random":4,"./model/avatar":6,"./spriteSet/female":10,"./spriteSet/identicon":11,"./spriteSet/male":12}],2:[function(require,module,exports){
+},{"./helper/canvas":5,"./helper/random":6,"./model/avatar":8,"./spriteSet/female":12,"./spriteSet/identicon":13,"./spriteSet/male":14}],2:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -126,20 +126,114 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var colorSet_1 = require("../../model/colorSet");
+var colorSet_1 = require("../../../model/colorSet");
+/**
+ * Ensures that the selected color is lighter than a reference color.
+ */
+var BrighterOrDarkerThan = /** @class */ (function (_super) {
+    __extends(BrighterOrDarkerThan, _super);
+    function BrighterOrDarkerThan(colors, reference, difference) {
+        var _this = _super.call(this, colors) || this;
+        _this.reference = reference;
+        _this.difference = difference;
+        return _this;
+    }
+    BrighterOrDarkerThan.prototype.getColor = function (random) {
+        var color = _super.prototype.getColor.call(this, random);
+        var referenceColor = this.reference.getColor(random);
+        var colorHsl = color.hsl;
+        var referenceColorHsl = referenceColor.hsl;
+        if (colorHsl[2] >= referenceColorHsl[2] + this.difference) {
+            return color;
+        }
+        colorHsl[2] = colorHsl[2] + this.difference;
+        if (colorHsl[2] > 100) {
+            colorHsl[2] = 100;
+        }
+        var brighterColor = color.clone();
+        brighterColor.hsl = colorHsl;
+        return brighterColor;
+    };
+    return BrighterOrDarkerThan;
+}(colorSet_1.default));
+exports.default = BrighterOrDarkerThan;
+
+},{"../../../model/colorSet":10}],3:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var colorSet_1 = require("../../../model/colorSet");
+/**
+ * Ensures that the selected color is darker than a reference color.
+ */
+var BrighterOrDarkerThan = /** @class */ (function (_super) {
+    __extends(BrighterOrDarkerThan, _super);
+    function BrighterOrDarkerThan(colors, reference, difference) {
+        var _this = _super.call(this, colors) || this;
+        _this.reference = reference;
+        _this.difference = difference;
+        return _this;
+    }
+    BrighterOrDarkerThan.prototype.getColor = function (random) {
+        var color = _super.prototype.getColor.call(this, random);
+        var referenceColor = this.reference.getColor(random);
+        var colorHsl = color.hsl;
+        var referenceColorHsl = referenceColor.hsl;
+        if (colorHsl[2] <= referenceColorHsl[2] - this.difference) {
+            return color;
+        }
+        colorHsl[2] = colorHsl[2] - this.difference;
+        if (colorHsl[2] < 0) {
+            colorHsl[2] = 0;
+        }
+        var darkerColor = color.clone();
+        darkerColor.hsl = colorHsl;
+        return darkerColor;
+    };
+    return BrighterOrDarkerThan;
+}(colorSet_1.default));
+exports.default = BrighterOrDarkerThan;
+
+},{"../../../model/colorSet":10}],4:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var colorSet_1 = require("../../../model/colorSet");
+var brighter_1 = require("./brighter");
+var darker_1 = require("./darker");
+/**
+ * Ensures that the selected color is darker or brighter than a reference color.
+ */
 var BrighterOrDarkerThan = /** @class */ (function (_super) {
     __extends(BrighterOrDarkerThan, _super);
     /**
      * @param colors
-     * @param referenceColor
-     * @param differenceBrightness
-     * @param differenceDarkness
+     * @param reference
+     * @param difference
      */
-    function BrighterOrDarkerThan(colors, referenceColor, differenceBrightness, differenceDarkness) {
+    function BrighterOrDarkerThan(colors, reference, difference) {
         var _this = _super.call(this, colors) || this;
-        _this.referenceColor = referenceColor;
-        _this.differenceBrightness = differenceBrightness ? differenceBrightness / 100 : 0;
-        _this.differenceDarkness = differenceDarkness ? differenceDarkness / 100 : 0;
+        _this.reference = reference;
+        _this.brighter = new brighter_1.default(colors, reference, difference);
+        _this.darker = new darker_1.default(colors, reference, difference);
         return _this;
     }
     /**
@@ -148,35 +242,22 @@ var BrighterOrDarkerThan = /** @class */ (function (_super) {
      * @param random
      */
     BrighterOrDarkerThan.prototype.getColor = function (random) {
-        var _this = this;
-        return Promise.all([_super.prototype.getColor.call(this, random), this.referenceColor.getColor(random)]).then(function (_a) {
-            var color = _a[0], referenceColor = _a[1];
-            var hslColor = color.hsl;
-            var hslReferenceColor = referenceColor.hsl;
-            var lightness = hslColor[2];
-            var referenceLightness = hslReferenceColor[2];
-            var minBrightness = referenceLightness + _this.differenceBrightness;
-            var minDarkness = referenceLightness - _this.differenceDarkness;
-            if (_this.differenceBrightness &&
-                minBrightness > lightness &&
-                (0 == _this.differenceDarkness || referenceLightness < lightness)) {
-                hslColor[2] = minBrightness;
-            }
-            if (_this.differenceDarkness &&
-                minDarkness < lightness &&
-                (0 == _this.differenceBrightness || referenceLightness > lightness)) {
-                hslColor[2] = minDarkness;
-            }
-            var newColor = color.clone();
-            newColor.hsl = hslColor;
-            return newColor;
-        });
+        var color = _super.prototype.getColor.call(this, random);
+        var referenceColor = this.reference.getColor(random);
+        var colorHsl = color.hsl;
+        var referenceColorHsl = referenceColor.hsl;
+        if (colorHsl[2] <= referenceColorHsl[2]) {
+            return this.brighter.getColor(random);
+        }
+        else {
+            return this.darker.getColor(random);
+        }
     };
     return BrighterOrDarkerThan;
 }(colorSet_1.default));
 exports.default = BrighterOrDarkerThan;
 
-},{"../../model/colorSet":8}],3:[function(require,module,exports){
+},{"../../../model/colorSet":10,"./brighter":2,"./darker":3}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function createCanvas() {
@@ -188,7 +269,7 @@ function createImage() {
 }
 exports.createImage = createImage;
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var seedrandom = require("seedrandom/seedrandom");
@@ -211,11 +292,11 @@ var Random = /** @class */ (function () {
 }());
 exports.default = Random;
 
-},{"seedrandom/seedrandom":14}],5:[function(require,module,exports){
+},{"seedrandom/seedrandom":16}],7:[function(require,module,exports){
 var avatars = require('./avatars').default;
 module.exports = avatars;
 
-},{"./avatars":1}],6:[function(require,module,exports){
+},{"./avatars":1}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var canvas_1 = require("../helper/canvas");
@@ -246,7 +327,7 @@ var Avatar = /** @class */ (function () {
 }());
 exports.default = Avatar;
 
-},{"../helper/canvas":3}],7:[function(require,module,exports){
+},{"../helper/canvas":5}],9:[function(require,module,exports){
 "use strict";
 /**
  * This file includes Parts of https://github.com/Qix-/color-convert
@@ -407,7 +488,7 @@ var Color = /** @class */ (function () {
 }());
 exports.default = Color;
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ColorSet = /** @class */ (function () {
@@ -422,22 +503,20 @@ var ColorSet = /** @class */ (function () {
      * Returns a color
      *
      * @param random
-     * @param callback
      */
     ColorSet.prototype.getColor = function (random) {
         if (this.colors instanceof ColorSet) {
             return this.colors.getColor(random);
         }
         else {
-            this.pickedColors[random.seed] = this.pickedColors[random.seed] || random.pickone(this.colors);
-            return Promise.resolve(this.pickedColors[random.seed]);
+            return (this.pickedColors[random.seed] = this.pickedColors[random.seed] || random.pickone(this.colors));
         }
     };
     return ColorSet;
 }());
 exports.default = ColorSet;
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var canvas_1 = require("../helper/canvas");
@@ -485,23 +564,21 @@ var Sprite = /** @class */ (function () {
      * @param random
      */
     Sprite.prototype.create = function (random) {
-        var _this = this;
         if (!this.image.complete) {
-            return Promise.reject(new Error('Sprite image not loaded.'));
+            throw new Error('Sprite image not loaded.');
         }
         var canvas = canvas_1.createCanvas();
         var context = canvas.getContext('2d');
         canvas.width = this.image.height;
         canvas.height = this.image.height;
         if (random.bool(this.options.chance)) {
-            return this.options.colorSet.getColor(random).then(function (color) {
-                context.drawImage(_this.image, random.integer(0, _this.imageSprites - 1) * _this.image.height * -1, 0);
-                _this.tintCanvas(canvas, color);
-                return canvas;
-            });
+            var color = this.options.colorSet.getColor(random);
+            context.drawImage(this.image, random.integer(0, this.imageSprites - 1) * this.image.height * -1, 0);
+            this.tintCanvas(canvas, color);
+            return canvas;
         }
         else {
-            return Promise.resolve(canvas);
+            return canvas;
         }
     };
     /**
@@ -530,14 +607,15 @@ var Sprite = /** @class */ (function () {
 }());
 exports.default = Sprite;
 
-},{"../helper/canvas":3}],10:[function(require,module,exports){
+},{"../helper/canvas":5}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 var sprite_1 = require("../model/sprite");
 var color_1 = require("../model/color");
 var colorSet_1 = require("../model/colorSet");
-var brighterOrDarkerThan_1 = require("../color/modifier/brighterOrDarkerThan");
+var difference_1 = require("../color/modifier/lightness/difference");
+var darker_1 = require("../color/modifier/lightness/darker");
 var femaleSpriteSet = function (random) {
     var base64Prefix = 'data:image/png;base64,';
     var skinColor = new colorSet_1.default([
@@ -547,7 +625,7 @@ var femaleSpriteSet = function (random) {
         new color_1.default('#c68642'),
         new color_1.default('#8d5524')
     ]);
-    var hairColor = new brighterOrDarkerThan_1.default(new colorSet_1.default([
+    var hairColor = new difference_1.default(new colorSet_1.default([
         new color_1.default('#090806'),
         new color_1.default('#2c222b'),
         new color_1.default('#71635a'),
@@ -572,7 +650,7 @@ var femaleSpriteSet = function (random) {
         new color_1.default('#6a4e42'),
         new color_1.default('#a7856a'),
         new color_1.default('#977961')
-    ]), skinColor, 12, 12);
+    ]), skinColor, 12);
     var spriteSet = {
         face: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAVElEQVQ4jdXTQQoAIAgEwK3//7muZSoqCuYx2CFRge41hPcVzXOgFWMNCnqxx5lBQKx08Gw52u5llf4Q6DiU8j30oqZLsaJsVgMlWM38N5R+e5gObtcgCxr27O7iAAAAAElFTkSuQmCC",
@@ -590,18 +668,18 @@ var femaleSpriteSet = function (random) {
         }),
         eyebrows: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAAAjUlEQVR4nO3UWwqEMAwAQO9/6for4qN5uKswAyKYtKY1dlkAAAAAgC8Zk89+bqaITKEdCx6bq5JzlJ+Nn43JxKI1ZGq7q+GfTTi7nsz3vdq/jj6szpWNR/LD9UVfHLXfwMr4jtwn1jt299lYtIbKHJ0/SGdDv73/np6v6q0HPQAAAAAAAAAAAAAAAMC5FfyBT7GLnPoYAAAAAElFTkSuQmCC",
-            colorSet: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, skinColor, 0, 5), hairColor, 0, 7)
+            colorSet: new darker_1.default(new darker_1.default(hairColor, skinColor, 5), hairColor, 7)
         }),
         mouth: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAQQAAAAUCAYAAABrqUMlAAAAdElEQVR4nO3UQQqAMAxFQe+U+5+trgoiuvIXg86A20fSSrcNAAAAAAAAAAAAAODTxtsD3Bin77GqSu8am+2i26Fx1Ux2V51fSvt9u//Q7XvhR6H9vsHemELNUVXzPmIzLmjF9g00oJXOD9axCQAAAAAA8FM7aHY9KjKubf4AAAAASUVORK5CYII=",
-            colorSet: new brighterOrDarkerThan_1.default([
+            colorSet: new darker_1.default([
                 new color_1.default('#dbac98'),
                 new color_1.default('#d29985'),
                 new color_1.default('#c98276'),
                 new color_1.default('#e35d6a'),
                 new color_1.default('#e32153'),
                 new color_1.default('#de0f0d')
-            ], skinColor, 0, 5)
+            ], skinColor, 5)
         }),
         accessories: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAFAAAAAUCAYAAAAa2LrXAAAAUUlEQVRYhe3QsQ3AMAgEQLKs99+AtC6SAkOT6E6isfSPRQQAANCSw9nRvrXWcd9DNrep6mTLiyazk3358l7pyoiI6/RHH7cfrnqDThYAgJ+4ASmZGFLEUrkXAAAAAElFTkSuQmCC",
@@ -668,7 +746,7 @@ var femaleSpriteSet = function (random) {
 };
 exports.default = femaleSpriteSet;
 
-},{"../color/modifier/brighterOrDarkerThan":2,"../model/color":7,"../model/colorSet":8,"../model/sprite":9}],11:[function(require,module,exports){
+},{"../color/modifier/lightness/darker":3,"../color/modifier/lightness/difference":4,"../model/color":9,"../model/colorSet":10,"../model/sprite":11}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -722,14 +800,16 @@ var identiconSpriteSet = function (random) {
 };
 exports.default = identiconSpriteSet;
 
-},{"../model/color":7,"../model/colorSet":8,"../model/sprite":9}],12:[function(require,module,exports){
+},{"../model/color":9,"../model/colorSet":10,"../model/sprite":11}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 var sprite_1 = require("../model/sprite");
 var color_1 = require("../model/color");
 var colorSet_1 = require("../model/colorSet");
-var brighterOrDarkerThan_1 = require("../color/modifier/brighterOrDarkerThan");
+var difference_1 = require("../color/modifier/lightness/difference");
+var brighter_1 = require("../color/modifier/lightness/brighter");
+var darker_1 = require("../color/modifier/lightness/darker");
 var maleSpriteSet = function (random) {
     var base64Prefix = 'data:image/png;base64,';
     var skinColor = new colorSet_1.default([
@@ -739,7 +819,7 @@ var maleSpriteSet = function (random) {
         new color_1.default('#c68642'),
         new color_1.default('#8d5524')
     ]);
-    var hairColor = new brighterOrDarkerThan_1.default([
+    var hairColor = new difference_1.default([
         new color_1.default('#090806'),
         new color_1.default('#2c222b'),
         new color_1.default('#71635a'),
@@ -757,7 +837,7 @@ var maleSpriteSet = function (random) {
         new color_1.default('#6a4e42'),
         new color_1.default('#a7856a'),
         new color_1.default('#977961')
-    ], skinColor, 12, 12);
+    ], skinColor, 12);
     var spriteSet = {
         face: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAS0lEQVQ4jWNgGOyAEYf4f3L1YzOQWMOwmoFuIKmGYZjDRKYBOAHVDUT2MrneRTFraHmZgWHExTIMUDWnkGooUXmZkOF49YwWDpQDANohChvs8TZPAAAAAElFTkSuQmCC",
@@ -775,16 +855,16 @@ var maleSpriteSet = function (random) {
         }),
         eyebrows: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAHUlEQVQ4jWNgGAVDBvynkhrSFJKodhSMglEwkgEAp6ED/bRBxw4AAAAASUVORK5CYII=",
-            colorSet: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, skinColor, 0, 5), hairColor, 0, 7)
+            colorSet: new darker_1.default(new darker_1.default(hairColor, skinColor, 5), hairColor, 7)
         }),
         mustache: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAANwAAAAUCAYAAADm4VNYAAAA+ElEQVR4nO3ZwQ7CIAyA4Wp8bI+89zzNzM1BC4UV/b9kJ6FjQFcyRQAAAAAAAAAAABDAMqjPr0qD+qjdewYH8ImEi89SsahuR5aK1bW6iRwTbtlcJZq2HIl8aNejJG0uj7bhjmwN9xwyrkfmN6+Nv4jIzdB2ZrXj18yP99x4bbAkIs/B96zhce/aGO/5ySWcp9kTCXlXJtJUvr1ZrclRejt7x4su+vxZk6NUvbzjeQv1vGeLo11k76NibbKt8VuT9Wyc1rjR50+7abyPirXJtsZv7V/S/XmvqCb7zROtojG+NvvNOLqilUQf31/SfqkFTPgfDgAAAI1ePdA5SBvHuo0AAAAASUVORK5CYII=",
             chance: 50,
-            colorSet: new brighterOrDarkerThan_1.default(new brighterOrDarkerThan_1.default(hairColor, hairColor, 15, 0), skinColor, 0, 5)
+            colorSet: new darker_1.default(new brighter_1.default(hairColor, hairColor, 15), skinColor, 5)
         }),
         mouth: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAANwAAAAUCAYAAADm4VNYAAAAdklEQVR4nO3UywqAIBAF0Ab6/1+eNi2kRc8xg87ZiCDXK4rTBAAAAAAAAAAAAPBfMXDvHLz/G3qdMdexV/Zn7iUzs51HxNNubV7VOU9nzhcCKy8hj5fcyqvouO32JDOK83qo7tfjQVdqO1W86099UAAAAAAA+xYj7xMHNiFSXAAAAABJRU5ErkJggg==",
-            colorSet: new brighterOrDarkerThan_1.default([new color_1.default('#eec1ad'), new color_1.default('#dbac98'), new color_1.default('#d29985')], skinColor, 0, 5)
+            colorSet: new darker_1.default([new color_1.default('#eec1ad'), new color_1.default('#dbac98'), new color_1.default('#d29985')], skinColor, 5)
         }),
         glasses: new sprite_1.default({
             src: base64Prefix + "iVBORw0KGgoAAAANSUhEUgAAAHgAAAAUCAYAAABGUvnzAAAAmElEQVRoge3V0Q3DIAxFUbxSvFK36kyd6fWHjxQ5Tqu6pEL3SEgRhkcQEWkNAAAAwGdswhpK1s1q72aO47PaDNX7rctzd/VJL83dldXO8iRtvd3GvKg2O2/l/UanLUnenzczu+/GZbUj+znNzB4HeWPtirzl9hsecND3H1dMnFlxRVfmVR/wV+93xT9qdb/4oAEAAAAAAPAEmLbyGT/XnVYAAAAASUVORK5CYII=",
@@ -840,9 +920,9 @@ var maleSpriteSet = function (random) {
 };
 exports.default = maleSpriteSet;
 
-},{"../color/modifier/brighterOrDarkerThan":2,"../model/color":7,"../model/colorSet":8,"../model/sprite":9}],13:[function(require,module,exports){
+},{"../color/modifier/lightness/brighter":2,"../color/modifier/lightness/darker":3,"../color/modifier/lightness/difference":4,"../model/color":9,"../model/colorSet":10,"../model/sprite":11}],15:[function(require,module,exports){
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /*
 Copyright 2014 David Bau.
 
@@ -1091,5 +1171,5 @@ if ((typeof module) == 'object' && module.exports) {
   Math    // math: package containing random, pow, and seedrandom
 );
 
-},{"crypto":13}]},{},[5])(5)
+},{"crypto":15}]},{},[7])(7)
 });

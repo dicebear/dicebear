@@ -11,7 +11,6 @@ export default class ColorSet {
      * Returns a color
      *
      * @param random
-     * @param callback
      */
-    getColor(random: Random): Promise<Color>;
+    getColor(random: Random): Color;
 }

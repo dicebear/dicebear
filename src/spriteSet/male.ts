@@ -3,7 +3,9 @@ import { SpriteSetInterface } from '../spriteSet';
 import Sprite from '../model/sprite';
 import Color from '../model/color';
 import ColorSet from '../model/colorSet';
-import BrighterOrDarkerThan from '../color/modifier/brighterOrDarkerThan';
+import LightnessDifference from '../color/modifier/lightness/difference';
+import LightnessBrighter from '../color/modifier/lightness/brighter';
+import LightnessDarker from '../color/modifier/lightness/darker';
 
 let maleSpriteSet: SpriteSetInterface = random => {
   let base64Prefix = 'data:image/png;base64,';
@@ -16,7 +18,7 @@ let maleSpriteSet: SpriteSetInterface = random => {
     new Color('#8d5524')
   ]);
 
-  let hairColor = new BrighterOrDarkerThan(
+  let hairColor = new LightnessDifference(
     [
       new Color('#090806'),
       new Color('#2c222b'),
@@ -37,7 +39,6 @@ let maleSpriteSet: SpriteSetInterface = random => {
       new Color('#977961')
     ],
     skinColor,
-    12,
     12
   );
 
@@ -58,21 +59,16 @@ let maleSpriteSet: SpriteSetInterface = random => {
     }),
     eyebrows: new Sprite({
       src: base64Prefix + fs.readFileSync(__dirname + '/../../assets/male/eyebrows.png', 'base64'),
-      colorSet: new BrighterOrDarkerThan(new BrighterOrDarkerThan(hairColor, skinColor, 0, 5), hairColor, 0, 7)
+      colorSet: new LightnessDarker(new LightnessDarker(hairColor, skinColor, 5), hairColor, 7)
     }),
     mustache: new Sprite({
       src: base64Prefix + fs.readFileSync(__dirname + '/../../assets/male/mustache.png', 'base64'),
       chance: 50,
-      colorSet: new BrighterOrDarkerThan(new BrighterOrDarkerThan(hairColor, hairColor, 15, 0), skinColor, 0, 5)
+      colorSet: new LightnessDarker(new LightnessBrighter(hairColor, hairColor, 15), skinColor, 5)
     }),
     mouth: new Sprite({
       src: base64Prefix + fs.readFileSync(__dirname + '/../../assets/male/mouth.png', 'base64'),
-      colorSet: new BrighterOrDarkerThan(
-        [new Color('#eec1ad'), new Color('#dbac98'), new Color('#d29985')],
-        skinColor,
-        0,
-        5
-      )
+      colorSet: new LightnessDarker([new Color('#eec1ad'), new Color('#dbac98'), new Color('#d29985')], skinColor, 5)
     }),
     glasses: new Sprite({
       src: base64Prefix + fs.readFileSync(__dirname + '/../../assets/male/glasses.png', 'base64'),

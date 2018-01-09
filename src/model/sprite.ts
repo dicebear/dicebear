@@ -59,9 +59,9 @@ export default class Sprite {
    *
    * @param random
    */
-  create(random: Random): Promise<HTMLCanvasElement> {
+  create(random: Random): HTMLCanvasElement {
     if (!this.image.complete) {
-      return Promise.reject(new Error('Sprite image not loaded.'));
+      throw new Error('Sprite image not loaded.');
     }
 
     var canvas = createCanvas();
@@ -71,15 +71,15 @@ export default class Sprite {
     canvas.height = this.image.height;
 
     if (random.bool(this.options.chance)) {
-      return this.options.colorSet.getColor(random).then(color => {
-        context.drawImage(this.image, random.integer(0, this.imageSprites - 1) * this.image.height * -1, 0);
+      let color = this.options.colorSet.getColor(random);
 
-        this.tintCanvas(canvas, color);
+      context.drawImage(this.image, random.integer(0, this.imageSprites - 1) * this.image.height * -1, 0);
 
-        return canvas;
-      });
+      this.tintCanvas(canvas, color);
+
+      return canvas;
     } else {
-      return Promise.resolve(canvas);
+      return canvas;
     }
   }
 

@@ -3,7 +3,8 @@ import { SpriteSetInterface } from '../spriteSet';
 import Sprite from '../model/sprite';
 import Color from '../model/color';
 import ColorSet from '../model/colorSet';
-import BrighterOrDarkerThan from '../color/modifier/brighterOrDarkerThan';
+import LightnessDifference from '../color/modifier/lightness/difference';
+import LightnessDarker from '../color/modifier/lightness/darker';
 
 let femaleSpriteSet: SpriteSetInterface = random => {
   let base64Prefix = 'data:image/png;base64,';
@@ -16,7 +17,7 @@ let femaleSpriteSet: SpriteSetInterface = random => {
     new Color('#8d5524')
   ]);
 
-  let hairColor = new BrighterOrDarkerThan(
+  let hairColor = new LightnessDifference(
     new ColorSet([
       new Color('#090806'),
       new Color('#2c222b'),
@@ -44,7 +45,6 @@ let femaleSpriteSet: SpriteSetInterface = random => {
       new Color('#977961')
     ]),
     skinColor,
-    12,
     12
   );
 
@@ -65,11 +65,11 @@ let femaleSpriteSet: SpriteSetInterface = random => {
     }),
     eyebrows: new Sprite({
       src: base64Prefix + fs.readFileSync(__dirname + '/../../assets/female/eyebrows.png', 'base64'),
-      colorSet: new BrighterOrDarkerThan(new BrighterOrDarkerThan(hairColor, skinColor, 0, 5), hairColor, 0, 7)
+      colorSet: new LightnessDarker(new LightnessDarker(hairColor, skinColor, 5), hairColor, 7)
     }),
     mouth: new Sprite({
       src: base64Prefix + fs.readFileSync(__dirname + '/../../assets/female/mouth.png', 'base64'),
-      colorSet: new BrighterOrDarkerThan(
+      colorSet: new LightnessDarker(
         [
           new Color('#dbac98'),
           new Color('#d29985'),
@@ -79,7 +79,6 @@ let femaleSpriteSet: SpriteSetInterface = random => {
           new Color('#de0f0d')
         ],
         skinColor,
-        0,
         5
       )
     }),

@@ -16,15 +16,12 @@ export default class ColorSet {
    * Returns a color
    *
    * @param random
-   * @param callback
    */
-  getColor(random: Random): Promise<Color> {
+  getColor(random: Random): Color {
     if (this.colors instanceof ColorSet) {
       return this.colors.getColor(random);
     } else {
-      this.pickedColors[random.seed] = this.pickedColors[random.seed] || random.pickone(this.colors);
-
-      return Promise.resolve(this.pickedColors[random.seed]);
+      return (this.pickedColors[random.seed] = this.pickedColors[random.seed] || random.pickone(this.colors));
     }
   }
 }

@@ -23,7 +23,7 @@ export default class Sprite {
      *
      * @param random
      */
-    create(random: Random): Promise<HTMLCanvasElement>;
+    create(random: Random): HTMLCanvasElement;
     /**
      * Tints an sprite
      *
