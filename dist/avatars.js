@@ -8,6 +8,12 @@
  *   homepage: https://github.com/DiceBear/avatars#readme
  *   version: 2.0.0
  *
+ * pure-color:
+ *   license: MIT (http://opensource.org/licenses/MIT)
+ *   author: Nick Williams
+ *   homepage: https://github.com/WickyNilliams/pure-color#readme
+ *   version: 1.3.0
+ *
  * seedrandom:
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: David Bau
@@ -292,7 +298,7 @@ var Random = /** @class */ (function () {
 }());
 exports.default = Random;
 
-},{"seedrandom/seedrandom":16}],7:[function(require,module,exports){
+},{"seedrandom/seedrandom":19}],7:[function(require,module,exports){
 var avatars = require('./avatars').default;
 module.exports = avatars;
 
@@ -329,31 +335,10 @@ exports.default = Avatar;
 
 },{"../helper/canvas":5}],9:[function(require,module,exports){
 "use strict";
-/**
- * This file includes Parts of https://github.com/Qix-/color-convert
- *
- * Copyright (c) 2011-2016 Heather Arthur <fayearthur@gmail.com>
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
 Object.defineProperty(exports, "__esModule", { value: true });
+var hexToRgb = require("pure-color/parse/hex");
+var rgbToHsv = require("pure-color/convert/rgb2hsv");
+var hsvToRgb = require("pure-color/convert/hsv2rgb");
 var Color = /** @class */ (function () {
     function Color(color) {
         if (color instanceof Array) {
@@ -368,85 +353,13 @@ var Color = /** @class */ (function () {
          * Get color hsl value
          */
         get: function () {
-            var r = this.rgb[0] / 255;
-            var g = this.rgb[1] / 255;
-            var b = this.rgb[2] / 255;
-            var min = Math.min(r, g, b);
-            var max = Math.max(r, g, b);
-            var delta = max - min;
-            var h, s, l;
-            if (max === min) {
-                h = 0;
-            }
-            else if (r === max) {
-                h = (g - b) / delta;
-            }
-            else if (g === max) {
-                h = 2 + (b - r) / delta;
-            }
-            else if (b === max) {
-                h = 4 + (r - g) / delta;
-            }
-            h = Math.min(h * 60, 360);
-            if (h < 0) {
-                h += 360;
-            }
-            l = (min + max) / 2;
-            if (max === min) {
-                s = 0;
-            }
-            else if (l <= 0.5) {
-                s = delta / (max + min);
-            }
-            else {
-                s = delta / (2 - max - min);
-            }
-            return [h, s * 100, l * 100];
+            return rgbToHsv(this.rgb);
         },
         /**
          * Set color hsl value and calculate rgb
          */
-        set: function (hsl) {
-            var h = hsl[0] / 360;
-            var s = hsl[1] / 100;
-            var l = hsl[2] / 100;
-            var t1, t2, t3, rgb, val;
-            if (s === 0) {
-                val = l * 255;
-                this.rgb = [val, val, val];
-            }
-            else {
-                if (l < 0.5) {
-                    t2 = l * (1 + s);
-                }
-                else {
-                    t2 = l + s - l * s;
-                }
-                t1 = 2 * l - t2;
-                this.rgb = [0, 0, 0];
-                for (var i = 0; i < 3; i++) {
-                    t3 = h + 1 / 3 * -(i - 1);
-                    if (t3 < 0) {
-                        t3++;
-                    }
-                    if (t3 > 1) {
-                        t3--;
-                    }
-                    if (6 * t3 < 1) {
-                        val = t1 + (t2 - t1) * 6 * t3;
-                    }
-                    else if (2 * t3 < 1) {
-                        val = t2;
-                    }
-                    else if (3 * t3 < 2) {
-                        val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
-                    }
-                    else {
-                        val = t1;
-                    }
-                    this.rgb[i] = val * 255;
-                }
-            }
+        set: function (hsv) {
+            this.rgb = hsvToRgb(hsv);
         },
         enumerable: true,
         configurable: true
@@ -456,24 +369,7 @@ var Color = /** @class */ (function () {
          * Set color hex value and calculate rgb
          */
         set: function (hex) {
-            var match = hex.match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
-            if (!match) {
-                this.rgb = [0, 0, 0];
-            }
-            var colorString = match[0];
-            if (match[0].length === 3) {
-                colorString = colorString
-                    .split('')
-                    .map(function (char) {
-                    return char + char;
-                })
-                    .join('');
-            }
-            var integer = parseInt(colorString, 16);
-            var r = (integer >> 16) & 0xff;
-            var g = (integer >> 8) & 0xff;
-            var b = integer & 0xff;
-            this.rgb = [r, g, b];
+            this.rgb = hexToRgb(hex);
         },
         enumerable: true,
         configurable: true
@@ -488,7 +384,7 @@ var Color = /** @class */ (function () {
 }());
 exports.default = Color;
 
-},{}],10:[function(require,module,exports){
+},{"pure-color/convert/hsv2rgb":16,"pure-color/convert/rgb2hsv":17,"pure-color/parse/hex":18}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ColorSet = /** @class */ (function () {
@@ -923,6 +819,105 @@ exports.default = maleSpriteSet;
 },{"../color/modifier/lightness/brighter":2,"../color/modifier/lightness/darker":3,"../color/modifier/lightness/difference":4,"../model/color":9,"../model/colorSet":10,"../model/sprite":11}],15:[function(require,module,exports){
 
 },{}],16:[function(require,module,exports){
+function hsv2rgb(hsv) {
+  var h = hsv[0] / 60,
+      s = hsv[1] / 100,
+      v = hsv[2] / 100,
+      hi = Math.floor(h) % 6;
+
+  var f = h - Math.floor(h),
+      p = 255 * v * (1 - s),
+      q = 255 * v * (1 - (s * f)),
+      t = 255 * v * (1 - (s * (1 - f))),
+      v = 255 * v;
+
+  switch(hi) {
+    case 0:
+      return [v, t, p];
+    case 1:
+      return [q, v, p];
+    case 2:
+      return [p, v, t];
+    case 3:
+      return [p, q, v];
+    case 4:
+      return [t, p, v];
+    case 5:
+      return [v, p, q];
+  }
+}
+
+module.exports = hsv2rgb;
+},{}],17:[function(require,module,exports){
+function rgb2hsv(rgb) {
+  var r = rgb[0],
+      g = rgb[1],
+      b = rgb[2],
+      min = Math.min(r, g, b),
+      max = Math.max(r, g, b),
+      delta = max - min,
+      h, s, v;
+
+  if (max == 0)
+    s = 0;
+  else
+    s = (delta/max * 1000)/10;
+
+  if (max == min)
+    h = 0;
+  else if (r == max)
+    h = (g - b) / delta;
+  else if (g == max)
+    h = 2 + (b - r) / delta;
+  else if (b == max)
+    h = 4 + (r - g) / delta;
+
+  h = Math.min(h * 60, 360);
+
+  if (h < 0)
+    h += 360;
+
+  v = ((max / 255) * 1000) / 10;
+
+  return [h, s, v];
+}
+
+module.exports = rgb2hsv;
+},{}],18:[function(require,module,exports){
+function expand(hex) {
+  var result = "#";
+
+  for (var i = 1; i < hex.length; i++) {
+    var val = hex.charAt(i);
+    result += val + val;
+  }
+
+  return result;
+}
+
+function hex(hex) {
+  // #RGB or #RGBA
+  if(hex.length === 4 || hex.length === 5) {
+    hex = expand(hex);
+  }
+
+  var rgb = [
+    parseInt(hex.substring(1,3), 16),
+    parseInt(hex.substring(3,5), 16),
+    parseInt(hex.substring(5,7), 16)
+  ];
+
+  // #RRGGBBAA
+  if (hex.length === 9) {
+    var alpha = parseFloat((parseInt(hex.substring(7,9), 16) / 255).toFixed(2));
+    rgb.push(alpha);
+  }
+
+  return rgb;
+}
+
+module.exports = hex;
+},{}],19:[function(require,module,exports){
 /*
 Copyright 2014 David Bau.
 
