@@ -16,6 +16,8 @@ Test in your Browser: <https://avatars.dicebear.com/>
 ![](http://avatars.dicebear.com/v1/female/7/60.png)
 ![](http://avatars.dicebear.com/v1/male/8/60.png)
 
+:exclamation: **Master build!** See https://github.com/DiceBear/avatars/tree/1.0.1 for the last stable version.
+
 ## Use the HTTP-API
 
 ```
@@ -75,10 +77,15 @@ yarn add @dicebear/avatars
 var avatars = new Avatars(Avatars.SPRITE_SETS.male); // male, female, identicon
 
 avatars.create('custom-seed').then(function(avatar) {
-  // Resize avatar and get data url
-  let dataUrl = avatar.resize(200).dataUrl;
+  // Resize avatar and get as png data url
+  let dataUrl = avatar.getPNG({
+    size: 200
+  });
 
-  console.log(dataUrl);
+  // Get as jpeg data url with white background
+  let dataUrl = avatar.getJPEG({
+    background: 200
+  });
 });
 ```
 
