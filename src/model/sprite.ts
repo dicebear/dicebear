@@ -46,10 +46,10 @@ export default class Sprite {
       if (this.image.src && this.image.complete) {
         this.imageError ? reject(this.imageError) : resolve(this.image);
       } else {
-        this.image.src = this.options.src;
-
         this.image.addEventListener('load', () => resolve(this.image));
         this.image.addEventListener('error', err => reject(err.error));
+
+        this.image.src = this.options.src;
       }
     });
   }

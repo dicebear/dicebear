@@ -11,7 +11,6 @@
  * pure-color:
  *   license: MIT (http://opensource.org/licenses/MIT)
  *   author: Nick Williams
- *   homepage: https://github.com/WickyNilliams/pure-color#readme
  *   version: 1.3.0
  *
  * seedrandom:
@@ -527,9 +526,9 @@ var Sprite = /** @class */ (function () {
                 _this.imageError ? reject(_this.imageError) : resolve(_this.image);
             }
             else {
-                _this.image.src = _this.options.src;
                 _this.image.addEventListener('load', function () { return resolve(_this.image); });
                 _this.image.addEventListener('error', function (err) { return reject(err.error); });
+                _this.image.src = _this.options.src;
             }
         });
     };
