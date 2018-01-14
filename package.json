@@ -31,17 +31,29 @@
     "type": "git",
     "url": "git+https://github.com/DiceBear/avatars.git"
   },
-  "keywords": ["avatar", "generator", "identicon", "javascript", "typescript"],
+  "keywords": [
+    "avatar",
+    "generator",
+    "identicon",
+    "javascript",
+    "typescript"
+  ],
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
-  "files": ["dist", "lib", "typings"],
+  "files": [
+    "dist",
+    "lib",
+    "typings"
+  ],
   "browser": {
     "./lib/index.js": "./lib/index.browser.js",
     "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"
   },
   "browserify": {
-    "transform": ["brfs"]
+    "transform": [
+      "brfs"
+    ]
   }
 }

@@ -10,8 +10,6 @@ export interface AvatarExportOptions {
 
 /**
  * Generated Avatar
- *
- * Contains export methods for formats supported by `node-canvas`.
  */
 export default class Avatar {
   public readonly canvas: HTMLCanvasElement;
@@ -41,15 +39,6 @@ export default class Avatar {
    */
   getJPEG(options: AvatarExportOptions = {}) {
     return this.getDataUrl('image/jpeg', options);
-  }
-
-  /**
-   * Exports the avatar as GIF data url
-   *
-   * @param options
-   */
-  getGIF(options: AvatarExportOptions = {}) {
-    return this.getDataUrl('image/gif', options);
   }
 
   /**

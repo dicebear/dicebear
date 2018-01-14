@@ -1,0 +1,125 @@
+{
+  "colors": {
+    "skin": {
+      "values": ["#ffdbac", "#f1c27d", "#e0ac69", "#c68642", "#8d5524"]
+    },
+    "hair": {
+      "values": [
+        "#090806",
+        "#2c222b",
+        "#71635a",
+        "#b7a69e",
+        "#d6c4c2",
+        "#cabfb1",
+        "#dcd0ba",
+        "#fff5e1",
+        "#e6cea8",
+        "#e5c8a8",
+        "#debc99",
+        "#b89778",
+        "#a56b46",
+        "#b55239",
+        "#8d4a43",
+        "#91553d",
+        "#533d32",
+        "#3b3024",
+        "#554838",
+        "#4e433f",
+        "#504444",
+        "#6a4e42",
+        "#a7856a",
+        "#977961"
+      ],
+      "modifier": [
+        {
+          "name": "lightness/difference",
+          "attr": ["ref:colors.skin", 12]
+        }
+      ]
+    },
+    "eyes": {
+      "values": ["#76778b", "#697b94", "#647b90", "#5b7c8b", "#588387"]
+    },
+    "eyebrows": {
+      "values": "ref:colors.hair",
+      "modifier": [
+        {
+          "name": "lightness/darker",
+          "attr": ["ref:colors.skin", 5]
+        },
+        {
+          "name": "lightness/darker",
+          "attr": ["ref:colors.hair", 7]
+        }
+      ]
+    },
+    "mouth": {
+      "values": ["#dbac98", "#d29985", "#c98276", "#e35d6a", "#e32153", "#de0f0d"],
+      "modifier": [
+        {
+          "name": "lightness/darker",
+          "attr": ["ref:colors.skin", 5]
+        }
+      ]
+    },
+    "accessories": {
+      "values": ["#daa520", "#ffd700", "#eee8aa", "#fafad2", "#d3d3d3", "#a9a9a9"]
+    },
+    "glasses": {
+      "values": ["#5f705c", "#43677d", "#5e172d", "#ffb67a", "#a04b5d", "#191919", "#323232", "#4b4b4b"]
+    },
+    "clothes": {
+      "values": [
+        "#d11141",
+        "#00b159",
+        "#00aedb",
+        "#f37735",
+        "#ffc425",
+        "#740001",
+        "#ae0001",
+        "#eeba30",
+        "#96ceb4",
+        "#ffeead",
+        "#ff6f69",
+        "#ffcc5c",
+        "#88d8b0"
+      ]
+    },
+    "hat": {
+      "values": ["#cc6192", "#2663a3", "#a62116", "#3d8a6b", "#614f8a"]
+    }
+  },
+  "sprites": {
+    "face": {
+      "colors": "ref:colors.skin"
+    },
+    "eyes": {
+      "colors": "ref:colors.eyes"
+    },
+    "eyebrows": {
+      "colors": "ref:colors.eyebrows"
+    },
+    "mouth": {
+      "colors": "ref:colors.mouth"
+    },
+    "accessories": {
+      "colors": "ref:colors.accessories",
+      "chance": 15
+    },
+    "glasses": {
+      "colors": "ref:colors.glasses",
+      "chance": 25
+    },
+    "clothes": {
+      "colors": "ref:colors.clothes"
+    },
+    "hair": {
+      "colors": "ref:colors.hair",
+      "chance": 95
+    },
+    "hat": {
+      "colors": "ref:colors.hat",
+      "chance": 5
+    }
+  }
+}
