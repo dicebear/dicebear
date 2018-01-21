@@ -1,18 +1,17 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "outDir": "./lib",
-        "moduleResolution": "node",
-        "declaration": true,
-        "lib": [
-            "es6",
-            "dom"
-        ],
-        "noImplicitAny": true
-    },
-    "include": [
-        "./src/",
-        "./typings/"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "outDir": "./lib",
+    "moduleResolution": "node",
+    "declaration": true,
+    "lib": ["es6", "dom"],
+    "noImplicitAny": true,
+    "baseUrl": ".",
+    "paths": {
+      "lib/*": ["src/lib/*"],
+      "sprites/*": ["src/sprites/*"]
+    }
+  },
+  "include": ["./src/", "./typings/"]
 }

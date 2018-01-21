@@ -15,10 +15,12 @@
     "browserify": "^14.1.0",
     "browserify-shim": "^3.8.14",
     "licensify": "^3.1.2",
+    "ts-node": "^4.1.0",
     "typescript": "^2.2.1",
     "uglify-js": "^2.8.22"
   },
   "scripts": {
+    "ts-node": "ts-node webpack",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -r dist/* lib/* || true",
     "build": "tsc && npm run build-pack && npm run build-pack-minify",
@@ -31,29 +33,17 @@
     "type": "git",
     "url": "git+https://github.com/DiceBear/avatars.git"
   },
-  "keywords": [
-    "avatar",
-    "generator",
-    "identicon",
-    "javascript",
-    "typescript"
-  ],
+  "keywords": ["avatar", "generator", "identicon", "javascript", "typescript"],
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
-  "files": [
-    "dist",
-    "lib",
-    "typings"
-  ],
+  "files": ["dist", "lib", "typings"],
   "browser": {
     "./lib/index.js": "./lib/index.browser.js",
     "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"
   },
   "browserify": {
-    "transform": [
-      "brfs"
-    ]
+    "transform": ["brfs"]
   }
 }
