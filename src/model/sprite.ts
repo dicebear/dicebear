@@ -1,5 +1,5 @@
-import { CollectionInterface as ColorCollectionInterface } from 'lib/model/color/collection';
-import Random from 'lib/helper/random';
+import { CollectionInterface as ColorCollectionInterface } from './color/collection';
+import Random from '../helper/random';
 
 import SpriteCollection from './sprite/collection';
 

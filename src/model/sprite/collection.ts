@@ -1,5 +1,5 @@
-import { SpriteInterface } from 'lib/model/sprite';
-import Random from 'lib/helper/random';
+import { SpriteInterface } from '../sprite';
+import Random from '../../helper/random';
 
 export interface CollectionInterface {
   get(random: Random): SpriteInterface;

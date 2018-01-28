@@ -1,7 +1,7 @@
-import Random from 'lib/helper/random';
+import Random from '../../../../../helper/random';
 
-import { ColorInterface } from 'lib/model/color';
-import { CollectionInterface } from 'lib/model/color/collection';
+import { ColorInterface } from '../../../../color';
+import { CollectionInterface } from '../../../collection';
 
 import Brighter from './brighter';
 import Darker from './darker';

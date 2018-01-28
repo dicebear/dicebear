@@ -1,31 +1,25 @@
 {
   "name": "@dicebear/avatars",
-  "version": "2.0.0",
+  "version": "2.0.0-alpha.1",
   "description": "Pixel-Art Avatar and Identicon Generator by Identifier",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "canvas": "^1.6.5",
     "pure-color": "^1.3.0",
     "seedrandom": "^2.4.3"
   },
   "devDependencies": {
     "@types/node": "^7.0.52",
-    "brfs": "^1.4.3",
-    "browserify": "^14.1.0",
-    "browserify-shim": "^3.8.14",
-    "licensify": "^3.1.2",
-    "ts-node": "^4.1.0",
     "typescript": "^2.2.1",
-    "uglify-js": "^2.8.22"
+    "webpack": "^3.10.0",
+    "webpack-merge": "^4.1.1",
+    "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
-    "ts-node": "ts-node webpack",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -r dist/* lib/* || true",
-    "build": "tsc && npm run build-pack && npm run build-pack-minify",
-    "build-pack": "browserify lib/index.js -p licensify -s Avatars > dist/avatars.js",
-    "build-pack-minify": "uglifyjs -m --comments -o dist/avatars.min.js -- dist/avatars.js"
+    "build": "tsc; webpack",
+    "watch": "webpack -w & tsc -w"
   },
   "author": "Florian Körner <contact@dicebear.com>",
   "license": "MIT",
@@ -38,12 +32,5 @@
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
-  "files": ["dist", "lib", "typings"],
-  "browser": {
-    "./lib/index.js": "./lib/index.browser.js",
-    "./lib/helper/canvas.js": "./lib/helper/canvas.browser.js"
-  },
-  "browserify": {
-    "transform": ["brfs"]
-  }
+  "files": ["dist", "lib", "typings"]
 }

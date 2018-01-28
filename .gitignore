@@ -1,2 +1,4 @@
-bower_components
+dist
+lib
 node_modules
+package-lock.json

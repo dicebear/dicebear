@@ -1,7 +1,7 @@
 import Modifier from './collection/modifier';
 
-import { ColorInterface } from 'lib/model/color';
-import Random from 'lib/helper/random';
+import { ColorInterface } from '../color';
+import Random from '../../helper/random';
 
 export interface CollectionInterface {
   get(random: Random): ColorInterface;

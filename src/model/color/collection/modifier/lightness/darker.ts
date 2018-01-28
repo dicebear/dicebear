@@ -1,7 +1,7 @@
-import Random from 'lib/helper/random';
+import Random from '../../../../../helper/random';
 
-import { default as Color, ColorInterface, ColorType } from 'lib/model/color';
-import { CollectionInterface } from 'lib/model/color/collection';
+import { default as Color, ColorInterface, ColorType } from '../../../../color';
+import { CollectionInterface } from '../../../collection';
 
 /**
  * Ensures that the selected color is darker than a reference color.

@@ -7,11 +7,7 @@
     "declaration": true,
     "lib": ["es6", "dom"],
     "noImplicitAny": true,
-    "baseUrl": ".",
-    "paths": {
-      "lib/*": ["src/lib/*"],
-      "sprites/*": ["src/sprites/*"]
-    }
+    "sourceMap": true
   },
   "include": ["./src/", "./typings/"]
 }
