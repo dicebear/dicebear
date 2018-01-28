@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@types/node": "^7.0.52",
+    "license-checker": "^16.0.0",
     "typescript": "^2.2.1",
     "webpack": "^3.10.0",
     "webpack-merge": "^4.1.1",
