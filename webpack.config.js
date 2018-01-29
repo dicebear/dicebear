@@ -1,5 +1,4 @@
 const licenseChecker = require('license-checker');
-const nodeExternals = require('webpack-node-externals');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 const path = require('path');

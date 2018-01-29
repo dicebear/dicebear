@@ -10,7 +10,7 @@ export default class Avatars {
   public static model = {
     avatar: Avatar,
     color: Color,
-    spirte: Sprite
+    sprite: Sprite
   };
 
   protected spriteCollection: SpriteCollection;

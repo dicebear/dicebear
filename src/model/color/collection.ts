@@ -8,6 +8,8 @@ export interface CollectionInterface {
 }
 
 export default class Collection implements CollectionInterface {
+  public static modifier = Modifier;
+
   private colors: ColorInterface[];
   private pickedColors: { [key: string]: ColorInterface } = {};
 

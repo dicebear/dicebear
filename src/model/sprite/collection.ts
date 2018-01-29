@@ -7,12 +7,16 @@ export interface CollectionInterface {
 
 export default class Collection implements CollectionInterface {
   private sprites: SpriteInterface[];
+  private width: number;
+  private height: number;
 
   /**
    * @param sprites
    */
-  constructor(sprites: SpriteInterface[]) {
+  constructor(sprites: SpriteInterface[], width: number, height: number = width) {
     this.sprites = sprites;
+    this.width = width;
+    this.height = height;
   }
 
   /**

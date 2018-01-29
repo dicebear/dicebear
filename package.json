@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.3",
   "description": "Pixel-Art Avatar and Identicon Generator by Identifier",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,8 +13,7 @@
     "license-checker": "^16.0.0",
     "typescript": "^2.2.1",
     "webpack": "^3.10.0",
-    "webpack-merge": "^4.1.1",
-    "webpack-node-externals": "^1.6.0"
+    "webpack-merge": "^4.1.1"
   },
   "scripts": {
     "prepublishOnly": "npm run build",
