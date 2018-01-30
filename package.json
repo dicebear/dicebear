@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "2.0.0-alpha.3",
+  "version": "2.0.0-alpha.4",
   "description": "Pixel-Art Avatar and Identicon Generator by Identifier",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
