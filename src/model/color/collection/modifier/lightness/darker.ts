@@ -42,6 +42,10 @@ export default class Darker implements CollectionInterface {
       primaryColorHsv[2] = 0;
     }
 
-    return (this.pickedColors[random.seed] = new Color(primaryColorHsv, ColorType.hsv));
+    // Create new color instance and preserve alpha
+    this.pickedColors[random.seed] = new Color('hsv(' + primaryColorHsv.join(',') + ')');
+    this.pickedColors[random.seed].alpha = primaryColor.alpha;
+
+    return this.pickedColors[random.seed];
   }
 }

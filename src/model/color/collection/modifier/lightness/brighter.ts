@@ -42,6 +42,10 @@ export default class Brighter implements CollectionInterface {
       primaryColorHsv[2] = 100;
     }
 
-    return (this.pickedColors[random.seed] = new Color(primaryColorHsv, ColorType.hsv));
+    // Create new color instance and preserve alpha
+    this.pickedColors[random.seed] = new Color('hsv(' + primaryColorHsv.join(',') + ')');
+    this.pickedColors[random.seed].alpha = primaryColor.alpha;
+
+    return this.pickedColors[random.seed];
   }
 }
