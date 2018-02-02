@@ -36,7 +36,7 @@ export default class Sprite implements SpriteInterface {
       let group = random.pickone(this.groups);
       let color = this.colorCollection.get(random);
 
-      group.replace(/(stroke|fill)=["'](.*?)["']/, (match, name, value) => {
+      group.replace(/(stroke|fill)=["'](.*?)["']/gi, (match, name, value) => {
         return name + '="' + this.calculateColor(value, color) + '"';
       });
     }
@@ -44,7 +44,23 @@ export default class Sprite implements SpriteInterface {
     return '';
   }
 
+  /**
+   * Calculates the target color
+   *
+   * @param sourceColor
+   * @param targetColor
+   */
   calculateColor(sourceColor: string, targetColor: ColorInterface) {
-    let sourceColorModel = new Color(sourceColor);
+    let sourceColorRgba = new Color(sourceColor).rgba;
+    let targetColorRgba = targetColor.rgba;
+
+    sourceColorRgba[0] = Math.round((sourceColorRgba[0] / 255 - 1) * -1 * targetColorRgba[0]);
+    sourceColorRgba[1] = Math.round((sourceColorRgba[1] / 255 - 1) * -1 * targetColorRgba[1]);
+    sourceColorRgba[2] = Math.round((sourceColorRgba[2] / 255 - 1) * -1 * targetColorRgba[2]);
+    sourceColorRgba[3] = Math.round(sourceColorRgba[3] / 1 * targetColorRgba[3]);
+
+    let newColor = 'rgba(' + sourceColorRgba.join(',') + ')';
+
+    return sourceColorRgba[3] != 1 ? newColor : new Color(newColor).hex;
   }
 }

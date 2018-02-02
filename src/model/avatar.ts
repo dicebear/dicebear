@@ -12,6 +12,4 @@ export default class {
   constructor(svg: string) {
     this.svg = svg;
   }
-
-  // @todo resize
 }

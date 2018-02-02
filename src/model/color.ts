@@ -16,6 +16,7 @@ export interface ColorInterface {
   alpha: number;
   hex: string;
   rgb: [number, number, number];
+  rgba: [number, number, number, number];
   hsv: [number, number, number];
 }
 

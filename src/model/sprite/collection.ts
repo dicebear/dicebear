@@ -2,13 +2,14 @@ import { SpriteInterface } from '../sprite';
 import Random from '../../helper/random';
 
 export interface CollectionInterface {
-  get(random: Random): SpriteInterface;
+  get(random: Random): SpriteInterface[];
 }
 
 export default class Collection implements CollectionInterface {
+  public width: number;
+  public height: number;
+
   private sprites: SpriteInterface[];
-  private width: number;
-  private height: number;
 
   /**
    * @param sprites
@@ -20,11 +21,11 @@ export default class Collection implements CollectionInterface {
   }
 
   /**
-   * Returns a sprite
+   * Returns generated sprite spaths
    *
    * @param random
    */
-  get(random: Random): SpriteInterface {
-    return null;
+  get(): SpriteInterface[] {
+    return this.sprites;
   }
 }
