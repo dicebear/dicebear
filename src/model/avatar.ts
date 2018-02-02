@@ -1,7 +1,7 @@
 /**
  * Generated Avatar
  */
-export default class {
+export default class Avatar {
   public readonly svg: string;
 
   /**
@@ -13,3 +13,5 @@ export default class {
     this.svg = svg;
   }
 }
+
+module.exports = Avatar;

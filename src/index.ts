@@ -1,8 +1,10 @@
 import SpriteCollection from './model/sprite/collection';
 
-import Avatar from './model/avatar';
-import Color from './model/color';
-import Sprite from './model/sprite';
+import { default as AvatarModel } from './model/avatar';
+
+import * as Avatar from './model/avatar';
+import * as Color from './model/color';
+import * as Sprite from './model/sprite';
 
 import Random from './helper/random';
 
@@ -36,8 +38,8 @@ export default class Avatars {
    *
    * @param seed
    */
-  public async create(seed: string, width: number = null, height: number = null) {
-    return new Avatar('<svg ' + this.getSvgAttributes() + '>' + this.getSvgPaths(new Random(seed)) + '</svg>');
+  public create(seed: string, width: number = null, height: number = null) {
+    return new AvatarModel('<svg ' + this.getSvgAttributes() + '>' + this.getSvgPaths(new Random(seed)) + '</svg>');
   }
 
   /**

@@ -25,7 +25,7 @@ module.exports = async () => {
       [
         name + ':',
         '  author: ' + license.publisher,
-        '  license: ' + license.licences,
+        '  license: ' + license.licenses,
         '  repository: ' + license.repository
       ].join('\n')
     );

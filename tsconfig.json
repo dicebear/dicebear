@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "target": "es5",
     "outDir": "./lib",
     "moduleResolution": "node",
     "declaration": true,
     "lib": ["es6", "dom"],
     "noImplicitAny": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/", "./typings/"]
+  "include": ["./src/**/*", "./typings/**/*"]
 }

@@ -29,3 +29,5 @@ export default class Collection implements CollectionInterface {
     return this.sprites;
   }
 }
+
+module.exports = Collection;

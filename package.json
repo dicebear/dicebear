@@ -11,7 +11,7 @@
   "devDependencies": {
     "@types/node": "^7.0.52",
     "license-checker": "^16.0.0",
-    "typescript": "^2.2.1",
+    "typescript": "^2.7.1",
     "webpack": "^3.10.0",
     "webpack-merge": "^4.1.1"
   },
@@ -27,10 +27,20 @@
     "type": "git",
     "url": "git+https://github.com/DiceBear/avatars.git"
   },
-  "keywords": ["avatar", "generator", "identicon", "javascript", "typescript"],
+  "keywords": [
+    "avatar",
+    "generator",
+    "identicon",
+    "javascript",
+    "typescript"
+  ],
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
-  "files": ["dist", "lib", "typings"]
+  "files": [
+    "dist",
+    "lib",
+    "typings"
+  ]
 }

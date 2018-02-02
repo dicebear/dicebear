@@ -2,7 +2,7 @@ import { CollectionInterface as ColorCollectionInterface } from './color/collect
 import { ColorInterface, default as Color } from './color';
 import Random from '../helper/random';
 
-import SpriteCollection from './sprite/collection';
+import * as SpriteCollection from './sprite/collection';
 
 export interface SpriteInterface {
   get(random: Random): string;
@@ -64,3 +64,5 @@ export default class Sprite implements SpriteInterface {
     return sourceColorRgba[3] != 1 ? newColor : new Color(newColor).hex;
   }
 }
+
+module.exports = Sprite;

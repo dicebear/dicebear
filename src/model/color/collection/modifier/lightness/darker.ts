@@ -1,6 +1,6 @@
 import Random from '../../../../../helper/random';
 
-import { default as Color, ColorInterface, ColorType } from '../../../../color';
+import { default as Color, ColorInterface } from '../../../../color';
 import { CollectionInterface } from '../../../collection';
 
 /**
@@ -49,3 +49,5 @@ export default class Darker implements CollectionInterface {
     return this.pickedColors[random.seed];
   }
 }
+
+module.exports = Darker;
