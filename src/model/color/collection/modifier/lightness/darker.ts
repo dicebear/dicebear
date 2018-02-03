@@ -1,6 +1,6 @@
 import Random from '../../../../../helper/random';
 
-import { default as Color, ColorInterface } from '../../../../color';
+import Color, { ColorInterface } from '../../../../color';
 import { CollectionInterface } from '../../../collection';
 
 /**
@@ -36,7 +36,7 @@ export default class Darker implements CollectionInterface {
       return (this.pickedColors[random.seed] = primaryColor);
     }
 
-    primaryColorHsv[2] = primaryColorHsv[2] - this.difference;
+    primaryColorHsv[2] = secondaryColorHsv[2] - this.difference;
 
     if (primaryColorHsv[2] < 0) {
       primaryColorHsv[2] = 0;

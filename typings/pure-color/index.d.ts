@@ -1,21 +1,21 @@
 declare namespace pureColor {
   namespace parse {
     interface hex {
-      (hex: string): [number, number, number];
+      (hex: string): number[];
     }
   }
 
   namespace convert {
     interface rgb2hsv {
-      (rgb: [number, number, number]): [number, number, number];
+      (rgb: number[]): number[];
     }
 
     interface rgb2hex {
-      (rgb: [number, number, number]): string;
+      (rgb: number[]): string;
     }
 
     interface hsv2rgb {
-      (rgb: [number, number, number]): [number, number, number];
+      (rgb: number[]): number[];
     }
   }
 }

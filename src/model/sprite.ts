@@ -1,5 +1,5 @@
 import { CollectionInterface as ColorCollectionInterface } from './color/collection';
-import { ColorInterface, default as Color } from './color';
+import Color, { ColorInterface } from './color';
 import Random from '../helper/random';
 
 import * as SpriteCollection from './sprite/collection';
@@ -36,7 +36,7 @@ export default class Sprite implements SpriteInterface {
       let group = random.pickone(this.groups);
       let color = this.colorCollection.get(random);
 
-      group.replace(/(stroke|fill)=["'](.*?)["']/gi, (match, name, value) => {
+      return group.replace(/(stroke|fill)=["'](.*?)["']/gi, (match, name, value) => {
         return name + '="' + this.calculateColor(value, color) + '"';
       });
     }
@@ -54,10 +54,16 @@ export default class Sprite implements SpriteInterface {
     let sourceColorRgba = new Color(sourceColor).rgba;
     let targetColorRgba = targetColor.rgba;
 
-    sourceColorRgba[0] = Math.round((sourceColorRgba[0] / 255 - 1) * -1 * targetColorRgba[0]);
-    sourceColorRgba[1] = Math.round((sourceColorRgba[1] / 255 - 1) * -1 * targetColorRgba[1]);
-    sourceColorRgba[2] = Math.round((sourceColorRgba[2] / 255 - 1) * -1 * targetColorRgba[2]);
-    sourceColorRgba[3] = Math.round(sourceColorRgba[3] / 1 * targetColorRgba[3]);
+    sourceColorRgba[0] = Math.round(
+      (sourceColorRgba[0] - targetColorRgba[0]) * (sourceColorRgba[0] / 255) + targetColorRgba[0]
+    );
+    sourceColorRgba[1] = Math.round(
+      (sourceColorRgba[1] - targetColorRgba[1]) * (sourceColorRgba[1] / 255) + targetColorRgba[1]
+    );
+    sourceColorRgba[2] = Math.round(
+      (sourceColorRgba[2] - targetColorRgba[2]) * (sourceColorRgba[2] / 255) + targetColorRgba[2]
+    );
+    sourceColorRgba[3] = Math.round(sourceColorRgba[3] / 1 * targetColorRgba[3] * 100) / 100;
 
     let newColor = 'rgba(' + sourceColorRgba.join(',') + ')';
 

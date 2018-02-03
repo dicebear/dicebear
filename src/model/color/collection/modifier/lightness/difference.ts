@@ -48,9 +48,9 @@ export default class Difference implements CollectionInterface {
     let secondaryColorHsv = secondaryColor.hsv;
 
     if (primaryColorHsv[2] <= secondaryColorHsv[2]) {
-      return (this.pickedColors[random.seed] = this.brighter.get(random));
-    } else {
       return (this.pickedColors[random.seed] = this.darker.get(random));
+    } else {
+      return (this.pickedColors[random.seed] = this.brighter.get(random));
     }
   }
 }

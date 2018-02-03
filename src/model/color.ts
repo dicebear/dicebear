@@ -8,9 +8,9 @@ import * as ColorCollection from './color/collection';
 export interface ColorInterface {
   alpha: number;
   hex: string;
-  rgb: [number, number, number];
-  rgba: [number, number, number, number];
-  hsv: [number, number, number];
+  rgb: number[];
+  rgba: number[];
+  hsv: number[];
 }
 
 export default class Color implements ColorInterface {
@@ -19,8 +19,8 @@ export default class Color implements ColorInterface {
   public alpha: number = 1;
 
   private color: {
-    rgb?: [number, number, number];
-    hsv?: [number, number, number];
+    rgb?: number[];
+    hsv?: number[];
     hex?: string;
   };
 
@@ -28,30 +28,24 @@ export default class Color implements ColorInterface {
     if (color[0] == '#') {
       this.hex = color;
     } else {
-      let match = /(.*)\(.*\)/.exec(color);
+      let match = /(.*)\((.*)\)/.exec(color);
 
       if (match) {
         let values = match[2].split(',').map(val => parseInt(val.trim()));
 
         switch (match[1].trim()) {
           case 'rgb':
-            if (values.length == 3) {
-              this.rgb = values as [number, number, number];
-            }
+            this.rgb = values;
 
             break;
 
           case 'rgba':
-            if (values.length == 4) {
-              this.rgba = values as [number, number, number, number];
-            }
+            this.rgba = values;
 
             break;
 
           case 'hsv':
-            if (values.length == 3) {
-              this.hsv = values as [number, number, number];
-            }
+            this.hsv = values;
 
             break;
 
@@ -64,7 +58,11 @@ export default class Color implements ColorInterface {
     }
   }
 
-  set rgb(rgb: [number, number, number]) {
+  set rgb(rgb: number[]) {
+    if (rgb.length != 3) {
+      throw new Error('An array with a length of 3 is expected.');
+    }
+
     this.alpha = 1;
     this.color = {
       rgb: rgb
@@ -72,10 +70,14 @@ export default class Color implements ColorInterface {
   }
 
   get rgb() {
-    return (this.color.rgb = this.color.rgb || (this.color.hex ? hexToRgb(this.hex) : hsvToRgb(this.hsv)));
+    return (this.color.rgb = this.color.rgb || (this.color.hex ? this.hexToRgb(this.hex) : this.hsvToRgb(this.hsv)));
   }
 
-  set rgba(rgba: [number, number, number, number]) {
+  set rgba(rgba: number[]) {
+    if (rgba.length != 4) {
+      throw new Error('An array with a length of 3 is expected.');
+    }
+
     this.rgb = [rgba[0], rgba[1], rgba[2]];
     this.alpha = rgba[3];
   }
@@ -84,7 +86,11 @@ export default class Color implements ColorInterface {
     return [this.rgb[0], this.rgb[1], this.rgb[2], this.alpha];
   }
 
-  set hsv(hsv: [number, number, number]) {
+  set hsv(hsv: number[]) {
+    if (hsv.length != 3) {
+      throw new Error('An array with a length of 3 is expected.');
+    }
+
     this.alpha = 1;
     this.color = {
       hsv: hsv
@@ -92,7 +98,7 @@ export default class Color implements ColorInterface {
   }
 
   get hsv() {
-    return (this.color.hsv = this.color.hsv || rgbToHsv(this.rgb));
+    return (this.color.hsv = this.color.hsv || this.rgbToHsv(this.rgb));
   }
 
   set hex(hex: string) {
@@ -103,7 +109,23 @@ export default class Color implements ColorInterface {
   }
 
   get hex() {
-    return (this.color.hex = this.color.hex || rgbToHex(this.rgb));
+    return (this.color.hex = this.color.hex || this.rgbToHex(this.rgb));
+  }
+
+  private rgbToHex(rgb: number[]) {
+    return rgbToHex(rgb);
+  }
+
+  private hexToRgb(hex: string) {
+    return hexToRgb(hex).map(val => Math.round(val));
+  }
+
+  private rgbToHsv(rgb: number[]) {
+    return rgbToHsv(rgb).map(val => Math.round(val));
+  }
+
+  private hsvToRgb(hsv: number[]) {
+    return hsvToRgb(hsv).map(val => Math.round(val));
   }
 }
 

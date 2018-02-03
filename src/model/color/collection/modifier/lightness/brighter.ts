@@ -1,6 +1,6 @@
 import Random from '../../../../../helper/random';
 
-import { default as Color, ColorInterface } from '../../../../color';
+import Color, { ColorInterface } from '../../../../color';
 import { CollectionInterface } from '../../../collection';
 
 /**
@@ -36,10 +36,10 @@ export default class Brighter implements CollectionInterface {
       return (this.pickedColors[random.seed] = primaryColor);
     }
 
-    primaryColorHsv[2] = primaryColorHsv[2] + this.difference;
+    primaryColorHsv[2] = secondaryColorHsv[2] + this.difference;
 
-    if (primaryColorHsv[2] > 100) {
-      primaryColorHsv[2] = 100;
+    if (primaryColorHsv[2] > 360) {
+      primaryColorHsv[2] = 360;
     }
 
     // Create new color instance and preserve alpha

@@ -1,6 +1,6 @@
 import SpriteCollection from './model/sprite/collection';
 
-import { default as AvatarModel } from './model/avatar';
+import AvatarModel from './model/avatar';
 
 import * as Avatar from './model/avatar';
 import * as Color from './model/color';
@@ -64,9 +64,11 @@ export default class Avatars {
       attributes['height'] = height || originalWidth / originalHeight * height;
     }
 
-    return Object.keys((key: keyof SvgAttributes) => {
-      return key + '="' + attributes[key] + '"';
-    });
+    return Object.keys(attributes)
+      .map((key: keyof SvgAttributes) => {
+        return key + '="' + attributes[key] + '"';
+      })
+      .join('');
   }
 
   /**

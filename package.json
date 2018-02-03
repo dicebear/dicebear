@@ -10,12 +10,14 @@
   },
   "devDependencies": {
     "@types/node": "^7.0.52",
+    "jest": "^22.1.4",
     "license-checker": "^16.0.0",
     "typescript": "^2.7.1",
     "webpack": "^3.10.0",
     "webpack-merge": "^4.1.1"
   },
   "scripts": {
+    "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -r dist/* lib/* || true",
     "build": "tsc; webpack",
