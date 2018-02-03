@@ -54,15 +54,9 @@ export default class Sprite implements SpriteInterface {
     let sourceColorRgba = new Color(sourceColor).rgba;
     let targetColorRgba = targetColor.rgba;
 
-    sourceColorRgba[0] = Math.round(
-      (sourceColorRgba[0] - targetColorRgba[0]) * (sourceColorRgba[0] / 255) + targetColorRgba[0]
-    );
-    sourceColorRgba[1] = Math.round(
-      (sourceColorRgba[1] - targetColorRgba[1]) * (sourceColorRgba[1] / 255) + targetColorRgba[1]
-    );
-    sourceColorRgba[2] = Math.round(
-      (sourceColorRgba[2] - targetColorRgba[2]) * (sourceColorRgba[2] / 255) + targetColorRgba[2]
-    );
+    sourceColorRgba[0] = Math.round((255 - targetColorRgba[0]) * (sourceColorRgba[0] / 255) + targetColorRgba[0]);
+    sourceColorRgba[1] = Math.round((255 - targetColorRgba[1]) * (sourceColorRgba[1] / 255) + targetColorRgba[1]);
+    sourceColorRgba[2] = Math.round((255 - targetColorRgba[2]) * (sourceColorRgba[2] / 255) + targetColorRgba[2]);
     sourceColorRgba[3] = Math.round(sourceColorRgba[3] / 1 * targetColorRgba[3] * 100) / 100;
 
     let newColor = 'rgba(' + sourceColorRgba.join(',') + ')';
