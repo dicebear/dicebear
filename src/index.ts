@@ -8,15 +8,6 @@ import * as Sprite from './model/sprite';
 
 import Random from './helper/random';
 
-interface SvgAttributes {
-  xmlns: string;
-  'xmlns:xlink': string;
-  viewBox: string;
-  version: number;
-  width?: number;
-  height?: number;
-}
-
 export default class Avatars {
   public static model = {
     avatar: Avatar,
@@ -39,7 +30,9 @@ export default class Avatars {
    * @param seed
    */
   public create(seed: string, width: number = null, height: number = null) {
-    return new AvatarModel('<svg ' + this.getSvgAttributes() + '>' + this.getSvgPaths(new Random(seed)) + '</svg>');
+    return new AvatarModel(
+      '<svg ' + this.getSvgAttributes(width, height) + '>' + this.getSvgPaths(new Random(seed)) + '</svg>'
+    );
   }
 
   /**
@@ -49,15 +42,11 @@ export default class Avatars {
    * @param height
    */
   protected getSvgAttributes(width: number = null, height: number = null) {
-    let originalWidth = this.spriteCollection.width;
-    let originalHeight = this.spriteCollection.height;
-
-    let attributes: SvgAttributes = {
-      xmlns: 'http://www.w3.org/2000/svg',
-      'xmlns:xlink': 'http://www.w3.org/1999/xlink',
-      viewBox: '0 0 ' + originalWidth + ' ' + originalHeight,
-      version: 1.1
-    };
+    let attributes = { ...{}, ...this.spriteCollection.options.svg } as { [key: string]: any };
+    let [x, y, originalHeight, originalWidth] = attributes.viewbox
+      .replace(/[^\d,]/g, '')
+      .split(',')
+      .map((val: string) => parseInt(val));
 
     if (width || height) {
       attributes['width'] = width || originalHeight / originalWidth * width;
@@ -65,7 +54,7 @@ export default class Avatars {
     }
 
     return Object.keys(attributes)
-      .map((key: keyof SvgAttributes) => {
+      .map(key => {
         return key + '="' + attributes[key] + '"';
       })
       .join('');
@@ -77,9 +66,6 @@ export default class Avatars {
    * @param random
    */
   protected getSvgPaths(random: Random) {
-    return this.spriteCollection
-      .get()
-      .map(sprite => sprite.get(random))
-      .join('');
+    return this.spriteCollection.get(random).join('');
   }
 }

@@ -2,31 +2,48 @@ import { SpriteInterface } from '../sprite';
 import Random from '../../helper/random';
 
 export interface CollectionInterface {
-  get(random: Random): SpriteInterface[];
+  get(random: Random): string[];
+}
+
+export interface CollectionOptions {
+  svg?: { [key: string]: any };
 }
 
 export default class Collection implements CollectionInterface {
-  public width: number;
-  public height: number;
+  public options: CollectionOptions;
 
-  private sprites: SpriteInterface[];
+  private sprites: SpriteInterface[] = [];
+  private pickedSprites: { [key: string]: string[] } = {};
 
   /**
    * @param sprites
    */
-  constructor(sprites: SpriteInterface[], width: number, height: number = width) {
+  constructor(sprites: SpriteInterface[], size: number, options: CollectionOptions = {}) {
     this.sprites = sprites;
-    this.width = width;
-    this.height = height;
+
+    let defaultOptions = {
+      svg: {
+        xmlns: 'http://www.w3.org/2000/svg',
+        'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+        viewbox: [0, 0, size, size].join(','),
+        version: 1.1,
+        'shape-rendering': 'crispEdges'
+      }
+    };
+
+    // Typeescript does not offer a Polyfill for `Object.assign`, but for Object spread syntax.
+    this.options = {};
+    this.options.svg = { ...defaultOptions.svg, ...(options.svg || {}) };
   }
 
   /**
-   * Returns generated sprite spaths
+   * Returns sprite set
    *
    * @param random
    */
-  get(): SpriteInterface[] {
-    return this.sprites;
+  get(random: Random): string[] {
+    return (this.pickedSprites[random.seed] =
+      this.pickedSprites[random.seed] || this.sprites.map(sprite => sprite.get(random)));
   }
 }
 

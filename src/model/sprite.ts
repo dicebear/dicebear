@@ -50,7 +50,7 @@ export default class Sprite implements SpriteInterface {
    * @param sourceColor
    * @param targetColor
    */
-  calculateColor(sourceColor: string, targetColor: ColorInterface) {
+  private calculateColor(sourceColor: string, targetColor: ColorInterface) {
     let sourceColorRgba = new Color(sourceColor).rgba;
     let targetColorRgba = targetColor.rgba;
 
