@@ -49,5 +49,3 @@ export default class Darker implements CollectionInterface {
     return this.pickedColors[random.seed];
   }
 }
-
-module.exports = Darker;

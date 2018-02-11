@@ -2,9 +2,9 @@ import SpriteCollection from './model/sprite/collection';
 
 import AvatarModel from './model/avatar';
 
-import * as Avatar from './model/avatar';
-import * as Color from './model/color';
-import * as Sprite from './model/sprite';
+import Avatar from './model/avatar';
+import Color from './model/color';
+import Sprite from './model/sprite';
 
 import Random from './helper/random';
 

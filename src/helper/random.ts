@@ -1,4 +1,4 @@
-import seedrandom = require('seedrandom/seedrandom');
+import * as seedrandom from 'seedrandom/seedrandom';
 
 export default class Random {
   private prng: seedrandom.prng;
@@ -22,5 +22,3 @@ export default class Random {
     return arr[this.integer(0, arr.length - 1)];
   }
 }
-
-module.exports = Random;

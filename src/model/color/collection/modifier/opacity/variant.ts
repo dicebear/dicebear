@@ -32,5 +32,3 @@ export default class Variant implements CollectionInterface {
     return this.pickedColors[random.seed];
   }
 }
-
-module.exports = Variant;

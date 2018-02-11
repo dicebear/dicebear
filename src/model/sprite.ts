@@ -2,7 +2,7 @@ import { CollectionInterface as ColorCollectionInterface } from './color/collect
 import Color, { ColorInterface } from './color';
 import Random from '../helper/random';
 
-import * as SpriteCollection from './sprite/collection';
+import SpriteCollection from './sprite/collection';
 
 export interface SpriteInterface {
   get(random: Random): string;
@@ -20,7 +20,7 @@ export default class Sprite implements SpriteInterface {
    * @param colorCollection
    * @param chance
    */
-  constructor(groups: string[], colorCollection: ColorCollectionInterface, chance: number = 100) {
+  constructor(groups: string[], colorCollection: ColorCollectionInterface = null, chance: number = 100) {
     this.groups = groups;
     this.colorCollection = colorCollection;
     this.chance = chance;
@@ -32,16 +32,21 @@ export default class Sprite implements SpriteInterface {
    * @param random
    */
   get(random: Random): string {
-    if (random.bool(this.chance)) {
-      let group = random.pickone(this.groups);
-      let color = this.colorCollection.get(random);
+    let result = '';
 
-      return group.replace(/(stroke|fill)=["'](.*?)["']/gi, (match, name, value) => {
-        return name + '="' + this.calculateColor(value, color) + '"';
-      });
+    if (random.bool(this.chance)) {
+      result = random.pickone(this.groups);
+
+      if (this.colorCollection) {
+        let color = this.colorCollection.get(random);
+
+        result = result.replace(/(stroke|fill)=["'](.*?)["']/gi, (match, name, value) => {
+          return name + '="' + this.calculateColor(value, color) + '"';
+        });
+      }
     }
 
-    return '';
+    return result;
   }
 
   /**
@@ -64,5 +69,3 @@ export default class Sprite implements SpriteInterface {
     return sourceColorRgba[3] != 1 ? newColor : new Color(newColor).hex;
   }
 }
-
-module.exports = Sprite;

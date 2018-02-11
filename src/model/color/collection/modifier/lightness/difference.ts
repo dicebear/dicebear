@@ -54,5 +54,3 @@ export default class Difference implements CollectionInterface {
     }
   }
 }
-
-module.exports = Difference;

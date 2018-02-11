@@ -46,5 +46,3 @@ export default class Collection implements CollectionInterface {
       this.pickedSprites[random.seed] || this.sprites.map(sprite => sprite.get(random)));
   }
 }
-
-module.exports = Collection;

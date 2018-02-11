@@ -1,9 +1,9 @@
-import hexToRgb = require('pure-color/parse/hex');
-import rgbToHsv = require('pure-color/convert/rgb2hsv');
-import rgbToHex = require('pure-color/convert/rgb2hex');
-import hsvToRgb = require('pure-color/convert/hsv2rgb');
+import * as hexToRgb from 'pure-color/parse/hex';
+import * as rgbToHsv from 'pure-color/convert/rgb2hsv';
+import * as rgbToHex from 'pure-color/convert/rgb2hex';
+import * as hsvToRgb from 'pure-color/convert/hsv2rgb';
 
-import * as ColorCollection from './color/collection';
+import ColorCollection from './color/collection';
 
 export interface ColorInterface {
   alpha: number;
@@ -128,5 +128,3 @@ export default class Color implements ColorInterface {
     return hsvToRgb(hsv).map(val => Math.round(val));
   }
 }
-
-module.exports = Color;

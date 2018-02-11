@@ -1,4 +1,4 @@
-import * as Modifier from './collection/modifier';
+import Modifier from './collection/modifier';
 
 import { ColorInterface } from '../color';
 import Random from '../../helper/random';
@@ -29,5 +29,3 @@ export default class Collection implements CollectionInterface {
     return (this.pickedColors[random.seed] = this.pickedColors[random.seed] || random.pickone(this.colors));
   }
 }
-
-module.exports = Collection;

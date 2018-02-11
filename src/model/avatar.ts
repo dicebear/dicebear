@@ -13,5 +13,3 @@ export default class Avatar {
     this.svg = svg;
   }
 }
-
-module.exports = Avatar;

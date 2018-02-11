@@ -6,9 +6,7 @@
     "declaration": true,
     "lib": ["es6", "dom"],
     "noImplicitAny": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "sourceMap": true
   },
   "include": ["./src/**/*", "./typings/**/*"]
 }

@@ -49,5 +49,3 @@ export default class Brighter implements CollectionInterface {
     return this.pickedColors[random.seed];
   }
 }
-
-module.exports = Brighter;
