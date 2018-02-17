@@ -42,7 +42,7 @@ export default class Avatars {
    * @param height
    */
   protected getSvgAttributes(width: number = null, height: number = null) {
-    let attributes = { ...{}, ...this.spriteCollection.options.svg } as { [key: string]: any };
+    let attributes = { ...{}, ...(this.spriteCollection.options.svg || {}) } as { [key: string]: any };
     let [x, y, originalHeight, originalWidth] = attributes.viewbox
       .replace(/[^\d,]/g, '')
       .split(',')
