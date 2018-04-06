@@ -1,8 +1,5 @@
 import SpriteCollection from './model/sprite/collection';
 
-import AvatarModel from './model/avatar';
-
-import Avatar from './model/avatar';
 import Color from './model/color';
 import Sprite from './model/sprite';
 
@@ -10,7 +7,6 @@ import Random from './helper/random';
 
 export default class Avatars {
   public static model = {
-    avatar: Avatar,
     color: Color,
     sprite: Sprite
   };
@@ -29,29 +25,19 @@ export default class Avatars {
    *
    * @param seed
    */
-  public create(seed: string, width: number = null, height: number = null) {
-    return new AvatarModel(
-      '<svg ' + this.getSvgAttributes(width, height) + '>' + this.getSvgPaths(new Random(seed)) + '</svg>'
-    );
+  public create(seed: string) {
+    return '<svg ' + this.getSvgAttributes() + '>' + this.getSvgPaths(new Random(seed)) + '</svg>';
   }
 
   /**
    * Get SVG attributes
-   *
-   * @param width
-   * @param height
    */
-  protected getSvgAttributes(width: number = null, height: number = null) {
+  protected getSvgAttributes() {
     let attributes = { ...{}, ...(this.spriteCollection.options.svg || {}) } as { [key: string]: any };
-    let [x, y, originalHeight, originalWidth] = attributes.viewbox
+    let [x, y] = attributes.viewbox
       .replace(/[^\d,]/g, '')
       .split(',')
       .map((val: string) => parseInt(val));
-
-    if (width || height) {
-      attributes['width'] = width || originalHeight / originalWidth * width;
-      attributes['height'] = height || originalWidth / originalHeight * height;
-    }
 
     return Object.keys(attributes)
       .map(key => {
