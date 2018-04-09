@@ -25,7 +25,7 @@ export default class Collection implements CollectionInterface {
       svg: {
         xmlns: 'http://www.w3.org/2000/svg',
         'xmlns:xlink': 'http://www.w3.org/1999/xlink',
-        viewbox: [0, 0, size, size].join(','),
+        viewBox: [0, 0, size, size].join(' '),
         version: 1.1,
         'shape-rendering': 'crispEdges'
       }
