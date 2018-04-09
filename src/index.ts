@@ -34,7 +34,7 @@ export default class Avatars {
    */
   protected getSvgAttributes() {
     let attributes = { ...{}, ...(this.spriteCollection.options.svg || {}) } as { [key: string]: any };
-    let [x, y] = attributes.viewbox
+    let [x, y] = attributes.viewBox
       .replace(/[^\d,]/g, '')
       .split(',')
       .map((val: string) => parseInt(val));
