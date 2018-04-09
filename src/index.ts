@@ -43,7 +43,7 @@ export default class Avatars {
       .map(key => {
         return key + '="' + attributes[key] + '"';
       })
-      .join('');
+      .join(' ');
   }
 
   /**
