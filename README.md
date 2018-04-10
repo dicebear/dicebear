@@ -5,7 +5,7 @@
 ![Bower](https://img.shields.io/bower/v/dicebear-avatars.svg)
 
 Avatars is a free pixel-art avatar placeholder library with HTTP-API.  
-Test in your Browser: <https://avatars.dicebear.com/>
+Test in your Browser: [avatars.dicebear.com](https://avatars.dicebear.com)
 
 <p>
     <img src="https://avatars.dicebear.com/v2/male/1.svg" width="60" />
@@ -21,7 +21,7 @@ Test in your Browser: <https://avatars.dicebear.com/>
 
 ## Usage
 
-### HTTP-API 🚀
+### HTTP-API (recommended)
 
 Our free HTTP-API is the easiest way to use Avatars. Just use the following URL as image source.
 
