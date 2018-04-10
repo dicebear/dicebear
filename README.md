@@ -7,19 +7,21 @@
 Avatars is a free pixel-art avatar placeholder library with HTTP-API.  
 Test in your Browser: <https://avatars.dicebear.com/>
 
-<img src="https://avatars.dicebear.com/v2/male/1.svg" width="60" />
-<img src="https://avatars.dicebear.com/v2/femalemale/2.svg" width="60" />
-<img src="https://avatars.dicebear.com/v2/identicon/3.svg" width="60" />
-<img src="https://avatars.dicebear.com/v2/male/4.svg" width="60" />
-<img src="https://avatars.dicebear.com/v2/femalemale/5.svg" width="60" />
-<img src="https://avatars.dicebear.com/v2/identicon/6.svg" width="60" />
-<img src="https://avatars.dicebear.com/v2/male/7.svg" width="60" />
-<img src="https://avatars.dicebear.com/v2/femalemale/8.svg" width="60" />
-<img src="https://avatars.dicebear.com/v2/identicon/9.svg" width="60" />
+<p>
+    <img src="https://avatars.dicebear.com/v2/male/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/femalemale/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/femalemale/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/femalemale/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/9.svg" width="60" />
+</p>
 
 ## Usage
 
-### HTTP-API
+### HTTP-API 🚀
 
 Our free HTTP-API is the easiest way to use Avatars. Just use the following URL as image source.
 
