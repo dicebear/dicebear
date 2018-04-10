@@ -4,103 +4,74 @@
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg)](https://www.npmjs.com/package/@dicebear/avatars)
 ![Bower](https://img.shields.io/bower/v/dicebear-avatars.svg)
 
-Pixel-Art Avatar and Identicon Generator by Identifier in JavaScript for Browsers and NodeJS.  
+Avatars is a free pixel-art avatar placeholder library with HTTP-API.  
 Test in your Browser: <https://avatars.dicebear.com/>
 
-![](http://avatars.dicebear.com/v1/female/1/60.png)
-![](http://avatars.dicebear.com/v1/male/2/60.png)
-![](http://avatars.dicebear.com/v1/female/3/60.png)
-![](http://avatars.dicebear.com/v1/male/4/60.png)
-![](http://avatars.dicebear.com/v1/female/5/60.png)
-![](http://avatars.dicebear.com/v1/male/6/60.png)
-![](http://avatars.dicebear.com/v1/female/7/60.png)
-![](http://avatars.dicebear.com/v1/male/8/60.png)
+<img src="https://avatars.dicebear.com/v2/male/1.svg" width="60" />
+<img src="https://avatars.dicebear.com/v2/femalemale/2.svg" width="60" />
+<img src="https://avatars.dicebear.com/v2/identicon/3.svg" width="60" />
+<img src="https://avatars.dicebear.com/v2/male/4.svg" width="60" />
+<img src="https://avatars.dicebear.com/v2/femalemale/5.svg" width="60" />
+<img src="https://avatars.dicebear.com/v2/identicon/6.svg" width="60" />
+<img src="https://avatars.dicebear.com/v2/male/7.svg" width="60" />
+<img src="https://avatars.dicebear.com/v2/femalemale/8.svg" width="60" />
+<img src="https://avatars.dicebear.com/v2/identicon/9.svg" width="60" />
 
-:exclamation: **Master build!** See https://github.com/DiceBear/avatars/tree/1.0.1 for the last stable version.
+## Usage
 
-## Use the HTTP-API
+### HTTP-API
 
-```
-GET https://avatars.dicebear.com/v1/:spriteSet/:seed/:size.png
-```
+Our free HTTP-API is the easiest way to use Avatars. Just use the following URL as image source.
 
-```
-:spriteSet => male|female|identicon
-:seed => string|number
-:size => 20 - 200 (px)
-```
+    https://avatars.dicebear.com/api/v2/:sprites/:seed.svg
 
-### Examples
+Replace `:sprites` with `male`, `female` or `identicon`. The value of `seed` can be anything you like.
 
-| Image                                                       | URL                                                      |
-| ----------------------------------------------------------- | -------------------------------------------------------- |
-| ![](http://avatars.dicebear.com/v1/male/john-doe/100.png)   | <http://avatars.dicebear.com/v1/male/john-doe/100.png>   |
-| ![](http://avatars.dicebear.com/v1/male/john-doe/60.png)    | <http://avatars.dicebear.com/v1/male/john-doe/60.png>    |
-| ![](http://avatars.dicebear.com/v1/female/jane-doe/100.png) | <http://avatars.dicebear.com/v1/female/jane-doe/100.png> |
-| ![](http://avatars.dicebear.com/v1/female/jane-doe/60.png)  | <http://avatars.dicebear.com/v1/female/jane-doe/60.png>  |
-| ![](http://avatars.dicebear.com/v1/identicon/doe/100.png)   | <http://avatars.dicebear.com/v1/identicon/doe/100.png>   |
-| ![](http://avatars.dicebear.com/v1/identicon/doe/60.png)    | <http://avatars.dicebear.com/v1/identicon/doe/60.png>    |
+### CDN
 
-### Host your own API-Server
+Choose the CDN if you want to use a spriteCollection that is not available via the HTTP-API.
 
-[Check out our OpenSource API-Server](https://github.com/DiceBear/avatars-server)
+Add the following line to the end of the document body.
 
-## Use the library
+    <script type="text/javascript" src="https://unpkg.com/@dicebear/avatars@2.0.0/dist/avatars.min.js"></script>
 
-### Installation
+You also need to add a sprite collection. In our example, we will use the male sprite collection.
 
-#### Using npm
+    <script type="text/javascript" src="https://unpkg.com/@dicebear/avatars-male-sprites@1.0.0/dist/sprites.min.js"></script>
 
-```
-npm install @dicebear/avatars
-```
+Now you are ready to create your first Avatar.
 
-#### Using yarn
+    var avatars = new Avatars(Avatars.sprites.male);
+    var svg = avatars.create('custom-seed');
 
-```
-yarn add @dicebear/avatars
-```
+### NPM
 
-#### Use a CDN
+Choose NPM if you want to use Avatars server-side or with webpack.
 
-```
-<script type="text/javascript" src="//rawgit.com/DiceBear/avatars/2.0.0/dist/avatars.min.js"></script>
-```
+Install the Avatars package with the following command.
 
-#### Download archive
+    npm install --save @dicebear/avatars
 
-* [Master build](https://github.com/DiceBear/avatars/archive/master.zip)
+You also need to add a sprite collection. In our example, we will use the male sprite collection.
 
-### Create an avatar
+    npm install --save @dicebear/avatars-male-sprites
 
-```js
-var avatars = new Avatars(Avatars.SPRITE_SETS.male); // male, female, identicon
+Now you are ready to create your first Avatar.
 
-avatars.create('custom-seed').then(function(avatar) {
-  // Resize avatar and get as png data url
-  let dataUrl = avatar.getPNG({
-    size: 200
-  });
+    const Avatars = require('@dicebear/avatars').default;
+    const IdenticonSprites = require('@dicebear/avatars-male-sprites').default;
 
-  // Get as jpeg data url with white background
-  let dataUrl = avatar.getJPEG({
-    background: 200
-  });
-});
-```
+    let avatars = new Avatars(IdenticonSprites);
+    let svg = avatars.create('custom-seed');
 
-### Create your own sprite sets
+Or with ES6-Modules:
 
-#### 1. Step - Create your sprite images
+    import Avatars from '@dicebear/avatars';
+    import IdenticonSprites from '@dicebear/avatars-male-sprites';
 
-See examples: <https://github.com/DiceBear/avatars/tree/master/assets/male>
+    let avatars = new Avatars(IdenticonSprites);
+    let svg = avatars.create('custom-seed');
 
-Sprite parts must be arranged horizontally. The library will detect the dimensions automatically.
+## Further informations
 
-#### 2. Step - Create your sprite set object
-
-See examples: <https://github.com/DiceBear/avatars/tree/master/src/spriteSet>
-
----
-
-_Inspired by [8biticon](https://github.com/matveyco/8biticon)_
+You can find the complete documentation at [avatars.dicebear.com](https://avatars.dicebear.com)

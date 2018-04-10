@@ -1,7 +1,7 @@
-const Brighter = require('../../../../../../lib/model/color/collection/modifier/lightness/brighter');
-const Color = require('../../../../../../lib/model/color');
-const ColorCollection = require('../../../../../../lib/model/color/collection');
-const Random = require('../../../../../../lib/helper/random');
+const Brighter = require('../../../../../../lib/model/color/collection/modifier/lightness/brighter').default;
+const Color = require('../../../../../../lib/model/color').default;
+const ColorCollection = require('../../../../../../lib/model/color/collection').default;
+const Random = require('../../../../../../lib/helper/random').default;
 
 test('Dark colors should become brighter.', () => {
   let random = new Random('');

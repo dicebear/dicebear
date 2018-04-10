@@ -27,8 +27,6 @@ export default class Variant implements CollectionInterface {
     this.pickedColors[random.seed] = new Color('rgb(' + color.rgb.join(',') + ')');
     this.pickedColors[random.seed].alpha = random.pickone(this.variants);
 
-    console.log(this.pickedColors[random.seed].alpha);
-
     return this.pickedColors[random.seed];
   }
 }

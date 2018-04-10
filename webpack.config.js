@@ -34,6 +34,7 @@ module.exports = async () => {
   let banner = licenses.join('\n\n');
 
   let baseConfig = {
+    mode: 'development',
     entry: './lib/index.js',
     devtool: 'sourcemap',
     target: 'web',
@@ -49,11 +50,7 @@ module.exports = async () => {
   };
 
   let minifyConfig = merge({}, baseConfig, {
-    plugins: [
-      new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true
-      })
-    ],
+    mode: 'production',
     output: {
       filename: 'avatars.min.js'
     }
