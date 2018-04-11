@@ -18,7 +18,8 @@
     "webpack-merge": "^4.1.2"
   },
   "scripts": {
-    "test": "build && jest",
+    "pretest": "npm run build",
+    "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -r dist/* lib/* || true",
     "build": "tsc; webpack",
