@@ -24,7 +24,7 @@ Test in your Browser: [avatars.dicebear.com](https://avatars.dicebear.com)
 
 Our free HTTP-API is the easiest way to use Avatars. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/api/v2/:sprites/:seed.svg
+    https://avatars.dicebear.com/v2/:sprites/:seed.svg
 
 Replace `:sprites` with `male`, `female` or `identicon`. The value of `seed` can be anything you like.
 
