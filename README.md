@@ -34,16 +34,22 @@ Choose the CDN if you want to use a spriteCollection that is not available via t
 
 Add the following line to the end of the document body.
 
-    <script type="text/javascript" src="https://unpkg.com/@dicebear/avatars@2.0.0/dist/avatars.min.js"></script>
+```html
+<script type="text/javascript" src="https://unpkg.com/@dicebear/avatars@2.0.0/dist/avatars.min.js"></script>
+```
 
 You also need to add a sprite collection. In our example, we will use the male sprite collection.
 
-    <script type="text/javascript" src="https://unpkg.com/@dicebear/avatars-male-sprites@1.0.0/dist/sprites.min.js"></script>
+```html
+<script type="text/javascript" src="https://unpkg.com/@dicebear/avatars-male-sprites@1.0.0/dist/sprites.min.js"></script>
+```
 
 Now you are ready to create your first Avatar.
 
-    var avatars = new Avatars(Avatars.sprites.male);
-    var svg = avatars.create('custom-seed');
+```js
+var avatars = new Avatars(Avatars.sprites.male);
+var svg = avatars.create('custom-seed');
+```
 
 ### NPM
 
@@ -59,19 +65,23 @@ You also need to add a sprite collection. In our example, we will use the male s
 
 Now you are ready to create your first Avatar.
 
-    const Avatars = require('@dicebear/avatars').default;
-    const SpriteCollection = require('@dicebear/avatars-male-sprites').default;
+```js
+const Avatars = require('@dicebear/avatars').default;
+const SpriteCollection = require('@dicebear/avatars-male-sprites').default;
 
-    let avatars = new Avatars(SpriteCollection);
-    let svg = avatars.create('custom-seed');
+let avatars = new Avatars(SpriteCollection);
+let svg = avatars.create('custom-seed');
+```
 
 Or with ES6-Modules:
 
-    import Avatars from '@dicebear/avatars';
-    import SpriteCollection from '@dicebear/avatars-male-sprites';
+```js
+import Avatars from '@dicebear/avatars';
+import SpriteCollection from '@dicebear/avatars-male-sprites';
 
-    let avatars = new Avatars(SpriteCollection);
-    let svg = avatars.create('custom-seed');
+let avatars = new Avatars(SpriteCollection);
+let svg = avatars.create('custom-seed');
+```
 
 ## Further informations
 
