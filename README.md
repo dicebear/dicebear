@@ -26,7 +26,8 @@ Our free HTTP-API is the easiest way to use Avatars. Just use the following URL 
 
     https://avatars.dicebear.com/v2/:sprites/:seed.svg
 
-Replace `:sprites` with `male`, `female` or `identicon`. The value of `seed` can be anything you like.
+Replace `:sprites` with `male`, `female` or `identicon`. The value of `:seed` can be anything you like - but **don't**
+use any sensitive or personal data here!
 
 ### CDN
 
