@@ -98,7 +98,8 @@ export default class Color implements ColorInterface {
   }
 
   get hsv() {
-    return (this.color.hsv = this.color.hsv || this.rgbToHsv(this.rgb));
+    // Slice array to return copy
+    return (this.color.hsv = this.color.hsv || this.rgbToHsv(this.rgb)).slice(0);
   }
 
   set hex(hex: string) {
@@ -109,7 +110,8 @@ export default class Color implements ColorInterface {
   }
 
   get hex() {
-    return (this.color.hex = this.color.hex || this.rgbToHex(this.rgb));
+    // Slice array to return copy
+    return (this.color.hex = this.color.hex || this.rgbToHex(this.rgb)).slice(0);
   }
 
   private rgbToHex(rgb: number[]) {
