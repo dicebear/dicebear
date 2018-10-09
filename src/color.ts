@@ -3,8 +3,6 @@ import * as rgbToHsv from 'pure-color/convert/rgb2hsv';
 import * as rgbToHex from 'pure-color/convert/rgb2hex';
 import * as hsvToRgb from 'pure-color/convert/hsv2rgb';
 
-import ColorCollection from './color/collection';
-
 export interface ColorInterface {
   alpha: number;
   hex: string;
@@ -14,8 +12,6 @@ export interface ColorInterface {
 }
 
 export default class Color implements ColorInterface {
-  public static collection = ColorCollection;
-
   public alpha: number = 1;
 
   private color: {
@@ -56,6 +52,10 @@ export default class Color implements ColorInterface {
         throw new Error('Unknown color format: ' + color);
       }
     }
+  }
+
+  clone() {
+    return new Color('rgb(' + this.color.rgb.join(',') + ')');
   }
 
   set rgb(rgb: number[]) {
@@ -112,6 +112,55 @@ export default class Color implements ColorInterface {
   get hex() {
     // Slice array to return copy
     return (this.color.hex = this.color.hex || this.rgbToHex(this.rgb)).slice(0);
+  }
+
+  public brighterThan(color: ColorInterface, difference: number) {
+    let primaryColorHsv = this.hsv;
+    let secondaryColorHsv = color.hsv;
+
+    if (primaryColorHsv[2] >= secondaryColorHsv[2] + difference) {
+      return this;
+    }
+
+    primaryColorHsv[2] = secondaryColorHsv[2] + difference;
+
+    if (primaryColorHsv[2] > 360) {
+      primaryColorHsv[2] = 360;
+    }
+
+    this.hsv = primaryColorHsv;
+
+    return this;
+  }
+
+  public darkerThan(color: ColorInterface, difference: number) {
+    let primaryColorHsv = this.hsv;
+    let secondaryColorHsv = color.hsv;
+
+    if (primaryColorHsv[2] <= secondaryColorHsv[2] - difference) {
+      return this;
+    }
+
+    primaryColorHsv[2] = secondaryColorHsv[2] - difference;
+
+    if (primaryColorHsv[2] < 0) {
+      primaryColorHsv[2] = 0;
+    }
+
+    this.hsv = primaryColorHsv;
+
+    return this;
+  }
+
+  public brighterOrDarkerThan(color: ColorInterface, difference: number) {
+    let primaryColorHsv = this.hsv;
+    let secondaryColorHsv = color.hsv;
+
+    if (primaryColorHsv[2] <= secondaryColorHsv[2]) {
+      return this.darkerThan(color, difference);
+    } else {
+      return this.brighterThan(color, difference);
+    }
   }
 
   private rgbToHex(rgb: number[]) {
