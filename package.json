@@ -9,10 +9,10 @@
     "seedrandom": "^2.4.3"
   },
   "devDependencies": {
-    "@types/node": "^10.5.2",
+    "@types/node": "^10.11.6",
     "jest": "^23.4.1",
-    "license-checker": "^20.1.0",
-    "typescript": "^2.9.2",
+    "license-checker": "^24.0.0",
+    "typescript": "^3.1.2",
     "webpack": "^4.16.1",
     "webpack-cli": "^3.1.0",
     "webpack-merge": "^4.1.3"
