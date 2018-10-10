@@ -4,8 +4,8 @@ import Color from './color';
 type SpriteCollection = (random: Random) => string;
 
 export default class Avatars {
-  public static Random = Random;
-  public static Color = Color;
+  public static random = Random;
+  public static color = Color;
 
   protected spriteCollection: SpriteCollection;
 
