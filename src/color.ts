@@ -55,7 +55,7 @@ export default class Color implements ColorInterface {
   }
 
   clone() {
-    return new Color('rgb(' + this.color.rgb.join(',') + ')');
+    return new Color('rgb(' + this.rgb.join(',') + ')');
   }
 
   set rgb(rgb: number[]) {
