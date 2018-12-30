@@ -1,7 +1,7 @@
 import Random from './random';
 import Color from './color';
 
-type SpriteCollection = (random: Random) => string;
+export type SpriteCollection = (random: Random) => string;
 
 export default class Avatars {
   public static random = Random;
