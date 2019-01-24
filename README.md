@@ -5,28 +5,25 @@ And best of all: We provide a simple and free HTTP API that you can use right aw
 
 https://avatars.dicebear.com
 
-
 ## Packages
 
 The Avatars repo is managed as a monorepo that is composed of many npm packages.
 
 ### Core Packages
 
-| Package | Version |
-|---|---|
+| Package                                | Version                                                                                                       |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | [@dicebear/avatars](/packages/avatars) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg)](https://www.npmjs.com/package/@dicebear/avatars) |
-
 
 ### Official Sprite Collections
 
-| Package | Version |
-|---|---|
-| [@dicebear/avatars-sprites-identicons](./packages/avatars-sprites-identicons) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-identicons-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-identicons-sprites) |
-| [@dicebear/avatars-sprites-avataaars](./packages/avatars-sprites-avataaars) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-avataaars-sprites) |
-| [@dicebear/avatars-sprites-male](./packages/avatars-sprites-male) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-male-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-male-sprites) |
-| [@dicebear/avatars-sprites-female](./packages/avatars-sprites-female) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites) |
-| [@dicebear/avatars-sprites-gridy](./packages/avatars-sprites-gridy) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites) |
-
+| Package                                                                     | Version                                                                                                                                           |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [@dicebear/avatars-identicon-sprites](./packages/avatars-identicon-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-identicon-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites) |
+| [@dicebear/avatars-avataaars-sprites](./packages/avatars-avataaars-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-avataaars-sprites) |
+| [@dicebear/avatars-male-sprites](./packages/avatars-male-sprites)           | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-male-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-male-sprites)           |
+| [@dicebear/avatars-female-sprites](./packages/avatars-female-sprites)       | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites)       |
+| [@dicebear/avatars-gridy-sprites](./packages/avatars-gridy-sprites)         | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites)         |
 
 ## API Server
 
