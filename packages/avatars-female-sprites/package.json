@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-female-sprites",
-  "version": "2.0.0-5",
+  "version": "2.0.0-alpha.5",
   "description": "Pixel art female sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
