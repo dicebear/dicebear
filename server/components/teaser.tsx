@@ -29,8 +29,8 @@ export default class Teaser extends React.Component<Props> {
                   <div>
                     <img src="/static/img/logo.svg" alt="DiceBear Avatars" className="logo mb-5" />
                     <p className="text-white lead">
-                      Avatars lets you create avatar placeholders. You can choose between simple identicons and lovely
-                      designed characters.
+                      Avatars allows you to create placeholder avatars. You can choose between simple identicons and
+                      lovely designed characters.
                     </p>
                     <p className="text-white lead mb-5">
                       And best of all: We provide a simple and free HTTP API that you can use right away!
