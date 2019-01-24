@@ -1,0 +1,42 @@
+{
+  "name": "@dicebear/avatars-male-sprites",
+  "version": "2.0.0-5",
+  "description": "Pixel art male sprite collection for DiceBear Avatars",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "prebuild": "rm -rf lib/ || true",
+    "build": "tsc",
+    "test": "echo 'No tests available'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiceBear/avatars-male-sprites.git"
+  },
+  "keywords": [
+    "dicebear",
+    "avatar",
+    "male",
+    "svg",
+    "sprites",
+    "pixel-art"
+  ],
+  "author": "DiceBear <opensource@dicebear.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DiceBear/avatars-male-sprites/issues"
+  },
+  "homepage": "https://github.com/DiceBear/avatars-male-sprites#readme",
+  "peerDependencies": {
+    "@dicebear/avatars": "^3.0.0-0"
+  },
+  "devDependencies": {
+    "@dicebear/avatars": "^3.0.0-0",
+    "typescript": "^3.1.3"
+  },
+  "files": [
+    "LICENSE",
+    "lib"
+  ]
+}

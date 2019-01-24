@@ -1,0 +1,49 @@
+{
+  "name": "@dicebear/avatars-avataaars-sprites",
+  "version": "1.0.0-4",
+  "description": "avataaars sprite collection for DiceBear Avatars",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "prebuild": "rm -rf lib/ || true",
+    "build": "tsc",
+    "test": "echo 'No tests available'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiceBear/avatars-avataaars-sprites.git"
+  },
+  "keywords": [
+    "dicebear",
+    "avatar",
+    "avataaars",
+    "svg",
+    "sprites"
+  ],
+  "author": "DiceBear <opensource@dicebear.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DiceBear/avatars-avataaars-sprites/issues"
+  },
+  "homepage": "https://github.com/DiceBear/avatars-avataaars-sprites#readme",
+  "peerDependencies": {
+    "@dicebear/avatars": "^3.0.0-0",
+    "avataaars": "^1.2.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "devDependencies": {
+    "@dicebear/avatars": "^3.0.0-0",
+    "@types/react": "^16.4.18",
+    "@types/react-dom": "^16.0.9",
+    "avataaars": "https://github.com/DiceBear/avataaars.git",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "typescript": "^3.1.3"
+  },
+  "files": [
+    "LICENSE",
+    "lib"
+  ]
+}

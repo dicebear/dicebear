@@ -1,0 +1,17 @@
+.teaser {
+  background-image: linear-gradient(to right, #22a7f0 0%, #22a7f0 50%, #19b5fe 50%, #19b5fe 100%);
+
+  .text-white,
+  .text-white a {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .lead {
+    font-size: 1.4rem;
+    line-height: 1.3em;
+  }
+
+  a:not(.btn):hover {
+    text-decoration: none;
+  }
+}
