@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DiceBear/avatars-avataaars-sprites.git"
+    "url": "git+https://github.com/DiceBear/avatars.git"
   },
   "keywords": [
     "dicebear",
@@ -24,9 +24,9 @@
   "author": "DiceBear <opensource@dicebear.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DiceBear/avatars-avataaars-sprites/issues"
+    "url": "https://github.com/DiceBear/avatars/issues"
   },
-  "homepage": "https://github.com/DiceBear/avatars-avataaars-sprites#readme",
+  "homepage": "https://github.com/DiceBear/avatars/packages/avatars-avataaars-sprites#readme",
   "peerDependencies": {
     "@dicebear/avatars": "^3.0.0-0",
     "avataaars": "^1.2.0",
