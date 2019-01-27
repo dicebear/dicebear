@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { stringify } from 'qs';
 
-import { GoChevronDown, GoChevronUp, GoGear, GoLinkExternal, GoClippy } from 'react-icons/go';
+import { GoGear, GoLinkExternal } from 'react-icons/go';
 import { Meta, MetaSpriteCollection } from '../../types/meta';
 import { Collapse, InputGroupButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
@@ -85,12 +85,14 @@ export default class Generator extends React.Component<Props, State> {
     });
   }
 
-  onToggleShowAdvancedOptions() {
+  onToggleShowAdvancedOptions(e: React.MouseEvent) {
     this.setState(prevState => {
       return {
         showAdvancedOptions: !prevState.showAdvancedOptions
       };
     });
+
+    e.preventDefault();
   }
 
   onChangeAdvancedOptions(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
@@ -169,7 +171,7 @@ export default class Generator extends React.Component<Props, State> {
     let avatar = this.getAvatarUrl();
 
     return (
-      <div className="min-vh-100 d-flex align-items-center">
+      <div className="min-vh-lg-100 d-flex align-items-center">
         <div className="w-100">
           <div className={`generator ${this.state.showAdvancedOptions ? 'position-sticky' : ''}`}>
             <div className="generator-body">
