@@ -1,4 +1,4 @@
-# Avataaars sprite collection for DiceBear Avatars
+![DiceBear Avatars - Avataaars Sprite Collection](./banner.svg)
 
 ![license](https://img.shields.io/github/license/dicebear/avatars-avataaars-sprites.svg)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-avataaars-sprites)

@@ -1,4 +1,4 @@
-# Gridy sprite collection for DiceBear Avatars
+![DiceBear Avatars - Gridy Sprite Collection](./banner.svg)
 
 ![license](https://img.shields.io/github/license/dicebear/avatars-gridy-sprites.svg)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites)
