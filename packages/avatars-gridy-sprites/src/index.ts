@@ -1,5 +1,5 @@
 // @ts-ignore
-import gridy = require('gridy-avatars');
+import { inner } from 'gridy-avatars';
 import Random from '@dicebear/avatars/lib/random';
 
 type Options = {
@@ -19,7 +19,7 @@ export default function(options: Options = {}) {
 
     return [
       '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 24 24" version="1.1" shape-rendering="crispEdges">',
-      gridy(`${body}${bodyColor}${eyes}${eyesColor}${mouth}${mouthColor}`),
+      inner(`${body}${bodyColor}${eyes}${eyesColor}${mouth}${mouthColor}`),
       '</svg>'
     ].join('');
   };
