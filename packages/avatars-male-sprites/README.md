@@ -4,15 +4,15 @@
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-male-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-male-sprites)
 
 <p>
-    <img src="https://avatars.dicebear.com/v3/male/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/9.svg" width="60" />
 </p>
 
 ## Usage
@@ -21,7 +21,7 @@
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v3/male/:seed.svg
+    https://avatars.dicebear.com/v2/male/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `option` can be used to pass [options](#options).
@@ -30,9 +30,9 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                          | url                                                                     |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v3/male/example.svg" width="60" />                        | https://avatars.dicebear.com/v3/male/example.svg                        |
-| <img src="https://avatars.dicebear.com/v3/male/example.svg?option['mood'][]=happy" width="60" /> | https://avatars.dicebear.com/v3/male/example.svg?option['mood'][]=happy |
-| <img src="https://avatars.dicebear.com/v3/male/example.svg?option['mood'][]=sad" width="60" />   | https://avatars.dicebear.com/v3/male/example.svg?option['mood'][]=sad   |
+| <img src="https://avatars.dicebear.com/v2/male/example.svg" width="60" />                        | https://avatars.dicebear.com/v2/male/example.svg                        |
+| <img src="https://avatars.dicebear.com/v2/male/example.svg?option['mood'][]=happy" width="60" /> | https://avatars.dicebear.com/v2/male/example.svg?option['mood'][]=happy |
+| <img src="https://avatars.dicebear.com/v2/male/example.svg?option['mood'][]=sad" width="60" />   | https://avatars.dicebear.com/v2/male/example.svg?option['mood'][]=sad   |
 
 ### NPM
 

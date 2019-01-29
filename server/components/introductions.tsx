@@ -72,7 +72,7 @@ export default class Introductions extends React.Component<Props> {
               <div className="rounded bg-light p-3">
                 <p>Our free HTTP-API is the easiest way to use Avatars. Just use the following URL as image source.</p>
                 <SyntaxHighlighter className="bg-white border rounded" style={prism}>
-                  {'https://avatars.dicebear.com/v3/:sprites/:seed.svg'}
+                  {'https://avatars.dicebear.com/v2/:sprites/:seed.svg'}
                 </SyntaxHighlighter>
                 <p>{this.getHttpApiDescription()}</p>
                 <hr />
@@ -83,7 +83,7 @@ export default class Introductions extends React.Component<Props> {
                   URL can be used:
                 </p>
                 <SyntaxHighlighter className="bg-white border rounded" style={prism}>
-                  {`https://avatars.dicebear.com/v3/${
+                  {`https://avatars.dicebear.com/v2/${
                     this.props.meta.spriteCollections[0].id
                   }/john.svg?options[mood][]=happy`}
                 </SyntaxHighlighter>

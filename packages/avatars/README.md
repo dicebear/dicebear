@@ -7,15 +7,15 @@ Avatars is a free pixel-art avatar placeholder library with HTTP-API.
 Test in your Browser: [avatars.dicebear.com](https://avatars.dicebear.com)
 
 <p>
-    <img src="https://avatars.dicebear.com/v3/male/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/female/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/female/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/male/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/female/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/female/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/female/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/female/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/9.svg" width="60" />
 </p>
 
 ## Usage
@@ -24,7 +24,7 @@ Test in your Browser: [avatars.dicebear.com](https://avatars.dicebear.com)
 
 Our free HTTP-API is the easiest way to use Avatars. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v3/:sprites/:seed.svg
+    https://avatars.dicebear.com/v2/:sprites/:seed.svg
 
 Replace `:sprites` with `male`, `female`, `identicon`, `gridy` or `avataaars`. The value of `:seed` can be anything you
 like - but **don't** use any sensitive or personal data here!
@@ -32,7 +32,7 @@ like - but **don't** use any sensitive or personal data here!
 The used sprite collection may offer additional options, which can be set using the GET parameter named `options`.
 For example, to create a happy _male_ avatar with the seed `john`, the following URL can be used:
 
-    https://avatars.dicebear.com/v3/male/john.svg?options[mood]=happy
+    https://avatars.dicebear.com/v2/male/john.svg?options[mood]=happy
 
 ### CDN
 
@@ -47,7 +47,10 @@ Add the following line to the end of the document body.
 You also need to add a sprite collection. In our example, we will use the male sprite collection.
 
 ```html
-<script type="text/javascript" src="https://unpkg.com/@dicebear/avatars-male-sprites@1.0.0/dist/sprites.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://unpkg.com/@dicebear/avatars-male-sprites@1.0.0/dist/sprites.min.js"
+></script>
 ```
 
 Now you are ready to create your first Avatar.

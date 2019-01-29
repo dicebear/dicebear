@@ -7,15 +7,15 @@ Designed by [Pablo Stanley](https://twitter.com/pablostanley), the Sketch librar
 [avataaars.com](https://avataaars.com/).
 
 <p>
-    <img src="https://avatars.dicebear.com/v3/avataaars/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/avataaars/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/avataaars/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/avataaars/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/avataaars/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/avataaars/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/avataaars/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/avataaars/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/avataaars/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/9.svg" width="60" />
 </p>
 
 ## Usage
@@ -24,7 +24,7 @@ Designed by [Pablo Stanley](https://twitter.com/pablostanley), the Sketch librar
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v3/avataaars/:seed.svg
+    https://avatars.dicebear.com/v2/avataaars/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `option` can be used to pass [options](#options).
@@ -33,9 +33,9 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                                                                 | url                                                                                                            |
 | --------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v3/avataaars/example.svg" width="60" />                                                          | https://avatars.dicebear.com/v3/avataaars/example.svg                                                          |
-| <img src="https://avatars.dicebear.com/v3/avataaars/example.svg?option['top'][]=longHair&option['facialHairChance']=0" width="60" />    | https://avatars.dicebear.com/v3/avataaars/example.svg?option['top'][]=longHair&option['facialHairChance']=0    |
-| <img src="https://avatars.dicebear.com/v3/avataaars/example.svg?option['top'][]=shortHair&option['facialHairChance']=100" width="60" /> | https://avatars.dicebear.com/v3/avataaars/example.svg?option['top'][]=shortHair&option['facialHairChance']=100 |
+| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg" width="60" />                                                          | https://avatars.dicebear.com/v2/avataaars/example.svg                                                          |
+| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg?option['top'][]=longHair&option['facialHairChance']=0" width="60" />    | https://avatars.dicebear.com/v2/avataaars/example.svg?option['top'][]=longHair&option['facialHairChance']=0    |
+| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg?option['top'][]=shortHair&option['facialHairChance']=100" width="60" /> | https://avatars.dicebear.com/v2/avataaars/example.svg?option['top'][]=shortHair&option['facialHairChance']=100 |
 
 ### NPM
 

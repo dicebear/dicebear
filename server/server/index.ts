@@ -5,7 +5,6 @@ import * as apicache from 'apicache';
 import privateConfig from '../config/private';
 
 import v2 from './actions/v2';
-import v3 from './actions/v3';
 import meta from './actions/meta';
 
 const ms = require('ms');
@@ -21,7 +20,6 @@ app
     const server = express();
 
     server.use(v2);
-    server.use(v3);
     server.use(meta);
 
     server.get('*', cache(ms(privateConfig.memoryCaching)), (req, res) => {

@@ -13,7 +13,7 @@ export default class SpriteCollection extends React.Component<Props> {
         <div>
           <div className="row pb-2">
             <div className="offset-3 col-6">
-              <img src={`/v3/${this.props.id}/seed.svg`} alt={this.props.id} />
+              <img src={`/v2/${this.props.id}/seed.svg`} alt={this.props.id} />
             </div>
           </div>
           <h3 className="display-3 text-center mb-0">{this.props.id}</h3>

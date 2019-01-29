@@ -1,5 +1,6 @@
-import Avatars from '@dicebear/avatars-v2';
+import Avatars from '@dicebear/avatars';
 import * as apicache from 'apicache';
+import * as yup from 'yup';
 
 import * as express from 'express';
 import privateConfig from '../../config/private';
@@ -13,7 +14,7 @@ const router = express.Router();
 
 const spriteCollections = new Map<string, PublicConfigSpriteCollection>();
 
-publicConfig.spriteCollections.v2.forEach(spriteCollection => {
+publicConfig.spriteCollections.v3.forEach(spriteCollection => {
   spriteCollections.set(spriteCollection.id, spriteCollection);
 });
 
@@ -21,9 +22,18 @@ router.get(/^\/v2\/([^/]+)\/([^/]*)\.svg$/, cache(ms(privateConfig.apiMemoryCach
   let spriteCollection = spriteCollections.get(req.params[0]);
 
   if (undefined === spriteCollection) {
-    res.status(400);
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Invalid sprite collection. Available: ' + [...spriteCollections.keys()].join(', '));
+    res.status(400).end('Invalid sprite collection. Available: ' + [...spriteCollections.keys()].join(', '));
+
+    return;
+  }
+
+  let options = spriteCollection.options || yup.object({}).noUnknown();
+  let requestOptions = req.query.options || {};
+
+  try {
+    await options.validate(requestOptions);
+  } catch (e) {
+    res.status(400).end(e['errors'].join(''));
 
     return;
   }
@@ -40,13 +50,9 @@ router.get(/^\/v2\/([^/]+)\/([^/]*)\.svg$/, cache(ms(privateConfig.apiMemoryCach
     res.status(200);
     res.setHeader('Content-Type', 'image/svg+xml');
     res.setHeader('Cache-Control', 'public, max-age=' + ms(privateConfig.apiHttpCaching) / 1000);
-    res.end(new Avatars(spriteCollectionPackage).create(seed));
+    res.end(new Avatars(spriteCollectionPackage(options.cast(requestOptions))).create(seed));
   } catch (e) {
-    console.log(e);
-
-    res.status(500);
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Failed to load package ' + spriteCollection.name);
+    res.status(500).end('Failed to load package ' + spriteCollection.name);
   }
 });
 

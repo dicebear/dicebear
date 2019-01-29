@@ -4,15 +4,15 @@
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-identicon-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites)
 
 <p>
-    <img src="https://avatars.dicebear.com/v3/identicon/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v3/identicon/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/9.svg" width="60" />
 </p>
 
 ## Usage
@@ -21,7 +21,7 @@
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v3/identicon/:seed.svg
+    https://avatars.dicebear.com/v2/identicon/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `option` can be used to pass [options](#options).
@@ -30,8 +30,8 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                                                           | url                                                                                                      |
 | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v3/identicon/example.svg" width="60" />                                                    | https://avatars.dicebear.com/v3/identicon/example.svg                                                    |
-| <img src="https://avatars.dicebear.com/v3/identicon/example.svg?options[padding]=0.4&options[background]=%23f0f0f0" width="60" /> | https://avatars.dicebear.com/v3/identicon/example.svg?options[padding]=0.4&options[background]=%23f0f0f0 |
+| <img src="https://avatars.dicebear.com/v2/identicon/example.svg" width="60" />                                                    | https://avatars.dicebear.com/v2/identicon/example.svg                                                    |
+| <img src="https://avatars.dicebear.com/v2/identicon/example.svg?options[padding]=0.4&options[background]=%23f0f0f0" width="60" /> | https://avatars.dicebear.com/v2/identicon/example.svg?options[padding]=0.4&options[background]=%23f0f0f0 |
 
 ### NPM
 

@@ -5,20 +5,6 @@ let values: Array<any> = [];
 
 let config: PublicConfig = {
   spriteCollections: {
-    v2: [
-      {
-        id: 'male',
-        name: '@dicebear/avatars-v2-male-sprites'
-      },
-      {
-        id: 'female',
-        name: '@dicebear/avatars-v2-female-sprites'
-      },
-      {
-        id: 'identicon',
-        name: '@dicebear/avatars-v2-identicon-sprites'
-      }
-    ],
     v3: [
       {
         id: 'male',
@@ -63,7 +49,7 @@ let config: PublicConfig = {
               .max(1)
               .meta({
                 type: 'switch',
-                values: [0, .4],
+                values: [0, 0.4],
                 defaultValue: 0
               }),
             background: yup
