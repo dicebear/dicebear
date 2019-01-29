@@ -3,8 +3,10 @@
 ![license](https://img.shields.io/github/license/dicebear/avatars.svg)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg)](https://www.npmjs.com/package/@dicebear/avatars)
 
-Avatars is a free pixel-art avatar placeholder library with HTTP-API.  
-Test in your Browser: [avatars.dicebear.com](https://avatars.dicebear.com)
+Avatars allows you to create placeholder avatars. You can choose between simple identicons and lovely designed characters.
+And best of all: We provide a simple and free HTTP API that you can use right away!
+
+https://avatars.dicebear.com
 
 <p>
     <img src="https://avatars.dicebear.com/v2/male/1.svg" width="60" />
@@ -34,36 +36,9 @@ For example, to create a happy _male_ avatar with the seed `john`, the following
 
     https://avatars.dicebear.com/v2/male/john.svg?options[mood]=happy
 
-### CDN
-
-Choose the CDN if you want to use a spriteCollection that is not available via the HTTP-API.
-
-Add the following line to the end of the document body.
-
-```html
-<script type="text/javascript" src="https://unpkg.com/@dicebear/avatars@2.0.0/dist/avatars.min.js"></script>
-```
-
-You also need to add a sprite collection. In our example, we will use the male sprite collection.
-
-```html
-<script
-  type="text/javascript"
-  src="https://unpkg.com/@dicebear/avatars-male-sprites@1.0.0/dist/sprites.min.js"
-></script>
-```
-
-Now you are ready to create your first Avatar.
-
-```js
-var options = {};
-var avatars = new Avatars(Avatars.sprites.male(options));
-var svg = avatars.create('custom-seed');
-```
-
 ### NPM
 
-Choose NPM if you want to use Avatars server-side or with webpack.
+Choose NPM if you want to use a spriteCollection that is not available via the HTTP-API.
 
 Install the Avatars package with the following command.
 
@@ -76,22 +51,11 @@ You also need to add a sprite collection. In our example, we will use the male s
 Now you are ready to create your first Avatar.
 
 ```js
-const Avatars = require('@dicebear/avatars').default;
-const SpriteCollection = require('@dicebear/avatars-male-sprites').default;
-
-let options = {};
-let avatars = new Avatars(SpriteCollection(options));
-let svg = avatars.create('custom-seed');
-```
-
-Or with ES6-Modules:
-
-```js
 import Avatars from '@dicebear/avatars';
-import SpriteCollection from '@dicebear/avatars-male-sprites';
+import sprites from '@dicebear/avatars-male-sprites';
 
 let options = {};
-let avatars = new Avatars(SpriteCollection(options));
+let avatars = new Avatars(sprites(options));
 let svg = avatars.create('custom-seed');
 ```
 

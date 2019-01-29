@@ -1,5 +1,5 @@
 // @ts-ignore
-import * as gridy from 'gridy-avatars';
+import gridy = require('gridy-avatars');
 import Random from '@dicebear/avatars/lib/random';
 
 type Options = {
