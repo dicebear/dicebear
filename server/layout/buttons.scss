@@ -1,0 +1,15 @@
+.btn-tooltip {
+  background-color: $light;
+  color: #212529;
+  margin-left: 8px;
+  position: relative;
+}
+
+.btn-tooltip:before {
+  content: '';
+  position: absolute;
+  border: 5px solid transparent;
+  border-right: 6px solid $light;
+  left: -11px;
+  top: 0.85em;
+}
