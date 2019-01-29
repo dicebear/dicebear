@@ -2,6 +2,7 @@ import * as request from 'request-promise-native';
 import * as latestVersion from 'latest-version';
 import * as fs from 'fs-extra';
 import * as yup from 'yup';
+const isUrl = require('is-url');
 
 import privateConfig from '../../config/private';
 import publicConfig from '../../config/public';
@@ -41,6 +42,54 @@ export async function getMetaData() {
     });
   });
 
+  let privacyPolicy: string;
+
+  if (privateConfig.privacyPolicyFile) {
+    if (isUrl(privateConfig.privacyPolicyFile)) {
+      let privacyPolicyHeaders = {
+        'User-Agent': 'Dicebear-Avatars'
+      };
+
+      if (privateConfig.privacyPolicyFile.startsWith('https://api.github.com/')) {
+        privacyPolicyHeaders['Accept'] = 'application/vnd.github.v3.raw';
+
+        if (privateConfig.githubAccessToken) {
+          privacyPolicyHeaders['Authorization'] = 'token ' + privateConfig.githubAccessToken;
+        }
+      }
+
+      privacyPolicy = await request(privateConfig.privacyPolicyFile, {
+        headers: privacyPolicyHeaders
+      });
+    } else {
+      privacyPolicy = await fs.readFile(privateConfig.privacyPolicyFile, 'utf8');
+    }
+  }
+
+  let legalNotice: string;
+
+  if (privateConfig.legalNoticeFile) {
+    if (isUrl(privateConfig.legalNoticeFile)) {
+      let legalNoticeHeaders = {
+        'User-Agent': 'Dicebear-Avatars'
+      };
+
+      if (privateConfig.privacyPolicyFile.startsWith('https://api.github.com/')) {
+        legalNoticeHeaders['Accept'] = 'application/vnd.github.v3.raw';
+
+        if (privateConfig.githubAccessToken) {
+          legalNoticeHeaders['Authorization'] = 'token ' + privateConfig.githubAccessToken;
+        }
+      }
+
+      legalNotice = await request(privateConfig.legalNoticeFile, {
+        headers: legalNoticeHeaders
+      });
+    } else {
+      legalNotice = await fs.readFile(privateConfig.legalNoticeFile, 'utf8');
+    }
+  }
+
   return {
     license: {
       name: repository.license.name,
@@ -61,9 +110,7 @@ export async function getMetaData() {
     name: '@dicebear/avatars',
     version: version,
     spriteCollections: spriteCollections,
-    privacy_policy: privateConfig.privacyPolicyFile
-      ? await fs.readFile(privateConfig.privacyPolicyFile, 'utf8')
-      : undefined,
-    legal_notice: privateConfig.legalNoticeFile ? await fs.readFile(privateConfig.legalNoticeFile, 'utf8') : undefined
+    privacy_policy: privacyPolicy,
+    legal_notice: legalNotice
   };
 }
