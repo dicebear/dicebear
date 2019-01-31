@@ -226,6 +226,7 @@ export default class Generator extends React.Component<Props, State> {
                   placeholder="your-custom-seed"
                   value={this.state.seed}
                   onChange={this.onChangeSeed}
+                  maxLength={512}
                 />
               </div>
               <small className="form-text text-muted text-center">Don't use sensitive or personal data as seed!</small>
