@@ -31,11 +31,11 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                                                              | url                                                                                                            |
-| ------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg" width="60" />                                                       | https://avatars.dicebear.com/v2/avataaars/example.svg                                                          |
-| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg?options[top][]=longHair&options[facialHairChance]=0" width="60" />   | https://avatars.dicebear.com/v2/avataaars/example.svg?option['top'][]=longHair&option['facialHairChance']=0    |
-| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg?options[top][]=longHair&options[facialHairChance]=100" width="60" /> | https://avatars.dicebear.com/v2/avataaars/example.svg?option['top'][]=shortHair&option['facialHairChance']=100 |
+| preview                                                                                                                              | url                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg" width="60" />                                                       | https://avatars.dicebear.com/v2/avataaars/example.svg                                                       |
+| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg?options[top][]=longHair&options[facialHairChance]=0" width="60" />   | https://avatars.dicebear.com/v2/avataaars/example.svg?options[top][]=longHair&options[facialHairChance]=0   |
+| <img src="https://avatars.dicebear.com/v2/avataaars/example.svg?options[top][]=longHair&options[facialHairChance]=100" width="60" /> | https://avatars.dicebear.com/v2/avataaars/example.svg?options[top][]=longHair&options[facialHairChance]=100 |
 
 ### NPM
 

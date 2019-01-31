@@ -30,10 +30,10 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                             | url                                                                    |
-| --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg" width="60" />                      | https://avatars.dicebear.com/v2/gridy/example.svg                      |
-| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg?option['colorful']=1" width="60" /> | https://avatars.dicebear.com/v2/gridy/example.svg?option['colorful']=1 |
+| preview                                                                                             | url                                                                        |
+| --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg" width="60" />                      | https://avatars.dicebear.com/v2/gridy/custom-seed.svg                      |
+| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg?option['colorful']=1" width="60" /> | https://avatars.dicebear.com/v2/gridy/custom-seed.svg?option['colorful']=1 |
 
 ### NPM
 
