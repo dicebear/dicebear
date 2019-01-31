@@ -1,4 +1,4 @@
-![DiceBear Avatars - Identicon Sprite Collection](./banner.svg)
+![DiceBear Avatars - Identicon Sprite Collection](./banner.svg?sanitize=true)
 
 ![license](https://img.shields.io/github/license/dicebear/avatars-identicon-sprites.svg)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-identicon-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites)
