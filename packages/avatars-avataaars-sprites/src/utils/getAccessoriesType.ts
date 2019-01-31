@@ -3,10 +3,6 @@ import Options from '../options';
 import getOption from './getOption';
 
 export default function(options: Options, random: Random) {
-  if (false === random.bool(undefined !== options.accessoriesChance ? options.accessoriesChance : 10)) {
-    return 'Blank';
-  }
-
   let accessoriesType = [];
 
   if (getOption('accessories', 'kurt', options)) {
@@ -33,5 +29,11 @@ export default function(options: Options, random: Random) {
     accessoriesType.push('Wayfarers');
   }
 
-  return random.pickone(accessoriesType);
+  let pickedAccessoriesType = random.pickone(accessoriesType);
+
+  if (false === random.bool(undefined !== options.accessoriesChance ? options.accessoriesChance : 10)) {
+    return 'Blank';
+  }
+
+  return pickedAccessoriesType;
 }

@@ -3,10 +3,6 @@ import Options from '../options';
 import getOption from './getOption';
 
 export default function(options: Options, random: Random) {
-  if (false === random.bool(undefined !== options.topChance ? options.topChance : 100)) {
-    return 'NoHair';
-  }
-
   let topType = [];
 
   if (getOption('top', 'longHair', options)) {
@@ -62,5 +58,11 @@ export default function(options: Options, random: Random) {
     topType.push('Turban');
   }
 
-  return random.pickone(topType);
+  let pickedTopType = random.pickone(topType);
+
+  if (false === random.bool(undefined !== options.topChance ? options.topChance : 100)) {
+    return 'NoHair';
+  }
+
+  return pickedTopType;
 }

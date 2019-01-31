@@ -3,10 +3,6 @@ import Options from '../options';
 import getOption from './getOption';
 
 export default function(options: Options, random: Random) {
-  if (false === random.bool(undefined !== options.facialHairChance ? options.facialHairChance : 10)) {
-    return 'Blank';
-  }
-
   let facialHairType = [];
 
   if (getOption('facialHair', 'medium', options)) {
@@ -29,5 +25,11 @@ export default function(options: Options, random: Random) {
     facialHairType.push('MoustacheMagnum');
   }
 
-  return random.pickone(facialHairType);
+  let pickedFacialHairType = random.pickone(facialHairType);
+
+  if (false === random.bool(undefined !== options.facialHairChance ? options.facialHairChance : 10)) {
+    return 'Blank';
+  }
+
+  return pickedFacialHairType;
 }
