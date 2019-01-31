@@ -3,7 +3,7 @@ import Options from '../options';
 import getOption from './getOption';
 
 export default function(options: Options, random: Random) {
-  if (false === random.bool(undefined !== options.facialHair ? options.facialHairChance : 10)) {
+  if (false === random.bool(undefined !== options.facialHairChance ? options.facialHairChance : 10)) {
     return 'Blank';
   }
 
