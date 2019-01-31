@@ -9,7 +9,7 @@
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@dicebear/avatars": "^3.0.3",
-    "@dicebear/avatars-avataaars-sprites": "^1.0.4",
+    "@dicebear/avatars-avataaars-sprites": "^1.0.5",
     "@dicebear/avatars-female-sprites": "^2.0.3",
     "@dicebear/avatars-gridy-sprites": "^1.0.7",
     "@dicebear/avatars-identicon-sprites": "^2.0.3",
