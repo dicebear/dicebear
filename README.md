@@ -1,4 +1,4 @@
-![DiceBear Avatars](./banner.svg?sanitize=true)
+![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/master/banner.svg?sanitize=true)
 
 Avatars allows you to create placeholder avatars. You can choose between simple identicons and lovely designed characters.
 And best of all: We provide a simple and free HTTP API that you can use right away!

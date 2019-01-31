@@ -1,4 +1,4 @@
-![DiceBear Avatars - Gridy Sprite Collection](./banner.svg?sanitize=true)
+![DiceBear Avatars - Gridy Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-gridy-sprites/banner.svg?sanitize=true)
 
 ![license](https://img.shields.io/github/license/dicebear/avatars-gridy-sprites.svg)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites)

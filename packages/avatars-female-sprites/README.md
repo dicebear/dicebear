@@ -1,4 +1,4 @@
-![DiceBear Avatars - Female Sprite Collection](./banner.svg?sanitize=true)
+![DiceBear Avatars - Female Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-female-sprites/banner.svg?sanitize=true)
 
 ![license](https://img.shields.io/github/license/dicebear/avatars-female-sprites.svg)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites)
