@@ -164,7 +164,9 @@ export default class Generator extends React.Component<Props, State> {
       { encodeValuesOnly: true, arrayFormat: 'brackets' }
     );
 
-    return `/v2/${this.state.spriteCollection.id}/${this.state.seed}.svg${params ? '?' + params : ''}`;
+    return `/v2/${this.state.spriteCollection.id}/${encodeURIComponent(this.state.seed)}.svg${
+      params ? '?' + params : ''
+    }`;
   }
 
   render() {
