@@ -8,12 +8,12 @@
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
-    "@dicebear/avatars": "^3.0.0",
-    "@dicebear/avatars-avataaars-sprites": "^1.0.0",
-    "@dicebear/avatars-female-sprites": "^2.0.0",
-    "@dicebear/avatars-gridy-sprites": "^1.0.3",
-    "@dicebear/avatars-identicon-sprites": "^2.0.0",
-    "@dicebear/avatars-male-sprites": "^2.0.0",
+    "@dicebear/avatars": "^3.0.3",
+    "@dicebear/avatars-avataaars-sprites": "^1.0.4",
+    "@dicebear/avatars-female-sprites": "^2.0.3",
+    "@dicebear/avatars-gridy-sprites": "^1.0.7",
+    "@dicebear/avatars-identicon-sprites": "^2.0.3",
+    "@dicebear/avatars-male-sprites": "^2.0.3",
     "@types/reactstrap": "^6.4.4",
     "@zeit/next-sass": "^1.0.1",
     "@zeit/next-typescript": "^1.1.1",
@@ -49,7 +49,7 @@
     "@types/ms": "^0.7.30",
     "@types/next": "^7.0.2",
     "@types/qs": "^6.5.1",
-    "@types/react": "^16.4.6",
+    "@types/react": "^16.8.0",
     "@types/react-icons": "^2.2.5",
     "@types/react-syntax-highlighter": "^10.1.0",
     "@types/request": "^2.47.1",
@@ -57,7 +57,7 @@
     "@types/yup": "^0.26.4",
     "nodemon": "^1.18.3",
     "ts-node": "^7.0.1",
-    "typescript": "^3.1.3"
+    "typescript": "^3.3.1"
   },
   "browser": {
     "./server/helper/meta": false
