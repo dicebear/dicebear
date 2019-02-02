@@ -4,6 +4,7 @@ import { stringify } from 'qs';
 import { GoGear, GoLinkExternal } from 'react-icons/go';
 import { Meta, MetaSpriteCollection } from '../../types/meta';
 import { Collapse, InputGroupButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { UncontrolledTooltip } from 'reactstrap';
 
 type Props = {
   meta: Meta;
@@ -185,14 +186,20 @@ export default class Generator extends React.Component<Props, State> {
               <div className="generator-head">
                 <div className="row">
                   <div className="col">
-                    <a href="#" onClick={this.onToggleShowAdvancedOptions}>
+                    <a href="#" onClick={this.onToggleShowAdvancedOptions} id="ShowAdvancedOptionsTooltip">
                       <GoGear size="1.3rem" />
                     </a>
+                    <UncontrolledTooltip placement="top" target="ShowAdvancedOptionsTooltip">
+                      Advanced options
+                    </UncontrolledTooltip>
                   </div>
                   <div className="col text-right">
-                    <a href={avatar} target="_blank">
+                    <a href={avatar} target="_blank" id="OpenNewTabTooltip">
                       <GoLinkExternal size="1.3rem" />
                     </a>
+                    <UncontrolledTooltip placement="top" target="OpenNewTabTooltip">
+                      Open in new tab
+                    </UncontrolledTooltip>
                   </div>
                 </div>
               </div>
