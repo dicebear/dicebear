@@ -8,4 +8,8 @@ export type PrivateConfig = {
   apiHttpCaching: string;
   apiMemoryCaching: string;
   githubAccessToken: string;
+  mongodbUri?: string;
+  mongodbDatabase: string;
+  mongodbReconnectInterval: number;
+  mongodbReconnectTries: number;
 };

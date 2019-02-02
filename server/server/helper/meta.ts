@@ -8,6 +8,7 @@ import privateConfig from '../../config/private';
 import publicConfig from '../../config/public';
 
 import { MetaSpriteCollection } from '../../types/meta';
+import { sumApiRequests } from './mongodb';
 
 export async function getMetaData() {
   let headers = {
@@ -111,6 +112,7 @@ export async function getMetaData() {
     version: version,
     spriteCollections: spriteCollections,
     privacy_policy: privacyPolicy,
-    legal_notice: legalNotice
+    legal_notice: legalNotice,
+    sumApiRequests: await sumApiRequests()
   };
 }
