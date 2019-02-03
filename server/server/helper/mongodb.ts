@@ -35,12 +35,13 @@ export async function db() {
   return null;
 }
 
-export async function registerApiRequest() {
+export async function registerApiRequest(spriteCollection: string) {
   let database = await db();
 
   if (database) {
-    let date = new Date();
-    let id = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+    let datetime = new Date();
+    let date = new Date(datetime.getTime() - datetime.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+    let id = [date, spriteCollection].join('-');
 
     let collection = database.collection(COLLECTION_API_REQUESTS);
 
@@ -55,7 +56,9 @@ export async function registerApiRequest() {
           views: 1
         },
         $setOnInsert: {
-          _id: id
+          _id: id,
+          date: date,
+          spriteCollection: spriteCollection
         }
       },
       {

@@ -20,15 +20,9 @@ publicConfig.spriteCollections.v3.forEach(spriteCollection => {
 });
 
 router.get(
-  /^\/v2\/([^/]+)\/([^/]*)\.svg$/,
-  async function(req, res, next) {
-    next();
-
-    registerApiRequest();
-  },
-  cache(ms(privateConfig.apiMemoryCaching)),
-  async function(req, res, next) {
-    let spriteCollection = spriteCollections.get(req.params[0]);
+  '/v2/:spriteCollection/:seed.svg',
+  function(req, res, next) {
+    let spriteCollection = spriteCollections.get(req.params['spriteCollection']);
 
     if (undefined === spriteCollection) {
       res.status(400).end('Invalid sprite collection. Available: ' + [...spriteCollections.keys()].join(', '));
@@ -36,6 +30,16 @@ router.get(
       return;
     }
 
+    next();
+  },
+  async function(req, res, next) {
+    next();
+
+    registerApiRequest(req.params['spriteCollection']);
+  },
+  cache(ms(privateConfig.apiMemoryCaching)),
+  async function(req, res, next) {
+    let spriteCollection = spriteCollections.get(req.params['spriteCollection']);
     let options = spriteCollection.options || yup.object({}).noUnknown();
     let requestOptions = req.query.options || {};
 
@@ -47,7 +51,7 @@ router.get(
       return;
     }
 
-    let seed = req.params[1];
+    let seed = req.params['seed'];
 
     try {
       let spriteCollectionPackage = await import(spriteCollection.name);
