@@ -20,7 +20,7 @@ publicConfig.spriteCollections.v3.forEach(spriteCollection => {
 });
 
 router.get(
-  '/v2/:spriteCollection/:seed.svg',
+  ['/v2/:spriteCollection/:seed.svg', '/v2/:spriteCollection/.svg'],
   function(req, res, next) {
     let spriteCollection = spriteCollections.get(req.params['spriteCollection']);
 
@@ -51,7 +51,7 @@ router.get(
       return;
     }
 
-    let seed = req.params['seed'];
+    let seed = req.params['seed'] || '';
 
     try {
       let spriteCollectionPackage = await import(spriteCollection.name);
