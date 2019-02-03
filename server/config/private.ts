@@ -4,7 +4,7 @@ let privateConfig: PrivateConfig = {
   port: parseInt(process.env.PORT, 10) || 3000,
   privacyPolicyFile: process.env.PRIVACY_POLICY_FILE,
   legalNoticeFile: process.env.LEGAL_NOTICE_FILE,
-  metaCacheLifetime: 3600,
+  metaCaching: '1h',
   httpCaching: '1h',
   memoryCaching: '1h',
   apiHttpCaching: '30d',

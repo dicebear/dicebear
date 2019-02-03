@@ -2,7 +2,7 @@ export type PrivateConfig = {
   port: number;
   privacyPolicyFile?: string;
   legalNoticeFile?: string;
-  metaCacheLifetime: number;
+  metaCaching: string;
   httpCaching: string;
   memoryCaching: string;
   apiHttpCaching: string;
