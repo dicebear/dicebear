@@ -54,11 +54,15 @@ let svg = avatars.create('custom-seed');
 
 ## Options
 
-| name               | type                 | default | description                   |
-| ------------------ | -------------------- | ------- | ----------------------------- |
-| hues               | array of numbers     | `null`  | Icon hue                      |
-| colorLightness     | array of two numbers | `null`  | Colored shapes - Saturation   |
-| grayscaleLightness | array of two numbers | `null`  | Grayscale shapes - Saturation |
+| name                | type                 | default | description                       |
+| ------------------- | -------------------- | ------- | --------------------------------- |
+| hues                | array of numbers     | `null`  | Icon hue                          |
+| padding             | number               | `0`     | Distance to the edge of the image |
+| colorLightness      | array of two numbers | `null`  | Colored shapes - Lightness        |
+| grayscaleLightness  | array of two numbers | `null`  | Grayscale shapes - Lightness      |
+| colorSaturation     | number               | `null`  | Colored shapes - Saturation       |
+| grayscaleSaturation | number               | `null`  | Grayscale shapes - Saturation     |
+| background          | string               | `null`  | Any valid color identifier        |
 
 ## Further informations
 
