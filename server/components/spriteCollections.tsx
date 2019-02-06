@@ -26,7 +26,7 @@ export default class SpriteCollections extends React.Component<Props> {
                 <SpriteCollection {...spriteCollection} />
               </div>
             ))}
-            <div className="col-12 col-md-6 col-lg-4 mb-4">
+            <div className="col-12">
               <div className="bg-white p-4 rounded h-100 d-flex flex-column justify-content-between">
                 <div className="text-center">
                   <h4 className="h5 mb-4">Your sprite collection here?</h4>
@@ -35,9 +35,11 @@ export default class SpriteCollections extends React.Component<Props> {
                   </p>
                   <p>Create an issue so that we can add your work to the list.</p>
                 </div>
-                <a href={this.props.meta.issues.url} className="btn btn-outline-dark mx-5">
-                  Create issue
-                </a>
+                <div className="text-center">
+                  <a href={this.props.meta.issues.url} className="btn btn-outline-dark mx-5">
+                    Create issue
+                  </a>
+                </div>
               </div>
             </div>
           </div>
