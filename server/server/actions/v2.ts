@@ -61,6 +61,8 @@ router.get(
       res.setHeader('Cache-Control', 'public, max-age=' + ms(privateConfig.apiHttpCaching) / 1000);
       res.end(new Avatars(spriteCollectionPackage(options.cast(requestOptions))).create(seed));
     } catch (e) {
+      console.error(e);
+
       res.status(500).end('Failed to load package ' + spriteCollection.name);
     }
   }

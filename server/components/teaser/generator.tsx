@@ -60,11 +60,13 @@ export default class Generator extends React.Component<Props, State> {
   getSpriteCollectionAdvancedOptions(spriteCollection: MetaSpriteCollection) {
     let advancedOptions = {};
 
-    Object.keys(spriteCollection.options.fields).forEach(field => {
-      let meta = spriteCollection.options.fields[field].meta;
+    Object.keys(spriteCollection.options.fields)
+      .filter(field => (spriteCollection.options.fields[field].meta ? true : false))
+      .forEach(field => {
+        let meta = spriteCollection.options.fields[field].meta;
 
-      advancedOptions[field] = Array.isArray(meta.defaultValue) ? [...meta.defaultValue] : meta.defaultValue;
-    });
+        advancedOptions[field] = Array.isArray(meta.defaultValue) ? [...meta.defaultValue] : meta.defaultValue;
+      });
 
     return advancedOptions;
   }
@@ -150,13 +152,15 @@ export default class Generator extends React.Component<Props, State> {
   getAvatarUrl() {
     let options = {};
 
-    Object.keys(this.state.spriteCollection.options.fields).map(key => {
-      let defaultValue = this.state.spriteCollection.options.fields[key].meta.defaultValue;
+    Object.keys(this.state.spriteCollection.options.fields)
+      .filter(key => (this.state.spriteCollection.options.fields[key].meta ? true : false))
+      .map(key => {
+        let defaultValue = this.state.spriteCollection.options.fields[key].meta.defaultValue;
 
-      if (defaultValue !== this.state.advancedOptions[key]) {
-        options[key] = this.state.advancedOptions[key];
-      }
-    });
+        if (defaultValue !== this.state.advancedOptions[key]) {
+          options[key] = this.state.advancedOptions[key];
+        }
+      });
 
     let params = stringify(
       {
@@ -244,89 +248,106 @@ export default class Generator extends React.Component<Props, State> {
             <div className="generator generator--options">
               <div className="generator-body">
                 {Object.keys(this.state.spriteCollection.options.fields).length ? (
-                  Object.keys(this.state.spriteCollection.options.fields).map(key => {
-                    let field = this.state.spriteCollection.options.fields[key].meta;
-                    let id = 'advanced_' + key;
+                  <>
+                    {Object.keys(this.state.spriteCollection.options.fields)
+                      .filter(key => (this.state.spriteCollection.options.fields[key].meta ? true : false))
+                      .map(key => {
+                        let field = this.state.spriteCollection.options.fields[key].meta;
+                        let id = 'advanced_' + key;
 
-                    return (
-                      <div className="form-group row" key={key}>
-                        <label
-                          htmlFor={id}
-                          className={`col-sm-3 col-form-label ${field.type !== 'select' ? 'py-0' : ''} pr-0`}
-                          title={key}
-                        >
-                          {key}
-                        </label>
-                        <div className="col-sm-9">
-                          {field.type === 'select' ? (
-                            <select
-                              id={id}
-                              name={key}
-                              className="custom-select"
-                              value={this.state.advancedOptions[key]}
-                              onChange={this.onChangeAdvancedOptions}
+                        return (
+                          <div className="form-group row" key={key}>
+                            <label
+                              htmlFor={id}
+                              className={`col-sm-3 col-form-label ${field.type !== 'select' ? 'py-0' : ''} pr-0`}
+                              title={key}
                             >
-                              {field.values.map(value => (
-                                <option key={value}>{value}</option>
-                              ))}
-                            </select>
-                          ) : (
-                            ''
-                          )}
+                              {key}
+                            </label>
+                            <div className="col-sm-9">
+                              {field.type === 'select' ? (
+                                <select
+                                  id={id}
+                                  name={key}
+                                  className="custom-select"
+                                  value={this.state.advancedOptions[key]}
+                                  onChange={this.onChangeAdvancedOptions}
+                                >
+                                  {field.values.map(value => (
+                                    <option key={value}>{value}</option>
+                                  ))}
+                                </select>
+                              ) : (
+                                ''
+                              )}
 
-                          {field.type === 'checkbox'
-                            ? field.values.map(value => (
-                                <div className="custom-control custom-switch" key={value}>
+                              {field.type === 'checkbox'
+                                ? field.values.map(value => (
+                                    <div className="custom-control custom-switch" key={value}>
+                                      <input
+                                        name={key}
+                                        type="checkbox"
+                                        className="custom-control-input"
+                                        id={id + '_' + value}
+                                        checked={this.state.advancedOptions[key].indexOf(value) !== -1}
+                                        onChange={this.onChangeAdvancedOptions}
+                                        value={value}
+                                      />
+                                      <label className="custom-control-label" htmlFor={id + '_' + value}>
+                                        {value}
+                                      </label>
+                                    </div>
+                                  ))
+                                : ''}
+
+                              {field.type === 'range' ? (
+                                <input
+                                  id={id}
+                                  name={key}
+                                  type="range"
+                                  className="d-block custom-range"
+                                  min={field.values[0]}
+                                  max={field.values[1]}
+                                  onChange={this.onChangeAdvancedOptions}
+                                  value={this.state.advancedOptions[key]}
+                                />
+                              ) : (
+                                ''
+                              )}
+
+                              {field.type === 'switch' ? (
+                                <div className="custom-control custom-switch">
                                   <input
+                                    id={id}
                                     name={key}
                                     type="checkbox"
                                     className="custom-control-input"
-                                    id={id + '_' + value}
-                                    checked={this.state.advancedOptions[key].indexOf(value) !== -1}
                                     onChange={this.onChangeAdvancedOptions}
-                                    value={value}
+                                    checked={this.state.advancedOptions[key] == field.values[1]}
                                   />
-                                  <label className="custom-control-label" htmlFor={id + '_' + value}>
-                                    {value}
-                                  </label>
+                                  <label className="custom-control-label" htmlFor={id} />
                                 </div>
-                              ))
-                            : ''}
-
-                          {field.type === 'range' ? (
-                            <input
-                              id={id}
-                              name={key}
-                              type="range"
-                              className="d-block custom-range"
-                              min={field.values[0]}
-                              max={field.values[1]}
-                              onChange={this.onChangeAdvancedOptions}
-                              value={this.state.advancedOptions[key]}
-                            />
-                          ) : (
-                            ''
-                          )}
-
-                          {field.type === 'switch' ? (
-                            <div className="custom-control custom-switch">
-                              <input
-                                id={id}
-                                name={key}
-                                type="checkbox"
-                                className="custom-control-input"
-                                onChange={this.onChangeAdvancedOptions}
-                                checked={this.state.advancedOptions[key] == field.values[1]}
-                              />
-                              <label className="custom-control-label" htmlFor={id} />
+                              ) : (
+                                ''
+                              )}
                             </div>
-                          ) : (
-                            ''
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })
+                          </div>
+                        );
+                      })}
+                    <div className="form-group">
+                      <small className="form-text text-muted text-center d-block">
+                        See{' '}
+                        <a
+                          href={`https://www.npmjs.com/package/${this.state.spriteCollection.name}#options`}
+                          target="_blank"
+                          className="text-reset"
+                        >
+                          README.md
+                        </a>{' '}
+                        for advanced options
+                      </small>
+                    </div>
+                  </>
                 ) : (
                   <div className="generator-row">
                     <div className="bg-white border-radius text-center px-3 py-2">No advanced options available</div>

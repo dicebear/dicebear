@@ -54,7 +54,7 @@ let config: PublicConfig = {
               }),
             background: yup
               .string()
-              .matches(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)
+              .matches(/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i)
               .meta({
                 type: 'switch',
                 values: ['#fff', '#f0f0f0'],
@@ -273,6 +273,65 @@ let config: PublicConfig = {
                 values: values,
                 defaultValue: []
               })
+          })
+          .noUnknown()
+      },
+      {
+        id: 'jdenticon',
+        name: '@dicebear/avatars-jdenticon-sprites',
+        options: yup
+          .object({
+            padding: yup
+              .number()
+              .min(0)
+              .max(0.2)
+              .meta({
+                type: 'switch',
+                values: [0, 0.05],
+                defaultValue: 0
+              }),
+            background: yup
+              .string()
+              .matches(/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i)
+              .meta({
+                type: 'switch',
+                values: ['#fff', '#f0f0f0'],
+                defaultValue: '#fff'
+              }),
+            hues: yup.array().of(
+              yup
+                .number()
+                .min(0)
+                .max(360)
+            ),
+            colorLightness: yup
+              .array()
+              .min(2)
+              .max(2)
+              .of(
+                yup
+                  .number()
+                  .min(0)
+                  .max(100)
+              ),
+            grayscaleLightness: yup
+              .array()
+              .min(2)
+              .max(2)
+              .of(
+                yup
+                  .number()
+                  .min(0)
+                  .max(100)
+              ),
+            colorSaturation: yup
+              .number()
+              .min(0)
+              .max(100),
+            grayscaleSaturation: yup
+              .number()
+              .min(0)
+              .max(100)
           })
           .noUnknown()
       }

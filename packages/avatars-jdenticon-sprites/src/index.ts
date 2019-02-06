@@ -1,6 +1,6 @@
 import Random from '@dicebear/avatars/lib/random';
 // @ts-ignore
-import * as jdenticon from 'jdenticon';
+import jdenticon from 'jdenticon';
 
 type Options = {
   hues?: number[];
@@ -28,8 +28,8 @@ export default function(options: Options = {}) {
     };
 
     return jdenticon
-      .toSvg(random.seed, 5, options.padding)
-      .replace('width="5"', '')
-      .replace('height="5"', '');
+      .toSvg(random.seed, 50, options.padding || 0)
+      .replace('width="50"', '')
+      .replace('height="50"', '');
   };
 }
