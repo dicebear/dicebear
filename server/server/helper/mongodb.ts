@@ -1,46 +1,45 @@
 import privateConfig from '../../config/private';
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient } from 'mongodb';
+import * as memoizee from 'memoizee';
 
 const COLLECTION_API_REQUESTS = 'api_requests';
 
-let connection: Promise<Db>;
-
-export async function db() {
-  if (connection) {
-    return connection;
-  }
-
-  if (privateConfig.mongodbUri) {
-    connection = new MongoClient(privateConfig.mongodbUri, {
-      useNewUrlParser: true,
-      reconnectInterval: 10000,
-      reconnectTries: 180,
-      autoReconnect: true
-    })
-      .connect()
-      .then(async client => {
-        let db = client.db(privateConfig.mongodbDatabase);
-
-        return db;
+export const db = memoizee(
+  async function() {
+    if (privateConfig.mongodbUri) {
+      return new MongoClient(privateConfig.mongodbUri, {
+        useNewUrlParser: true,
+        reconnectInterval: 10000,
+        reconnectTries: 180,
+        autoReconnect: true
       })
-      .catch(err => {
-        console.error(err);
+        .connect()
+        .then(async client => {
+          let db = client.db(privateConfig.mongodbDatabase);
 
-        return null;
-      });
+          return db;
+        })
+        .catch(err => {
+          console.error(err);
 
-    return connection;
+          return null;
+        });
+    }
+
+    return null;
+  },
+  {
+    promise: true
   }
+);
 
-  return null;
-}
-
-export async function registerApiRequest() {
+export async function registerApiRequest(spriteCollection: string) {
   let database = await db();
 
   if (database) {
-    let date = new Date();
-    let id = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+    let datetime = new Date();
+    let date = new Date(datetime.getTime() - datetime.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+    let id = [date, spriteCollection].join('-');
 
     let collection = database.collection(COLLECTION_API_REQUESTS);
 
@@ -55,7 +54,9 @@ export async function registerApiRequest() {
           views: 1
         },
         $setOnInsert: {
-          _id: id
+          _id: id,
+          date: date,
+          spriteCollection: spriteCollection
         }
       },
       {
