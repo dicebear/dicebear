@@ -1,7 +1,7 @@
 ![DiceBear Avatars - Female Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-female-sprites/banner.svg?sanitize=true)
 
-![license](https://img.shields.io/github/license/dicebear/avatars-female-sprites.svg)
-[![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites)
+![license](https://img.shields.io/npm/l/@dicebear/avatars-female-sprites.svg?style=flat-square)
+[![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites)
 
 <p>
     <img src="https://avatars.dicebear.com/v2/female/1.svg" width="60" />

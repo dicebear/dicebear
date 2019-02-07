@@ -1,7 +1,7 @@
 ![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars/banner.svg?sanitize=true)
 
-![license](https://img.shields.io/github/license/dicebear/avatars.svg)
-[![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg)](https://www.npmjs.com/package/@dicebear/avatars)
+![license]https://img.shields.io/npm/l/@dicebear/avatars.svg?style=flat-square)
+[![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars)
 
 Avatars allows you to create placeholder avatars. You can choose between simple identicons and lovely designed characters.
 And best of all: We provide a simple and free HTTP API that you can use right away!

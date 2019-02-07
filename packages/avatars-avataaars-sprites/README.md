@@ -1,7 +1,7 @@
 ![DiceBear Avatars - Avataaars Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-avataaars-sprites/banner.svg?sanitize=true)
 
-![license](https://img.shields.io/github/license/dicebear/avatars-avataaars-sprites.svg)
-[![npm](https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-avataaars-sprites)
+![license](https://img.shields.io/npm/l/@dicebear/avatars-avataaars-sprites.svg?style=flat-square)
+[![npm](https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-avataaars-sprites)
 
 Designed by [Pablo Stanley](https://twitter.com/pablostanley), the Sketch library can be found on
 [avataaars.com](https://avataaars.com/).

@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
-  "homepage": "https://github.com/DiceBear/avatars/packages/avatars-avataaars-sprites#readme",
+  "homepage": "https://github.com/DiceBear/avatars#readme",
   "peerDependencies": {
     "@dicebear/avatars": "^3.0.0-0",
     "avataaars": "^1.2.0",

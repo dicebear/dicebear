@@ -28,7 +28,7 @@
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
-  "homepage": "https://github.com/DiceBear/avatars/packages/avatars-gridy-sprites#readme",
+  "homepage": "https://github.com/DiceBear/avatars#readme",
   "peerDependencies": {
     "@dicebear/avatars": "^3.0.0-0"
   },

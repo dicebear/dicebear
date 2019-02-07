@@ -1,7 +1,7 @@
 ![DiceBear Avatars - Jdenticon Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-jdenticon-sprites/banner.svg?sanitize=true)
 
-![license](https://img.shields.io/github/license/dicebear/avatars-jdenticon-sprites.svg)
-[![npm](https://img.shields.io/npm/v/@dicebear/avatars-jdenticon-sprites.svg)](https://www.npmjs.com/package/@dicebear/avatars-jdenticon-sprites)
+![license](https://img.shields.io/npm/l/@dicebear/avatars-jdenticon-sprites.svg?style=flat-square)
+[![npm](https://img.shields.io/npm/v/@dicebear/avatars-jdenticon-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-jdenticon-sprites)
 
 [Jdenticon](https://github.com/dmester/jdenticon) wrapper for DiceBear Avatars.
 
