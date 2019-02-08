@@ -36,6 +36,9 @@
     "jdenticon": "^2.1.1",
     "typescript": "^3.1.3"
   },
+  "dependencies": {
+    "jdenticon": "^2.1.1"
+  },
   "files": [
     "LICENSE",
     "lib"
