@@ -22,13 +22,22 @@ export default class Layout extends React.Component<Props> {
               <a href="https://reactjs.org/">react</a>, <a href="https://getbootstrap.com/">bootstrap</a> and{' '}
               <a href="https://octicons.github.com/">octicons</a>.
             </div>
-            {this.props.meta.privacy_policy || this.props.meta.legal_notice ? (
+            {this.props.meta.stats || this.props.meta.privacy_policy || this.props.meta.legal_notice ? (
               <ul className="list-inline m-0 text-center text-md-left">
                 <li className="list-inline-item mr-0 ml-4">
                   <Link prefetch href="/">
                     <a>Home</a>
                   </Link>
                 </li>
+                {this.props.meta.stats ? (
+                  <li className="list-inline-item mr-0 ml-4">
+                    <Link prefetch href="/stats">
+                      <a>Stats</a>
+                    </Link>
+                  </li>
+                ) : (
+                  ''
+                )}
                 {this.props.meta.privacy_policy ? (
                   <li className="list-inline-item mr-0 ml-4">
                     <Link prefetch href="/privacy-policy">

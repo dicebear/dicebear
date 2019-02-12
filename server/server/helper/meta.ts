@@ -8,7 +8,9 @@ const ms = require('ms');
 import privateConfig from '../../config/private';
 import publicConfig from '../../config/public';
 
-import { MetaSpriteCollection } from '../../types/meta';
+import * as mongodb from './mongodb';
+
+import { MetaSpriteCollection, Stats } from '../../types/meta';
 
 export const getMetaData = memoizee(
   async function() {
@@ -85,6 +87,15 @@ export const getMetaData = memoizee(
       }
     }
 
+    let stats: Stats;
+
+    if (privateConfig.mongodbUri) {
+      stats = {
+        line: await mongodb.line(),
+        total: await mongodb.total()
+      };
+    }
+
     return {
       stargazers: {
         url: repository.html_url + '/stargazers',
@@ -94,6 +105,7 @@ export const getMetaData = memoizee(
         url: repository.html_url + '/issues',
         count: repository.issues_count
       },
+      stats: stats,
       name: '@dicebear/avatars',
       spriteCollections: spriteCollections,
       privacy_policy: privacyPolicy,

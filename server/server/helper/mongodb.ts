@@ -66,7 +66,41 @@ export async function registerApiRequest(spriteCollection: string) {
   }
 }
 
-export async function sumApiRequests() {
+export async function line() {
+  let database = await db();
+
+  if (database) {
+    let collection = database.collection(COLLECTION_API_REQUESTS);
+
+    let result = await collection.aggregate([
+      {
+        $group: {
+          _id: '$date',
+          sum: {
+            $sum: '$views'
+          }
+        }
+      },
+      {
+        $sort: { _id: 1 }
+      }
+    ]);
+
+    return await result.toArray().then(data => {
+      let result = {};
+
+      data.forEach(row => {
+        result[row._id] = row.sum;
+      });
+
+      return result;
+    });
+  }
+
+  return 0;
+}
+
+export async function total() {
   let database = await db();
 
   if (database) {
@@ -78,12 +112,20 @@ export async function sumApiRequests() {
           _id: '',
           sum: {
             $sum: '$views'
+          },
+          since: {
+            $min: '$date'
           }
         }
       }
     ]);
 
-    return await result.toArray().then(data => data[0].sum);
+    return await result.toArray().then(data => {
+      return {
+        sum: data[0].sum,
+        since: data[0].since
+      };
+    });
   }
 
   return 0;
