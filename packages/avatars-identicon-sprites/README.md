@@ -52,10 +52,10 @@ let svg = avatars.create('custom-seed');
 
 ## Options
 
-| name       | type | default | description                       |
-| ---------- | ---- | ------- | --------------------------------- |
-| padding    | int  | `0`     | Distance to the edge of the image |
-| background | int  | `#FFF`  | Any valid color identifier        |
+| name       | type | default | description                                                                                                                                       |
+| ---------- | ---- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| padding    | int  | `0`     | Distance to the edge of the image<br> **HTTP-API limitation** Maximum value: `0.4`                                                                |
+| background | int  | `#FFF`  | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
 
 ## Further information
 

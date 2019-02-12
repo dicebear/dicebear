@@ -54,15 +54,15 @@ let svg = avatars.create('custom-seed');
 
 ## Options
 
-| name                | type                 | default | description                       |
-| ------------------- | -------------------- | ------- | --------------------------------- |
-| hues                | array of numbers     | `null`  | Icon hue                          |
-| padding             | number               | `0`     | Distance to the edge of the image |
-| colorLightness      | array of two numbers | `null`  | Colored shapes - Lightness        |
-| grayscaleLightness  | array of two numbers | `null`  | Grayscale shapes - Lightness      |
-| colorSaturation     | number               | `null`  | Colored shapes - Saturation       |
-| grayscaleSaturation | number               | `null`  | Grayscale shapes - Saturation     |
-| background          | string               | `null`  | Any valid color identifier        |
+| name                | type                                   | default | description                                                                                                                                       |
+| ------------------- | -------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| hues                | array of numbers between 0 and 360     | `null`  | Icon hue                                                                                                                                          |
+| padding             | number                                 | `0`     | Distance to the edge of the image<br> **HTTP-API limitation** Maximum value: `0.2`                                                                |
+| colorLightness      | array of two numbers between 0 and 100 | `null`  | Colored shapes - Lightness                                                                                                                        |
+| grayscaleLightness  | array of two numbers between 0 and 100 | `null`  | Grayscale shapes - Lightness                                                                                                                      |
+| colorSaturation     | number between 0 and 100               | `null`  | Colored shapes - Saturation                                                                                                                       |
+| grayscaleSaturation | number between 0 and 100               | `null`  | Grayscale shapes - Saturation                                                                                                                     |
+| background          | string                                 | `null`  | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
 
 ## Further information
 
