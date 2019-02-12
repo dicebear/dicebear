@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "dev": "nodemon server/index.ts",
+    "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
-    "start": "NODE_ENV=production node .next/production-server/server/index.js",
+    "start": "cross-env NODE_ENV=production node dist/server/index.js",
     "analyze": "cross-env ANALYZE=1 next build",
     "postinstall": "npm run build"
   },
@@ -23,6 +23,7 @@
     "avataaars": "^1.2.1",
     "babel-loader": "^8.0.4",
     "bootstrap": "^4.2.0",
+    "cross-env": "^5.2.0",
     "express": "^4.16.3",
     "fs-extra": "^7.0.0",
     "is-url": "^1.2.4",
