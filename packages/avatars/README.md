@@ -59,6 +59,6 @@ let avatars = new Avatars(sprites(options));
 let svg = avatars.create('custom-seed');
 ```
 
-## Further informations
+## Further information
 
 You can find the complete documentation at [avatars.dicebear.com](https://avatars.dicebear.com)

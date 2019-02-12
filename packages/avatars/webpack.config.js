@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = async () => {
-  let licenseInformations = await new Promise((resolve, reject) => {
+  let licenseInformation = await new Promise((resolve, reject) => {
     licenseChecker.init(
       {
         start: __dirname,
@@ -18,8 +18,8 @@ module.exports = async () => {
 
   let licenses = [];
 
-  Object.keys(licenseInformations).forEach(name => {
-    let license = licenseInformations[name];
+  Object.keys(licenseInformation).forEach(name => {
+    let license = licenseInformation[name];
 
     licenses.push(
       [

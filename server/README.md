@@ -32,7 +32,7 @@ yarn start
 GET /
 ```
 
-### Avatars v3
+### Avatars v2
 
 ```
 GET /v2/:spriteSet/:seed.svg
@@ -44,32 +44,5 @@ GET /v2/:spriteSet/:seed.svg
 ```
 
 Optionally `options` GET parameter with spriteSet options.
-
-⚠️ Don't use sensitive or personal data as seed!
-
-### Avatars v2 (deprecated)
-
-```
-GET /v2/:spriteSet/:seed.svg
-```
-
-```
-:spriteSet => male|female|identicon
-:seed => string
-```
-
-⚠️ Don't use sensitive or personal data as seed!
-
-### Avatars v1 (deprecated)
-
-```
-GET /v1/:spriteSet/:seed/:size.png
-```
-
-```
-:spriteSet => male|female
-:seed => string
-:size => 20 - 200 (px)
-```
 
 ⚠️ Don't use sensitive or personal data as seed!

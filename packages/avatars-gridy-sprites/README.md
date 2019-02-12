@@ -58,6 +58,6 @@ let svg = avatars.create('custom-seed');
 | -------- | ------- | ------- | --------------------------------------- |
 | colorful | boolean | `false` | Use different colors for eyes and mouth |
 
-## Further informations
+## Further information
 
 You can find the DiceBear Avatars documentation at [avatars.dicebear.com](https://avatars.dicebear.com)

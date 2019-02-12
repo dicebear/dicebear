@@ -57,7 +57,7 @@ let svg = avatars.create('custom-seed');
 | padding    | int  | `0`     | Distance to the edge of the image |
 | background | int  | `#FFF`  | Any valid color identifier        |
 
-## Further informations
+## Further information
 
 You can find the DiceBear Avatars documentation at [avatars.dicebear.com](https://avatars.dicebear.com)
 

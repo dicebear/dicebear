@@ -76,6 +76,6 @@ let svg = avatars.create('custom-seed');
 | mouth             | array of strings | `null`        | Possible values: `concerned`, `default`, `disbelief`, `eating`, `grimace`, `sad`, `scream`, `serious`, `smile`, `tongue`, `twinkle`, `vomit` |
 | skin              | array of strings | `null`        | Possible values: `tanned`, `yellow`, `pale`, `light`, `brown`, `darkBrown`, `black`                                                          |
 
-## Further informations
+## Further information
 
 You can find the DiceBear Avatars documentation at [avatars.dicebear.com](https://avatars.dicebear.com)

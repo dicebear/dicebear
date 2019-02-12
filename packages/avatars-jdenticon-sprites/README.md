@@ -64,6 +64,6 @@ let svg = avatars.create('custom-seed');
 | grayscaleSaturation | number               | `null`  | Grayscale shapes - Saturation     |
 | background          | string               | `null`  | Any valid color identifier        |
 
-## Further informations
+## Further information
 
 You can find the DiceBear Avatars documentation at [avatars.dicebear.com](https://avatars.dicebear.com)

@@ -57,7 +57,7 @@ let svg = avatars.create('custom-seed');
 | ---- | ---------------- | ------------------------------- | -------------------------------------------- |
 | mood | array of strings | `['happy', 'sad', 'surprised']` | Possible values: `sad`, `happy`, `surprised` |
 
-## Further informations
+## Further information
 
 You can find the DiceBear Avatars documentation at [avatars.dicebear.com](https://avatars.dicebear.com)
 
