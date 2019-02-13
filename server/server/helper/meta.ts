@@ -12,89 +12,112 @@ import * as mongodb from './mongodb';
 
 import { MetaSpriteCollection, Stats } from '../../types/meta';
 
-export const getMetaData = memoizee(
-  async function() {
-    let headers = {
-      Accept: 'application/vnd.github.v3+json',
-      'User-Agent': 'Dicebear-Avatars'
-    };
+const getRepository = () => {
+  let headers = {
+    Accept: 'application/vnd.github.v3+json',
+    'User-Agent': 'Dicebear-Avatars'
+  };
 
-    if (privateConfig.githubAccessToken) {
-      headers['Authorization'] = 'token ' + privateConfig.githubAccessToken;
+  if (privateConfig.githubAccessToken) {
+    headers['Authorization'] = 'token ' + privateConfig.githubAccessToken;
+  }
+
+  return request
+    .get('https://api.github.com/repos/dicebear/avatars', {
+      headers: headers
+    })
+    .then(response => JSON.parse(response));
+};
+
+const getPrivacyPolicy = async () => {
+  let privacyPolicy: string;
+
+  if (privateConfig.privacyPolicyFile) {
+    if (isUrl(privateConfig.privacyPolicyFile)) {
+      let privacyPolicyHeaders = {
+        'User-Agent': 'Dicebear-Avatars'
+      };
+
+      if (privateConfig.privacyPolicyFile.startsWith('https://api.github.com/')) {
+        privacyPolicyHeaders['Accept'] = 'application/vnd.github.v3.raw';
+
+        if (privateConfig.githubAccessToken) {
+          privacyPolicyHeaders['Authorization'] = 'token ' + privateConfig.githubAccessToken;
+        }
+      }
+
+      privacyPolicy = await request(privateConfig.privacyPolicyFile, {
+        headers: privacyPolicyHeaders
+      });
+    } else {
+      privacyPolicy = await fs.readFile(privateConfig.privacyPolicyFile, 'utf8');
     }
+  }
 
-    let repository = await request
-      .get('https://api.github.com/repos/dicebear/avatars', {
-        headers: headers
-      })
-      .then(response => JSON.parse(response));
+  return privacyPolicy;
+};
+
+const getLegalNotice = async () => {
+  let legalNotice: string;
+
+  if (privateConfig.legalNoticeFile) {
+    if (isUrl(privateConfig.legalNoticeFile)) {
+      let legalNoticeHeaders = {
+        'User-Agent': 'Dicebear-Avatars'
+      };
+
+      if (privateConfig.privacyPolicyFile.startsWith('https://api.github.com/')) {
+        legalNoticeHeaders['Accept'] = 'application/vnd.github.v3.raw';
+
+        if (privateConfig.githubAccessToken) {
+          legalNoticeHeaders['Authorization'] = 'token ' + privateConfig.githubAccessToken;
+        }
+      }
+
+      legalNotice = await request(privateConfig.legalNoticeFile, {
+        headers: legalNoticeHeaders
+      });
+    } else {
+      legalNotice = await fs.readFile(privateConfig.legalNoticeFile, 'utf8');
+    }
+  }
+
+  return legalNotice;
+};
+
+export const getStats = async () => {
+  let stats: Stats;
+
+  if (privateConfig.mongodbUri) {
+    let [line, total] = await Promise.all([mongodb.line(), mongodb.total()]);
+
+    stats = {
+      line: line,
+      total: total
+    };
+  }
+
+  return stats;
+};
+
+const collectMetaData = memoizee(
+  async function() {
+    let [repository, privacyPolicy, legalNotice, stats] = await Promise.all([
+      getRepository(),
+      getPrivacyPolicy(),
+      getLegalNotice(),
+      getStats()
+    ]);
 
     let spriteCollections: MetaSpriteCollection[] = [];
 
-    publicConfig.spriteCollections.v3.forEach((spriteCollection, key) => {
+    publicConfig.spriteCollections.v3.forEach(spriteCollection => {
       spriteCollections.push({
         id: spriteCollection.id,
         name: spriteCollection.name,
         options: spriteCollection.options ? spriteCollection.options.describe() : yup.object().describe()
       });
     });
-
-    let privacyPolicy: string;
-
-    if (privateConfig.privacyPolicyFile) {
-      if (isUrl(privateConfig.privacyPolicyFile)) {
-        let privacyPolicyHeaders = {
-          'User-Agent': 'Dicebear-Avatars'
-        };
-
-        if (privateConfig.privacyPolicyFile.startsWith('https://api.github.com/')) {
-          privacyPolicyHeaders['Accept'] = 'application/vnd.github.v3.raw';
-
-          if (privateConfig.githubAccessToken) {
-            privacyPolicyHeaders['Authorization'] = 'token ' + privateConfig.githubAccessToken;
-          }
-        }
-
-        privacyPolicy = await request(privateConfig.privacyPolicyFile, {
-          headers: privacyPolicyHeaders
-        });
-      } else {
-        privacyPolicy = await fs.readFile(privateConfig.privacyPolicyFile, 'utf8');
-      }
-    }
-
-    let legalNotice: string;
-
-    if (privateConfig.legalNoticeFile) {
-      if (isUrl(privateConfig.legalNoticeFile)) {
-        let legalNoticeHeaders = {
-          'User-Agent': 'Dicebear-Avatars'
-        };
-
-        if (privateConfig.privacyPolicyFile.startsWith('https://api.github.com/')) {
-          legalNoticeHeaders['Accept'] = 'application/vnd.github.v3.raw';
-
-          if (privateConfig.githubAccessToken) {
-            legalNoticeHeaders['Authorization'] = 'token ' + privateConfig.githubAccessToken;
-          }
-        }
-
-        legalNotice = await request(privateConfig.legalNoticeFile, {
-          headers: legalNoticeHeaders
-        });
-      } else {
-        legalNotice = await fs.readFile(privateConfig.legalNoticeFile, 'utf8');
-      }
-    }
-
-    let stats: Stats;
-
-    if (privateConfig.mongodbUri) {
-      stats = {
-        line: await mongodb.line(),
-        total: await mongodb.total()
-      };
-    }
 
     return {
       stargazers: {
@@ -117,3 +140,17 @@ export const getMetaData = memoizee(
     promise: true
   }
 );
+
+export const getMetaData = async () => {
+  try {
+    return await collectMetaData();
+  } catch (err) {
+    // @ts-ignore
+    if (collectMetaData._has()) {
+      // @ts-ignore
+      return collectMetaData._get();
+    } else {
+      throw err;
+    }
+  }
+};
