@@ -3,7 +3,7 @@
 ![license]https://img.shields.io/npm/l/@dicebear/avatars.svg?style=flat-square)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars)
 
-Avatars allows you to create placeholder avatars. You can choose between simple identicons and lovely designed characters.
+Avatars is an avatar placeholder library for designers and developers. You can choose between simple identicons and lovely designed characters.
 And best of all: We provide a simple and free HTTP API that you can use right away!
 
 https://avatars.dicebear.com

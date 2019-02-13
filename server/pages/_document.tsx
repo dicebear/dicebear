@@ -7,7 +7,7 @@ export default class MyDocument extends Document {
         <Head>
           <meta
             name="description"
-            content="Free and MIT licensed SVG avatar placeholder library with HTTP-API for designers and developers."
+            content="Avatars is an avatar placeholder library for designers and developers. You can choose between simple identicons and lovely designed characters."
           />
 
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />

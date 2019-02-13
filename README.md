@@ -1,6 +1,6 @@
 ![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/master/banner.svg?sanitize=true)
 
-Avatars allows you to create placeholder avatars. You can choose between simple identicons and lovely designed characters.
+Avatars is an avatar placeholder library for designers and developers. You can choose between simple identicons and lovely designed characters.
 And best of all: We provide a simple and free HTTP API that you can use right away!
 
 https://avatars.dicebear.com

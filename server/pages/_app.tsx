@@ -18,7 +18,7 @@ export default class MyApp extends App {
     return (
       <Container>
         <Head>
-          <title>DiceBear Avatars - SVG Avatar Placeholder Library</title>
+          <title>Avatar Placeholder Library - DiceBear Avatars</title>
         </Head>
         <Component {...pageProps} />
       </Container>
