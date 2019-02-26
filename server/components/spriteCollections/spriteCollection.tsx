@@ -24,7 +24,7 @@ export default class SpriteCollection extends React.Component<Props> {
             href={'https://www.npmjs.com/package/' + this.props.name}
             className="btn btn-dark d-inline-flex align-items-center"
           >
-            <GoBook className="mr-1" size="1.3em" />
+            <GoBook className="mr-1" size={20} />
             Read documentation
           </a>
         </div>

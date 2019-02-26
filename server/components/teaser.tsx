@@ -43,7 +43,7 @@ export default class Teaser extends React.Component<Props> {
                             className="btn btn-light d-inline-flex align-items-center mr-sm-4 mb-2 mb-sm-0"
                             onClick={e => this.onClickScrollTo(e)}
                           >
-                            <GoBook className="mr-1" size="1.3em" />
+                            <GoBook className="mr-1" size={20} />
                             Documentation
                           </a>
                           <br className="d-sm-none" />
@@ -51,7 +51,7 @@ export default class Teaser extends React.Component<Props> {
                             className="btn btn-light d-inline-flex align-items-center"
                             href={this.props.meta.stargazers.url}
                           >
-                            <GoMarkGithub className="mr-1" size="1.3em" />
+                            <GoMarkGithub className="mr-1" size={20} />
                             Star
                           </a>
                           <a className="btn btn-tooltip" href={this.props.meta.stargazers.url} target="_blank">

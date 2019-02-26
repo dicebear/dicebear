@@ -191,7 +191,7 @@ export default class Generator extends React.Component<Props, State> {
                 <div className="row">
                   <div className="col">
                     <a href="#" onClick={this.onToggleShowAdvancedOptions} id="ShowAdvancedOptionsTooltip">
-                      <GoGear size="1.3rem" />
+                      <GoGear size={20} />
                     </a>
                     <UncontrolledTooltip placement="top" target="ShowAdvancedOptionsTooltip">
                       Advanced options
@@ -199,7 +199,7 @@ export default class Generator extends React.Component<Props, State> {
                   </div>
                   <div className="col text-right">
                     <a href={avatar} target="_blank" id="OpenNewTabTooltip">
-                      <GoLinkExternal size="1.3rem" />
+                      <GoLinkExternal size={20} />
                     </a>
                     <UncontrolledTooltip placement="top" target="OpenNewTabTooltip">
                       Open in new tab
