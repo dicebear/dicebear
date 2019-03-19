@@ -7,21 +7,21 @@ Documentation and HTTP-API for [DiceBear Avatars](https://github.com/DiceBear/av
 ### 1. Download
 
 ```
-git clone https://github.com/DiceBear/avatars.dicebear.com.git
+git clone https://github.com/DiceBear/avatars.git
 ```
 
 ### 2. Installation
 
 ```
-cd avatars.dicebear.com;
-yarn install;
+cd avatars/server;
+npm install;
 ```
 
 ### 3. Start server
 
 ```
-yarn build
-yarn start
+npm run build
+npm run start
 ```
 
 ## API Routes
