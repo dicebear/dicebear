@@ -8,9 +8,7 @@ const ms = require('ms');
 import privateConfig from '../../config/private';
 import publicConfig from '../../config/public';
 
-import * as mongodb from './mongodb';
-
-import { MetaSpriteCollection, Stats } from '../../types/meta';
+import { MetaSpriteCollection } from '../../types/meta';
 
 const getRepository = () => {
   let headers = {
@@ -85,28 +83,12 @@ const getLegalNotice = async () => {
   return legalNotice;
 };
 
-export const getStats = async () => {
-  let stats: Stats;
-
-  if (privateConfig.mongodbUri) {
-    let [line, total] = await Promise.all([mongodb.line(), mongodb.total()]);
-
-    stats = {
-      line: line,
-      total: total
-    };
-  }
-
-  return stats;
-};
-
 const collectMetaData = memoizee(
   async function() {
-    let [repository, privacyPolicy, legalNotice, stats] = await Promise.all([
+    let [repository, privacyPolicy, legalNotice] = await Promise.all([
       getRepository(),
       getPrivacyPolicy(),
-      getLegalNotice(),
-      getStats()
+      getLegalNotice()
     ]);
 
     let spriteCollections: MetaSpriteCollection[] = [];
@@ -128,11 +110,11 @@ const collectMetaData = memoizee(
         url: repository.html_url + '/issues',
         count: repository.issues_count
       },
-      stats: stats,
       name: '@dicebear/avatars',
       spriteCollections: spriteCollections,
       privacy_policy: privacyPolicy,
-      legal_notice: legalNotice
+      legal_notice: legalNotice,
+      stats: privateConfig.mongodbUri ? true : false
     };
   },
   {

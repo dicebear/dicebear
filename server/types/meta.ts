@@ -6,16 +6,6 @@ export type MetaSpriteCollection = {
   options: SchemaDescription;
 };
 
-export type Stats = {
-  line: {
-    [date: string]: number;
-  };
-  total: {
-    sum: number;
-    since: string;
-  };
-};
-
 export type Meta = {
   stargazers: {
     url: string;
@@ -26,8 +16,8 @@ export type Meta = {
     count: number;
   };
   name: string;
-  stats?: Stats;
   spriteCollections: MetaSpriteCollection[];
   privacy_policy?: string;
   legal_notice?: string;
+  stats: boolean;
 };

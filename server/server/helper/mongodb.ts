@@ -1,10 +1,11 @@
 import privateConfig from '../../config/private';
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
 import * as memoizee from 'memoizee';
+import { Stats } from '../../types/mongodb';
 
 const COLLECTION_API_REQUESTS = 'api_requests';
 
-export const db = memoizee(
+export const db = memoizee<() => Promise<Db>>(
   async function() {
     if (privateConfig.mongodbUri) {
       return new MongoClient(privateConfig.mongodbUri, {
@@ -128,5 +129,25 @@ export async function total() {
     });
   }
 
-  return 0;
+  let now = new Date();
+
+  return {
+    sum: 0,
+    since: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+  };
+}
+
+export async function getStats() {
+  let stats: Stats;
+
+  if (privateConfig.mongodbUri) {
+    let [statsLine, statsTotal] = await Promise.all([line(), total()]);
+
+    stats = {
+      line: statsLine,
+      total: statsTotal
+    };
+  }
+
+  return stats;
 }

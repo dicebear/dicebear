@@ -1,5 +1,6 @@
 import React from 'react';
 import * as http from 'http';
+import * as socketio from 'socket.io-client';
 
 import Layout from '../layout';
 
@@ -8,6 +9,7 @@ import { getMetaData } from '../server/helper/meta';
 
 import ReactChartkick, { AreaChart } from 'react-chartkick';
 import Chart from 'chart.js';
+import { Stats } from '../types/mongodb';
 
 ReactChartkick.addAdapter(Chart);
 
@@ -15,7 +17,13 @@ type Props = {
   meta: Meta;
 };
 
-export default class LegalNotice extends React.Component<Props> {
+type State = {
+  stats?: Stats;
+};
+
+export default class LegalNotice extends React.Component<Props, State> {
+  state = {};
+
   static async getInitialProps(ctx: { req: http.IncomingMessage }) {
     let meta: Meta;
 
@@ -32,9 +40,11 @@ export default class LegalNotice extends React.Component<Props> {
     };
   }
 
-  onChangeSeed(seed: string) {
-    this.setState({
-      seed: seed
+  componentDidMount() {
+    socketio().on('data', (data: Stats) => {
+      this.setState({
+        stats: data
+      });
     });
   }
 
@@ -43,22 +53,26 @@ export default class LegalNotice extends React.Component<Props> {
       <Layout meta={this.props.meta}>
         <div className="container">
           <h1 className="my-4">HTTP-API Stats</h1>
-          <div className="row mb-5">
-            <div className="col-lg-9 mb-3 mb-lg-0">
-              <div className="rounded bg-light p-3">
-                <AreaChart data={this.props.meta.stats.line} thousands="," />
-              </div>
-            </div>
-            <div className="col-lg-3">
-              <div className="rounded bg-light py-3 text-center">
-                <p className="mb-0">Total requests</p>
-                <div className="display-2 mb-1">
-                  {new Intl.NumberFormat('en-US').format(this.props.meta.stats.total.sum)}
+          {this.state.stats ? (
+            <div className="row mb-5">
+              <div className="col-lg-9 mb-3 mb-lg-0">
+                <div className="rounded bg-light p-3">
+                  <AreaChart data={this.state.stats.line} thousands="," />
                 </div>
-                <p className="text-muted mb-0">since {this.props.meta.stats.total.since}</p>
+              </div>
+              <div className="col-lg-3">
+                <div className="rounded bg-light py-3 text-center">
+                  <p className="mb-0">Total requests</p>
+                  <div className="display-2 mb-1">
+                    {new Intl.NumberFormat('en-US').format(this.state.stats.total.sum)}
+                  </div>
+                  <p className="text-muted mb-0">since {this.state.stats.total.since}</p>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            'Loading'
+          )}
         </div>
       </Layout>
     );

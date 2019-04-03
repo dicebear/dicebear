@@ -12,4 +12,5 @@ export type PrivateConfig = {
   mongodbDatabase: string;
   mongodbReconnectInterval: number;
   mongodbReconnectTries: number;
+  socketInterval: number;
 };

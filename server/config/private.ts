@@ -13,7 +13,8 @@ let privateConfig: PrivateConfig = {
   mongodbUri: process.env.MONGODB_URI,
   mongodbDatabase: process.env.MONGODB_DATABASE || 'avatars',
   mongodbReconnectInterval: parseInt(process.env.MONGODB_RECONNECT_INTERVAL) || 1000,
-  mongodbReconnectTries: parseInt(process.env.MONGODB_RECONNECT_TRIES) || Number.MAX_VALUE
+  mongodbReconnectTries: parseInt(process.env.MONGODB_RECONNECT_TRIES) || Number.MAX_VALUE,
+  socketInterval: 1000
 };
 
 export default privateConfig;
