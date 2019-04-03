@@ -22,7 +22,7 @@ type State = {
 };
 
 export default class LegalNotice extends React.Component<Props, State> {
-  state = {};
+  state: State = {};
 
   static async getInitialProps(ctx: { req: http.IncomingMessage }) {
     let meta: Meta;
