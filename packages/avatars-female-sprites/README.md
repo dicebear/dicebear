@@ -24,15 +24,15 @@ Our free HTTP-API is the easiest way to use this sprite collection. Just use the
     https://avatars.dicebear.com/v2/female/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
-`option` can be used to pass [options](#options).
+`options` can be used to pass [options](#options).
 
 #### Examples
 
-| preview                                                                                          | url                                                                     |
-| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/female/example.svg" width="60" />                      | https://avatars.dicebear.com/v2/female/example.svg                      |
-| <img src="https://avatars.dicebear.com/v2/female/example.svg?option[mood][]=happy" width="60" /> | https://avatars.dicebear.com/v2/female/example.svg?option[mood][]=happy |
-| <img src="https://avatars.dicebear.com/v2/female/example.svg?option[mood][]=sad" width="60" />   | https://avatars.dicebear.com/v2/female/example.svg?option[mood][]=sad   |
+| preview                                                                                           | url                                                                      |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| <img src="https://avatars.dicebear.com/v2/female/example.svg" width="60" />                       | https://avatars.dicebear.com/v2/female/example.svg                       |
+| <img src="https://avatars.dicebear.com/v2/female/example.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/v2/female/example.svg?options[mood][]=happy |
+| <img src="https://avatars.dicebear.com/v2/female/example.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/v2/female/example.svg?options[mood][]=sad   |
 
 ### NPM
 

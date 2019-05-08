@@ -26,14 +26,14 @@ Our free HTTP-API is the easiest way to use this sprite collection. Just use the
     https://avatars.dicebear.com/v2/gridy/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
-`option` can be used to pass [options](#options).
+`options` can be used to pass [options](#options).
 
 #### Examples
 
-| preview                                                                                           | url                                                                      |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg" width="60" />                    | https://avatars.dicebear.com/v2/gridy/custom-seed.svg                    |
-| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg?option[colorful]=1" width="60" /> | https://avatars.dicebear.com/v2/gridy/custom-seed.svg?option[colorful]=1 |
+| preview                                                                                            | url                                                                       |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg" width="60" />                     | https://avatars.dicebear.com/v2/gridy/custom-seed.svg                     |
+| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg?options[colorful]=1" width="60" /> | https://avatars.dicebear.com/v2/gridy/custom-seed.svg?options[colorful]=1 |
 
 ### NPM
 
