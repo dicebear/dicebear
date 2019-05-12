@@ -1,7 +1,6 @@
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
-
-type Options = {};
+import Options from './options';
 
 export default function(options: Options = {}) {
   options = {};
