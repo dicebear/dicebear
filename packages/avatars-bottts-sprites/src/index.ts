@@ -1,6 +1,6 @@
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
-import Options from './options';
+import Options, { Colors } from './options';
 
 import eyesCollection from './eyes';
 import faceCollection from './face';
@@ -8,25 +8,37 @@ import mouthCollection from './mouth';
 import sidesCollection from './sides';
 import textureCollection from './texture';
 import topCollection from './top';
-import colorsCollection from './colors';
+
+import colors from './colors';
 
 export default function(options: Options = {}) {
   options = {
-    primaryColorLevel: 900,
-    secondaryColorLevel: 800,
-    mouthChance: 80,
-    sidesChance: 80,
+    primaryColorLevel: 600,
+    secondaryColorLevel: 400,
+    mouthChance: 100,
+    sidesChance: 100,
     textureChance: 50,
-    topChange: 80
+    topChange: 100,
+    ...options
   };
 
   const group = (random: Random, content: string, chance: number, x: number, y: number) => {
     if (random.bool(chance)) {
-      return `<g x="${x}" y="${y}">${content}</g>`;
+      return `<g transform="translate(${x}, ${y})">${content}</g>`;
     }
 
     return '';
   };
+
+  let colorsCollection: Array<{
+    [level: number]: string;
+  }> = [];
+
+  Object.keys(colors).forEach((color: Colors) => {
+    if (options.colors === undefined || options.colors.length === 0 || options.colors.indexOf(color) !== -1) {
+      colorsCollection.push(colors[color]);
+    }
+  });
 
   return function(random: Random) {
     let primaryColorCollection = random.pickone(colorsCollection);
@@ -35,7 +47,7 @@ export default function(options: Options = {}) {
     let primaryColor = new Color(primaryColorCollection[options.primaryColorLevel]);
     let secondaryColor = new Color(primaryColorCollection[options.secondaryColorLevel]);
 
-    if (false === options.colorful) {
+    if (options.colorful) {
       secondaryColor = new Color(secondaryColorCollection[options.secondaryColorLevel]);
     }
 
@@ -50,10 +62,10 @@ export default function(options: Options = {}) {
     return [
       '<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">',
       group(random, sides(secondaryColor), options.sidesChance, 0, 66),
-      group(random, top(secondaryColor), options.sidesChance, 41, 0),
-      group(random, face(primaryColor, random.bool(options.textureChance) ? texture() : undefined), options.sidesChance, 25, 44),
-      group(random, mouth(), options.sidesChance, 52, 124),
-      group(random, eyes(), options.sidesChance, 38, 76),
+      group(random, top(secondaryColor), options.topChange, 41, 0),
+      group(random, face(primaryColor, random.bool(options.textureChance) ? texture() : undefined), 100, 25, 44),
+      group(random, mouth(), options.mouthChance, 52, 124),
+      group(random, eyes(), 100, 38, 76),
       '</svg>'
     ].join('');
   };

@@ -18,24 +18,24 @@ import red from './red';
 import teal from './teal';
 import yellow from './yellow';
 
-export default [
-  amber,
-  blue,
-  blueGrey,
-  brown,
-  cyan,
-  deepOrange,
-  deepPurple,
-  agreenmber,
-  grey,
-  indigo,
-  lightBlue,
-  lightGreen,
-  lime,
-  orange,
-  pink,
-  purple,
-  red,
-  teal,
-  yellow
-];
+export default {
+  amber: amber,
+  blue: blue,
+  blueGrey: blueGrey,
+  brown: brown,
+  cyan: cyan,
+  deepOrange: deepOrange,
+  deepPurple: deepPurple,
+  agreenmber: agreenmber,
+  grey: grey,
+  indigo: indigo,
+  lightBlue: lightBlue,
+  lightGreen: lightGreen,
+  lime: lime,
+  orange: orange,
+  pink: pink,
+  purple: purple,
+  red: red,
+  teal: teal,
+  yellow: yellow
+};
