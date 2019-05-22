@@ -1,7 +1,7 @@
 {
   "name": "@dicebear/avatars-bottts-sprites",
-  "version": "2.0.6",
-  "description": "Pixel art bottts sprite collection for DiceBear Avatars",
+  "version": "0.0.0",
+  "description": "Bottts sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

@@ -26,7 +26,7 @@ export default class SpriteCollections extends React.Component<Props> {
                 <SpriteCollection {...spriteCollection} />
               </div>
             ))}
-            <div className="col-12">
+            <div className="col-12 col-md-6 col-lg-4 mb-4">
               <div className="bg-white p-4 rounded h-100 d-flex flex-column justify-content-between">
                 <div className="text-center">
                   <h4 className="h5 mb-4">Your sprite collection here?</h4>

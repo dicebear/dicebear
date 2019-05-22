@@ -166,22 +166,6 @@ let config: PublicConfig = {
           .noUnknown()
       },
       {
-        id: 'gridy',
-        name: '@dicebear/avatars-gridy-sprites',
-        options: yup
-          .object({
-            colorful: yup
-              .number()
-              .oneOf([0, 1])
-              .meta({
-                type: 'switch',
-                values: [0, 1],
-                defaultValue: 0
-              })
-          })
-          .noUnknown()
-      },
-      {
         id: 'avataaars',
         name: '@dicebear/avatars-avataaars-sprites',
         options: yup
@@ -434,6 +418,22 @@ let config: PublicConfig = {
               .number()
               .min(0)
               .max(100)
+          })
+          .noUnknown()
+      },
+      {
+        id: 'gridy',
+        name: '@dicebear/avatars-gridy-sprites',
+        options: yup
+          .object({
+            colorful: yup
+              .number()
+              .oneOf([0, 1])
+              .meta({
+                type: 'switch',
+                values: [0, 1],
+                defaultValue: 0
+              })
           })
           .noUnknown()
       }

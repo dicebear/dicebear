@@ -60,7 +60,7 @@ export default function(options: Options = {}) {
 
     // prettier-ignore
     return [
-      '<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">',
+      '<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" fill="none">',
       group(random, sides(secondaryColor), options.sidesChance, 0, 66),
       group(random, top(secondaryColor), options.topChange, 41, 0),
       group(random, face(primaryColor, random.bool(options.textureChance) ? texture() : undefined), 100, 25, 44),

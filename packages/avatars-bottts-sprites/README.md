@@ -30,10 +30,11 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                 | url                                            |
-| ----------------------------------------------------------------------- | ---------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/bottts/foo.svg" width="60" /> | https://avatars.dicebear.com/v2/bottts/foo.svg |
-| <img src="https://avatars.dicebear.com/v2/bottts/bar.svg" width="60" /> | https://avatars.dicebear.com/v2/bottts/bar.svg |
+| preview                                                                                                                           | url                                                                                                      |
+| --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/v2/bottts/example.svg" width="60" />                                                       | https://avatars.dicebear.com/v2/bottts/example.svg                                                       |
+| <img src="https://avatars.dicebear.com/v2/bottts/example.svg?options[colors][]=cyan" width="60" />                                | https://avatars.dicebear.com/v2/bottts/example.svg?options[colors][]=cyan                                |
+| <img src="https://avatars.dicebear.com/v2/bottts/example.svg?options[colors][]=cyan&options[primaryColorLevel]=200" width="60" /> | https://avatars.dicebear.com/v2/bottts/example.svg?options[colors][]=cyan&options[primaryColorLevel]=200 |
 
 ### NPM
 
@@ -50,6 +51,19 @@ import sprites from '@dicebear/avatars-bottts-sprites';
 let avatars = new Avatars(sprites());
 let svg = avatars.create('custom-seed');
 ```
+
+## Options
+
+| name                | type             | default | description                                                                                                                                                                                                       |
+| ------------------- | ---------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| colors              | array of strings | `null`  | Possible values: `amber`, `blue`, `blueGrey`, `brown`, `cyan`, `deepOrange`, `deepPurple`, `agreenmber`, `grey`, `indigo`, `lightBlue`, `lightGreen`, `lime`, `orange`, `pink`, `purple`, `red`, `teal`, `yellow` |
+| primaryColorLevel   | number           | `600`   | Possible values: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`                                                                                                                              |
+| secondaryColorLevel | number           | `400`   | Possible values: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`                                                                                                                              |
+| colorful            | boolean          | `100`   | Probability in percent                                                                                                                                                                                            |
+| mouthChance         | number           | `100`   | Probability in percent                                                                                                                                                                                            |
+| sidesChance         | number           | `100`   | Probability in percent                                                                                                                                                                                            |
+| textureChance       | number           | `50`    | Probability in percent                                                                                                                                                                                            |
+| topChange           | number           | `100`   | Probability in percent                                                                                                                                                                                            |
 
 ## Further information
 
