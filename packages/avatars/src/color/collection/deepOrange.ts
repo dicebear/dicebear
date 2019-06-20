@@ -1,4 +1,6 @@
-export default {
+import { Color } from '../../types';
+
+const color: Color = {
   50: '#FBE9E7',
   100: '#FFCCBC',
   200: '#FFAB91',
@@ -10,3 +12,5 @@ export default {
   800: '#D84315',
   900: '#BF360C'
 };
+
+export default color;

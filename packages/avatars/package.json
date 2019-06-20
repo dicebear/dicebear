@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@types/node": "^10.11.6",
-    "jest": "^23.4.1",
+    "jest": "^24.8.0",
     "license-checker": "^24.0.0",
     "typescript": "^3.4.5",
     "webpack": "^4.16.1",
@@ -22,7 +22,7 @@
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -r dist/* lib/* || true",
-    "build": "tsc; webpack",
+    "build": "tsc && webpack",
     "watch": "webpack -w & tsc -w"
   },
   "author": "Florian Körner <contact@dicebear.com>",

@@ -2,6 +2,7 @@ import * as hexToRgb from 'pure-color/parse/hex';
 import * as rgbToHsv from 'pure-color/convert/rgb2hsv';
 import * as rgbToHex from 'pure-color/convert/rgb2hex';
 import * as hsvToRgb from 'pure-color/convert/hsv2rgb';
+import collection from './collection';
 
 export interface ColorInterface {
   alpha: number;
@@ -12,6 +13,8 @@ export interface ColorInterface {
 }
 
 export default class Color implements ColorInterface {
+  public static collection = collection;
+
   public alpha: number = 1;
 
   private color: {

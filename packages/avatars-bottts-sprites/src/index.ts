@@ -1,6 +1,7 @@
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
-import Options, { Colors } from './options';
+import { ColorCollection, Color as ColorType } from '@dicebear/avatars/lib/types';
+import Options from './options';
 
 import eyesCollection from './eyes';
 import faceCollection from './face';
@@ -8,8 +9,6 @@ import mouthCollection from './mouth';
 import sidesCollection from './sides';
 import textureCollection from './texture';
 import topCollection from './top';
-
-import colors from './colors';
 
 export default function(options: Options = {}) {
   options = {
@@ -30,13 +29,11 @@ export default function(options: Options = {}) {
     return '';
   };
 
-  let colorsCollection: Array<{
-    [level: number]: string;
-  }> = [];
+  let colorsCollection: Array<ColorType> = [];
 
-  Object.keys(colors).forEach((color: Colors) => {
+  Object.keys(Color.collection).forEach((color: keyof ColorCollection) => {
     if (options.colors === undefined || options.colors.length === 0 || options.colors.indexOf(color) !== -1) {
-      colorsCollection.push(colors[color]);
+      colorsCollection.push(Color.collection[color]);
     }
   });
 

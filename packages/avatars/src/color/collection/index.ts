@@ -17,8 +17,9 @@ import purple from './purple';
 import red from './red';
 import teal from './teal';
 import yellow from './yellow';
+import { ColorCollection } from '../../types';
 
-export default {
+const collection: ColorCollection = {
   amber: amber,
   blue: blue,
   blueGrey: blueGrey,
@@ -39,3 +40,5 @@ export default {
   teal: teal,
   yellow: yellow
 };
+
+export default collection;
