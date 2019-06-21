@@ -44,26 +44,30 @@ export async function registerApiRequest(spriteCollection: string) {
 
     let collection = database.collection(COLLECTION_API_REQUESTS);
 
-    return collection.findOneAndUpdate(
-      {
-        query: {
-          _id: id
-        }
-      },
-      {
-        $inc: {
-          views: 1
+    return collection
+      .findOneAndUpdate(
+        {
+          query: {
+            _id: id
+          }
         },
-        $setOnInsert: {
-          _id: id,
-          date: date,
-          spriteCollection: spriteCollection
+        {
+          $inc: {
+            views: 1
+          },
+          $setOnInsert: {
+            _id: id,
+            date: date,
+            spriteCollection: spriteCollection
+          }
+        },
+        {
+          upsert: true
         }
-      },
-      {
-        upsert: true
-      }
-    );
+      )
+      .catch(e => {
+        console.error(e);
+      });
   }
 }
 
