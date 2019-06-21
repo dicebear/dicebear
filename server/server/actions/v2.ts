@@ -2,6 +2,7 @@ import Avatars from '@dicebear/avatars';
 import * as apicache from 'apicache';
 import * as yup from 'yup';
 
+import * as request from 'request-promise-native';
 import * as express from 'express';
 import privateConfig from '../../config/private';
 import publicConfig from '../../config/public';
@@ -58,6 +59,24 @@ router.get(
 
       if (spriteCollectionPackage.default) {
         spriteCollectionPackage = spriteCollectionPackage.default;
+      }
+
+      if ('gravatar' in req.query) {
+        try {
+          let gravatarSize = parseInt(req.query['s']);
+          let gravatarUrl = gravatarSize
+            ? `https://gravatar.com/avatar/${seed}.png?d=404&s=${gravatarSize}`
+            : `https://gravatar.com/avatar/${seed}.png?d=404`;
+
+          // Check whether the image exists at Gravatar.
+          await request.head(gravatarUrl).promise();
+
+          res.redirect(gravatarUrl);
+
+          return;
+        } catch (e) {
+          // No image available at Gravtar, therefore no forwarding.
+        }
       }
 
       res.status(200);
