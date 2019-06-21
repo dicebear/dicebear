@@ -59,6 +59,48 @@ let config: PublicConfig = {
                 type: 'switch',
                 values: ['#fff', '#f0f0f0'],
                 defaultValue: '#fff'
+              }),
+            colors: yup
+              .array()
+              .of(
+                yup
+                  .string()
+                  .oneOf(
+                    (values = [
+                      'amber',
+                      'blue',
+                      'blueGrey',
+                      'brown',
+                      'cyan',
+                      'deepOrange',
+                      'deepPurple',
+                      'agreenmber',
+                      'grey',
+                      'indigo',
+                      'lightBlue',
+                      'lightGreen',
+                      'lime',
+                      'orange',
+                      'pink',
+                      'purple',
+                      'red',
+                      'teal',
+                      'yellow'
+                    ])
+                  )
+              )
+              .meta({
+                type: 'checkbox',
+                values: values,
+                defaultValue: []
+              }),
+            colorLevel: yup
+              .number()
+              .oneOf((values = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]))
+              .meta({
+                type: 'select',
+                values: values,
+                defaultValue: 600
               })
           })
           .noUnknown()

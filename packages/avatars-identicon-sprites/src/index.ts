@@ -1,39 +1,32 @@
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
+import { ColorCollection, Color as ColorType } from '@dicebear/avatars/lib/types';
 
 type Options = {
   padding?: number;
-  background?: string
+  background?: string;
+  colors?: Array<keyof ColorCollection>;
+  colorLevel?: keyof ColorType;
 };
 
 export default function(options: Options = {}) {
   options = {
     padding: 0,
     background: '#FFF',
+    colorLevel: 600,
     ...options
   };
 
-  let colors = [
-    new Color(`#e57373`),
-    new Color(`#F06292`),
-    new Color(`#BA68C8`),
-    new Color(`#9575CD`),
-    new Color(`#7986CB`),
-    new Color(`#64B5F6`),
-    new Color(`#4FC3F7`),
-    new Color(`#4DD0E1`),
-    new Color(`#4DB6AC`),
-    new Color(`#81C784`),
-    new Color(`#AED581`),
-    new Color(`#DCE775`),
-    new Color(`#FFF176`),
-    new Color(`#FFD54F`),
-    new Color(`#FFB74D`),
-    new Color(`#FF8A65`)
-  ];
+  let colors: string[] = [];
+
+  Object.keys(Color.collection).forEach((color: keyof ColorCollection) => {
+    if (options.colors === undefined || options.colors.length === 0 || options.colors.indexOf(color) !== -1) {
+      colors.push(Color.collection[color][options.colorLevel]);
+    }
+  });
 
   return function(random: Random) {
-    let color = random.pickone(colors).hex;
+    let color = random.pickone(colors);
 
     // prettier-ignore
     return [
