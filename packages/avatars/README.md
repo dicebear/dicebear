@@ -36,6 +36,11 @@ For example, to create a happy _male_ avatar with the seed `john`, the following
 
     https://avatars.dicebear.com/v2/male/john.svg?options[mood]=happy
 
+You also can use the HTTP API as fallback for Gravatar. Use the [Gravatar hash](https://en.gravatar.com/site/implement/hash/) as seed
+and add the parameter `gravatar` to your URL. With the parameter `s` you can also define the size of the Gravatar avatar.
+
+https://avatars.dicebear.com/v2/male/48c424d839214264fc7f65b52235467c.svg?gravatar&s=248
+
 ### NPM
 
 Choose NPM if you want to use a spriteCollection that is not available via the HTTP-API.

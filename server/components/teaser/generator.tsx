@@ -13,6 +13,7 @@ type Props = {
 type State = {
   spriteCollection: MetaSpriteCollection;
   seed: string;
+  gravatar: boolean;
   advancedOptions: {
     [key: string]: any;
   };
@@ -29,6 +30,7 @@ export default class Generator extends React.Component<Props, State> {
     this.state = {
       spriteCollection: props.meta.spriteCollections[0],
       seed: '',
+      gravatar: false,
       advancedOptions: this.getSpriteCollectionAdvancedOptions(props.meta.spriteCollections[0]),
       showAdvancedOptions: false,
       spriteDropdownOpen: false
@@ -39,6 +41,7 @@ export default class Generator extends React.Component<Props, State> {
     this.onToggleShowAdvancedOptions = this.onToggleShowAdvancedOptions.bind(this);
     this.onChangeAdvancedOptions = this.onChangeAdvancedOptions.bind(this);
     this.toggleSpriteDropdownOpen = this.toggleSpriteDropdownOpen.bind(this);
+    this.onChangeGravatar = this.onChangeGravatar.bind(this);
 
     this.seedInputRef = React.createRef();
   }
@@ -96,6 +99,12 @@ export default class Generator extends React.Component<Props, State> {
     });
 
     e.preventDefault();
+  }
+
+  onChangeGravatar(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({
+      gravatar: e.target.checked
+    });
   }
 
   onChangeAdvancedOptions(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
@@ -164,7 +173,8 @@ export default class Generator extends React.Component<Props, State> {
 
     let params = stringify(
       {
-        options: options
+        options: options,
+        gravatar: this.state.gravatar || undefined
       },
       { encodeValuesOnly: true, arrayFormat: 'brackets' }
     );
@@ -247,112 +257,122 @@ export default class Generator extends React.Component<Props, State> {
           <Collapse isOpen={this.state.showAdvancedOptions}>
             <div className="generator generator--options">
               <div className="generator-body">
-                {Object.keys(this.state.spriteCollection.options.fields).length ? (
-                  <>
-                    {Object.keys(this.state.spriteCollection.options.fields)
-                      .filter(key => (this.state.spriteCollection.options.fields[key].meta ? true : false))
-                      .map(key => {
-                        let field = this.state.spriteCollection.options.fields[key].meta;
-                        let id = 'advanced_' + key;
+                <div className="form-group row">
+                  <label htmlFor="gravatar" className={`col-sm-3 col-form-label py-0 pr-0`}>
+                    gravatar
+                  </label>
+                  <div className="col-sm-9">
+                    <div className="custom-control custom-switch">
+                      <input
+                        id="gravatar"
+                        name="gravatar"
+                        type="checkbox"
+                        className="custom-control-input"
+                        onChange={this.onChangeGravatar}
+                        checked={this.state.gravatar}
+                      />
+                      <label className="custom-control-label" htmlFor="gravatar" />
+                    </div>
+                  </div>
+                </div>
+                {Object.keys(this.state.spriteCollection.options.fields)
+                  .filter(key => (this.state.spriteCollection.options.fields[key].meta ? true : false))
+                  .map(key => {
+                    let field = this.state.spriteCollection.options.fields[key].meta;
+                    let id = 'advanced_' + key;
 
-                        return (
-                          <div className="form-group row" key={key}>
-                            <label
-                              htmlFor={id}
-                              className={`col-sm-3 col-form-label ${field.type !== 'select' ? 'py-0' : ''} pr-0`}
-                              title={key}
+                    return (
+                      <div className="form-group row" key={key}>
+                        <label
+                          htmlFor={id}
+                          className={`col-sm-3 col-form-label ${field.type !== 'select' ? 'py-0' : ''} pr-0`}
+                          title={key}
+                        >
+                          {key}
+                        </label>
+                        <div className="col-sm-9">
+                          {field.type === 'select' ? (
+                            <select
+                              id={id}
+                              name={key}
+                              className="custom-select"
+                              value={this.state.advancedOptions[key]}
+                              onChange={this.onChangeAdvancedOptions}
                             >
-                              {key}
-                            </label>
-                            <div className="col-sm-9">
-                              {field.type === 'select' ? (
-                                <select
-                                  id={id}
-                                  name={key}
-                                  className="custom-select"
-                                  value={this.state.advancedOptions[key]}
-                                  onChange={this.onChangeAdvancedOptions}
-                                >
-                                  {field.values.map(value => (
-                                    <option key={value}>{value}</option>
-                                  ))}
-                                </select>
-                              ) : (
-                                ''
-                              )}
+                              {field.values.map(value => (
+                                <option key={value}>{value}</option>
+                              ))}
+                            </select>
+                          ) : (
+                            ''
+                          )}
 
-                              {field.type === 'checkbox'
-                                ? field.values.map(value => (
-                                    <div className="custom-control custom-switch" key={value}>
-                                      <input
-                                        name={key}
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        id={id + '_' + value}
-                                        checked={this.state.advancedOptions[key].indexOf(value) !== -1}
-                                        onChange={this.onChangeAdvancedOptions}
-                                        value={value}
-                                      />
-                                      <label className="custom-control-label" htmlFor={id + '_' + value}>
-                                        {value}
-                                      </label>
-                                    </div>
-                                  ))
-                                : ''}
-
-                              {field.type === 'range' ? (
-                                <input
-                                  id={id}
-                                  name={key}
-                                  type="range"
-                                  className="d-block custom-range"
-                                  min={field.values[0]}
-                                  max={field.values[1]}
-                                  onChange={this.onChangeAdvancedOptions}
-                                  value={this.state.advancedOptions[key]}
-                                />
-                              ) : (
-                                ''
-                              )}
-
-                              {field.type === 'switch' ? (
-                                <div className="custom-control custom-switch">
+                          {field.type === 'checkbox'
+                            ? field.values.map(value => (
+                                <div className="custom-control custom-switch" key={value}>
                                   <input
-                                    id={id}
                                     name={key}
                                     type="checkbox"
                                     className="custom-control-input"
+                                    id={id + '_' + value}
+                                    checked={this.state.advancedOptions[key].indexOf(value) !== -1}
                                     onChange={this.onChangeAdvancedOptions}
-                                    checked={this.state.advancedOptions[key] == field.values[1]}
+                                    value={value}
                                   />
-                                  <label className="custom-control-label" htmlFor={id} />
+                                  <label className="custom-control-label" htmlFor={id + '_' + value}>
+                                    {value}
+                                  </label>
                                 </div>
-                              ) : (
-                                ''
-                              )}
+                              ))
+                            : ''}
+
+                          {field.type === 'range' ? (
+                            <input
+                              id={id}
+                              name={key}
+                              type="range"
+                              className="d-block custom-range"
+                              min={field.values[0]}
+                              max={field.values[1]}
+                              onChange={this.onChangeAdvancedOptions}
+                              value={this.state.advancedOptions[key]}
+                            />
+                          ) : (
+                            ''
+                          )}
+
+                          {field.type === 'switch' ? (
+                            <div className="custom-control custom-switch">
+                              <input
+                                id={id}
+                                name={key}
+                                type="checkbox"
+                                className="custom-control-input"
+                                onChange={this.onChangeAdvancedOptions}
+                                checked={this.state.advancedOptions[key] == field.values[1]}
+                              />
+                              <label className="custom-control-label" htmlFor={id} />
                             </div>
-                          </div>
-                        );
-                      })}
-                    <div className="form-group">
-                      <small className="form-text text-muted text-center d-block">
-                        See{' '}
-                        <a
-                          href={`https://www.npmjs.com/package/${this.state.spriteCollection.name}#options`}
-                          target="_blank"
-                          className="text-reset"
-                        >
-                          README.md
-                        </a>{' '}
-                        for advanced options
-                      </small>
-                    </div>
-                  </>
-                ) : (
-                  <div className="generator-row">
-                    <div className="bg-white border-radius text-center px-3 py-2">No advanced options available</div>
-                  </div>
-                )}
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                <div className="form-group">
+                  <small className="form-text text-muted text-center d-block">
+                    See{' '}
+                    <a
+                      href={`https://www.npmjs.com/package/${this.state.spriteCollection.name}#options`}
+                      target="_blank"
+                      className="text-reset"
+                    >
+                      README.md
+                    </a>{' '}
+                    for advanced options
+                  </small>
+                </div>
               </div>
             </div>
           </Collapse>

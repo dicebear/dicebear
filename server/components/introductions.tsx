@@ -76,7 +76,7 @@ export default class Introductions extends React.Component<Props> {
                 </SyntaxHighlighter>
                 <p>{this.getHttpApiDescription()}</p>
                 <hr />
-                <p className="mb-0">
+                <p>
                   The used sprite collection may offer additional options, which can be set using the GET parameter
                   named <code>options</code>. For example, to create a happy{' '}
                   <i>{this.props.meta.spriteCollections[0].id}</i> avatar with the seed <code>john</code>, the following
@@ -86,6 +86,20 @@ export default class Introductions extends React.Component<Props> {
                   {`https://avatars.dicebear.com/v2/${
                     this.props.meta.spriteCollections[0].id
                   }/john.svg?options[mood][]=happy`}
+                </SyntaxHighlighter>
+                <hr />
+                <p className="mb-0">
+                  You also can use the HTTP API as fallback for Gravatar. Use the{' '}
+                  <a href="https://en.gravatar.com/site/implement/hash/" target="_blank" rel="nofollow">
+                    Gravatar hash
+                  </a>{' '}
+                  as seed and add the parameter <code>gravatar</code> to your URL. With the parameter <code>s</code> you
+                  can also define the size of the Gravatar avatar.
+                </p>
+                <SyntaxHighlighter className="bg-white border rounded" style={prism}>
+                  {`https://avatars.dicebear.com/v2/${
+                    this.props.meta.spriteCollections[0].id
+                  }/48c424d839214264fc7f65b52235467c.svg?gravatar&s=248`}
                 </SyntaxHighlighter>
               </div>
             </div>

@@ -25,9 +25,9 @@ export default class Faq extends React.Component {
             <div className="col-12 col-md-6 mb-5">
               <h4 className="h5">Will the library remain free of charge?</h4>
               <p>
-                DiceBear Avatars is developed open source and will remain free of charge. We believe that everyone
-                should be able to benefit from this library. Also we are always happy about improvements and extensions
-                of contributors, which help us to make DiceBear Avatars even better.
+                DiceBear Avatars is developed open source and will remain free of charge. I believe that everyone should
+                be able to benefit from this library. Also I'm always happy about improvements and extensions of
+                contributors, which help me to make DiceBear Avatars even better.
               </p>
             </div>
             <div className="col-12 col-md-6 mb-5">
@@ -35,6 +35,18 @@ export default class Faq extends React.Component {
               <p>
                 No! Sensitive or personal data should never be used as seed. The seed could be read from the source
                 code. The generated avatar could also reveal the seed.
+              </p>
+            </div>
+            <div className="col-12 col-md-6 mb-5">
+              <h4 className="h5">Where are the servers located?</h4>
+              <p>The HTTP API replies from servers in Frankfurt (Germany), Oregon (USA) and Singapore.</p>
+            </div>
+            <div className="col-12 col-md-6 mb-5">
+              <h4 className="h5">How stable is the HTTP API?</h4>
+              <p>
+                DiceBear Avatars is a hobby project. Therefore, I can not guarantee the availability of the HTTP API.
+                Access to the HTTP-API can be temporarily or permanently blocked. I also reserve the right to completely
+                discontinue the HTTP API.
               </p>
             </div>
           </div>
