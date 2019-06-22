@@ -26,17 +26,17 @@ Our free HTTP-API is the easiest way to use this sprite collection. Just use the
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `options` can be used to pass [options](#options).
 
-You also can use the HTTP API as fallback for Gravatar. Use the [Gravatar hash](https://en.gravatar.com/site/implement/hash/) as seed
-and add the parameter `gravatar` to your URL. With the parameter `s` you can also define the size of the Gravatar avatar.
-
-https://avatars.dicebear.com/v2/identicon/48c424d839214264fc7f65b52235467c.svg?gravatar&s=248
-
 #### Examples
 
 | preview                                                                                                                           | url                                                                                                      |
 | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | <img src="https://avatars.dicebear.com/v2/identicon/example.svg" width="60" />                                                    | https://avatars.dicebear.com/v2/identicon/example.svg                                                    |
 | <img src="https://avatars.dicebear.com/v2/identicon/example.svg?options[padding]=0.4&options[background]=%23f0f0f0" width="60" /> | https://avatars.dicebear.com/v2/identicon/example.svg?options[padding]=0.4&options[background]=%23f0f0f0 |
+
+You also can use the HTTP API as fallback for Gravatar. Use the [Gravatar hash](https://en.gravatar.com/site/implement/hash/) as seed
+and add the parameter `gravatar` to your URL. With the parameter `s` you can also define the size of the Gravatar avatar.
+
+    https://avatars.dicebear.com/v2/identicon/48c424d839214264fc7f65b52235467c.svg?gravatar&s=248
 
 ### NPM
 
