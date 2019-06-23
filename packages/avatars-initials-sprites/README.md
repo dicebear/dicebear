@@ -28,11 +28,11 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                                | url                                                                           |
-| ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg" width="60" />                       | https://avatars.dicebear.com/v2/initials/John%20Doe.svg                       |
-| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[mood][]=happy |
-| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[mood][]=sad   |
+| preview                                                                                                            | url                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg" width="60" />                                   | https://avatars.dicebear.com/v2/initials/John%20Doe.svg                                   |
+| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[fontSize]=80" width="60" />              | https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[fontSize]=80              |
+| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[backgroundColorLevel]=900" width="60" /> | https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[backgroundColorLevel]=900 |
 
 You also can use the HTTP API as fallback for Gravatar. Add a parameter `gravatar` with a
 [Gravatar hash](https://en.gravatar.com/site/implement/hash/) as value to your URL. With the parameter `s` you can also
