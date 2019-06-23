@@ -22,6 +22,7 @@ The Avatars repo is managed as a monorepo that is composed of many npm packages.
 | [@dicebear/avatars-male-sprites](./packages/avatars-male-sprites)           | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-male-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-male-sprites)           |
 | [@dicebear/avatars-female-sprites](./packages/avatars-female-sprites)       | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites)       |
 | [@dicebear/avatars-identicon-sprites](./packages/avatars-identicon-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-identicon-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites) |
+| [@dicebear/avatars-initials-sprites](./packages/avatars-initials-sprites)   | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-initials-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites)  |
 | [@dicebear/avatars-bottts-sprites](./packages/avatars-bottts-sprites)       | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-bottts-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-bottts-sprites)       |
 
 ### Wrapper Sprite Collections

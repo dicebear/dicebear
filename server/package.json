@@ -16,6 +16,7 @@
     "@dicebear/avatars-identicon-sprites": "^2.0.7",
     "@dicebear/avatars-jdenticon-sprites": "^1.0.4",
     "@dicebear/avatars-male-sprites": "^2.0.7",
+    "@dicebear/avatars-initials-sprites": "^0.0.0",
     "@types/reactstrap": "^7.1.4",
     "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.32",

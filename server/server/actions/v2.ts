@@ -63,10 +63,11 @@ router.get(
 
       if ('gravatar' in req.query) {
         try {
+          let gravatarHash = req.query['gravatar'] || seed;
           let gravatarSize = parseInt(req.query['s']);
           let gravatarUrl = gravatarSize
-            ? `https://gravatar.com/avatar/${seed}.png?d=404&s=${gravatarSize}`
-            : `https://gravatar.com/avatar/${seed}.png?d=404`;
+            ? `https://gravatar.com/avatar/${gravatarHash}.png?d=404&s=${gravatarSize}`
+            : `https://gravatar.com/avatar/${gravatarHash}.png?d=404`;
 
           // Check whether the image exists at Gravatar.
           await request.head(gravatarUrl).promise();

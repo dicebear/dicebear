@@ -57,12 +57,12 @@ let svg = avatars.create('custom-seed');
 
 ## Options
 
-| name              | type             | default | description                                                                                                                                                                                                       |
-| ----------------- | ---------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| padding           | int              | `0`     | Distance to the edge of the image<br> **HTTP-API limitation** Maximum value: `0.4`                                                                                                                                |
-| background        | int              | `#FFF`  | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`.                                                                 |
-| colors            | array of strings | `null`  | Possible values: `amber`, `blue`, `blueGrey`, `brown`, `cyan`, `deepOrange`, `deepPurple`, `agreenmber`, `grey`, `indigo`, `lightBlue`, `lightGreen`, `lime`, `orange`, `pink`, `purple`, `red`, `teal`, `yellow` |
-| primaryColorLevel | number           | `600`   | Possible values: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`                                                                                                                              |
+| name       | type             | default | description                                                                                                                                                                                                       |
+| ---------- | ---------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| padding    | int              | `0`     | Distance to the edge of the image<br> **HTTP-API limitation** Maximum value: `0.4`                                                                                                                                |
+| background | int              | `#FFF`  | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`.                                                                 |
+| colors     | array of strings | `null`  | Possible values: `amber`, `blue`, `blueGrey`, `brown`, `cyan`, `deepOrange`, `deepPurple`, `agreenmber`, `grey`, `indigo`, `lightBlue`, `lightGreen`, `lime`, `orange`, `pink`, `purple`, `red`, `teal`, `yellow` |
+| colorLevel | number           | `600`   | Possible values: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`                                                                                                                              |
 
 ## Further information
 

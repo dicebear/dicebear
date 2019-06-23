@@ -174,7 +174,7 @@ export default class Generator extends React.Component<Props, State> {
     let params = stringify(
       {
         options: options,
-        gravatar: this.state.gravatar || undefined
+        gravatar: this.state.gravatar ? this.state.seed : undefined
       },
       { encodeValuesOnly: true, arrayFormat: 'brackets' }
     );
