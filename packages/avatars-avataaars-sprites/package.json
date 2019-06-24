@@ -34,10 +34,10 @@
     "react-dom": "^16.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^3.2.0",
+    "@dicebear/avatars": "^3.1.0",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
-    "avataaars": "^1.2.0",
+    "avataaars": "git+https://github.com/DiceBear/avataaars.git",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "typescript": "^3.4.5"

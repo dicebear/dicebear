@@ -31,7 +31,7 @@
     "@dicebear/avatars": "^3.1.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^3.2.0",
+    "@dicebear/avatars": "^3.1.0",
     "typescript": "^3.4.5"
   },
   "files": [
