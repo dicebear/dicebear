@@ -3,5 +3,8 @@
   "private": true,
   "devDependencies": {
     "lerna": "^3.13.4"
+  },
+  "resolutions": {
+    "inquirer": "6.3.1"
   }
 }
