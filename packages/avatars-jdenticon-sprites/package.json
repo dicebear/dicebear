@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@dicebear/avatars": "^3.2.0",
+    "jdenticon": "^2.1.1",
     "typescript": "^3.4.5"
   },
   "files": [
