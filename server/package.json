@@ -1,4 +1,5 @@
 {
+  "name": "@dicebear/avatars-server",
   "private": true,
   "scripts": {
     "dev": "nodemon",

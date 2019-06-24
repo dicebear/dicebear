@@ -30,9 +30,10 @@
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
   "peerDependencies": {
-    "@dicebear/avatars": "^3.0.6"
+    "@dicebear/avatars": "^3.1.0"
   },
   "devDependencies": {
+    "@dicebear/avatars": "^3.1.0",
     "typescript": "^3.4.5"
   },
   "dependencies": {
