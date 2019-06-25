@@ -35,7 +35,7 @@ export default function(options: Options = {}) {
 
   return function(random: Random) {
     let backgroundColor = random.pickone(backgroundColors);
-    let seedInitials = (initials(random.seed.trim()) as string).slice(0, options.chars).toLocaleUpperCase();
+    let seedInitials = (initials(random.seed.trim()) as string).toLocaleUpperCase().slice(0, options.chars);
     let fontFamily = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif";
 
     // prettier-ignore
