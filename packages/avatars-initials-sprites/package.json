@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-initials-sprites",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Initials sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -32,7 +32,7 @@
     "@dicebear/avatars": "^3.1.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^3.1.0",
+    "@dicebear/avatars": "^3.1.1",
     "typescript": "^3.4.5"
   },
   "files": [
