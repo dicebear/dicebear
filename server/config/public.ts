@@ -364,7 +364,7 @@ let config: PublicConfig = {
               }),
             facialHair: yup
               .array()
-              .of(yup.string().oneOf((values = ['medium', 'light', 'magestic', 'fancy', 'magnum'])))
+              .of(yup.string().oneOf((values = ['medium', 'light', 'majestic', 'fancy', 'magnum'])))
               .meta({
                 type: 'checkbox',
                 values: values,

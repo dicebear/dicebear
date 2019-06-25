@@ -71,7 +71,7 @@ let svg = avatars.create('custom-seed');
 | hairColor         | array of strings | `null`        | Possible values: `auburn`, `black`, `blonde`, `brown`, `pastel`, `platinum`, `red`, `gray`                                                   |
 | accessories       | array of strings | `null`        | Possible values: `kurt`, `prescription01`, `prescription02`, `round`, `sunglasses`, `wayfarers`                                              |
 | accessoriesChance | number           | `10`          | Probability in percent                                                                                                                       |
-| facialHair        | array of strings | `null`        | Possible values: `medium`, `light`, `magestic`, `fancy`, `magnum`                                                                            |
+| facialHair        | array of strings | `null`        | Possible values: `medium`, `light`, `majestic`, `fancy`, `magnum`                                                                            |
 | facialHairChance  | number           | `10`          | Probability in percent                                                                                                                       |
 | facialHairColor   | array of strings | `null`        | Possible values: `auburn`, `black`, `blonde`, `brown`, `platinum`, `red`                                                                     |
 | clothes           | array of strings | `null`        | Possible values: `blazer`, `sweater`, `shirt`, `hoodie`, `overall`                                                                           |

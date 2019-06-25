@@ -5,24 +5,28 @@ import getOption from './getOption';
 export default function(options: Options, random: Random) {
   let facialHairColor = [];
 
-  if (getOption('facialHairColor', 'medium', options)) {
-    facialHairColor.push('BeardMedium');
+  if (getOption('facialHairColor', 'auburn', options)) {
+    facialHairColor.push('Auburn');
   }
 
-  if (getOption('facialHairColor', 'light', options)) {
-    facialHairColor.push('BeardLight');
+  if (getOption('facialHairColor', 'black', options)) {
+    facialHairColor.push('Black');
   }
 
-  if (getOption('facialHairColor', 'magestic', options)) {
-    facialHairColor.push('BeardMagestic');
+  if (getOption('facialHairColor', 'blonde', options)) {
+    facialHairColor.push('Blonde', 'BlondeGolden');
   }
 
-  if (getOption('facialHairColor', 'fancy', options)) {
-    facialHairColor.push('MoustacheFancy');
+  if (getOption('facialHairColor', 'brown', options)) {
+    facialHairColor.push('Brown', 'BrownDark');
   }
 
-  if (getOption('facialHairColor', 'magnum', options)) {
-    facialHairColor.push('MoustacheMagnum');
+  if (getOption('facialHairColor', 'platinum', options)) {
+    facialHairColor.push('Platinum');
+  }
+
+  if (getOption('facialHairColor', 'red', options)) {
+    facialHairColor.push('Red');
   }
 
   return random.pickone(facialHairColor);

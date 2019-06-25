@@ -13,8 +13,8 @@ export default function(options: Options, random: Random) {
     facialHairType.push('BeardLight');
   }
 
-  if (getOption('facialHair', 'magestic', options)) {
-    facialHairType.push('BeardMagestic');
+  if (getOption('facialHair', 'majestic', options)) {
+    facialHairType.push('BeardMajestic');
   }
 
   if (getOption('facialHair', 'fancy', options)) {
