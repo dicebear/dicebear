@@ -1,6 +1,6 @@
 ![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars/banner.svg?sanitize=true)
 
-![license]https://img.shields.io/npm/l/@dicebear/avatars.svg?style=flat-square)
+![license](https://img.shields.io/npm/l/@dicebear/avatars.svg?style=flat-square)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars)
 
 Avatars is an avatar placeholder library for designers and developers. You can choose between simple identicons and lovely designed characters.
@@ -9,15 +9,14 @@ And best of all: We provide a simple and free HTTP API that you can use right aw
 https://avatars.dicebear.com
 
 <p>
-    <img src="https://avatars.dicebear.com/v2/male/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/identicon/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/male/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/identicon/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/male/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/identicon/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/male/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/female/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/identicon/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/bottts/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/avataaars/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/jdenticon/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/v2/gridy/John%20Doe.svg" width="60" />
 </p>
 
 ## Usage
@@ -28,7 +27,7 @@ Our free HTTP-API is the easiest way to use Avatars. Just use the following URL 
 
     https://avatars.dicebear.com/v2/:sprites/:seed.svg
 
-Replace `:sprites` with `male`, `female`, `identicon`, `gridy`, `avataaars` or `jdenticon`. The value of `:seed` can be anything you
+Replace `:sprites` with `male`, `female`, `identicon`, `initials`, `bottts`, `avataaars`, `jdenticon` or `gridy`. The value of `:seed` can be anything you
 like - but **don't** use any sensitive or personal data here!
 
 The used sprite collection may offer additional options, which can be set using the GET parameter named `options`.
