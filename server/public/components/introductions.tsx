@@ -3,7 +3,7 @@ import SyntaxHighlighter, { registerLanguage } from 'react-syntax-highlighter/di
 import js from 'react-syntax-highlighter/dist/languages/prism/javascript';
 import prism from 'react-syntax-highlighter/dist/styles/prism/prism';
 
-import { Meta, MetaSpriteCollection } from '../types/meta';
+import { Meta, MetaSpriteCollection } from '../../types/meta';
 
 registerLanguage('javascript', js);
 

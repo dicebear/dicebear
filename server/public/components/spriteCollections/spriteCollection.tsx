@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { GoBook } from 'react-icons/go';
 
-import { MetaSpriteCollection } from '../../types/meta';
+import { MetaSpriteCollection } from '../../../types/meta';
 
 type Props = MetaSpriteCollection;
 

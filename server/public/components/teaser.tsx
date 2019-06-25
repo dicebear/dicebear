@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { GoMarkGithub, GoBook } from 'react-icons/go';
-import { Meta } from '../types/meta';
+import { Meta } from '../../types/meta';
 import Generator from './teaser/generator';
 
 type Props = {

@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { Meta } from '../types/meta';
+import { Meta } from '../../types/meta';
 import SpriteCollection from './spriteCollections/spriteCollection';
-import { PublicConfigSpriteCollection } from '../types/publicConfig';
+import { PublicConfigSpriteCollection } from '../../types/publicConfig';
 
 type Props = {
   meta: Meta;

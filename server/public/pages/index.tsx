@@ -7,10 +7,10 @@ import Introductions from '../components/introductions';
 import SpriteCollections from '../components/spriteCollections';
 import Faq from '../components/faq';
 
-import { Meta } from '../types/meta';
-import { getMetaData } from '../server/helper/meta';
+import { Meta } from '../../types/meta';
+import { getMetaData } from '../../server/helper/meta';
 import publicConfig from '../config/public';
-import { PublicConfigSpriteCollection } from '../types/publicConfig';
+import { PublicConfigSpriteCollection } from '../../types/publicConfig';
 
 if (process.env.IS_BROWSER) {
   require('whatwg-fetch');

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { stringify } from 'qs';
 
 import { GoGear, GoLinkExternal } from 'react-icons/go';
-import { Meta, MetaSpriteCollection } from '../../types/meta';
+import { Meta, MetaSpriteCollection } from '../../../types/meta';
 import { Collapse, InputGroupButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { UncontrolledTooltip } from 'reactstrap';
 

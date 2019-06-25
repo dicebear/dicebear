@@ -1,10 +1,10 @@
-import React from "react";
-import * as http from "http";
+import React from 'react';
+import * as http from 'http';
 
-import Layout from "../layout";
+import Layout from '../layout';
 
-import { Meta } from "../../types/meta";
-import { getMetaData } from "../../server/helper/meta";
+import { Meta } from '../../types/meta';
+import { getMetaData } from '../../server/helper/meta';
 
 type Props = {
   meta: Meta;
@@ -17,7 +17,7 @@ export default class LegalNotice extends React.Component<Props> {
     if (ctx.req) {
       meta = await getMetaData();
     } else {
-      let response = await fetch("/meta.json");
+      let response = await fetch('/meta.json');
 
       meta = await response.json();
     }
@@ -36,10 +36,7 @@ export default class LegalNotice extends React.Component<Props> {
   render() {
     return (
       <Layout meta={this.props.meta}>
-        <div
-          className="container py-3"
-          dangerouslySetInnerHTML={{ __html: this.props.meta.legal_notice }}
-        />
+        <div className="container py-3" dangerouslySetInnerHTML={{ __html: this.props.meta.legal_notice }} />
       </Layout>
     );
   }

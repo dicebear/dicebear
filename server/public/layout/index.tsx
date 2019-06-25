@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 
-import { Meta } from '../types/meta';
+import { Meta } from '../../types/meta';
 
 import './index.scss';
 
