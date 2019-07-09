@@ -33,6 +33,3 @@ The Avatars repo is managed as a monorepo that is composed of many npm packages.
 | [@dicebear/avatars-gridy-sprites](./packages/avatars-gridy-sprites)         | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites)         |
 | [@dicebear/avatars-jdenticon-sprites](./packages/avatars-jdenticon-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-jdenticon-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-jdenticon-sprites) |
 
-## API Server
-
-The [source code](./server) for the HTTP API can also be found in this repo.
