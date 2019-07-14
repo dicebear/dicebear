@@ -1,5 +1,5 @@
 // @ts-ignore
-import { inner } from 'gridy-avatars';
+import { inner } from 'gridy-avatars/dist/avatars';
 import Random from '@dicebear/avatars/lib/random';
 
 type Options = {
