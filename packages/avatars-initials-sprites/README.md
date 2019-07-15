@@ -34,12 +34,6 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 | <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[fontSize]=80" width="60" />              | https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[fontSize]=80              |
 | <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[backgroundColorLevel]=900" width="60" /> | https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[backgroundColorLevel]=900 |
 
-You also can use the HTTP API as fallback for Gravatar. Add a parameter `gravatar` with a
-[Gravatar hash](https://en.gravatar.com/site/implement/hash/) as value to your URL. With the parameter `s` you can also
-define the size of the Gravatar avatar.
-
-    https://avatars.dicebear.com/v2/initials/Florian%20Körner.svg?gravatar=48c424d839214264fc7f65b52235467c&s=248
-
 ### NPM
 
 Install the Avatars and this sprite collection with the following command.
