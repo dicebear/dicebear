@@ -4,6 +4,7 @@ import { ColorCollection, Color as ColorType } from '@dicebear/avatars/lib/types
 
 // @ts-ignore
 import initials from 'initials';
+import Bowser from 'bowser';
 
 type Options = {
   backgroundColors?: Array<keyof ColorCollection>;
@@ -11,6 +12,7 @@ type Options = {
   fontSize?: number;
   chars?: number;
   bold?: boolean;
+  userAgent?: string;
 };
 
 export default function(options: Options = {}) {
@@ -18,10 +20,17 @@ export default function(options: Options = {}) {
     backgroundColorLevel: 600,
     fontSize: 50,
     chars: 2,
+    userAgent: window && window.navigator && window.navigator.userAgent,
     ...options
   };
 
   let backgroundColors: string[] = [];
+  let isLegacyBrowser =
+    options.userAgent &&
+    Bowser.getParser(options.userAgent).satisfies({
+      ie: '>0',
+      edge: '>0'
+    });
 
   Object.keys(Color.collection).forEach((backgroundColor: keyof ColorCollection) => {
     if (
@@ -41,7 +50,7 @@ export default function(options: Options = {}) {
     // prettier-ignore
     return [
       `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate; background: ${backgroundColor}" viewBox="0 0 1 1" version="1.1">`,
-      `<text x="50%" y="50%" style="line-height: 1; ${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" dy=".1em" fill="#FFF" text-anchor="middle" dominant-baseline="middle">${seedInitials}</text>`,
+      `<text x="50%" y="50%" style="line-height: 1; ${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" ${isLegacyBrowser ? 'dy=".35em"' : 'alignment-baseline="middle"'} fill="#FFF" text-anchor="middle" dominant-baseline="middle">${seedInitials}</text>`,
       '</svg>'
     ].join('');
   };
