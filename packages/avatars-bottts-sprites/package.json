@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-bottts-sprites",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Bottts sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -31,7 +31,7 @@
     "@dicebear/avatars": "^3.1.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^3.1.2",
+    "@dicebear/avatars": "^3.1.3",
     "typescript": "^3.4.5"
   },
   "files": [
