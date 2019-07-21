@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-male-sprites",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Pixel art male sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -32,7 +32,7 @@
     "@dicebear/avatars": "^3.1.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^3.1.1",
+    "@dicebear/avatars": "^3.1.2",
     "typescript": "^3.4.5"
   },
   "files": [
