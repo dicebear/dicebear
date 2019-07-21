@@ -20,7 +20,7 @@ export default function(options: Options = {}) {
     backgroundColorLevel: 600,
     fontSize: 50,
     chars: 2,
-    userAgent: window && window.navigator && window.navigator.userAgent,
+    userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent,
     ...options
   };
 
