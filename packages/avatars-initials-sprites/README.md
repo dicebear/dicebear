@@ -53,13 +53,14 @@ let svg = avatars.create('custom-seed');
 
 ## Options
 
-| name                 | type             | default | description                                                                                                                                                                                                       |
-| -------------------- | ---------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| backgroundColors     | array of strings | `null`  | Possible values: `amber`, `blue`, `blueGrey`, `brown`, `cyan`, `deepOrange`, `deepPurple`, `agreenmber`, `grey`, `indigo`, `lightBlue`, `lightGreen`, `lime`, `orange`, `pink`, `purple`, `red`, `teal`, `yellow` |
-| backgroundColorLevel | number           | `600`   | Possible values: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`                                                                                                                              |
-| fontSize             | number           | `50`    | Number between 1 and 100                                                                                                                                                                                          |
-| chars                | number           | `2`     | Number between 0 and 2                                                                                                                                                                                            |
-| bold                 | bool             | `false` |                                                                                                                                                                                                                   |
+| name                 | type             | default                      | description                                                                                                                                                                                                       |
+| -------------------- | ---------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| backgroundColors     | array of strings | `null`                       | Possible values: `amber`, `blue`, `blueGrey`, `brown`, `cyan`, `deepOrange`, `deepPurple`, `agreenmber`, `grey`, `indigo`, `lightBlue`, `lightGreen`, `lime`, `orange`, `pink`, `purple`, `red`, `teal`, `yellow` |
+| backgroundColorLevel | number           | `600`                        | Possible values: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`                                                                                                                              |
+| fontSize             | number           | `50`                         | Number between 1 and 100                                                                                                                                                                                          |
+| chars                | number           | `2`                          | Number between 0 and 2                                                                                                                                                                                            |
+| bold                 | bool             | `false`                      |                                                                                                                                                                                                                   |
+| userAgent            | string           | `window.navigator.userAgent` | User-Agent for legacy browser fallback                                                                                                                                                                            |
 
 ## Further information
 
