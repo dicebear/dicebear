@@ -25,11 +25,16 @@ export default function(options: Options = {}) {
   };
 
   let backgroundColors: string[] = [];
-  let isLegacyBrowser =
+  let isInternetExplorer =
     options.userAgent &&
     Bowser.getParser(options.userAgent).satisfies({
       ie: '>0',
       edge: '>0'
+    });
+  let isSafari =
+    options.userAgent &&
+    Bowser.getParser(options.userAgent).satisfies({
+      safari: '>0'
     });
 
   Object.keys(Color.collection).forEach((backgroundColor: keyof ColorCollection) => {
@@ -50,7 +55,7 @@ export default function(options: Options = {}) {
     // prettier-ignore
     return [
       `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate; background: ${backgroundColor}" viewBox="0 0 1 1" version="1.1">`,
-      `<text x="50%" y="50%" style="line-height: 1; ${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" ${isLegacyBrowser ? 'dy=".35em"' : 'dy=".1em" alignment-baseline="middle"'} fill="#FFF" text-anchor="middle" dominant-baseline="middle">${seedInitials}</text>`,
+      `<text x="50%" y="50%" style="line-height: 1; ${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" ${isInternetExplorer ? 'dy=".35em"' : `dy="${isSafari ? '.05em' : '.1em'}" alignment-baseline="middle"`} fill="#FFF" text-anchor="middle" dominant-baseline="middle">${seedInitials}</text>`,
       '</svg>'
     ].join('');
   };
