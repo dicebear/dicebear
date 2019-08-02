@@ -37,5 +37,8 @@
   "files": [
     "LICENSE",
     "lib"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
