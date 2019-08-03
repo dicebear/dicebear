@@ -40,7 +40,7 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 Install the Avatars and this sprite collection with the following command.
 
-    npm install --save @dicebear/avatars @dicebear/avatars-human-sprites
+    npm install --save @dicebear/avatars @dicebear/avatars-male-sprites @dicebear/avatars-female-sprites @dicebear/avatars-human-sprites
 
 Now you are ready to create your first Avatar.
 
