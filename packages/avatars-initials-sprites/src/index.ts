@@ -9,22 +9,18 @@ import Bowser from 'bowser';
 type Options = {
   margin?: number;
   background?: string;
+  userAgent?: string;
   backgroundColors?: Array<keyof ColorCollection>;
   backgroundColorLevel?: keyof ColorType;
   fontSize?: number;
   chars?: number;
   bold?: boolean;
-  userAgent?: string;
 };
 
 export default function(random: Random, options: Options = {}) {
-  options = {
-    backgroundColorLevel: 600,
-    fontSize: 50,
-    chars: 2,
-    userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent,
-    ...options
-  };
+  options.backgroundColorLevel = options.backgroundColorLevel || 600;
+  options.fontSize = options.fontSize || 600;
+  options.chars = options.chars || 2;
 
   let backgroundColors: string[] = [];
   let isInternetExplorer =

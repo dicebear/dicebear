@@ -8,10 +8,7 @@ type Options = {
 };
 
 export default function(random: Random, options: Options = {}) {
-  options = {
-    colorLevel: 600,
-    ...options
-  };
+  options.colorLevel = options.colorLevel || 600;
 
   let colors: string[] = [];
 
