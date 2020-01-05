@@ -9,6 +9,7 @@ export type Options = {
   height?: number | string;
   margin?: number;
   background?: string;
+  userAgent?: string;
 };
 
 export type SpriteCollection<O = {}> = (random: Random, options?: O) => string | svgson.schema;
@@ -25,7 +26,10 @@ export default class Avatars<O> {
    */
   constructor(spriteCollection: SpriteCollection<O>, defaultOptions?: O & Options) {
     this.spriteCollection = spriteCollection;
-    this.defaultOptions = defaultOptions;
+    this.defaultOptions = {
+      userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent,
+      ...defaultOptions
+    };
   }
 
   /**
@@ -34,7 +38,7 @@ export default class Avatars<O> {
    * @param seed
    */
   public create(seed: string, options?: O & Options) {
-    options = { ...(this.defaultOptions || {}), ...options };
+    options = { ...this.defaultOptions, ...options };
 
     let svg = this.spriteCollection(new Random(seed), options);
 
