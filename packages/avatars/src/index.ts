@@ -45,9 +45,9 @@ export default class Avatars<O> {
     if (options) {
       svg = Parser.parse(svg);
 
-      let viewPort = svg.attributes['viewport'].split(' ');
-      let viewPortWidth = parseInt(viewPort[3]);
-      let viewPortHeight = parseInt(viewPort[4]);
+      let viewBox = svg.attributes['viewBox'].split(' ');
+      let viewBoxWidth = parseInt(viewBox[2]);
+      let viewBoxHeight = parseInt(viewBox[3]);
 
       if (options.width) {
         svg.attributes['width'] = options.width.toString();
@@ -87,20 +87,20 @@ export default class Avatars<O> {
                   children: [],
                   attributes: {
                     fill: 'none',
-                    width: viewPortWidth.toString(),
-                    height: viewPortHeight.toString()
+                    width: viewBoxWidth.toString(),
+                    height: viewBoxHeight.toString()
                   }
                 },
                 ...groupable
               ],
               attributes: {
-                transform: `translate(${(viewPortWidth * options.margin) / 100}, ${(viewPortHeight * options.margin) /
-                  100})`
+                transform: `scale(${1 - (options.margin * 2) / 100})`
               }
             }
           ],
           attributes: {
-            transform: `scale(${options.margin / 100})`
+            // prettier-ignore
+            transform: `translate(${viewBoxWidth * options.margin / 100}, ${viewBoxHeight * options.margin / 100})`
           }
         });
       }
@@ -113,8 +113,8 @@ export default class Avatars<O> {
           children: [],
           attributes: {
             fill: options.background,
-            width: viewPortWidth.toString(),
-            height: viewPortHeight.toString()
+            width: viewBoxWidth.toString(),
+            height: viewBoxHeight.toString()
           }
         });
       }
@@ -144,10 +144,11 @@ export default class Avatars<O> {
                 value: '',
                 children: [],
                 attributes: {
-                  width: viewPortWidth.toString(),
-                  height: viewPortHeight.toString(),
-                  rx: ((viewPortWidth / 100) * options.radius).toString(),
-                  ry: ((viewPortHeight / 100) * options.radius).toString()
+                  width: viewBoxWidth.toString(),
+                  height: viewBoxHeight.toString(),
+                  rx: ((viewBoxWidth / 100) * options.radius).toString(),
+                  ry: ((viewBoxHeight / 100) * options.radius).toString(),
+                  fill: '#fff'
                 }
               }
             ],
@@ -174,6 +175,6 @@ export default class Avatars<O> {
   }
 
   private isGroupable(element: svgson.schema) {
-    return element.type === 'element' && ['title', 'desc', 'defs', 'metadata'].indexOf(element.name) !== -1;
+    return element.type === 'element' && ['title', 'desc', 'defs', 'metadata'].indexOf(element.name) === -1;
   }
 }

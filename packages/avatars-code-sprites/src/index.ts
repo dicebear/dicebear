@@ -11,7 +11,8 @@ export default function(random: Random, options: Options = {}) {
   let svg = qrImage
     .imageSync(random.seed, {
       type: 'svg',
-      ec_level: options.correctionLevel
+      ec_level: options.correctionLevel,
+      margin: 0
     })
     .toString();
 
