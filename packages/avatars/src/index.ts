@@ -18,12 +18,12 @@ export default class Avatars<O> {
   public static color = Color;
 
   protected spriteCollection: SpriteCollection<O>;
-  protected defaultOptions: O & Options;
+  protected defaultOptions?: O & Options;
 
   /**
    * @param spriteCollection
    */
-  constructor(spriteCollection: SpriteCollection<O>, defaultOptions: O & Options) {
+  constructor(spriteCollection: SpriteCollection<O>, defaultOptions?: O & Options) {
     this.spriteCollection = spriteCollection;
     this.defaultOptions = defaultOptions;
   }
@@ -34,7 +34,7 @@ export default class Avatars<O> {
    * @param seed
    */
   public create(seed: string, options?: O & Options) {
-    options = { ...this.defaultOptions, ...options };
+    options = { ...(this.defaultOptions || {}), ...options };
 
     let svg = this.spriteCollection(new Random(seed), options);
 
