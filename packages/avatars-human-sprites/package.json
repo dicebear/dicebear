@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
-  "homepage": "https://github.com/DiceBear/avatars#readme",
+  "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/avatars-human-sprites#readme",
   "dependencies": {
     "@dicebear/avatars-female-sprites": "^4.0.0",
     "@dicebear/avatars-male-sprites": "^4.0.0"
@@ -39,8 +39,6 @@
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.0.0",
-    "@dicebear/avatars-female-sprites": "^4.0.0",
-    "@dicebear/avatars-male-sprites": "^4.0.0",
     "typescript": "^3.4.5"
   },
   "files": [

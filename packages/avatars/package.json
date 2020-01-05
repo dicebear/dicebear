@@ -42,7 +42,7 @@
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
-  "homepage": "https://github.com/DiceBear/avatars#readme",
+  "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/avatars#readme",
   "files": [
     "dist",
     "lib",

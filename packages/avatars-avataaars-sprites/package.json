@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/DiceBear/avatars/issues"
   },
-  "homepage": "https://github.com/DiceBear/avatars#readme",
+  "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/avatars-avataaars-sprites#readme",
   "dependencies": {
     "avataaars": "^1.2.0",
     "react": "^16.0.0",
@@ -40,8 +40,6 @@
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
     "avataaars": "git+https://github.com/DiceBear/avataaars.git",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
     "typescript": "^3.4.5"
   },
   "files": [
