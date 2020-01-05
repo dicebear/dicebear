@@ -61,7 +61,7 @@ let svg = avatars.create('custom-seed');
 
 ### Available options
 
-The following options are available for each SpriteCollection.
+The following options are available for each sprite collection.
 
 | name       | type   | default | description                                                                                                                                       |
 | ---------- | ------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
