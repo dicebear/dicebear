@@ -46,7 +46,7 @@ import Avatars from '@dicebear/avatars';
 import sprites from '@dicebear/avatars-code-sprites';
 
 let options = {};
-let avatars = new Avatars(sprites(options));
+let avatars = new Avatars(sprites, options);
 let svg = avatars.create('custom-seed');
 ```
 
@@ -54,10 +54,14 @@ let svg = avatars.create('custom-seed');
 
 | name            | type   | default | description                                                                                                                                       |
 | --------------- | ------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type            | string | `qr`    | Currently only "qr" is supported                                                                                                                  |
-| padding         | number | `0`     | Distance to the edge of the image<br> **HTTP-API limitation** Maximum value: `1`                                                                  |
-| color           | string | `null`  | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
+| radius          | number | `0`     | Avatar border radius                                                                                                                              |
+| base64          | bool   | `false` | Return avatar as base64 data uri instead of XML <br> **Not supported by the HTTP API**                                                            |
+| width           | number | `null`  | Fixed width                                                                                                                                       |
+| height          | number | `null`  | Fixed height                                                                                                                                      |
+| margin          | number | `0`     | Avatar margin in percent<br> **HTTP-API limitation** Max value `25`                                                                               |
 | background      | string | `null`  | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
+| type            | string | `qr`    | Currently only "qr" is supported                                                                                                                  |
+| color           | string | `null`  | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
 | correctionLevel | string | `M`     | Choose from `L`, `M`, `Q`, `H`                                                                                                                    |
 
 ## Further information

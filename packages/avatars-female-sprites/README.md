@@ -47,15 +47,21 @@ import Avatars from '@dicebear/avatars';
 import sprites from '@dicebear/avatars-female-sprites';
 
 let options = {};
-let avatars = new Avatars(sprites(options));
+let avatars = new Avatars(sprites, options);
 let svg = avatars.create('custom-seed');
 ```
 
 ## Options
 
-| name | type             | default                         | description                                  |
-| ---- | ---------------- | ------------------------------- | -------------------------------------------- |
-| mood | array of strings | `['happy', 'sad', 'surprised']` | Possible values: `sad`, `happy`, `surprised` |
+| name       | type             | default                         | description                                                                                                                                       |
+| ---------- | ---------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| radius     | number           | `0`                             | Avatar border radius                                                                                                                              |
+| base64     | bool             | `false`                         | Return avatar as base64 data uri instead of XML <br> **Not supported by the HTTP API**                                                            |
+| width      | number           | `null`                          | Fixed width                                                                                                                                       |
+| height     | number           | `null`                          | Fixed height                                                                                                                                      |
+| margin     | number           | `0`                             | Avatar margin in percent<br> **HTTP-API limitation** Max value `25`                                                                               |
+| background | string           | `null`                          | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
+| mood       | array of strings | `['happy', 'sad', 'surprised']` | Possible values: `sad`, `happy`, `surprised`                                                                                                      |
 
 ## Further information
 

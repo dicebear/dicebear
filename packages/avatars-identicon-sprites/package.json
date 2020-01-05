@@ -28,10 +28,10 @@
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
   "peerDependencies": {
-    "@dicebear/avatars": "^3.1.0"
+    "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^3.1.4",
+    "@dicebear/avatars": "^4.0.0",
     "typescript": "^3.4.5"
   },
   "files": [
