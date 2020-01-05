@@ -30,15 +30,17 @@
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
+  "dependencies": {
+    "@dicebear/avatars-female-sprites": "^4.0.0",
+    "@dicebear/avatars-male-sprites": "^4.0.0"
+  },
   "peerDependencies": {
-    "@dicebear/avatars": "^3.1.0",
-    "@dicebear/avatars-female-sprites": "^2.1.3",
-    "@dicebear/avatars-male-sprites": "^2.1.3"
+    "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^3.1.4",
-    "@dicebear/avatars-female-sprites": "^2.1.4",
-    "@dicebear/avatars-male-sprites": "^2.1.4",
+    "@dicebear/avatars": "^4.0.0",
+    "@dicebear/avatars-female-sprites": "^4.0.0",
+    "@dicebear/avatars-male-sprites": "^4.0.0",
     "typescript": "^3.4.5"
   },
   "files": [

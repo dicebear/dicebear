@@ -6,7 +6,8 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "pure-color": "^1.3.0",
-    "seedrandom": "^2.4.3"
+    "seedrandom": "^2.4.3",
+    "svgson": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^10.11.6",

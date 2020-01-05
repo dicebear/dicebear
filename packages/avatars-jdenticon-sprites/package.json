@@ -27,12 +27,14 @@
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars#readme",
-  "peerDependencies": {
-    "@dicebear/avatars": "^3.1.0",
+  "dependencies": {
     "jdenticon": "^2.1.1"
   },
+  "peerDependencies": {
+    "@dicebear/avatars": "^4.0.0"
+  },
   "devDependencies": {
-    "@dicebear/avatars": "^3.1.4",
+    "@dicebear/avatars": "^4.0.0",
     "jdenticon": "^2.1.1",
     "typescript": "^3.4.5"
   },

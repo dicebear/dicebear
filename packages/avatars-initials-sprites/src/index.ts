@@ -7,6 +7,8 @@ import initials from 'initials';
 import Bowser from 'bowser';
 
 type Options = {
+  margin?: number;
+  background?: string;
   backgroundColors?: Array<keyof ColorCollection>;
   backgroundColorLevel?: keyof ColorType;
   fontSize?: number;
@@ -15,7 +17,7 @@ type Options = {
   userAgent?: string;
 };
 
-export default function(options: Options = {}) {
+export default function(random: Random, options: Options = {}) {
   options = {
     backgroundColorLevel: 600,
     fontSize: 50,
@@ -37,26 +39,39 @@ export default function(options: Options = {}) {
       safari: '>0'
     });
 
-  Object.keys(Color.collection).forEach((backgroundColor: keyof ColorCollection) => {
-    if (
-      options.backgroundColors === undefined ||
-      options.backgroundColors.length === 0 ||
-      options.backgroundColors.indexOf(backgroundColor) !== -1
-    ) {
-      backgroundColors.push(Color.collection[backgroundColor][options.backgroundColorLevel]);
-    }
-  });
+  if (options.background) {
+    backgroundColors.push(options.background);
 
-  return function(random: Random) {
-    let backgroundColor = random.pickone(backgroundColors);
-    let seedInitials = (initials(random.seed.trim()) as string).toLocaleUpperCase().slice(0, options.chars);
-    let fontFamily = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif";
+    options.background = undefined;
+  } else {
+    Object.keys(Color.collection).forEach((backgroundColor: keyof ColorCollection) => {
+      if (
+        options.backgroundColors === undefined ||
+        options.backgroundColors.length === 0 ||
+        options.backgroundColors.indexOf(backgroundColor) !== -1
+      ) {
+        backgroundColors.push(Color.collection[backgroundColor][options.backgroundColorLevel]);
+      }
+    });
+  }
 
-    // prettier-ignore
-    return [
-      `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate; background: ${backgroundColor}" viewBox="0 0 1 1" version="1.1">`,
-      `<text x="50%" y="50%" style="line-height: 1; ${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" ${isInternetExplorer ? 'dy=".35em"' : `dy="${isSafari ? '.05em' : '.1em'}" alignment-baseline="middle"`} fill="#FFF" text-anchor="middle" dominant-baseline="middle">${seedInitials}</text>`,
-      '</svg>'
-    ].join('');
-  };
+  let backgroundColor = random.pickone(backgroundColors);
+  let seedInitials = (initials(random.seed.trim()) as string).toLocaleUpperCase().slice(0, options.chars);
+  let fontFamily = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif";
+
+  // prettier-ignore
+  let svg = [
+    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate;" viewBox="0 0 1 1" version="1.1">`,
+    `<rect with="1" height="1" fill="${backgroundColor}"`,
+    options.margin ? `<g transform="scale(${options.margin / 100})">` : '',
+    options.margin ? `<g transform="transform(${options.margin / 100}, ${options.margin / 100})">` : '',
+    `<text x="50%" y="50%" style="line-height: 1; ${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" ${isInternetExplorer ? 'dy=".35em"' : `dy="${isSafari ? '.05em' : '.1em'}" alignment-baseline="middle"`} fill="#FFF" text-anchor="middle" dominant-baseline="middle">${seedInitials}</text>`,
+    options.margin ? '</g>' : '',
+    options.margin ? '</g>' : '',
+    '</svg>'
+  ].join('');
+
+  options.margin = undefined;
+
+  return svg;
 }

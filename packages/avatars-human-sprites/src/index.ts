@@ -6,15 +6,10 @@ type Options = {
   mood?: Array<'happy' | 'sad' | 'surprised'>;
 };
 
-export default function(options: Options = {}) {
-  const male = Male(options);
-  const female = Female(options);
-
-  return function(random: Random) {
-    if (random.bool(50)) {
-      return male(random);
-    } else {
-      return female(random);
-    }
-  };
+export default function(random: Random, options: Options = {}) {
+  if (random.bool(50)) {
+    return Male(random, options);
+  } else {
+    return Female(random, options);
+  }
 }
