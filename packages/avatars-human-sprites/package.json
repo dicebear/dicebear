@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-human-sprites",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Pixel art human sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -31,14 +31,14 @@
   },
   "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/avatars-human-sprites#readme",
   "dependencies": {
-    "@dicebear/avatars-female-sprites": "^4.0.1",
-    "@dicebear/avatars-male-sprites": "^4.0.1"
+    "@dicebear/avatars-female-sprites": "^4.0.2",
+    "@dicebear/avatars-male-sprites": "^4.0.2"
   },
   "peerDependencies": {
     "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.0.1",
+    "@dicebear/avatars": "^4.0.2",
     "typescript": "^3.4.5"
   },
   "files": [
