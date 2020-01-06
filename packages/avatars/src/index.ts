@@ -46,6 +46,8 @@ export default class Avatars<O> {
       svg = Parser.parse(svg);
 
       let viewBox = svg.attributes['viewBox'].split(' ');
+      let viewBoxX = parseInt(viewBox[0]);
+      let viewBoxY = parseInt(viewBox[1]);
       let viewBoxWidth = parseInt(viewBox[2]);
       let viewBoxHeight = parseInt(viewBox[3]);
 
@@ -88,7 +90,9 @@ export default class Avatars<O> {
                   attributes: {
                     fill: 'none',
                     width: viewBoxWidth.toString(),
-                    height: viewBoxHeight.toString()
+                    height: viewBoxHeight.toString(),
+                    x: viewBoxX.toString(),
+                    y: viewBoxY.toString()
                   }
                 },
                 ...groupable
@@ -114,7 +118,9 @@ export default class Avatars<O> {
           attributes: {
             fill: options.background,
             width: viewBoxWidth.toString(),
-            height: viewBoxHeight.toString()
+            height: viewBoxHeight.toString(),
+            x: viewBoxX.toString(),
+            y: viewBoxY.toString()
           }
         });
       }
@@ -146,9 +152,11 @@ export default class Avatars<O> {
                 attributes: {
                   width: viewBoxWidth.toString(),
                   height: viewBoxHeight.toString(),
-                  rx: ((viewBoxWidth / 100) * options.radius).toString(),
-                  ry: ((viewBoxHeight / 100) * options.radius).toString(),
-                  fill: '#fff'
+                  rx: ((viewBoxWidth * options.radius) / 100).toString(),
+                  ry: ((viewBoxHeight * options.radius) / 100).toString(),
+                  fill: '#fff',
+                  x: viewBoxX.toString(),
+                  y: viewBoxY.toString()
                 }
               }
             ],
