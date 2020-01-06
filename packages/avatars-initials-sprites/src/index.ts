@@ -59,8 +59,8 @@ export default function(random: Random, options: Options = {}) {
   let svg = [
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate;" viewBox="0 0 1 1" version="1.1">`,
     `<rect width="1" height="1" fill="${backgroundColor}"></rect>`,
-    options.margin ? `<g transform="scale(${options.margin / 100})">` : '',
-    options.margin ? `<g transform="transform(${options.margin / 100}, ${options.margin / 100})">` : '',
+    options.margin ? `<g transform="translate(${options.margin / 100}, ${options.margin / 100})">` : '',
+    options.margin ? `<g transform="scale(${1 - (options.margin * 2) / 100})">` : '',
     `<text x="50%" y="50%" style="line-height: 1; ${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" ${isInternetExplorer ? 'dy=".35em"' : `dy="${isSafari ? '.05em' : '.1em'}" alignment-baseline="middle"`} fill="#FFF" text-anchor="middle" dominant-baseline="middle">${seedInitials}</text>`,
     options.margin ? '</g>' : '',
     options.margin ? '</g>' : '',
