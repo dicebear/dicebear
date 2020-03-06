@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-jdenticon-sprites",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Jdenticon sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -34,7 +34,7 @@
     "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.0.2",
+    "@dicebear/avatars": "^4.0.3",
     "jdenticon": "^2.1.1",
     "typescript": "^3.4.5"
   },
