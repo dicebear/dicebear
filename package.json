@@ -2,9 +2,6 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^3.15.0"
-  },
-  "resolutions": {
-    "inquirer": "6.3.1"
+    "lerna": "^3.20.2"
   }
 }

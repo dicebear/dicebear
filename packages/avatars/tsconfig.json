@@ -8,5 +8,5 @@
     "noImplicitAny": true,
     "sourceMap": true
   },
-  "include": ["./src/**/*", "./typings/**/*"]
+  "include": ["./src/**/*"]
 }

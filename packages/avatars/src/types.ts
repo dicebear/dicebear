@@ -1,3 +1,7 @@
+/// <reference types="../typings/pure-color" />
+/// <reference types="../typings/seedrandom" />
+/// <reference types="../typings/svgson" />
+
 export interface Color {
     50: string,
     100: string,

@@ -23,6 +23,7 @@ export default function(random: Random, options: Options = {}) {
       avatarStyle={getAvatarStyle(options)}
       topType={getTopType(options, random)}
       accessoriesType={getAccessoriesType(options, random)}
+      // @ts-ignore
       hatColor={getHatColor(options, random)}
       hairColor={getHairColor(options, random)}
       facialHairType={getFacialHairType(options, random)}
