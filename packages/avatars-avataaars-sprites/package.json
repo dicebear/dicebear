@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-avataaars-sprites",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "description": "avataaars sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -36,7 +36,7 @@
     "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.0.5",
+    "@dicebear/avatars": "^4.0.6",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
     "typescript": "^3.4.5"
