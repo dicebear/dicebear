@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-identicon-sprites",
-  "version": "4.0.7",
+  "version": "4.0.8",
   "description": "Pixel art identicon sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -31,7 +31,7 @@
     "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.0.7",
+    "@dicebear/avatars": "^4.0.8",
     "typescript": "^3.4.5"
   },
   "files": [

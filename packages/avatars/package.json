@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "4.0.7",
+  "version": "4.0.8",
   "description": "Pixel-Art Avatar Placeholder Library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
