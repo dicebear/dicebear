@@ -5,7 +5,7 @@ import brown from './brown';
 import cyan from './cyan';
 import deepOrange from './deepOrange';
 import deepPurple from './deepPurple';
-import agreenmber from './green';
+import green from './green';
 import grey from './grey';
 import indigo from './indigo';
 import lightBlue from './lightBlue';
@@ -27,7 +27,7 @@ const collection: ColorCollection = {
   cyan: cyan,
   deepOrange: deepOrange,
   deepPurple: deepPurple,
-  agreenmber: agreenmber,
+  green: green,
   grey: grey,
   indigo: indigo,
   lightBlue: lightBlue,
@@ -38,7 +38,7 @@ const collection: ColorCollection = {
   purple: purple,
   red: red,
   teal: teal,
-  yellow: yellow
+  yellow: yellow,
 };
 
 export default collection;
