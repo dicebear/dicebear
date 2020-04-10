@@ -24,7 +24,7 @@ export default function(random: Random, options: Options = {}) {
   options.mouthChance = options.mouthChance || 100;
   options.sidesChance = options.sidesChance || 100;
   options.textureChance = options.textureChance || 50;
-  options.topChange = options.topChange || 100;
+  options.topChance = options.topChance || 100;
 
   let colorsCollection: Array<ColorType> = [];
 
@@ -55,7 +55,7 @@ export default function(random: Random, options: Options = {}) {
   return [
     '<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" fill="none">',
     group(random, sides(secondaryColor), options.sidesChance, 0, 66),
-    group(random, top(secondaryColor), options.topChange, 41, 0),
+    group(random, top(secondaryColor), options.topChance, 41, 0),
     group(random, face(primaryColor, random.bool(options.textureChance) ? texture() : undefined), 100, 25, 44),
     group(random, mouth(), options.mouthChance, 52, 124),
     group(random, eyes(), 100, 38, 76),
