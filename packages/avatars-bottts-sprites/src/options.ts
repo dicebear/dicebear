@@ -8,7 +8,7 @@ type Options = {
   mouthChance?: number;
   sidesChance?: number;
   textureChance?: number;
-  topChange?: number;
+  topChance?: number;
 };
 
 export default Options;
