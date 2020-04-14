@@ -16,7 +16,6 @@ Designed by [Jan Forst](https://github.com/darosh/gridy-avatars).
     <img src="https://avatars.dicebear.com/v2/gridy/8.svg" width="60" />
     <img src="https://avatars.dicebear.com/v2/gridy/9.svg" width="60" />
 </p>
-
 ## Usage
 
 ### HTTP-API (recommended)
@@ -64,6 +63,7 @@ let svg = avatars.create('custom-seed');
 | background | string  | `null`                       | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
 | userAgent  | string  | `window.navigator.userAgent` | User-Agent for legacy browser fallback<br> **Automatically detected by the HTTP API**                                                             |
 | colorful   | boolean | `false`                      | Use different colors for eyes and mouth                                                                                                           |
+| deterministic | boolean | `false`                   | Force deterministic output (see [#64](https://github.com/DiceBear/avatars/issues/64))
 
 ## Further information
 
