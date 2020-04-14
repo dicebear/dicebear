@@ -5,10 +5,11 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "pretest": "npm run build",
+    "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -rf lib/ || true",
-    "build": "tsc",
-    "test": "echo 'No tests available'"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.0.8",
+    "jest": "^24.8.0",
     "typescript": "^3.4.5"
   },
   "dependencies": {
