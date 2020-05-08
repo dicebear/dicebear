@@ -4,7 +4,6 @@ import { ColorCollection, Color as ColorType } from '@dicebear/avatars/lib/types
 
 // @ts-ignore
 import initials from 'initials';
-import Bowser from 'bowser';
 
 type Options = {
   margin?: number;
@@ -17,23 +16,12 @@ type Options = {
   bold?: boolean;
 };
 
-export default function(random: Random, options: Options = {}) {
+export default function (random: Random, options: Options = {}) {
   options.backgroundColorLevel = options.backgroundColorLevel || 600;
   options.fontSize = options.fontSize || 50;
   options.chars = options.chars || 2;
 
   let backgroundColors: string[] = [];
-  let isInternetExplorer =
-    options.userAgent &&
-    Bowser.getParser(options.userAgent).satisfies({
-      ie: '>0',
-      edge: '>0'
-    });
-  let isSafari =
-    options.userAgent &&
-    Bowser.getParser(options.userAgent).satisfies({
-      safari: '>0'
-    });
 
   if (options.background) {
     backgroundColors.push(options.background);
@@ -53,7 +41,7 @@ export default function(random: Random, options: Options = {}) {
 
   let backgroundColor = random.pickone(backgroundColors);
   let seedInitials = (initials(random.seed.trim()) as string).toLocaleUpperCase().slice(0, options.chars);
-  let fontFamily = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif";
+  let fontFamily = 'Arial,sans-serif';
 
   // prettier-ignore
   let svg = [
@@ -61,7 +49,7 @@ export default function(random: Random, options: Options = {}) {
     `<rect width="1" height="1" fill="${backgroundColor}"></rect>`,
     options.margin ? `<g transform="translate(${options.margin / 100}, ${options.margin / 100})">` : '',
     options.margin ? `<g transform="scale(${1 - (options.margin * 2) / 100})">` : '',
-    `<text x="50%" y="50%" style="line-height: 1; ${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" ${isInternetExplorer ? 'dy=".35em"' : `dy="${isSafari ? '.05em' : '.1em'}" alignment-baseline="middle"`} fill="#FFF" text-anchor="middle" dominant-baseline="middle">${seedInitials}</text>`,
+    `<text x="50%" y="50%" style="${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" fill="#FFF" text-anchor="middle" dy=".2">${seedInitials}</text>`,
     options.margin ? '</g>' : '',
     options.margin ? '</g>' : '',
     '</svg>'

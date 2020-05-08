@@ -40,7 +40,6 @@
     "lib"
   ],
   "dependencies": {
-    "bowser": "^2.5.2",
     "initials": "^3.0.1"
   },
   "publishConfig": {
