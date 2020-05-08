@@ -4,11 +4,16 @@ import Parser from './parser';
 
 export type Options = {
   radius?: number;
+  r?: number;
   base64?: boolean;
   width?: number | string;
+  w?: number | string;
   height?: number | string;
+  h?: number | string;
   margin?: number;
+  m?: number;
   background?: string;
+  b?: number;
   userAgent?: string;
 };
 
@@ -28,7 +33,7 @@ export default class Avatars<O> {
     this.spriteCollection = spriteCollection;
     this.defaultOptions = {
       userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent,
-      ...defaultOptions
+      ...defaultOptions,
     };
   }
 
@@ -39,6 +44,16 @@ export default class Avatars<O> {
    */
   public create(seed: string, options?: O & Options) {
     options = { ...this.defaultOptions, ...options };
+
+    // Apply alias options
+    options = {
+      radius: options.r,
+      width: options.w,
+      height: options.h,
+      margin: options.m,
+      background: options.b,
+      ...options,
+    };
 
     let svg = this.spriteCollection(new Random(seed), options);
 
@@ -62,7 +77,7 @@ export default class Avatars<O> {
       if (options.margin) {
         let groupable: svgson.schema[] = [];
 
-        svg.children = svg.children.filter(child => {
+        svg.children = svg.children.filter((child) => {
           if (this.isGroupable(child)) {
             groupable.push(child);
 
@@ -92,20 +107,20 @@ export default class Avatars<O> {
                     width: viewBoxWidth.toString(),
                     height: viewBoxHeight.toString(),
                     x: viewBoxX.toString(),
-                    y: viewBoxY.toString()
-                  }
+                    y: viewBoxY.toString(),
+                  },
                 },
-                ...groupable
+                ...groupable,
               ],
               attributes: {
-                transform: `scale(${1 - (options.margin * 2) / 100})`
-              }
-            }
+                transform: `scale(${1 - (options.margin * 2) / 100})`,
+              },
+            },
           ],
           attributes: {
             // prettier-ignore
             transform: `translate(${viewBoxWidth * options.margin / 100}, ${viewBoxHeight * options.margin / 100})`
-          }
+          },
         });
       }
 
@@ -120,15 +135,15 @@ export default class Avatars<O> {
             width: viewBoxWidth.toString(),
             height: viewBoxHeight.toString(),
             x: viewBoxX.toString(),
-            y: viewBoxY.toString()
-          }
+            y: viewBoxY.toString(),
+          },
         });
       }
 
       if (options.radius) {
         let groupable: svgson.schema[] = [];
 
-        svg.children = svg.children.filter(child => {
+        svg.children = svg.children.filter((child) => {
           if (this.isGroupable(child)) {
             groupable.push(child);
 
@@ -156,13 +171,13 @@ export default class Avatars<O> {
                   ry: ((viewBoxHeight * options.radius) / 100).toString(),
                   fill: '#fff',
                   x: viewBoxX.toString(),
-                  y: viewBoxY.toString()
-                }
-              }
+                  y: viewBoxY.toString(),
+                },
+              },
             ],
             attributes: {
-              id: 'avatarsRadiusMask'
-            }
+              id: 'avatarsRadiusMask',
+            },
           },
           {
             name: 'g',
@@ -170,8 +185,8 @@ export default class Avatars<O> {
             value: '',
             children: groupable,
             attributes: {
-              mask: `url(#avatarsRadiusMask)`
-            }
+              mask: `url(#avatarsRadiusMask)`,
+            },
           }
         );
       }
@@ -188,7 +203,7 @@ export default class Avatars<O> {
 
   private base64EncodeUnicode(value: string) {
     // @see https://www.base64encoder.io/javascript/
-    let utf8Bytes = encodeURIComponent(value).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+    let utf8Bytes = encodeURIComponent(value).replace(/%([0-9A-F]{2})/g, function (match, p1) {
       return String.fromCharCode(parseInt(`0x${p1}`));
     });
 
