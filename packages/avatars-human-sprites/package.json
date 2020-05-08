@@ -31,15 +31,14 @@
   },
   "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/avatars-human-sprites#readme",
   "dependencies": {
-    "@dicebear/avatars-female-sprites": "^4.0.8",
-    "@dicebear/avatars-male-sprites": "^4.0.8"
+    "@dicebear/avatars-female-sprites": "file:../avatars-female-sprites",
+    "@dicebear/avatars-male-sprites": "file:../avatars-male-sprites"
   },
   "peerDependencies": {
     "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.0.8",
-    "typescript": "^3.4.5"
+    "@dicebear/avatars": "file:../avatars"
   },
   "files": [
     "LICENSE",

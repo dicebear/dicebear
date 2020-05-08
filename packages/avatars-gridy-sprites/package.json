@@ -34,9 +34,7 @@
     "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.0.8",
-    "jest": "^24.8.0",
-    "typescript": "^3.4.5"
+    "@dicebear/avatars": "file:../avatars"
   },
   "dependencies": {
     "gridy-avatars": "^1.1.3"

@@ -36,10 +36,7 @@
     "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.0.8",
-    "@types/react": "^16.4.18",
-    "@types/react-dom": "^16.0.9",
-    "typescript": "^3.4.5"
+    "@dicebear/avatars": "file:../avatars"
   },
   "files": [
     "LICENSE",
