@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-bottts-sprites",
-  "version": "4.0.8",
+  "version": "4.1.0-alpha.0",
   "description": "Bottts sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
