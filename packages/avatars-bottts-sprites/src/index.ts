@@ -18,13 +18,16 @@ const group = (random: Random, content: string, chance: number, x: number, y: nu
   return '';
 };
 
-export default function(random: Random, options: Options = {}) {
-  options.primaryColorLevel = options.primaryColorLevel || 600;
-  options.secondaryColorLevel = options.secondaryColorLevel || 400;
-  options.mouthChance = options.mouthChance || 100;
-  options.sidesChance = options.sidesChance || 100;
-  options.textureChance = options.textureChance || 50;
-  options.topChance = options.topChance || 100;
+export default function (random: Random, options: Options = {}) {
+  options = {
+    primaryColorLevel: 600,
+    secondaryColorLevel: 400,
+    mouthChance: 100,
+    sidesChance: 100,
+    textureChance: 50,
+    topChance: 100,
+    ...options,
+  };
 
   let colorsCollection: Array<ColorType> = [];
 
