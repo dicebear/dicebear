@@ -1,0 +1,44 @@
+{
+  "name": "@avatars/core",
+  "version": "4.1.1",
+  "description": "Pixel-Art Avatar Placeholder Library",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "pure-color": "^1.3.0",
+    "seedrandom": "^2.4.3",
+    "svgson": "^4.0.0"
+  },
+  "scripts": {
+    "pretest": "npm run build",
+    "prepublishOnly": "npm run build",
+    "prebuild": "rm -r dist/* lib/* || true",
+    "build": "tsc && webpack",
+    "watch": "webpack -w & tsc -w"
+  },
+  "author": "Florian Körner <contact@dicebear.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiceBear/avatars.git"
+  },
+  "keywords": [
+    "avatar",
+    "generator",
+    "identicon",
+    "javascript",
+    "typescript"
+  ],
+  "bugs": {
+    "url": "https://github.com/DiceBear/avatars/issues"
+  },
+  "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/@avatars/core#readme",
+  "files": [
+    "dist",
+    "lib",
+    "typings"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

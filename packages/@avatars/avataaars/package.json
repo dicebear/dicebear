@@ -1,0 +1,48 @@
+{
+  "name": "@avatars/avataaars",
+  "version": "4.1.0´1",
+  "description": "avataaars avatar style for DiceBear Avatars",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "prebuild": "rm -rf lib/ || true",
+    "build": "tsc",
+    "test": "echo 'No tests available'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiceBear/avatars.git"
+  },
+  "keywords": [
+    "dicebear",
+    "avatar",
+    "avataaars",
+    "svg",
+    "sprites"
+  ],
+  "author": "DiceBear <opensource@dicebear.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DiceBear/avatars/issues"
+  },
+  "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/@avatars/avataaars#readme",
+  "dependencies": {
+    "avataaars": "^1.2.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "peerDependencies": {
+    "@avatars/core": "^4.0.0"
+  },
+  "devDependencies": {
+    "@avatars/core": "file:../core"
+  },
+  "files": [
+    "LICENSE",
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

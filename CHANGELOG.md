@@ -1,5 +1,30 @@
 # Changelog
 
+## [5.0.0] - TBA
+
+### Added
+
+### Changed
+
+- NPM namespace and package names changed to distinguish them from libraries not belonging to "DiceBear Avatars". In addition "sprite collections" are now called "avatar styles". This results in the following name changes:
+  - @dicebear/avatars => @avatars/core
+  - @dicebear/avatars-avataaars-sprites => @avatars/avataaars
+  - @dicebear/avatars-bottts-sprites => @avatars/bottts
+  - @dicebear/avatars-code-sprites => @avatars/code
+  - @dicebear/avatars-female-sprites => @avatars/female
+  - @dicebear/avatars-gridy-sprites => @avatars/gridy
+  - @dicebear/avatars-human-sprites => @avatars/human
+  - @dicebear/avatars-identicon-sprites => @avatars/identicon
+  - @dicebear/avatars-initials-sprites => @avatars/initials
+  - @dicebear/avatars-jdenticon-sprites => @avatars/jdenticon
+  - @dicebear/avatars-male-sprites => @avatars/male
+- Deprecation of packets with the old namespace.
+
+### Fixed
+
+### Removed
+
+
 ## [4.1.1] - 2020-05-14
 
 ### Changed
