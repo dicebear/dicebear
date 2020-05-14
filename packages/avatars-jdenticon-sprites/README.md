@@ -6,15 +6,15 @@
 [Jdenticon](https://github.com/dmester/jdenticon) wrapper for DiceBear Avatars.
 
 <p>
-    <img src="https://avatars.dicebear.com/v2/jdenticon/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/9.svg" width="60" />
 </p>
 
 ## Usage
@@ -23,7 +23,7 @@
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v2/jdenticon/:seed.svg
+    https://avatars.dicebear.com/api/jdenticon/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `options` can be used to pass [options](#options).
@@ -32,8 +32,8 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                                                            | url                                                                                                       |
 | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/jdenticon/example.svg" width="60" />                                                     | https://avatars.dicebear.com/v2/jdenticon/example.svg                                                     |
-| <img src="https://avatars.dicebear.com/v2/jdenticon/example.svg?options[padding]=0.05&options[background]=%23f0f0f0" width="60" /> | https://avatars.dicebear.com/v2/jdenticon/example.svg?options[padding]=0.05&options[background]=%23f0f0f0 |
+| <img src="https://avatars.dicebear.com/api/jdenticon/example.svg" width="60" />                                                     | https://avatars.dicebear.com/api/jdenticon/example.svg                                                     |
+| <img src="https://avatars.dicebear.com/api/jdenticon/example.svg?options[padding]=0.05&options[background]=%23f0f0f0" width="60" /> | https://avatars.dicebear.com/api/jdenticon/example.svg?options[padding]=0.05&options[background]=%23f0f0f0 |
 
 ### NPM
 

@@ -7,15 +7,15 @@ Designed by [Pablo Stanley](https://twitter.com/pablostanley), the Sketch librar
 [bottts.com](https://bottts.com/).
 
 <p>
-    <img src="https://avatars.dicebear.com/v2/bottts/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/9.svg" width="60" />
 </p>
 
 ## Usage
@@ -24,7 +24,7 @@ Designed by [Pablo Stanley](https://twitter.com/pablostanley), the Sketch librar
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v2/bottts/:seed.svg
+    https://avatars.dicebear.com/api/bottts/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here!
 
@@ -32,9 +32,9 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                                                           | url                                                                                                      |
 | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/bottts/example.svg" width="60" />                                                       | https://avatars.dicebear.com/v2/bottts/example.svg                                                       |
-| <img src="https://avatars.dicebear.com/v2/bottts/example.svg?options[colors][]=cyan" width="60" />                                | https://avatars.dicebear.com/v2/bottts/example.svg?options[colors][]=cyan                                |
-| <img src="https://avatars.dicebear.com/v2/bottts/example.svg?options[colors][]=cyan&options[primaryColorLevel]=200" width="60" /> | https://avatars.dicebear.com/v2/bottts/example.svg?options[colors][]=cyan&options[primaryColorLevel]=200 |
+| <img src="https://avatars.dicebear.com/api/bottts/example.svg" width="60" />                                                       | https://avatars.dicebear.com/api/bottts/example.svg                                                       |
+| <img src="https://avatars.dicebear.com/api/bottts/example.svg?options[colors][]=cyan" width="60" />                                | https://avatars.dicebear.com/api/bottts/example.svg?options[colors][]=cyan                                |
+| <img src="https://avatars.dicebear.com/api/bottts/example.svg?options[colors][]=cyan&options[primaryColorLevel]=200" width="60" /> | https://avatars.dicebear.com/api/bottts/example.svg?options[colors][]=cyan&options[primaryColorLevel]=200 |
 
 ### NPM
 

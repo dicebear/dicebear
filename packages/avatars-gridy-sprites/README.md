@@ -6,15 +6,15 @@
 Designed by [Jan Forst](https://github.com/darosh/gridy-avatars).
 
 <p>
-    <img src="https://avatars.dicebear.com/v2/gridy/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/9.svg" width="60" />
 </p>
 ## Usage
 
@@ -22,7 +22,7 @@ Designed by [Jan Forst](https://github.com/darosh/gridy-avatars).
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v2/gridy/:seed.svg
+    https://avatars.dicebear.com/api/gridy/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `options` can be used to pass [options](#options).
@@ -31,8 +31,8 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                            | url                                                                       |
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg" width="60" />                     | https://avatars.dicebear.com/v2/gridy/custom-seed.svg                     |
-| <img src="https://avatars.dicebear.com/v2/gridy/custom-seed.svg?options[colorful]=1" width="60" /> | https://avatars.dicebear.com/v2/gridy/custom-seed.svg?options[colorful]=1 |
+| <img src="https://avatars.dicebear.com/api/gridy/custom-seed.svg" width="60" />                     | https://avatars.dicebear.com/api/gridy/custom-seed.svg                     |
+| <img src="https://avatars.dicebear.com/api/gridy/custom-seed.svg?options[colorful]=1" width="60" /> | https://avatars.dicebear.com/api/gridy/custom-seed.svg?options[colorful]=1 |
 
 ### NPM
 

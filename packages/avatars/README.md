@@ -9,15 +9,15 @@ And best of all: We provide a simple and free HTTP API that you can use right aw
 https://avatars.dicebear.com
 
 <p>
-    <img src="https://avatars.dicebear.com/v2/male/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/identicon/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/bottts/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/avataaars/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/jdenticon/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/gridy/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/code/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/identicon/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/avataaars/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/code/John%20Doe.svg" width="60" />
 </p>
 
 ## Usage
@@ -26,7 +26,7 @@ https://avatars.dicebear.com
 
 Our free HTTP-API is the easiest way to use Avatars. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v2/:sprites/:seed.svg
+    https://avatars.dicebear.com/api/:sprites/:seed.svg
 
 Replace `:sprites` with `male`, `female`, `human`, `identicon`, `initials`, `bottts`, `avataaars`, `jdenticon`, `gridy` or `code`. The value of `:seed` can be anything you
 like - but **don't** use any sensitive or personal data here!
@@ -34,7 +34,7 @@ like - but **don't** use any sensitive or personal data here!
 The used sprite collection may offer additional options, which can be set using the GET parameter named `options`.
 For example, to create a happy _male_ avatar with the seed `john`, the following URL can be used:
 
-    https://avatars.dicebear.com/v2/male/john.svg?options[mood]=happy
+    https://avatars.dicebear.com/api/male/john.svg?options[mood]=happy
 
 ### NPM
 

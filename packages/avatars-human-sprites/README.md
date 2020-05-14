@@ -6,15 +6,15 @@
 This Sprite Collection combines the Sprite Collections [male](https://www.npmjs.com/package/@dicebear/avatars-male-sprites) and [female](https://www.npmjs.com/package/@dicebear/avatars-female-sprites) and selects the gender randomly.
 
 <p>
-    <img src="https://avatars.dicebear.com/v2/human/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/human/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/human/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/human/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/human/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/human/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/human/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/human/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/human/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/9.svg" width="60" />
 </p>
 
 ## Usage
@@ -23,7 +23,7 @@ This Sprite Collection combines the Sprite Collections [male](https://www.npmjs.
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v2/human/:seed.svg
+    https://avatars.dicebear.com/api/human/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `options` can be used to pass [options](#options).
@@ -32,9 +32,9 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                          | url                                                                     |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/human/example.svg" width="60" />                       | https://avatars.dicebear.com/v2/human/example.svg                       |
-| <img src="https://avatars.dicebear.com/v2/human/example.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/v2/human/example.svg?options[mood][]=happy |
-| <img src="https://avatars.dicebear.com/v2/human/example.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/v2/human/example.svg?options[mood][]=sad   |
+| <img src="https://avatars.dicebear.com/api/human/example.svg" width="60" />                       | https://avatars.dicebear.com/api/human/example.svg                       |
+| <img src="https://avatars.dicebear.com/api/human/example.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/api/human/example.svg?options[mood][]=happy |
+| <img src="https://avatars.dicebear.com/api/human/example.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/api/human/example.svg?options[mood][]=sad   |
 
 ### NPM
 

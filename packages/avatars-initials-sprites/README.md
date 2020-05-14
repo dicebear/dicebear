@@ -4,15 +4,15 @@
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-initials-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-initials-sprites)
 
 <p>
-    <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/Irene%20West.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/Joshua%20Nelson.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/Terrence%20Gomez.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/Charlie%20Sanders.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/Eli%20Chambers.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/Carla%20Chavez.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/Clarence%20Lawson.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/initials/Vivan%20Wade.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Irene%20West.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Joshua%20Nelson.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Terrence%20Gomez.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Charlie%20Sanders.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Eli%20Chambers.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Carla%20Chavez.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Clarence%20Lawson.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Vivan%20Wade.svg" width="60" />
 </p>
 
 ## Usage
@@ -21,7 +21,7 @@
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v2/initials/:seed.svg
+    https://avatars.dicebear.com/api/initials/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `options` can be used to pass [options](#options).
@@ -30,9 +30,9 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                                            | url                                                                                       |
 | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg" width="60" />                                   | https://avatars.dicebear.com/v2/initials/John%20Doe.svg                                   |
-| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[fontSize]=80" width="60" />              | https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[fontSize]=80              |
-| <img src="https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[backgroundColorLevel]=900" width="60" /> | https://avatars.dicebear.com/v2/initials/John%20Doe.svg?options[backgroundColorLevel]=900 |
+| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg" width="60" />                                   | https://avatars.dicebear.com/api/initials/John%20Doe.svg                                   |
+| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[fontSize]=80" width="60" />              | https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[fontSize]=80              |
+| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[backgroundColorLevel]=900" width="60" /> | https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[backgroundColorLevel]=900 |
 
 ### NPM
 

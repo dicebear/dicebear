@@ -4,15 +4,15 @@
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites)
 
 <p>
-    <img src="https://avatars.dicebear.com/v2/female/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/v2/female/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/female/9.svg" width="60" />
 </p>
 
 ## Usage
@@ -21,7 +21,7 @@
 
 Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
 
-    https://avatars.dicebear.com/v2/female/:seed.svg
+    https://avatars.dicebear.com/api/female/:seed.svg
 
 The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
 `options` can be used to pass [options](#options).
@@ -30,9 +30,9 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 | preview                                                                                           | url                                                                      |
 | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| <img src="https://avatars.dicebear.com/v2/female/example.svg" width="60" />                       | https://avatars.dicebear.com/v2/female/example.svg                       |
-| <img src="https://avatars.dicebear.com/v2/female/example.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/v2/female/example.svg?options[mood][]=happy |
-| <img src="https://avatars.dicebear.com/v2/female/example.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/v2/female/example.svg?options[mood][]=sad   |
+| <img src="https://avatars.dicebear.com/api/female/example.svg" width="60" />                       | https://avatars.dicebear.com/api/female/example.svg                       |
+| <img src="https://avatars.dicebear.com/api/female/example.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/api/female/example.svg?options[mood][]=happy |
+| <img src="https://avatars.dicebear.com/api/female/example.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/api/female/example.svg?options[mood][]=sad   |
 
 ### NPM
 
