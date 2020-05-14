@@ -49,7 +49,7 @@ export default function (random: Random, options: Options = {}) {
     `<rect width="1" height="1" fill="${backgroundColor}"></rect>`,
     options.margin ? `<g transform="translate(${options.margin / 100}, ${options.margin / 100})">` : '',
     options.margin ? `<g transform="scale(${1 - (options.margin * 2) / 100})">` : '',
-    `<text x="50%" y="50%" style="${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" fill="#FFF" text-anchor="middle" dy=".2">${seedInitials}</text>`,
+    `<text x="50%" y="50%" style="${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" fill="#FFF" text-anchor="middle" dy=".178">${seedInitials}</text>`,
     options.margin ? '</g>' : '',
     options.margin ? '</g>' : '',
     '</svg>'
