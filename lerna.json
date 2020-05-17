@@ -1,7 +1,5 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/@avatars/*"],
   "concurrency": 1,
   "version": "4.1.1"
 }

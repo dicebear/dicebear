@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import Random from '@avatars/core/lib/random';
+import type { IStyle } from '@avatars/core';
 import Avatar from 'avataaars';
 import Options from './options';
 import getAvatarStyle from './utils/getAvatarStyle';
@@ -17,23 +17,23 @@ import getEyebrowType from './utils/getEyebrowType';
 import getMouthType from './utils/getMouthType';
 import getSkinColor from './utils/getSkinColor';
 
-export default function (random: Random, options: Options = {}) {
+const style: IStyle<Options> = function (prng, options = {}) {
   let jsx = (
     <Avatar
       avatarStyle={getAvatarStyle(options)}
-      topType={getTopType(options, random)}
-      accessoriesType={getAccessoriesType(options, random)}
+      topType={getTopType(options, prng)}
+      accessoriesType={getAccessoriesType(options, prng)}
       // @ts-ignore
-      hatColor={getHatColor(options, random)}
-      hairColor={getHairColor(options, random)}
-      facialHairType={getFacialHairType(options, random)}
-      facialHairColor={getFacialHairColor(options, random)}
-      clotheType={getClotheType(options, random)}
-      clotheColor={getClotheColor(options, random)}
-      eyeType={getEyeType(options, random)}
-      eyebrowType={getEyebrowType(options, random)}
-      mouthType={getMouthType(options, random)}
-      skinColor={getSkinColor(options, random)}
+      hatColor={getHatColor(options, prng)}
+      hairColor={getHairColor(options, prng)}
+      facialHairType={getFacialHairType(options, prng)}
+      facialHairColor={getFacialHairColor(options, prng)}
+      clotheType={getClotheType(options, prng)}
+      clotheColor={getClotheColor(options, prng)}
+      eyeType={getEyeType(options, prng)}
+      eyebrowType={getEyebrowType(options, prng)}
+      mouthType={getMouthType(options, prng)}
+      skinColor={getSkinColor(options, prng)}
     />
   );
 
@@ -52,4 +52,6 @@ export default function (random: Random, options: Options = {}) {
     .replace('width="264px"', '')
     .replace('height="280px"', '')
     .replace('viewBox="0 0 264 280"', 'viewBox="-8 0 280 280"');
-}
+};
+
+export default style;

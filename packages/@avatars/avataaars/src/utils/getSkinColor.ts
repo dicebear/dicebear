@@ -1,8 +1,8 @@
-import Random from '@avatars/core/lib/random';
+import type { utils } from '@avatars/core';
 import Options from '../options';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random) {
+export default function (options: Options, prng: utils.prng.IPrng) {
   let skinColor = [];
 
   if (getOption('skin', 'tanned', options)) {
@@ -33,5 +33,5 @@ export default function (options: Options, random: Random) {
     skinColor.push('Black');
   }
 
-  return random.pickone(skinColor);
+  return prng.pick(skinColor);
 }

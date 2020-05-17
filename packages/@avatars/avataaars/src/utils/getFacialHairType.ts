@@ -1,8 +1,8 @@
-import Random from '@avatars/core/lib/random';
+import type { utils } from '@avatars/core';
 import Options from '../options';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random) {
+export default function (options: Options, prng: utils.prng.IPrng) {
   let facialHairType = [];
 
   if (getOption('facialHair', 'medium', options)) {
@@ -25,9 +25,9 @@ export default function (options: Options, random: Random) {
     facialHairType.push('MoustacheMagnum');
   }
 
-  let pickedFacialHairType = random.pickone(facialHairType);
+  let pickedFacialHairType = prng.pick(facialHairType);
 
-  if (false === random.bool(undefined !== options.facialHairChance ? options.facialHairChance : 10)) {
+  if (false === prng.bool(undefined !== options.facialHairChance ? options.facialHairChance : 10)) {
     return 'Blank';
   }
 

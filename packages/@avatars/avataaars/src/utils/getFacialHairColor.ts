@@ -1,8 +1,8 @@
-import Random from '@avatars/core/lib/random';
+import type { utils } from '@avatars/core';
 import Options from '../options';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random) {
+export default function (options: Options, prng: utils.prng.IPrng) {
   let facialHairColor = [];
 
   if (getOption('facialHairColor', 'auburn', options)) {
@@ -29,5 +29,5 @@ export default function (options: Options, random: Random) {
     facialHairColor.push('Red');
   }
 
-  return random.pickone(facialHairColor);
+  return prng.pick(facialHairColor);
 }

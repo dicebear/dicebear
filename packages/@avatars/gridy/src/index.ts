@@ -1,6 +1,6 @@
 // @ts-ignore
 import { inner } from 'gridy-avatars/dist/avatars';
-import Random from '@avatars/core/lib/random';
+import { IStyle } from '@avatars/core';
 
 type Options = {
   colorful?: boolean;
@@ -20,21 +20,21 @@ let fixDeterministic = (svg: string, id: number): string => {
   return svg.replace(clipA, `clip-a-${id}`).replace(clipB, `clip-b-${id}`);
 };
 
-export default function (random: Random, options: Options = {}) {
-  let body = random.integer(0, 7);
-  let bodyColor = random.integer(0, 7);
+const style: IStyle<Options> = function (prng, options = {}) {
+  let body = prng.integer(0, 7);
+  let bodyColor = prng.integer(0, 7);
 
-  let eyes = random.integer(0, 7);
-  let eyesColor = random.integer(0, 7);
+  let eyes = prng.integer(0, 7);
+  let eyesColor = prng.integer(0, 7);
 
-  let mouth = random.integer(0, 7);
-  let mouthColor = options.colorful ? random.integer(0, 7) : eyesColor;
+  let mouth = prng.integer(0, 7);
+  let mouthColor = options.colorful ? prng.integer(0, 7) : eyesColor;
 
   let deterministic = options && options.deterministic;
 
   let svg = inner(`${body}${bodyColor}${eyes}${eyesColor}${mouth}${mouthColor}`);
   if (deterministic) {
-    let id = random.integer(0, 10e9);
+    let id = prng.integer(0, 10e9);
     svg = fixDeterministic(svg, id);
   }
 
@@ -43,4 +43,6 @@ export default function (random: Random, options: Options = {}) {
     svg,
     '</svg>',
   ].join('');
-}
+};
+
+export default style;

@@ -1,8 +1,8 @@
-import Random from '@avatars/core/lib/random';
+import type { utils } from '@avatars/core';
 import Options from '../options';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random) {
+export default function (options: Options, prng: utils.prng.IPrng) {
   let eyebrowType = [];
 
   if (getOption('eyebrow', 'angry', options)) {
@@ -33,5 +33,5 @@ export default function (options: Options, random: Random) {
     eyebrowType.push('UpDown', 'UpDownNatural');
   }
 
-  return random.pickone(eyebrowType);
+  return prng.pick(eyebrowType);
 }

@@ -1,15 +1,11 @@
 import Options from '../options';
 
-export default function(options: Options) {
-  let avatarStyle = 'Transparent';
-
+export default function (options: Options) {
   switch (options.style) {
     case 'circle':
       return 'Circle';
 
-    case 'transparent':
+    default:
       return 'Transparent';
   }
-
-  return avatarStyle;
 }

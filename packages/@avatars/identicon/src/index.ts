@@ -1,30 +1,30 @@
-import Color from '@avatars/core/lib/color';
-import Random from '@avatars/core/lib/random';
-import { ColorCollection, Color as ColorType } from '@avatars/core/lib/types';
+import type { IStyle } from '@avatars/core';
+import materialColors from 'material-colors/dist/colors.json';
 
 type Options = {
-  colors?: Array<keyof ColorCollection>;
-  colorLevel?: keyof ColorType;
+  colors?: string[];
+  colorLevel?: number;
 };
 
-export default function (random: Random, options: Options = {}) {
+const style: IStyle<Options> = function (prng, options = {}) {
   options.colorLevel = options.colorLevel || 600;
 
   let colors: string[] = [];
 
-  Object.keys(Color.collection).forEach((color: keyof ColorCollection) => {
+  Object.keys(materialColors).forEach((color) => {
     if (options.colors === undefined || options.colors.length === 0 || options.colors.indexOf(color) !== -1) {
-      colors.push(Color.collection[color][options.colorLevel]);
+      // @ts-ignore
+      colors.push(materialColors[color][options.colorLevel]);
     }
   });
 
-  let color = random.pickone(colors);
+  let color = prng.pick(colors);
 
   // prettier-ignore
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 5 5" version="1.1" shape-rendering="crispEdges">`,
     // Row 1
-    random.pickone([
+    prng.pick([
       `<path d="M0 4h1v1H0V4zm4 0h1v1H4V4z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 4h2v1H0V4zm3 0h2v1H3V4z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 4h5v1H0V4z" fill="${color}"/>`,
@@ -33,7 +33,7 @@ export default function (random: Random, options: Options = {}) {
       `<path d="M0 4h1v1H0V4zm2 0h1v1H2V4zm2 0h1v1H4V4z" fill-rule="evenodd" fill="${color}"/>`
     ]),
     // Row 2
-    random.pickone([
+    prng.pick([
       `<path d="M0 3h1v1H0V3zm4 0h1v1H4V3z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 3h2v1H0V3zm3 0h2v1H3V3z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 3h5v1H0V3z" fill="${color}"/>`,
@@ -42,7 +42,7 @@ export default function (random: Random, options: Options = {}) {
       `<path d="M0 3h1v1H0V3zm2 0h1v1H2V3zm2 0h1v1H4V3z" fill-rule="evenodd" fill="${color}"/>`
     ]),
     // Row 3
-    random.pickone([
+    prng.pick([
       `<path d="M0 2h1v1H0V2zm4 0h1v1H4V2z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 2h2v1H0V2zm3 0h2v1H3V2z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 2h5v1H0V2z" fill="${color}"/>`,
@@ -51,7 +51,7 @@ export default function (random: Random, options: Options = {}) {
       `<path d="M0 2h1v1H0V2zm2 0h1v1H2V2zm2 0h1v1H4V2z" fill-rule="evenodd" fill="${color}"/>`
     ]),
     // Row 4
-    random.pickone([
+    prng.pick([
       `<path d="M0 1h1v1H0V1zm4 0h1v1H4V1z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 1h2v1H0V1zm3 0h2v1H3V1z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 1h5v1H0V1z" fill="${color}"/>`,
@@ -60,7 +60,7 @@ export default function (random: Random, options: Options = {}) {
       `<path d="M0 1h1v1H0V1zm2 0h1v1H2V1zm2 0h1v1H4V1z" fill-rule="evenodd" fill="${color}"/>`
     ]),
     // Row 5
-    random.pickone([
+    prng.pick([
       `<path d="M0 0h1v1H0V0zm4 0h1v1H4V0z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 0h2v1H0V0zm3 0h2v1H3V0z" fill-rule="evenodd" fill="${color}"/>`,
       `<path d="M0 0h5v1H0V0z" fill="${color}"/>`,
@@ -70,4 +70,6 @@ export default function (random: Random, options: Options = {}) {
     ]),
     '</svg>'
   ].join('');
-}
+};
+
+export default style;

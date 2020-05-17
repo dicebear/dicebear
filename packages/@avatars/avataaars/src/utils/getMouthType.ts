@@ -1,8 +1,8 @@
-import Random from '@avatars/core/lib/random';
+import type { utils } from '@avatars/core';
 import Options from '../options';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random) {
+export default function (options: Options, prng: utils.prng.IPrng) {
   let mouthType = [];
 
   if (getOption('mouth', 'concerned', options)) {
@@ -53,5 +53,5 @@ export default function (options: Options, random: Random) {
     mouthType.push('Vomit');
   }
 
-  return random.pickone(mouthType);
+  return prng.pick(mouthType);
 }

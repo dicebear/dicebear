@@ -1,8 +1,8 @@
-import Random from '@avatars/core/lib/random';
+import type { utils } from '@avatars/core';
 import Options from '../options';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random) {
+export default function (options: Options, prng: utils.prng.IPrng) {
   let topType = [];
 
   if (getOption('top', 'longHair', options)) {
@@ -58,9 +58,9 @@ export default function (options: Options, random: Random) {
     topType.push('Turban');
   }
 
-  let pickedTopType = random.pickone(topType);
+  let pickedTopType = prng.pick(topType);
 
-  if (false === random.bool(undefined !== options.topChance ? options.topChance : 100)) {
+  if (false === prng.bool(undefined !== options.topChance ? options.topChance : 100)) {
     return 'NoHair';
   }
 

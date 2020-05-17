@@ -1,8 +1,8 @@
-import Random from '@avatars/core/lib/random';
+import type { utils } from '@avatars/core';
 import Options from '../options';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random) {
+export default function (options: Options, prng: utils.prng.IPrng) {
   let accessoriesType = [];
 
   if (getOption('accessories', 'kurt', options)) {
@@ -29,9 +29,9 @@ export default function (options: Options, random: Random) {
     accessoriesType.push('Wayfarers');
   }
 
-  let pickedAccessoriesType = random.pickone(accessoriesType);
+  let pickedAccessoriesType = prng.pick(accessoriesType);
 
-  if (false === random.bool(undefined !== options.accessoriesChance ? options.accessoriesChance : 10)) {
+  if (false === prng.bool(undefined !== options.accessoriesChance ? options.accessoriesChance : 10)) {
     return 'Blank';
   }
 

@@ -8,10 +8,8 @@
     "sourceMap": true,
     "outDir": "lib",
     "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]
-    },
-    "declaration": true
+    "declaration": true,
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"]
 }

@@ -1,9 +1,7 @@
-import { ColorCollection, Color } from '@avatars/core/lib/types';
-
 type Options = {
-  colors?: Array<keyof ColorCollection>;
-  primaryColorLevel?: keyof Color;
-  secondaryColorLevel?: keyof Color;
+  colors?: string[];
+  primaryColorLevel?: number;
+  secondaryColorLevel?: number;
   colorful?: boolean;
   mouthChance?: number;
   sidesChance?: number;

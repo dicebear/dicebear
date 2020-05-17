@@ -1,8 +1,8 @@
-import Random from '@avatars/core/lib/random';
+import type { utils } from '@avatars/core';
 import Options from '../options';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random) {
+export default function (options: Options, prng: utils.prng.IPrng) {
   let clotheType = [];
 
   if (getOption('clothes', 'blazer', options)) {
@@ -25,5 +25,5 @@ export default function (options: Options, random: Random) {
     clotheType.push('Overall');
   }
 
-  return random.pickone(clotheType);
+  return prng.pick(clotheType);
 }

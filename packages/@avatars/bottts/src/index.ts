@@ -1,8 +1,7 @@
-import Color from '@avatars/core/lib/color';
-import Random from '@avatars/core/lib/random';
-import { ColorCollection, Color as ColorType } from '@avatars/core/lib/types';
+import type { utils, IStyle } from '@avatars/core';
 import Options from './options';
 
+import colors from 'material-colors/dist/colors.json';
 import eyesCollection from './eyes';
 import faceCollection from './face';
 import mouthCollection from './mouth';
@@ -10,15 +9,15 @@ import sidesCollection from './sides';
 import textureCollection from './texture';
 import topCollection from './top';
 
-const group = (random: Random, content: string, chance: number, x: number, y: number) => {
-  if (random.bool(chance)) {
+const group = (prng: utils.prng.IPrng, content: string, chance: number, x: number, y: number) => {
+  if (prng.bool(chance)) {
     return `<g transform="translate(${x}, ${y})">${content}</g>`;
   }
 
   return '';
 };
 
-export default function (random: Random, options: Options = {}) {
+const style: IStyle<Options> = function (prng, options = {}) {
   options = {
     primaryColorLevel: 600,
     secondaryColorLevel: 400,
@@ -29,39 +28,40 @@ export default function (random: Random, options: Options = {}) {
     ...options,
   };
 
-  let colorsCollection: Array<ColorType> = [];
-
-  Object.keys(Color.collection).forEach((color: keyof ColorCollection) => {
+  let colorsCollection: Array<Record<string, string>> = Object.keys(colors).map((color) => {
     if (options.colors === undefined || options.colors.length === 0 || options.colors.indexOf(color) !== -1) {
-      colorsCollection.push(Color.collection[color]);
+      // @ts-ignore
+      return colors[color];
     }
   });
 
-  let primaryColorCollection = random.pickone(colorsCollection);
-  let secondaryColorCollection = random.pickone(colorsCollection);
+  let primaryColorCollection = prng.pick(colorsCollection);
+  let secondaryColorCollection = prng.pick(colorsCollection);
 
-  let primaryColor = new Color(primaryColorCollection[options.primaryColorLevel]);
-  let secondaryColor = new Color(primaryColorCollection[options.secondaryColorLevel]);
+  let primaryColor = primaryColorCollection[options.primaryColorLevel.toString()];
+  let secondaryColor = primaryColorCollection[options.secondaryColorLevel.toString()];
 
   if (options.colorful) {
-    secondaryColor = new Color(secondaryColorCollection[options.secondaryColorLevel]);
+    secondaryColor = secondaryColorCollection[options.secondaryColorLevel.toString()];
   }
 
-  let eyes = random.pickone(eyesCollection);
-  let face = random.pickone(faceCollection);
-  let mouth = random.pickone(mouthCollection);
-  let sides = random.pickone(sidesCollection);
-  let texture = random.pickone(textureCollection);
-  let top = random.pickone(topCollection);
+  let eyes = prng.pick(eyesCollection);
+  let face = prng.pick(faceCollection);
+  let mouth = prng.pick(mouthCollection);
+  let sides = prng.pick(sidesCollection);
+  let texture = prng.pick(textureCollection);
+  let top = prng.pick(topCollection);
 
   // prettier-ignore
   return [
     '<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" fill="none">',
-    group(random, sides(secondaryColor), options.sidesChance, 0, 66),
-    group(random, top(secondaryColor), options.topChance, 41, 0),
-    group(random, face(primaryColor, random.bool(options.textureChance) ? texture() : undefined), 100, 25, 44),
-    group(random, mouth(), options.mouthChance, 52, 124),
-    group(random, eyes(), 100, 38, 76),
+    group(prng, sides(secondaryColor), options.sidesChance, 0, 66),
+    group(prng, top(secondaryColor), options.topChance, 41, 0),
+    group(prng, face(primaryColor, prng.bool(options.textureChance) ? texture() : undefined), 100, 25, 44),
+    group(prng, mouth(), options.mouthChance, 52, 124),
+    group(prng, eyes(), 100, 38, 76),
     '</svg>'
   ].join('');
-}
+};
+
+export default style;
