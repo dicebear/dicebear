@@ -23,7 +23,7 @@
 ### Changed
 
 - [#55][1] Parameter key for the HTTP API flattened. It is now no longer necessary to nest the values in an `options` object.
-- [#61][6] Update `topChange` to `topChance`, clarify some documentation (thans to @pennstatephil)
+- [#61][6] Update `topChange` to `topChance`, clarify some documentation (thanks to @pennstatephil)
 - [Configurator][2] now always generates the smallest possible HTTP-API URL.
 - Reorganized dependencies in the repository.
 - Stackpath CDN configured for HTTP API. Saves 90% traffic to Cloudflare Workers and therefore also unnecessary costs. Unfortunately makes the initial call a bit slower.
