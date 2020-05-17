@@ -40,7 +40,10 @@ export default function (random: Random, options: Options = {}) {
   let rendered = renderToStaticMarkup(jsx);
 
   if (options.background && options.style === 'circle') {
-    rendered = rendered.replace('mask="url(#mask-2)" fill="#65C9FF"', `mask="url(#mask-2)" fill="${options.background}"`);
+    rendered = rendered.replace(
+      'mask="url(#mask-2)" fill="#65C9FF"',
+      `mask="url(#mask-2)" fill="${options.background}"`
+    );
 
     options.background = undefined;
   }

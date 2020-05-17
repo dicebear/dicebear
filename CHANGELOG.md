@@ -6,24 +6,55 @@
 
 ### Changed
 
-- NPM namespace and package names changed to distinguish them from libraries not belonging to "DiceBear Avatars". In addition "sprite collections" are now called "avatar styles". This results in the following name changes:
-  - @dicebear/avatars => @avatars/core
-  - @dicebear/avatars-avataaars-sprites => @avatars/avataaars
-  - @dicebear/avatars-bottts-sprites => @avatars/bottts
-  - @dicebear/avatars-code-sprites => @avatars/code
-  - @dicebear/avatars-female-sprites => @avatars/female
-  - @dicebear/avatars-gridy-sprites => @avatars/gridy
-  - @dicebear/avatars-human-sprites => @avatars/human
-  - @dicebear/avatars-identicon-sprites => @avatars/identicon
-  - @dicebear/avatars-initials-sprites => @avatars/initials
-  - @dicebear/avatars-jdenticon-sprites => @avatars/jdenticon
-  - @dicebear/avatars-male-sprites => @avatars/male
+- NPM namespace and package names changed to separate them from libraries not belonging to "DiceBear Avatars". In addition "sprite collections" are now called "avatar styles". This results in the following name changes:
+  - `@dicebear/avatars` => `@avatars/core`
+  - `@dicebear/avatars-avataaars-sprites` => `@avatars/avataaars`
+  - `@dicebear/avatars-bottts-sprites` => `@avatars/bottts`
+  - `@dicebear/avatars-code-sprites` => `@avatars/code`
+  - `@dicebear/avatars-female-sprites` => `@avatars/female`
+  - `@dicebear/avatars-gridy-sprites` => `@avatars/gridy`
+  - `@dicebear/avatars-human-sprites` => `@avatars/human`
+  - `@dicebear/avatars-identicon-sprites` => `@avatars/identicon`
+  - `@dicebear/avatars-initials-sprites` => `@avatars/initials`
+  - `@dicebear/avatars-jdenticon-sprites` => `@avatars/jdenticon`
+  - `@dicebear/avatars-male-sprites` => `@avatars/male`
 - Deprecation of packages with the old namespace.
+- `@avatars/core` Classes are rewritten as functions. This change allows direct access to the `create` function without having to initialize an object first.
+
+  Old API
+
+  ```js
+    import Avatars from `@dicebear/avatars`;
+    import spriteCollection from `@dicebear/avatars-initials-sprites`;
+
+    let options = {};
+    let seed = 'custom-seed';
+    let avatars = new Avatars(spriteCollection, options);
+    let svg = avatars.create(seed);
+  ```
+
+  New API
+
+  ```js
+    import * as avatars from `@avatars/core`;
+    import avatarsStyle from `@avatars/initials`;
+
+    let options = {};
+    let seed = 'custom-seed';
+    let svg = avatars.create(avatarsStyle, seed, options);
+  ```
 
 ### Fixed
 
+- `@avatars/core` [#68](7) base64 option on nodejs environments
+
 ### Removed
 
+- `@avatars/core` Color modifier classes. Moved to `@avatars/humans`.
+- `@avatars/core` Material colors. Use [material-colors](8) package instead.
+
+[7]: https://github.com/DiceBear/avatars/issues/68
+[8]: https://www.npmjs.com/package/material-colors
 
 ## [4.1.1] - 2020-05-14
 
@@ -35,7 +66,6 @@
 
 - `initials` more precisely centered
 - `avataaars` Background Color
-
 
 ## [4.1.0] - 2020-05-09
 
