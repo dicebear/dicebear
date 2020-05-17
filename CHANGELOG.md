@@ -18,7 +18,7 @@
   - @dicebear/avatars-initials-sprites => @avatars/initials
   - @dicebear/avatars-jdenticon-sprites => @avatars/jdenticon
   - @dicebear/avatars-male-sprites => @avatars/male
-- Deprecation of packets with the old namespace.
+- Deprecation of packages with the old namespace.
 
 ### Fixed
 
