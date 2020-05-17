@@ -1,7 +1,7 @@
 import type { utils, IStyle } from '@avatars/core';
 import Options from './options';
 
-import colors from 'material-colors/dist/colors.json';
+import materialColors from 'material-colors/dist/colors.json';
 import eyesCollection from './eyes';
 import faceCollection from './face';
 import mouthCollection from './mouth';
@@ -28,21 +28,23 @@ const style: IStyle<Options> = function (prng, options = {}) {
     ...options,
   };
 
-  let colorsCollection: Array<Record<string, string>> = Object.keys(colors).map((color) => {
+  let colorsCollection: Array<Record<string, string>> = [];
+
+  Object.keys(materialColors).forEach((color) => {
     if (options.colors === undefined || options.colors.length === 0 || options.colors.indexOf(color) !== -1) {
       // @ts-ignore
-      return colors[color];
+      colorsCollection.push(materialColors[color]);
     }
   });
 
   let primaryColorCollection = prng.pick(colorsCollection);
   let secondaryColorCollection = prng.pick(colorsCollection);
 
-  let primaryColor = primaryColorCollection[options.primaryColorLevel.toString()];
-  let secondaryColor = primaryColorCollection[options.secondaryColorLevel.toString()];
+  let primaryColor = primaryColorCollection[options.primaryColorLevel];
+  let secondaryColor = primaryColorCollection[options.secondaryColorLevel];
 
   if (options.colorful) {
-    secondaryColor = secondaryColorCollection[options.secondaryColorLevel.toString()];
+    secondaryColor = secondaryColorCollection[options.secondaryColorLevel];
   }
 
   let eyes = prng.pick(eyesCollection);
