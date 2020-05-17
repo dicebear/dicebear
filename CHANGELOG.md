@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.1.1] - 2020-05-14
+
+### Changed
+
+- New API Path. `/api/` instead of `/v2/`
+
+### Fixed
+
+- `initials` more precisely centered
+- `avataaars` Background Color
+
+
 ## [4.1.0] - 2020-05-09
 
 ### Added
