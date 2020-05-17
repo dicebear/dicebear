@@ -1,7 +1,7 @@
 {
   "name": "@avatars/core",
   "version": "4.1.1",
-  "description": "Pixel-Art Avatar Placeholder Library",
+  "description": "Avatar placeholder library for designers and developers.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
