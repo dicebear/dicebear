@@ -30,8 +30,8 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                                                            | url                                                                                                       |
-| ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| preview                                                                                                                             | url                                                                                                        |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | <img src="https://avatars.dicebear.com/api/jdenticon/example.svg" width="60" />                                                     | https://avatars.dicebear.com/api/jdenticon/example.svg                                                     |
 | <img src="https://avatars.dicebear.com/api/jdenticon/example.svg?options[padding]=0.05&options[background]=%23f0f0f0" width="60" /> | https://avatars.dicebear.com/api/jdenticon/example.svg?options[padding]=0.05&options[background]=%23f0f0f0 |
 
@@ -64,10 +64,10 @@ let svg = avatars.create('custom-seed');
 | background          | b     | string                               | `null`                       | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
 | userAgent           |       | string                               | `window.navigator.userAgent` | User-Agent for legacy browser fallback<br> **Automatically detected by the HTTP API**                                                             |
 | hues                |       | array of numbers between 0 and 360   | `null`                       | Icon hue                                                                                                                                          |
-| colorLightness      |       | array of two numbers between 0 and 1 | `null`                       | Colored shapes - Lightness                                                                                                                        |
-| grayscaleLightness  |       | array of two numbers between 0 and 1 | `null`                       | Grayscale shapes - Lightness                                                                                                                      |
-| colorSaturation     |       | number between 0 and 1               | `null`                       | Colored shapes - Saturation                                                                                                                       |
-| grayscaleSaturation |       | number between 0 and 1               | `null`                       | Grayscale shapes - Saturation                                                                                                                     |
+| lightnessColor      |       | array of two numbers between 0 and 1 | `null`                       | Colored shapes - Lightness                                                                                                                        |
+| lightnessGrayscale  |       | array of two numbers between 0 and 1 | `null`                       | Grayscale shapes - Lightness                                                                                                                      |
+| saturationColor     |       | number between 0 and 1               | `null`                       | Colored shapes - Saturation                                                                                                                       |
+| saturationGrayscale |       | number between 0 and 1               | `null`                       | Grayscale shapes - Saturation                                                                                                                     |
 
 ## Further information
 

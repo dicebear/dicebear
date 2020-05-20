@@ -44,6 +44,12 @@
     let svg = avatars.create(avatarsStyle, seed, options);
   ```
 
+- `@avatars/jdenticon` Options are adapted to those of the 'jdenticon' library. This results in the following changes:
+  - `colorLightness` => `lightnessColor`
+  - `grayscaleLightness` => `lightnessGrayscale`
+  - `colorSaturation` => `saturationColor`
+  - `grayscaleSaturation` => `saturationGrayscale`
+
 ### Fixed
 
 - `@avatars/core` [#68](7) base64 option on nodejs environments

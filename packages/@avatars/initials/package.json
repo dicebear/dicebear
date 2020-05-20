@@ -39,6 +39,7 @@
     "lib"
   ],
   "dependencies": {
+    "material-colors": "^1.2.6",
     "initials": "^3.0.1"
   },
   "publishConfig": {

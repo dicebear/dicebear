@@ -1,6 +1,5 @@
-import Color from '@avatars/core/lib/color';
-import Random from '@avatars/core/lib/random';
-import { ColorCollection, Color as ColorType } from '@avatars/core/lib/types';
+import { IStyle } from '@avatars/core';
+import materialColors from 'material-colors/dist/colors.json';
 
 // @ts-ignore
 import initials from 'initials';
@@ -9,14 +8,14 @@ type Options = {
   margin?: number;
   background?: string;
   userAgent?: string;
-  backgroundColors?: Array<keyof ColorCollection>;
-  backgroundColorLevel?: keyof ColorType;
+  backgroundColors?: string[];
+  backgroundColorLevel?: number;
   fontSize?: number;
   chars?: number;
   bold?: boolean;
 };
 
-export default function (random: Random, options: Options = {}) {
+const style: IStyle<Options> = function (random, options = {}) {
   options.backgroundColorLevel = options.backgroundColorLevel || 600;
   options.fontSize = options.fontSize || 50;
   options.chars = options.chars || 2;
@@ -28,18 +27,18 @@ export default function (random: Random, options: Options = {}) {
 
     options.background = undefined;
   } else {
-    Object.keys(Color.collection).forEach((backgroundColor: keyof ColorCollection) => {
+    Object.keys(materialColors).forEach((backgroundColor) => {
       if (
         options.backgroundColors === undefined ||
         options.backgroundColors.length === 0 ||
         options.backgroundColors.indexOf(backgroundColor) !== -1
       ) {
-        backgroundColors.push(Color.collection[backgroundColor][options.backgroundColorLevel]);
+        backgroundColors.push(materialColors[backgroundColor][options.backgroundColorLevel]);
       }
     });
   }
 
-  let backgroundColor = random.pickone(backgroundColors);
+  let backgroundColor = random.pick(backgroundColors);
   let seedInitials = (initials(random.seed.trim()) as string).toLocaleUpperCase().slice(0, options.chars);
   let fontFamily = 'Arial,sans-serif';
 
@@ -58,4 +57,6 @@ export default function (random: Random, options: Options = {}) {
   options.margin = undefined;
 
   return svg;
-}
+};
+
+export default style;

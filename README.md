@@ -9,28 +9,23 @@ https://avatars.dicebear.com
 
 The Avatars repo is managed as a monorepo that is composed of many npm packages.
 
-### Core Packages
+### Core Package
 
-| Package                                | Version                                                                                                                         |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| [@dicebear/avatars](/packages/avatars) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars) |
+| Package                            | Version                                                                                                                     |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [@avatars/core](/packages/avatars) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/core) |
 
-### Original Sprite Collections
+### Avatar Styles Sprite Collections
 
-| Package                                                                     | Version                                                                                                                                                             |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [@dicebear/avatars-male-sprites](./packages/avatars-male-sprites)           | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-male-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-male-sprites)           |
-| [@dicebear/avatars-female-sprites](./packages/avatars-female-sprites)       | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites)       |
-| [@dicebear/avatars-human-sprites](./packages/avatars-human-sprites)         | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-human-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-human-sprites)         |
-| [@dicebear/avatars-identicon-sprites](./packages/avatars-identicon-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-identicon-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites) |
-| [@dicebear/avatars-initials-sprites](./packages/avatars-initials-sprites)   | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-initials-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites)  |
-| [@dicebear/avatars-bottts-sprites](./packages/avatars-bottts-sprites)       | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-bottts-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-bottts-sprites)       |
-
-### Wrapper Sprite Collections
-
-| Package                                                                     | Version                                                                                                                                                             |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [@dicebear/avatars-avataaars-sprites](./packages/avatars-avataaars-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-avataaars-sprites) |
-| [@dicebear/avatars-gridy-sprites](./packages/avatars-gridy-sprites)         | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites)         |
-| [@dicebear/avatars-jdenticon-sprites](./packages/avatars-jdenticon-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-jdenticon-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-jdenticon-sprites) |
-| [@dicebear/avatars-code-sprites](./packages/avatars-code-sprites)           | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-code-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-code-sprites)           |
+| Package                                             | Version                                                                                                                           |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| [@avatars/male](./packages/@avatars/male)           | [![npm](https://img.shields.io/npm/v/@avatars/male.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/male)           |
+| [@avatars/female](./packages/@avatars/female)       | [![npm](https://img.shields.io/npm/v/@avatars/female.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/female)       |
+| [@avatars/human](./packages/@avatars/human)         | [![npm](https://img.shields.io/npm/v/@avatars/human.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/human)         |
+| [@avatars/identicon](./packages/@avatars/identicon) | [![npm](https://img.shields.io/npm/v/@avatars/identicon.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/identicon) |
+| [@avatars/initials](./packages/@avatars/initials)   | [![npm](https://img.shields.io/npm/v/@avatars/initials.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/identicon)  |
+| [@avatars/bottts](./packages/@avatars/bottts)       | [![npm](https://img.shields.io/npm/v/@avatars/bottts.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/bottts)       |
+| [@avatars/avataaars](./packages/@avatars/avataaars) | [![npm](https://img.shields.io/npm/v/@avatars/avataaars.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/avataaars) |
+| [@avatars/gridy](./packages/@avatars/gridy)         | [![npm](https://img.shields.io/npm/v/@avatars/gridy.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/gridy)         |
+| [@avatars/jdenticon](./packages/@avatars/jdenticon) | [![npm](https://img.shields.io/npm/v/@avatars/jdenticon.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/jdenticon) |
+| [@avatars/code](./packages/@avatars/code)           | [![npm](https://img.shields.io/npm/v/@avatars/code.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/code)           |
