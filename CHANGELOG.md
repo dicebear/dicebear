@@ -1,8 +1,6 @@
-# Changelog
+# [5.0.0] - TBA
 
-## [5.0.0] - TBA
-
-### Added
+## Added
 
 - `@avatars/pixel-art` as a merger for `male`, `female` and `human`.
 - `@avatars/pixel-art` The following options are new:
@@ -15,7 +13,7 @@
   - `femaleGlassesProbability`
   - `femaleHatProbability`
 
-### Changed
+## Changed
 
 - NPM namespace and package names changed to separate them from libraries not belonging to "DiceBear Avatars". In addition "sprite collections" are now called "avatar styles". This results in the following name changes:
   - `@dicebear/avatars` => `@avatars/core`
@@ -70,11 +68,11 @@
   - `textureChance` => `textureProbability`
   - `topChance` => `topProbability`
 
-### Fixed
+## Fixed
 
 - `@avatars/core` [#68](7) base64 option on nodejs environments
 
-### Removed
+## Removed
 
 - `@avatars/core` Color modifier classes. Moved to `@avatars/pixel-art`.
 - `@avatars/core` Material colors. Use [material-colors](8) package instead.
@@ -84,26 +82,26 @@
 [8]: https://www.npmjs.com/package/material-colors
 [9]: https://github.com/DiceBear/avatars/issues/53
 
-## [4.1.1] - 2020-05-14
+# [4.1.1] - 2020-05-14
 
-### Changed
+## Changed
 
 - New API Path. `/api/` instead of `/v2/`
 
-### Fixed
+## Fixed
 
 - `initials` more precisely centered
 - `avataaars` Background Color
 
-## [4.1.0] - 2020-05-09
+# [4.1.0] - 2020-05-09
 
-### Added
+## Added
 
 - [#55][1] Aliases for `width`, `height`, `radius`, `background` and `margin`, to keep the URLs of the HTTP API shorter
 - [#66][5] `deterministic` for `gridy` avatars. (thanks to @elierotenberg)
 - This changelog
 
-### Changed
+## Changed
 
 - [#55][1] Parameter key for the HTTP API flattened. It is now no longer necessary to nest the values in an `options` object.
 - [#61][6] Update `topChange` to `topChance`, clarify some documentation (thanks to @pennstatephil)
@@ -111,12 +109,12 @@
 - Reorganized dependencies in the repository.
 - Stackpath CDN configured for HTTP API. Saves 90% traffic to Cloudflare Workers and therefore also unnecessary costs. Unfortunately makes the initial call a bit slower.
 
-### Fixed
+## Fixed
 
 - [#69][3] Initial avatars were displayed incorrectly in Firefox. Same solution implemented for all browsers.
 - [#58][4] Value `0` did not work for chance options in `bottts`.
 
-### Removed
+## Removed
 
 - `bowser` dependency in initials avatars.
 
