@@ -31,7 +31,7 @@ export default function (options: Options, prng: utils.prng.IPrng) {
 
   let pickedAccessoriesType = prng.pick(accessoriesType);
 
-  if (false === prng.bool(undefined !== options.accessoriesChance ? options.accessoriesChance : 10)) {
+  if (false === prng.bool(undefined !== options.accessoriesProbability ? options.accessoriesProbability : 10)) {
     return 'Blank';
   }
 

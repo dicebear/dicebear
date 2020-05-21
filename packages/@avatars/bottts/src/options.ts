@@ -3,10 +3,10 @@ type Options = {
   primaryColorLevel?: number;
   secondaryColorLevel?: number;
   colorful?: boolean;
-  mouthChance?: number;
-  sidesChance?: number;
-  textureChance?: number;
-  topChance?: number;
+  mouthProbability?: number;
+  sidesProbability?: number;
+  textureProbability?: number;
+  topProbability?: number;
 };
 
 export default Options;

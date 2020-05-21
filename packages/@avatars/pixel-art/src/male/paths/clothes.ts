@@ -1,0 +1,15 @@
+export default (color: string) => [
+  `<path d="M3 20v-3h1v-1h4v-1h4v1h4v1h1v3H3z" fill="${color}"/><path d="M3 20v-3h1v-1h12v1h1v3H3z" fill="#FFF" fill-opacity=".2"/><path d="M12 19v-1h3v1h-3z" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h12v1h1v3H3z" fill="${color}"/><path d="M5 20v-2h1v-1h8v1h1v2h-2v-1h-2v1H9v-1H7v1H5z" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h12v1h1v3H3z" fill="${color}"/><path d="M8 16H4v1H3v3h14v-3h-1v-1h-4v1h1v1h-1v1h-1v-1H9v1H8v-1H7v-1h1v-1z" fill="#FFF" fill-opacity=".2"/><path d="M9 16v1h2v-1H9z" fill="#FFF"/>`,
+  `<path d="M3 20v-3h1v-1h12v1h1v3H3z" fill="${color}"/><path d="M9 16H4v1H3v3h6v-2H8v-1h1v-1zm2 0h5v1h1v3h-6v-2h1v-1h-1v-1z" fill-rule="evenodd" fill="#FFF" fill-opacity=".3"/>`,
+  `<path d="M3 20v-3h1v-1h3v2h6v-2h3v1h1v3H3z" fill="${color}"/><path d="M5 16H4v1H3v3h2v-4zm1 0h1v2h6v-2h1v4H6v-4zm9 0h1v1h1v3h-2v-4z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h4v1h1v1h2v-1h1v-1h4v1h1v3H3z" fill="${color}"/><path d="M4 17v-1h3v1H4zm9 0v-1h3v1h-3z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h3v-1h1v1h1v1h2v-1h1v-1h1v1h3v1h1v3H3z" fill="${color}"/><path d="M6 16H4v1H3v3h6v-2H8v-1H6v-1zm2 0h1-1zm3 0h1-1zm2 0h1v1h-2v1h-1v2h6v-3h-1v-1h-3z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M5 16H4v1H3v3h14v-3h-1v-1h-3v1H7v-1H5z" fill="${color}"/><path d="M10 20v-1h3v1h-3z" fill="#FFF" fill-opacity=".5"/><path d="M5 16H4v1H3v3h1v-1h1v-3zm1 0h1v1h6v-1h1v2H6v-2zm9 0h1v1h1v3h-1v-1h-1v-3z" fill-rule="evenodd" fill="#FFF" fill-opacity=".8"/>`,
+  `<path d="M3 20v-3h1v-1h4v1h4v-1h4v1h1v3H3z" fill="${color}"/><path d="M3 20v-1h1v1H3zm2 0v-1h1v1H5zm2 0v-1h1v1H7zm2 0v-1h1v1H9zm2 0v-1h1v1h-1zm2 0v-1h1v1h-1zm2 0v-1h1v1h-1zm1-2h1v1h-1v-1zm-2 0h1v1h-1v-1zm-2 0h1v1h-1v-1zm-2 0h1v1h-1v-1zm-2 0h1v1H8v-1zm-2 0h1v1H6v-1zm-2 0h1v1H4v-1zm-1-1h1v1H3v-1zm2 0h1v1H5v-1zm2 0h1v1H7v-1zm2 0h1v1H9v-1zm2 0h1v1h-1v-1zm2 0h1v1h-1v-1zm2 0h1v1h-1v-1zM4 16h1v1H4v-1zm2 0h1v1H6v-1zm6 0h1v1h-1v-1zm2 0h1v1h-1v-1z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h4v1h4v-1h4v1h1v3H3z" fill="${color}"/><path d="M3 20v-2h1v2H3zm3 0v-2h2v2H6zm4 0v-2h2v2h-2zm4 0v-2h2v2h-2zm2-3v1h1v-1h-1zm-2 1v-2h-2v2h2zm-6-1v1h2v-1H8zm-4-1v2h2v-2H4z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h4v1h4v-1h4v1h1v3H3z" fill="${color}"/><path d="M3 19h14v1H3v-1zm0-2h14v1H3v-1z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h4v1h4v-1h4v1h1v3H3z" fill="${color}"/>`,
+  `<path d="M3 20v-3h1v-1h12v1h1v3H3z" fill="${color}"/>`,
+];

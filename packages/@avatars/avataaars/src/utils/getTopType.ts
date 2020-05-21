@@ -60,7 +60,7 @@ export default function (options: Options, prng: utils.prng.IPrng) {
 
   let pickedTopType = prng.pick(topType);
 
-  if (false === prng.bool(undefined !== options.topChance ? options.topChance : 100)) {
+  if (false === prng.bool(undefined !== options.topProbability ? options.topProbability : 100)) {
     return 'NoHair';
   }
 

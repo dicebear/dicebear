@@ -7,7 +7,6 @@ import initials from 'initials';
 type Options = {
   margin?: number;
   background?: string;
-  userAgent?: string;
   backgroundColors?: string[];
   backgroundColorLevel?: number;
   fontSize?: number;

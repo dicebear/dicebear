@@ -19,9 +19,7 @@ The Avatars repo is managed as a monorepo that is composed of many npm packages.
 
 | Package                                             | Version                                                                                                                           |
 | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| [@avatars/male](./packages/@avatars/male)           | [![npm](https://img.shields.io/npm/v/@avatars/male.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/male)           |
-| [@avatars/female](./packages/@avatars/female)       | [![npm](https://img.shields.io/npm/v/@avatars/female.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/female)       |
-| [@avatars/human](./packages/@avatars/human)         | [![npm](https://img.shields.io/npm/v/@avatars/human.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/human)         |
+| [@avatars/pixel-art](./packages/@avatars/pixel-art) | [![npm](https://img.shields.io/npm/v/@avatars/pixel-art.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/pixel-art) |
 | [@avatars/identicon](./packages/@avatars/identicon) | [![npm](https://img.shields.io/npm/v/@avatars/identicon.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/identicon) |
 | [@avatars/initials](./packages/@avatars/initials)   | [![npm](https://img.shields.io/npm/v/@avatars/initials.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/identicon)  |
 | [@avatars/bottts](./packages/@avatars/bottts)       | [![npm](https://img.shields.io/npm/v/@avatars/bottts.svg?style=flat-square)](https://www.npmjs.com/package/@avatars/bottts)       |

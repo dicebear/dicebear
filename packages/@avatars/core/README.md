@@ -28,7 +28,7 @@ Our free HTTP-API is the easiest way to use Avatars. Just use the following URL 
 
     https://avatars.dicebear.com/api/:sprites/:seed.svg
 
-Replace `:sprites` with `male`, `female`, `human`, `identicon`, `initials`, `bottts`, `avataaars`, `jdenticon`, `gridy` or `code`. The value of `:seed` can be anything you
+Replace `:sprites` with `pixel-art`, `identicon`, `initials`, `bottts`, `avataaars`, `jdenticon`, `gridy` or `code`. The value of `:seed` can be anything you
 like - but **don't** use any sensitive or personal data here!
 
 The used avatar style may offer additional options, which can be set using the GET parameter named `options`.
@@ -63,15 +63,14 @@ let svg = avatars.create('custom-seed');
 
 The following options are available for each avatar style.
 
-| name       | alias | type   | default                      | description                                                                                                                                       |
-| ---------- | ----- | ------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| radius     | r     | number | `0`                          | Avatar border radius                                                                                                                              |
-| base64     |       | bool   | `false`                      | Return avatar as base64 data uri instead of XML <br> **Not supported by the HTTP API**                                                            |
-| width      | w     | number | `null`                       | Fixed width                                                                                                                                       |
-| height     | h     | number | `null`                       | Fixed height                                                                                                                                      |
-| margin     | m     | number | `0`                          | Avatar margin in percent<br> **HTTP-API limitation** Max value `25`                                                                               |
-| background | b     | string | `null`                       | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
-| userAgent  |       | string | `window.navigator.userAgent` | User-Agent for legacy browser fallback<br> **Automatically detected by the HTTP API**                                                             |
+| name       | alias | type   | default | description                                                                                                                                       |
+| ---------- | ----- | ------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| radius     | r     | number | `0`     | Avatar border radius                                                                                                                              |
+| base64     |       | bool   | `false` | Return avatar as base64 data uri instead of XML <br> **Not supported by the HTTP API**                                                            |
+| width      | w     | number | `null`  | Fixed width                                                                                                                                       |
+| height     | h     | number | `null`  | Fixed height                                                                                                                                      |
+| margin     | m     | number | `0`     | Avatar margin in percent<br> **HTTP-API limitation** Max value `25`                                                                               |
+| background | b     | string | `null`  | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
 
 More available options can be found in the README.md of each avatar style.
 

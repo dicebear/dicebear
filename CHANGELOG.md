@@ -4,6 +4,17 @@
 
 ### Added
 
+- `@avatars/pixel-art` as a merger for `male`, `female` and `human`.
+- `@avatars/pixel-art` The following options are new:
+  - `skinColor` (See [#68](9))
+  - `maleMustacheProbability`
+  - `maleGlassesProbability`
+  - `maleHairProbability`
+  - `maleHatProbability`
+  - `femaleAccessoriesProbability`
+  - `femaleGlassesProbability`
+  - `femaleHatProbability`
+
 ### Changed
 
 - NPM namespace and package names changed to separate them from libraries not belonging to "DiceBear Avatars". In addition "sprite collections" are now called "avatar styles". This results in the following name changes:
@@ -11,13 +22,13 @@
   - `@dicebear/avatars-avataaars-sprites` => `@avatars/avataaars`
   - `@dicebear/avatars-bottts-sprites` => `@avatars/bottts`
   - `@dicebear/avatars-code-sprites` => `@avatars/code`
-  - `@dicebear/avatars-female-sprites` => `@avatars/female`
+  - `@dicebear/avatars-female-sprites` => `@avatars/pixel-art`
   - `@dicebear/avatars-gridy-sprites` => `@avatars/gridy`
-  - `@dicebear/avatars-human-sprites` => `@avatars/human`
+  - `@dicebear/avatars-human-sprites` => `@avatars/pixel-art`
   - `@dicebear/avatars-identicon-sprites` => `@avatars/identicon`
   - `@dicebear/avatars-initials-sprites` => `@avatars/initials`
   - `@dicebear/avatars-jdenticon-sprites` => `@avatars/jdenticon`
-  - `@dicebear/avatars-male-sprites` => `@avatars/male`
+  - `@dicebear/avatars-male-sprites` => `@avatars/pixel-art`
 - Deprecation of packages with the old namespace.
 - `@avatars/core` Classes are rewritten as functions. This change allows direct access to the `create` function without having to initialize an object first.
 
@@ -49,6 +60,15 @@
   - `grayscaleLightness` => `lightnessGrayscale`
   - `colorSaturation` => `saturationColor`
   - `grayscaleSaturation` => `saturationGrayscale`
+- `@avatars/avataaars` The following options have been renamed
+  - `topChance` => `topProbability`
+  - `accessoriesChance` => `accessoriesProbability`
+  - `facialHairChance` => `facialHairProbability`
+- `@avatars/bottts` The following options have been renamed
+  - `mouthChance` => `mouthProbability`
+  - `sidesChance` => `sidesProbability`
+  - `textureChance` => `textureProbability`
+  - `topChance` => `topProbability`
 
 ### Fixed
 
@@ -56,11 +76,13 @@
 
 ### Removed
 
-- `@avatars/core` Color modifier classes. Moved to `@avatars/humans`.
+- `@avatars/core` Color modifier classes. Moved to `@avatars/pixel-art`.
 - `@avatars/core` Material colors. Use [material-colors](8) package instead.
+- `@avatars/core` Option `userAgent`
 
 [7]: https://github.com/DiceBear/avatars/issues/68
 [8]: https://www.npmjs.com/package/material-colors
+[9]: https://github.com/DiceBear/avatars/issues/53
 
 ## [4.1.1] - 2020-05-14
 

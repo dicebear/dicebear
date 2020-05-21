@@ -9,8 +9,8 @@ import sidesCollection from './sides';
 import textureCollection from './texture';
 import topCollection from './top';
 
-const group = (prng: utils.prng.IPrng, content: string, chance: number, x: number, y: number) => {
-  if (prng.bool(chance)) {
+const group = (prng: utils.prng.IPrng, content: string, probability: number, x: number, y: number) => {
+  if (prng.bool(probability)) {
     return `<g transform="translate(${x}, ${y})">${content}</g>`;
   }
 
@@ -21,10 +21,10 @@ const style: IStyle<Options> = function (prng, options = {}) {
   options = {
     primaryColorLevel: 600,
     secondaryColorLevel: 400,
-    mouthChance: 100,
-    sidesChance: 100,
-    textureChance: 50,
-    topChance: 100,
+    mouthProbability: 100,
+    sidesProbability: 100,
+    textureProbability: 50,
+    topProbability: 100,
     ...options,
   };
 
@@ -57,10 +57,10 @@ const style: IStyle<Options> = function (prng, options = {}) {
   // prettier-ignore
   return [
     '<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" fill="none">',
-    group(prng, sides(secondaryColor), options.sidesChance, 0, 66),
-    group(prng, top(secondaryColor), options.topChance, 41, 0),
-    group(prng, face(primaryColor, prng.bool(options.textureChance) ? texture() : undefined), 100, 25, 44),
-    group(prng, mouth(), options.mouthChance, 52, 124),
+    group(prng, sides(secondaryColor), options.sidesProbability, 0, 66),
+    group(prng, top(secondaryColor), options.topProbability, 41, 0),
+    group(prng, face(primaryColor, prng.bool(options.textureProbability) ? texture() : undefined), 100, 25, 44),
+    group(prng, mouth(), options.mouthProbability, 52, 124),
     group(prng, eyes(), 100, 38, 76),
     '</svg>'
   ].join('');

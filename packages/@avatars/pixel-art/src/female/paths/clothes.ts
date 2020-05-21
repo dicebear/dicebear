@@ -1,0 +1,15 @@
+export default (color: string) => [
+  `<path d="M3 20v-3h1v-1h12v1h1v3H3z" fill="${color}"/>`,
+  `<path d="M4 16v4h4v-1H7v-1H6v-1H5v-1H4zm12 0v4h-4v-1h1v-1h1v-1h1v-1h1z" fill-rule="evenodd" fill="${color}"/>`,
+  `<path d="M5 16h1v2h1v1h1v1H5v-4zm9 0h1v4h-3v-1h1v-1h1v-2z" fill-rule="evenodd" fill="${color}"/>`,
+  `<path d="M4 20v-2h1v-1h1v-1h2v1h1v1h2v-1h1v-1h2v1h1v1h1v2H4z" fill="${color}"/>`,
+  `<path d="M3 20v-3h1v-1h4v1h1v1h2v-1h1v-1h4v1h1v3H3z" fill="${color}"/><path d="M3 20v-3h1v-1h2v1h1v1h1v1h4v-1h1v-1h1v-1h2v1h1v3H3z" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h5v1h2v-1h5v1h1v3H3z" fill="${color}"/><path d="M3 20v-2h1v1h3v1H3zm14 0v-2h-1v1h-3v1h4z" fill-rule="evenodd" fill="#FFF" fill-opacity=".4"/><path d="M7 16H4v1H3v1h1v1h3v1h6v-1h3v-1h1v-1h-1v-1h-3v1H7v-1z" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h4v1h4v-1h4v1h1v3H3z" fill="${color}"/><path d="M15 20h2v-3h-1v-1h-4v1H8v-1H4v1H3v3h2v-2h10v2z" fill="#FFF" fill-opacity=".4"/>`,
+  `<path d="M3 20v-3h1v-1h4v1h1v1h2v-1h1v-1h4v1h1v3H3z" fill="${color}"/><path d="M6 16v1h1v1h1v1h4v-1h1v-1h1v-1h-2v1h-1v1H9v-1H8v-1H6z" fill="#FFF" fill-opacity=".4"/><path d="M13 20v-1h2v1h-2zm1-4v1h2v-1h-2zm-8 0H4v1h2v-1z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/>`,
+  `<path d="M3 20v-3h1v-1h3v1h1v1h1v1h2v-1h1v-1h1v-1h3v1h1v3H3z" fill="${color}"/>`,
+  `<path d="M3 20v-3h1v-1h2v1h1v1h1v1h1v1H3zm14 0v-3h-1v-1h-2v1h-1v1h-1v1h-1v1h6z" fill-rule="evenodd" fill="${color}"/>`,
+  `<path d="M4 16v4h4v-1H7v-1H6v-2H4zM16 20v-4h-2v2h-1v1h-1v1h4z" fill="${color}"/>`,
+  `<path d="M3 20v-3h1v-1h3v1h1v1h1v1h2v-1h1v-1h1v-1h3v1h1v3H3z" fill="${color}"/><path d="M6 16v1h1v1h1v1h1v1h2v-1h1v-1h1v-1h1v-1h-1v1h-1v1h-1v1H9v-1H8v-1H7v-1H6z" fill="#FFF" fill-opacity=".4"/><path d="M15 16v1h-1v1h-1v1h-1v1h-1v-1h1v-1h1v-1h1v-1h1zM5 16v1h1v1h1v1h1v1h1v-1H8v-1H7v-1H6v-1H5z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/><path d="M3 20h1v-3h1v1h1v1h1v1h1v-1H7v-1H6v-1H5v-1H4v1H3v3zm14 0v-3h-1v-1h-1v1h-1v1h-1v1h-1v1h1v-1h1v-1h1v-1h1v3h1z" fill-rule="evenodd" fill="#FFF" fill-opacity=".1"/>`,
+  `<path d="M3 20v-3h1v-1h5v1h2v-1h5v1h1v3H3z" fill="${color}"/><path d="M3 17h14v1H3v-1zm0 2v1h14v-1H3z" fill-rule="evenodd" fill="#FFF" fill-opacity=".2"/>`,
+];

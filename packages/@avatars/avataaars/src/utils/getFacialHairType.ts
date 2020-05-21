@@ -27,7 +27,7 @@ export default function (options: Options, prng: utils.prng.IPrng) {
 
   let pickedFacialHairType = prng.pick(facialHairType);
 
-  if (false === prng.bool(undefined !== options.facialHairChance ? options.facialHairChance : 10)) {
+  if (false === prng.bool(undefined !== options.facialHairProbability ? options.facialHairProbability : 10)) {
     return 'Blank';
   }
 
