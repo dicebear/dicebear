@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.2.0] - 2020-05-26
+
+### Changed
+
+- [#73][7] Update seedrandom package to 3.0.5
+
+[7]: https://github.com/DiceBear/avatars/pull/73
+
 ## [4.1.1] - 2020-05-14
 
 ### Changed
@@ -10,7 +18,6 @@
 
 - `initials` more precisely centered
 - `avataaars` Background Color
-
 
 ## [4.1.0] - 2020-05-09
 
