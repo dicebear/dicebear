@@ -1,39 +1,38 @@
-import type { utils } from '@avatars/core';
-import Options from '../options';
-import getOption from './getOption';
+import type { Random } from '@avatars/core';
+import type Options from '../options';
 
-export default function (options: Options, prng: utils.prng.IPrng) {
-  let accessoriesType = [];
+export default function (options: Options, random: Random) {
+    let accessoriesType = [];
 
-  if (getOption('accessories', 'kurt', options)) {
-    accessoriesType.push('Kurt');
-  }
+    if (options.get('accessories', ['kurt']).includes('kurt')) {
+        accessoriesType.push('Kurt');
+    }
 
-  if (getOption('accessories', 'prescription01', options)) {
-    accessoriesType.push('Prescription01');
-  }
+    if (options.get('accessories', ['prescription01']).includes('prescription01')) {
+        accessoriesType.push('Prescription01');
+    }
 
-  if (getOption('accessories', 'prescription02', options)) {
-    accessoriesType.push('Prescription02');
-  }
+    if (options.get('accessories', ['prescription02']).includes('prescription02')) {
+        accessoriesType.push('Prescription02');
+    }
 
-  if (getOption('accessories', 'round', options)) {
-    accessoriesType.push('Round');
-  }
+    if (options.get('accessories', ['round']).includes('round')) {
+        accessoriesType.push('Round');
+    }
 
-  if (getOption('accessories', 'sunglasses', options)) {
-    accessoriesType.push('Sunglasses');
-  }
+    if (options.get('accessories', ['sunglasses']).includes('sunglasses')) {
+        accessoriesType.push('Sunglasses');
+    }
 
-  if (getOption('accessories', 'wayfarers', options)) {
-    accessoriesType.push('Wayfarers');
-  }
+    if (options.get('accessories', ['wayfarers']).includes('wayfarers')) {
+        accessoriesType.push('Wayfarers');
+    }
 
-  let pickedAccessoriesType = prng.pick(accessoriesType);
+    let pickedAccessoriesType = random.pickone(accessoriesType);
 
-  if (false === prng.bool(undefined !== options.accessoriesProbability ? options.accessoriesProbability : 10)) {
-    return 'Blank';
-  }
+    if (false === random.bool(options.get('accessoriesChance'))) {
+        return 'Blank';
+    }
 
-  return pickedAccessoriesType;
+    return pickedAccessoriesType;
 }

@@ -1,35 +1,34 @@
-import type { utils } from '@avatars/core';
-import Options from '../options';
-import getOption from './getOption';
+import type { Random } from '@avatars/core';
+import type Options from '../options';
 
-export default function (options: Options, prng: utils.prng.IPrng) {
-  let facialHairType = [];
+export default function (options: Options, random: Random) {
+    let facialHairType = [];
 
-  if (getOption('facialHair', 'medium', options)) {
-    facialHairType.push('BeardMedium');
-  }
+    if (options.get('facialHair', ['medium']).includes('medium')) {
+        facialHairType.push('BeardMedium');
+    }
 
-  if (getOption('facialHair', 'light', options)) {
-    facialHairType.push('BeardLight');
-  }
+    if (options.get('facialHair', ['light']).includes('light')) {
+        facialHairType.push('BeardLight');
+    }
 
-  if (getOption('facialHair', 'majestic', options)) {
-    facialHairType.push('BeardMajestic');
-  }
+    if (options.get('facialHair', ['majestic']).includes('majestic')) {
+        facialHairType.push('BeardMajestic');
+    }
 
-  if (getOption('facialHair', 'fancy', options)) {
-    facialHairType.push('MoustacheFancy');
-  }
+    if (options.get('facialHair', ['fancy']).includes('fancy')) {
+        facialHairType.push('MoustacheFancy');
+    }
 
-  if (getOption('facialHair', 'magnum', options)) {
-    facialHairType.push('MoustacheMagnum');
-  }
+    if (options.get('facialHair', ['magnum']).includes('magnum')) {
+        facialHairType.push('MoustacheMagnum');
+    }
 
-  let pickedFacialHairType = prng.pick(facialHairType);
+    let pickedFacialHairType = random.pickone(facialHairType);
 
-  if (false === prng.bool(undefined !== options.facialHairProbability ? options.facialHairProbability : 10)) {
-    return 'Blank';
-  }
+    if (false === random.bool(options.get('facialHairChance'))) {
+        return 'Blank';
+    }
 
-  return pickedFacialHairType;
+    return pickedFacialHairType;
 }

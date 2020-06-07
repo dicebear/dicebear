@@ -1,68 +1,67 @@
-import type { utils } from '@avatars/core';
-import Options from '../options';
-import getOption from './getOption';
+import type { Random } from '@avatars/core';
+import type Options from '../options';
 
-export default function (options: Options, prng: utils.prng.IPrng) {
-  let topType = [];
+export default function (options: Options, random: Random) {
+    let topType = [];
 
-  if (getOption('top', 'longHair', options)) {
-    topType.push(
-      'LongHairBigHair',
-      'LongHairBob',
-      'LongHairBun',
-      'LongHairCurly',
-      'LongHairCurvy',
-      'LongHairDreads',
-      'LongHairFrida',
-      'LongHairFro',
-      'LongHairFroBand',
-      'LongHairMiaWallace',
-      'LongHairNotTooLong',
-      'LongHairShavedSides',
-      'LongHairStraight',
-      'LongHairStraight2',
-      'LongHairStraightStrand'
-    );
-  }
+    if (options.get('top', ['longHair']).includes('longHair')) {
+        topType.push(
+            'LongHairBigHair',
+            'LongHairBob',
+            'LongHairBun',
+            'LongHairCurly',
+            'LongHairCurvy',
+            'LongHairDreads',
+            'LongHairFrida',
+            'LongHairFro',
+            'LongHairFroBand',
+            'LongHairMiaWallace',
+            'LongHairNotTooLong',
+            'LongHairShavedSides',
+            'LongHairStraight',
+            'LongHairStraight2',
+            'LongHairStraightStrand'
+        );
+    }
 
-  if (getOption('top', 'shortHair', options)) {
-    topType.push(
-      'ShortHairDreads01',
-      'ShortHairDreads02',
-      'ShortHairFrizzle',
-      'ShortHairShaggy',
-      'ShortHairShaggyMullet',
-      'ShortHairShortCurly',
-      'ShortHairShortFlat',
-      'ShortHairShortRound',
-      'ShortHairShortWaved',
-      'ShortHairSides',
-      'ShortHairTheCaesar',
-      'ShortHairTheCaesarSidePart'
-    );
-  }
+    if (options.get('top', ['shortHair']).includes('shortHair')) {
+        topType.push(
+            'ShortHairDreads01',
+            'ShortHairDreads02',
+            'ShortHairFrizzle',
+            'ShortHairShaggy',
+            'ShortHairShaggyMullet',
+            'ShortHairShortCurly',
+            'ShortHairShortFlat',
+            'ShortHairShortRound',
+            'ShortHairShortWaved',
+            'ShortHairSides',
+            'ShortHairTheCaesar',
+            'ShortHairTheCaesarSidePart'
+        );
+    }
 
-  if (getOption('top', 'eyepatch', options)) {
-    topType.push('Eyepatch');
-  }
+    if (options.get('top', ['eyepatch']).includes('eyepatch')) {
+        topType.push('Eyepatch');
+    }
 
-  if (getOption('top', 'hat', options)) {
-    topType.push('Hat', 'WinterHat1', 'WinterHat2', 'WinterHat3', 'WinterHat4');
-  }
+    if (options.get('top', ['hat']).includes('hat')) {
+        topType.push('Hat', 'WinterHat1', 'WinterHat2', 'WinterHat3', 'WinterHat4');
+    }
 
-  if (getOption('top', 'hijab', options)) {
-    topType.push('Hijab');
-  }
+    if (options.get('top', ['hijab']).includes('hijab')) {
+        topType.push('Hijab');
+    }
 
-  if (getOption('top', 'turban', options)) {
-    topType.push('Turban');
-  }
+    if (options.get('top', ['turban']).includes('turban')) {
+        topType.push('Turban');
+    }
 
-  let pickedTopType = prng.pick(topType);
+    let pickedTopType = random.pickone(topType);
 
-  if (false === prng.bool(undefined !== options.topProbability ? options.topProbability : 100)) {
-    return 'NoHair';
-  }
+    if (false === random.bool(options.get('topChance'))) {
+        return 'NoHair';
+    }
 
-  return pickedTopType;
+    return pickedTopType;
 }

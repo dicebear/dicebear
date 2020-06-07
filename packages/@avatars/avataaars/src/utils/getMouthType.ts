@@ -1,57 +1,56 @@
-import type { utils } from '@avatars/core';
-import Options from '../options';
-import getOption from './getOption';
+import type { Random } from '@avatars/core';
+import type Options from '../options';
 
-export default function (options: Options, prng: utils.prng.IPrng) {
-  let mouthType = [];
+export default function (options: Options, random: Random) {
+    let mouthType = [];
 
-  if (getOption('mouth', 'concerned', options)) {
-    mouthType.push('Concerned');
-  }
+    if (options.get('mouth', ['concerned']).includes('concerned')) {
+        mouthType.push('Concerned');
+    }
 
-  if (getOption('mouth', 'default', options)) {
-    mouthType.push('Default');
-  }
+    if (options.get('mouth', ['default']).includes('default')) {
+        mouthType.push('Default');
+    }
 
-  if (getOption('mouth', 'disbelief', options)) {
-    mouthType.push('Disbelief');
-  }
+    if (options.get('mouth', ['disbelief']).includes('disbelief')) {
+        mouthType.push('Disbelief');
+    }
 
-  if (getOption('mouth', 'eating', options)) {
-    mouthType.push('Eating');
-  }
+    if (options.get('mouth', ['eating']).includes('eating')) {
+        mouthType.push('Eating');
+    }
 
-  if (getOption('mouth', 'grimace', options)) {
-    mouthType.push('Grimace');
-  }
+    if (options.get('mouth', ['grimace']).includes('grimace')) {
+        mouthType.push('Grimace');
+    }
 
-  if (getOption('mouth', 'sad', options)) {
-    mouthType.push('Sad');
-  }
+    if (options.get('mouth', ['sad']).includes('sad')) {
+        mouthType.push('Sad');
+    }
 
-  if (getOption('mouth', 'scream', options)) {
-    mouthType.push('ScreamOpen');
-  }
+    if (options.get('mouth', ['scream']).includes('scream')) {
+        mouthType.push('ScreamOpen');
+    }
 
-  if (getOption('mouth', 'serious', options)) {
-    mouthType.push('Serious');
-  }
+    if (options.get('mouth', ['serious']).includes('serious')) {
+        mouthType.push('Serious');
+    }
 
-  if (getOption('mouth', 'smile', options)) {
-    mouthType.push('Smile');
-  }
+    if (options.get('mouth', ['smile']).includes('smile')) {
+        mouthType.push('Smile');
+    }
 
-  if (getOption('mouth', 'tongue', options)) {
-    mouthType.push('Tongue');
-  }
+    if (options.get('mouth', ['tongue']).includes('tongue')) {
+        mouthType.push('Tongue');
+    }
 
-  if (getOption('mouth', 'twinkle', options)) {
-    mouthType.push('Twinkle');
-  }
+    if (options.get('mouth', ['twinkle']).includes('twinkle')) {
+        mouthType.push('Twinkle');
+    }
 
-  if (getOption('mouth', 'vomit', options)) {
-    mouthType.push('Vomit');
-  }
+    if (options.get('mouth', ['vomit']).includes('vomit')) {
+        mouthType.push('Vomit');
+    }
 
-  return prng.pick(mouthType);
+    return random.pickone(mouthType);
 }

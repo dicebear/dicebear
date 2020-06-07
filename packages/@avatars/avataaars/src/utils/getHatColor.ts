@@ -1,41 +1,40 @@
-import type { utils } from '@avatars/core';
-import Options from '../options';
-import getOption from './getOption';
+import type { Random } from '@avatars/core';
+import type Options from '../options';
 
-export default function (options: Options, prng: utils.prng.IPrng) {
-  let hatColor = [];
+export default function (options: Options, random: Random) {
+    let hatColor = [];
 
-  if (getOption('hatColor', 'black', options)) {
-    hatColor.push('black');
-  }
+    if (options.get('hatColor', ['black']).includes('black')) {
+        hatColor.push('black');
+    }
 
-  if (getOption('hatColor', 'blue', options)) {
-    hatColor.push('Blue01', 'Blue02', 'Blue03');
-  }
+    if (options.get('hatColor', ['blue']).includes('blue')) {
+        hatColor.push('Blue01', 'Blue02', 'Blue03');
+    }
 
-  if (getOption('hatColor', 'gray', options)) {
-    hatColor.push('Gray01', 'Gray02');
-  }
+    if (options.get('hatColor', ['gray']).includes('gray')) {
+        hatColor.push('Gray01', 'Gray02');
+    }
 
-  if (getOption('hatColor', 'heather', options)) {
-    hatColor.push('Heather');
-  }
+    if (options.get('hatColor', ['heather']).includes('heather')) {
+        hatColor.push('Heather');
+    }
 
-  if (getOption('hatColor', 'pastel', options)) {
-    hatColor.push('PastelBlue', 'PastelGreen', 'PastelOrange', 'PastelRed', 'PastelYellow');
-  }
+    if (options.get('hatColor', ['pastel']).includes('pastel')) {
+        hatColor.push('PastelBlue', 'PastelGreen', 'PastelOrange', 'PastelRed', 'PastelYellow');
+    }
 
-  if (getOption('hatColor', 'pink', options)) {
-    hatColor.push('Pink');
-  }
+    if (options.get('hatColor', ['pink']).includes('pink')) {
+        hatColor.push('Pink');
+    }
 
-  if (getOption('hatColor', 'red', options)) {
-    hatColor.push('Red');
-  }
+    if (options.get('hatColor', ['red']).includes('red')) {
+        hatColor.push('Red');
+    }
 
-  if (getOption('hatColor', 'white', options)) {
-    hatColor.push('White');
-  }
+    if (options.get('hatColor', ['white']).includes('white')) {
+        hatColor.push('White');
+    }
 
-  return prng.pick(hatColor);
+    return random.pickone(hatColor);
 }

@@ -1,37 +1,36 @@
-import type { utils } from '@avatars/core';
-import Options from '../options';
-import getOption from './getOption';
+import type { Random } from '@avatars/core';
+import type Options from '../options';
 
-export default function (options: Options, prng: utils.prng.IPrng) {
-  let eyebrowType = [];
+export default function (options: Options, random: Random) {
+    let eyebrowType = [];
 
-  if (getOption('eyebrow', 'angry', options)) {
-    eyebrowType.push('Angry', 'AngryNatural');
-  }
+    if (options.get('eyebrow', ['angry']).includes('angry')) {
+        eyebrowType.push('Angry', 'AngryNatural');
+    }
 
-  if (getOption('eyebrow', 'default', options)) {
-    eyebrowType.push('Default', 'DefaultNatural');
-  }
+    if (options.get('eyebrow', ['default']).includes('default')) {
+        eyebrowType.push('Default', 'DefaultNatural');
+    }
 
-  if (getOption('eyebrow', 'flat', options)) {
-    eyebrowType.push('FlatNatural');
-  }
+    if (options.get('eyebrow', ['flat']).includes('flat')) {
+        eyebrowType.push('FlatNatural');
+    }
 
-  if (getOption('eyebrow', 'raised', options)) {
-    eyebrowType.push('RaisedExcited', 'RaisedExcitedNatural');
-  }
+    if (options.get('eyebrow', ['raised']).includes('raised')) {
+        eyebrowType.push('RaisedExcited', 'RaisedExcitedNatural');
+    }
 
-  if (getOption('eyebrow', 'sad', options)) {
-    eyebrowType.push('SadConcerned', 'SadConcernedNatural');
-  }
+    if (options.get('eyebrow', ['sad']).includes('sad')) {
+        eyebrowType.push('SadConcerned', 'SadConcernedNatural');
+    }
 
-  if (getOption('eyebrow', 'unibrow', options)) {
-    eyebrowType.push('UnibrowNatural');
-  }
+    if (options.get('eyebrow', ['unibrow']).includes('unibrow')) {
+        eyebrowType.push('UnibrowNatural');
+    }
 
-  if (getOption('eyebrow', 'up', options)) {
-    eyebrowType.push('UpDown', 'UpDownNatural');
-  }
+    if (options.get('eyebrow', ['up']).includes('up')) {
+        eyebrowType.push('UpDown', 'UpDownNatural');
+    }
 
-  return prng.pick(eyebrowType);
+    return random.pickone(eyebrowType);
 }

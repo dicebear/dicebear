@@ -1,37 +1,36 @@
-import type { utils } from '@avatars/core';
-import Options from '../options';
-import getOption from './getOption';
+import type { Random } from '@avatars/core';
+import type Options from '../options';
 
-export default function (options: Options, prng: utils.prng.IPrng) {
-  let skinColor = [];
+export default function (options: Options, random: Random) {
+    let skinColor = [];
 
-  if (getOption('skin', 'tanned', options)) {
-    skinColor.push('Tanned');
-  }
+    if (options.get('skin', ['tanned']).includes('tanned')) {
+        skinColor.push('Tanned');
+    }
 
-  if (getOption('skin', 'yellow', options)) {
-    skinColor.push('Yellow');
-  }
+    if (options.get('skin', ['yellow']).includes('yellow')) {
+        skinColor.push('Yellow');
+    }
 
-  if (getOption('skin', 'pale', options)) {
-    skinColor.push('Pale');
-  }
+    if (options.get('skin', ['pale']).includes('pale')) {
+        skinColor.push('Pale');
+    }
 
-  if (getOption('skin', 'light', options)) {
-    skinColor.push('Light');
-  }
+    if (options.get('skin', ['light']).includes('light')) {
+        skinColor.push('Light');
+    }
 
-  if (getOption('skin', 'brown', options)) {
-    skinColor.push('Brown');
-  }
+    if (options.get('skin', ['brown']).includes('brown')) {
+        skinColor.push('Brown');
+    }
 
-  if (getOption('skin', 'darkBrown', options)) {
-    skinColor.push('DarkBrown');
-  }
+    if (options.get('skin', ['darkBrown']).includes('darkBrown')) {
+        skinColor.push('DarkBrown');
+    }
 
-  if (getOption('skin', 'black', options)) {
-    skinColor.push('Black');
-  }
+    if (options.get('skin', ['black']).includes('black')) {
+        skinColor.push('Black');
+    }
 
-  return prng.pick(skinColor);
+    return random.pickone(skinColor);
 }

@@ -1,33 +1,32 @@
-import type { utils } from '@avatars/core';
-import Options from '../options';
-import getOption from './getOption';
+import type { Random } from '@avatars/core';
+import type Options from '../options';
 
-export default function (options: Options, prng: utils.prng.IPrng) {
-  let facialHairColor = [];
+export default function (options: Options, random: Random) {
+    let facialHairColor = [];
 
-  if (getOption('facialHairColor', 'auburn', options)) {
-    facialHairColor.push('Auburn');
-  }
+    if (options.get('facialHairColor', ['auburn']).includes('auburn')) {
+        facialHairColor.push('Auburn');
+    }
 
-  if (getOption('facialHairColor', 'black', options)) {
-    facialHairColor.push('Black');
-  }
+    if (options.get('facialHairColor', ['black']).includes('black')) {
+        facialHairColor.push('Black');
+    }
 
-  if (getOption('facialHairColor', 'blonde', options)) {
-    facialHairColor.push('Blonde', 'BlondeGolden');
-  }
+    if (options.get('facialHairColor', ['blonde']).includes('blonde')) {
+        facialHairColor.push('Blonde', 'BlondeGolden');
+    }
 
-  if (getOption('facialHairColor', 'brown', options)) {
-    facialHairColor.push('Brown', 'BrownDark');
-  }
+    if (options.get('facialHairColor', ['brown']).includes('brown')) {
+        facialHairColor.push('Brown', 'BrownDark');
+    }
 
-  if (getOption('facialHairColor', 'platinum', options)) {
-    facialHairColor.push('Platinum');
-  }
+    if (options.get('facialHairColor', ['platinum']).includes('platinum')) {
+        facialHairColor.push('Platinum');
+    }
 
-  if (getOption('facialHairColor', 'red', options)) {
-    facialHairColor.push('Red');
-  }
+    if (options.get('facialHairColor', ['red']).includes('red')) {
+        facialHairColor.push('Red');
+    }
 
-  return prng.pick(facialHairColor);
+    return random.pickone(facialHairColor);
 }

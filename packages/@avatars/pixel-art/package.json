@@ -31,8 +31,6 @@
   },
   "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/@avatars/pixel-art#readme",
   "dependencies": {
-    "@avatars/female": "file:../female",
-    "@avatars/male": "file:../male",
     "pure-color": "^1.3.0"
   },
   "peerDependencies": {

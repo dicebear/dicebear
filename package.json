@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "devDependencies": {
+    "@prettier/plugin-xml": "^0.7.2",
     "@types/node": "^10.11.6",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
@@ -9,6 +10,7 @@
     "jest": "^24.8.0",
     "lerna": "^3.20.2",
     "license-checker": "^24.0.0",
+    "prettier": "^2.0.5",
     "typescript": "^3.4.5",
     "webpack": "^4.16.1",
     "webpack-cli": "^3.1.0",
@@ -19,12 +21,10 @@
     "@avatars/avataaars": "file:packages/@avatars/avataaars",
     "@avatars/bottts": "file:packages/@avatars/bottts",
     "@avatars/code": "file:packages/@avatars/code",
-    "@avatars/female": "file:packages/@avatars/female",
     "@avatars/gridy": "file:packages/@avatars/gridy",
-    "@avatars/human": "file:packages/@avatars/human",
+    "@avatars/pixel-art": "file:packages/@avatars/pixel-art",
     "@avatars/identicon": "file:packages/@avatars/identicon",
     "@avatars/initials": "file:packages/@avatars/initials",
-    "@avatars/jdenticon": "file:packages/@avatars/jdenticon",
-    "@avatars/male": "file:packages/@avatars/male"
+    "@avatars/jdenticon": "file:packages/@avatars/jdenticon"
   }
 }

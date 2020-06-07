@@ -62,6 +62,7 @@
   - `topChance` => `topProbability`
   - `accessoriesChance` => `accessoriesProbability`
   - `facialHairChance` => `facialHairProbability`
+  - `skin` => `skinColor`
 - `@avatars/bottts` The following options have been renamed
   - `mouthChance` => `mouthProbability`
   - `sidesChance` => `sidesProbability`
