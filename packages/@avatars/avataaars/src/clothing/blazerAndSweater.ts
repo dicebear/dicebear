@@ -1,15 +1,16 @@
 import { utils } from '@avatars/core';
 import type Options from '../options';
-import * as clothingUtils from './utils';
+import * as color from '../utils/color';
+import * as mask from '../utils/mask';
 
 export default (prng: utils.prng.IPrng, options: Options) => {
   return `
     <path fill-rule="evenodd" clip-rule="evenodd" d="M159 32.0517C159 45.8588 146.912 57.0517 132 57.0517C117.088 57.0517 105 45.8588 105 32.0517C105 31.0365 105.065 30.0353 105.192 29.0517H104C64.2355 29.0517 32 61.2873 32 101.052V110H232V101.052C232 61.2872 199.764 29.0517 160 29.0517L158.808 29.0517C158.935 30.0353 159 31.0365 159 32.0517Z" fill="#E6E6E6"/>
-    <mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="32" y="29" width="200" height="81">
+    <mask id="${mask.next()}" mask-type="alpha" maskUnits="userSpaceOnUse" x="32" y="29" width="200" height="81">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M159 32.0517C159 45.8588 146.912 57.0517 132 57.0517C117.088 57.0517 105 45.8588 105 32.0517C105 31.0365 105.065 30.0353 105.192 29.0517H104C64.2355 29.0517 32 61.2873 32 101.052V110H232V101.052C232 61.2872 199.764 29.0517 160 29.0517L158.808 29.0517C158.935 30.0353 159 31.0365 159 32.0517Z" fill="white"/>
     </mask>
-    <g mask="url(#mask0)">
-        <rect width="264" height="110" fill="${clothingUtils.color(prng, options)}"/>
+    <g mask="url(#${mask.current()})">
+        <rect width="264" height="110" fill="${color.clothing(prng, options)}"/>
     </g>
     <path fill-rule="evenodd" clip-rule="evenodd" d="M163.638 110H232V101.052C232 62.7068 202.025 31.3628 164.229 29.1738C167.265 40.7709 169 54.1942 169 68.5C169 83.7087 167.039 97.92 163.638 110ZM100.785 29.1222C97.74 40.7311 96 54.173 96 68.5C96 83.7087 97.9607 97.92 101.362 110H32V101.052C32 62.3647 62.5123 30.8041 100.785 29.1222Z" fill="#3A4C5A"/>
     <path fill-rule="evenodd" clip-rule="evenodd" d="M181 86L190.556 78.8331C191.999 77.7508 193.988 77.7683 195.412 78.8757L202 84L181 86Z" fill="#E6E6E6"/>
