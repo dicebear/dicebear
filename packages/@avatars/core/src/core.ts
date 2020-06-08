@@ -21,7 +21,11 @@ export interface IStyle<O = {}> {
   (prng: prng.IPrng, options: Partial<O & IOptions>): string | svgson.INode;
 }
 
-export function create<O = {}>(style: IStyle<O>, seed: string, options: Partial<O & IOptions> = {}) {
+export function create<O = {}>(
+  style: IStyle<O>,
+  seed: string = Math.random().toString(),
+  options: Partial<O & IOptions> = {}
+) {
   // Apply alias options
   options = {
     radius: options.r,

@@ -1,5 +1,5 @@
 import graphic from './graphic';
-import { utils } from '@avatars/core';
+import type { utils } from '@avatars/core';
 import * as group from '../utils/group';
 import type Options from '../options';
 import * as color from '../utils/color';

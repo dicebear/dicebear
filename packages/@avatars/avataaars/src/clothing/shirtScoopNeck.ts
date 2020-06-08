@@ -1,4 +1,4 @@
-import { utils } from '@avatars/core';
+import type { utils } from '@avatars/core';
 import type Options from '../options';
 import * as color from '../utils/color';
 import * as mask from '../utils/mask';

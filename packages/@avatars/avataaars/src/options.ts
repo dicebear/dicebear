@@ -27,7 +27,7 @@ type Options = {
     | 'wink'
     | 'winkWacky'
   >;
-  eyebrow?: Array<'angry' | 'default' | 'flat' | 'raised' | 'sad' | 'unibrow' | 'up'>;
+  eyebrows?: Array<'angry' | 'default' | 'flat' | 'raised' | 'sadConcerned' | 'unibrow' | 'upDown' | 'frown'>;
   mouth?: Array<
     | 'concerned'
     | 'default'

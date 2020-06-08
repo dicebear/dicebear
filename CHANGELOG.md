@@ -2,8 +2,14 @@
 
 ## Added
 
-- `@avatars/pixel-art` as a merger for `male`, `female` and `human`.
-- `@avatars/pixel-art` The following options are new:
+### @avatars/avataaars
+
+- Added `frown` as possible value for the `eyebrows` option.
+
+### @avatars/pixel-art
+
+- Added as a merger for `male`, `female` and `human`.
+- The following options are new:
   - `skinColor` (See [#68](9))
   - `maleMustacheProbability`
   - `maleGlassesProbability`
@@ -14,6 +20,8 @@
   - `femaleHatProbability`
 
 ## Changed
+
+### General
 
 - NPM namespace and package names changed to separate them from libraries not belonging to "DiceBear Avatars". In addition "sprite collections" are now called "avatar styles". This results in the following name changes:
   - `@dicebear/avatars` => `@avatars/core`
@@ -28,13 +36,16 @@
   - `@dicebear/avatars-jdenticon-sprites` => `@avatars/jdenticon`
   - `@dicebear/avatars-male-sprites` => `@avatars/pixel-art`
 - Deprecation of packages with the old namespace.
-- `@avatars/core` Classes are rewritten as functions. This change allows direct access to the `create` function without having to initialize an object first.
+
+### @avatars/core
+
+- Classes are rewritten as functions. This change allows direct access to the `create` function without having to initialize an object first.
 
   Old API
 
   ```js
     import Avatars from `@dicebear/avatars`;
-    import spriteCollection from `@dicebear/avatars-initials-sprites`;
+    import spriteCollection from `@dicebear/avatars-identicon-sprites`;
 
     let options = {};
     let seed = 'custom-seed';
@@ -46,38 +57,65 @@
 
   ```js
     import * as avatars from `@avatars/core`;
-    import avatarsStyle from `@avatars/initials`;
+    import avatarsStyle from `@avatars/identicon`;
 
     let options = {};
     let seed = 'custom-seed';
     let svg = avatars.create(avatarsStyle, seed, options);
   ```
 
-- `@avatars/jdenticon` Options are adapted to those of the 'jdenticon' library. This results in the following changes:
-  - `colorLightness` => `lightnessColor`
-  - `grayscaleLightness` => `lightnessGrayscale`
-  - `colorSaturation` => `saturationColor`
-  - `grayscaleSaturation` => `saturationGrayscale`
-- `@avatars/avataaars` The following options have been renamed
+- If no `seed` is passed, a random one is defined. Example usage:
+
+  ```js
+    import * as avatars from `@avatars/core`;
+    import avatarsStyle from `@avatars/identicon`;
+
+    let options = {};
+    let seed = undefined;
+    let svg = avatars.create(avatarsStyle, seed, options);
+  ```
+
+### @avatars/avataaars
+
+- The following options have been renamed
   - `topChance` => `topProbability`
   - `accessoriesChance` => `accessoriesProbability`
   - `facialHairChance` => `facialHairProbability`
   - `skin` => `skinColor`
-- `@avatars/bottts` The following options have been renamed
+  - `eyebrow` => `eyebrows`
+- Renamed the following possible values of the `eyebrows` option:
+  - `sad` => `sadConcerned`
+  - `up` => `upDown`
+
+### @avatars/bottts
+
+- The following options have been renamed
   - `mouthChance` => `mouthProbability`
   - `sidesChance` => `sidesProbability`
   - `textureChance` => `textureProbability`
   - `topChance` => `topProbability`
 
+### @avatars/jdenticon
+
+- Options are adapted to those of the 'jdenticon' library. This results in the following changes:
+  - `colorLightness` => `lightnessColor`
+  - `grayscaleLightness` => `lightnessGrayscale`
+  - `colorSaturation` => `saturationColor`
+  - `grayscaleSaturation` => `saturationGrayscale`
+
 ## Fixed
 
-- `@avatars/core` [#68](7) base64 option on nodejs environments
+### @avatars/core
+
+- [#68](7) base64 option on nodejs environments
 
 ## Removed
 
-- `@avatars/core` Color modifier classes. Moved to `@avatars/pixel-art`.
-- `@avatars/core` Material colors. Use [material-colors](8) package instead.
-- `@avatars/core` Option `userAgent`
+### @avatars/core
+
+- Color modifier classes. Moved to `@avatars/pixel-art`.
+- Material colors. Use [material-colors](8) package instead.
+- Option `userAgent`.
 
 [7]: https://github.com/DiceBear/avatars/issues/68
 [8]: https://www.npmjs.com/package/material-colors

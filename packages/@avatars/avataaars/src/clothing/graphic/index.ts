@@ -1,4 +1,4 @@
-import { utils } from '@avatars/core';
+import type { utils } from '@avatars/core';
 import bat from './bat';
 import bear from './bear';
 import cumbia from './cumbia';

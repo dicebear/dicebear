@@ -78,7 +78,7 @@ let svg = avatars.create('custom-seed');
 | clothes                |       | array of strings | `null`        | Possible values: `blazer`, `sweater`, `shirt`, `hoodie`, `overall`                                                                                |
 | clothesColor           |       | array of strings | `null`        | Possible values: `black`, `blue`, `gray`, `heather`, `pastel`, `pink`, `red`, `white`                                                             |
 | eyes                   |       | array of strings | `null`        | Possible values: `close`, `cry`, `default`, `dizzy`, `roll`, `happy`, `hearts`, `side`, `squint`, `surprised`, `wink`, `winkWacky`                |
-| eyebrow                |       | array of strings | `null`        | Possible values: `angry`, `default`, `flat`, `raised`, `sad`, `unibrow`, `up`                                                                     |
+| eyebrows               |       | array of strings | `null`        | Possible values: `angry`, `default`, `flat`, `raised`, `sadConcerned`, `unibrow`, `upDown`, `frown`                                               |
 | mouth                  |       | array of strings | `null`        | Possible values: `concerned`, `default`, `disbelief`, `eating`, `grimace`, `sad`, `scream`, `serious`, `smile`, `tongue`, `twinkle`, `vomit`      |
 | skin                   |       | array of strings | `null`        | Possible values: `tanned`, `yellow`, `pale`, `light`, `brown`, `darkBrown`, `black`                                                               |
 
