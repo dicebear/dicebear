@@ -1,6 +1,6 @@
 {
   "name": "@avatars/bottts",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Bottts avatar style for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

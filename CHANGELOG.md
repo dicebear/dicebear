@@ -92,7 +92,7 @@
 
 ### @avatars/core
 
-- [#68](7) base64 option on nodejs environments
+- [#68](8) base64 option on nodejs environments
 
 ## Added
 
@@ -121,7 +121,7 @@
 
 - Added as a merger for `male`, `female` and `human`.
 - The following options are new:
-  - `skinColor` (See [#68](9))
+  - `skinColor` (See [#68](10))
   - `maleMustacheProbability`
   - `maleGlassesProbability`
   - `maleHairProbability`
@@ -135,7 +135,7 @@
 ### @avatars/core
 
 - Color modifier classes. Moved to `@avatars/pixel-art`.
-- Material colors. Use [material-colors](8) package instead.
+- Material colors. Use [material-colors](9) package instead.
 - Option `userAgent`.
 
 ### @avatars/avataaars
@@ -148,9 +148,17 @@
   - `sad` - use `sadConcerned` and `sadConcernedNatural` instead.
   - `up` - use `upDown` and `upDownNatural` instead.
 
-[7]: https://github.com/DiceBear/avatars/issues/68
-[8]: https://www.npmjs.com/package/material-colors
-[9]: https://github.com/DiceBear/avatars/issues/53
+[8]: https://github.com/DiceBear/avatars/issues/68
+[9]: https://www.npmjs.com/package/material-colors
+[10]: https://github.com/DiceBear/avatars/issues/53
+
+# [4.2.0] - 2020-05-26
+
+## Changed
+
+- [#73][7] Update seedrandom package to 3.0.5
+
+[7]: https://github.com/DiceBear/avatars/pull/73
 
 # [4.1.1] - 2020-05-14
 
@@ -165,12 +173,6 @@
 
 # [4.1.0] - 2020-05-09
 
-## Added
-
-- [#55][1] Aliases for `width`, `height`, `radius`, `background` and `margin`, to keep the URLs of the HTTP API shorter
-- [#66][5] `deterministic` for `gridy` avatars. (thanks to @elierotenberg)
-- This changelog
-
 ## Changed
 
 - [#55][1] Parameter key for the HTTP API flattened. It is now no longer necessary to nest the values in an `options` object.
@@ -183,6 +185,12 @@
 
 - [#69][3] Initial avatars were displayed incorrectly in Firefox. Same solution implemented for all browsers.
 - [#58][4] Value `0` did not work for chance options in `bottts`.
+
+## Added
+
+- [#55][1] Aliases for `width`, `height`, `radius`, `background` and `margin`, to keep the URLs of the HTTP API shorter
+- [#66][5] `deterministic` for `gridy` avatars. (thanks to @elierotenberg)
+- This changelog
 
 ## Removed
 

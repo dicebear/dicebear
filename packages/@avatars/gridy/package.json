@@ -1,6 +1,6 @@
 {
   "name": "@avatars/gridy",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Gridy Avatars avatar style for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
