@@ -12,7 +12,7 @@ import type { utils } from '@avatars/core';
 import * as filter from '../utils/filter';
 
 export default (prng: utils.prng.IPrng, options: Options) => {
-  let clothing = filter.byOptionName(options, 'clothes', {
+  let clothing = filter.byOptionName(options, 'clothing', {
     blazerAndShirt,
     blazerAndSweater,
     collarAndSweater,

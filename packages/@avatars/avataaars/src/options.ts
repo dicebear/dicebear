@@ -11,7 +11,7 @@ type Options = {
   facialHair?: Array<'medium' | 'light' | 'majestic' | 'fancy' | 'magnum'>;
   facialHairProbability?: number;
   facialHairColor?: Array<'auburn' | 'black' | 'blonde' | 'brown' | 'platinum' | 'red'>;
-  clothes?: Array<
+  clothing?: Array<
     | 'blazerAndShirt'
     | 'blazerAndSweater'
     | 'collarAndSweater'
@@ -22,7 +22,7 @@ type Options = {
     | 'hoodie'
     | 'overall'
   >;
-  clothesColor?: Array<'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white'>;
+  clothingColor?: Array<'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white'>;
   eyes?: Array<
     | 'close'
     | 'cry'

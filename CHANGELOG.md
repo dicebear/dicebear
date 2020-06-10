@@ -1,41 +1,5 @@
 # [5.0.0] - TBA
 
-## Added
-
-### @avatars/avataaars
-
-- New possible values for `eyebrows` option:
-  - `frownNatural`
-  - `angryNatural`
-  - `defaultNatural`
-  - `raisedExcited`
-  - `raisedExcitedNatural`
-  - `sadConcerned`
-  - `sadConcernedNatural`
-  - `upDown`
-  - `upDownNatural`
-  - `flatNatural`
-- New possible values for `clothes` option:
-  - `blazerAndShirt`
-  - `blazerAndSweater`
-  - `graphicShirt`
-  - `shirtCrewNeck`
-  - `shirtScoopNeck`
-  - `shirtVNeck`
-
-### @avatars/pixel-art
-
-- Added as a merger for `male`, `female` and `human`.
-- The following options are new:
-  - `skinColor` (See [#68](9))
-  - `maleMustacheProbability`
-  - `maleGlassesProbability`
-  - `maleHairProbability`
-  - `maleHatProbability`
-  - `femaleAccessoriesProbability`
-  - `femaleGlassesProbability`
-  - `femaleHatProbability`
-
 ## Changed
 
 ### General
@@ -100,6 +64,8 @@
   - `facialHairChance` => `facialHairProbability`
   - `skin` => `skinColor`
   - `eyebrow` => `eyebrows`
+  - `clothes` => `clothing` - To be closer to the names in the Sketch library.
+  - `clothesColor` => `clothingColor` - To be closer to the names in the Sketch library.
 - Renamed the following possible values of the `eyebrows` option:
   - `flat` => `flatNatural`
   - `unibrow` => `unibrowNatural`
@@ -127,6 +93,42 @@
 ### @avatars/core
 
 - [#68](7) base64 option on nodejs environments
+
+## Added
+
+### @avatars/avataaars
+
+- New possible values for `eyebrows` option:
+  - `frownNatural`
+  - `angryNatural`
+  - `defaultNatural`
+  - `raisedExcited`
+  - `raisedExcitedNatural`
+  - `sadConcerned`
+  - `sadConcernedNatural`
+  - `upDown`
+  - `upDownNatural`
+  - `flatNatural`
+- New possible values for `clothes` option:
+  - `blazerAndShirt`
+  - `blazerAndSweater`
+  - `graphicShirt`
+  - `shirtCrewNeck`
+  - `shirtScoopNeck`
+  - `shirtVNeck`
+
+### @avatars/pixel-art
+
+- Added as a merger for `male`, `female` and `human`.
+- The following options are new:
+  - `skinColor` (See [#68](9))
+  - `maleMustacheProbability`
+  - `maleGlassesProbability`
+  - `maleHairProbability`
+  - `maleHatProbability`
+  - `femaleAccessoriesProbability`
+  - `femaleGlassesProbability`
+  - `femaleHatProbability`
 
 ## Removed
 
