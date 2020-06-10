@@ -11,7 +11,17 @@ type Options = {
   facialHair?: Array<'medium' | 'light' | 'majestic' | 'fancy' | 'magnum'>;
   facialHairProbability?: number;
   facialHairColor?: Array<'auburn' | 'black' | 'blonde' | 'brown' | 'platinum' | 'red'>;
-  clothes?: Array<'blazer' | 'sweater' | 'shirt' | 'hoodie' | 'overall'>;
+  clothes?: Array<
+    | 'blazerAndShirt'
+    | 'blazerAndSweater'
+    | 'collarAndSweater'
+    | 'graphicShirt'
+    | 'shirtCrewNeck'
+    | 'shirtScoopNeck'
+    | 'shirtVNeck'
+    | 'hoodie'
+    | 'overall'
+  >;
   clothesColor?: Array<'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white'>;
   eyes?: Array<
     | 'close'
@@ -27,7 +37,21 @@ type Options = {
     | 'wink'
     | 'winkWacky'
   >;
-  eyebrows?: Array<'angry' | 'default' | 'flat' | 'raised' | 'sadConcerned' | 'unibrow' | 'upDown' | 'frown'>;
+  eyebrows?: Array<
+    | 'angry'
+    | 'angryNatural'
+    | 'default'
+    | 'defaultNatural'
+    | 'flatNatural'
+    | 'raisedExcited'
+    | 'raisedExcitedNatural'
+    | 'sadConcerned'
+    | 'sadConcernedNatural'
+    | 'upDown'
+    | 'upDownNatural'
+    | 'frownNatural'
+    | 'unibrowNatural'
+  >;
   mouth?: Array<
     | 'concerned'
     | 'default'

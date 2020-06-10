@@ -4,7 +4,24 @@
 
 ### @avatars/avataaars
 
-- Added `frown` as possible value for the `eyebrows` option.
+- New possible values for `eyebrows` option:
+  - `frownNatural`
+  - `angryNatural`
+  - `defaultNatural`
+  - `raisedExcited`
+  - `raisedExcitedNatural`
+  - `sadConcerned`
+  - `sadConcernedNatural`
+  - `upDown`
+  - `upDownNatural`
+  - `flatNatural`
+- New possible values for `clothes` option:
+  - `blazerAndShirt`
+  - `blazerAndSweater`
+  - `graphicShirt`
+  - `shirtCrewNeck`
+  - `shirtScoopNeck`
+  - `shirtVNeck`
 
 ### @avatars/pixel-art
 
@@ -84,8 +101,10 @@
   - `skin` => `skinColor`
   - `eyebrow` => `eyebrows`
 - Renamed the following possible values of the `eyebrows` option:
-  - `sad` => `sadConcerned`
-  - `up` => `upDown`
+  - `flat` => `flatNatural`
+  - `unibrow` => `unibrowNatural`
+- Renamed the following possible values of the `clothes` option:
+  - `sweater` => `collarAndSweater`
 
 ### @avatars/bottts
 
@@ -116,6 +135,16 @@
 - Color modifier classes. Moved to `@avatars/pixel-art`.
 - Material colors. Use [material-colors](8) package instead.
 - Option `userAgent`.
+
+### @avatars/avataaars
+
+- The followig values of the `clothes` option are removed:
+  - `blazer` - use `blazerAndShirt` and `blazerAndSweater` instead.
+  - `shirt` - use `graphicShirt`, `shirtCrewNeck`, `shirtScoopNeck` and `shirtVNeck` instead.
+- The followig values of the `eyebrows` option are removed:
+  - `raised` - use `raisedExcited` and `raisedExcitedNatural` instead.
+  - `sad` - use `sadConcerned` and `sadConcernedNatural` instead.
+  - `up` - use `upDown` and `upDownNatural` instead.
 
 [7]: https://github.com/DiceBear/avatars/issues/68
 [8]: https://www.npmjs.com/package/material-colors

@@ -14,19 +14,23 @@ import upDownNatural from './upDownNatural';
 import type { utils } from '@avatars/core';
 import type Options from '../options';
 import * as filter from '../utils/filter';
-import * as map from '../utils/map';
 
 export default (prng: utils.prng.IPrng, options: Options) => {
   let eyebrows = filter.byOptionName(options, 'eyebrows', {
-    angry: [angry, angryNatural],
-    default: [default_, defaultNatural],
-    flat: [flatNatural],
-    raised: [raisedExcited, raisedExcitedNatural],
-    sadConcerned: [sadConcerned, sadConcernedNatural],
-    upDown: [upDown, upDownNatural],
-    frown: [frownNatural],
-    unibrow: [unibrowNatural],
+    angry,
+    angryNatural,
+    default: default_,
+    defaultNatural,
+    flatNatural,
+    raisedExcited,
+    raisedExcitedNatural,
+    sadConcerned,
+    sadConcernedNatural,
+    upDown,
+    upDownNatural,
+    frownNatural,
+    unibrowNatural,
   });
 
-  return prng.pick(map.flatten(eyebrows))();
+  return prng.pick(Object.values(eyebrows))();
 };

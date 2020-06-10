@@ -10,16 +10,19 @@ import shirtVNeck from './shirtVNeck';
 import type Options from '../options';
 import type { utils } from '@avatars/core';
 import * as filter from '../utils/filter';
-import * as map from '../utils/map';
 
 export default (prng: utils.prng.IPrng, options: Options) => {
   let clothing = filter.byOptionName(options, 'clothes', {
-    blazer: [blazerAndShirt, blazerAndSweater],
-    sweater: [collarAndSweater],
-    shirt: [graphicShirt, shirtCrewNeck, shirtScoopNeck, shirtVNeck],
-    hoodie: [hoodie],
-    overall: [overall],
+    blazerAndShirt,
+    blazerAndSweater,
+    collarAndSweater,
+    graphicShirt,
+    shirtCrewNeck,
+    shirtScoopNeck,
+    shirtVNeck,
+    hoodie,
+    overall,
   });
 
-  return prng.pick(map.flatten(clothing))(prng, options);
+  return prng.pick(Object.values(clothing))(prng, options);
 };
