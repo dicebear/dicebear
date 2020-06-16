@@ -71,6 +71,12 @@
   - `unibrow` => `unibrowNatural`
 - Renamed the following possible values of the `clothes` option:
   - `sweater` => `collarAndSweater`
+- Renamed the following possible values of the `hairColor` option:
+  - `pastel` => `pastelPink`
+  - `gray` => `
+- Renamed the following possible values of the `facialHairColor` option:
+  - `pastel` => `pastelPink`
+  - `gray` => `graySilver`
 
 ### @avatars/bottts
 
@@ -127,6 +133,23 @@
   - `pastelOrange`
   - `pastelRed`
   - `pastelYellow`
+- New possible values for `hatColor` option:
+  - `blue01`
+  - `blue02`
+  - `blue03`
+  - `gray01`
+  - `gray02`
+  - `pastelBlue`
+  - `pastelGreen`
+  - `pastelOrange`
+  - `pastelRed`
+  - `pastelYellow`
+- New possible values for `hairColor` option:
+  - `blondeGolden`
+  - `brownDark`
+- New possible values for `facialHairColor` option:
+  - `blondeGolden`
+  - `brownDark`
 
 ### @avatars/pixel-art
 
@@ -159,6 +182,10 @@
   - `sad` - use `sadConcerned` and `sadConcernedNatural` instead.
   - `up` - use `upDown` and `upDownNatural` instead.
 - The followig values of the `clothingColor` option are removed:
+  - `blue` - use `blue01`, `blue02` and `blue03` instead.
+  - `gray` - use `gray01` and `gray02` instead.
+  - `pastel` - use `pastelBlue`, `pastelGreen`, `pastelOrange`, `pastelRed` and `pastelYellow` instead.
+- The followig values of the `hatColor` option are removed:
   - `blue` - use `blue01`, `blue02` and `blue03` instead.
   - `gray` - use `gray01` and `gray02` instead.
   - `pastel` - use `pastelBlue`, `pastelGreen`, `pastelOrange`, `pastelRed` and `pastelYellow` instead.

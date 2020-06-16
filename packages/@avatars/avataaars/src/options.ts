@@ -5,10 +5,32 @@ type Options = {
   top?: Array<'longHair' | 'shortHair' | 'eyepatch' | 'hat' | 'hijab' | 'turban'>;
   topProbability?: 100;
   hatColor?: Array<'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white'>;
-  hairColor?: Array<'auburn' | 'black' | 'blonde' | 'brown' | 'pastel' | 'platinum' | 'red' | 'gray'>;
+  hairColor?: Array<
+    | 'auburn'
+    | 'black'
+    | 'blonde'
+    | 'blondeGolden'
+    | 'brown'
+    | 'brownDark'
+    | 'pastelPink'
+    | 'platinum'
+    | 'red'
+    | 'graySilver'
+  >;
   accessories?: Array<'kurt' | 'prescription01' | 'prescription02' | 'round' | 'sunglasses' | 'wayfarers'>;
   accessoriesProbability?: number;
-  facialHair?: Array<'medium' | 'light' | 'majestic' | 'fancy' | 'magnum'>;
+  facialHair?: Array<
+    | 'auburn'
+    | 'black'
+    | 'blonde'
+    | 'blondeGolden'
+    | 'brown'
+    | 'brownDark'
+    | 'pastelPink'
+    | 'platinum'
+    | 'red'
+    | 'graySilver'
+  >;
   facialHairProbability?: number;
   facialHairColor?: Array<'auburn' | 'black' | 'blonde' | 'brown' | 'platinum' | 'red'>;
   clothing?: Array<
