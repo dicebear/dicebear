@@ -22,7 +22,23 @@ type Options = {
     | 'hoodie'
     | 'overall'
   >;
-  clothingColor?: Array<'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white'>;
+  clothingColor?: Array<
+    | 'black'
+    | 'blue01'
+    | 'blue02'
+    | 'blue03'
+    | 'gray01'
+    | 'gray02'
+    | 'heather'
+    | 'pastelBlue'
+    | 'pastelGreen'
+    | 'pastelOrange'
+    | 'pastelRed'
+    | 'pastelYellow'
+    | 'pink'
+    | 'red'
+    | 'white'
+  >;
   eyes?: Array<
     | 'close'
     | 'cry'

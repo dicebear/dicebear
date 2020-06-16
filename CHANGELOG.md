@@ -116,6 +116,17 @@
   - `shirtCrewNeck`
   - `shirtScoopNeck`
   - `shirtVNeck`
+- New possible values for `clothingColor` option:
+  - `blue01`
+  - `blue02`
+  - `blue03`
+  - `gray01`
+  - `gray02`
+  - `pastelBlue`
+  - `pastelGreen`
+  - `pastelOrange`
+  - `pastelRed`
+  - `pastelYellow`
 
 ### @avatars/pixel-art
 
@@ -147,6 +158,10 @@
   - `raised` - use `raisedExcited` and `raisedExcitedNatural` instead.
   - `sad` - use `sadConcerned` and `sadConcernedNatural` instead.
   - `up` - use `upDown` and `upDownNatural` instead.
+- The followig values of the `clothingColor` option are removed:
+  - `blue` - use `blue01`, `blue02` and `blue03` instead.
+  - `gray` - use `gray01` and `gray02` instead.
+  - `pastel` - use `pastelBlue`, `pastelGreen`, `pastelOrange`, `pastelRed` and `pastelYellow` instead.
 
 [8]: https://github.com/DiceBear/avatars/issues/68
 [9]: https://www.npmjs.com/package/material-colors

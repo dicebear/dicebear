@@ -1,7 +1,6 @@
 import type { utils } from '@avatars/core';
 import Options from '../options';
 import * as filter from './filter';
-import * as map from './map';
 
 export function skin(prng: utils.prng.IPrng, options: Options) {
   let colors = filter.byOptionName(options, 'skinColor', {
@@ -18,18 +17,23 @@ export function skin(prng: utils.prng.IPrng, options: Options) {
 }
 
 export function clothing(prng: utils.prng.IPrng, options: Options) {
-  let colors = map.flatten(
-    filter.byOptionName(options, 'clothesColor', {
-      black: ['#262E33'],
-      blue: ['#65C9FF', '#5199E4', '#25557C'],
-      gray: ['#E5E5E5', '#929598'],
-      heather: ['#3C4F5C'],
-      pastel: ['#B1E2FF', '#A7FFC4', '#FFDEB5', '#FFAFB9', '#FFFFB1'],
-      pink: ['#FF488E'],
-      red: ['#FF5C5C'],
-      white: ['#FFFFFF'],
-    })
-  );
+  let colors = filter.byOptionName(options, 'clothingColor', {
+    black: '#262E33',
+    blue01: '#65C9FF',
+    blue02: '#5199E4',
+    blue03: '#25557C',
+    gray01: '#E5E5E5',
+    gray02: '#929598',
+    heather: '#3C4F5C',
+    pastelBlue: '#B1E2FF',
+    pastelGreen: '#A7FFC4',
+    pastelOrange: '#FFDEB5',
+    pastelRed: '#FFAFB9',
+    pastelYellow: '#FFFFB1',
+    pink: '#FF488E',
+    red: '#FF5C5C',
+    white: '#FFFFFF',
+  });
 
-  return prng.pick(colors);
+  return prng.pick(Object.values(colors));
 }
