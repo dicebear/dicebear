@@ -2,19 +2,18 @@
   "name": "@avatars/core",
   "version": "4.2.0",
   "description": "Avatar placeholder library for designers and developers.",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/cjs/avatars.js",
+  "module": "dist/esm/avatars.js",
+  "browser": "dist/amd/avatars.min.js",
+  "types": "types/index.d.ts",
   "dependencies": {
-    "pure-color": "^1.3.0",
     "seedrandom": "^3.0.5",
     "svgson": "^4.0.0"
   },
   "scripts": {
-    "pretest": "npm run build",
-    "prepublishOnly": "npm run build",
-    "prebuild": "rm -r dist/* lib/* || true",
-    "build": "tsc && webpack",
-    "watch": "webpack -w & tsc -w"
+    "build:types": "tsc --emitDeclarationOnly --outDir types",
+    "build:js": "rollup -c",
+    "build": "npm run build:types && npm run build:js"
   },
   "author": "Florian Körner <contact@dicebear.com>",
   "license": "MIT",
