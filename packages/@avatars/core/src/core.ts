@@ -1,75 +1,60 @@
-import type * as svgson from 'svgson';
 import * as base64 from './base64';
-import * as prng from './prng';
 import * as svg from './svg';
+import * as options from './options';
+import type * as style from './style';
 
-export interface IOptions {
-  seed?: string;
-  radius?: number;
-  r?: number;
-  base64?: boolean;
-  width?: number;
-  w?: number;
-  height?: number;
-  h?: number;
-  margin?: number;
-  m?: number;
-  background?: string;
-  b?: number;
-}
-
-export interface IStyle<O = {}> {
-  (prng: prng.IPrng, options: Partial<O & IOptions>): string | svgson.INode;
-}
-
-export function create<O = {}>(style: IStyle<O>, optionsOrSeed: string | Partial<O & IOptions> = {}) {
+export function create<O = {}>(
+  styleObject: style.IStyle<O>,
+  optionsOrSeed: string | Partial<style.IStyleOptions<O>> = {}
+) {
   let seed = Math.random().toString();
-  let options: Partial<O & IOptions> = {};
+  let optionsObject: Partial<style.IStyleOptions<O>> = {};
 
   if (typeof optionsOrSeed === 'string') {
     seed = optionsOrSeed;
   } else {
-    options = optionsOrSeed;
+    optionsObject = optionsOrSeed;
   }
 
-  // Apply alias options
-  options = {
+  // Apply defaults and alias options and process config
+  let processedOptions = options.process<style.IStyleOptions<O>>({
+    ...styleObject.options,
     seed: seed,
-    radius: options.r,
-    width: options.w,
-    height: options.h,
-    margin: options.m,
-    background: options.b,
-    ...options,
-  };
+    radius: optionsObject.r,
+    width: optionsObject.w,
+    height: optionsObject.h,
+    margin: optionsObject.m,
+    background: optionsObject.b,
+    ...optionsObject,
+  });
 
-  let avatar = style(prng.create(options.seed), options);
+  let avatar = styleObject.generator(processedOptions);
 
   if (Object.keys(options).length > 0) {
     avatar = svg.parse(avatar);
 
-    if (options.width) {
-      svg.addWidth(avatar, options.width);
+    if (typeof processedOptions.width === 'number') {
+      svg.addWidth(avatar, processedOptions.width as number);
     }
 
-    if (options.height) {
-      svg.addHeight(avatar, options.height);
+    if (typeof processedOptions.height === 'number') {
+      svg.addHeight(avatar, processedOptions.height as number);
     }
 
-    if (options.margin) {
-      svg.addMargin(avatar, options.margin);
+    if (typeof processedOptions.margin === 'number') {
+      svg.addMargin(avatar, processedOptions.margin as number);
     }
 
-    if (options.background) {
-      svg.addBackground(avatar, options.background);
+    if (typeof processedOptions.background === 'string') {
+      svg.addBackground(avatar, processedOptions.background as string);
     }
 
-    if (options.radius) {
-      svg.addRadius(avatar, options.radius);
+    if (typeof processedOptions.radius === 'number') {
+      svg.addRadius(avatar, processedOptions.radius as number);
     }
   }
 
   avatar = svg.stringify(avatar);
 
-  return options.base64 ? `data:image/svg+xml;base64,${base64.encode(avatar)}` : avatar;
+  return processedOptions.base64 ? `data:image/svg+xml;base64,${base64.encode(avatar)}` : avatar;
 }

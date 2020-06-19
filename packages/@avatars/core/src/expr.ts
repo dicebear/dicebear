@@ -1,10 +1,15 @@
 import * as prng from './prng';
 
-export function includes(search: any, arr: any[]) {
+export interface IExpression<T = any> {
+  0: string;
+  1: Array<T | IExpression<T>>;
+}
+
+export function includes(search: any, arr: any[]): IExpression {
   return ['$includes', [search, arr]];
 }
 
-function resolveIncludes(args: any[]) {
+function resolveIncludes(args: any[]): boolean {
   if (args[0] && Array.isArray(args[1])) {
     return args[1].includes(args[0]);
   }
@@ -12,11 +17,11 @@ function resolveIncludes(args: any[]) {
   throw new Error('Invalid arguments for $includes.');
 }
 
-export function every(arr: any) {
+export function every(arr: any): IExpression {
   return ['$every', [arr]];
 }
 
-function resolveEvery(args: any[]) {
+function resolveEvery(args: any[]): boolean {
   if (Array.isArray(args[0])) {
     return args[0].every((v) => v);
   }
@@ -24,11 +29,11 @@ function resolveEvery(args: any[]) {
   throw new Error('Invalid arguments for $every.');
 }
 
-export function some(arr: any) {
+export function some(arr: any): IExpression {
   return ['$some', [arr]];
 }
 
-function resolveSome(args: any[]) {
+function resolveSome(args: any[]): boolean {
   if (Array.isArray(args[0])) {
     return args[0].some((v) => v);
   }
@@ -36,27 +41,27 @@ function resolveSome(args: any[]) {
   throw new Error('Invalid arguments for $some.');
 }
 
-export function is(val1: any, val2: any) {
+export function is(val1: any, val2: any): IExpression {
   return ['$is', [val1, val2]];
 }
 
-function resolveIs(args: any[]) {
+function resolveIs(args: any[]): boolean {
   return args[0] === args[1];
 }
 
-export function isNot(val1: any, val2: any) {
+export function isNot(val1: any, val2: any): IExpression {
   return ['$isNot', [val1, val2]];
 }
 
-function resolveIsNot(args: any[]) {
+function resolveIsNot(args: any[]): boolean {
   return args[0] !== args[1];
 }
 
-export function gt(val1: any, val2: any) {
+export function gt(val1: any, val2: any): IExpression {
   return ['$gt', [val1, val2]];
 }
 
-function resolveGt(args: any[]) {
+function resolveGt(args: any[]): boolean {
   if (Number.isInteger(args[0]) && Number.isInteger(args[1])) {
     return args[0] > args[1];
   }
@@ -64,11 +69,11 @@ function resolveGt(args: any[]) {
   throw new Error('Invalid arguments for $gt.');
 }
 
-export function gte(val1: any, val2: any) {
+export function gte(val1: any, val2: any): IExpression {
   return ['$gte', [val1, val2]];
 }
 
-function resolveGte(args: any[]) {
+function resolveGte(args: any[]): boolean {
   if (Number.isInteger(args[0]) && Number.isInteger(args[1])) {
     return args[0] >= args[1];
   }
@@ -76,11 +81,11 @@ function resolveGte(args: any[]) {
   throw new Error('Invalid arguments for $gte.');
 }
 
-export function lt(val1: any, val2: any) {
+export function lt(val1: any, val2: any): IExpression {
   return ['$lt', [val1, val2]];
 }
 
-function resolveLt(args: any[]) {
+function resolveLt(args: any[]): boolean {
   if (Number.isInteger(args[0]) && Number.isInteger(args[1])) {
     return args[0] < args[1];
   }
@@ -88,11 +93,11 @@ function resolveLt(args: any[]) {
   throw new Error('Invalid arguments for $lt.');
 }
 
-export function lte(val1: any, val2: any) {
+export function lte(val1: any, val2: any): IExpression {
   return ['$lte', [val1, val2]];
 }
 
-function resolveLte(args: any[]) {
+function resolveLte(args: any[]): boolean {
   if (Number.isInteger(args[0]) && Number.isInteger(args[1])) {
     return args[0] <= args[1];
   }
@@ -100,11 +105,11 @@ function resolveLte(args: any[]) {
   throw new Error('Invalid arguments for $lte.');
 }
 
-export function ref(ref: any) {
+export function ref(ref: any): IExpression {
   return ['$ref', [ref]];
 }
 
-function resolveRef(args: any[], root: Record<string, any>, prng: prng.IPrng, callstack: string[]) {
+function resolveRef<T = any>(args: any[], root: Record<string, any>, prng: prng.IPrng, callstack: string[]): T {
   if (typeof args[0] === 'string') {
     if (callstack.includes(args[0])) {
       throw new Error(`Recursion Error: ${callstack.join(' → ')}`);
@@ -116,7 +121,7 @@ function resolveRef(args: any[], root: Record<string, any>, prng: prng.IPrng, ca
   throw new Error('Invalid arguments for $ref.');
 }
 
-export function prngInteger(min: any, max: any) {
+export function prngInteger(min: any, max: any): IExpression {
   return ['$prng.integer', [min, max]];
 }
 
@@ -128,7 +133,7 @@ function resolvePrngInteger(args: any[], prng: prng.IPrng) {
   throw new Error('Invalid arguments for $prng.integer.');
 }
 
-export function prngBool(likelihood: any) {
+export function prngBool(likelihood: any): IExpression {
   return ['$prng.bool', [likelihood]];
 }
 
@@ -140,11 +145,11 @@ function resolvePrngBool(args: any[], prng: prng.IPrng) {
   throw new Error('Invalid arguments for $prng.bool.');
 }
 
-export function prngPick(arr: any) {
+export function prngPick(arr: any): IExpression {
   return ['$prng.pick', [arr]];
 }
 
-function resolvePrngPick(args: any[], prng: prng.IPrng) {
+function resolvePrngPick<T = any>(args: Array<T | IExpression<T>>, prng: prng.IPrng): T {
   if (Array.isArray(args[0])) {
     return prng.pick(args[0]);
   }
@@ -208,14 +213,18 @@ export function resolve(expr: any, root: Record<string, any>, prng: prng.IPrng, 
         throw new Error(`Arguments must be defined as an array. ${typeof args} given.`);
       }
     } else {
-      return expr.map((v) => resolve(v, root, prng, callstack));
+      let arr = expr.map((v) => resolve(v, root, prng, callstack));
+
+      return prng.pick(arr);
     }
   }
 
   if (typeof expr === 'object') {
-    return Object.keys(expr)
+    let arr = Object.keys(expr)
       .filter((key) => resolve(expr[key], root, prng, callstack))
       .map((key) => expr[key]);
+
+    return prng.pick(arr);
   }
 
   return expr;
