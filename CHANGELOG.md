@@ -38,22 +38,26 @@
 
   ```js
     import * as avatars from `@avatars/core`;
-    import avatarsStyle from `@avatars/identicon`;
+    import * as style from `@avatars/identicon`;
 
-    let options = {};
     let seed = 'custom-seed';
-    let svg = avatars.create(avatarsStyle, seed, options);
+    let options = { seed };
+
+    let svg = avatars.create(style, options);
+
+    // Or create a avatar without options and seed only
+    let svg = avatars.create(style, seed);
   ```
 
 - If no `seed` is passed, a random one is defined. Example usage:
 
   ```js
     import * as avatars from `@avatars/core`;
-    import avatarsStyle from `@avatars/identicon`;
+    import * as style from `@avatars/identicon`;
 
     let options = {};
-    let seed = undefined;
-    let svg = avatars.create(avatarsStyle, seed, options);
+
+    let svg = avatars.create(style, options);
   ```
 
 ### @avatars/avataaars

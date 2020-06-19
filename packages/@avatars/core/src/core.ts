@@ -1,9 +1,10 @@
-import * as svgson from 'svgson';
-import * as base64 from './utils/base64';
-import * as prng from './utils/prng';
-import * as svg from './utils/svg';
+import type * as svgson from 'svgson';
+import * as base64 from './base64';
+import * as prng from './prng';
+import * as svg from './svg';
 
 export interface IOptions {
+  seed?: string;
   radius?: number;
   r?: number;
   base64?: boolean;
@@ -21,13 +22,19 @@ export interface IStyle<O = {}> {
   (prng: prng.IPrng, options: Partial<O & IOptions>): string | svgson.INode;
 }
 
-export function create<O = {}>(
-  style: IStyle<O>,
-  seed: string = Math.random().toString(),
-  options: Partial<O & IOptions> = {}
-) {
+export function create<O = {}>(style: IStyle<O>, optionsOrSeed: string | Partial<O & IOptions> = {}) {
+  let seed = Math.random().toString();
+  let options: Partial<O & IOptions> = {};
+
+  if (typeof optionsOrSeed === 'string') {
+    seed = optionsOrSeed;
+  } else {
+    options = optionsOrSeed;
+  }
+
   // Apply alias options
   options = {
+    seed: seed,
     radius: options.r,
     width: options.w,
     height: options.h,
@@ -36,7 +43,7 @@ export function create<O = {}>(
     ...options,
   };
 
-  let avatar = style(prng.create(seed), options);
+  let avatar = style(prng.create(options.seed), options);
 
   if (Object.keys(options).length > 0) {
     avatar = svg.parse(avatar);
