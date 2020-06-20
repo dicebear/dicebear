@@ -11,6 +11,8 @@
     "svgson": "^4.0.0"
   },
   "scripts": {
+    "pretest": "npm run build",
+    "test": "jest --verbose",
     "build:types": "tsc --emitDeclarationOnly --outDir types",
     "build:js": "rollup -c",
     "build": "npm run build:types && npm run build:js"
@@ -39,5 +41,8 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "jest": {
+    "transform": {}
   }
 }

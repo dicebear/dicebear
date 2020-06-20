@@ -16,4 +16,4 @@ export declare function ref(ref: any): IExpression;
 export declare function prngInteger(min: any, max: any): IExpression;
 export declare function prngBool(likelihood: any): IExpression;
 export declare function prngPick(arr: any): IExpression;
-export declare function resolve(expr: any, root: Record<string, any>, prng: prng.IPrng, callstack: string[]): any;
+export declare function resolve(expr: any, root: Record<string, any>, prng: prng.IPrng, callstack: string[], nesting?: number): any;

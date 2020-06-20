@@ -8,6 +8,7 @@
     "@babel/preset-env": "^7.10.3",
     "@babel/preset-typescript": "^7.10.1",
     "@prettier/plugin-xml": "^0.7.2",
+    "@types/jest": "^26.0.0",
     "@types/node": "^10.11.6",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",

@@ -109,13 +109,19 @@ export function ref(ref: any): IExpression {
   return ['$ref', [ref]];
 }
 
-function resolveRef<T = any>(args: any[], root: Record<string, any>, prng: prng.IPrng, callstack: string[]): T {
+function resolveRef<T = any>(
+  args: any[],
+  root: Record<string, any>,
+  prng: prng.IPrng,
+  callstack: string[],
+  nesting: number
+): T {
   if (typeof args[0] === 'string') {
     if (callstack.includes(args[0])) {
       throw new Error(`Recursion Error: ${callstack.join(' → ')}`);
     }
 
-    return (root[args[0]] = resolve(root[args[0]], root, prng, [...callstack, args[0]]));
+    return (root[args[0]] = resolve(root[args[0]], root, prng, [...callstack, args[0]], nesting + 1));
   }
 
   throw new Error('Invalid arguments for $ref.');
@@ -157,14 +163,14 @@ function resolvePrngPick<T = any>(args: Array<T | IExpression<T>>, prng: prng.IP
   throw new Error('Invalid arguments for $prng.bool.');
 }
 
-export function resolve(expr: any, root: Record<string, any>, prng: prng.IPrng, callstack: string[]): any {
+export function resolve(expr: any, root: Record<string, any>, prng: prng.IPrng, callstack: string[], nesting = 0): any {
   if (Array.isArray(expr)) {
     if (typeof expr[0] === 'string' && expr[0][0] === '$') {
       let name = expr[0];
       let args = expr[1];
 
       if (Array.isArray(args)) {
-        args = args.map((v) => resolve(v, root, prng, callstack));
+        args = args.map((v) => resolve(v, root, prng, callstack, nesting + 1));
 
         switch (name.toLowerCase()) {
           case '$includes':
@@ -195,7 +201,7 @@ export function resolve(expr: any, root: Record<string, any>, prng: prng.IPrng, 
             return resolveLte(args);
 
           case '$ref':
-            return resolveRef(args, root, prng, callstack);
+            return resolveRef(args, root, prng, callstack, nesting);
 
           case '$prng.integer':
             return resolvePrngInteger(args, prng);
@@ -212,14 +218,14 @@ export function resolve(expr: any, root: Record<string, any>, prng: prng.IPrng, 
       } else {
         throw new Error(`Arguments must be defined as an array. ${typeof args} given.`);
       }
-    } else {
-      let arr = expr.map((v) => resolve(v, root, prng, callstack));
+    } else if (nesting === 0) {
+      let arr = expr.map((v) => resolve(v, root, prng, callstack, nesting + 1));
 
       return prng.pick(arr);
     }
   }
 
-  if (typeof expr === 'object') {
+  if (typeof expr === 'object' && nesting === 0) {
     let arr = Object.keys(expr)
       .filter((key) => resolve(expr[key], root, prng, callstack))
       .map((key) => expr[key]);
