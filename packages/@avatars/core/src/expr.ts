@@ -226,9 +226,7 @@ export function resolve(expr: any, root: Record<string, any>, prng: prng.IPrng, 
   }
 
   if (typeof expr === 'object' && nesting === 0) {
-    let arr = Object.keys(expr)
-      .filter((key) => resolve(expr[key], root, prng, callstack))
-      .map((key) => expr[key]);
+    let arr = Object.keys(expr).filter((key) => resolve(expr[key], root, prng, callstack, nesting + 1));
 
     return prng.pick(arr);
   }
