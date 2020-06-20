@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.2.1] - 2020-06-20
+
+### Changed
+
+- Renamed default branch to `v4`.
+
 ## [4.2.0] - 2020-05-26
 
 ### Changed
