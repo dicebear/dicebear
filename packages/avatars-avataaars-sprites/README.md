@@ -1,4 +1,4 @@
-![DiceBear Avatars - Avataaars Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-avataaars-sprites/banner.svg?sanitize=true)
+![DiceBear Avatars - Avataaars Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/v4/packages/avatars-avataaars-sprites/banner.svg?sanitize=true)
 
 ![license](https://img.shields.io/npm/l/@dicebear/avatars-avataaars-sprites.svg?style=flat-square)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-avataaars-sprites)
@@ -31,8 +31,8 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                                                               | url                                                                                                          |
-| ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| preview                                                                                                                                | url                                                                                                           |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | <img src="https://avatars.dicebear.com/api/avataaars/example.svg" width="60" />                                                        | https://avatars.dicebear.com/api/avataaars/example.svg                                                        |
 | <img src="https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair" width="60" />                               | https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair                               |
 | <img src="https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93" width="60" /> | https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93 |

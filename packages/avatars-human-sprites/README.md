@@ -1,4 +1,4 @@
-![DiceBear Avatars - Human Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-human-sprites/banner.svg?sanitize=true)
+![DiceBear Avatars - Human Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/v4/packages/avatars-human-sprites/banner.svg?sanitize=true)
 
 ![license](https://img.shields.io/npm/l/@dicebear/avatars-human-sprites.svg?style=flat-square)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-human-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-human-sprites)
@@ -30,8 +30,8 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                          | url                                                                     |
-| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| preview                                                                                           | url                                                                      |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | <img src="https://avatars.dicebear.com/api/human/example.svg" width="60" />                       | https://avatars.dicebear.com/api/human/example.svg                       |
 | <img src="https://avatars.dicebear.com/api/human/example.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/api/human/example.svg?options[mood][]=happy |
 | <img src="https://avatars.dicebear.com/api/human/example.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/api/human/example.svg?options[mood][]=sad   |

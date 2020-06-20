@@ -1,4 +1,4 @@
-![DiceBear Avatars - Initials Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-initials-sprites/banner.svg?sanitize=true)
+![DiceBear Avatars - Initials Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/v4/packages/avatars-initials-sprites/banner.svg?sanitize=true)
 
 ![license](https://img.shields.io/npm/l/@dicebear/avatars-initials-sprites.svg?style=flat-square)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-initials-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-initials-sprites)
@@ -28,8 +28,8 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                                            | url                                                                                       |
-| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| preview                                                                                                             | url                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg" width="60" />                                   | https://avatars.dicebear.com/api/initials/John%20Doe.svg                                   |
 | <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[fontSize]=80" width="60" />              | https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[fontSize]=80              |
 | <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[backgroundColorLevel]=900" width="60" /> | https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[backgroundColorLevel]=900 |

@@ -1,4 +1,4 @@
-![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars/banner.svg?sanitize=true)
+![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/v4/packages/avatars/banner.svg?sanitize=true)
 
 ![license](https://img.shields.io/npm/l/@dicebear/avatars.svg?style=flat-square)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars)

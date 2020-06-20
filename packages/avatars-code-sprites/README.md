@@ -1,4 +1,4 @@
-![DiceBear Avatars - Code Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/master/packages/avatars-code-sprites/banner.svg?sanitize=true)
+![DiceBear Avatars - Code Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/v4/packages/avatars-code-sprites/banner.svg?sanitize=true)
 
 ![license](https://img.shields.io/npm/l/@dicebear/avatars-code-sprites.svg?style=flat-square)
 [![npm](https://img.shields.io/npm/v/@dicebear/avatars-code-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-code-sprites)
@@ -28,8 +28,8 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                                                    | url                                                                                               |
-| -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| preview                                                                                                                     | url                                                                                                |
+| --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | <img src="https://avatars.dicebear.com/api/code/example.svg" width="60" />                                                  | https://avatars.dicebear.com/api/code/example.svg                                                  |
 | <img src="https://avatars.dicebear.com/api/code/example.svg?options[padding]=1&options[background]=%23f0f0f0" width="60" /> | https://avatars.dicebear.com/api/code/example.svg?options[padding]=1&options[background]=%23f0f0f0 |
 

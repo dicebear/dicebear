@@ -1,4 +1,4 @@
-![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/master/banner.svg?sanitize=true)
+![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/v4/banner.svg?sanitize=true)
 
 Avatars is an avatar placeholder library for designers and developers. You can choose between simple identicons and lovely designed characters.
 And best of all: We provide a simple and free HTTP API that you can use right away!
