@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.2.2] - 2020-07-21
+
+### Fixed
+
+- Type for `topChance` in `avatars-avataaars-sprites`
+
 ## [4.2.1] - 2020-06-20
 
 ### Changed
