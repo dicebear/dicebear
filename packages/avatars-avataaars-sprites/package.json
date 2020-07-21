@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-avataaars-sprites",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "description": "avataaars sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
