@@ -3,7 +3,7 @@ type Options = {
   mode?: 'include' | 'exclude';
   style?: 'transparent' | 'circle';
   top?: 'longHair' | 'shortHair' | 'eyepatch' | 'hat' | 'hijab' | 'turban';
-  topChance?: 100;
+  topChance?: number;
   hatColor?: 'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white';
   hairColor?: 'auburn' | 'black' | 'blonde' | 'brown' | 'pastel' | 'platinum' | 'red' | 'gray';
   accessories?: 'kurt' | 'prescription01' | 'prescription02' | 'round' | 'sunglasses' | 'wayfarers';
