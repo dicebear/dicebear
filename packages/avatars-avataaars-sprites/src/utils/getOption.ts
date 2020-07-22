@@ -1,9 +1,9 @@
 import Options from '../options';
 
-export default function(key: keyof Options, value: string, options: Options) {
+export default function (key: keyof Options, value: string, options: Options) {
   let mode = options.mode || 'include';
 
-  let optionValue = options[key];
+  let optionValue: any = options[key];
 
   if (Array.isArray(optionValue)) {
     switch (mode) {
