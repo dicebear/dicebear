@@ -1,0 +1,6 @@
+62 error Error: Command failed: git tag v4.2.4 -m v4.2.4
+62 error fatal: Tag 'v4.2.4' existiert bereits
+62 error
+62 error     at makeError (/Users/fkoerner/Development/dicebear/avatars/node_modules/execa/index.js:174:9)
+62 error     at /Users/fkoerner/Development/dicebear/avatars/node_modules/execa/index.js:278:16
+62 error     at processTicksAndRejections (internal/process/task_queues.js:97:5)
