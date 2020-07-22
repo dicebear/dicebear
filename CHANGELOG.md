@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.2.4] - 2020-07-22
+
+### Fixed
+
+- Types for array options in `avatars-avataaars-sprites`
+
 ## [4.2.2] - 2020-07-21
 
 ### Fixed

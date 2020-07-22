@@ -2,18 +2,18 @@ type Options = {
   background?: string;
   mode?: 'include' | 'exclude';
   style?: 'transparent' | 'circle';
-  top?: 'longHair' | 'shortHair' | 'eyepatch' | 'hat' | 'hijab' | 'turban';
+  top?: Array<'longHair' | 'shortHair' | 'eyepatch' | 'hat' | 'hijab' | 'turban'>;
   topChance?: number;
-  hatColor?: 'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white';
-  hairColor?: 'auburn' | 'black' | 'blonde' | 'brown' | 'pastel' | 'platinum' | 'red' | 'gray';
-  accessories?: 'kurt' | 'prescription01' | 'prescription02' | 'round' | 'sunglasses' | 'wayfarers';
+  hatColor?: Array<'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white'>;
+  hairColor?: Array<'auburn' | 'black' | 'blonde' | 'brown' | 'pastel' | 'platinum' | 'red' | 'gray'>;
+  accessories?: Array<'kurt' | 'prescription01' | 'prescription02' | 'round' | 'sunglasses' | 'wayfarers'>;
   accessoriesChance?: number;
-  facialHair?: 'medium' | 'light' | 'majestic' | 'fancy' | 'magnum';
+  facialHair?: Array<'medium' | 'light' | 'majestic' | 'fancy' | 'magnum'>;
   facialHairChance?: number;
-  facialHairColor?: 'auburn' | 'black' | 'blonde' | 'brown' | 'platinum' | 'red';
-  clothes?: 'blazer' | 'sweater' | 'shirt' | 'hoodie' | 'overall';
-  clothesColor?: 'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white';
-  eyes?:
+  facialHairColor?: Array<'auburn' | 'black' | 'blonde' | 'brown' | 'platinum' | 'red'>;
+  clothes?: Array<'blazer' | 'sweater' | 'shirt' | 'hoodie' | 'overall'>;
+  clothesColor?: Array<'black' | 'blue' | 'gray' | 'heather' | 'pastel' | 'pink' | 'red' | 'white'>;
+  eyes?: Array<
     | 'close'
     | 'cry'
     | 'default'
@@ -25,9 +25,10 @@ type Options = {
     | 'squint'
     | 'surprised'
     | 'wink'
-    | 'winkWacky';
-  eyebrow?: 'angry' | 'default' | 'flat' | 'raised' | 'sad' | 'unibrow' | 'up';
-  mouth?:
+    | 'winkWacky'
+  >;
+  eyebrow?: Array<'angry' | 'default' | 'flat' | 'raised' | 'sad' | 'unibrow' | 'up'>;
+  mouth?: Array<
     | 'concerned'
     | 'default'
     | 'disbelief'
@@ -39,8 +40,9 @@ type Options = {
     | 'smile'
     | 'tongue'
     | 'twinkle'
-    | 'vomit';
-  skin?: 'tanned' | 'yellow' | 'pale' | 'light' | 'brown' | 'darkBrown' | 'black';
+    | 'vomit'
+  >;
+  skin?: Array<'tanned' | 'yellow' | 'pale' | 'light' | 'brown' | 'darkBrown' | 'black'>;
 };
 
 export default Options;
