@@ -17,7 +17,6 @@ https://avatars.dicebear.com
     <img src="https://avatars.dicebear.com/api/avataaars/John%20Doe.svg" width="60" />
     <img src="https://avatars.dicebear.com/api/jdenticon/John%20Doe.svg" width="60" />
     <img src="https://avatars.dicebear.com/api/gridy/John%20Doe.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/code/John%20Doe.svg" width="60" />
 </p>
 
 ## Usage
@@ -28,7 +27,7 @@ Our free HTTP-API is the easiest way to use Avatars. Just use the following URL 
 
     https://avatars.dicebear.com/api/:sprites/:seed.svg
 
-Replace `:sprites` with `male`, `female`, `human`, `identicon`, `initials`, `bottts`, `avataaars`, `jdenticon`, `gridy` or `code`. The value of `:seed` can be anything you
+Replace `:sprites` with `male`, `female`, `human`, `identicon`, `initials`, `bottts`, `avataaars`, `jdenticon`, `gridy`. The value of `:seed` can be anything you
 like - but **don't** use any sensitive or personal data here!
 
 The used sprite collection may offer additional options, which can be set using the GET parameter named `options`.
