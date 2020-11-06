@@ -2,7 +2,11 @@
 
 ## [4.3.0] - 2020-11-06
 
-## Removed
+### Fixed
+
+- Text position was wrong in `@dicebear/avatars-initials-sprites` when a font size was specified.
+
+### Removed
 
 - Code sprites are no longer supported. Too CPU intensive for the HTTP API and does not fit into the future vision of the next major release. Use [qr-image](https://www.npmjs.com/package/qr-image) directly instead.
 
