@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.3.0] - 2020-11-06
+
+## Removed
+
+- Code sprites are no longer supported. Too CPU intensive for the HTTP API and does not fit into the future vision of the next major release. Use [qr-image](https://www.npmjs.com/package/qr-image) directly instead.
+
 ## [4.2.4] - 2020-07-22
 
 ### Fixed
