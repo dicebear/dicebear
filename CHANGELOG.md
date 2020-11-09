@@ -4,7 +4,7 @@
 
 ### Changed
 
-- `@dicebear/avatars-avataaars-sprites` Completely rewritten to remove the `react', `react-dom' and `avataaars' dependencies. Solves [#48](https://github.com/DiceBear/avatars/issues/48).
+- `@dicebear/avatars-avataaars-sprites` Completely rewritten to remove the `react`, `react-dom` and `avataaars` dependencies. Solves [#48](https://github.com/DiceBear/avatars/issues/48).
 
 ## [4.3.0] - 2020-11-06
 
