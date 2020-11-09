@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.4.0] - 2020-11-10
+
+### Changed
+
+- `@dicebear/avatars-avataaars-sprites` Komplett neu geschrieben und damit die `react`, `react-dom` und `avataaars` Abhängigkeiten entfern. Löst [#48](https://github.com/DiceBear/avatars/issues/48).
+
 ## [4.3.0] - 2020-11-06
 
 ### Fixed

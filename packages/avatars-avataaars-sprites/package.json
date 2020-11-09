@@ -27,11 +27,7 @@
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars/tree/v4/packages/avatars-avataaars-sprites#readme",
-  "dependencies": {
-    "avataaars": "^1.2.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@dicebear/avatars": "^4.0.0"
   },
