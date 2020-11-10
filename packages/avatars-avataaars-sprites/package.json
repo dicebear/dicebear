@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-avataaars-sprites",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "avataaars sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -27,7 +27,6 @@
     "url": "https://github.com/DiceBear/avatars/issues"
   },
   "homepage": "https://github.com/DiceBear/avatars/tree/v4/packages/avatars-avataaars-sprites#readme",
-  "dependencies": {},
   "peerDependencies": {
     "@dicebear/avatars": "^4.0.0"
   },

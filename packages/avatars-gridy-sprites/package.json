@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-gridy-sprites",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "Gridy Avatars sprite collection for DiceBear Avatars",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
