@@ -5,7 +5,7 @@
 ### Added
 
 - `@dicebear/avatars-avataaars-sprites` New option values for `facialHair`: `pastel` and `gray`
-- `@dicebear/avatars-avataaars-sprites` New option value for `eyebrows`: `frown`
+- `@dicebear/avatars-avataaars-sprites` New option value for `eyebrow`: `frown`
 - `@dicebear/avatars-avataaars-sprites` New option `accessoriesColor`
 
 ### Changed
