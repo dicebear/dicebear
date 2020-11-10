@@ -1,40 +1,47 @@
-import Random from '@dicebear/avatars/lib/random';
-import Options from '../options';
+import type Random from '@dicebear/avatars/lib/random';
+import type Options from '../options';
 import getOption from './getOption';
+import { palette } from '../colors';
 
-export default function(options: Options, random: Random) {
+export default function (options: Options, random: Random) {
   let clotheColor = [];
 
   if (getOption('clothesColor', 'black', options)) {
-    clotheColor.push('black');
+    clotheColor.push(palette.black);
   }
 
   if (getOption('clothesColor', 'blue', options)) {
-    clotheColor.push('Blue01', 'Blue02', 'Blue03');
+    clotheColor.push(palette.blue01, palette.blue02, palette.blue03);
   }
 
   if (getOption('clothesColor', 'gray', options)) {
-    clotheColor.push('Gray01', 'Gray02');
+    clotheColor.push(palette.gray01, palette.gray02);
   }
 
   if (getOption('clothesColor', 'heather', options)) {
-    clotheColor.push('Heather');
+    clotheColor.push(palette.heather);
   }
 
   if (getOption('clothesColor', 'pastel', options)) {
-    clotheColor.push('PastelBlue', 'PastelGreen', 'PastelOrange', 'PastelRed', 'PastelYellow');
+    clotheColor.push(
+      palette.pastelBlue,
+      palette.pastelGreen,
+      palette.pastelOrange,
+      palette.pastelRed,
+      palette.pastelYellow
+    );
   }
 
   if (getOption('clothesColor', 'pink', options)) {
-    clotheColor.push('Pink');
+    clotheColor.push(palette.pink);
   }
 
   if (getOption('clothesColor', 'red', options)) {
-    clotheColor.push('Red');
+    clotheColor.push(palette.red);
   }
 
   if (getOption('clothesColor', 'white', options)) {
-    clotheColor.push('White');
+    clotheColor.push(palette.white);
   }
 
   return random.pickone(clotheColor);

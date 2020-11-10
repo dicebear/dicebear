@@ -1,4 +1,5 @@
 export { default as getAccessoriesType } from './getAccessoriesType';
+export { default as getAccessoriesColor } from './getAccessoriesColor';
 export { default as getClotheColor } from './getClotheColor';
 export { default as getClotheType } from './getClotheType';
 export { default as getEyebrowType } from './getEyebrowType';
@@ -10,4 +11,6 @@ export { default as getHatColor } from './getHatColor';
 export { default as getMouthType } from './getMouthType';
 export { default as getOption } from './getOption';
 export { default as getSkinColor } from './getSkinColor';
+export { default as getSkinType } from './getSkinType';
 export { default as getTopType } from './getTopType';
+export { default as getNoseType } from './getNoseType';

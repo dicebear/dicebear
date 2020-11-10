@@ -1,40 +1,47 @@
-import Random from '@dicebear/avatars/lib/random';
-import Options from '../options';
+import type Random from '@dicebear/avatars/lib/random';
+import type Options from '../options';
 import getOption from './getOption';
+import { palette } from '../colors';
 
-export default function(options: Options, random: Random) {
+export default function (options: Options, random: Random) {
   let hatColor = [];
 
   if (getOption('hatColor', 'black', options)) {
-    hatColor.push('black');
+    hatColor.push(palette.black);
   }
 
   if (getOption('hatColor', 'blue', options)) {
-    hatColor.push('Blue01', 'Blue02', 'Blue03');
+    hatColor.push(palette.blue01, palette.blue02, palette.blue03);
   }
 
   if (getOption('hatColor', 'gray', options)) {
-    hatColor.push('Gray01', 'Gray02');
+    hatColor.push(palette.gray01, palette.gray02);
   }
 
   if (getOption('hatColor', 'heather', options)) {
-    hatColor.push('Heather');
+    hatColor.push(palette.heather);
   }
 
   if (getOption('hatColor', 'pastel', options)) {
-    hatColor.push('PastelBlue', 'PastelGreen', 'PastelOrange', 'PastelRed', 'PastelYellow');
+    hatColor.push(
+      palette.pastelBlue,
+      palette.pastelGreen,
+      palette.pastelOrange,
+      palette.pastelRed,
+      palette.pastelYellow
+    );
   }
 
   if (getOption('hatColor', 'pink', options)) {
-    hatColor.push('Pink');
+    hatColor.push(palette.pink);
   }
 
   if (getOption('hatColor', 'red', options)) {
-    hatColor.push('Red');
+    hatColor.push(palette.red);
   }
 
   if (getOption('hatColor', 'white', options)) {
-    hatColor.push('White');
+    hatColor.push(palette.white);
   }
 
   return random.pickone(hatColor);

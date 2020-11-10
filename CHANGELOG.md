@@ -2,6 +2,12 @@
 
 ## [4.4.0] - 2020-11-10
 
+### Added
+
+- `@dicebear/avatars-avataaars-sprites` New option values for `facialHair`: `pastel` and `gray`
+- `@dicebear/avatars-avataaars-sprites` New option value for `eyebrows`: `frown`
+- `@dicebear/avatars-avataaars-sprites` New option `accessoriesColor`
+
 ### Changed
 
 - `@dicebear/avatars-avataaars-sprites` Completely rewritten to remove the `react`, `react-dom` and `avataaars` dependencies. Solves [#48](https://github.com/DiceBear/avatars/issues/48).

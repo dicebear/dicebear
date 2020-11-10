@@ -1,32 +1,41 @@
-import Random from '@dicebear/avatars/lib/random';
-import Options from '../options';
+import type Random from '@dicebear/avatars/lib/random';
+import type Options from '../options';
 import getOption from './getOption';
+import { hair } from '../colors';
 
-export default function(options: Options, random: Random) {
+export default function (options: Options, random: Random) {
   let facialHairColor = [];
 
   if (getOption('facialHairColor', 'auburn', options)) {
-    facialHairColor.push('Auburn');
+    facialHairColor.push(hair.auburn);
   }
 
   if (getOption('facialHairColor', 'black', options)) {
-    facialHairColor.push('Black');
+    facialHairColor.push(hair.black);
   }
 
   if (getOption('facialHairColor', 'blonde', options)) {
-    facialHairColor.push('Blonde', 'BlondeGolden');
+    facialHairColor.push(hair.blonde, hair.blondeGolden);
   }
 
   if (getOption('facialHairColor', 'brown', options)) {
-    facialHairColor.push('Brown', 'BrownDark');
+    facialHairColor.push(hair.brown, hair.brownDark);
+  }
+
+  if (getOption('facialHairColor', 'pastel', options)) {
+    facialHairColor.push(hair.pastelPink);
   }
 
   if (getOption('facialHairColor', 'platinum', options)) {
-    facialHairColor.push('Platinum');
+    facialHairColor.push(hair.platinum);
   }
 
   if (getOption('facialHairColor', 'red', options)) {
-    facialHairColor.push('Red');
+    facialHairColor.push(hair.red);
+  }
+
+  if (getOption('facialHairColor', 'gray', options)) {
+    facialHairColor.push(hair.silverGray);
   }
 
   return random.pickone(facialHairColor);

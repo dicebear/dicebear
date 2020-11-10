@@ -1,56 +1,57 @@
-import Random from '@dicebear/avatars/lib/random';
-import Options from '../options';
+import type Random from '@dicebear/avatars/lib/random';
+import type Options from '../options';
 import getOption from './getOption';
+import { eyes } from '../paths';
 
-export default function(options: Options, random: Random) {
+export default function (options: Options, random: Random) {
   let eyeType = [];
 
   if (getOption('eyes', 'close', options)) {
-    eyeType.push('Close');
+    eyeType.push(eyes.closed);
   }
 
   if (getOption('eyes', 'cry', options)) {
-    eyeType.push('Cry');
+    eyeType.push(eyes.cry);
   }
 
   if (getOption('eyes', 'default', options)) {
-    eyeType.push('Default');
+    eyeType.push(eyes.default);
   }
 
   if (getOption('eyes', 'dizzy', options)) {
-    eyeType.push('Dizzy');
+    eyeType.push(eyes.xDizzy);
   }
 
   if (getOption('eyes', 'roll', options)) {
-    eyeType.push('EyeRoll');
+    eyeType.push(eyes.eyeRoll);
   }
 
   if (getOption('eyes', 'happy', options)) {
-    eyeType.push('Happy');
+    eyeType.push(eyes.happy);
   }
 
   if (getOption('eyes', 'hearts', options)) {
-    eyeType.push('Hearts');
+    eyeType.push(eyes.hearts);
   }
 
   if (getOption('eyes', 'side', options)) {
-    eyeType.push('Side');
+    eyeType.push(eyes.side);
   }
 
   if (getOption('eyes', 'squint', options)) {
-    eyeType.push('Squint');
+    eyeType.push(eyes.squint);
   }
 
   if (getOption('eyes', 'surprised', options)) {
-    eyeType.push('Surprised');
+    eyeType.push(eyes.surprised);
   }
 
   if (getOption('eyes', 'wink', options)) {
-    eyeType.push('Wink');
+    eyeType.push(eyes.wink);
   }
 
   if (getOption('eyes', 'winkWacky', options)) {
-    eyeType.push('WinkWacky');
+    eyeType.push(eyes.winkWacky);
   }
 
   return random.pickone(eyeType);

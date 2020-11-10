@@ -1,4 +1,4 @@
-import Options from '../options';
+import type Options from '../options';
 
 export default function (key: keyof Options, value: string, options: Options) {
   let mode = options.mode || 'include';

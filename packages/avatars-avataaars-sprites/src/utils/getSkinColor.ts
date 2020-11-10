@@ -1,36 +1,37 @@
-import Random from '@dicebear/avatars/lib/random';
-import Options from '../options';
+import type Random from '@dicebear/avatars/lib/random';
+import type Options from '../options';
 import getOption from './getOption';
+import { skin } from '../colors';
 
-export default function(options: Options, random: Random) {
+export default function (options: Options, random: Random) {
   let skinColor = [];
 
   if (getOption('skin', 'tanned', options)) {
-    skinColor.push('Tanned');
+    skinColor.push(skin.tanned);
   }
 
   if (getOption('skin', 'yellow', options)) {
-    skinColor.push('Yellow');
+    skinColor.push(skin.yellow);
   }
 
   if (getOption('skin', 'pale', options)) {
-    skinColor.push('Pale');
+    skinColor.push(skin.pale);
   }
 
   if (getOption('skin', 'light', options)) {
-    skinColor.push('Light');
+    skinColor.push(skin.light);
   }
 
   if (getOption('skin', 'brown', options)) {
-    skinColor.push('Brown');
+    skinColor.push(skin.brown);
   }
 
   if (getOption('skin', 'darkBrown', options)) {
-    skinColor.push('DarkBrown');
+    skinColor.push(skin.darkBrown);
   }
 
   if (getOption('skin', 'black', options)) {
-    skinColor.push('Black');
+    skinColor.push(skin.black);
   }
 
   return random.pickone(skinColor);
