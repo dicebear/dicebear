@@ -2,6 +2,7 @@ export { default as getAccessoriesType } from './getAccessoriesType';
 export { default as getAccessoriesColor } from './getAccessoriesColor';
 export { default as getClotheColor } from './getClotheColor';
 export { default as getClotheType } from './getClotheType';
+export { default as getClotheGraphicType } from './getClotheGraphicType';
 export { default as getEyebrowType } from './getEyebrowType';
 export { default as getEyeType } from './getEyeType';
 export { default as getFacialHairColor } from './getFacialHairColor';

@@ -7,31 +7,38 @@ export default function (random: Random, options: Options = {}) {
   let noseType = utils.getNoseType();
   let skinType = utils.getSkinType();
   let skinColor = utils.getSkinColor(options, random);
-  let topType = utils.getTopType(options, random);
+  let [topType, topTypeIsHat, topTypeZIndex] = utils.getTopType(options, random);
   let facialHairType = utils.getFacialHairType(options, random);
   let facialHairColor = utils.getFacialHairColor(options, random);
   let clotheType = utils.getClotheType(options, random);
+  let clotheGraphicType = utils.getClotheGraphicType(random);
   let clotheColor = utils.getClotheColor(options, random);
   let eyeType = utils.getEyeType(options, random);
   let eyebrowType = utils.getEyebrowType(options, random);
   let mouthType = utils.getMouthType(options, random);
   let accessoriesType = utils.getAccessoriesType(options, random);
   let accessoriesColor = utils.getAccessoriesColor(options, random);
+  let hatColor = utils.getHatColor(options, random);
+  let hairColor = utils.getHairColor(options, random);
 
   const group = (content: string, x: number, y: number) => {
-    return `<g transform="translate(${x}, ${y})">${content}</g>`;
+    return content.length > 0 ? `<g transform="translate(${x}, ${y})">${content}</g>` : '';
   };
+
+  const top = group(topType(topTypeIsHat ? hatColor : hairColor), 7, 0);
 
   let content = `
     ${group(skinType(skinColor), 40, 36)}
-    ${group(clotheType(clotheColor), 8, 170)}
+    ${group(clotheType(clotheColor, clotheGraphicType()), 8, 170)}
     ${group(mouthType(), 86, 134)}
     ${group(noseType(), 112, 122)}
     ${group(eyeType(), 84, 90)}
     ${group(eyebrowType(), 84, 82)}
-    ${group(topType(), 7, 0)}
-    ${group(facialHairType(facialHairColor), 49, 72)}
-    ${group(accessoriesType(accessoriesColor), 62, 85)}
+    ${0 === topTypeZIndex ? top : ''}
+    ${facialHairType ? group(facialHairType(facialHairColor), 56, 72) : ''}
+    ${1 === topTypeZIndex ? top : ''}
+    ${accessoriesType ? group(accessoriesType(accessoriesColor), 69, 85) : ''}
+    ${2 === topTypeZIndex ? top : ''}
   `;
 
   if (options.style === 'circle') {
@@ -52,7 +59,7 @@ export default function (random: Random, options: Options = {}) {
   options.background = undefined;
 
   return `
-    <svg width="280" height="280" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
       ${content}
     </svg>
   `;
