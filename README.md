@@ -1,37 +1,23 @@
-![DiceBear Avatars](https://raw.githubusercontent.com/DiceBear/avatars/v4/banner.svg?sanitize=true)
+<br />
+<br />
 
-Avatars is an avatar placeholder library for designers and developers. You can choose between simple identicons and lovely designed characters.
-And best of all: We provide a simple and free HTTP API that you can use right away!
+<h1 align="center"><img src="https://avatars.dicebear.com/api/male/seed.svg" width="124" /> <br />DiceBear Avatars</h1>
+<p align="center"><strong>Avatars is an avatar placeholder library for designers and developers.</strong></p>
 
-https://avatars.dicebear.com
+<p align="center">
+    <a href="https://github.com/dicebear/avatars/blob/master/LICENSE" target="_blank">
+        <img src="https://img.shields.io/github/license/dicebear/avatars.svg?style=flat-square" alt="License">
+    </a>
+    <a href="https://www.npmjs.com/package/@dicebear/avatars" target="_blank">
+        <img src="https://img.shields.io/npm/v/@dicebear/avatars.svg?style=flat-square" alt="Latest Version">
+    </a>
+    <a href="https://github.com/dicebear/avatars/stargazers" target="_blank">
+        <img src="https://img.shields.io/github/stars/dicebear/avatars?style=flat-square" alt="Stargazers">
+    </a>
+</p>
 
-## Packages
-
-The Avatars repo is managed as a monorepo that is composed of many npm packages.
-
-### Core Packages
-
-| Package                                | Version                                                                                                                         |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| [@dicebear/avatars](/packages/avatars) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars) |
-
-### Original Sprite Collections
-
-| Package                                                                     | Version                                                                                                                                                             |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [@dicebear/avatars-male-sprites](./packages/avatars-male-sprites)           | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-male-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-male-sprites)           |
-| [@dicebear/avatars-female-sprites](./packages/avatars-female-sprites)       | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-female-sprites)       |
-| [@dicebear/avatars-human-sprites](./packages/avatars-human-sprites)         | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-human-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-human-sprites)         |
-| [@dicebear/avatars-identicon-sprites](./packages/avatars-identicon-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-identicon-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites) |
-| [@dicebear/avatars-initials-sprites](./packages/avatars-initials-sprites)   | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-initials-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites)  |
-| [@dicebear/avatars-bottts-sprites](./packages/avatars-bottts-sprites)       | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-bottts-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-bottts-sprites)       |
-| [@dicebear/avatars-avataaars-sprites](./packages/avatars-avataaars-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-avataaars-sprites) |
-
-### Wrapper Sprite Collections
-
-| Package                                                                     | Version                                                                                                                                                             |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [@dicebear/avatars-gridy-sprites](./packages/avatars-gridy-sprites)         | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites)         |
-| [@dicebear/avatars-jdenticon-sprites](./packages/avatars-jdenticon-sprites) | [![npm](https://img.shields.io/npm/v/@dicebear/avatars-jdenticon-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-jdenticon-sprites) |
-
-[![Testing Powered By SauceLabs](https://saucelabs.github.io/images/opensauce/powered-by-saucelabs-badge-white.png?sanitize=true 'Testing Powered By SauceLabs')](https://saucelabs.com)
+<p align="center">
+  <a href="https://avatars.dicebear.com/">
+    Read Documentation
+  </a>
+</p>

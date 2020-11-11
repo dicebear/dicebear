@@ -1,7 +1,7 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "npmClient": "yarn",
+  "packages": ["packages/*"],
   "concurrency": 1,
-  "version": "4.4.0"
+  "version": "4.4.0",
+  "useWorkspaces": true
 }

@@ -1,73 +1,26 @@
-![DiceBear Avatars - Identicon Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/v4/packages/avatars-identicon-sprites/banner.svg?sanitize=true)
+<br />
+<br />
 
-![license](https://img.shields.io/npm/l/@dicebear/avatars-identicon-sprites.svg?style=flat-square)
-[![npm](https://img.shields.io/npm/v/@dicebear/avatars-identicon-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites)
-
-<p>
-    <img src="https://avatars.dicebear.com/api/identicon/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/identicon/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/identicon/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/identicon/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/identicon/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/identicon/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/identicon/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/identicon/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/identicon/9.svg" width="60" />
+<h1 align="center"><img src="https://avatars.dicebear.com/api/identicon/1.svg" width="124" /> <br />identicon</h1>
+<p align="center">
+  <strong>Avatar Style for <a href="https://avatars.dicebear.com/">DiceBear Avatars</a>.</strong><br />
+  Inspired by <a href="https://github.com/donpark/identicon">donpark/identicon</a>
 </p>
 
-## Usage
+<p align="center">
+    <a href="https://github.com/dicebear/avatars/blob/master/LICENSE" target="_blank">
+        <img src="https://img.shields.io/github/license/dicebear/avatars.svg?style=flat-square" alt="License">
+    </a>
+    <a href="https://www.npmjs.com/package/@dicebear/avatars-identicon-sprites" target="_blank">
+        <img src="https://img.shields.io/npm/v/@dicebear/avatars-identicon-sprites.svg?style=flat-square" alt="Latest Version">
+    </a>
+    <a href="https://github.com/dicebear/avatars/stargazers" target="_blank">
+        <img src="https://img.shields.io/github/stars/dicebear/avatars?style=flat-square" alt="Stargazers">
+    </a>
+</p>
 
-### HTTP-API (recommended)
-
-Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
-
-    https://avatars.dicebear.com/api/identicon/:seed.svg
-
-The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
-`options` can be used to pass [options](#options).
-
-#### Examples
-
-| preview                                                                                                                            | url                                                                                                       |
-| ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/api/identicon/example.svg" width="60" />                                                    | https://avatars.dicebear.com/api/identicon/example.svg                                                    |
-| <img src="https://avatars.dicebear.com/api/identicon/example.svg?options[padding]=0.4&options[background]=%23f0f0f0" width="60" /> | https://avatars.dicebear.com/api/identicon/example.svg?options[padding]=0.4&options[background]=%23f0f0f0 |
-
-### NPM
-
-Install the Avatars and this sprite collection with the following command.
-
-    npm install --save @dicebear/avatars @dicebear/avatars-identicon-sprites
-
-Now you are ready to create your first Avatar.
-
-```js
-import Avatars from '@dicebear/avatars';
-import sprites from '@dicebear/avatars-identicon-sprites';
-
-let options = {};
-let avatars = new Avatars(sprites, options);
-let svg = avatars.create('custom-seed');
-```
-
-## Options
-
-| name       | alias | type             | default                      | description                                                                                                                                                                                                  |
-| ---------- | ----- | ---------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| radius     | r     | number           | `0`                          | Avatar border radius                                                                                                                                                                                         |
-| base64     |       | bool             | `false`                      | Return avatar as base64 data uri instead of XML <br> **Not supported by the HTTP API**                                                                                                                       |
-| width      | w     | number           | `null`                       | Fixed width                                                                                                                                                                                                  |
-| height     | h     | number           | `null`                       | Fixed height                                                                                                                                                                                                 |
-| margin     | m     | number           | `0`                          | Avatar margin in percent<br> **HTTP-API limitation** Max value `25`                                                                                                                                          |
-| background | b     | string           | `null`                       | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`.                                                            |
-| userAgent  |       | string           | `window.navigator.userAgent` | User-Agent for legacy browser fallback<br> **Automatically detected by the HTTP API**                                                                                                                        |
-| colors     |       | array of strings | `null`                       | Possible values: `amber`, `blue`, `blueGrey`, `brown`, `cyan`, `deepOrange`, `deepPurple`, `green`, `grey`, `indigo`, `lightBlue`, `lightGreen`, `lime`, `orange`, `pink`, `purple`, `red`, `teal`, `yellow` |
-| colorLevel |       | number           | `600`                        | Possible values: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`                                                                                                                         |
-
-## Further information
-
-You can find the DiceBear Avatars documentation at [avatars.dicebear.com](https://avatars.dicebear.com)
-
----
-
-_Inspired by [donpark/identicon](https://github.com/donpark/identicon)_
+<p align="center">
+  <a href="https://avatars.dicebear.com/styles/identicon">
+    Read Documentation
+  </a>
+</p>

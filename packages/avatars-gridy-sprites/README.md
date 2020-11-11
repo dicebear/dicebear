@@ -1,70 +1,26 @@
-![DiceBear Avatars - Gridy Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/v4/packages/avatars-gridy-sprites/banner.svg?sanitize=true)
+<br />
+<br />
 
-![license](https://img.shields.io/npm/l/@dicebear/avatars-gridy-sprites.svg?style=flat-square)
-[![npm](https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites)
-
-Designed by [Jan Forst](https://github.com/darosh/gridy-avatars).
-
-<p>
-    <img src="https://avatars.dicebear.com/api/gridy/1.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/gridy/2.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/gridy/3.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/gridy/4.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/gridy/5.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/gridy/6.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/gridy/7.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/gridy/8.svg" width="60" />
-    <img src="https://avatars.dicebear.com/api/gridy/9.svg" width="60" />
+<h1 align="center"><img src="https://avatars.dicebear.com/api/gridy/1.svg" width="124" /> <br />gridy</h1>
+<p align="center">
+  <strong>Avatar Style for <a href="https://avatars.dicebear.com/">DiceBear Avatars</a>.</strong><br />
+  Designed by <a href="https://github.com/darosh/gridy-avatars">Jan Forst</a>.
 </p>
-## Usage
 
-### HTTP-API (recommended)
+<p align="center">
+    <a href="https://github.com/dicebear/avatars/blob/master/LICENSE" target="_blank">
+        <img src="https://img.shields.io/github/license/dicebear/avatars.svg?style=flat-square" alt="License">
+    </a>
+    <a href="https://www.npmjs.com/package/@dicebear/avatars-gridy-sprites" target="_blank">
+        <img src="https://img.shields.io/npm/v/@dicebear/avatars-gridy-sprites.svg?style=flat-square" alt="Latest Version">
+    </a>
+    <a href="https://github.com/dicebear/avatars/stargazers" target="_blank">
+        <img src="https://img.shields.io/github/stars/dicebear/avatars?style=flat-square" alt="Stargazers">
+    </a>
+</p>
 
-Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
-
-    https://avatars.dicebear.com/api/gridy/:seed.svg
-
-The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
-`options` can be used to pass [options](#options).
-
-#### Examples
-
-| preview                                                                                             | url                                                                        |
-| --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/api/gridy/custom-seed.svg" width="60" />                     | https://avatars.dicebear.com/api/gridy/custom-seed.svg                     |
-| <img src="https://avatars.dicebear.com/api/gridy/custom-seed.svg?options[colorful]=1" width="60" /> | https://avatars.dicebear.com/api/gridy/custom-seed.svg?options[colorful]=1 |
-
-### NPM
-
-Install the Avatars and this sprite collection with the following command.
-
-    npm install --save @dicebear/avatars @dicebear/avatars-gridy-sprites
-
-Now you are ready to create your first Avatar.
-
-```js
-import Avatars from '@dicebear/avatars';
-import sprites from '@dicebear/avatars-gridy-sprites';
-
-let options = {};
-let avatars = new Avatars(sprites, options);
-let svg = avatars.create('custom-seed');
-```
-
-## Options
-
-| name          | alias | type    | default                      | description                                                                                                                                       |
-| ------------- | ----- | ------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| radius        | r     | number  | `0`                          | Avatar border radius                                                                                                                              |
-| base64        |       | bool    | `false`                      | Return avatar as base64 data uri instead of XML <br> **Not supported by the HTTP API**                                                            |
-| width         | w     | number  | `null`                       | Fixed width                                                                                                                                       |
-| height        | h     | number  | `null`                       | Fixed height                                                                                                                                      |
-| margin        | m     | number  | `0`                          | Avatar margin in percent<br> **HTTP-API limitation** Max value `25`                                                                               |
-| background    | b     | string  | `null`                       | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
-| userAgent     |       | string  | `window.navigator.userAgent` | User-Agent for legacy browser fallback<br> **Automatically detected by the HTTP API**                                                             |
-| colorful      |       | boolean | `false`                      | Use different colors for eyes and mouth                                                                                                           |
-| deterministic |       | boolean | `false`                      | Force deterministic output (see [#64](https://github.com/DiceBear/avatars/issues/64))                                                             |
-
-## Further information
-
-You can find the DiceBear Avatars documentation at [avatars.dicebear.com](https://avatars.dicebear.com)
+<p align="center">
+  <a href="https://avatars.dicebear.com/styles/gridy">
+    Read Documentation
+  </a>
+</p>
