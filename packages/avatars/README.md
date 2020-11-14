@@ -1,11 +1,6 @@
-<br />
-<br />
-
 <h1 align="center"><img src="https://avatars.dicebear.com/api/male/seed.svg" width="124" /> <br />DiceBear Avatars</h1>
 <p align="center">
-  <strong>Avatars is an avatar placeholder library for designers and developers.</strong><br />
-  You can choose between simple identicons and lovely designed characters.<br />
-  And best of all: We provide a simple and free HTTP API that you can use right away!
+  <strong>Avatars is an avatar placeholder library for designers and developers.</strong><
 </p>
 
 <p align="center">

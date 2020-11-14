@@ -1,6 +1,3 @@
-<br />
-<br />
-
 <h1 align="center"><img src="https://avatars.dicebear.com/api/bottts/1.svg" width="124" /> <br />bottts</h1>
 <p align="center">
   <strong>Avatar Style for <a href="https://avatars.dicebear.com/">DiceBear Avatars</a>.</strong><br />

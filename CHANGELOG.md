@@ -1,10 +1,19 @@
 # Changelog
 
+## [4.5.0] - t.b.a.
+
+### Added
+
+- HTTP-API serverless functions (Apache OpenWhisk)
+- JSON schema for options of core library and avatar styles.
+- New documentation page (based on docusaurus 2)
+- CLI for common tasks during avatar style development.
+
 ## [4.4.0] - 2020-11-11
 
 ### Added
 
-- `@dicebear/avatars-avataaars-sprites` New option values for `facialHair`: `pastel` and `gray`
+- `@dicebear/avatars-avataaars-sprites` New option values for `facialHairColor`: `pastel` and `gray`
 - `@dicebear/avatars-avataaars-sprites` New option value for `eyebrow`: `frown`
 - `@dicebear/avatars-avataaars-sprites` New option `accessoriesColor`
 

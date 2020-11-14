@@ -17,20 +17,20 @@ export type Options = {
   userAgent?: string;
 };
 
-export type SpriteCollection<O = {}> = (random: Random, options?: O) => string | svgson.schema;
+export type AvatarStyle<O = {}> = (random: Random, options?: O) => string | svgson.schema;
 
 export default class Avatars<O> {
   public static random = Random;
   public static color = Color;
 
-  protected spriteCollection: SpriteCollection<O>;
+  protected avatarStyle: AvatarStyle<O>;
   protected defaultOptions?: O & Options;
 
   /**
-   * @param spriteCollection
+   * @param avatarStyle
    */
-  constructor(spriteCollection: SpriteCollection<O>, defaultOptions?: O & Options) {
-    this.spriteCollection = spriteCollection;
+  constructor(avatarStyle: AvatarStyle<O>, defaultOptions?: O & Options) {
+    this.avatarStyle = avatarStyle;
     this.defaultOptions = {
       userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent,
       ...defaultOptions,
@@ -55,7 +55,7 @@ export default class Avatars<O> {
       ...options,
     };
 
-    let svg = this.spriteCollection(new Random(seed), options);
+    let svg = this.avatarStyle(new Random(seed), options);
 
     if (options) {
       svg = Parser.parse(svg);
@@ -119,7 +119,7 @@ export default class Avatars<O> {
           ],
           attributes: {
             // prettier-ignore
-            transform: `translate(${viewBoxWidth * options.margin / 100}, ${viewBoxHeight * options.margin / 100})`
+            transform: `translate(${viewBoxWidth * options.margin / 100}, ${viewBoxHeight * options.margin / 100})`,
           },
         });
       }
