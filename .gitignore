@@ -1,4 +1,9 @@
-lib
-dist
 node_modules
-lerna-debug.log
+
+# Misc
+.DS_Store
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
