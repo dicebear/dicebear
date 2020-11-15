@@ -1,7 +1,7 @@
 import type { INode } from 'svgson';
 import type { Prng } from './types';
 import { prng } from './utils';
-import Parser from './Parser';
+import Parser from './parser';
 import { utils } from '.';
 import { version } from '../package.json';
 
@@ -51,7 +51,7 @@ export default class Avatars<O> {
 
     this.avatarStyle = avatarStyle;
     this.defaultOptions = {
-      userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent,
+      userAgent: window?.navigator?.userAgent,
       ...defaultOptions,
     };
   }

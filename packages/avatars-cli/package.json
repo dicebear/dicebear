@@ -2,19 +2,39 @@
   "name": "@dicebear/avatars-cli",
   "version": "4.4.0",
   "description": "CLI for DiceBear Avatars.",
-  "bin": {
-    "avatars": "dist/cli.js"
+  "keywords": [
+    "avatar",
+    "identicons"
+  ],
+  "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/avatars-cli#readme",
+  "bugs": {
+    "url": "https://github.com/DiceBear/avatars/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiceBear/avatars.git"
+  },
+  "license": "MIT",
+  "author": "Florian Körner <contact@dicebear.com>",
+  "main": "dist/index.js",
+  "module": "dist/index.m.js",
   "source": [
     "src/index.ts",
     "src/cli.ts"
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.m.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "avatars": "dist/cli.js"
+  },
+  "files": [
+    "cli"
+  ],
+  "scripts": {
+    "build": "microbundle --target=node -f es,cjs",
+    "watch": "microbundle --watch --target=node -f es,cjs"
+  },
   "dependencies": {
     "fs-extra": "^9.0.1",
-    "globby": "^11.0.1",
     "inquirer": "^7.3.3",
     "json-schema-to-typescript": "^9.1.1",
     "sade": "^1.7.4"
@@ -27,27 +47,6 @@
     "microbundle": "^0.12.4",
     "typescript": "^4.0.3"
   },
-  "scripts": {
-    "watch": "microbundle --watch --target=node -f es,cjs",
-    "build": "microbundle --target=node -f es,cjs --no-sourcemap"
-  },
-  "author": "Florian Körner <contact@dicebear.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DiceBear/avatars.git"
-  },
-  "keywords": [
-    "avatar",
-    "identicons"
-  ],
-  "bugs": {
-    "url": "https://github.com/DiceBear/avatars/issues"
-  },
-  "homepage": "https://github.com/DiceBear/avatars/tree/master/packages/avatars-cli#readme",
-  "files": [
-    "cli"
-  ],
   "publishConfig": {
     "access": "public"
   }
