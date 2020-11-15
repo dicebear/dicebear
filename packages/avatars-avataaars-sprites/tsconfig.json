@@ -1,18 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "jsx": "react",
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
     "esModuleInterop": true,
-    "target": "es6",
-    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "lib",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]
-    },
-    "declaration": true
-  },
-  "include": ["src/**/*"]
+    "resolveJsonModule": true
+  }
 }
