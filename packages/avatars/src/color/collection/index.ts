@@ -19,6 +19,9 @@ import teal from './teal';
 import yellow from './yellow';
 import { ColorCollection } from '../../types';
 
+/**
+ * @deprecated Since version 4.5. Will be removed in version 5.0.
+ */
 const collection: ColorCollection = {
   amber: amber,
   blue: blue,

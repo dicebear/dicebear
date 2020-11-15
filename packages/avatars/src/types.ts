@@ -1,7 +1,18 @@
 /// <reference types="../typings/pure-color" />
-/// <reference types="../typings/seedrandom" />
-/// <reference types="../typings/svgson" />
 
+export interface Prng {
+  seed: string;
+  bool(likelihood?: number): boolean;
+  integer(min: number, max: number): number;
+  pick<T>(arr: T[]): T;
+  // @deprecated
+  pickone<T>(arr: T[]): T;
+  skip(rounds: number): void;
+}
+
+/**
+ * @deprecated Since version 4.5. Will be removed in version 5.0.
+ */
 export interface Color {
   50: string;
   100: string;
@@ -15,6 +26,9 @@ export interface Color {
   900: string;
 }
 
+/**
+ * @deprecated Since version 4.5. Will be removed in version 5.0.
+ */
 export interface ColorCollection {
   amber: Color;
   blue: Color;
