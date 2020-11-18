@@ -29,12 +29,6 @@ module.exports = {
           position: 'left',
         },
         {
-          to: 'faq/',
-          activeBasePath: 'faq',
-          label: 'FAQ',
-          position: 'left',
-        },
-        {
           href: 'https://github.com/DiceBear/avatars',
           label: 'GitHub',
           position: 'right',
