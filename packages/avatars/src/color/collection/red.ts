@@ -1,8 +1,5 @@
 import { Color } from '../../types';
 
-/**
- * @deprecated Since version 4.5. Will be removed in version 5.0.
- */
 const color: Color = {
   50: '#FFEBEE',
   100: '#FFCDD2',
@@ -13,7 +10,7 @@ const color: Color = {
   600: '#E53935',
   700: '#D32F2F',
   800: '#C62828',
-  900: '#B71C1C',
+  900: '#B71C1C'
 };
 
 export default color;

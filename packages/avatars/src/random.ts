@@ -1,29 +1,24 @@
-import type { Prng } from './types';
-import { create } from './utils/prng';
+import * as seedrandom from 'seedrandom/seedrandom';
 
-/**
- * @deprecated Since version 4.5. Will be removed in version 5.0. Use `utils.prng` instead.
- */
 export default class Random {
-  private prng: Prng;
+  private prng: seedrandom.prng;
+  public readonly seed: string;
 
   constructor(seed: string) {
-    this.prng = create(seed);
-  }
+    this.seed = seed;
 
-  get seed() {
-    return this.prng.seed;
+    this.prng = seedrandom(seed);
   }
 
   bool(likelihood: number = 50) {
-    return this.prng.bool(likelihood);
+    return this.prng() * 100 < likelihood;
   }
 
   integer(min: number, max: number) {
-    return this.prng.integer(min, max);
+    return Math.floor(this.prng() * (max - min + 1) + min);
   }
 
   pickone<T>(arr: T[]): T {
-    return this.prng.pick(arr);
+    return arr[this.integer(0, arr.length - 1)];
   }
 }

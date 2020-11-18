@@ -4,9 +4,6 @@ import * as rgbToHex from 'pure-color/convert/rgb2hex';
 import * as hsvToRgb from 'pure-color/convert/hsv2rgb';
 import collection from './collection';
 
-/**
- * @deprecated Since version 4.5. Will be removed in version 5.0.
- */
 export interface ColorInterface {
   alpha: number;
   hex: string;
@@ -15,9 +12,6 @@ export interface ColorInterface {
   hsv: number[];
 }
 
-/**
- * @deprecated Since version 4.5. Will be removed in version 5.0.
- */
 export default class Color implements ColorInterface {
   public static collection = collection;
 
@@ -36,7 +30,7 @@ export default class Color implements ColorInterface {
       let match = /(.*)\((.*)\)/.exec(color);
 
       if (match) {
-        let values = match[2].split(',').map((val) => parseInt(val.trim()));
+        let values = match[2].split(',').map(val => parseInt(val.trim()));
 
         switch (match[1].trim()) {
           case 'rgb':
@@ -74,7 +68,7 @@ export default class Color implements ColorInterface {
 
     this.alpha = 1;
     this.color = {
-      rgb: rgb,
+      rgb: rgb
     };
   }
 
@@ -102,7 +96,7 @@ export default class Color implements ColorInterface {
 
     this.alpha = 1;
     this.color = {
-      hsv: hsv,
+      hsv: hsv
     };
   }
 
@@ -114,7 +108,7 @@ export default class Color implements ColorInterface {
   set hex(hex: string) {
     this.alpha = 1;
     this.color = {
-      hex: hex,
+      hex: hex
     };
   }
 
@@ -177,14 +171,14 @@ export default class Color implements ColorInterface {
   }
 
   private hexToRgb(hex: string) {
-    return hexToRgb(hex).map((val) => Math.round(val));
+    return hexToRgb(hex).map(val => Math.round(val));
   }
 
   private rgbToHsv(rgb: number[]) {
-    return rgbToHsv(rgb).map((val) => Math.round(val));
+    return rgbToHsv(rgb).map(val => Math.round(val));
   }
 
   private hsvToRgb(hsv: number[]) {
-    return hsvToRgb(hsv).map((val) => Math.round(val));
+    return hsvToRgb(hsv).map(val => Math.round(val));
   }
 }

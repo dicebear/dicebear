@@ -6,8 +6,7 @@
     "declaration": true,
     "lib": ["es6", "dom"],
     "noImplicitAny": true,
-    "sourceMap": true,
-    "resolveJsonModule": true
+    "sourceMap": true
   },
   "include": ["./src/**/*"]
 }
