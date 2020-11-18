@@ -23,7 +23,7 @@ export default class Color implements ColorInterface {
 
   public alpha: number = 1;
 
-  private color?: {
+  private color: {
     rgb?: number[];
     hsv?: number[];
     hex?: string;

@@ -1,6 +1,6 @@
 <h1 align="center"><img src="https://avatars.dicebear.com/api/male/seed.svg" width="124" /> <br />DiceBear Avatars CLI</h1>
 <p align="center">
-  <strong>CLI for DiceBear Avatars.</strong>
+  <strong>CLI for DiceBear Avatars.</strong><
 </p>
 
 <p align="center">
