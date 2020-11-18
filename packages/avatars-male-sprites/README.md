@@ -1,26 +1,73 @@
-<br />
-<br />
+![DiceBear Avatars - Male Sprite Collection](https://raw.githubusercontent.com/DiceBear/avatars/v4/packages/avatars-male-sprites/banner.svg?sanitize=true)
 
-<h1 align="center"><img src="https://avatars.dicebear.com/api/female/1.svg" width="124" /> <br />female</h1>
-<p align="center">
-  <strong>Avatar Style for <a href="https://avatars.dicebear.com/">DiceBear Avatars</a>.</strong><br />
-  Designed by <a href="https://github.com/FlorianKoerner">Florian Körner</a>. Heavy inspired by <a href="https://github.com/matveyco/8biticon">8biticon</a>.
+![license](https://img.shields.io/npm/l/@dicebear/avatars-male-sprites.svg?style=flat-square)
+[![npm](https://img.shields.io/npm/v/@dicebear/avatars-male-sprites.svg?style=flat-square)](https://www.npmjs.com/package/@dicebear/avatars-male-sprites)
+
+<p>
+    <img src="https://avatars.dicebear.com/api/male/1.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/2.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/3.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/4.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/5.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/6.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/7.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/8.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/9.svg" width="60" />
 </p>
 
-<p align="center">
-    <a href="https://github.com/dicebear/avatars/blob/master/LICENSE" target="_blank">
-        <img src="https://img.shields.io/github/license/dicebear/avatars.svg?style=flat-square" alt="License">
-    </a>
-    <a href="https://www.npmjs.com/package/@dicebear/avatars-female-sprites" target="_blank">
-        <img src="https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg?style=flat-square" alt="Latest Version">
-    </a>
-    <a href="https://github.com/dicebear/avatars/stargazers" target="_blank">
-        <img src="https://img.shields.io/github/stars/dicebear/avatars?style=flat-square" alt="Stargazers">
-    </a>
-</p>
+## Usage
 
-<p align="center">
-  <a href="https://avatars.dicebear.com/styles/female">
-    Read Documentation
-  </a>
-</p>
+### HTTP-API (recommended)
+
+Our free HTTP-API is the easiest way to use this sprite collection. Just use the following URL as image source.
+
+    https://avatars.dicebear.com/api/male/:seed.svg
+
+The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
+`options` can be used to pass [options](#options).
+
+#### Examples
+
+| preview                                                                                          | url                                                                     |
+| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/api/male/example.svg" width="60" />                       | https://avatars.dicebear.com/api/male/example.svg                       |
+| <img src="https://avatars.dicebear.com/api/male/example.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/api/male/example.svg?options[mood][]=happy |
+| <img src="https://avatars.dicebear.com/api/male/example.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/api/male/example.svg?options[mood][]=sad   |
+
+### NPM
+
+Install the Avatars and this sprite collection with the following command.
+
+    npm install --save @dicebear/avatars @dicebear/avatars-male-sprites
+
+Now you are ready to create your first Avatar.
+
+```js
+import Avatars from '@dicebear/avatars';
+import sprites from '@dicebear/avatars-male-sprites';
+
+let options = {};
+let avatars = new Avatars(sprites, options);
+let svg = avatars.create('custom-seed');
+```
+
+## Options
+
+| name       | alias | type             | default                         | description                                                                                                                                       |
+| ---------- | ----- | ---------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| radius     | r     | number           | `0`                             | Avatar border radius                                                                                                                              |
+| base64     |       | bool             | `false`                         | Return avatar as base64 data uri instead of XML <br> **Not supported by the HTTP API**                                                            |
+| width      | w     | number           | `null`                          | Fixed width                                                                                                                                       |
+| height     | h     | number           | `null`                          | Fixed height                                                                                                                                      |
+| margin     | m     | number           | `0`                             | Avatar margin in percent<br> **HTTP-API limitation** Max value `25`                                                                               |
+| background | b     | string           | `null`                          | Any valid color identifier<br> **HTTP-API limitation** Only hex _(3-digit, 6-digit and 8-digit)_ values are allowed. Use url encoded hash: `%23`. |
+| userAgent  |       | string           | `window.navigator.userAgent`    | User-Agent for legacy browser fallback<br> **Automatically detected by the HTTP API**                                                             |
+| mood       |       | array of strings | `['happy', 'sad', 'surprised']` | Possible values: `sad`, `happy`, `surprised`                                                                                                      |
+
+## Further information
+
+You can find the DiceBear Avatars documentation at [avatars.dicebear.com](https://avatars.dicebear.com)
+
+---
+
+_Inspired by [8biticon](https://github.com/matveyco/8biticon) (Copyright 2012 Plastic Jam - [MIT Licensed](https://github.com/matveyco/8biticon/blob/dfe624da950fb2f8c43e1151c380d333c2b12225/old_python/LICENSE))_
