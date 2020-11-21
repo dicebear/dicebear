@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.4.1] - 2020-11-21
+
+### Removed
+
+- `@dicebear/avatars-avataaars-sprites` Graphic shirt "selena"
+
 ## [4.4.0] - 2020-11-11
 
 ### Added
