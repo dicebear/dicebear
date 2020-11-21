@@ -4,8 +4,6 @@
   "devDependencies": {
     "@dicebear/avatars": "file:../avatars",
     "@types/node": "^10.11.6",
-    "@types/react": "^16.4.18",
-    "@types/react-dom": "^16.0.9",
     "jdenticon": "^2.1.1",
     "jest": "^24.8.0",
     "lerna": "^3.20.2",
