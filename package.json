@@ -19,7 +19,6 @@
     "@dicebear/avatars": "file:packages/avatars",
     "@dicebear/avatars-avataaars-sprites": "file:packages/avatars-avataaars-sprites",
     "@dicebear/avatars-bottts-sprites": "file:packages/avatars-bottts-sprites",
-    "@dicebear/avatars-code-sprites": "file:packages/avatars-code-sprites",
     "@dicebear/avatars-female-sprites": "file:packages/avatars-female-sprites",
     "@dicebear/avatars-gridy-sprites": "file:packages/avatars-gridy-sprites",
     "@dicebear/avatars-human-sprites": "file:packages/avatars-human-sprites",
