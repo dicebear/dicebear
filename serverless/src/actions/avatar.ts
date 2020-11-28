@@ -68,7 +68,7 @@ export async function avatarHandler(props: any) {
   return {
     headers: {
       'Content-Type': 'image/svg+xml',
-      'Cache-Control': `public, max-age=${60 * 60 * 24 * 30}, s-maxage=0`,
+      'Cache-Control': `public, max-age=${60 * 60 * 24 * 365}, s-maxage=0`,
     },
     body: Buffer.from(svg).toString('base64'),
     statusCode: 200,
