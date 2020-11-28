@@ -34,7 +34,7 @@
     "@dicebear/avatars": "^4.0.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "file:../avatars"
+    "@dicebear/avatars": "^4.0.0"
   },
   "files": [
     "LICENSE",

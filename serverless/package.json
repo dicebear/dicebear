@@ -1,0 +1,35 @@
+{
+  "name": "@dicebear/avatars-serverless",
+  "version": "1.0.0",
+  "description": "Sample OpenWhisk NodeJS serverless framework service.",
+  "keywords": [
+    "serverless",
+    "openwhisk"
+  ],
+  "main": "dist/avatar.js",
+  "source": [
+    "./src/actions/avatar.ts"
+  ],
+  "scripts": {
+    "build": "microbundle --format cjs --external none --target node --alias svgson=svgson/dist/svgson.cjs.js",
+    "deploy": "ibmcloud fn deploy"
+  },
+  "dependencies": {
+    "@dicebear/avatars": "^4.4.1",
+    "@dicebear/avatars-avataaars-sprites": "^4.4.1",
+    "@dicebear/avatars-bottts-sprites": "^4.4.1",
+    "@dicebear/avatars-female-sprites": "^4.4.1",
+    "@dicebear/avatars-gridy-sprites": "^4.4.1",
+    "@dicebear/avatars-human-sprites": "^4.4.1",
+    "@dicebear/avatars-identicon-sprites": "^4.4.1",
+    "@dicebear/avatars-initials-sprites": "^4.4.1",
+    "@dicebear/avatars-jdenticon-sprites": "^4.4.1",
+    "@dicebear/avatars-male-sprites": "^4.4.1",
+    "@types/yup": "^0.29.9",
+    "yup": "^0.31.0"
+  },
+  "devDependencies": {
+    "microbundle": "^0.12.4",
+    "typescript": "^4.1.2"
+  }
+}

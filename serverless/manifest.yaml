@@ -1,0 +1,23 @@
+packages:
+  v4.1:
+    version: 1.0
+    license: MIT
+    actions:
+      avatar:
+        function: dist/avatar.js
+        main: avatarHandler
+        web-export: true
+        limits:
+          memorySize: 128
+          timeout: 1000
+    apis:
+      v4.1:
+        /:
+          api:
+            avatar:
+              method: GET
+              response: http
+          v2:
+            avatar:
+              method: GET
+              response: http
