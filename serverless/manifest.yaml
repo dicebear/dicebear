@@ -1,18 +1,32 @@
 packages:
+  data:
+    actions:
+      stats:
+        function: dist/stats.js
+        main: statsMain
+        web-export: true
+        limits:
+          memorySize: 128
+          timeout: 1000
+    apis:
+      data:
+        data:
+          stats:
+            stats:
+              method: GET
+              response: http
   v4.1:
-    version: 1.0
-    license: MIT
     actions:
       avatar:
         function: dist/avatar.js
-        main: avatarHandler
+        main: avatarMain
         web-export: true
         limits:
           memorySize: 128
           timeout: 1000
     apis:
       v4.1:
-        /:
+        4.1:
           api:
             avatar:
               method: GET

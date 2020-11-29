@@ -8,10 +8,11 @@
   ],
   "main": "dist/avatar.js",
   "source": [
-    "./src/actions/avatar.ts"
+    "./src/actions/avatar.ts",
+    "./src/actions/stats.ts"
   ],
   "scripts": {
-    "build": "microbundle --format cjs --external none --target node --alias svgson=svgson/dist/svgson.cjs.js",
+    "build": "microbundle --format cjs --external axios --target node --alias svgson=svgson/dist/svgson.cjs.js",
     "deploy": "ibmcloud fn deploy"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
     "@dicebear/avatars-jdenticon-sprites": "^4.4.1",
     "@dicebear/avatars-male-sprites": "^4.4.1",
     "@types/yup": "^0.29.9",
+    "axios": "^0.21.0",
     "yup": "^0.31.0"
   },
   "devDependencies": {
