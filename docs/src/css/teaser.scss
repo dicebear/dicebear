@@ -1,0 +1,46 @@
+$teaser-brand-background: #22a7f0;
+$teaser-generator-background: #19b5fe;
+
+.teaser {
+  @include media-breakpoint-up(lg) {
+    background-image: linear-gradient(
+      to right,
+      $teaser-brand-background 0%,
+      $teaser-brand-background 50%,
+      $teaser-generator-background 50%,
+      $teaser-generator-background 100%
+    );
+
+    .teaser-container-mobile {
+      padding: 0;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+  }
+
+  @include media-breakpoint-down(md) {
+    .teaser-brand {
+      background-color: $teaser-brand-background;
+    }
+
+    .teaser-generator {
+      background-color: $teaser-generator-background;
+    }
+
+    .teaser-container-desktop {
+      padding: 0;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+  }
+
+  .text-white,
+  .text-white a {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .lead {
+    font-size: 1.4rem;
+    line-height: 1.3em;
+  }
+}

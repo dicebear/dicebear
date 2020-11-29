@@ -1,0 +1,5 @@
+@include media-breakpoint-up(lg) {
+  .min-vh-lg-100 {
+    min-height: calc(100vh - 60px);
+  }
+}
