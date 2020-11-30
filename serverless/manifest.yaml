@@ -7,7 +7,7 @@ packages:
         web-export: true
         runtime: nodejs:12
         limits:
-          memorySize: 128
+          memorySize: 256
           timeout: 2000
           concurrentActivations: 5
     apis:

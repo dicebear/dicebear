@@ -28,9 +28,11 @@
     "@dicebear/avatars-male-sprites": "^4.4.1",
     "@types/yup": "^0.29.9",
     "axios": "^0.21.0",
+    "qs": "^6.9.4",
     "yup": "^0.31.0"
   },
   "devDependencies": {
+    "@types/qs": "^6.9.5",
     "microbundle": "^0.12.4",
     "typescript": "^4.1.2"
   }

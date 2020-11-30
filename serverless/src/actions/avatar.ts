@@ -1,3 +1,5 @@
+import * as qs from 'qs';
+
 import Avatars from '@dicebear/avatars';
 
 import avataaars from '@dicebear/avatars-avataaars-sprites';
@@ -33,12 +35,19 @@ const styles: Record<string, [any, any]> = {
 };
 
 export async function avatarMain(props: any) {
-  let path = props.__ow_headers['x-forwarded-uri'] || props.__ow_path;
+  let [path, query = ''] = props.__ow_headers['x-forwarded-uri'].split('?');
   let route = decodeURIComponent(path).match(/^\/(?:api(?:\/\d+\.\d+)?|v2)\/([a-z]+)\/([^\/]*)\.svg$/);
-  let requestOptions = props['options'] || props || {};
+  let parsedQueryString = qs.parse(query);
+  let requestOptions = parsedQueryString['options'] || parsedQueryString || {};
+  let defaultHeaders = {
+    'Cache-Control': `public, max-age=${60 * 60 * 24 * 365}, s-maxage=0`,
+  };
 
   if (null === route) {
     return {
+      headers: {
+        ...defaultHeaders,
+      },
       body: '404 Not Found',
       statusCode: 404,
     };
@@ -48,6 +57,9 @@ export async function avatarMain(props: any) {
 
   if (undefined === style) {
     return {
+      headers: {
+        ...defaultHeaders,
+      },
       body: '404 Not Found',
       statusCode: 404,
     };
@@ -57,6 +69,9 @@ export async function avatarMain(props: any) {
     await options.validate(requestOptions);
   } catch (e) {
     return {
+      headers: {
+        ...defaultHeaders,
+      },
       body: e['errors'].join(''),
       statusCode: 400,
     };
@@ -68,8 +83,8 @@ export async function avatarMain(props: any) {
 
   return {
     headers: {
+      ...defaultHeaders,
       'Content-Type': 'image/svg+xml',
-      'Cache-Control': `public, max-age=${60 * 60 * 24 * 365}, s-maxage=0`,
     },
     body: Buffer.from(svg).toString('base64'),
     statusCode: 200,
