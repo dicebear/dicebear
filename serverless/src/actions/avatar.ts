@@ -33,7 +33,8 @@ const styles: Record<string, [any, any]> = {
 };
 
 export async function avatarMain(props: any) {
-  let route = decodeURIComponent(props.__ow_path).match(/^\/(?:api(?:\/\d+\.\d+)?|v2)\/([a-z]+)\/([^\/]*)\.svg$/);
+  let path = props.__ow_headers['x-forwarded-uri'] || props.__ow_path;
+  let route = decodeURIComponent(path).match(/^\/(?:api(?:\/\d+\.\d+)?|v2)\/([a-z]+)\/([^\/]*)\.svg$/);
   let requestOptions = props['options'] || props || {};
 
   if (null === route) {

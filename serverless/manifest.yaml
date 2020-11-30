@@ -1,32 +1,18 @@
 packages:
-  data:
-    actions:
-      stats:
-        function: dist/stats.js
-        main: statsMain
-        web-export: true
-        limits:
-          memorySize: 128
-          timeout: 1000
-    apis:
-      data:
-        data:
-          stats:
-            stats:
-              method: GET
-              response: http
   v4.1:
     actions:
       avatar:
         function: dist/avatar.js
         main: avatarMain
         web-export: true
+        runtime: nodejs:12
         limits:
           memorySize: 128
-          timeout: 1000
+          timeout: 2000
+          concurrentActivations: 5
     apis:
       v4.1:
-        4.1:
+        /:
           api:
             avatar:
               method: GET
