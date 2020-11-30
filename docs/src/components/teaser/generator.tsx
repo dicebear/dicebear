@@ -1,7 +1,7 @@
-import * as React from "react";
-import { stringify } from "qs";
-import SpriteCollection from "../../types/spriteCollection";
-import { GoGear, GoLinkExternal } from "react-icons/go";
+import * as React from 'react';
+import { stringify } from 'qs';
+import SpriteCollection from '../../types/spriteCollection';
+import { GoGear, GoLinkExternal } from 'react-icons/go';
 import {
   Collapse,
   InputGroupButtonDropdown,
@@ -9,10 +9,10 @@ import {
   DropdownMenu,
   DropdownItem,
   UncontrolledTooltip,
-} from "reactstrap";
-import spriteCollections from "../../options";
-import Link from "@docusaurus/Link";
-import Avatars from "@dicebear/avatars";
+} from 'reactstrap';
+import spriteCollections from '../../options';
+import Link from '@docusaurus/Link';
+import Avatars from '@dicebear/avatars';
 
 type State = {
   spriteCollection: SpriteCollection;
@@ -32,19 +32,15 @@ export default class Generator extends React.Component<{}, State> {
 
     this.state = {
       spriteCollection: spriteCollections[0],
-      seed: "",
-      advancedOptions: this.getSpriteCollectionAdvancedOptions(
-        spriteCollections[0]
-      ),
+      seed: '',
+      advancedOptions: this.getSpriteCollectionAdvancedOptions(spriteCollections[0]),
       showAdvancedOptions: false,
       spriteDropdownOpen: false,
     };
 
     this.onChangeSpriteCollection = this.onChangeSpriteCollection.bind(this);
     this.onChangeSeed = this.onChangeSeed.bind(this);
-    this.onToggleShowAdvancedOptions = this.onToggleShowAdvancedOptions.bind(
-      this
-    );
+    this.onToggleShowAdvancedOptions = this.onToggleShowAdvancedOptions.bind(this);
     this.onChangeAdvancedOptions = this.onChangeAdvancedOptions.bind(this);
     this.toggleSpriteDropdownOpen = this.toggleSpriteDropdownOpen.bind(this);
 
@@ -73,9 +69,7 @@ export default class Generator extends React.Component<{}, State> {
       .forEach((field) => {
         let meta = spriteCollection.options[field];
 
-        advancedOptions[field] = Array.isArray(meta.defaultValue)
-          ? [...meta.defaultValue]
-          : meta.defaultValue;
+        advancedOptions[field] = Array.isArray(meta.defaultValue) ? [...meta.defaultValue] : meta.defaultValue;
       });
 
     return advancedOptions;
@@ -83,12 +77,10 @@ export default class Generator extends React.Component<{}, State> {
 
   onChangeSpriteCollection(e: React.MouseEvent<HTMLDivElement>) {
     spriteCollections.forEach((spriteCollection) => {
-      if (spriteCollection.id === e.currentTarget.getAttribute("data-id")) {
+      if (spriteCollection.id === e.currentTarget.getAttribute('data-id')) {
         this.setState({
           spriteCollection: spriteCollection,
-          advancedOptions: this.getSpriteCollectionAdvancedOptions(
-            spriteCollection
-          ),
+          advancedOptions: this.getSpriteCollectionAdvancedOptions(spriteCollection),
         });
       }
     });
@@ -110,9 +102,7 @@ export default class Generator extends React.Component<{}, State> {
     e.preventDefault();
   }
 
-  onChangeAdvancedOptions(
-    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) {
+  onChangeAdvancedOptions(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
     let target = e.target;
 
     this.setState((prevState) => {
@@ -120,15 +110,15 @@ export default class Generator extends React.Component<{}, State> {
       let meta = this.state.spriteCollection.options[target.name];
 
       switch (meta.type) {
-        case "select":
+        case 'select':
           advancedOptions[target.name] = target.value;
 
           break;
 
-        case "checkbox":
+        case 'checkbox':
           let index = advancedOptions[target.name].indexOf(target.value);
 
-          if (target["checked"]) {
+          if (target['checked']) {
             if (-1 === index) {
               advancedOptions[target.name].push(target.value);
             }
@@ -140,10 +130,10 @@ export default class Generator extends React.Component<{}, State> {
 
           break;
 
-        case "switch":
+        case 'switch':
           let values = meta.values;
 
-          if (target["checked"]) {
+          if (target['checked']) {
             advancedOptions[target.name] = values ? values[1] : 1;
           } else {
             advancedOptions[target.name] = values ? values[0] : 0;
@@ -151,17 +141,17 @@ export default class Generator extends React.Component<{}, State> {
 
           break;
 
-        case "range":
+        case 'range':
           advancedOptions[target.name] = parseInt(target.value);
 
           break;
 
-        case "number":
+        case 'number':
           advancedOptions[target.name] = parseInt(target.value);
 
           break;
 
-        case "color":
+        case 'color':
           advancedOptions[target.name] = target.value;
 
           break;
@@ -177,15 +167,12 @@ export default class Generator extends React.Component<{}, State> {
     let options = {};
 
     Object.keys(this.state.spriteCollection.options)
-      .filter((key) =>
-        this.state.spriteCollection.options[key] ? true : false
-      )
+      .filter((key) => (this.state.spriteCollection.options[key] ? true : false))
       .map((key) => {
         let optionsKey = this.state.spriteCollection.options[key].alias || key;
-        let defaultValue = this.state.spriteCollection.options[key]
-          .defaultValue;
+        let defaultValue = this.state.spriteCollection.options[key].defaultValue;
 
-        if (defaultValue !== this.state.advancedOptions[key]) {
+        if (JSON.stringify(defaultValue) !== JSON.stringify(this.state.advancedOptions[key])) {
           options[optionsKey] = this.state.advancedOptions[key];
         }
       });
@@ -195,14 +182,14 @@ export default class Generator extends React.Component<{}, State> {
 
   getAvatarSvg() {
     let options = this.getAvatarOptions();
-
-    return new Avatars(this.state.spriteCollection.style).create(
-      this.state.seed,
-      {
-        ...options,
-        base64: true,
-      }
-    );
+    console.log({
+      ...options,
+      base64: true,
+    });
+    return new Avatars(this.state.spriteCollection.style).create(this.state.seed, {
+      ...options,
+      base64: true,
+    });
   }
 
   getAvatarUrl() {
@@ -210,12 +197,12 @@ export default class Generator extends React.Component<{}, State> {
 
     let params = stringify(options, {
       encodeValuesOnly: true,
-      arrayFormat: "brackets",
+      arrayFormat: 'brackets',
     });
 
-    return `https://avatars.dicebear.com/api/${
-      this.state.spriteCollection.id
-    }/${encodeURIComponent(this.state.seed)}.svg${params ? "?" + params : ""}`;
+    return `https://avatars.dicebear.com/api/${this.state.spriteCollection.id}/${encodeURIComponent(
+      this.state.seed
+    )}.svg${params ? '?' + params : ''}`;
   }
 
   render() {
@@ -225,11 +212,7 @@ export default class Generator extends React.Component<{}, State> {
     return (
       <div className="min-vh-lg-100 d-flex align-items-center">
         <div className="w-100">
-          <div
-            className={`generator ${
-              this.state.showAdvancedOptions ? "position-sticky" : ""
-            }`}
-          >
+          <div className={`generator ${this.state.showAdvancedOptions ? 'position-sticky' : ''}`}>
             <div className="generator-body">
               <div className="generator-avatar">
                 <Link href={avatar} target="_blank">
@@ -239,17 +222,10 @@ export default class Generator extends React.Component<{}, State> {
               <div className="generator-head">
                 <div className="row">
                   <div className="col">
-                    <a
-                      href="#"
-                      onClick={this.onToggleShowAdvancedOptions}
-                      id="ShowAdvancedOptionsTooltip"
-                    >
+                    <a href="#" onClick={this.onToggleShowAdvancedOptions} id="ShowAdvancedOptionsTooltip">
                       <GoGear size={20} />
                     </a>
-                    <UncontrolledTooltip
-                      placement="top"
-                      target="ShowAdvancedOptionsTooltip"
-                    >
+                    <UncontrolledTooltip placement="top" target="ShowAdvancedOptionsTooltip">
                       Advanced options
                     </UncontrolledTooltip>
                   </div>
@@ -257,10 +233,7 @@ export default class Generator extends React.Component<{}, State> {
                     <Link href={avatar} target="_blank" id="OpenNewTabTooltip">
                       <GoLinkExternal size={20} />
                     </Link>
-                    <UncontrolledTooltip
-                      placement="top"
-                      target="OpenNewTabTooltip"
-                    >
+                    <UncontrolledTooltip placement="top" target="OpenNewTabTooltip">
                       Open in new tab
                     </UncontrolledTooltip>
                   </div>
@@ -299,9 +272,7 @@ export default class Generator extends React.Component<{}, State> {
                   maxLength={512}
                 />
               </div>
-              <small className="form-text text-muted text-center">
-                Don't use sensitive or personal data as seed!
-              </small>
+              <small className="form-text text-muted text-center">Don't use sensitive or personal data as seed!</small>
             </div>
           </div>
 
@@ -309,30 +280,23 @@ export default class Generator extends React.Component<{}, State> {
             <div className="generator generator--options">
               <div className="generator-body">
                 {Object.keys(this.state.spriteCollection.options)
-                  .filter((key) =>
-                    this.state.spriteCollection.options[key] ? true : false
-                  )
-                  .filter(
-                    (key) =>
-                      this.state.spriteCollection.options[key].alias != key
-                  )
+                  .filter((key) => (this.state.spriteCollection.options[key] ? true : false))
+                  .filter((key) => this.state.spriteCollection.options[key].alias != key)
                   .map((key) => {
                     let field = this.state.spriteCollection.options[key];
-                    let id = "advanced_" + key;
+                    let id = 'advanced_' + key;
 
                     return (
                       <div className="form-group row" key={key}>
                         <label
                           htmlFor={id}
-                          className={`col-sm-3 col-form-label ${
-                            field.type !== "select" ? "py-0" : ""
-                          } pr-0`}
+                          className={`col-sm-3 col-form-label ${field.type !== 'select' ? 'py-0' : ''} pr-0`}
                           title={key}
                         >
                           {key}
                         </label>
                         <div className="col-sm-9">
-                          {field.type === "select" ? (
+                          {field.type === 'select' ? (
                             <select
                               id={id}
                               name={key}
@@ -345,39 +309,29 @@ export default class Generator extends React.Component<{}, State> {
                               ))}
                             </select>
                           ) : (
-                            ""
+                            ''
                           )}
 
-                          {field.type === "checkbox"
+                          {field.type === 'checkbox'
                             ? field.values?.map((value) => (
-                                <div
-                                  className="custom-control custom-switch"
-                                  key={value}
-                                >
+                                <div className="custom-control custom-switch" key={value}>
                                   <input
                                     name={key}
                                     type="checkbox"
                                     className="custom-control-input"
-                                    id={id + "_" + value}
-                                    checked={
-                                      this.state.advancedOptions[key].indexOf(
-                                        value
-                                      ) !== -1
-                                    }
+                                    id={id + '_' + value}
+                                    checked={this.state.advancedOptions[key].indexOf(value) !== -1}
                                     onChange={this.onChangeAdvancedOptions}
                                     value={value}
                                   />
-                                  <label
-                                    className="custom-control-label"
-                                    htmlFor={id + "_" + value}
-                                  >
+                                  <label className="custom-control-label" htmlFor={id + '_' + value}>
                                     {value}
                                   </label>
                                 </div>
                               ))
-                            : ""}
+                            : ''}
 
-                          {field.type === "range" ? (
+                          {field.type === 'range' ? (
                             <input
                               id={id}
                               name={key}
@@ -389,10 +343,10 @@ export default class Generator extends React.Component<{}, State> {
                               value={this.state.advancedOptions[key]}
                             />
                           ) : (
-                            ""
+                            ''
                           )}
 
-                          {field.type === "number" ? (
+                          {field.type === 'number' ? (
                             <input
                               id={id}
                               name={key}
@@ -404,10 +358,10 @@ export default class Generator extends React.Component<{}, State> {
                               value={this.state.advancedOptions[key]}
                             />
                           ) : (
-                            ""
+                            ''
                           )}
 
-                          {field.type === "color" ? (
+                          {field.type === 'color' ? (
                             <input
                               id={id}
                               name={key}
@@ -417,10 +371,10 @@ export default class Generator extends React.Component<{}, State> {
                               value={this.state.advancedOptions[key]}
                             />
                           ) : (
-                            ""
+                            ''
                           )}
 
-                          {field.type === "switch" ? (
+                          {field.type === 'switch' ? (
                             <div className="custom-control custom-switch">
                               <input
                                 id={id}
@@ -429,17 +383,13 @@ export default class Generator extends React.Component<{}, State> {
                                 className="custom-control-input"
                                 onChange={this.onChangeAdvancedOptions}
                                 checked={
-                                  this.state.advancedOptions[key] ==
-                                  (field.values ? field.values[1] : undefined)
+                                  this.state.advancedOptions[key] == (field.values ? field.values[1] : undefined)
                                 }
                               />
-                              <label
-                                className="custom-control-label"
-                                htmlFor={id}
-                              />
+                              <label className="custom-control-label" htmlFor={id} />
                             </div>
                           ) : (
-                            ""
+                            ''
                           )}
                         </div>
                       </div>
@@ -463,7 +413,7 @@ export default class Generator extends React.Component<{}, State> {
           <Collapse isOpen={!this.state.showAdvancedOptions}>
             <div className="generator-create-your-own">
               Create your own
-              <img src={"img/arrow.svg"} alt="arrow" />
+              <img src={'img/arrow.svg'} alt="arrow" />
             </div>
           </Collapse>
         </div>
