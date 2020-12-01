@@ -22,7 +22,7 @@ import initialsOptions from '../options/initials';
 import jdenticonOptions from '../options/jdenticon';
 import maleOptions from '../options/male';
 
-const styles: Record<string, [any, any]> = {
+const styles: Record<string, any> = {
   avataaars: [avataaars, avataaarsOptions],
   bottts: [bottts, botttsOptions],
   female: [female, femaleOptions],
@@ -34,59 +34,52 @@ const styles: Record<string, [any, any]> = {
   male: [male, maleOptions],
 };
 
-export async function avatarMain(props: any) {
-  let [path, query = ''] = props.__ow_headers['x-forwarded-uri'].split('?');
-  let route = decodeURIComponent(path).match(/^\/(?:api(?:\/\d+\.\d+)?|v2)\/([a-z]+)\/([^\/]*)\.svg$/);
-  let parsedQueryString = qs.parse(query);
+type WorkerEvent = {
+  request: Request;
+  respondWith: (response: Response | Promise<Response>) => void;
+};
+
+addEventListener<any>('fetch', (event: WorkerEvent) => {
+  event.respondWith(handler(event.request));
+});
+
+async function handler(request: Request) {
+  let url = new URL(request.url);
+  let route = decodeURIComponent(url.pathname).match(/^\/(?:api(?:\/\d+\.\d+)?|v2)\/([a-z]+)\/([^\/]*)\.svg$/);
+  let parsedQueryString = qs.parse(url.search.slice(1));
   let requestOptions = parsedQueryString['options'] || parsedQueryString || {};
-  let defaultHeaders = {
-    'Cache-Control': `public, max-age=${60 * 60 * 24 * 365}, s-maxage=0`,
-  };
+  let headers = new Headers();
 
   if (null === route) {
-    return {
-      headers: {
-        ...defaultHeaders,
-      },
-      body: '404 Not Found',
-      statusCode: 404,
-    };
+    return new Response('404 Not Found', {
+      status: 404,
+    });
   }
 
   let [style, options] = styles[route[1]] || [];
 
   if (undefined === style) {
-    return {
-      headers: {
-        ...defaultHeaders,
-      },
-      body: '404 Not Found',
-      statusCode: 404,
-    };
+    return new Response('404 Not Found', {
+      status: 404,
+    });
   }
 
   try {
     await options.validate(requestOptions);
   } catch (e) {
-    return {
-      headers: {
-        ...defaultHeaders,
-      },
-      body: e['errors'].join(''),
-      statusCode: 400,
-    };
+    return new Response(e['errors'].join(''), {
+      status: 400,
+    });
   }
 
   let seed = route[2];
   let avatars = new Avatars(style);
   let svg = avatars.create(seed, options.cast(requestOptions));
 
-  return {
-    headers: {
-      ...defaultHeaders,
-      'Content-Type': 'image/svg+xml',
-    },
-    body: Buffer.from(svg).toString('base64'),
-    statusCode: 200,
-  };
+  headers.append('Content-Type', 'image/svg+xml');
+  headers.append('Cache-Control', `max-age=${60 * 60 * 24 * 365}`);
+
+  return new Response(svg, {
+    headers: headers,
+  });
 }

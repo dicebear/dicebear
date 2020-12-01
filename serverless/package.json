@@ -1,20 +1,13 @@
 {
   "name": "@dicebear/avatars-serverless",
   "version": "1.0.0",
-  "description": "Sample OpenWhisk NodeJS serverless framework service.",
-  "keywords": [
-    "serverless",
-    "openwhisk"
-  ],
-  "main": "dist/avatar.js",
-  "source": [
-    "./src/actions/avatar.ts",
-    "./src/actions/stats.ts"
-  ],
+  "description": "Cloudflare serverless deployment for self-serve customers",
+  "main": "index.js",
   "scripts": {
-    "build": "microbundle --format cjs --external axios --target node --alias svgson=svgson/dist/svgson.cjs.js",
-    "deploy": "ibmcloud fn deploy"
+    "deploy": "serverless deploy"
   },
+  "author": "Florian Körner <contact@florian-koerner.com>",
+  "license": "MIT",
   "dependencies": {
     "@dicebear/avatars": "^4.4.1",
     "@dicebear/avatars-avataaars-sprites": "^4.4.1",
@@ -27,13 +20,15 @@
     "@dicebear/avatars-jdenticon-sprites": "^4.4.1",
     "@dicebear/avatars-male-sprites": "^4.4.1",
     "@types/yup": "^0.29.9",
-    "axios": "^0.21.0",
     "qs": "^6.9.4",
     "yup": "^0.31.0"
   },
   "devDependencies": {
     "@types/qs": "^6.9.5",
-    "microbundle": "^0.12.4",
+    "serverless": "^2.13.0",
+    "serverless-cloudflare-workers": "^1.2.0",
+    "serverless-dotenv-plugin": "^3.1.0",
+    "ts-loader": "^8.0.11",
     "typescript": "^4.1.2"
   }
 }

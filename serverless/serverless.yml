@@ -1,0 +1,41 @@
+service: serverless
+frameworkVersion: '2'
+useDotenv: false
+custom:
+  dotenv:
+    exclude:
+      - CLOUDFLARE_ACCOUNT_ID
+      - CLOUDFLARE_ZONE_ID
+      - CLOUDFLARE_AUTH_KEY
+      - CLOUDFLARE_AUTH_EMAIL
+
+provider:
+  name: cloudflare
+  config:
+    accountId: ${env:CLOUDFLARE_ACCOUNT_ID}
+    zoneId: ${env:CLOUDFLARE_ZONE_ID}
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-cloudflare-workers
+
+functions:
+  v4_1:
+    name: v4_1
+    script: src/actions/avatar
+    webpack: webpack.config
+    events:
+      - http:
+          url: dicebear-avatars.com/api/*
+          method: GET
+      - http:
+          url: dicebear-avatars.com/v2/*
+          method: GET
+  stats:
+    name: stats
+    script: src/actions/stats
+    webpack: webpack.config
+    events:
+      - http:
+          url: dicebear-avatars.com/data/stats.json
+          method: GET

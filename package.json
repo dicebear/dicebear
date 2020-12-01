@@ -14,7 +14,8 @@
   },
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "serverless"
     ],
     "nohoist": []
   }
