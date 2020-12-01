@@ -14,6 +14,7 @@
   },
   "workspaces": {
     "packages": [
+      "docs",
       "packages/*",
       "serverless"
     ],
