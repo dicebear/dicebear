@@ -30,11 +30,11 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                           | url                                                                      |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| <img src="https://avatars.dicebear.com/api/human/example.svg" width="60" />                       | https://avatars.dicebear.com/api/human/example.svg                       |
-| <img src="https://avatars.dicebear.com/api/human/example.svg?options[mood][]=happy" width="60" /> | https://avatars.dicebear.com/api/human/example.svg?options[mood][]=happy |
-| <img src="https://avatars.dicebear.com/api/human/example.svg?options[mood][]=sad" width="60" />   | https://avatars.dicebear.com/api/human/example.svg?options[mood][]=sad   |
+| preview                                                                                  | url                                                             |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/api/human/example.svg" width="60" />              | https://avatars.dicebear.com/api/human/example.svg              |
+| <img src="https://avatars.dicebear.com/api/human/example.svg?mood[]=happy" width="60" /> | https://avatars.dicebear.com/api/human/example.svg?mood[]=happy |
+| <img src="https://avatars.dicebear.com/api/human/example.svg?mood[]=sad" width="60" />   | https://avatars.dicebear.com/api/human/example.svg?mood[]=sad   |
 
 ### NPM
 

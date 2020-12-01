@@ -31,11 +31,11 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                                                            | url                                                                                                       |
-| ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| <img src="https://avatars.dicebear.com/api/bottts/example.svg" width="60" />                                                       | https://avatars.dicebear.com/api/bottts/example.svg                                                       |
-| <img src="https://avatars.dicebear.com/api/bottts/example.svg?options[colors][]=cyan" width="60" />                                | https://avatars.dicebear.com/api/bottts/example.svg?options[colors][]=cyan                                |
-| <img src="https://avatars.dicebear.com/api/bottts/example.svg?options[colors][]=cyan&options[primaryColorLevel]=200" width="60" /> | https://avatars.dicebear.com/api/bottts/example.svg?options[colors][]=cyan&options[primaryColorLevel]=200 |
+| preview                                                                                                          | url                                                                                     |
+| ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/api/bottts/example.svg" width="60" />                                     | https://avatars.dicebear.com/api/bottts/example.svg                                     |
+| <img src="https://avatars.dicebear.com/api/bottts/example.svg?colors[]=cyan" width="60" />                       | https://avatars.dicebear.com/api/bottts/example.svg?colors[]=cyan                       |
+| <img src="https://avatars.dicebear.com/api/bottts/example.svg?colors[]=cyan&primaryColorLevel=200" width="60" /> | https://avatars.dicebear.com/api/bottts/example.svg?colors[]=cyan&primaryColorLevel=200 |
 
 ### NPM
 

@@ -28,11 +28,11 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 #### Examples
 
-| preview                                                                                                             | url                                                                                        |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg" width="60" />                                   | https://avatars.dicebear.com/api/initials/John%20Doe.svg                                   |
-| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[fontSize]=80" width="60" />              | https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[fontSize]=80              |
-| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[backgroundColorLevel]=900" width="60" /> | https://avatars.dicebear.com/api/initials/John%20Doe.svg?options[backgroundColorLevel]=900 |
+| preview                                                                                                    | url                                                                               |
+| ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg" width="60" />                          | https://avatars.dicebear.com/api/initials/John%20Doe.svg                          |
+| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg?fontSize=80" width="60" />              | https://avatars.dicebear.com/api/initials/John%20Doe.svg?fontSize=80              |
+| <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg?backgroundColorLevel=900" width="60" /> | https://avatars.dicebear.com/api/initials/John%20Doe.svg?backgroundColorLevel=900 |
 
 ### NPM
 
