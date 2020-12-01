@@ -45,7 +45,9 @@ addEventListener<any>('fetch', (event: WorkerEvent) => {
 
 async function handler(request: Request) {
   let url = new URL(request.url);
-  let route = decodeURIComponent(url.pathname).match(/^\/(?:api(?:\/\d+\.\d+)?|v2)\/([a-z]+)\/([^\/]*)\.svg$/);
+  let route = decodeURIComponent(url.pathname).match(
+    /^\/(?:\d+\.\d+\/)?(?:api(?:\/\d+\.\d+)?|v2)\/([a-z]+)\/([^\/]*)\.svg$/
+  );
   let parsedQueryString = qs.parse(url.search.slice(1));
   let requestOptions = parsedQueryString['options'] || parsedQueryString || {};
   let headers = new Headers();

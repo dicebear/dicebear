@@ -1,7 +1,7 @@
-import * as React from "react";
-import { GoMarkGithub, GoBook } from "react-icons/go";
-import Generator from "./teaser/generator";
-import Link from "@docusaurus/Link";
+import * as React from 'react';
+import { GoMarkGithub, GoBook } from 'react-icons/go';
+import Generator from './teaser/generator';
+import Link from '@docusaurus/Link';
 
 export default function Teaser() {
   let [stats, setStats] = React.useState<
@@ -14,9 +14,7 @@ export default function Teaser() {
   React.useEffect(() => {
     (async () => {
       if (window && window.fetch) {
-        const response = await fetch(
-          `https://avatars.dicebear.com/api/stats.json`
-        );
+        const response = await fetch(`https://avatars.dicebear.com/4.1/stats.json`);
 
         const json = await response.json();
 
@@ -35,19 +33,13 @@ export default function Teaser() {
                 <div className="col-12 offset-md-2 col-md-8 offset-lg-0 col-lg-11 offset-xl-1 col-xl-10">
                   <div className="min-vh-lg-100 d-flex align-items-center">
                     <div className="text-center text-lg-left">
-                      <img
-                        src={"img/logo.svg"}
-                        alt="DiceBear Avatars"
-                        className="logo mb-5"
-                      />
+                      <img src={'img/logo.svg'} alt="DiceBear Avatars" className="logo mb-5" />
                       <p className="text-white lead">
-                        Avatars is an avatar placeholder library for designers
-                        and developers. You can choose between simple identicons
-                        and lovely designed characters.
+                        Avatars is an avatar placeholder library for designers and developers. You can choose between
+                        simple identicons and lovely designed characters.
                       </p>
                       <p className="text-white lead mb-5">
-                        And best of all: We provide a simple and free HTTP API
-                        that you can use right away!
+                        And best of all: We provide a simple and free HTTP API that you can use right away!
                       </p>
                       <div className="mb-lg-4 d-flex justify-content-center justify-content-lg-start">
                         <div>
@@ -61,12 +53,10 @@ export default function Teaser() {
                           <br className="d-sm-none" />
                           <Link
                             className="btn btn-light d-inline-flex align-items-center"
-                            href={`https://github.com/DiceBear/avatars${
-                              stats ? "/stargazers" : ""
-                            }`}
+                            href={`https://github.com/DiceBear/avatars${stats ? '/stargazers' : ''}`}
                           >
                             <GoMarkGithub className="mr-1" size={20} />
-                            {stats ? "Star" : "GitHub"}
+                            {stats ? 'Star' : 'GitHub'}
                           </Link>
                           {stats && (
                             <Link
@@ -79,18 +69,9 @@ export default function Teaser() {
                           )}
 
                           <div className="d-flex flex-column align-items-center mt-5">
-                            <div className="text-white line-height-0 mb-1">
-                              sponsored by
-                            </div>
-                            <Link
-                              className="btn btn-block btn-light justify-center p-3"
-                              href="https://bunnycdn.com/"
-                            >
-                              <img
-                                src="/img/bunnycdn.png"
-                                alt="bunnycdn"
-                                style={{ maxWidth: 200, height: "auto" }}
-                              />
+                            <div className="text-white line-height-0 mb-1">sponsored by</div>
+                            <Link className="btn btn-block btn-light justify-center p-3" href="https://bunnycdn.com/">
+                              <img src="/img/bunnycdn.png" alt="bunnycdn" style={{ maxWidth: 200, height: 'auto' }} />
                             </Link>
                           </div>
                         </div>

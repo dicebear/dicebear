@@ -20,22 +20,22 @@ plugins:
   - serverless-cloudflare-workers
 
 functions:
-  v4_1:
-    name: v4_1
+  v4_1_api:
+    name: v4_1_api
     script: src/actions/avatar
     webpack: webpack.config
     events:
       - http:
-          url: dicebear-avatars.com/api/*
+          url: dicebear-avatars.com/4.1/api/*
           method: GET
       - http:
-          url: dicebear-avatars.com/v2/*
+          url: dicebear-avatars.com/4.1/v2/*
           method: GET
-  stats:
-    name: stats
+  v4_1_stats:
+    name: v4_1_stats
     script: src/actions/stats
     webpack: webpack.config
     events:
       - http:
-          url: dicebear-avatars.com/data/stats.json
+          url: dicebear-avatars.com/4.1/stats.json
           method: GET
