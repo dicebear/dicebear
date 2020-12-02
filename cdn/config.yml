@@ -1,7 +1,8 @@
 blocked:
   referrer:
-    # Porn
+    # Block Porn sites
     - uncams.com
+    - xujan.com
 
 redirect:
   # Redirect to current api version
