@@ -17,6 +17,7 @@ dotenv.config();
   );
 
   prog.command('update').describe('Updates CDN Config.').action(commands.update(config));
+  prog.command('stats').describe('Get last day CDN Stats.').action(commands.stats(config));
 
   prog.parse(process.argv);
 })();
