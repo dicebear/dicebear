@@ -18,6 +18,8 @@
       "scripts",
       "website"
     ],
-    "nohoist": []
+    "nohoist": [
+      "**/html-minifier-terser"
+    ]
   }
 }

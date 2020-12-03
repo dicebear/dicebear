@@ -182,10 +182,7 @@ export default class Generator extends React.Component<{}, State> {
 
   getAvatarSvg() {
     let options = this.getAvatarOptions();
-    console.log({
-      ...options,
-      base64: true,
-    });
+
     return new Avatars(this.state.spriteCollection.style).create(this.state.seed, {
       ...options,
       base64: true,
