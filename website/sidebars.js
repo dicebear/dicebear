@@ -1,5 +1,6 @@
 module.exports = {
   docs: ['getting-started', 'http-api', 'installation', 'options'],
+  integrations: ['integrations/serverless'],
   styles: [
     'styles/overview',
     {

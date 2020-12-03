@@ -14,10 +14,9 @@
   },
   "workspaces": {
     "packages": [
-      "cdn",
-      "docs",
       "packages/*",
-      "serverless"
+      "scripts",
+      "website"
     ],
     "nohoist": []
   }

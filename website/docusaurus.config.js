@@ -1,84 +1,92 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-  title: "DiceBear Avatars",
-  tagline:
-    "Avatars is an avatar placeholder library for designers and developers. ",
-  url: "https://avatars.dicebear.com",
-  baseUrl: "/",
-  onBrokenLinks: "throw",
-  favicon: "img/favicon.ico",
-  organizationName: "DiceBear", // Usually your GitHub org/user name.
-  projectName: "avatars", // Usually your repo name.
+  title: 'DiceBear Avatars',
+  tagline: 'Avatars is an avatar placeholder library for designers and developers. ',
+  url: 'https://avatars.dicebear.com',
+  baseUrl: '/',
+  onBrokenLinks: 'throw',
+  favicon: 'img/favicon.ico',
+  organizationName: 'DiceBear', // Usually your GitHub org/user name.
+  projectName: 'avatars', // Usually your repo name.
   themeConfig: {
     sidebarCollapsible: false,
     colorMode: {
-      defaultMode: "light",
+      defaultMode: 'light',
       disableSwitch: true,
       respectPrefersColorScheme: false,
     },
     navbar: {
-      title: "DiceBear Avatars",
+      title: 'DiceBear Avatars',
       logo: {
-        alt: "DiceBear Avatars",
-        src: "img/favicon.svg",
+        alt: 'DiceBear Avatars',
+        src: 'img/favicon.svg',
       },
       items: [
         {
-          to: "docs",
-          activeBasePath: "docs",
-          label: "Docs",
-          position: "left",
+          to: 'docs',
+          activeBasePath: 'docs',
+          label: 'Docs',
+          position: 'left',
         },
         {
-          to: "styles",
-          activeBasePath: "styles",
-          label: "Styles",
-          position: "left",
+          to: 'styles',
+          activeBasePath: 'styles',
+          label: 'Styles',
+          position: 'left',
         },
         {
-          to: "faq",
-          activeBasePath: "faq",
-          label: "FAQ",
-          position: "left",
+          to: 'integrations/serverless',
+          activeBasePath: 'integrations',
+          label: 'Integrations',
+          position: 'left',
         },
         {
-          href: "https://github.com/DiceBear/avatars",
-          label: "GitHub",
-          position: "right",
+          href: 'https://github.com/DiceBear/avatars',
+          label: 'GitHub',
+          position: 'right',
         },
       ],
     },
     footer: {
-      style: "light",
+      style: 'light',
       links: [
         {
-          title: "Community",
+          title: 'Community',
           items: [
             {
-              label: "GitHub",
-              href: "https://github.com/DiceBear/avatars",
+              label: 'GitHub',
+              href: 'https://github.com/DiceBear/avatars',
             },
             {
-              label: "Status",
-              href: "https://dicebear.betteruptime.com/",
+              label: 'Status',
+              href: 'https://dicebear.betteruptime.com/',
             },
             {
-              label: "Twitter",
-              href: "https://twitter.com/flomavali",
+              label: 'Twitter',
+              href: 'https://twitter.com/flomavali',
             },
           ],
         },
         {
-          title: "Legal",
+          title: 'More',
           items: [
             {
-              label: "Privacy Policy",
-              to: "/legal/privacy-policy",
+              label: 'Frequently Asked Questions',
+              to: '/faq',
+            },
+          ],
+        },
+        {
+          title: 'Legal',
+          items: [
+            {
+              label: 'Privacy Policy',
+              to: '/legal/privacy-policy',
             },
             {
-              label: "Legal Notice / Impressum",
-              to: "/legal/legal-notice",
+              label: 'Legal Notice / Impressum',
+              to: '/legal/legal-notice',
             },
           ],
         },
@@ -88,22 +96,19 @@ module.exports = {
   },
   presets: [
     [
-      "@docusaurus/preset-classic",
+      '@docusaurus/preset-classic',
       {
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
+          sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: "https://github.com/DiceBear/avatars/edit/v4/docs/",
-          routeBasePath: "/",
+          editUrl: 'https://github.com/DiceBear/avatars/edit/v4/docs/',
+          routeBasePath: '/',
         },
         theme: {
-          customCss: require.resolve("./src/css/index.scss"),
+          customCss: require.resolve('./src/css/index.scss'),
         },
       },
     ],
   ],
-  plugins: [
-    "docusaurus-plugin-sass",
-    path.resolve(__dirname, "src/plugins/buffer-plugin"),
-  ],
+  plugins: ['docusaurus-plugin-sass', path.resolve(__dirname, 'src/plugins/buffer-plugin')],
 };
