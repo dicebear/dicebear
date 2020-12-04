@@ -3,19 +3,23 @@ title: Serverless
 slug: /integrations/serverless
 ---
 
-You can run our public [HTTP-API](/docs/http-api) yourself. Just [register](https://dash.cloudflare.com/sign-up) on Cloudflare and [add a domain](https://community.cloudflare.com/t/step-1-adding-your-domain-to-cloudflare/64309) to your account. You can make 100.000 Cloudflare Workers requests per month [for free](https://developers.cloudflare.com/workers/platform/pricing)!
+You can also host the HTTP API yourself. The API is based on [Cloudflare Workers](https://workers.cloudflare.com/) and the [Serverless Framework](https://www.serverless.com/). A free Cloudflare Workers account contains [100.000 free requests](https://developers.cloudflare.com/workers/platform/pricing). So just give it a try.
 
 ## Installation
 
 ### Step 1
 
-First checkout our repository [avatars-serverless](https://github.com/DiceBear/avatars-serverless):
+First [register](https://dash.cloudflare.com/sign-up) on Cloudflare and [add a domain](https://community.cloudflare.com/t/step-1-adding-your-domain-to-cloudflare/64309) to your account.
+
+### Step 2
+
+Checkout our repository [avatars-serverless](https://github.com/DiceBear/avatars-serverless):
 
 ```
 git checkout https://github.com/DiceBear/avatars-serverless.git
 ```
 
-### Step 2
+### Step 3
 
 Change to the project directory and copy the file `.env.dist` to `.env`:
 
@@ -24,7 +28,7 @@ cd avatars-serverless
 cp .env.dist .env
 ```
 
-### Step 3
+### Step 4
 
 Edit the new created `.env` file and enter the following data:
 
@@ -49,7 +53,7 @@ Edit the new created `.env` file and enter the following data:
 
 ### Step 5
 
-Now install the dependencies:
+Install the dependencies:
 
 ```
 npm install
@@ -57,7 +61,7 @@ npm install
 
 ### Step 6
 
-And now you are ready to deploy the API with a simple command:
+Now you are ready to deploy the API with a simple command:
 
 ```
 npm run deploy
@@ -67,4 +71,4 @@ npm run deploy
 
 That's it. Your API should now be available in the worldwide network of Cloudflare. Create your first avatar:
 
-[_http://**your-domain.com**/4.4/api/male/seed.svg_](https://avatars.dicebear.com/4.4/api/male/seed.svg)
+[_https://**your-domain.com**/4.4/api/male/seed.svg_](https://avatars.dicebear.com/4.4/api/male/seed.svg)
