@@ -3,13 +3,16 @@ title: Serverless
 slug: /integrations/serverless
 ---
 
-You can also host the HTTP API yourself. The API is based on [Cloudflare Workers](https://workers.cloudflare.com/) and the [Serverless Framework](https://www.serverless.com/). A free Cloudflare Workers account contains [100.000 free requests](https://developers.cloudflare.com/workers/platform/pricing). So just give it a try.
+You can also host the HTTP API yourself. The API is based on [Cloudflare Workers](https://workers.cloudflare.com/) and
+the [Serverless Framework](https://www.serverless.com/). A free Cloudflare Workers account contains
+[100.000 free requests](https://developers.cloudflare.com/workers/platform/pricing). So just give it a try.
 
 ## Installation
 
 ### Step 1
 
-First [register](https://dash.cloudflare.com/sign-up) on Cloudflare and [add a domain](https://community.cloudflare.com/t/step-1-adding-your-domain-to-cloudflare/64309) to your account.
+First [register](https://dash.cloudflare.com/sign-up) on Cloudflare and
+[add a domain](https://community.cloudflare.com/t/step-1-adding-your-domain-to-cloudflare/64309) to your account.
 
 ### Step 2
 
@@ -44,12 +47,12 @@ Edit the new created `.env` file and enter the following data:
 
 - **CLOUDFLARE_AUTH_KEY**
 
-  1. Log in to your Cloudflare account and navigate to _My Profile_ => _[API Tokens](https://dash.cloudflare.com/profile/api-tokens)_.
+  1. Log in to your Cloudflare account and navigate to _My Profile_ =>
+     _[API Tokens](https://dash.cloudflare.com/profile/api-tokens)_.
   2. On the bottom, look for _Global API Key_ and click _View_.
   3. Enter your password and click _Click to copy_ below the input.
 
-- **CLOUDFLARE_AUTH_EMAIL**
-  This is your account email address.
+- **CLOUDFLARE_AUTH_EMAIL** This is your account email address.
 
 ### Step 5
 

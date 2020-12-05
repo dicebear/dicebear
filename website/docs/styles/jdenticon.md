@@ -25,8 +25,7 @@ Our free HTTP-API is the easiest way to use this avatar style. Just use the foll
 
     https://avatars.dicebear.com/api/jdenticon/:seed.svg
 
-The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
-`options` can be used to pass [options](#options).
+See the [HTTP API documentation](/docs/http-api) for more information.
 
 #### Examples
 

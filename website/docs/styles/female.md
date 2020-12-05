@@ -3,7 +3,8 @@ title: Female
 slug: /styles/female
 ---
 
-Designed by <a href="https://github.com/FlorianKoerner">Florian Körner</a>. Heavy inspired by [8biticon](https://github.com/matveyco/8biticon).
+Designed by <a href="https://github.com/FlorianKoerner">Florian Körner</a>. Heavy inspired by
+[8biticon](https://github.com/matveyco/8biticon).
 
 <p>
     <img src="https://avatars.dicebear.com/api/female/1.svg" width="60" />{ ' ' }
@@ -25,8 +26,7 @@ Our free HTTP-API is the easiest way to use this avatar style. Just use the foll
 
     https://avatars.dicebear.com/api/female/:seed.svg
 
-The value of `:seed` can be anything you like - but **don't** use any sensitive or personal data here! The GET parameter
-`options` can be used to pass [options](#options).
+See the [HTTP API documentation](/docs/http-api) for more information.
 
 #### Examples
 
