@@ -12,7 +12,7 @@ The value of `:seed` can be anything you like - but **don't** use any sensitive 
 
 ## Options
 
-Most options can be specified using the query string. Note that you have to encode the values.
+Most [options](/docs/options) can be specified using the query string. Note that you have to encode the values.
 
 The following URL for example sets a blue background:
 
