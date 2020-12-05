@@ -18,7 +18,7 @@ The following URL for example sets a blue background:
 
     https://avatars.dicebear.com/api/male/john.svg?background=%230000ff
 
-And this URL sets the `mood` option for the avatar style [/styles/male](male) to `happy` and `sad`:
+And this URL sets the `mood` option for the avatar style [male](/styles/male) to `happy` and `sad`:
 
     https://avatars.dicebear.com/api/male/john.svg?mood[]=happy&mood[]=sad
 
