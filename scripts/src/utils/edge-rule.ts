@@ -38,19 +38,6 @@ export function getManagedId(edgeRule: EdgeRule) {
   return `(MANAGED: ${shasum.digest('hex')})`;
 }
 
-export function replacePlaceholders(edgeRule: EdgeRule): EdgeRule {
-  return JSON.parse(JSON.stringify(edgeRule), (key, val) => {
-    if (typeof val !== 'string') {
-      return val;
-    }
-
-    return val
-      .replace('{{hostname}}', process.env.BUNNYCDN_HOSTNAME || '')
-      .replace('{{linked_hostname}}', process.env.BUNNYCDN_LINKED_HOSTNAME || '')
-      .replace('{{origin}}', process.env.BUNNYCDN_ORIGIN || '');
-  });
-}
-
 export function createBlockReferrers(referrers: string[]) {
   referrers = referrers.reduce<string[]>((result, val) => {
     return [...result, val, `*.${val}`];
@@ -73,10 +60,7 @@ export function createBlockReferrers(referrers: string[]) {
     }),
   };
 
-  edgeRule = replacePlaceholders(edgeRule);
-  edgeRule = makeManaged(edgeRule);
-
-  return edgeRule;
+  return makeManaged(edgeRule);
 }
 
 export function createRedirect(to: string, from: string[]) {
@@ -97,10 +81,7 @@ export function createRedirect(to: string, from: string[]) {
     }),
   };
 
-  edgeRule = replacePlaceholders(edgeRule);
-  edgeRule = makeManaged(edgeRule);
-
-  return edgeRule;
+  return makeManaged(edgeRule);
 }
 
 export function createRemoveHeader(name: string) {
@@ -121,10 +102,7 @@ export function createRemoveHeader(name: string) {
     ],
   };
 
-  edgeRule = replacePlaceholders(edgeRule);
-  edgeRule = makeManaged(edgeRule);
-
-  return edgeRule;
+  return makeManaged(edgeRule);
 }
 
 export function createClientCache(timeString: string, routes: string[]) {
@@ -145,10 +123,7 @@ export function createClientCache(timeString: string, routes: string[]) {
     }),
   };
 
-  edgeRule = replacePlaceholders(edgeRule);
-  edgeRule = makeManaged(edgeRule);
-
-  return edgeRule;
+  return makeManaged(edgeRule);
 }
 
 export function createServerCache(timeString: string, routes: string[]) {
@@ -169,10 +144,7 @@ export function createServerCache(timeString: string, routes: string[]) {
     }),
   };
 
-  edgeRule = replacePlaceholders(edgeRule);
-  edgeRule = makeManaged(edgeRule);
-
-  return edgeRule;
+  return makeManaged(edgeRule);
 }
 
 export function createOrigin(origin: string, routes: string[]) {
@@ -193,8 +165,5 @@ export function createOrigin(origin: string, routes: string[]) {
     }),
   };
 
-  edgeRule = replacePlaceholders(edgeRule);
-  edgeRule = makeManaged(edgeRule);
-
-  return edgeRule;
+  return makeManaged(edgeRule);
 }

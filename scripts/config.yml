@@ -1,50 +1,51 @@
-blocked:
-  referrer:
-    # Block Porn sites
-    - uncams.com
-    - xujan.com
+cdn:
+  blocked:
+    referrer:
+      # Block Porn sites
+      - uncams.com
+      - xujan.com
 
-redirect:
-  # Redirect to current api version
-  https://{{linked_hostname}}/4.4{{path}}:
-    - https://{{linked_hostname}}/api/*
-    - https://{{linked_hostname}}/v2/*
+  redirect:
+    # Redirect to current api version
+    https://{{process.env.BUNNYCDN_HOSTNAME}}/4.4{{path}}:
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
 
-  # Redirect to primary domain
-  https://{{linked_hostname}}{{path}}:
-    - https://{{hostname}}/*
-    - https://{{origin}}/*
+    # Redirect to primary domain
+    https://{{process.env.BUNNYCDN_HOSTNAME}}{{path}}:
+      - https://{{process.env.BUNNYCDN_PULL_ZONE_NAME}}.b-cdn.net/*
+      - https://{{process.env.BUNNYCDN_ORIGIN}}/*
 
-header:
-  remove:
-    - expect-ct
-    - cf-ray
-    - cf-request-id
-    - nel
-    - report-to
+  header:
+    remove:
+      - expect-ct
+      - cf-ray
+      - cf-request-id
+      - nel
+      - report-to
 
-cache:
-  server:
-    1y:
-      - https://{{linked_hostname}}/*/api/*
-      - https://{{linked_hostname}}/*/v2/*
+  cache:
+    server:
+      1y:
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
 
-  client:
-    1h:
-      - https://{{linked_hostname}}/
-      - https://{{linked_hostname}}/*/
-    30d:
-      - https://{{linked_hostname}}/*/api/*
-      - https://{{linked_hostname}}/*/v2/*
-      - https://{{linked_hostname}}/api/*
-      - https://{{linked_hostname}}/v2/*
-      - https://{{linked_hostname}}/*.js
-      - https://{{linked_hostname}}/*.css
-      - https://{{linked_hostname}}/*.png
-      - https://{{linked_hostname}}/*.jpg
+    client:
+      1h:
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/
+      30d:
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.js
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.css
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.png
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.jpg
 
-origin:
-  https://{{origin}}:
-    - https://{{linked_hostname}}/*/api/*
-    - https://{{linked_hostname}}/*/v2/*
-    - https://{{linked_hostname}}/*/stats.json
+  origin:
+    https://{{process.env.BUNNYCDN_ORIGIN}}:
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/stats.json

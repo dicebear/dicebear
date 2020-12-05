@@ -1,5 +1,5 @@
 {
-  "name": "@dicebear/avatars-cdn",
+  "name": "@dicebear/avatars-scripts",
   "version": "1.0.0",
   "main": "src/cli.ts",
   "repository": "https://github.com/DiceBear/avatars.git",
@@ -7,22 +7,26 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@types/sade": "^1.7.2",
+    "basic-ftp": "^4.6.3",
+    "cross-spawn": "^7.0.3",
     "dotenv": "^8.2.0",
     "fs-extra": "^9.0.1",
     "got": "^11.8.0",
     "ora": "^5.1.0",
     "pretty-bytes": "^5.4.1",
-    "sade": "^1.7.4",
     "ts-node": "^9.0.0",
     "typescript": "^4.1.2",
     "yaml": "^1.10.0"
   },
   "scripts": {
-    "update": "ts-node ./src/cli.ts update",
-    "stats": "ts-node ./src/cli.ts stats"
+    "cdn:clear": "ts-node -r dotenv/config ./src/cdn/clear.ts",
+    "cdn:purge": "ts-node -r dotenv/config ./src/cdn/purge.ts",
+    "cdn:upload": "ts-node -r dotenv/config ./src/cdn/upload.ts",
+    "cdn:update": "ts-node -r dotenv/config ./src/cdn/update.ts",
+    "cdn:stats": "ts-node -r dotenv/config ./src/cdn/stats.ts"
   },
   "devDependencies": {
+    "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^9.0.4"
   }
 }

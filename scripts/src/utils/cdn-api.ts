@@ -15,11 +15,11 @@ export function get<T>(uri: string) {
   });
 }
 
-export function post<T>(uri: string, data: T) {
+export function post<T>(uri: string, data: T | undefined = undefined) {
   return got.post(`https://bunnycdn.com/api/${uri}`, {
     headers: getHeaders(),
     responseType: 'json',
-    body: JSON.stringify(data),
+    body: data ? JSON.stringify(data) : undefined,
   });
 }
 

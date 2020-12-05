@@ -1,23 +1,25 @@
 export interface Options {
-  blocked: {
-    referrer: string[];
-  };
-  redirect: {
-    [to: string]: string[];
-  };
-  header: {
-    remove: string[];
-  };
-  cache: {
-    client: {
-      [duration: string]: string[];
+  cdn: {
+    blocked: {
+      referrer: string[];
     };
-    server: {
-      [duration: string]: string[];
+    redirect: {
+      [to: string]: string[];
     };
-  };
-  origin: {
-    [host: string]: string[];
+    header: {
+      remove: string[];
+    };
+    cache: {
+      client: {
+        [duration: string]: string[];
+      };
+      server: {
+        [duration: string]: string[];
+      };
+    };
+    origin: {
+      [host: string]: string[];
+    };
   };
 }
 
