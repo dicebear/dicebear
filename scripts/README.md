@@ -24,7 +24,7 @@ Purges the CDN cache.
 
 ### cdn:stats
 
-[WIP] Outputs statistics from the CDN.
+Outputs statistics from the CDN.
 
 ### cdn:update
 

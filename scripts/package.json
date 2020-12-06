@@ -11,9 +11,13 @@
     "cross-spawn": "^7.0.3",
     "dotenv": "^8.2.0",
     "fs-extra": "^9.0.1",
+    "globby": "^11.0.1",
     "got": "^11.8.0",
+    "mustache": "^4.1.0",
+    "open": "^7.3.0",
     "ora": "^5.1.0",
     "pretty-bytes": "^5.4.1",
+    "throttle-debounce": "^3.0.1",
     "ts-node": "^9.0.0",
     "typescript": "^4.1.2",
     "yaml": "^1.10.0"
@@ -27,6 +31,9 @@
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.2",
-    "@types/fs-extra": "^9.0.4"
+    "@types/fs-extra": "^9.0.4",
+    "@types/mustache": "^4.0.1",
+    "@types/n-readlines": "^1.0.1",
+    "@types/throttle-debounce": "^2.1.0"
   }
 }
