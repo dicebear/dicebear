@@ -30,7 +30,7 @@ The API also supports versioning!
 **Always use the latest version:**  
 https://avatars.dicebear.com/api/:sprites/:seed.svg
 
-**Use a specific version (4.4 for example):**  
-https://avatars.dicebear.com/4.4/api/:sprites/:seed.svg
+**Use a specific version (4.5 for example):**  
+https://avatars.dicebear.com/4.5/api/:sprites/:seed.svg
 
 The last 10 minor versions are supported - starting with version 4.4.
