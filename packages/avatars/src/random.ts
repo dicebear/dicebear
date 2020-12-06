@@ -1,24 +1,25 @@
-import * as seedrandom from 'seedrandom/seedrandom';
+import type { Prng } from './types';
+import { create } from './utils/prng';
 
 export default class Random {
-  private prng: seedrandom.prng;
+  private prng: Prng;
   public readonly seed: string;
 
   constructor(seed: string) {
     this.seed = seed;
 
-    this.prng = seedrandom(seed);
+    this.prng = create(seed);
   }
 
   bool(likelihood: number = 50) {
-    return this.prng() * 100 < likelihood;
+    return this.prng.bool(likelihood);
   }
 
   integer(min: number, max: number) {
-    return Math.floor(this.prng() * (max - min + 1) + min);
+    return this.prng.integer(min, max);
   }
 
   pickone<T>(arr: T[]): T {
-    return arr[this.integer(0, arr.length - 1)];
+    return this.prng.pick(arr);
   }
 }

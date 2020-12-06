@@ -2,6 +2,5 @@
   "npmClient": "yarn",
   "packages": ["packages/*"],
   "concurrency": 1,
-  "version": "4.4.1",
-  "useWorkspaces": true
+  "version": "4.4.1"
 }

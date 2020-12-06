@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.5.0] - 2020-12-06
+
+### Added
+
+- `@dicebear/avatars` Option `dataUri` as replacement for `base64`.
+
+### Changed
+
+- `@dicebear/avatars` Package `seedrandom` replaced with own PRNG implementation.
+
+### Deprecated
+
+- `@dicebear/avatars` Option `base64` is now deprecated. Use `dataUri` instead.
+
 ## [4.4.1] - 2020-11-21
 
 ### Removed
@@ -16,7 +30,8 @@
 
 ### Changed
 
-- `@dicebear/avatars-avataaars-sprites` Completely rewritten to remove the `react`, `react-dom` and `avataaars` dependencies. Solves [#48](https://github.com/DiceBear/avatars/issues/48).
+- `@dicebear/avatars-avataaars-sprites` Completely rewritten to remove the `react`, `react-dom` and `avataaars`
+  dependencies. Solves [#48](https://github.com/DiceBear/avatars/issues/48).
 
 ## [4.3.0] - 2020-11-06
 
@@ -26,7 +41,8 @@
 
 ### Removed
 
-- Code sprites are no longer supported. Too CPU intensive for the HTTP API and does not fit into the future vision of the next major release. Use [qr-image](https://www.npmjs.com/package/qr-image) directly instead.
+- Code sprites are no longer supported. Too CPU intensive for the HTTP API and does not fit into the future vision of
+  the next major release. Use [qr-image](https://www.npmjs.com/package/qr-image) directly instead.
 
 ## [4.2.4] - 2020-07-22
 
@@ -75,11 +91,13 @@
 
 ### Changed
 
-- [#55][1] Parameter key for the HTTP API flattened. It is now no longer necessary to nest the values in an `options` object.
+- [#55][1] Parameter key for the HTTP API flattened. It is now no longer necessary to nest the values in an `options`
+  object.
 - [#61][6] Update `topChange` to `topChance`, clarify some documentation (thanks to @pennstatephil)
 - [Configurator][2] now always generates the smallest possible HTTP-API URL.
 - Reorganized dependencies in the repository.
-- Stackpath CDN configured for HTTP API. Saves 90% traffic to Cloudflare Workers and therefore also unnecessary costs. Unfortunately makes the initial call a bit slower.
+- Stackpath CDN configured for HTTP API. Saves 90% traffic to Cloudflare Workers and therefore also unnecessary costs.
+  Unfortunately makes the initial call a bit slower.
 
 ### Fixed
 

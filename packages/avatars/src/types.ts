@@ -1,6 +1,12 @@
 /// <reference types="../typings/pure-color" />
-/// <reference types="../typings/seedrandom" />
 /// <reference types="../typings/svgson" />
+
+export interface Prng {
+  seed: string;
+  bool(likelihood?: number): boolean;
+  integer(min: number, max: number): number;
+  pick<T>(arr: T[]): T;
+}
 
 export interface Color {
   50: string;
