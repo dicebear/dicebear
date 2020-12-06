@@ -5,7 +5,9 @@ import Parser from './parser';
 export type Options = {
   radius?: number;
   r?: number;
+  /** @deprecated use dataUri instead */
   base64?: boolean;
+  dataUri?: boolean;
   width?: number | string;
   w?: number | string;
   height?: number | string;
@@ -119,7 +121,7 @@ export default class Avatars<O> {
           ],
           attributes: {
             // prettier-ignore
-            transform: `translate(${viewBoxWidth * options.margin / 100}, ${viewBoxHeight * options.margin / 100})`
+            transform: `translate(${viewBoxWidth * options.margin / 100}, ${viewBoxHeight * options.margin / 100})`,
           },
         });
       }
@@ -194,7 +196,15 @@ export default class Avatars<O> {
 
     svg = Parser.stringify(svg);
 
-    return options && options.base64 ? `data:image/svg+xml;base64,${this.base64EncodeUnicode(svg)}` : svg;
+    if (options.dataUri) {
+      return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+    }
+
+    if (options.base64) {
+      return `data:image/svg+xml;base64,${this.base64EncodeUnicode(svg)}`;
+    }
+
+    return svg;
   }
 
   private isGroupable(element: svgson.schema) {
