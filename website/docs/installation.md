@@ -23,3 +23,5 @@ let options = {};
 let avatars = new Avatars(sprites, options);
 let svg = avatars.create('custom-seed');
 ```
+
+You can also omit seed to create a completely random avatar.

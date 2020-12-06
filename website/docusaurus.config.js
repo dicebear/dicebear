@@ -6,7 +6,7 @@ module.exports = {
   url: 'https://avatars.dicebear.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  favicon: 'img/favicon.ico',
+  favicon: 'favicon.ico',
   organizationName: 'DiceBear', // Usually your GitHub org/user name.
   projectName: 'avatars', // Usually your repo name.
   themeConfig: {

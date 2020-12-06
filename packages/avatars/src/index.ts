@@ -44,7 +44,7 @@ export default class Avatars<O> {
    *
    * @param seed
    */
-  public create(seed: string, options?: O & Options) {
+  public create(seed?: string, options?: O & Options) {
     options = { ...this.defaultOptions, ...options };
 
     // Apply alias options

@@ -14,11 +14,13 @@ function hashSeed(seed: string) {
 }
 
 function randomSeed() {
-  return MIN + Math.floor((MAX - MIN) * Math.random());
+  return MIN + Math.floor((MAX - MIN) * Math.random()).toString();
 }
 
 export function create(seed?: string): Prng {
-  let value = (seed ? hashSeed(seed) : randomSeed()) || 1;
+  seed = seed ?? randomSeed();
+
+  let value = hashSeed(seed) || 1;
 
   const next = () => {
     value ^= value << 13;

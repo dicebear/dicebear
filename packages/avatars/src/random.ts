@@ -6,9 +6,8 @@ export default class Random {
   public readonly seed: string;
 
   constructor(seed: string) {
-    this.seed = seed;
-
     this.prng = create(seed);
+    this.seed = this.prng.seed;
   }
 
   bool(likelihood: number = 50) {
