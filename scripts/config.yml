@@ -10,6 +10,7 @@ cdn:
     https://{{process.env.BUNNYCDN_HOSTNAME}}/4.5{{path}}:
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/stats.json
 
     # Redirect to primary domain
     https://{{process.env.BUNNYCDN_HOSTNAME}}{{path}}:
