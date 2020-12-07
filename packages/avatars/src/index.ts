@@ -16,6 +16,7 @@ export type Options = {
   m?: number;
   background?: string;
   b?: number;
+  /** @deprecated */
   userAgent?: string;
 };
 
