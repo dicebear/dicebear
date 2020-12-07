@@ -7,15 +7,15 @@ Designed by [Pablo Stanley](https://twitter.com/pablostanley). The Sketch librar
 [bottts.com](https://bottts.com/).
 
 <p>
-    <img src="https://avatars.dicebear.com/api/bottts/1.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/bottts/2.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/bottts/3.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/bottts/4.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/bottts/5.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/bottts/6.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/bottts/7.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/bottts/8.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/bottts/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/bottts/Sean%20Moore.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/bottts/Lionel%20Quinn.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/bottts/Lydia%20Ellis.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/bottts/Bryan%20Phelps.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/bottts/Ronald%20Frank.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/bottts/Annette%20Klein.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/bottts/Brent%20Hill.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/bottts/Stanley%20Newman.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/bottts/Grace%20Singleton.svg" width="60" />
 </p>
 
 ## Usage

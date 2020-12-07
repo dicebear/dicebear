@@ -6,15 +6,15 @@ slug: /styles/jdenticon
 [Jdenticon](https://github.com/dmester/jdenticon) wrapper for DiceBear Avatars.
 
 <p>
-    <img src="https://avatars.dicebear.com/api/jdenticon/1.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/jdenticon/2.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/jdenticon/3.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/jdenticon/4.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/jdenticon/5.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/jdenticon/6.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/jdenticon/7.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/jdenticon/8.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/jdenticon/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/jdenticon/Sean%20Moore.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/jdenticon/Lionel%20Quinn.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/jdenticon/Lydia%20Ellis.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/jdenticon/Bryan%20Phelps.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/jdenticon/Ronald%20Frank.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/jdenticon/Annette%20Klein.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/jdenticon/Brent%20Hill.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/jdenticon/Stanley%20Newman.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/jdenticon/Grace%20Singleton.svg" width="60" />
 </p>
 
 ## Usage

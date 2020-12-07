@@ -7,15 +7,15 @@ This avatar style combines [male](https://www.npmjs.com/package/@dicebear/avatar
 [female](https://www.npmjs.com/package/@dicebear/avatars-female-sprites) and selects the gender randomly.
 
 <p>
-    <img src="https://avatars.dicebear.com/api/human/1.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/human/2.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/human/3.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/human/4.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/human/5.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/human/6.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/human/7.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/human/8.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/human/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/human/Sean%20Moore.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/human/Lionel%20Quinn.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/human/Lydia%20Ellis.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/human/Bryan%20Phelps.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/human/Ronald%20Frank.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/human/Annette%20Klein.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/human/Brent%20Hill.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/human/Stanley%20Newman.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/human/Grace%20Singleton.svg" width="60" />
 </p>
 
 ## Usage

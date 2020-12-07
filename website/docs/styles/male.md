@@ -7,15 +7,15 @@ Designed by <a href="https://github.com/FlorianKoerner">Florian Körner</a>. Hea
 [8biticon](https://github.com/matveyco/8biticon).
 
 <p>
-    <img src="https://avatars.dicebear.com/api/male/1.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/male/2.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/male/3.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/male/4.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/male/5.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/male/6.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/male/7.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/male/8.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/male/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/male/Sean%20Moore.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/male/Lionel%20Quinn.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/male/Lydia%20Ellis.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/male/Bryan%20Phelps.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/male/Ronald%20Frank.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/male/Annette%20Klein.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/male/Brent%20Hill.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/male/Stanley%20Newman.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/male/Grace%20Singleton.svg" width="60" />
 </p>
 
 ## Usage

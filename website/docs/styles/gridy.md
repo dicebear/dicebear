@@ -6,15 +6,15 @@ slug: /styles/gridy
 Designed by [Jan Forst](https://github.com/darosh/gridy-avatars).
 
 <p>
-    <img src="https://avatars.dicebear.com/api/gridy/1.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/gridy/2.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/gridy/3.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/gridy/4.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/gridy/5.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/gridy/6.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/gridy/7.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/gridy/8.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/gridy/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/gridy/Sean%20Moore.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/gridy/Lionel%20Quinn.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/gridy/Lydia%20Ellis.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/gridy/Bryan%20Phelps.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/gridy/Ronald%20Frank.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/gridy/Annette%20Klein.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/gridy/Brent%20Hill.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/gridy/Stanley%20Newman.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/gridy/Grace%20Singleton.svg" width="60" />
 </p>
 
 ## Usage

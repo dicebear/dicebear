@@ -6,15 +6,15 @@ slug: /styles/identicon
 Inspired by [donpark/identicon](https://github.com/donpark/identicon)
 
 <p>
-    <img src="https://avatars.dicebear.com/api/identicon/1.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/identicon/2.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/identicon/3.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/identicon/4.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/identicon/5.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/identicon/6.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/identicon/7.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/identicon/8.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/identicon/9.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/identicon/Sean%20Moore.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/identicon/Lionel%20Quinn.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/identicon/Lydia%20Ellis.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/identicon/Bryan%20Phelps.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/identicon/Ronald%20Frank.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/identicon/Annette%20Klein.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/identicon/Brent%20Hill.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/identicon/Stanley%20Newman.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/identicon/Grace%20Singleton.svg" width="60" />
 </p>
 
 ## Usage

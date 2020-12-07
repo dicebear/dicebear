@@ -4,15 +4,15 @@ slug: /styles/initials
 ---
 
 <p>
-    <img src="https://avatars.dicebear.com/api/initials/John%20Doe.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/initials/Irene%20West.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/initials/Joshua%20Nelson.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/initials/Terrence%20Gomez.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/initials/Charlie%20Sanders.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/initials/Eli%20Chambers.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/initials/Carla%20Chavez.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/initials/Clarence%20Lawson.svg" width="60" />{ ' ' }
-    <img src="https://avatars.dicebear.com/api/initials/Vivan%20Wade.svg" width="60" />
+    <img src="https://avatars.dicebear.com/api/initials/Sean%20Moore.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/initials/Lionel%20Quinn.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/initials/Lydia%20Ellis.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/initials/Bryan%20Phelps.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/initials/Ronald%20Frank.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/initials/Annette%20Klein.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/initials/Brent%20Hill.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/initials/Stanley%20Newman.svg" width="60" />{ ' ' }
+    <img src="https://avatars.dicebear.com/api/initials/Grace%20Singleton.svg" width="60" />
 </p>
 
 ## Usage
