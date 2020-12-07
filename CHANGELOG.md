@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.5.1] - 2020-12-07
+
+### Fixed
+
+- `@dicebear/avatars` Randomness increased in new PRNG implementation
+
 ## [4.5.0] - 2020-12-06
 
 ### Added
