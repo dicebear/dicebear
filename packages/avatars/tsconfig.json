@@ -6,7 +6,8 @@
     "declaration": true,
     "lib": ["es6", "dom"],
     "noImplicitAny": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "skipLibCheck": true
   },
   "include": ["./src/**/*"]
 }
