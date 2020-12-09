@@ -11,6 +11,7 @@ export async function processLineByLine(log: string, cb: (line: string, i: numbe
 
   let i = 0;
 
+  // @ts-ignore
   for await (const line of rl) {
     cb(line, i++);
   }

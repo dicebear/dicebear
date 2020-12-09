@@ -94,7 +94,7 @@ const pipeline = promisify(stream.pipeline);
   }).start();
 
   const updateLinesSpinner = throttle(1000, (no: number) => {
-    linesSpinner.text = `${no.toLocaleString()} lines processed`;
+    linesSpinner.text = `${no.toLocaleString('en-US')} lines processed`;
   });
 
   await log.processLineByLine(logFilePath, (line, i) => {
@@ -145,12 +145,12 @@ const pipeline = promisify(stream.pipeline);
 
       tableData.push([
         referrer,
-        requests.toLocaleString(),
-        error.toLocaleString(),
+        requests.toLocaleString('en-US'),
+        error.toLocaleString('en-US'),
         `${(error ? (error / requests) * 100 : 0).toFixed(2)}%`,
-        hit.toLocaleString(),
+        hit.toLocaleString('en-US'),
         `${(hit ? (hit / requests) * 100 : 0).toFixed(2)}%`,
-        miss.toLocaleString(),
+        miss.toLocaleString('en-US'),
         `${(miss ? (miss / requests) * 100 : 0).toFixed(2)}%`,
         `$ ${((5 / 10000000) * miss * 30).toFixed(2)}`,
       ]);
