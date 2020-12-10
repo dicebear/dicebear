@@ -10,15 +10,22 @@
     <title>CDN Stats</title>
   </head>
   <body style="padding: 20px;">
-    <table id="table" class="table"></table>
+    <h1>By referrer</h1>
+    <table id="referrer-table" class="table"></table>
+
+    <br />
+    <br />
+
+    <h1>By version</h1>
+    <table id="version-table" class="table"></table>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script>
       $(document).ready(function() {
-          $('#table').DataTable( {
-              data: {{{ tableData }}},
+          $('#referrer-table').DataTable( {
+              data: {{{ referrerTableData }}},
               columns: [
                   { title: "Referrer" },
                   { title: "Requests" },
@@ -29,7 +36,24 @@
                   { title: "Miss" },
                   { title: "Miss rate" },
                   { title: "Estimated monthly costs" },
-              ]
+              ],
+              order: [[ 1, "desc" ]]
+          } );
+
+          $('#version-table').DataTable( {
+              data: {{{ versionsTableData }}},
+              columns: [
+                  { title: "Version" },
+                  { title: "Requests" },
+                  { title: "Errors" },
+                  { title: "Error rate" },
+                  { title: "Hit" },
+                  { title: "Hit rate" },
+                  { title: "Miss" },
+                  { title: "Miss rate" },
+                  { title: "Estimated monthly costs" },
+              ],
+              order: [[ 1, "desc" ]]
           } );
       } );
     </script>

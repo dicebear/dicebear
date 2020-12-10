@@ -13,6 +13,15 @@ import open from 'open';
 
 const pipeline = promisify(stream.pipeline);
 
+type RequestCollection = Record<
+  string,
+  {
+    error: number;
+    hit: number;
+    miss: number;
+  }
+>;
+
 (async () => {
   // Define log path and filename.
   const date = new Date();
@@ -80,14 +89,10 @@ const pipeline = promisify(stream.pipeline);
   }
 
   // Collect referrers
-  let referrers: Record<
-    string,
-    {
-      error: number;
-      hit: number;
-      miss: number;
-    }
-  > = {};
+  let referrers: RequestCollection = {};
+
+  // Collect versions
+  let versions: RequestCollection = {};
 
   const linesSpinner = ora({
     prefixText: 'Read log lines. This may take a while.',
@@ -105,15 +110,16 @@ const pipeline = promisify(stream.pipeline);
     let isHit = cols[0] === 'HIT';
     let statusCode = parseInt(cols[1]);
     let isError = statusCode >= 400;
-    let isApi = !!cols[7].match(/\d+\.\d+\/(v2|api)/);
+    let apiMatch = cols[7].match(/(\d+\.\d+)\/(?:v2|api)/);
 
-    if (false === isApi) {
+    if (null === apiMatch) {
       return;
     }
 
-    if (cols[6] !== '-') {
-      referrer = cols[6].replace(/[^:]+:\/\/([^\/]+).*/, '$1');
-    }
+    let version = apiMatch[1];
+
+    referrer = cols[6].replace(/[^:]+:\/\/([^\/]+).*/, '$1');
+    referrer = ['', '(null)'].includes(referrer) ? '-' : referrer;
 
     referrers[referrer] = referrers[referrer] || {
       error: 0,
@@ -121,45 +127,65 @@ const pipeline = promisify(stream.pipeline);
       miss: 0,
     };
 
+    versions[version] = versions[version] || {
+      error: 0,
+      hit: 0,
+      miss: 0,
+    };
+
     if (isError) {
       referrers[referrer].error++;
+      versions[version].error++;
     }
 
     if (isHit) {
       referrers[referrer].hit++;
+      versions[version].hit++;
     } else {
       referrers[referrer].miss++;
+      versions[version].miss++;
     }
   });
 
   linesSpinner.stop();
 
+  const createTableData = (obj: RequestCollection) => {
+    let result = [];
+
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const { error, hit, miss } = obj[key];
+        const requests = hit + miss;
+
+        result.push([
+          key,
+          requests.toLocaleString('en-US'),
+          error.toLocaleString('en-US'),
+          `${(error ? (error / requests) * 100 : 0).toFixed(2)}%`,
+          hit.toLocaleString('en-US'),
+          `${(hit ? (hit / requests) * 100 : 0).toFixed(2)}%`,
+          miss.toLocaleString('en-US'),
+          `${(miss ? (miss / requests) * 100 : 0).toFixed(2)}%`,
+          `$ ${((5 / 10000000) * miss * 30).toFixed(2)}`,
+        ]);
+      }
+    }
+
+    return result;
+  };
+
   // Compile stats html
   const compileLoader = ora('Compiling stats').start();
-  let tableData = [];
-
-  for (var referrer in referrers) {
-    if (referrers.hasOwnProperty(referrer)) {
-      const { error, hit, miss } = referrers[referrer];
-      const requests = hit + miss;
-
-      tableData.push([
-        referrer,
-        requests.toLocaleString('en-US'),
-        error.toLocaleString('en-US'),
-        `${(error ? (error / requests) * 100 : 0).toFixed(2)}%`,
-        hit.toLocaleString('en-US'),
-        `${(hit ? (hit / requests) * 100 : 0).toFixed(2)}%`,
-        miss.toLocaleString('en-US'),
-        `${(miss ? (miss / requests) * 100 : 0).toFixed(2)}%`,
-        `$ ${((5 / 10000000) * miss * 30).toFixed(2)}`,
-      ]);
-    }
-  }
 
   let template = await fs.readFile(path.join(__dirname, '../../views/cdn/stats.mustache'), { encoding: 'utf-8' });
 
-  await fs.writeFile(statsFilePath, mustache.render(template, { tableData: JSON.stringify(tableData) }));
+  await fs.writeFile(
+    statsFilePath,
+    mustache.render(template, {
+      referrerTableData: JSON.stringify(createTableData(referrers)),
+      versionsTableData: JSON.stringify(createTableData(versions)),
+    })
+  );
 
   open(statsFilePath);
 
