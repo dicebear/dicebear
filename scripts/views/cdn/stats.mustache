@@ -19,6 +19,12 @@
     <h1>By version</h1>
     <table id="version-table" class="table"></table>
 
+    <br />
+    <br />
+
+    <h1>Docs by referrer</h1>
+    <table id="docs-referrer-table" class="table"></table>
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
@@ -44,6 +50,22 @@
               data: {{{ versionsTableData }}},
               columns: [
                   { title: "Version" },
+                  { title: "Requests" },
+                  { title: "Errors" },
+                  { title: "Error rate" },
+                  { title: "Hit" },
+                  { title: "Hit rate" },
+                  { title: "Miss" },
+                  { title: "Miss rate" },
+                  { title: "Estimated monthly costs" },
+              ],
+              order: [[ 1, "desc" ]]
+          } );
+
+          $('#docs-referrer-table').DataTable( {
+              data: {{{ docsReferrerTableData }}},
+              columns: [
+                  { title: "Referrer" },
                   { title: "Requests" },
                   { title: "Errors" },
                   { title: "Error rate" },

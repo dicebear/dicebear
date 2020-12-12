@@ -10,6 +10,8 @@ import * as log from '../utils/log';
 import globby from 'globby';
 import mustache from 'mustache';
 import open from 'open';
+// @ts-ignore
+import Sitemapper from 'sitemapper';
 
 const pipeline = promisify(stream.pipeline);
 
@@ -94,6 +96,16 @@ type RequestCollection = Record<
   // Collect versions
   let versions: RequestCollection = {};
 
+  // Collect doc referrers
+  let docsReferrers: RequestCollection = {};
+
+  const sitemap = new Sitemapper({
+    url: 'https://avatars.dicebear.com/sitemap.xml',
+    timeout: 15000, // 15 seconds
+  });
+
+  const { sites: docsSites } = await sitemap.fetch();
+
   const linesSpinner = ora({
     prefixText: 'Read log lines. This may take a while.',
   }).start();
@@ -111,39 +123,73 @@ type RequestCollection = Record<
     let statusCode = parseInt(cols[1]);
     let isError = statusCode >= 400;
     let apiMatch = cols[7].match(/(\d+\.\d+)\/(?:v2|api)/);
+    let isDocs = docsSites.includes(cols[7]);
 
-    if (null === apiMatch) {
+    if (null === apiMatch && false === isDocs) {
       return;
     }
 
-    let version = apiMatch[1];
+    let version = '';
+    let isApi = apiMatch !== null;
+
+    if (apiMatch) {
+      version = apiMatch[1];
+    }
 
     referrer = cols[6].replace(/[^:]+:\/\/([^\/]+).*/, '$1');
     referrer = ['', '(null)'].includes(referrer) ? '-' : referrer;
 
-    referrers[referrer] = referrers[referrer] || {
-      error: 0,
-      hit: 0,
-      miss: 0,
-    };
+    if (isApi) {
+      referrers[referrer] = referrers[referrer] || {
+        error: 0,
+        hit: 0,
+        miss: 0,
+      };
 
-    versions[version] = versions[version] || {
-      error: 0,
-      hit: 0,
-      miss: 0,
-    };
+      versions[version] = versions[version] || {
+        error: 0,
+        hit: 0,
+        miss: 0,
+      };
+    }
+
+    if (isDocs) {
+      docsReferrers[referrer] = docsReferrers[referrer] || {
+        error: 0,
+        hit: 0,
+        miss: 0,
+      };
+    }
 
     if (isError) {
-      referrers[referrer].error++;
-      versions[version].error++;
+      if (isApi) {
+        referrers[referrer].error++;
+        versions[version].error++;
+      }
+
+      if (isDocs) {
+        docsReferrers[referrer].error++;
+      }
     }
 
     if (isHit) {
-      referrers[referrer].hit++;
-      versions[version].hit++;
+      if (isApi) {
+        referrers[referrer].hit++;
+        versions[version].hit++;
+      }
+
+      if (isDocs) {
+        docsReferrers[referrer].hit++;
+      }
     } else {
-      referrers[referrer].miss++;
-      versions[version].miss++;
+      if (isApi) {
+        referrers[referrer].miss++;
+        versions[version].miss++;
+      }
+
+      if (isDocs) {
+        docsReferrers[referrer].miss++;
+      }
     }
   });
 
@@ -184,6 +230,7 @@ type RequestCollection = Record<
     mustache.render(template, {
       referrerTableData: JSON.stringify(createTableData(referrers)),
       versionsTableData: JSON.stringify(createTableData(versions)),
+      docsReferrerTableData: JSON.stringify(createTableData(docsReferrers)),
     })
   );
 
