@@ -34,7 +34,12 @@ cdn:
     client:
       1h:
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/
-        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/docs*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/styles*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/integrations*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/legal*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/faq*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/sitemap.xml
       30d:
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
