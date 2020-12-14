@@ -54,9 +54,9 @@ export default function (random: Random, options: Options = {}) {
         ${content}
       </g>
     `;
-  }
 
-  options.background = undefined;
+    options.background = undefined;
+  }
 
   return `
     <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">

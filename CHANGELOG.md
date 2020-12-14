@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.5.2] - 2020-12-14
+
+### Fixed
+
+- `@dicebear/avatars-avataaars-sprites` Background color was not used
+
 ## [4.5.1] - 2020-12-07
 
 ### Fixed
