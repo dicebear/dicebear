@@ -20,23 +20,20 @@ import { EdgeRule, Pullzone } from '../types';
   }, {});
 
   // Save function
-  const saveEdgeRule = async (val: EdgeRule) => {
+  const newEdgeRules: EdgeRule[] = [];
+  const saveEdgeRule = (val: EdgeRule) => {
     let managedId = edgeRule.getManagedId(val);
 
     if (managedEdgeRules[managedId]) {
       delete managedEdgeRules[managedId];
     } else {
-      try {
-        await api.post(`pullzone/${process.env.BUNNYCDN_PULL_ZONE_ID}/edgerules/addOrUpdate`, val);
-      } catch (e) {
-        console.error(e);
-      }
+      newEdgeRules.push(val);
     }
   };
 
   // Update blocked referrers
   if (cdnOptions.blocked.referrer) {
-    await saveEdgeRule(edgeRule.createBlockReferrers(cdnOptions.blocked.referrer));
+    saveEdgeRule(edgeRule.createBlockReferrers(cdnOptions.blocked.referrer));
   }
 
   // Update redirects
@@ -46,14 +43,14 @@ import { EdgeRule, Pullzone } from '../types';
     let to = redirects[i];
     let from = cdnOptions.redirect[to];
 
-    await saveEdgeRule(edgeRule.createRedirect(to, from));
+    saveEdgeRule(edgeRule.createRedirect(to, from));
   }
 
   // Remove headers
   for (let i = 0; i < cdnOptions.header.remove.length; i++) {
     let name = cdnOptions.header.remove[i];
 
-    await saveEdgeRule(edgeRule.createRemoveHeader(name));
+    saveEdgeRule(edgeRule.createRemoveHeader(name));
   }
 
   // Update client cache
@@ -63,7 +60,7 @@ import { EdgeRule, Pullzone } from '../types';
     let timeString = cacheClientTimes[i];
     let routes = cdnOptions.cache.client[timeString];
 
-    await saveEdgeRule(edgeRule.createClientCache(timeString, routes));
+    saveEdgeRule(edgeRule.createClientCache(timeString, routes));
   }
 
   // Update server cache
@@ -73,7 +70,7 @@ import { EdgeRule, Pullzone } from '../types';
     let timeString = cacheServerTimes[i];
     let routes = cdnOptions.cache.server[timeString];
 
-    await saveEdgeRule(edgeRule.createServerCache(timeString, routes));
+    saveEdgeRule(edgeRule.createServerCache(timeString, routes));
   }
 
   // Update origin
@@ -83,7 +80,7 @@ import { EdgeRule, Pullzone } from '../types';
     let origin = origins[i];
     let routes = cdnOptions.origin[origin];
 
-    await saveEdgeRule(edgeRule.createOrigin(origin, routes));
+    saveEdgeRule(edgeRule.createOrigin(origin, routes));
   }
 
   // Delete obsolete managed edge rules
@@ -93,5 +90,18 @@ import { EdgeRule, Pullzone } from '../types';
     let id = managedEdgeRulesValues[i];
 
     await api.del(`pullzone/${process.env.BUNNYCDN_PULL_ZONE_ID}/edgerules/${id}`);
+  }
+
+  // Save new rules
+  if (newEdgeRules.length > 0) {
+    await Promise.all(
+      newEdgeRules.map(async (edgeRule) => {
+        try {
+          await api.post(`pullzone/${process.env.BUNNYCDN_PULL_ZONE_ID}/edgerules/addOrUpdate`, edgeRule);
+        } catch (e) {
+          console.error(e);
+        }
+      })
+    );
   }
 })();
