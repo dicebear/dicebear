@@ -64,7 +64,7 @@ module.exports = {
             },
             {
               label: 'Twitter',
-              href: 'https://twitter.com/flomavali',
+              href: 'https://twitter.com/KoernerFlorian',
             },
           ],
         },
