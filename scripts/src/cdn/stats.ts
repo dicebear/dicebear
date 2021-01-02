@@ -30,7 +30,7 @@ type RequestCollection = Record<
 
   date.setDate(date.getDate() - 1);
 
-  const month = date.getMonth() + 1;
+  const month = ('00' + date.getMonth() + 1).slice(-2);
   const day = ('00' + date.getDate()).slice(-2);
   const year = date.getFullYear().toString().slice(-2);
   const yesterday = `${month}-${day}-${year}`;
