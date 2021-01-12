@@ -70,7 +70,7 @@ export default function Teaser() {
 
                           <div className="d-flex flex-column align-items-center mt-5">
                             <div className="text-white line-height-0 mb-1">sponsored by</div>
-                            <Link className="btn btn-block btn-light justify-center p-3" href="https://bunnycdn.com/">
+                            <Link className="btn btn-block btn-light justify-center p-3" href="https://bunny.net/">
                               <img src="/img/bunnycdn.svg" alt="bunnycdn" style={{ maxWidth: 200, height: 'auto' }} />
                             </Link>
                           </div>
