@@ -83,6 +83,11 @@ import { EdgeRule, Pullzone } from '../types';
     saveEdgeRule(edgeRule.createOrigin(origin, routes));
   }
 
+  // Update cors headers
+  if (cdnOptions.cors) {
+    saveEdgeRule(edgeRule.createCorsHeader(cdnOptions.cors));
+  }
+
   // Delete obsolete managed edge rules
   let managedEdgeRulesValues = Object.values(managedEdgeRules);
 

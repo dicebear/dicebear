@@ -105,6 +105,27 @@ export function createRemoveHeader(name: string) {
   return makeManaged(edgeRule);
 }
 
+export function createCorsHeader(routes: string[]) {
+  let edgeRule: EdgeRule = {
+    Enabled: true,
+    Description: `Set cors`,
+    ActionType: ActionType.SetResponseHeader,
+    ActionParameter1: 'access-control-allow-origin',
+    ActionParameter2: `*`,
+    TriggerMatchingType: MatchingType.Any,
+    Triggers: array.chunk(routes, 5).map((val) => {
+      return {
+        Type: TriggerType.RequestURL,
+        Parameter1: '',
+        PatternMatchingType: MatchingType.Any,
+        PatternMatches: val,
+      };
+    }),
+  };
+
+  return makeManaged(edgeRule);
+}
+
 export function createClientCache(timeString: string, routes: string[]) {
   let edgeRule: EdgeRule = {
     Enabled: true,

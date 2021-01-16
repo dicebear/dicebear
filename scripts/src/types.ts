@@ -20,6 +20,7 @@ export interface Options {
     origin: {
       [host: string]: string[];
     };
+    cors: string[];
   };
 }
 

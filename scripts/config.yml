@@ -25,6 +25,14 @@ cdn:
       - nel
       - report-to
 
+  cors:
+    - https://{{process.env.BUNNYCDN_HOSTNAME}}/stats.json
+    - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/stats.json
+    - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
+    - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
+    - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
+    - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
+
   cache:
     server:
       1y:
