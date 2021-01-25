@@ -43,7 +43,6 @@ export default function (random: Random, options: Options = {}) {
 
   if (options.style === 'circle') {
     content = `
-      <path fill="#fff" d="M0 0h280v280H0z"/>
       <path d="M260 160c0 66.274-53.726 120-120 120S20 226.274 20 160 73.726 40 140 40s120 53.726 120 120z" fill="${
         options.background ?? palette.blue01
       }"/>
