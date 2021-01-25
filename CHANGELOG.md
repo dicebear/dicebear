@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.5.3] - 2021-01-25
+
+### Fixed
+
+- `@dicebear/avatars-avataaars-sprites` Removed unnecessary white background.
+
 ## [4.5.2] - 2020-12-14
 
 ### Fixed
