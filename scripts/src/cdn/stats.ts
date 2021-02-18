@@ -26,14 +26,9 @@ type RequestCollection = Record<
 
 (async () => {
   // Define log path and filename.
-  const date = new Date();
+  const [year, month, day] = new Date().toISOString().split('T')[0].split('-');
 
-  date.setDate(date.getDate() - 1);
-
-  const month = ('00' + date.getMonth() + 1).slice(-2);
-  const day = ('00' + date.getDate()).slice(-2);
-  const year = date.getFullYear().toString().slice(-2);
-  const yesterday = `${month}-${day}-${year}`;
+  const yesterday = `${month}-${day}-${year.slice(-2)}`;
   const tmpDir = path.join(__dirname, '../../.tmp/cdn/stats');
   const filename = `${yesterday}.log`;
   const logFilePath = path.join(tmpDir, filename);
