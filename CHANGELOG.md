@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.5.4] - 2021-02-24
+
+### Fixed
+
+- `@dicebear/avatars` Type for `b` option.
+
 ## [4.5.3] - 2021-01-25
 
 ### Fixed
