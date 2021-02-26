@@ -1,16 +1,12 @@
 cdn:
   blocked:
-    referrer:
-      # Block Porn sites
-      - uncams.com
-      - xujan.com
+    referrer: []
 
   redirect:
     # Redirect to current api version
     https://{{process.env.BUNNYCDN_HOSTNAME}}/4.5{{path}}:
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
-      - https://{{process.env.BUNNYCDN_HOSTNAME}}/stats.json
 
     # Redirect to primary domain
     https://{{process.env.BUNNYCDN_HOSTNAME}}{{path}}:
@@ -18,16 +14,10 @@ cdn:
       - https://{{process.env.BUNNYCDN_ORIGIN}}/*
 
   header:
-    remove:
-      - expect-ct
-      - cf-ray
-      - cf-request-id
-      - nel
-      - report-to
+    remove: []
 
   cors:
     - https://{{process.env.BUNNYCDN_HOSTNAME}}/stats.json
-    - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/stats.json
     - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
     - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
     - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
@@ -49,17 +39,14 @@ cdn:
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/faq*
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/sitemap.xml
       30d:
-        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
-        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
-        - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
-        - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.js
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.css
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.png
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.jpg
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.svg
 
   origin:
     https://{{process.env.BUNNYCDN_ORIGIN}}:
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
-      - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/stats.json
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/stats.json

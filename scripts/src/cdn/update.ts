@@ -32,7 +32,7 @@ import { EdgeRule, Pullzone } from '../types';
   };
 
   // Update blocked referrers
-  if (cdnOptions.blocked.referrer) {
+  if (cdnOptions.blocked.referrer.length > 0) {
     saveEdgeRule(edgeRule.createBlockReferrers(cdnOptions.blocked.referrer));
   }
 
