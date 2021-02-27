@@ -43,7 +43,8 @@ cdn:
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.css
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.png
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.jpg
-        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.svg
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*.svg
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*.svg
 
   origin:
     https://{{process.env.BUNNYCDN_ORIGIN}}:
