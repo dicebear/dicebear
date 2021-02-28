@@ -3,15 +3,12 @@ cdn:
     referrer: []
 
   redirect:
-    # Redirect to current api version
-    https://{{process.env.BUNNYCDN_HOSTNAME}}/4.5{{path}}:
-      - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
-      - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
-
     # Redirect to primary domain
     https://{{process.env.BUNNYCDN_HOSTNAME}}{{path}}:
       - https://{{process.env.BUNNYCDN_PULL_ZONE_NAME}}.b-cdn.net/*
       - https://{{process.env.BUNNYCDN_ORIGIN}}/*
+      - https://dicebear.com/*
+      - https://www.dicebear.com/*
 
   header:
     remove: []
@@ -19,14 +16,16 @@ cdn:
   cors:
     - https://{{process.env.BUNNYCDN_HOSTNAME}}/stats.json
     - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
-    - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
     - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
+    - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
     - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
 
   cache:
     server:
       1y:
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
 
     client:
@@ -43,11 +42,12 @@ cdn:
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.css
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.png
         - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.jpg
-        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*.svg
-        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*.svg
+        - https://{{process.env.BUNNYCDN_HOSTNAME}}/*.svg
 
   origin:
     https://{{process.env.BUNNYCDN_ORIGIN}}:
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/api/*
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/api/*
+      - https://{{process.env.BUNNYCDN_HOSTNAME}}/v2/*
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/*/v2/*
       - https://{{process.env.BUNNYCDN_HOSTNAME}}/stats.json
