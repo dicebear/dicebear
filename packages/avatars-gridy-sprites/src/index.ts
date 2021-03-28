@@ -15,12 +15,12 @@ let fixDeterministic = (svg: string, id: number): string => {
     return svg;
   }
   let [, prevId] = match;
-  let clipA = new RegExp(`clip-a-${prevId}`, "g");
-  let clipB = new RegExp(`clip-b-${prevId}`, "g");
+  let clipA = new RegExp(`clip-a-${prevId}`, 'g');
+  let clipB = new RegExp(`clip-b-${prevId}`, 'g');
   return svg.replace(clipA, `clip-a-${id}`).replace(clipB, `clip-b-${id}`);
 };
 
-export default function (random: Random, options: Options = {}) {
+export function create(random: Random, options: Options = {}) {
   let body = random.integer(0, 7);
   let bodyColor = random.integer(0, 7);
 
@@ -41,6 +41,8 @@ export default function (random: Random, options: Options = {}) {
   return [
     '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 24 24" version="1.1">',
     svg,
-    '</svg>'
+    '</svg>',
   ].join('');
 }
+
+export default create;

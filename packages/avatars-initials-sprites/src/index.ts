@@ -16,7 +16,7 @@ type Options = {
   bold?: boolean;
 };
 
-export default function (random: Random, options: Options = {}) {
+export function create(random: Random, options: Options = {}) {
   options.backgroundColorLevel = options.backgroundColorLevel || 600;
   options.fontSize = options.fontSize || 50;
   options.chars = options.chars || 2;
@@ -59,3 +59,5 @@ export default function (random: Random, options: Options = {}) {
 
   return svg;
 }
+
+export default create;

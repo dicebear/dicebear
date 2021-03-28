@@ -3,7 +3,7 @@ import type Random from '@dicebear/avatars/lib/random';
 import * as utils from './utils';
 import { palette } from './colors';
 
-export default function (random: Random, options: Options = {}) {
+export function create(random: Random, options: Options = {}) {
   let noseType = utils.getNoseType();
   let skinType = utils.getSkinType();
   let skinColor = utils.getSkinColor(options, random);
@@ -63,3 +63,5 @@ export default function (random: Random, options: Options = {}) {
     </svg>
   `;
 }
+
+export default create;

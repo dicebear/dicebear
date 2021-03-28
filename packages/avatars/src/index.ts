@@ -22,6 +22,9 @@ export type Options = {
 
 export type SpriteCollection<O = {}> = (random: Random, options?: O) => string | svgson.schema;
 
+/**
+ * @deprecated use `createAvatar` function instead.
+ */
 export default class Avatars<O> {
   public static random = Random;
   public static color = Color;
@@ -220,4 +223,11 @@ export default class Avatars<O> {
 
     return btoa(utf8Bytes);
   }
+}
+
+export function createAvatar<O = {}>(
+  style: { create: SpriteCollection<O> },
+  { seed, ...options }: O & Options & { seed?: string }
+) {
+  return new Avatars(style.create).create(seed, options as O & Options);
 }

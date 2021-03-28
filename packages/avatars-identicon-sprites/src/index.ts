@@ -7,7 +7,7 @@ type Options = {
   colorLevel?: keyof ColorType;
 };
 
-export default function(random: Random, options: Options = {}) {
+export function create(random: Random, options: Options = {}) {
   options.colorLevel = options.colorLevel || 600;
 
   let colors: string[] = [];
@@ -71,3 +71,5 @@ export default function(random: Random, options: Options = {}) {
     '</svg>'
   ].join('');
 }
+
+export default create;

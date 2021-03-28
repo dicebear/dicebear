@@ -5,7 +5,7 @@ type Options = {
   mood?: Array<'happy' | 'sad' | 'surprised'>;
 };
 
-export default function(random: Random, options: Options = {}) {
+export function create(random: Random, options: Options = {}) {
   let skinColor = random.pickone([
     new Color('#FFDBAC'),
     new Color('#F5CFA0'),
@@ -14,7 +14,7 @@ export default function(random: Random, options: Options = {}) {
     new Color('#CB9E6E'),
     new Color('#B68655'),
     new Color('#A26D3D'),
-    new Color('#8D5524')
+    new Color('#8D5524'),
   ]);
 
   let hairColor = random
@@ -42,7 +42,7 @@ export default function(random: Random, options: Options = {}) {
       new Color('#504444'),
       new Color('#6a4e42'),
       new Color('#a7856a'),
-      new Color('#977961')
+      new Color('#977961'),
     ])
     .brighterOrDarkerThan(skinColor, 17);
 
@@ -51,13 +51,10 @@ export default function(random: Random, options: Options = {}) {
     new Color('#697b94'),
     new Color('#647b90'),
     new Color('#5b7c8b'),
-    new Color('#588387')
+    new Color('#588387'),
   ]);
 
-  let eyebrowsColor = hairColor
-    .clone()
-    .darkerThan(skinColor, 7)
-    .darkerThan(hairColor, 10);
+  let eyebrowsColor = hairColor.clone().darkerThan(skinColor, 7).darkerThan(hairColor, 10);
 
   let accessoriesColor = random.pickone([
     new Color('#daa520'),
@@ -65,7 +62,7 @@ export default function(random: Random, options: Options = {}) {
     new Color('#eee8aa'),
     new Color('#fafad2'),
     new Color('#d3d3d3'),
-    new Color('#a9a9a9')
+    new Color('#a9a9a9'),
   ]);
 
   let mouthColor = random
@@ -75,7 +72,7 @@ export default function(random: Random, options: Options = {}) {
       new Color('#c98276'),
       new Color('#e35d6a'),
       new Color('#e32153'),
-      new Color('#de0f0d')
+      new Color('#de0f0d'),
     ])
     .brighterOrDarkerThan(skinColor, 10);
 
@@ -87,7 +84,7 @@ export default function(random: Random, options: Options = {}) {
     new Color('#a04b5d'),
     new Color('#191919'),
     new Color('#323232'),
-    new Color('#4b4b4b')
+    new Color('#4b4b4b'),
   ]);
 
   let clothesColor = random.pickone([
@@ -103,7 +100,7 @@ export default function(random: Random, options: Options = {}) {
     new Color('#ffeead'),
     new Color('#ff6f69'),
     new Color('#ffcc5c'),
-    new Color('#88d8b0')
+    new Color('#88d8b0'),
   ]);
 
   let hatColor = random.pickone([
@@ -111,7 +108,7 @@ export default function(random: Random, options: Options = {}) {
     new Color('#2663a3'),
     new Color('#a62116'),
     new Color('#3d8a6b'),
-    new Color('#614f8a')
+    new Color('#614f8a'),
   ]);
 
   let mouth = [];
@@ -266,3 +263,5 @@ export default function(random: Random, options: Options = {}) {
     '</svg>'
   ].join('');
 }
+
+export default create;

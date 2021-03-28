@@ -4,6 +4,32 @@
 
 ### Added
 
+- New API based on functions instead of classes in preparation for version 5.0
+
+  Old API
+
+  ```js
+  import Avatars from `@dicebear/avatars`;
+  import style from `@dicebear/avatars-identicon-sprites`;
+
+  let options = {};
+  let seed = 'custom-seed';
+  let avatars = new Avatars(style, options);
+  let svg = avatars.create(seed);
+  ```
+
+  New API
+
+  ```js
+  import { createAvatar } from `@dicebear/avatars`;
+  import * as style from `@dicebear/avatars-identicon-sprites`;
+
+  let svg = createAvatar(style, {
+    seed: 'custom-seed',
+    // ... and other options
+  });
+  ```
+
 #### @dicebear/avatars-avataaars-sprites
 
 - New option values for `accessoriesColor`, `clotheColor` and `hatColor`:
@@ -106,6 +132,8 @@
   - `winterHat04`
 
 ### Deprecated
+
+- Default exports are deprecated. Use new function based API instead. (See "Added")
 
 #### @dicebear/avatars-avataaars-sprites
 

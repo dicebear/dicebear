@@ -18,7 +18,7 @@ const group = (random: Random, content: string, chance: number, x: number, y: nu
   return '';
 };
 
-export default function (random: Random, options: Options = {}) {
+export function create(random: Random, options: Options = {}) {
   options = {
     primaryColorLevel: 600,
     secondaryColorLevel: 400,
@@ -65,3 +65,5 @@ export default function (random: Random, options: Options = {}) {
     '</svg>'
   ].join('');
 }
+
+export default create;
