@@ -137,19 +137,19 @@
 
 #### @dicebear/avatars-avataaars-sprites
 
-- Some values of `accessoriesColor` and `clotheColor` are deprecated:
+- Some `accessoriesColor` and `clotheColor` values are deprecated:
 
   - `blue` => use `blue01`, `blue02` and `blue03` instead
   - `gray` => use `gray01` and `gray02` instead
   - `pastel` => use `pastelBlue`, `pastelGreen`, `pastelOrange`, `pastelRed` and `pastelYellow` instead
 
-- Some values of `clothes` are deprecated:
+- Some `clothes` values are deprecated:
 
   - `blazer` => use `blazerAndShirt` and `blazerAndSweater` instead
   - `sweater` => use `collarAndSweater` instead
   - `shirt` => use `graphicShirt`, `shirtCrewNeck`, `shirtScoopNeck` and `shirtVNeck` instead
 
-- Some values of `eyebrow` are deprecated:
+- Some `eyebrow` values are deprecated:
 
   - `flat` => use `flatNatural` instead
   - `raised` => use `raisedExcited` and `raisedExcitedNatural` instead
@@ -158,18 +158,18 @@
   - `up` => use `upDown` and `upDownNatural` instead
   - `frown` => use `frownNatural` instead
 
-- Some values of `eyes` are deprecated:
+- Some `eyes` values are deprecated:
 
   - `close` => use `closed` instead
   - `dizzy` => use `xDizzy` instead
   - `roll` => use `eyeRoll` instead
 
-- Some values of `facialHairColor` and `hairColor` are deprecated:
+- Some `facialHairColor` and `hairColor` values are deprecated:
 
   - `pastel` => use `pastelPink` instead
   - `gray` => use `silverGray` instead
 
-- Some values of `facialHair` are deprecated:
+- Some `facialHair` values are deprecated:
 
   - `medium` => use `beardMedium` instead
   - `light` => use `beardLight` instead
@@ -177,13 +177,13 @@
   - `fancy` => use `moustaceFancy` instead
   - `magnum` => use `moustacheMagnum` instead
 
-- Some values of `mouth` are deprecated:
+- Some `mouth` values are deprecated:
 
   - `scream` => use `screamOpen` instead
 
 - Option `mode` is deprecated. Default will be `include` starting with version 5.0
 
-- Some values of `top` are deprecated:
+- Some `top` values are deprecated:
 
   - `longHair` => use `bigHair`, `bob`, `bun`, `curly`, `curvy`, `dreads`, `frida`, `fro`, `froAndBand`, `miaWallace`,
     `longButNotTooLong`, `shavedSides`, `straight01`, `straight02` and `straightAndStrand` instead
