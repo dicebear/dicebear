@@ -1,42 +1,43 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, Eyebrow } from '../options';
 import getOption from './getOption';
 import { eyebrows } from '../paths';
+import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random) {
-  let eyebrowType = [];
+export default function (options: Options, random: Random): () => string {
+  let selected: Array<keyof typeof eyebrows> = [];
 
-  if (getOption('eyebrow', 'angry', options)) {
-    eyebrowType.push(eyebrows.angry, eyebrows.angryNatural);
-  }
+  let values: Record<Eyebrow, Array<keyof typeof eyebrows>> = {
+    angry: ['angry'],
+    angryNatural: ['angryNatural'],
+    default: ['default'],
+    defaultNatural: ['defaultNatural'],
+    flat: ['flatNatural'],
+    flatNatural: ['flatNatural'],
+    raised: ['raisedExcited', 'raisedExcitedNatural'],
+    raisedExcited: ['raisedExcited'],
+    raisedExcitedNatural: ['raisedExcitedNatural'],
+    sad: ['sadConcerned', 'sadConcernedNatural'],
+    sadConcerned: ['sadConcerned'],
+    sadConcernedNatural: ['sadConcernedNatural'],
+    unibrow: ['unibrowNatural'],
+    unibrowNatural: ['unibrowNatural'],
+    up: ['upDown', 'upDownNatural'],
+    upDown: ['upDown'],
+    upDownNatural: ['upDownNatural'],
+    frown: ['frownNatural'],
+    frownNatural: ['frownNatural'],
+  };
 
-  if (getOption('eyebrow', 'default', options)) {
-    eyebrowType.push(eyebrows.default, eyebrows.defaultNatural);
-  }
+  Object.keys(values).forEach((key) => {
+    let val = values[key as Eyebrow];
 
-  if (getOption('eyebrow', 'flat', options)) {
-    eyebrowType.push(eyebrows.flatNatural);
-  }
+    if (getOption('eyebrow', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('eyebrow', 'raised', options)) {
-    eyebrowType.push(eyebrows.raisedExcited, eyebrows.raisedExcitedNatural);
-  }
+  let picked = random.pickone(arrayUnique(selected));
 
-  if (getOption('eyebrow', 'sad', options)) {
-    eyebrowType.push(eyebrows.sadConcerned, eyebrows.sadConcernedNatural);
-  }
-
-  if (getOption('eyebrow', 'unibrow', options)) {
-    eyebrowType.push(eyebrows.unibrowNatural);
-  }
-
-  if (getOption('eyebrow', 'up', options)) {
-    eyebrowType.push(eyebrows.upDown, eyebrows.upDownNatural);
-  }
-
-  if (getOption('eyebrow', 'frown', options)) {
-    eyebrowType.push(eyebrows.frownNatural);
-  }
-
-  return random.pickone(eyebrowType);
+  return eyebrows[picked];
 }

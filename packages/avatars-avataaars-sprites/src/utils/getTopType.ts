@@ -1,75 +1,96 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, Top } from '../options';
 import getOption from './getOption';
 import { top } from '../paths';
 
-export default function (options: Options, random: Random): [(color: string) => string, boolean, number] {
-  let topType: Array<[(color: string) => string, boolean, number]> = [];
+export default function (
+  options: Options,
+  random: Random
+): { path: (color: string) => string; isHat: boolean; zIndex: number } {
+  let selected: Array<keyof typeof top> = [];
 
-  if (getOption('top', 'longHair', options)) {
-    topType.push(
-      [top.bigHair, false, 0],
-      [top.bob, false, 0],
-      [top.bun, false, 1],
-      [top.curly, false, 0],
-      [top.curvy, false, 0],
-      [top.dreads, false, 0],
-      [top.frida, false, 0],
-      [top.fro, false, 0],
-      [top.froAndBand, false, 0],
-      [top.miaWallace, false, 0],
-      [top.longButNotTooLong, false, 0],
-      [top.shavedSides, false, 0],
-      [top.straight01, false, 0],
-      [top.straight02, false, 0],
-      [top.straightAndStrand, false, 0]
-    );
-  }
+  let values: Record<Top, Array<keyof typeof top>> = {
+    longHair: [
+      'bigHair',
+      'bob',
+      'bun',
+      'curly',
+      'curvy',
+      'dreads',
+      'frida',
+      'fro',
+      'froAndBand',
+      'miaWallace',
+      'longButNotTooLong',
+      'shavedSides',
+      'straight01',
+      'straight02',
+      'straightAndStrand',
+    ],
+    bigHair: ['bigHair'],
+    bob: ['bob'],
+    bun: ['bun'],
+    curly: ['curly'],
+    curvy: ['curvy'],
+    dreads: ['dreads'],
+    frida: ['frida'],
+    fro: ['fro'],
+    froAndBand: ['froAndBand'],
+    miaWallace: ['miaWallace'],
+    longButNotTooLong: ['longButNotTooLong'],
+    shavedSides: ['shavedSides'],
+    straight01: ['straight01'],
+    straight02: ['straight02'],
+    straightAndStrand: ['straightAndStrand'],
+    shortHair: [
+      'dreads01',
+      'dreads02',
+      'frizzle',
+      'shaggy',
+      'shaggyMullet',
+      'shortCurly',
+      'shortFlat',
+      'shortRound',
+      'shortWaved',
+      'sides',
+      'theCaesar',
+      'theCaesarAndSidePart',
+    ],
+    dreads01: ['dreads01'],
+    dreads02: ['dreads02'],
+    frizzle: ['frizzle'],
+    shaggy: ['shaggy'],
+    shaggyMullet: ['shaggyMullet'],
+    shortCurly: ['shortCurly'],
+    shortFlat: ['shortFlat'],
+    shortRound: ['shortRound'],
+    shortWaved: ['shortWaved'],
+    sides: ['sides'],
+    theCaesar: ['theCaesar'],
+    theCaesarAndSidePart: ['theCaesarAndSidePart'],
+    eyepatch: ['eyepatch'],
+    hat: ['hat'],
+    winterHat01: ['winterHat01'],
+    winterHat02: ['winterHat02'],
+    winterHat03: ['winterHat03'],
+    winterHat04: ['winterHat04'],
+    hijab: ['hijab'],
+    turban: ['turban'],
+  };
 
-  if (getOption('top', 'shortHair', options)) {
-    topType.push(
-      [top.dreads01, false, 1],
-      [top.dreads02, false, 1],
-      [top.frizzle, false, 1],
-      [top.shaggy, false, 2],
-      [top.shaggyMullet, false, 0],
-      [top.shortCurly, false, 1],
-      [top.shortFlat, false, 1],
-      [top.shortRound, false, 1],
-      [top.shortWaved, false, 1],
-      [top.sides, false, 1],
-      [top.theCaesar, false, 1],
-      [top.theCaesarAndSidePart, false, 1]
-    );
-  }
+  Object.keys(values).forEach((key) => {
+    let val = values[key as Top];
 
-  if (getOption('top', 'eyepatch', options)) {
-    topType.push([top.eyepatch, true, 0]);
-  }
+    if (getOption('top', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('top', 'hat', options)) {
-    topType.push(
-      [top.hat, true, 0],
-      [top.winterHat01, true, 2],
-      [top.winterHat02, true, 2],
-      [top.winterHat03, true, 2],
-      [top.winterHat04, true, 2]
-    );
-  }
-
-  if (getOption('top', 'hijab', options)) {
-    topType.push([top.hijab, true, 1]);
-  }
-
-  if (getOption('top', 'turban', options)) {
-    topType.push([top.turban, true, 1]);
-  }
-
-  let pickedTopType = random.pickone(topType);
+  let picked = random.pickone(selected);
 
   if (false === random.bool(undefined !== options.topChance ? options.topChance : 100)) {
-    return [() => '', false, 0];
+    return { path: () => '', isHat: false, zIndex: 0 };
   }
 
-  return pickedTopType;
+  return top[picked];
 }

@@ -1,48 +1,42 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, Color } from '../options';
 import getOption from './getOption';
 import { palette } from '../colors';
+import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random) {
-  let hatColor = [];
+export default function (options: Options, random: Random): string {
+  let selected: Array<keyof typeof palette> = [];
 
-  if (getOption('hatColor', 'black', options)) {
-    hatColor.push(palette.black);
-  }
+  let colors: Record<Color, Array<keyof typeof palette>> = {
+    black: ['black'],
+    blue: ['blue01', 'blue02', 'blue03'],
+    blue01: ['blue01'],
+    blue02: ['blue02'],
+    blue03: ['blue03'],
+    gray: ['gray01', 'gray02'],
+    gray01: ['gray01'],
+    gray02: ['gray02'],
+    heather: ['heather'],
+    pastel: ['pastelBlue', 'pastelGreen', 'pastelOrange', 'pastelRed', 'pastelYellow'],
+    pastelBlue: ['pastelBlue'],
+    pastelGreen: ['pastelGreen'],
+    pastelOrange: ['pastelOrange'],
+    pastelRed: ['pastelRed'],
+    pastelYellow: ['pastelYellow'],
+    pink: ['pink'],
+    red: ['red'],
+    white: ['white'],
+  };
 
-  if (getOption('hatColor', 'blue', options)) {
-    hatColor.push(palette.blue01, palette.blue02, palette.blue03);
-  }
+  Object.keys(colors).forEach((key) => {
+    let val = colors[key as Color];
 
-  if (getOption('hatColor', 'gray', options)) {
-    hatColor.push(palette.gray01, palette.gray02);
-  }
+    if (getOption('hatColor', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('hatColor', 'heather', options)) {
-    hatColor.push(palette.heather);
-  }
+  let picked = random.pickone(arrayUnique(selected));
 
-  if (getOption('hatColor', 'pastel', options)) {
-    hatColor.push(
-      palette.pastelBlue,
-      palette.pastelGreen,
-      palette.pastelOrange,
-      palette.pastelRed,
-      palette.pastelYellow
-    );
-  }
-
-  if (getOption('hatColor', 'pink', options)) {
-    hatColor.push(palette.pink);
-  }
-
-  if (getOption('hatColor', 'red', options)) {
-    hatColor.push(palette.red);
-  }
-
-  if (getOption('hatColor', 'white', options)) {
-    hatColor.push(palette.white);
-  }
-
-  return random.pickone(hatColor);
+  return palette[picked];
 }

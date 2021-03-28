@@ -1,30 +1,36 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, Clothes } from '../options';
 import getOption from './getOption';
 import { clothing } from '../paths';
+import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random) {
-  let clotheType = [];
+export default function (options: Options, random: Random): (color: string, clotheGraphic?: string) => string {
+  let selected: Array<keyof typeof clothing> = [];
 
-  if (getOption('clothes', 'blazer', options)) {
-    clotheType.push(clothing.blazerAndShirt, clothing.blazerAndSweater);
-  }
+  let values: Record<Clothes, Array<keyof typeof clothing>> = {
+    blazer: ['blazerAndShirt', 'blazerAndSweater'],
+    blazerAndShirt: ['blazerAndShirt'],
+    blazerAndSweater: ['blazerAndSweater'],
+    sweater: ['collarAndSweater'],
+    collarAndSweater: ['collarAndSweater'],
+    shirt: ['graphicShirt', 'shirtCrewNeck', 'shirtScoopNeck', 'shirtVNeck'],
+    graphicShirt: ['graphicShirt'],
+    shirtCrewNeck: ['shirtCrewNeck'],
+    shirtScoopNeck: ['shirtScoopNeck'],
+    shirtVNeck: ['shirtVNeck'],
+    hoodie: ['hoodie'],
+    overall: ['overall'],
+  };
 
-  if (getOption('clothes', 'sweater', options)) {
-    clotheType.push(clothing.collarAndSweater);
-  }
+  Object.keys(values).forEach((key) => {
+    let val = values[key as Clothes];
 
-  if (getOption('clothes', 'shirt', options)) {
-    clotheType.push(clothing.graphicShirt, clothing.shirtCrewNeck, clothing.shirtScoopNeck, clothing.shirtVNeck);
-  }
+    if (getOption('clothes', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('clothes', 'hoodie', options)) {
-    clotheType.push(clothing.hoodie);
-  }
+  let picked = random.pickone(arrayUnique(selected));
 
-  if (getOption('clothes', 'overall', options)) {
-    clotheType.push(clothing.overall);
-  }
-
-  return random.pickone(clotheType);
+  return clothing[picked];
 }

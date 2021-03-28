@@ -1,42 +1,36 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, HairColor } from '../options';
 import getOption from './getOption';
 import { hair } from '../colors';
+import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random) {
-  let hairColor = [];
+export default function (options: Options, random: Random): string {
+  let selected: Array<keyof typeof hair> = [];
 
-  if (getOption('hairColor', 'auburn', options)) {
-    hairColor.push(hair.auburn);
-  }
+  let values: Record<HairColor, Array<keyof typeof hair>> = {
+    auburn: ['auburn'],
+    black: ['black'],
+    blonde: ['blonde'],
+    blondeGolden: ['blondeGolden'],
+    brown: ['brown'],
+    brownDark: ['brownDark'],
+    pastel: ['pastelPink'],
+    pastelPink: ['pastelPink'],
+    platinum: ['platinum'],
+    red: ['red'],
+    gray: ['silverGray'],
+    silverGray: ['silverGray'],
+  };
 
-  if (getOption('hairColor', 'black', options)) {
-    hairColor.push(hair.black);
-  }
+  Object.keys(values).forEach((key) => {
+    let val = values[key as HairColor];
 
-  if (getOption('hairColor', 'blonde', options)) {
-    hairColor.push(hair.blonde, hair.blondeGolden);
-  }
+    if (getOption('hairColor', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('hairColor', 'brown', options)) {
-    hairColor.push(hair.brown, hair.brownDark);
-  }
+  let picked = random.pickone(arrayUnique(selected));
 
-  if (getOption('hairColor', 'pastel', options)) {
-    hairColor.push(hair.pastelPink);
-  }
-
-  if (getOption('hairColor', 'platinum', options)) {
-    hairColor.push(hair.platinum);
-  }
-
-  if (getOption('hairColor', 'red', options)) {
-    hairColor.push(hair.red);
-  }
-
-  if (getOption('hairColor', 'gray', options)) {
-    hairColor.push(hair.silverGray);
-  }
-
-  return random.pickone(hairColor);
+  return hair[picked];
 }

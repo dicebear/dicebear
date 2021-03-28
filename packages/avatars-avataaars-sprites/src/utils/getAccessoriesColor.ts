@@ -1,48 +1,42 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, Color } from '../options';
 import getOption from './getOption';
 import { palette } from '../colors';
+import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random) {
-  let accessoriesColor = [];
+export default function (options: Options, random: Random): string {
+  let selected: Array<keyof typeof palette> = [];
 
-  if (getOption('accessoriesColor', 'black', options)) {
-    accessoriesColor.push(palette.black);
-  }
+  let values: Record<Color, Array<keyof typeof palette>> = {
+    black: ['black'],
+    blue: ['blue01', 'blue02', 'blue03'],
+    blue01: ['blue01'],
+    blue02: ['blue02'],
+    blue03: ['blue03'],
+    gray: ['gray01', 'gray02'],
+    gray01: ['gray01'],
+    gray02: ['gray02'],
+    heather: ['heather'],
+    pastel: ['pastelBlue', 'pastelGreen', 'pastelOrange', 'pastelRed', 'pastelYellow'],
+    pastelBlue: ['pastelBlue'],
+    pastelGreen: ['pastelGreen'],
+    pastelOrange: ['pastelOrange'],
+    pastelRed: ['pastelRed'],
+    pastelYellow: ['pastelYellow'],
+    pink: ['pink'],
+    red: ['red'],
+    white: ['white'],
+  };
 
-  if (getOption('accessoriesColor', 'blue', options)) {
-    accessoriesColor.push(palette.blue01, palette.blue02, palette.blue03);
-  }
+  Object.keys(values).forEach((key) => {
+    let val = values[key as Color];
 
-  if (getOption('accessoriesColor', 'gray', options)) {
-    accessoriesColor.push(palette.gray01, palette.gray02);
-  }
+    if (getOption('accessoriesColor', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('accessoriesColor', 'heather', options)) {
-    accessoriesColor.push(palette.heather);
-  }
+  let picked = random.pickone(arrayUnique(selected));
 
-  if (getOption('accessoriesColor', 'pastel', options)) {
-    accessoriesColor.push(
-      palette.pastelBlue,
-      palette.pastelGreen,
-      palette.pastelOrange,
-      palette.pastelRed,
-      palette.pastelYellow
-    );
-  }
-
-  if (getOption('accessoriesColor', 'pink', options)) {
-    accessoriesColor.push(palette.pink);
-  }
-
-  if (getOption('accessoriesColor', 'red', options)) {
-    accessoriesColor.push(palette.red);
-  }
-
-  if (getOption('accessoriesColor', 'white', options)) {
-    accessoriesColor.push(palette.white);
-  }
-
-  return random.pickone(accessoriesColor);
+  return palette[picked];
 }

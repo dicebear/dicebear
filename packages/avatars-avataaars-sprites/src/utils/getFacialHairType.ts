@@ -1,36 +1,38 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, FacialHair } from '../options';
 import getOption from './getOption';
 import { facialHair } from '../paths';
+import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random) {
-  let facialHairType = [];
+export default function (options: Options, random: Random): (color: string) => string {
+  let selected: Array<keyof typeof facialHair> = [];
 
-  if (getOption('facialHair', 'medium', options)) {
-    facialHairType.push(facialHair.beardMedium);
-  }
+  let values: Record<FacialHair, Array<keyof typeof facialHair>> = {
+    medium: ['beardMedium'],
+    beardMedium: ['beardMedium'],
+    light: ['beardLight'],
+    beardLight: ['beardLight'],
+    majestic: ['beardMajestic'],
+    beardMagestic: ['beardMajestic'],
+    fancy: ['moustaceFancy'],
+    moustaceFancy: ['moustaceFancy'],
+    magnum: ['moustacheMagnum'],
+    moustacheMagnum: ['moustacheMagnum'],
+  };
 
-  if (getOption('facialHair', 'light', options)) {
-    facialHairType.push(facialHair.beardLight);
-  }
+  Object.keys(values).forEach((key) => {
+    let val = values[key as FacialHair];
 
-  if (getOption('facialHair', 'majestic', options)) {
-    facialHairType.push(facialHair.beardMagestic);
-  }
+    if (getOption('facialHair', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('facialHair', 'fancy', options)) {
-    facialHairType.push(facialHair.moustaceFancy);
-  }
-
-  if (getOption('facialHair', 'magnum', options)) {
-    facialHairType.push(facialHair.moustacheMagnum);
-  }
-
-  let pickedFacialHairType = random.pickone(facialHairType);
+  let picked = random.pickone(arrayUnique(selected));
 
   if (false === random.bool(undefined !== options.facialHairChance ? options.facialHairChance : 10)) {
     return undefined;
   }
 
-  return pickedFacialHairType;
+  return facialHair[picked];
 }

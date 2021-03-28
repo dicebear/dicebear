@@ -7,11 +7,11 @@ export default function (random: Random, options: Options = {}) {
   let noseType = utils.getNoseType();
   let skinType = utils.getSkinType();
   let skinColor = utils.getSkinColor(options, random);
-  let [topType, topTypeIsHat, topTypeZIndex] = utils.getTopType(options, random);
+  let top = utils.getTopType(options, random);
   let facialHairType = utils.getFacialHairType(options, random);
   let facialHairColor = utils.getFacialHairColor(options, random);
   let clotheType = utils.getClotheType(options, random);
-  let clotheGraphicType = utils.getClotheGraphicType(random);
+  let clotheGraphicType = utils.getClotheGraphicType(options, random);
   let clotheColor = utils.getClotheColor(options, random);
   let eyeType = utils.getEyeType(options, random);
   let eyebrowType = utils.getEyebrowType(options, random);
@@ -25,7 +25,7 @@ export default function (random: Random, options: Options = {}) {
     return content.length > 0 ? `<g transform="translate(${x}, ${y})">${content}</g>` : '';
   };
 
-  const top = group(topType(topTypeIsHat ? hatColor : hairColor), 7, 0);
+  const topPath = group(top.path(top.isHat ? hatColor : hairColor), 7, 0);
 
   let content = `
     ${group(skinType(skinColor), 40, 36)}
@@ -34,11 +34,11 @@ export default function (random: Random, options: Options = {}) {
     ${group(noseType(), 112, 122)}
     ${group(eyeType(), 84, 90)}
     ${group(eyebrowType(), 84, 82)}
-    ${0 === topTypeZIndex ? top : ''}
+    ${0 === top.zIndex ? top : ''}
     ${facialHairType ? group(facialHairType(facialHairColor), 56, 72) : ''}
-    ${1 === topTypeZIndex ? top : ''}
+    ${1 === top.zIndex ? top : ''}
     ${accessoriesType ? group(accessoriesType(accessoriesColor), 69, 85) : ''}
-    ${2 === topTypeZIndex ? top : ''}
+    ${2 === top.zIndex ? top : ''}
   `;
 
   if (options.style === 'circle') {

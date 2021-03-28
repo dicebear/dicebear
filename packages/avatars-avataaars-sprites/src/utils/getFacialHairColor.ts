@@ -1,42 +1,36 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, HairColor } from '../options';
 import getOption from './getOption';
 import { hair } from '../colors';
+import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random) {
-  let facialHairColor = [];
+export default function (options: Options, random: Random): string {
+  let selected: Array<keyof typeof hair> = [];
 
-  if (getOption('facialHairColor', 'auburn', options)) {
-    facialHairColor.push(hair.auburn);
-  }
+  let values: Record<HairColor, Array<keyof typeof hair>> = {
+    auburn: ['auburn'],
+    black: ['black'],
+    blonde: ['blonde'],
+    blondeGolden: ['blondeGolden'],
+    brown: ['brown'],
+    brownDark: ['brownDark'],
+    pastel: ['pastelPink'],
+    pastelPink: ['pastelPink'],
+    platinum: ['platinum'],
+    red: ['red'],
+    gray: ['silverGray'],
+    silverGray: ['silverGray'],
+  };
 
-  if (getOption('facialHairColor', 'black', options)) {
-    facialHairColor.push(hair.black);
-  }
+  Object.keys(values).forEach((key) => {
+    let val = values[key as HairColor];
 
-  if (getOption('facialHairColor', 'blonde', options)) {
-    facialHairColor.push(hair.blonde, hair.blondeGolden);
-  }
+    if (getOption('facialHairColor', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('facialHairColor', 'brown', options)) {
-    facialHairColor.push(hair.brown, hair.brownDark);
-  }
+  let picked = random.pickone(arrayUnique(selected));
 
-  if (getOption('facialHairColor', 'pastel', options)) {
-    facialHairColor.push(hair.pastelPink);
-  }
-
-  if (getOption('facialHairColor', 'platinum', options)) {
-    facialHairColor.push(hair.platinum);
-  }
-
-  if (getOption('facialHairColor', 'red', options)) {
-    facialHairColor.push(hair.red);
-  }
-
-  if (getOption('facialHairColor', 'gray', options)) {
-    facialHairColor.push(hair.silverGray);
-  }
-
-  return random.pickone(facialHairColor);
+  return hair[picked];
 }

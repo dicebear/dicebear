@@ -1,58 +1,39 @@
 import type Random from '@dicebear/avatars/lib/random';
-import type Options from '../options';
+import type { Options, Eyes } from '../options';
 import getOption from './getOption';
 import { eyes } from '../paths';
+import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random) {
-  let eyeType = [];
+export default function (options: Options, random: Random): () => string {
+  let selected: Array<keyof typeof eyes> = [];
 
-  if (getOption('eyes', 'close', options)) {
-    eyeType.push(eyes.closed);
-  }
+  let values: Record<Eyes, Array<keyof typeof eyes>> = {
+    close: ['closed'],
+    closed: ['closed'],
+    cry: ['cry'],
+    default: ['default'],
+    dizzy: ['xDizzy'],
+    xDizzy: ['xDizzy'],
+    roll: ['eyeRoll'],
+    eyeRoll: ['eyeRoll'],
+    happy: ['happy'],
+    hearts: ['hearts'],
+    side: ['side'],
+    squint: ['squint'],
+    surprised: ['surprised'],
+    wink: ['wink'],
+    winkWacky: ['winkWacky'],
+  };
 
-  if (getOption('eyes', 'cry', options)) {
-    eyeType.push(eyes.cry);
-  }
+  Object.keys(values).forEach((key) => {
+    let val = values[key as Eyes];
 
-  if (getOption('eyes', 'default', options)) {
-    eyeType.push(eyes.default);
-  }
+    if (getOption('eyes', key, options)) {
+      selected.push(...val);
+    }
+  });
 
-  if (getOption('eyes', 'dizzy', options)) {
-    eyeType.push(eyes.xDizzy);
-  }
+  let picked = random.pickone(arrayUnique(selected));
 
-  if (getOption('eyes', 'roll', options)) {
-    eyeType.push(eyes.eyeRoll);
-  }
-
-  if (getOption('eyes', 'happy', options)) {
-    eyeType.push(eyes.happy);
-  }
-
-  if (getOption('eyes', 'hearts', options)) {
-    eyeType.push(eyes.hearts);
-  }
-
-  if (getOption('eyes', 'side', options)) {
-    eyeType.push(eyes.side);
-  }
-
-  if (getOption('eyes', 'squint', options)) {
-    eyeType.push(eyes.squint);
-  }
-
-  if (getOption('eyes', 'surprised', options)) {
-    eyeType.push(eyes.surprised);
-  }
-
-  if (getOption('eyes', 'wink', options)) {
-    eyeType.push(eyes.wink);
-  }
-
-  if (getOption('eyes', 'winkWacky', options)) {
-    eyeType.push(eyes.winkWacky);
-  }
-
-  return random.pickone(eyeType);
+  return eyes[picked];
 }

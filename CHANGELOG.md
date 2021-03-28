@@ -1,5 +1,168 @@
 # Changelog
 
+## [4.6.0] - TBA
+
+### Added
+
+#### @dicebear/avatars-avataaars-sprites
+
+- New option values for `accessoriesColor`, `clotheColor` and `hatColor`:
+
+  - `blue01`
+  - `blue02`
+  - `blue03`
+  - `gray01`
+  - `gray02`
+  - `pastelBlue`
+  - `pastelGreen`
+  - `pastelOrange`
+  - `pastelRed`
+  - `pastelYellow`
+
+- New option `clotheGraphic`
+
+- New option values for `clothes`:
+
+  - `blazerAndShirt`
+  - `blazerAndSweater`
+  - `collarAndSweater`
+  - `graphicShirt`
+  - `shirtCrewNeck`
+  - `shirtScoopNeck`
+  - `shirtVNeck`
+
+- New option values for `eyebrows`:
+
+  - `angryNatural`
+  - `defaultNatural`
+  - `flatNatural`
+  - `raisedExcited`
+  - `raisedExcitedNatural`
+  - `sadConcerned`
+  - `sadConcernedNatural`
+  - `unibrowNatural`
+  - `upDown`
+  - `upDownNatural`
+  - `frownNatural`
+
+- New option values for `eyes`:
+
+  - `closed`
+  - `xDizzy`
+  - `eyeRoll`
+
+- New option values for `facialHairColor` and `hairColor`:
+
+  - `blondeGolden`
+  - `brownDark`
+  - `pastelPink`
+  - `silverGray`
+
+- New option values for `facialHair`:
+
+  - `beardMedium`
+  - `beardLight`
+  - `beardMagestic`
+  - `moustaceFancy`
+  - `moustacheMagnum`
+
+- New option values for `mouth`:
+
+  - `screamOpen`
+
+- New option values for `top`:
+
+  - `bigHair`
+  - `bob`
+  - `bun`
+  - `curly`
+  - `curvy`
+  - `dreads`
+  - `frida`
+  - `fro`
+  - `froAndBand`
+  - `miaWallace`
+  - `longButNotTooLong`
+  - `shavedSides`
+  - `straight01`
+  - `straight02`
+  - `straightAndStrand`
+  - `dreads01`
+  - `dreads02`
+  - `frizzle`
+  - `shaggy`
+  - `shaggyMullet`
+  - `shortCurly`
+  - `shortFlat`
+  - `shortRound`
+  - `shortWaved`
+  - `sides`
+  - `theCaesar`
+  - `theCaesarAndSidePart`
+  - `hat`
+  - `winterHat01`
+  - `winterHat02`
+  - `winterHat03`
+  - `winterHat04`
+
+### Deprecated
+
+#### @dicebear/avatars-avataaars-sprites
+
+- Some values of `accessoriesColor` and `clotheColor` are deprecated:
+
+  - `blue` => use `blue01`, `blue02` and `blue03` instead
+  - `gray` => use `gray01` and `gray02` instead
+  - `pastel` => use `pastelBlue`, `pastelGreen`, `pastelOrange`, `pastelRed` and `pastelYellow` instead
+
+- Some values of `clothes` are deprecated:
+
+  - `blazer` => use `blazerAndShirt` and `blazerAndSweater` instead
+  - `sweater` => use `collarAndSweater` instead
+  - `shirt` => use `graphicShirt`, `shirtCrewNeck`, `shirtScoopNeck` and `shirtVNeck` instead
+
+- Some values of `eyebrow` are deprecated:
+
+  - `flat` => use `flatNatural` instead
+  - `raised` => use `raisedExcited` and `raisedExcitedNatural` instead
+  - `sad` => use `sadConcerned` and `sadConcernedNatural` instead
+  - `unibrow` => use `unibrowNatural` instead
+  - `up` => use `upDown` and `upDownNatural` instead
+  - `frown` => use `frownNatural` instead
+
+- Some values of `eyes` are deprecated:
+
+  - `close` => use `closed` instead
+  - `dizzy` => use `xDizzy` instead
+  - `roll` => use `eyeRoll` instead
+
+- Some values of `facialHairColor` and `hairColor` are deprecated:
+
+  - `pastel` => use `pastelPink` instead
+  - `gray` => use `silverGray` instead
+
+- Some values of `facialHair` are deprecated:
+
+  - `medium` => use `beardMedium` instead
+  - `light` => use `beardLight` instead
+  - `majestic` => use `beardMagestic` instead
+  - `fancy` => use `moustaceFancy` instead
+  - `magnum` => use `moustacheMagnum` instead
+
+- Some values of `mouth` are deprecated:
+
+  - `scream` => use `screamOpen` instead
+
+- Option `mode` is deprecated. Default will be `include` starting with version 5.0
+
+- Some values of `top` are deprecated:
+
+  - `longHair` => use `bigHair`, `bob`, `bun`, `curly`, `curvy`, `dreads`, `frida`, `fro`, `froAndBand`, `miaWallace`,
+    `longButNotTooLong`, `shavedSides`, `straight01`, `straight02` and `straightAndStrand` instead
+  - `shortHair` => use
+    `dreads01`,`dreads02`,`frizzle`,`shaggy`,`shaggyMullet`,`shortCurly`,`shortFlat`,`shortRound`,`shortWaved`,`sides`,`theCaesar`
+    and `theCaesarAndSidePart` instead
+
 ## [4.5.4] - 2021-02-24
 
 ### Fixed
