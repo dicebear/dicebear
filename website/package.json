@@ -22,8 +22,8 @@
     "@dicebear/avatars-initials-sprites": "^4.4.1",
     "@dicebear/avatars-jdenticon-sprites": "^4.4.1",
     "@dicebear/avatars-male-sprites": "^4.4.1",
-    "@docusaurus/core": "2.0.0-alpha.69",
-    "@docusaurus/preset-classic": "2.0.0-alpha.69",
+    "@docusaurus/core": "2.0.0-alpha.72",
+    "@docusaurus/preset-classic": "2.0.0-alpha.72",
     "@mdx-js/react": "^1.6.21",
     "bootstrap": "^4.5.3",
     "clsx": "^1.1.1",
@@ -47,7 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.0.0-alpha.69",
+    "@docusaurus/module-type-aliases": "^2.0.0-alpha.72",
     "@tsconfig/docusaurus": "^1.0.2",
     "@types/react": "^17.0.0",
     "@types/react-helmet": "^6.1.0",
