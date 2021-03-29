@@ -173,7 +173,7 @@
 
   - `medium` => use `beardMedium` instead
   - `light` => use `beardLight` instead
-  - `majestic` => use `beardMagestic` instead
+  - `majestic` => use `beardMajestic` instead
   - `fancy` => use `moustaceFancy` instead
   - `magnum` => use `moustacheMagnum` instead
 
@@ -181,7 +181,7 @@
 
   - `scream` => use `screamOpen` instead
 
-- Option `mode` is deprecated. Default will be `include` starting with version 5.0
+- Option `mode` is deprecated.
 
 - Some `top` values are deprecated:
 

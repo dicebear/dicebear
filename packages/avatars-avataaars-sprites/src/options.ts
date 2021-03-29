@@ -83,9 +83,9 @@ export type FacialHair =
   /** @deprecated use `beardLight` instead */
   | 'light'
   | 'beardLight'
-  /** @deprecated use `beardMagestic` instead */
+  /** @deprecated use `beardMajestic` instead */
   | 'majestic'
-  | 'beardMagestic'
+  | 'beardMajestic'
   /** @deprecated use `moustaceFancy` instead */
   | 'fancy'
   | 'moustaceFancy'
