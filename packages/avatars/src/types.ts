@@ -2,7 +2,7 @@
 /// <reference types="../typings/svgson" />
 
 export interface Prng {
-  seed: string;
+  seed: string | undefined;
   bool(likelihood?: number): boolean;
   integer(min: number, max: number): number;
   pick<T>(arr: T[]): T;

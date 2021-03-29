@@ -30,6 +30,8 @@
   });
   ```
 
+- New official CLI `@dicebear/cli`
+
 #### @dicebear/avatars-avataaars-sprites
 
 - New option values for `accessoriesColor`, `clotheColor` and `hatColor`:
@@ -131,9 +133,19 @@
   - `winterHat03`
   - `winterHat04`
 
+### Fixed
+
+#### @dicebear/avatars
+
+- Type for `Prng.seed` fixed. Now also `undefined` is allowed.
+
 ### Deprecated
 
 - Default exports are deprecated. Use new function based API instead. (See "Added")
+
+#### @dicebear/avatars
+
+- Color class is deprecated and will be removed with Version 5.0.
 
 #### @dicebear/avatars-avataaars-sprites
 
