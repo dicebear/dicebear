@@ -13,7 +13,7 @@ export default function (options: Options, random: Random): (color: string) => s
     light: ['beardLight'],
     beardLight: ['beardLight'],
     majestic: ['beardMajestic'],
-    beardMagestic: ['beardMajestic'],
+    beardMajestic: ['beardMajestic'],
     fancy: ['moustaceFancy'],
     moustaceFancy: ['moustaceFancy'],
     magnum: ['moustacheMagnum'],
