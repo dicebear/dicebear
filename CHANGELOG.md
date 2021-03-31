@@ -30,8 +30,6 @@
   });
   ```
 
-- New official CLI `@dicebear/cli`
-
 #### @dicebear/avatars-avataaars-sprites
 
 - New option values for `accessoriesColor`, `clotheColor` and `hatColor`:
