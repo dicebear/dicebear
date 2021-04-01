@@ -1,11 +1,7 @@
 // @ts-ignore
 import { inner } from 'gridy-avatars/dist/avatars';
 import Random from '@dicebear/avatars/lib/random';
-
-type Options = {
-  colorful?: boolean;
-  deterministic?: boolean;
-};
+import type { Options } from './options';
 
 // See https://github.com/DiceBear/avatars/issues/64
 let fixDeterministicClipARegExp = /clipPath id="clip-a-([0-9]*)"/;

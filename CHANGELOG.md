@@ -30,6 +30,8 @@
   });
   ```
 
+- JSON Schema added to each avatar style. Used for API, Types and upcoming features.
+
 #### @dicebear/avatars-avataaars-sprites
 
 - New option values for `accessoriesColor`, `clotheColor` and `hatColor`:

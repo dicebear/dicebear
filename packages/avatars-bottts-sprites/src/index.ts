@@ -1,7 +1,7 @@
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
 import { ColorCollection, Color as ColorType } from '@dicebear/avatars/lib/types';
-import Options from './options';
+import { Options } from './options';
 
 import eyesCollection from './eyes';
 import faceCollection from './face';

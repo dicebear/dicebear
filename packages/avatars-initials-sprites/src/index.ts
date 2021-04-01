@@ -1,20 +1,10 @@
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
-import { ColorCollection, Color as ColorType } from '@dicebear/avatars/lib/types';
+import { ColorCollection } from '@dicebear/avatars/lib/types';
+import type { Options } from './options';
 
 // @ts-ignore
 import initials from 'initials';
-
-type Options = {
-  margin?: number;
-  background?: string;
-  userAgent?: string;
-  backgroundColors?: Array<keyof ColorCollection>;
-  backgroundColorLevel?: keyof ColorType;
-  fontSize?: number;
-  chars?: number;
-  bold?: boolean;
-};
 
 export function create(random: Random, options: Options = {}) {
   options.backgroundColorLevel = options.backgroundColorLevel || 600;

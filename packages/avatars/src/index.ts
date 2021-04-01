@@ -1,24 +1,9 @@
 import Random from './random';
 import Color from './color';
 import Parser from './parser';
+import type { Options } from './options';
 
-export type Options = {
-  radius?: number;
-  r?: number;
-  /** @deprecated use dataUri instead */
-  base64?: boolean;
-  dataUri?: boolean;
-  width?: number | string;
-  w?: number | string;
-  height?: number | string;
-  h?: number | string;
-  margin?: number;
-  m?: number;
-  background?: string;
-  b?: string;
-  /** @deprecated */
-  userAgent?: string;
-};
+export { Options };
 
 export type SpriteCollection<O = {}> = (random: Random, options?: O) => string | svgson.schema;
 

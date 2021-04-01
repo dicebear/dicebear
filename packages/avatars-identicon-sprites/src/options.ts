@@ -5,9 +5,6 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type ColorLevel = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
-export type Chance = number;
-
 export interface Options {
   colors?: (
     | "amber"
@@ -30,11 +27,5 @@ export interface Options {
     | "teal"
     | "yellow"
   )[];
-  colorful?: boolean | number;
-  primaryColorLevel?: ColorLevel;
-  secondaryColorLevel?: ColorLevel;
-  textureChance?: Chance;
-  mouthChance?: Chance;
-  sidesChance?: Chance;
-  topChance?: Chance;
+  colorLevel?: 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 }

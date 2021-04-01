@@ -1,4 +1,4 @@
-import type Options from './options';
+import type { Options } from './options';
 import type Random from '@dicebear/avatars/lib/random';
 import * as utils from './utils';
 import { palette } from './colors';

@@ -1,11 +1,7 @@
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
 import { ColorCollection, Color as ColorType } from '@dicebear/avatars/lib/types';
-
-type Options = {
-  colors?: Array<keyof ColorCollection>;
-  colorLevel?: keyof ColorType;
-};
+import type { Options } from './options';
 
 export function create(random: Random, options: Options = {}) {
   options.colorLevel = options.colorLevel || 600;

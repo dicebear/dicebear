@@ -1,14 +1,7 @@
 import Random from '@dicebear/avatars/lib/random';
 // @ts-ignore
 import jdenticon from 'jdenticon';
-
-type Options = {
-  hues?: number[];
-  colorLightness?: [number, number];
-  grayscaleLightness?: [number, number];
-  colorSaturation?: number;
-  grayscaleSaturation?: number;
-};
+import type { Options } from './options';
 
 export function create(random: Random, options: Options = {}) {
   jdenticon.config = {

@@ -1,6 +1,9 @@
 /// <reference types="../typings/pure-color" />
 /// <reference types="../typings/svgson" />
 
+import type { JSONSchema7 } from 'json-schema';
+import type { Options } from './options';
+
 export interface Prng {
   seed: string | undefined;
   bool(likelihood?: number): boolean;
@@ -41,4 +44,44 @@ export interface ColorCollection {
   red: Color;
   teal: Color;
   yellow: Color;
+}
+
+export type StyleSchema = JSONSchema7;
+
+export type StyleOptions<O extends {}> = Options & O;
+
+export interface StyleCreateProps<O> {
+  prng: Prng;
+  options: StyleOptions<O>;
+}
+
+export type StyleCreate<O extends {}> = (props: StyleCreateProps<O>) => StyleCreateResult;
+
+export interface StyleCreateResultAttributes {
+  viewBox: string;
+  [key: string]: string;
+}
+
+export interface StyleCreateResult {
+  attributes: StyleCreateResultAttributes;
+  head?: string;
+  body: string;
+}
+
+export interface StyleMetaLicense {
+  name: string;
+  link: string;
+}
+
+export interface StyleMeta {
+  title: string;
+  creator: string;
+  source: string;
+  license: StyleMetaLicense;
+}
+
+export interface Style<O extends {}> {
+  meta: StyleMeta;
+  schema: StyleSchema;
+  create: StyleCreate<O>;
 }

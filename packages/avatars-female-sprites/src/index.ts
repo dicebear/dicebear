@@ -1,9 +1,6 @@
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
-
-type Options = {
-  mood?: Array<'happy' | 'sad' | 'surprised'>;
-};
+import type { Options } from './options';
 
 export function create(random: Random, options: Options = {}) {
   let skinColor = random.pickone([
