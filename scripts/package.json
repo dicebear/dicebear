@@ -20,7 +20,7 @@
     "sitemapper": "^3.1.10",
     "throttle-debounce": "^3.0.1",
     "ts-node": "^9.0.0",
-    "typescript": "^4.1.2",
+    "typescript": "^4.2.3",
     "yaml": "^1.10.0"
   },
   "scripts": {
