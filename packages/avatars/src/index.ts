@@ -212,7 +212,7 @@ export default class Avatars<O> {
 
 export function createAvatar<O = {}>(
   style: { create: SpriteCollection<O> },
-  { seed, ...options }: O & Options & { seed?: string }
+  options?: O & Options & { seed?: string }
 ) {
-  return new Avatars(style.create).create(seed, options as O & Options);
+  return new Avatars(style.create).create(options?.seed, options as O & Options);
 }

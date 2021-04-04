@@ -27,7 +27,6 @@
     "typings"
   ],
   "scripts": {
-    "pretest": "npm run build",
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -r dist/* lib/* || true",

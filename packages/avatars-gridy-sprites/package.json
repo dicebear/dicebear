@@ -28,7 +28,6 @@
     "lib"
   ],
   "scripts": {
-    "pretest": "npm run build",
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -rf lib/ || true",

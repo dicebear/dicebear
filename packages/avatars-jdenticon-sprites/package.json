@@ -26,12 +26,12 @@
     "lib"
   ],
   "scripts": {
+    "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -rf lib/ || true",
     "build": "yarn run build:options && yarn run build:ts",
     "build:ts": "tsc",
-    "build:options": "json2ts -i src/schema.json -o src/options.ts",
-    "test": "echo 'No tests available'"
+    "build:options": "json2ts -i src/schema.json -o src/options.ts"
   },
   "dependencies": {
     "@types/json-schema": "^7.0.7",
