@@ -1,0 +1,8 @@
+.DS_Store
+yarn-error.log
+
+dist
+lib
+node_modules
+src/options.ts
+src/schema.json
