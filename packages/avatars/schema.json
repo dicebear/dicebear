@@ -23,8 +23,7 @@
     "backgroundColor": {
       "oneOf": [
         {
-          "type": "string",
-          "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})+$"
+          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
         },
         {
           "type": "string",

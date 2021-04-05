@@ -2,11 +2,6 @@
   "title": "Options",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "chance": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100
-    },
     "color": {
       "type": "string",
       "enum": [
@@ -200,8 +195,7 @@
     "background": {
       "oneOf": [
         {
-          "type": "string",
-          "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})+$"
+          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
         },
         {
           "type": "string",
@@ -225,7 +219,7 @@
       }
     },
     "topChance": {
-      "$ref": "#/definitions/chance"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
     },
     "hatColor": {
       "type": "array",
@@ -246,7 +240,7 @@
       }
     },
     "accessoriesChance": {
-      "$ref": "#/definitions/chance"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
     },
     "accessoriesColor": {
       "type": "array",
@@ -261,7 +255,7 @@
       }
     },
     "facialHairChance": {
-      "$ref": "#/definitions/chance"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
     },
     "facialHairColor": {
       "type": "array",

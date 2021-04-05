@@ -1,65 +1,33 @@
 {
   "title": "Options",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "definitions": {
-    "colorLevel": {
-      "type": "integer",
-      "enum": [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
-    },
-    "chance": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100
-    }
-  },
   "properties": {
     "colors": {
       "type": "array",
       "items": {
-        "type": "string",
-        "enum": [
-          "amber",
-          "blue",
-          "blueGrey",
-          "brown",
-          "cyan",
-          "deepOrange",
-          "deepPurple",
-          "green",
-          "grey",
-          "indigo",
-          "lightBlue",
-          "lightGreen",
-          "lime",
-          "orange",
-          "pink",
-          "purple",
-          "red",
-          "teal",
-          "yellow"
-        ]
+        "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollection"
       }
     },
     "colorful": {
       "type": ["boolean", "number"]
     },
     "primaryColorLevel": {
-      "$ref": "#/definitions/colorLevel"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel"
     },
     "secondaryColorLevel": {
-      "$ref": "#/definitions/colorLevel"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel"
     },
     "textureChance": {
-      "$ref": "#/definitions/chance"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
     },
     "mouthChance": {
-      "$ref": "#/definitions/chance"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
     },
     "sidesChance": {
-      "$ref": "#/definitions/chance"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
     },
     "topChance": {
-      "$ref": "#/definitions/chance"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
     }
   },
   "additionalProperties": false

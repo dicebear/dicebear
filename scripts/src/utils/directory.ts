@@ -1,21 +1,29 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-export async function getDirectories(source: string, recursive: boolean = false) {
-  let files = await fs.readdir(source, { withFileTypes: true });
+export async function list(source: string, { files, directories }: { files?: boolean, directories?: boolean } = {}) {
+  let items = await fs.readdir(source, { withFileTypes: true });
+  let result: string[] = [];
 
-  let directories = files.filter((dirent) => dirent.isDirectory()).map((dirent) => dirent.name);
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i];
 
-  if (recursive) {
-    for (let i = 0; i < directories.length; i++) {
-      let directory = directories[i];
-      let subDirectories = await getDirectories(path.join(source, directory), true);
+    if (files && item.isFile()) {
+      result.push(item.name);
+    }
 
-      subDirectories.forEach((val) => {
-        directories.push(path.join(directory, val));
+    if (directories && item.isDirectory()) {
+      result.push(item.name);
+    }
+
+    if (item.isDirectory()) {
+      let subItems = await list(path.join(source, item.name), { files, directories });
+  
+      subItems.forEach((val) => {
+        result.push(path.join(item.name, val));
       });
     }
   }
 
-  return directories;
+  return result;
 }

@@ -10,8 +10,7 @@
     "background": {
       "oneOf": [
         {
-          "type": "string",
-          "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})+$"
+          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
         },
         {
           "type": "string",
@@ -22,33 +21,11 @@
     "backgroundColors": {
       "type": "array",
       "items": {
-        "type": "string",
-        "enum": [
-          "amber",
-          "blue",
-          "blueGrey",
-          "brown",
-          "cyan",
-          "deepOrange",
-          "deepPurple",
-          "green",
-          "grey",
-          "indigo",
-          "lightBlue",
-          "lightGreen",
-          "lime",
-          "orange",
-          "pink",
-          "purple",
-          "red",
-          "teal",
-          "yellow"
-        ]
+        "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollection"
       }
     },
     "backgroundColorLevel": {
-      "type": "integer",
-      "enum": [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel"
     },
     "fontSize": {
       "type": "integer",

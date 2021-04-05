@@ -7,6 +7,7 @@ import spawn from 'cross-spawn';
 
 (async () => {
   const websiteBuildDir = path.resolve(__dirname, '../../../website/build');
+  const schemaDir = path.resolve(__dirname, '../../../schema');
 
   // Build docs
   spawn.sync(
@@ -15,7 +16,7 @@ import spawn from 'cross-spawn';
     { stdio: 'inherit' }
   );
 
-  // Upload build
+  // Connect client
   const client = new ftp.Client();
   const uploadSpinner = ora({
     prefixText: 'Upload files',
@@ -31,6 +32,10 @@ import spawn from 'cross-spawn';
     password: process.env.BUNNYCDN_FTP_PASSWORD,
   });
 
+  // Upload Schema
+  await client.uploadFromDir(schemaDir, 'schema');
+
+  // Upload build
   await client.uploadFromDir(websiteBuildDir);
   await client.close();
 
@@ -41,11 +46,15 @@ import spawn from 'cross-spawn';
     prefixText: 'Clear CDN Cache',
   }).start();
 
-  const directories = ['', ...(await directory.getDirectories(websiteBuildDir, true))];
+  const items = [
+    '',
+    ...(await directory.list(websiteBuildDir, { directories: true })),
+    ...(await directory.list(schemaDir, { files: true })),
+  ];
 
-  for (let i = 0; i < directories.length; i++) {
-    let directory = directories[i];
-    let url = `https://${process.env.BUNNYCDN_HOSTNAME}/${directory}`;
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i];
+    let url = `https://${process.env.BUNNYCDN_HOSTNAME}/${item}`;
 
     cacheSpinner.text = url;
 

@@ -5,33 +5,11 @@
     "colors": {
       "type": "array",
       "items": {
-        "type": "string",
-        "enum": [
-          "amber",
-          "blue",
-          "blueGrey",
-          "brown",
-          "cyan",
-          "deepOrange",
-          "deepPurple",
-          "green",
-          "grey",
-          "indigo",
-          "lightBlue",
-          "lightGreen",
-          "lime",
-          "orange",
-          "pink",
-          "purple",
-          "red",
-          "teal",
-          "yellow"
-        ]
+        "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollection"
       }
     },
     "colorLevel": {
-      "type": "integer",
-      "enum": [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel"
     }
   },
   "additionalProperties": false
