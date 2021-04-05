@@ -1,13 +1,1 @@
-{
-  "title": "Options",
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "properties": {
-    "colorful": {
-      "type": ["boolean", "number"]
-    },
-    "deterministic": {
-      "type": ["boolean", "number"]
-    }
-  },
-  "additionalProperties": false
-}
+{"title":"Options","$schema":"http://json-schema.org/draft-07/schema#","properties":{"colorful":{"type":["boolean","number"]},"deterministic":{"type":["boolean","number"]}},"additionalProperties":false}

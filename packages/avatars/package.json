@@ -30,10 +30,11 @@
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "rm -r dist/* lib/* || true",
-    "build": "yarn run build:options && yarn run build:ts && yarn run build:webpack",
+    "build": "yarn run build:schema && yarn run build:options && yarn run build:ts && yarn run build:webpack",
     "build:ts": "tsc",
     "build:webpack": "webpack",
-    "build:options": "json2ts -i src/schema.json -o src/options.ts",
+    "build:schema": "json-dereference -s schema.json -o src/schema.json",
+    "build:options": "json2ts -i schema.json -o src/options.ts",
     "watch": "webpack -w & tsc -w"
   },
   "dependencies": {
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.22",
     "jest": "^26.6.3",
+    "json-dereference-cli": "^0.1.2",
     "json-schema-to-typescript": "^10.1.4",
     "license-checker": "^24.0.0",
     "ts-jest": "^26.5.4",

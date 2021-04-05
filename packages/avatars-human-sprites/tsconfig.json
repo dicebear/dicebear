@@ -12,7 +12,8 @@
       "*": ["node_modules/*", "src/types/*"]
     },
     "declaration": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"]
 }

@@ -32,6 +32,10 @@
 
 - JSON Schema added to each avatar style. Used for API, Types and upcoming features.
 
+#### @dicebear/avatars
+
+- New Option `backgroundColor`
+
 #### @dicebear/avatars-avataaars-sprites
 
 - New option values for `accessoriesColor`, `clotheColor` and `hatColor`:
@@ -146,6 +150,7 @@
 #### @dicebear/avatars
 
 - Color class is deprecated and will be removed with Version 5.0.
+- Option `background` is deprecated. Use `backgroundColor` instead.
 
 #### @dicebear/avatars-avataaars-sprites
 

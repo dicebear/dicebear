@@ -17,7 +17,7 @@ export type UserAgent = string;
 export type Radius = number;
 export type Size = number;
 export type Margin = number;
-export type Background = string | "transparent";
+export type BackgroundColor = string | "transparent";
 
 export interface Options {
   base64?: Base64;
@@ -31,6 +31,10 @@ export interface Options {
   h?: Size;
   margin?: Margin;
   m?: Margin;
-  background?: Background;
-  b?: Background;
+  /**
+   * @deprecated use backgroundColor instead
+   */
+  background?: string | "transparent";
+  backgroundColor?: BackgroundColor;
+  b?: BackgroundColor;
 }
