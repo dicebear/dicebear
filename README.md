@@ -18,3 +18,5 @@
     Read Documentation
   </a>
 </p>
+
+[![Testing Powered By SauceLabs](https://saucelabs.github.io/images/opensauce/powered-by-saucelabs-badge-white.png?sanitize=true "Testing Powered By SauceLabs")](https://saucelabs.com)
