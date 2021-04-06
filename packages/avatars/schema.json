@@ -33,6 +33,9 @@
     }
   },
   "properties": {
+    "seed": {
+      "type": "string"
+    },
     "base64": {
       "title": "Base64",
       "description": "@deprecated use dataUri instead",

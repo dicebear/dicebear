@@ -1,6 +1,6 @@
 import { default as Avatars, createAvatar } from '@dicebear/avatars';
-import * as style from '../lib';
+import legacyStyle from '../lib';
 
-test('avataaars.create', () => {
-    expect(createAvatar(style)).toContain('svg');
+test('avataaars.create.legacy', () => {
+    expect(new Avatars(legacyStyle).create()).toContain('svg');
 });

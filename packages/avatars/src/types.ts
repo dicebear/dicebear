@@ -74,10 +74,10 @@ export interface StyleMetaLicense {
 }
 
 export interface StyleMeta {
-  title: string;
-  creator: string;
-  source: string;
-  license: StyleMetaLicense;
+  title?: string;
+  creator?: string;
+  source?: string;
+  license?: StyleMetaLicense;
 }
 
 export interface Style<O extends {}> {

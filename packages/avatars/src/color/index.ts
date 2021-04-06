@@ -4,6 +4,8 @@ import * as rgbToHex from 'pure-color/convert/rgb2hex';
 import * as hsvToRgb from 'pure-color/convert/hsv2rgb';
 import collection from './collection';
 
+export { collection };
+
 /** @deprecated */
 export interface ColorInterface {
   alpha: number;

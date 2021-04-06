@@ -1,6 +1,9 @@
 import type { Prng } from './types';
 import { create } from './utils/prng';
 
+/**
+ * @deprecated use `utils.prng` instead.
+ */
 export default class Random {
   private prng: Prng;
   public readonly seed: string;
