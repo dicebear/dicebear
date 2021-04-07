@@ -7,11 +7,8 @@ export function defaults(schema: JSONSchema7) {
   Object.keys(properties).forEach((key) => {
     let val = properties[key];
 
-    if (typeof val === 'object') {
-      result = {
-        ...result,
-        [key]: val.default,
-      };
+    if (typeof val === 'object' && undefined !== val.default) {
+      result[key] = val.default;
     }
   });
 

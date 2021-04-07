@@ -3,22 +3,24 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Options",
   "definitions": {
+    "seed": {
+      "type": "string"
+    },
     "radius": {
-      "title": "Radius",
       "type": "integer",
       "minimum": 0,
-      "maximum": 50
+      "maximum": 50,
+      "default": 0
     },
     "size": {
-      "title": "Size",
       "type": "integer",
       "minimum": 1
     },
     "margin": {
-      "title": "Margin",
       "type": "integer",
       "minimum": 0,
-      "maximum": 25
+      "maximum": 25,
+      "default": 0
     },
     "backgroundColor": {
       "oneOf": [
@@ -29,21 +31,29 @@
           "type": "string",
           "enum": ["transparent"]
         }
-      ]
+      ],
+      "default": "transparent"
     }
   },
   "properties": {
     "seed": {
-      "type": "string"
+      "title": "Seed",
+      "$ref": "#/definitions/seed"
+    },
+    "s": {
+      "title": "Seed",
+      "$ref": "#/definitions/seed"
     },
     "base64": {
       "title": "Base64",
       "description": "@deprecated use dataUri instead",
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "dataUri": {
-      "title": "Data Uri",
-      "type": "boolean"
+      "title": "Data URI",
+      "type": "boolean",
+      "default": false
     },
     "userAgent": {
       "title": "User Agent",
@@ -51,37 +61,48 @@
       "type": "string"
     },
     "radius": {
+      "title": "Radius",
       "$ref": "#/definitions/radius"
     },
     "r": {
+      "title": "Radius",
       "$ref": "#/definitions/radius"
     },
     "width": {
+      "title": "Width",
       "$ref": "#/definitions/size"
     },
     "w": {
+      "title": "Width",
       "$ref": "#/definitions/size"
     },
     "height": {
+      "title": "Height",
       "$ref": "#/definitions/size"
     },
     "h": {
+      "title": "Height",
       "$ref": "#/definitions/size"
     },
     "margin": {
+      "title": "Margin",
       "$ref": "#/definitions/margin"
     },
     "m": {
+      "title": "Margin",
       "$ref": "#/definitions/margin"
     },
     "background": {
+      "title": "Background Color",
       "description": "@deprecated use backgroundColor instead",
       "$ref": "#/definitions/backgroundColor"
     },
     "backgroundColor": {
+      "title": "Background Color",
       "$ref": "#/definitions/backgroundColor"
     },
     "b": {
+      "title": "Background Color",
       "$ref": "#/definitions/backgroundColor"
     }
   },

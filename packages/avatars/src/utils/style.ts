@@ -4,62 +4,55 @@ import * as schema from './schema';
 import { JSONSchema7 } from 'json-schema';
 
 export function options<O extends {}>(style: Style<O>, options: StyleOptions<O>): StyleOptions<O> {
-  let mergedOptions: StyleOptions<O> = {
-    seed: Math.random().toString(),
-    userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent,
-    ...schema.defaults(coreSchema as JSONSchema7),
-    ...schema.defaults(style.schema),
-    ...options,
-  };
+  const userAgent = typeof window !== 'undefined' && window.navigator && window.navigator.userAgent;
 
-  let aliasCollection = [...schema.aliases(coreSchema as JSONSchema7), ...schema.aliases(style.schema)].reduce(
-    (result, values) => {
-      values.forEach((key) => {
-        result[key] = values;
-      });
+  let optionSources: Partial<StyleOptions<O>>[] = [
+    {
+      seed: Math.random().toString(),
+      userAgent: userAgent ? userAgent : undefined
+    } as Partial<StyleOptions<O>>,
+    schema.defaults(coreSchema as JSONSchema7) as Partial<StyleOptions<O>>,
+    schema.defaults(style.schema) as Partial<StyleOptions<O>>,
+    options
+  ];
 
-      return result;
-    },
-    {} as Record<string, string[]>
-  );
+  let result = createOptionsProxy(style);
 
-  return new Proxy(mergedOptions, {
+  optionSources.forEach(optionSource => {
+    Object.keys(optionSource).forEach(key => {
+      result[key as keyof StyleOptions<O>] = optionSource[key as keyof StyleOptions<O>];
+    });
+  });
+
+  return result as StyleOptions<O>;
+}
+
+export function createOptionsProxy<O extends {}>(style: Style<O>) {
+  let aliasMap = [...schema.aliases(coreSchema as JSONSchema7), ...schema.aliases(style.schema)].reduce((map, aliases) => {
+    aliases.forEach(alias => {
+      map.set(alias, aliases[0]);
+    });
+
+    return map;
+  }, new Map<string | symbol, string>());
+
+  return new Proxy({} as Partial<StyleOptions<O>>, {
     get: (obj, key) => {
-      const aliases = aliasCollection[key.toString()];
+      let originalKey = (aliasMap.get(key) ?? key) as keyof StyleOptions<O>;
 
-      if (Array.isArray(aliases)) {
-        for (let i = 0; i < aliases.length; i++) {
-          let alias = aliases[i];
-
-          if (alias in obj) {
-            return obj[alias as keyof StyleOptions<O>];
-          }
-        }
-      }
-
-      return obj[key as keyof StyleOptions<O>];
+      return obj[originalKey];
     },
     set: (obj, key, value) => {
-      const aliases = aliasCollection[key.toString()];
+      let originalKey = (aliasMap.get(key) ?? key) as keyof StyleOptions<O>;
 
-      if (Array.isArray(aliases)) {
-        obj[aliases[0] as keyof StyleOptions<O>] = value;
-      }
+      obj[originalKey] = value;
 
       return true;
     },
     deleteProperty: (obj, key) => {
-      const aliases = aliasCollection[key.toString()];
+      let originalKey = (aliasMap.get(key) ?? key) as keyof StyleOptions<O>;
 
-      if (Array.isArray(aliases)) {
-        aliases.forEach(alias => {
-          delete obj[alias as keyof StyleOptions<O>];
-        });
-
-        return true;
-      }
-
-      delete obj[key.toString() as keyof StyleOptions<O>];
+      delete obj[originalKey];
 
       return true;
     }

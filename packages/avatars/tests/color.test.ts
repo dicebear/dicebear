@@ -1,4 +1,4 @@
-const Color = require('../lib/color').default;
+import Color from '../lib/color';
 
 test('Hex converter.', () => {
   let color = '#556677';
