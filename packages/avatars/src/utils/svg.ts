@@ -141,6 +141,6 @@ export function createAttrString(attributes: StyleCreateResultAttributes): strin
   attributes = { ...getXmlnsAttributes(), ...attributes };
 
   return Object.keys(attributes)
-    .map((attr) => `${escape.attr(attr)}="${escape.attr(attributes[attr])}"`)
+    .map((attr) => `${escape.xml(attr)}="${escape.xml(attributes[attr])}"`)
     .join(' ');
 }
