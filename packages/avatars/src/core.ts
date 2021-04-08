@@ -1,7 +1,7 @@
 import type { Style, StyleOptions } from './types';
 import * as utils from './utils';
 
-export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O>) {
+export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O> = {}) {
   options = utils.style.options(style, options);
 
   let prngInstance = utils.prng.create(options.seed);

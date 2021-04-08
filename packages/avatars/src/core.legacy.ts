@@ -2,7 +2,7 @@ import Random from './random';
 import Color from './color';
 import Parser from './parser';
 import type { Options } from './options';
-import { Style, StyleCreateResultAttributes } from './types';
+import { Style, StyleCreateResultAttributes, StyleOptions } from './types';
 import { createAvatar } from './core';
 
 /**
@@ -13,7 +13,7 @@ export type SpriteCollection<O = {}> = (random: Random, options?: O) => string |
 /**
  * @deprecated use `createAvatar` function instead.
  */
-export default class Avatars<O> {
+export default class Avatars<O extends {}> {
   public static random = Random;
   public static color = Color;
 
@@ -38,7 +38,7 @@ export default class Avatars<O> {
         meta: {},
         schema: {},
         create: ({ prng, options: styleOptions }) => {
-            let svg = Parser.parse(this.spriteCollection(new Random(prng.seed), styleOptions));
+            let svg = Parser.parse(this.spriteCollection(new Random(prng.seed), styleOptions as O));
             let head: svgson.schema[] = [];
             let body: svgson.schema[] = [];
 

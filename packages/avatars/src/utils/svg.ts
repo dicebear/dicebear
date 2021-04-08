@@ -27,8 +27,12 @@ export function getMetadata<O extends Options>(style: Style<O>) {
   let isCcZero10 = 'CC0 1.0' === style.meta.license?.name;
   let isCc = isCcBy40 || isCcZero10;
 
+  if (Object.keys(style.meta).length === 0) {
+    return '';
+  }
+
   return `
-    <metadata id="metadata70">
+    <metadata>
       <rdf:RDF>
         <cc:Work rdf:about="">
           <dc:format>image/svg+xml</dc:format>

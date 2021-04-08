@@ -48,7 +48,7 @@ export interface ColorCollection {
 
 export type StyleSchema = JSONSchema7;
 
-export type StyleOptions<O extends {}> = Options & O;
+export type StyleOptions<O extends {}> = Partial<O & Options>;
 
 export interface StyleCreateProps<O> {
   prng: Prng;
