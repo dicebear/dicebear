@@ -51,7 +51,7 @@ export function getMetadata<O extends Options>(style: Style<O>) {
           ${style.meta.source ? `<dc:source>${style.meta.source}</dc:source>` : ''}
         </cc:Work>
         ${
-          isCc
+          isCc && style.meta.license
             ? `
               <cc:License rdf:about="${style.meta.license.link}">
                 <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />

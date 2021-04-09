@@ -1,6 +1,7 @@
 import type { JSONSchema7 } from 'json-schema';
+import coreSchema from './schema.json';
 
-const schema = require('./schema.json') as JSONSchema7;
+const schema = coreSchema as JSONSchema7;
 
 export { default, SpriteCollection } from './core.legacy';
 export * from './core';

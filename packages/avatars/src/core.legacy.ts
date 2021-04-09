@@ -1,14 +1,15 @@
+import type { INode } from 'svgson';
 import Random from './random';
 import Color from './color';
 import Parser from './parser';
 import type { Options } from './options';
-import { Style, StyleCreateResultAttributes, StyleOptions } from './types';
+import { Style, StyleCreateResultAttributes } from './types';
 import { createAvatar } from './core';
 
 /**
  * @deprecated use `Style` type instead.
  */
-export type SpriteCollection<O = {}> = (random: Random, options?: O) => string | svgson.schema;
+export type SpriteCollection<O = {}> = (random: Random, options?: O) => string | INode;
 
 /**
  * @deprecated use `createAvatar` function instead.
@@ -39,8 +40,8 @@ export default class Avatars<O extends {}> {
         schema: {},
         create: ({ prng, options: styleOptions }) => {
             let svg = Parser.parse(this.spriteCollection(new Random(prng.seed), styleOptions as O));
-            let head: svgson.schema[] = [];
-            let body: svgson.schema[] = [];
+            let head: INode[] = [];
+            let body: INode[] = [];
 
             svg.children.forEach((child) => {
                 if (this.isBody(child)) {
@@ -58,10 +59,11 @@ export default class Avatars<O extends {}> {
         }
     }
 
+    // @ts-ignore
     return createAvatar(style, { ...this.defaultOptions, ...options, seed });
   }
 
-  private isBody(element: svgson.schema) {
+  private isBody(element: INode) {
     return element.type === 'element' && ['title', 'desc', 'defs', 'metadata'].indexOf(element.name) === -1;
   }
 }

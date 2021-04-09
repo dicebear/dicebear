@@ -3,7 +3,7 @@ import { inner } from 'gridy-avatars/dist/avatars';
 import Random from '@dicebear/avatars/lib/random';
 import type { Options } from './options';
 
-// See https://github.com/DiceBear/avatars/issues/64
+// See https://github.com/dicebear/dicebear/issues/64
 let fixDeterministicClipARegExp = /clipPath id="clip-a-([0-9]*)"/;
 let fixDeterministic = (svg: string, id: number): string => {
   let match = svg.match(fixDeterministicClipARegExp);

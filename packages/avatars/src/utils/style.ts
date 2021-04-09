@@ -1,5 +1,5 @@
 import type { Style, StyleOptions } from '../types';
-import * as coreSchema from '../schema.json';
+import coreSchema from '../schema.json';
 import * as schema from './schema';
 import { JSONSchema7 } from 'json-schema';
 
@@ -7,6 +7,7 @@ export function options<O extends {}>(style: Style<O>, options: StyleOptions<O>)
   let optionSources: StyleOptions<O>[] = [
     {
       seed: Math.random().toString(),
+      /** @ts-ignore @deprecated - will be removed with version 5.0 */
       userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent
     } as StyleOptions<O>,
     schema.defaults(coreSchema as JSONSchema7) as StyleOptions<O>,

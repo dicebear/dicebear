@@ -137,11 +137,9 @@
   - `winterHat03`
   - `winterHat04`
 
-### Fixed
+### Changed
 
-#### @dicebear/avatars
-
-- Type for `Prng.seed` fixed. Now also `undefined` is allowed.
+- Dependency `svgson` updated to version 5.2
 
 ### Deprecated
 
@@ -149,7 +147,8 @@
 
 #### @dicebear/avatars
 
-- Color class is deprecated and will be removed with Version 5.0.
+- Color class is deprecated and will be removed with version 5.0.
+- Parser class is deprecated and will be removed with version 5.0.
 - Option `background` is deprecated. Use `backgroundColor` instead.
 
 #### @dicebear/avatars-avataaars-sprites
@@ -207,6 +206,12 @@
   - `shortHair` => use
     `dreads01`,`dreads02`,`frizzle`,`shaggy`,`shaggyMullet`,`shortCurly`,`shortFlat`,`shortRound`,`shortWaved`,`sides`,`theCaesar`
     and `theCaesarAndSidePart` instead
+
+### Removed
+
+#### @dicebear/avatars
+
+- Removed unused webpack build. We will completely switch to microbundle with version 5 and also support CDNs like unpkg.
 
 ## [4.5.4] - 2021-02-24
 
@@ -341,7 +346,7 @@
 - `bowser` dependency in initials avatars.
 
 [1]: https://github.com/DiceBear/avatars/issues/55
-[2]: https://avatars.dicebear.com
+[2]: https://dicebear.com
 [3]: https://github.com/DiceBear/avatars/issues/69
 [4]: https://github.com/DiceBear/avatars/issues/58
 [5]: https://github.com/DiceBear/avatars/pull/66

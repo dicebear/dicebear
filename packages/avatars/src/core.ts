@@ -39,6 +39,7 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     return `data:image/svg+xml;utf8,${encodeURIComponent(avatar)}`;
   }
 
+  /** @deprecated - will be removed with version 5.0 */
   if (options.base64) {
     // @see https://www.base64encoder.io/javascript/
     return encodeURIComponent(avatar).replace(/%([0-9A-F]{2})/g, function (match, p1) {

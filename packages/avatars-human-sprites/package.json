@@ -12,16 +12,16 @@
     "sprites",
     "pixel-art"
   ],
-  "homepage": "https://github.com/DiceBear/avatars/tree/v4/packages/avatars-human-sprites#readme",
+  "homepage": "https://dicebear.com",
   "bugs": {
-    "url": "https://github.com/DiceBear/avatars/issues"
+    "url": "https://github.com/dicebear/dicebear/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DiceBear/avatars.git"
+    "url": "git+https://github.com/dicebear/dicebear.git"
   },
   "license": "MIT",
-  "author": "DiceBear <opensource@dicebear.com>",
+  "author": "Florian Körner <contact@florian-koerner.com>",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [

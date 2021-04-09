@@ -1,7 +1,7 @@
-import * as hexToRgb from 'pure-color/parse/hex';
-import * as rgbToHsv from 'pure-color/convert/rgb2hsv';
-import * as rgbToHex from 'pure-color/convert/rgb2hex';
-import * as hsvToRgb from 'pure-color/convert/hsv2rgb';
+import hexToRgb from 'pure-color/parse/hex';
+import rgbToHsv from 'pure-color/convert/rgb2hsv';
+import rgbToHex from 'pure-color/convert/rgb2hex';
+import hsvToRgb from 'pure-color/convert/hsv2rgb';
 import collection from './collection';
 
 export { collection };
@@ -25,7 +25,7 @@ export default class Color implements ColorInterface {
     rgb?: number[];
     hsv?: number[];
     hex?: string;
-  };
+  } = {};
 
   constructor(color: string = '#000') {
     if (color[0] == '#') {

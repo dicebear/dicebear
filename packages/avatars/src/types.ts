@@ -1,11 +1,10 @@
 /// <reference types="../typings/pure-color" />
-/// <reference types="../typings/svgson" />
 
 import type { JSONSchema7 } from 'json-schema';
 import type { Options } from './options';
 
 export interface Prng {
-  seed: string | undefined;
+  seed: string;
   bool(likelihood?: number): boolean;
   integer(min: number, max: number): number;
   pick<T>(arr: T[]): T;
