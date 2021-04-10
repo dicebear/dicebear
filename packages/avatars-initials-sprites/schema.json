@@ -25,17 +25,20 @@
       }
     },
     "backgroundColorLevel": {
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel",
+      "default": 600
     },
     "fontSize": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 100
+      "maximum": 100,
+      "default": 50
     },
     "chars": {
       "type": "number",
       "minimum": 0,
-      "maximum": 2
+      "maximum": 2,
+      "default": 2
     },
     "bold": {
       "type": ["boolean", "number"]

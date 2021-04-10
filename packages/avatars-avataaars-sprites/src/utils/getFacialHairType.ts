@@ -4,7 +4,7 @@ import getOption from './getOption';
 import { facialHair } from '../paths';
 import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random): (color: string) => string {
+export default function (options: Options, random: Random): ((color: string) => string) | undefined {
   let selected: Array<keyof typeof facialHair> = [];
 
   let values: Record<FacialHair, Array<keyof typeof facialHair>> = {

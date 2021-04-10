@@ -1,16 +1,14 @@
+import { utils, ColorCollection, StyleSchema  } from '@dicebear/avatars';
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
-import { ColorCollection } from '@dicebear/avatars/lib/types';
 import type { Options } from './options';
+import schema from './schema.json';
 
 // @ts-ignore
 import initials from 'initials';
 
 export function create(random: Random, options: Options = {}) {
-  options.backgroundColorLevel = options.backgroundColorLevel || 600;
-  options.fontSize = options.fontSize || 50;
-  options.chars = options.chars || 2;
-
+  let defaults = utils.schema.defaults(schema as StyleSchema);
   let backgroundColors: string[] = [];
 
   if (options.background) {
@@ -18,20 +16,24 @@ export function create(random: Random, options: Options = {}) {
 
     options.background = undefined;
   } else {
-    Object.keys(Color.collection).forEach((backgroundColor: keyof ColorCollection) => {
+    Object.keys(Color.collection).forEach((backgroundColor) => {
       if (
         options.backgroundColors === undefined ||
         options.backgroundColors.length === 0 ||
-        options.backgroundColors.indexOf(backgroundColor) !== -1
+        options.backgroundColors.indexOf(backgroundColor as keyof ColorCollection) !== -1
       ) {
-        backgroundColors.push(Color.collection[backgroundColor][options.backgroundColorLevel]);
+        let colorCollection = Color.collection[backgroundColor as keyof ColorCollection];
+
+        backgroundColors.push(colorCollection[options.backgroundColorLevel ?? defaults.backgroundColorLevel as keyof typeof colorCollection]);
       }
     });
   }
 
   let backgroundColor = random.pickone(backgroundColors);
-  let seedInitials = (initials(random.seed.trim()) as string).toLocaleUpperCase().slice(0, options.chars);
+  let seedInitials = (initials(random.seed.trim()) as string).toLocaleUpperCase().slice(0, options.chars ?? defaults.chars as number);
   let fontFamily = 'Arial,sans-serif';
+
+  let fontSize = (options.fontSize ?? defaults.fontSize as number) / 100;
 
   // prettier-ignore
   let svg = [
@@ -39,7 +41,7 @@ export function create(random: Random, options: Options = {}) {
     `<rect width="1" height="1" fill="${backgroundColor}"></rect>`,
     options.margin ? `<g transform="translate(${options.margin / 100}, ${options.margin / 100})">` : '',
     options.margin ? `<g transform="scale(${1 - (options.margin * 2) / 100})">` : '',
-    `<text x="50%" y="50%" style="${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${options.fontSize / 100}px" fill="#FFF" text-anchor="middle" dy="${(options.fontSize / 100 * .356).toFixed(3)}">${seedInitials}</text>`,
+    `<text x="50%" y="50%" style="${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${fontSize}px" fill="#FFF" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
     options.margin ? '</g>' : '',
     options.margin ? '</g>' : '',
     '</svg>'

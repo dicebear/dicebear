@@ -92,7 +92,7 @@ export function create(random: Random, options: Options = {}) {
   let mouth = [];
 
   while (mouth.length === 0) {
-    if (false === Array.isArray(options.mood) || options.mood.indexOf('sad') > -1) {
+    if (undefined === options.mood || options.mood.indexOf('sad') > -1) {
       // prettier-ignore
       mouth.push(
           `<path d="M8 13h3v1H8v-1z" fill="${mouthColor.hex}"/>`,
@@ -103,7 +103,7 @@ export function create(random: Random, options: Options = {}) {
         );
     }
 
-    if (false === Array.isArray(options.mood) || options.mood.indexOf('happy') > -1) {
+    if (undefined === options.mood || options.mood.indexOf('happy') > -1) {
       // prettier-ignore
       mouth.push(
           `<path d="M7 12v1h1v1h4v-1H8v-1H7z" fill="${mouthColor.hex}"/>`,
@@ -113,7 +113,7 @@ export function create(random: Random, options: Options = {}) {
         );
     }
 
-    if (false === Array.isArray(options.mood) || options.mood.indexOf('surprised') > -1) {
+    if (undefined === options.mood || options.mood.indexOf('surprised') > -1) {
       // prettier-ignore
       mouth.push(
           `<path d="M9 12v2h2v-2H9z" fill="${mouthColor.hex}"/>`,

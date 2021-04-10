@@ -1,16 +1,19 @@
+import { utils, ColorCollection, StyleSchema } from '@dicebear/avatars';
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
-import { ColorCollection, Color as ColorType } from '@dicebear/avatars/lib/types';
 import type { Options } from './options';
+import schema from './schema.json';
 
 export function create(random: Random, options: Options = {}) {
-  options.colorLevel = options.colorLevel || 600;
+  let defaults = utils.schema.defaults(schema as StyleSchema);
 
   let colors: string[] = [];
 
-  Object.keys(Color.collection).forEach((color: keyof ColorCollection) => {
-    if (options.colors === undefined || options.colors.length === 0 || options.colors.indexOf(color) !== -1) {
-      colors.push(Color.collection[color][options.colorLevel]);
+  Object.keys(Color.collection).forEach((color) => {
+    if (options.colors === undefined || options.colors.length === 0 || options.colors.indexOf(color as keyof ColorCollection) !== -1) {
+      let colorCollection = Color.collection[color as keyof ColorCollection];
+
+      colors.push(colorCollection[options.colorLevel || defaults.colorLevel as keyof typeof colorCollection]);
     }
   });
 

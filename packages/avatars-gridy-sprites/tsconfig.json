@@ -1,19 +1,9 @@
 {
+  "extends": "@tsconfig/node12/tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "lib",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]
-    },
+    "resolveJsonModule": true,
     "declaration": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true
+    "outDir": "./lib",
   },
-  "include": ["src/**/*"]
+  "include": ["./src/index.ts"]
 }

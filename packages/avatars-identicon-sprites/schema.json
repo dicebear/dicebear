@@ -9,7 +9,8 @@
       }
     },
     "colorLevel": {
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel",
+      "default": 600
     }
   },
   "additionalProperties": false

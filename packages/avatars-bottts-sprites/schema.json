@@ -12,22 +12,28 @@
       "type": ["boolean", "number"]
     },
     "primaryColorLevel": {
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel",
+      "default": 600
     },
     "secondaryColorLevel": {
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel",
+      "default": 400
     },
     "textureChance": {
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 50
     },
     "mouthChance": {
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 100
     },
     "sidesChance": {
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 100
     },
     "topChance": {
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability"
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 100
     }
   },
   "additionalProperties": false

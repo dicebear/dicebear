@@ -4,7 +4,7 @@ import getOption from './getOption';
 import { accessories } from '../paths';
 import { arrayUnique } from '../helpers/arrayUnique';
 
-export default function (options: Options, random: Random): (color: string) => string {
+export default function (options: Options, random: Random): ((color: string) => string) | undefined {
   let selected: Array<keyof typeof accessories> = [];
 
   let values: Accessories[] = ['kurt', 'prescription01', 'prescription02', 'round', 'sunglasses', 'wayfarers'];
