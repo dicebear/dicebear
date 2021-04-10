@@ -1,3 +1,8 @@
-node_modules
-.env
+# Cache and log files
 .tmp
+
+# Dependencies
+node_modules
+
+# Environment files
+.env

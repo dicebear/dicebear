@@ -1,5 +1,7 @@
+# Cache and log files
 lerna-debug.log
 .DS_Store
 yarn-error.log
 
+# Dependencies
 node_modules

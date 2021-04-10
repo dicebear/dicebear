@@ -1,8 +1,13 @@
+# Cache and log files
 .DS_Store
 yarn-error.log
 
-dist
-lib
+# Dependencies
 node_modules
+
+# Build files
+lib
+
+# Generated files
 src/options.ts
 src/schema.json
