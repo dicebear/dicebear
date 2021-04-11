@@ -1,4 +1,4 @@
-import { utils, ColorCollection, StyleSchema  } from '@dicebear/avatars';
+import { utils, ColorCollection, StyleSchema, Options as CoreOptions } from '@dicebear/avatars';
 import Color from '@dicebear/avatars/lib/color';
 import Random from '@dicebear/avatars/lib/random';
 import type { Options } from './options';
@@ -7,7 +7,7 @@ import schema from './schema.json';
 // @ts-ignore
 import initials from 'initials';
 
-export function create(random: Random, options: Options = {}) {
+export function create(random: Random, options: Options & CoreOptions = {}) {
   let defaults = utils.schema.defaults(schema as StyleSchema);
   let backgroundColors: string[] = [];
 

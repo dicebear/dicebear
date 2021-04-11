@@ -12,7 +12,7 @@
         <img src="https://img.shields.io/npm/v/@dicebear/avatars-avataaars-sprites.svg?style=flat-square" alt="Latest Version">
     </a>
     <a href="https://github.com/dicebear/dicebear/stargazers" target="_blank">
-        <img src="https://img.shields.io/github/stars/dicebear/avatars?style=flat-square" alt="Stargazers">
+        <img src="https://img.shields.io/github/stars/dicebear/dicebear?style=flat-square" alt="Stargazers">
     </a>
 </p>
 

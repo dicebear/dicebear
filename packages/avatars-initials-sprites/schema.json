@@ -7,17 +7,6 @@
       "minimum": 0,
       "maximum": 25
     },
-    "background": {
-      "oneOf": [
-        {
-          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
-        },
-        {
-          "type": "string",
-          "enum": ["transparent"]
-        }
-      ]
-    },
     "backgroundColors": {
       "type": "array",
       "items": {

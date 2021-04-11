@@ -9,7 +9,7 @@ import { createAvatar } from './core';
 /**
  * @deprecated use `Style` type instead.
  */
-export type SpriteCollection<O = {}> = (random: Random, options?: O) => string | INode;
+export type SpriteCollection<O = {}> = (random: Random, options?: O & Options) => string | INode;
 
 /**
  * @deprecated use `createAvatar` function instead.

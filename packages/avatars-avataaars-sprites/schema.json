@@ -192,17 +192,6 @@
     }
   },
   "properties": {
-    "background": {
-      "oneOf": [
-        {
-          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
-        },
-        {
-          "type": "string",
-          "enum": ["transparent"]
-        }
-      ]
-    },
     "style": {
       "type": "string",
       "enum": ["transparent", "circle"]

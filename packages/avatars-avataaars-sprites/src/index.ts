@@ -1,9 +1,10 @@
+import { Options as CoreOptions } from '@dicebear/avatars';
 import type { Options } from './options';
 import type Random from '@dicebear/avatars/lib/random';
 import * as utils from './utils';
 import { palette } from './colors';
 
-export function create(random: Random, options: Options = {}) {
+export function create(random: Random, options: Options & CoreOptions = {}) {
   let noseType = utils.getNoseType();
   let skinType = utils.getSkinType();
   let skinColor = utils.getSkinColor(options, random);
