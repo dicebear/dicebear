@@ -4,25 +4,35 @@
   "title": "Options",
   "definitions": {
     "seed": {
+      "title": "Seed",
       "type": "string"
     },
     "radius": {
+      "title": "Radius",
       "type": "integer",
       "minimum": 0,
       "maximum": 50,
       "default": 0
     },
-    "size": {
+    "width": {
+      "title": "Width",
+      "type": "integer",
+      "minimum": 1
+    },
+    "height": {
+      "title": "Height",
       "type": "integer",
       "minimum": 1
     },
     "margin": {
+      "title": "Margin",
       "type": "integer",
       "minimum": 0,
       "maximum": 25,
       "default": 0
     },
     "backgroundColor": {
+      "title": "Background Color",
       "oneOf": [
         {
           "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
@@ -37,11 +47,9 @@
   },
   "properties": {
     "seed": {
-      "title": "Seed",
       "$ref": "#/definitions/seed"
     },
     "s": {
-      "title": "Seed",
       "$ref": "#/definitions/seed"
     },
     "base64": {
@@ -61,48 +69,37 @@
       "type": "string"
     },
     "radius": {
-      "title": "Radius",
       "$ref": "#/definitions/radius"
     },
     "r": {
-      "title": "Radius",
       "$ref": "#/definitions/radius"
     },
     "width": {
-      "title": "Width",
-      "$ref": "#/definitions/size"
+      "$ref": "#/definitions/width"
     },
     "w": {
-      "title": "Width",
-      "$ref": "#/definitions/size"
+      "$ref": "#/definitions/width"
     },
     "height": {
-      "title": "Height",
-      "$ref": "#/definitions/size"
+      "$ref": "#/definitions/height"
     },
     "h": {
-      "title": "Height",
-      "$ref": "#/definitions/size"
+      "$ref": "#/definitions/height"
     },
     "margin": {
-      "title": "Margin",
       "$ref": "#/definitions/margin"
     },
     "m": {
-      "title": "Margin",
       "$ref": "#/definitions/margin"
     },
+    "backgroundColor": {
+      "$ref": "#/definitions/backgroundColor"
+    },
     "background": {
-      "title": "Background Color",
       "description": "@deprecated use backgroundColor instead",
       "$ref": "#/definitions/backgroundColor"
     },
-    "backgroundColor": {
-      "title": "Background Color",
-      "$ref": "#/definitions/backgroundColor"
-    },
     "b": {
-      "title": "Background Color",
       "$ref": "#/definitions/backgroundColor"
     }
   },

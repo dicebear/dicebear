@@ -1,3 +1,4 @@
+import type { ValuesType } from 'utility-types';
 import type Random from '@dicebear/avatars/lib/random';
 import type { Options, Eyes } from '../options';
 import getOption from './getOption';
@@ -7,7 +8,7 @@ import { arrayUnique } from '../helpers/arrayUnique';
 export default function (options: Options, random: Random): () => string {
   let selected: Array<keyof typeof eyes> = [];
 
-  let values: Record<Eyes, Array<keyof typeof eyes>> = {
+  let values: Record<ValuesType<Eyes>, Array<keyof typeof eyes>> = {
     close: ['closed'],
     closed: ['closed'],
     cry: ['cry'],
@@ -26,7 +27,7 @@ export default function (options: Options, random: Random): () => string {
   };
 
   Object.keys(values).forEach((key) => {
-    let val = values[key as Eyes];
+    let val = values[key as ValuesType<Eyes>];
 
     if (getOption('eyes', key, options)) {
       selected.push(...val);

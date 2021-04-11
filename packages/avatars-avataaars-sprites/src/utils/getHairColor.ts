@@ -1,3 +1,4 @@
+import type { ValuesType } from 'utility-types';
 import type Random from '@dicebear/avatars/lib/random';
 import type { Options, HairColor } from '../options';
 import getOption from './getOption';
@@ -7,7 +8,7 @@ import { arrayUnique } from '../helpers/arrayUnique';
 export default function (options: Options, random: Random): string {
   let selected: Array<keyof typeof hair> = [];
 
-  let values: Record<HairColor, Array<keyof typeof hair>> = {
+  let values: Record<ValuesType<HairColor>, Array<keyof typeof hair>> = {
     auburn: ['auburn'],
     black: ['black'],
     blonde: ['blonde'],
@@ -23,7 +24,7 @@ export default function (options: Options, random: Random): string {
   };
 
   Object.keys(values).forEach((key) => {
-    let val = values[key as HairColor];
+    let val = values[key as ValuesType<HairColor>];
 
     if (getOption('hairColor', key, options)) {
       selected.push(...val);

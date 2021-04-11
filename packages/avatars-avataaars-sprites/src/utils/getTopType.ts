@@ -1,3 +1,4 @@
+import type { ValuesType } from 'utility-types';
 import type Random from '@dicebear/avatars/lib/random';
 import type { Options, Top } from '../options';
 import getOption from './getOption';
@@ -9,7 +10,7 @@ export default function (
 ): { path: (color: string) => string; isHat: boolean; zIndex: number } {
   let selected: Array<keyof typeof top> = [];
 
-  let values: Record<Top, Array<keyof typeof top>> = {
+  let values: Record<ValuesType<Top>, Array<keyof typeof top>> = {
     longHair: [
       'bigHair',
       'bob',
@@ -79,7 +80,7 @@ export default function (
   };
 
   Object.keys(values).forEach((key) => {
-    let val = values[key as Top];
+    let val = values[key as ValuesType<Top>];
 
     if (getOption('top', key, options)) {
       selected.push(...val);
