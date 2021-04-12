@@ -1,14 +1,8 @@
-import Male from '@dicebear/avatars-male-sprites';
-import Female from '@dicebear/avatars-female-sprites';
-import Random from '@dicebear/avatars/lib/random';
-import type { Options } from './options';
+import { style } from './core';
 
-export function create(random: Random, options: Options = {}) {
-  if (random.bool(50)) {
-    return Male(random, options);
-  } else {
-    return Female(random, options);
-  }
-}
+let { create, meta, schema } = style;
 
-export default create;
+export { create, meta, schema };
+
+/** @deprecated will be removed in Version 5.0 */
+export { legacyStyle as default } from './core.legacy';

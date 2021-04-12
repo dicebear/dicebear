@@ -1,12 +1,12 @@
 import type { ValuesType } from 'utility-types';
-import type Random from '@dicebear/avatars/lib/random';
 import type { Options, Top } from '../options';
 import getOption from './getOption';
 import { top } from '../paths';
+import { Prng } from '@dicebear/avatars';
 
 export default function (
   options: Options,
-  random: Random
+  prng: Prng
 ): { path: (color: string) => string; isHat: boolean; zIndex: number } {
   let selected: Array<keyof typeof top> = [];
 
@@ -87,9 +87,9 @@ export default function (
     }
   });
 
-  let picked = random.pickone(selected);
+  let picked = prng.pick(selected);
 
-  if (false === random.bool(undefined !== options.topChance ? options.topChance : 100)) {
+  if (false === prng.bool(undefined !== options.topChance ? options.topChance : 100)) {
     return { path: () => '', isHat: false, zIndex: 0 };
   }
 

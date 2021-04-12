@@ -1,10 +1,10 @@
 import type { ValuesType } from 'utility-types';
-import type Random from '@dicebear/avatars/lib/random';
 import type { Options, Skin } from '../options';
 import getOption from './getOption';
 import { skin } from '../colors';
+import { Prng } from '@dicebear/avatars';
 
-export default function (options: Options, random: Random): string {
+export default function (options: Options, prng: Prng): string {
   let selected: Array<keyof typeof skin> = [];
 
   let values: Array<ValuesType<Skin>> = ['tanned', 'yellow', 'pale', 'light', 'brown', 'darkBrown', 'black'];
@@ -15,7 +15,7 @@ export default function (options: Options, random: Random): string {
     }
   });
 
-  let picked = random.pickone(selected);
+  let picked = prng.pick(selected);
 
   return skin[picked];
 }

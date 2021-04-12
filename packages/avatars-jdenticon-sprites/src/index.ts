@@ -1,22 +1,8 @@
-import Random from '@dicebear/avatars/lib/random';
-// @ts-ignore
-import jdenticon from 'jdenticon';
-import type { Options } from './options';
+import { style } from './core';
 
-export function create(random: Random, options: Options = {}) {
-  jdenticon.config = {
-    hues: options.hues,
-    lightness: {
-      color: options.colorLightness,
-      grayscale: options.grayscaleLightness,
-    },
-    saturation: {
-      color: options.colorSaturation,
-      grayscale: options.grayscaleSaturation,
-    },
-  };
+let { create, meta, schema } = style;
 
-  return jdenticon.toSvg(random.seed, 50, 0).replace('width="50"', '').replace('height="50"', '');
-}
+export { create, meta, schema };
 
-export default create;
+/** @deprecated will be removed in Version 5.0 */
+export { legacyStyle as default } from './core.legacy';

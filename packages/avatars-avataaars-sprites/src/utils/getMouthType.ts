@@ -1,11 +1,11 @@
 import type { ValuesType } from 'utility-types';
-import type Random from '@dicebear/avatars/lib/random';
 import type { Options, Mouth } from '../options';
 import getOption from './getOption';
 import { mouth } from '../paths';
 import { arrayUnique } from '../helpers/arrayUnique';
+import { Prng } from '@dicebear/avatars';
 
-export default function (options: Options, random: Random): () => string {
+export default function (options: Options, prng: Prng): () => string {
   let selected: Array<keyof typeof mouth> = [];
 
   let values: Record<ValuesType<Mouth>, Array<keyof typeof mouth>> = {
@@ -32,7 +32,7 @@ export default function (options: Options, random: Random): () => string {
     }
   });
 
-  let picked = random.pickone(arrayUnique(selected));
+  let picked = prng.pick(arrayUnique(selected));
 
   return mouth[picked];
 }

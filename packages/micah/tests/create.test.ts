@@ -1,10 +1,10 @@
 import * as avatars from '@dicebear/avatars';
 import * as style from '../lib';
 
-test('micah.create', () => {
+test('Simple create', () => {
     expect(avatars.createAvatar(style)).toContain('svg');
 });
 
-test('micah.create.legacy', () => {
+test('Simple legacy create', () => {
     expect(new avatars.default(style.default).create()).toContain('svg');
 });

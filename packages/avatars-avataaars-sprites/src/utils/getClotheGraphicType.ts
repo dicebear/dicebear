@@ -1,10 +1,10 @@
+import { Prng } from '@dicebear/avatars';
 import type { ValuesType } from 'utility-types';
-import type Random from '@dicebear/avatars/lib/random';
 import type { Options, ClotheGraphics } from '../options';
 import { clothingGraphic } from '../paths';
 import getOption from './getOption';
 
-export default function (options: Options, random: Random): () => string {
+export default function (options: Options, prng: Prng): () => string {
   let selected: Array<keyof typeof clothingGraphic> = [];
 
   let values: ValuesType<ClotheGraphics>[] = [
@@ -26,7 +26,7 @@ export default function (options: Options, random: Random): () => string {
     }
   });
 
-  let picked = random.pickone(selected);
+  let picked = prng.pick(selected);
 
   return clothingGraphic[picked];
 }

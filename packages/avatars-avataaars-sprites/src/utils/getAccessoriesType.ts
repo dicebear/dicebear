@@ -1,11 +1,11 @@
 import type { ValuesType } from 'utility-types';
-import type Random from '@dicebear/avatars/lib/random';
 import type { Options, Accessories } from '../options';
 import getOption from './getOption';
 import { accessories } from '../paths';
 import { arrayUnique } from '../helpers/arrayUnique';
+import { Prng } from '@dicebear/avatars';
 
-export default function (options: Options, random: Random): ((color: string) => string) | undefined {
+export default function (options: Options, prng: Prng): ((color: string) => string) | undefined {
   let selected: Array<keyof typeof accessories> = [];
 
   let values: ValuesType<Accessories>[] = ['kurt', 'prescription01', 'prescription02', 'round', 'sunglasses', 'wayfarers'];
@@ -16,9 +16,9 @@ export default function (options: Options, random: Random): ((color: string) => 
     }
   });
 
-  let picked = random.pickone(arrayUnique(selected));
+  let picked = prng.pick(arrayUnique(selected));
 
-  if (false === random.bool(undefined !== options.accessoriesChance ? options.accessoriesChance : 10)) {
+  if (false === prng.bool(undefined !== options.accessoriesChance ? options.accessoriesChance : 10)) {
     return undefined;
   }
 
