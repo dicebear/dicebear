@@ -6,8 +6,8 @@ import * as path from 'path';
 
 const seed = 'test';
 const data: Array<StyleOptions<style.Options>> = [
-    { seed, deterministic: true },
-    { seed, deterministic: true, backgroundColor: '#FF0000' }
+    { seed },
+    { seed, backgroundColor: '#FF0000' }
 ];
 
 data.forEach((options, key) => {
@@ -25,6 +25,6 @@ data.forEach((options, key) => {
         const svg = fs.readFileSync(svgPath, { encoding: 'utf-8' })
 
         expect(avatars.createAvatar(style, options)).toEqual(svg);
-        //expect(new avatars.default(style.default, options).create(seed)).toEqual(svg);
+        expect(new avatars.default(style.default, options).create(seed)).toEqual(svg);
     });
 })

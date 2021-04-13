@@ -25,7 +25,7 @@ export const style: Style<Options> = {
       new Color('#A26D3D'),
       new Color('#8D5524'),
     ]);
-  
+
     let hairColor = prng
       .pick([
         new Color('#090806'),
@@ -47,7 +47,7 @@ export const style: Style<Options> = {
         new Color('#977961'),
       ])
       .brighterOrDarkerThan(skinColor, 17);
-  
+
     let eyesColor = prng.pick([
       new Color('#76778b'),
       new Color('#697b94'),
@@ -55,16 +55,16 @@ export const style: Style<Options> = {
       new Color('#5b7c8b'),
       new Color('#588387'),
     ]);
-  
+
     let eyebrowsColor = hairColor.clone().darkerThan(skinColor, 7).darkerThan(hairColor, 10);
-  
+
     let mustacheColor = hairColor.clone().darkerThan(skinColor, 7);
     mustacheColor.alpha = prng.pick([1, 0.75, 0.5]);
-  
+
     let mouthColor = prng
       .pick([new Color('#eec1ad'), new Color('#dbac98'), new Color('#d29985')])
       .brighterOrDarkerThan(skinColor, 10);
-  
+
     let glassesColor = prng.pick([
       new Color('#5f705c'),
       new Color('#43677d'),
@@ -75,7 +75,7 @@ export const style: Style<Options> = {
       new Color('#323232'),
       new Color('#4b4b4b'),
     ]);
-  
+
     let clothesColor = prng.pick([
       new Color('#5bc0de'),
       new Color('#5cb85c'),
@@ -91,7 +91,7 @@ export const style: Style<Options> = {
       new Color('#666547'),
       new Color('#ffe28a'),
     ]);
-  
+
     let hatColor = prng.pick([
       new Color('#18293b'),
       new Color('#2e1e05'),
@@ -100,9 +100,9 @@ export const style: Style<Options> = {
       new Color('#517459'),
       new Color('#a62116'),
     ]);
-  
+
     let mouth = [];
-  
+
     while (mouth.length === 0) {
       if (undefined === options.mood || options.mood.indexOf('sad') > -1) {
         // prettier-ignore
@@ -114,7 +114,7 @@ export const style: Style<Options> = {
             `<path d="M8 13v1h1v-1h3v-1H9v1H8z" fill="${mouthColor.hex}"/>`
           );
       }
-  
+
       if (undefined === options.mood || options.mood.indexOf('happy') > -1) {
         // prettier-ignore
         mouth.push(
@@ -124,7 +124,7 @@ export const style: Style<Options> = {
             `<path d="M8 12v2h4v-2H8z" fill="#FFF"/>`
           );
       }
-  
+
       if (undefined === options.mood || options.mood.indexOf('surprised') > -1) {
         // prettier-ignore
         mouth.push(
@@ -132,13 +132,13 @@ export const style: Style<Options> = {
             `<path d="M9 13v1h1v-1H9z" fill="${mouthColor.hex}"/>`
           );
       }
-  
+
       if (mouth.length === 0) {
         // Reset mood option because it appears to be invalid.
         options.mood = undefined;
       }
     }
-  
+
     // prettier-ignore
     let body = [
       // Head
@@ -253,8 +253,7 @@ export const style: Style<Options> = {
     return {
       attributes: {
         viewBox: '0 0 20 20',
-        style: "isolation:isolate",
-        'shape-rendering': "crispEdges"
+        'shape-rendering': 'crispEdges',
       },
       body,
     };

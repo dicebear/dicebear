@@ -4,7 +4,7 @@ import type { Options } from './options';
 
 /** @deprecated will be removed in Version 5.0 */
 export const legacyStyle: SpriteCollection<Options> = (random, options) => {
-    options = utils.style.options(style, options as StyleOptions<Options>);
+    options = Object.assign(options, utils.style.options(style, options as StyleOptions<Options>));
 
     let result = style.create({
         prng: utils.prng.create(random.seed),

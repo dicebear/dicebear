@@ -1,6 +1,7 @@
 // @ts-ignore
-import { inner } from 'gridy-avatars/dist/avatars';
-import { Style, StyleSchema } from '@dicebear/avatars';
+import { outer } from 'gridy-avatars/dist/avatars';
+import { Style, StyleCreateResultAttributes, StyleSchema } from '@dicebear/avatars';
+import Parser from '@dicebear/avatars/lib/parser';
 import { Options } from './options';
 import schema from './schema.json';
 
@@ -40,18 +41,29 @@ export const style: Style<Options> = {
 
     let deterministic = options && options.deterministic;
 
-    let svg = inner(`${body}${bodyColor}${eyes}${eyesColor}${mouth}${mouthColor}`);
+    let svg: string = outer(`${body}${bodyColor}${eyes}${eyesColor}${mouth}${mouthColor}`);
+
     if (deterministic) {
       let id = prng.integer(0, 10e9);
       svg = fixDeterministic(svg, id);
     }
 
+    let parsed = Parser.parse(svg);
+    let parsedHead: Array<typeof parsed> = [];
+    let parsedBody: Array<typeof parsed> = [];
+
+    parsed.children.forEach((child) => {
+      if (child.type === 'element' && ['title', 'desc', 'defs', 'metadata'].indexOf(child.name) === -1) {
+        parsedBody.push(child);
+      } else {
+        parsedHead.push(child);
+      }
+    });
+
     return {
-      attributes: {
-        viewBox: '0 0 24 24',
-        style: 'isolation:isolate',
-      },
-      body: svg,
+      attributes: parsed.attributes as StyleCreateResultAttributes,
+      head: parsedHead.map((v) => Parser.stringify(v)).join(''),
+      body: parsedBody.map((v) => Parser.stringify(v)).join(''),
     };
   },
 };

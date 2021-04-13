@@ -140,6 +140,7 @@
 ### Changed
 
 - Dependency `svgson` updated to version 5.2
+- Removed style `isolation:isolate` in all avatar styles
 
 ### Deprecated
 
@@ -206,6 +207,10 @@
   - `shortHair` => use
     `dreads01`,`dreads02`,`frizzle`,`shaggy`,`shaggyMullet`,`shortCurly`,`shortFlat`,`shortRound`,`shortWaved`,`sides`,`theCaesar`
     and `theCaesarAndSidePart` instead
+
+#### @dicebear/avatars-gridy-sprites
+
+- Change `deterministic` default to `true`.
 
 ### Removed
 

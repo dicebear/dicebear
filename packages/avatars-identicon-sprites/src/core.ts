@@ -85,7 +85,6 @@ export const style: Style<Options> = {
     return {
       attributes: {
         viewBox: '0 0 5 5',
-        style: 'isolation:isolate',
         'shape-rendering': 'crispEdges',
       },
       body,

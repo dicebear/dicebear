@@ -21,7 +21,7 @@ export const style: Style<Options> = {
     let defaults = utils.schema.defaults(schema as StyleSchema);
     let backgroundColors: string[] = [];
 
-    if (options.background) {
+    if (options.background && options.background !== 'transparent') {
       backgroundColors.push(options.background);
 
       options.background = undefined;
@@ -66,7 +66,6 @@ export const style: Style<Options> = {
     return {
       attributes: {
         viewBox: '0 0 1 1',
-        style: 'isolation:isolate;',
       },
       body: svg,
     };

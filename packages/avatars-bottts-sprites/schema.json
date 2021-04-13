@@ -9,7 +9,7 @@
       }
     },
     "colorful": {
-      "type": ["boolean", "number"]
+      "type": "boolean"
     },
     "primaryColorLevel": {
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel",
