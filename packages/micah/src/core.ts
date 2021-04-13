@@ -18,17 +18,25 @@ export const style: Style<Options> = {
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     const pickColor = (values: string[], filter: string[] = []): string => {
-      let result = values
+      let result: string[] = values
         .map((val) => colors[val as keyof typeof colors] || val)
         .filter((val) => false === filter.includes(val));
 
-      return result.length > 0 ? prng.pick(result) : values[0] || 'transparent';
+      if (result.length === 0) {
+        result.push('transparent');
+      }
+
+      return prng.pick(result);
     };
 
     const pickPath = <T>(paths: Record<string, T>, values: string[] = []): T | undefined => {
-      let result = values.map((val) => paths[val]);
+      let result: Array<T | undefined> = values.map((val) => paths[val]);
 
-      return result.length > 0 ? prng.pick(result) : undefined;
+      if (result.length === 0) {
+        result.push(undefined);
+      }
+
+      return prng.pick(result);
     };
 
     const baseColor = pickColor(options.baseColor ?? []);

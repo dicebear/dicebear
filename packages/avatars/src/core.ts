@@ -27,13 +27,13 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     result.body = utils.svg.addRadius(result, options);
   }
 
-  let avatar = `
+  let avatar = utils.svg.removeWhitespace(`
     <svg ${utils.svg.createAttrString(result.attributes)}>
       ${utils.svg.getMetadata(style)}
       ${result.head ?? ''}
       ${result.body}
     </svg>
-  `;
+  `);
 
   if (options.dataUri) {
     return `data:image/svg+xml;utf8,${encodeURIComponent(avatar)}`;

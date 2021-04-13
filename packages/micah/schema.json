@@ -53,7 +53,7 @@
         "type": "string",
         "enum": ["standard"]
       },
-      "defeault": ["standard"]
+      "default": ["standard"]
     },
     "baseColor": {
       "$ref": "#/definitions/colors",
