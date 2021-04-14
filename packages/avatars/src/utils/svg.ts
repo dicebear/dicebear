@@ -137,7 +137,7 @@ export function addRadius<O extends Options>(result: StyleCreateResult, options:
     <mask id="avatarsRadiusMask">
       <rect width="${width}" height="${height}" rx="${rx}" ry="${ry}" x="${x}" y="${y}" fill="#fff" />
     </mask>
-    <g mask="url(#avatarsRadiusMask)>${result.body}</g>
+    <g mask="url(#avatarsRadiusMask)">${result.body}</g>
   `;
 }
 
@@ -150,17 +150,19 @@ export function createAttrString(attributes: StyleCreateResultAttributes): strin
 }
 
 export function removeWhitespace(svg: string): string {
-  return svg
-    // Remove space before tag
-    .replace(/[\n\r\s]+</g, '<')
-    // Remove space after tag
-    .replace(/>[\n\r\s]+/g, '>')
-    // Remove breaking lines
-    .replace(/[\n\r]+/g, ' ')
-    // Reduce whitespace
-    .replace(/[\s]{2,}/g, ' ')
-    // Create self closing tags
-    .replace(/<([^\/>]+)><\/[^>]+>/gi, '<$1/>')
-    // Remove whitespace before self tag self close
-    .replace(/\s(\/?>)/g, '$1');
+  return (
+    svg
+      // Remove space before tag
+      .replace(/[\n\r\s]+</g, '<')
+      // Remove space after tag
+      .replace(/>[\n\r\s]+/g, '>')
+      // Remove breaking lines
+      .replace(/[\n\r]+/g, ' ')
+      // Reduce whitespace
+      .replace(/[\s]{2,}/g, ' ')
+      // Create self closing tags
+      .replace(/<([^\/>]+)><\/[^>]+>/gi, '<$1/>')
+      // Remove whitespace before self tag self close
+      .replace(/\s(\/?>)/g, '$1')
+  );
 }

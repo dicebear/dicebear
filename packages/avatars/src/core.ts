@@ -2,7 +2,7 @@ import type { Style, StyleOptions } from './types';
 import * as utils from './utils';
 
 export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O> = {}) {
-  options = utils.style.options(style, options);
+  options = utils.options.merge(style, options);
 
   let prngInstance = utils.prng.create(options.seed);
   let result = style.create({ prng: prngInstance, options });

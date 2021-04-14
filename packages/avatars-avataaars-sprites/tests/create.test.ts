@@ -7,7 +7,12 @@ import * as path from 'path';
 const seed = 'test';
 const data: Array<StyleOptions<style.Options>> = [
     { seed },
-    { seed, backgroundColor: '#FF0000' }
+    { seed, backgroundColor: '#FF0000' },
+    { seed, backgroundColor: '#FF0000', margin: 10 },
+    { seed, radius: 25 },
+    { seed, width: 100 },
+    { seed, height: 100 },
+    { seed, height: 100 },
 ];
 
 data.forEach((options, key) => {
