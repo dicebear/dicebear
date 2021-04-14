@@ -67,16 +67,12 @@ export interface StyleCreateResult {
   body: string;
 }
 
-export interface StyleMetaLicense {
-  name: string;
-  link: string;
-}
-
 export interface StyleMeta {
   title?: string;
   creator?: string;
   source?: string;
-  license?: StyleMetaLicense;
+  license?: string;
+  contributor?: string;
 }
 
 export interface Style<O extends {}> {

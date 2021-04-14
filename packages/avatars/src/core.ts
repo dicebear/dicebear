@@ -27,9 +27,11 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     result.body = utils.svg.addRadius(result, options);
   }
 
+  const hasMetadata = Boolean(result.head?.match(/<metadata([^>]*)>/));
+
   let avatar = utils.svg.removeWhitespace(`
     <svg ${utils.svg.createAttrString(result.attributes)}>
-      ${utils.svg.getMetadata(style)}
+      ${hasMetadata ? '' : utils.svg.getMetadata(style)}
       ${result.head ?? ''}
       ${result.body}
     </svg>

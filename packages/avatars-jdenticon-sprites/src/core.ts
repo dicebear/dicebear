@@ -7,12 +7,9 @@ import schema from './schema.json';
 export const style: Style<Options> = {
   meta: {
     title: 'Jdenticon',
-    creator: '(c) 2014-2018 Daniel Mester Pirttijärvi',
+    creator: 'Daniel Mester Pirttijärvi',
     source: 'https://github.com/dmester/jdenticon',
-    license: {
-      name: 'MIT',
-      link: 'https://opensource.org/licenses/MIT',
-    },
+    license: 'https://opensource.org/licenses/MIT',
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {

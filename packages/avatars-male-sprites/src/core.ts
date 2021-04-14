@@ -6,12 +6,10 @@ import schema from './schema.json';
 export const style: Style<Options> = {
   meta: {
     title: 'Male / 8biticon',
-    creator: '(c) 2012 Plastic Jam, (c) 2021 Florian Körner',
+    creator: 'Plastic Jam',
+    contributor: 'Florian Körner',
     source: 'https://github.com/dicebear/dicebear',
-    license: {
-      name: 'MIT',
-      link: 'https://opensource.org/licenses/MIT',
-    },
+    license: 'https://opensource.org/licenses/MIT',
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {

@@ -21,12 +21,9 @@ let fixDeterministic = (svg: string, id: number): string => {
 export const style: Style<Options> = {
   meta: {
     title: 'Gridy Avatars',
-    creator: '(c) 2018 Jan Forst',
+    creator: 'Jan Forst',
     source: 'https://github.com/darosh/gridy-avatars',
-    license: {
-      name: 'MIT',
-      link: 'https://opensource.org/licenses/MIT',
-    },
+    license: 'https://opensource.org/licenses/MIT',
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {

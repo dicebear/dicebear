@@ -8,6 +8,44 @@ type CreateGroupProps = {
   y: number;
 };
 
+const ccLicenses: Record<string, { permits: string[]; requires: string[]; prohibits: string[] }> = {
+  by: {
+    permits: ['Reproduction', 'Distribution', 'DerivativeWorks'],
+    requires: ['Notice', 'Attribution'],
+    prohibits: [],
+  },
+  'by-sa': {
+    permits: ['Reproduction', 'Distribution', 'DerivativeWorks'],
+    requires: ['Notice', 'Attribution', 'ShareAlike'],
+    prohibits: [],
+  },
+  'by-nd': {
+    permits: ['Reproduction', 'Distribution'],
+    requires: ['Notice', 'Attribution'],
+    prohibits: [],
+  },
+  'by-nc': {
+    permits: ['Reproduction', 'Distribution', 'DerivativeWorks'],
+    requires: ['Notice', 'Attribution'],
+    prohibits: ['CommercialUse'],
+  },
+  'by-nc-sa': {
+    permits: ['Reproduction', 'Distribution', 'DerivativeWorks'],
+    requires: ['Notice', 'Attribution', 'ShareAlike'],
+    prohibits: ['CommercialUse'],
+  },
+  'by-nc-nd': {
+    permits: ['Reproduction', 'Distribution'],
+    requires: ['Notice', 'Attribution'],
+    prohibits: ['CommercialUse'],
+  },
+  zero: {
+    permits: ['Reproduction', 'Distribution', 'DerivativeWorks'],
+    requires: [],
+    prohibits: [],
+  },
+};
+
 export function createGroup({ children, x, y }: CreateGroupProps) {
   return `<g transform="translate(${x}, ${y})">${children}</g>`;
 }
@@ -23,49 +61,108 @@ export function getXmlnsAttributes() {
 }
 
 export function getMetadata<O extends Options>(style: Style<O>) {
-  let isCcBy40 = 'CC BY 4.0' === style.meta.license?.name;
-  let isCcZero10 = 'CC0 1.0' === style.meta.license?.name;
-  let isCc = isCcBy40 || isCcZero10;
-
-  if (Object.keys(style.meta).length === 0) {
-    return '';
-  }
-
   return `
     <metadata>
       <rdf:RDF>
-        <cc:Work rdf:about="">
+        <cc:Work>
           <dc:format>image/svg+xml</dc:format>
           <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-          ${style.meta.title ? `<dc:title>${style.meta.title}</dc:title>` : ''}
-          ${style.meta.license ? `<cc:license rdf:resource="${style.meta.license.link}" />` : ''}
-          ${
-            style.meta.creator
-              ? `<dc:creator>
-                  <cc:Agent>
-                    <dc:title>${style.meta.creator}</dc:title>
-                  </cc:Agent>
-                </dc:creator>`
-              : ''
-          }
-          ${style.meta.source ? `<dc:source>${style.meta.source}</dc:source>` : ''}
+          ${getMetadataWorkTitle(style)}
+          ${getMetadataWorkCreator(style)}
+          ${getMetadataWorkSource(style)}
+          ${getMetadataWorkLicense(style)}
+          ${getMetadataWorkContributor(style)}
         </cc:Work>
-        ${
-          isCc && style.meta.license
-            ? `
-              <cc:License rdf:about="${style.meta.license.link}">
-                <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-                <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-                ${isCcBy40 ? '<cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />' : ''}
-                ${isCcBy40 ? '<cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />' : ''}
-                <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-              </cc:License>
-            `
-            : ''
-        }
+        ${getMetadataLicense(style)}
       </rdf:RDF>
     </metadata>
   `;
+}
+
+export function getMetadataWorkTitle<O extends Options>(style: Style<O>) {
+  if (style.meta.title) {
+    return `<dc:title>${style.meta.title}</dc:title>`;
+  }
+
+  return '';
+}
+
+export function getMetadataWorkCreator<O extends Options>(style: Style<O>) {
+  if (style.meta.creator) {
+    return `
+      <dc:creator>
+        <cc:Agent>
+          <dc:title>${style.meta.creator}</dc:title>
+        </cc:Agent>
+      </dc:creator>
+    `;
+  }
+
+  return '';
+}
+
+export function getMetadataWorkSource<O extends Options>(style: Style<O>) {
+  if (style.meta.source) {
+    return `<dc:source>${style.meta.source}</dc:source>`;
+  }
+
+  return '';
+}
+
+export function getMetadataWorkLicense<O extends Options>(style: Style<O>) {
+  if (style.meta.license) {
+    return `<cc:license rdf:resource="${style.meta.license}" />`;
+  }
+
+  return '';
+}
+
+export function getMetadataWorkContributor<O extends Options>(style: Style<O>) {
+  if (style.meta.contributor) {
+    return `
+      <dc:contributor>
+        <cc:Agent>
+          <dc:title>${style.meta.contributor}</dc:title>
+        </cc:Agent>
+      </dc:contributor>
+    `;
+  }
+
+  return '';
+}
+
+export function getMetadataLicense<O extends Options>(style: Style<O>) {
+  let match = style.meta.license?.match(
+    /^https?:\/\/creativecommons.org\/(?:licenses|publicdomain)\/([a-z\-]+)\/\d.\d\//
+  );
+
+  if (match) {
+    let license = ccLicenses[match[1]];
+
+    if (license) {
+      let result = ``;
+
+      license.permits.forEach((permits) => {
+        result += `<cc:permits rdf:resource="https://creativecommons.org/ns#${permits}" />`;
+      });
+
+      license.requires.forEach((requires) => {
+        result += `<cc:requires rdf:resource="https://creativecommons.org/ns#${requires}" />`;
+      });
+
+      license.prohibits.forEach((prohibits) => {
+        result += `<cc:prohibits rdf:resource="https://creativecommons.org/ns#${prohibits}" />`;
+      });
+
+      return `
+        <cc:License rdf:about="${style.meta.license}">
+          ${result}
+        </cc:License>
+      `;
+    }
+  }
+
+  return '';
 }
 
 export function getViewBox(result: StyleCreateResult) {

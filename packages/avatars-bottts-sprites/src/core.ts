@@ -22,11 +22,9 @@ export const style: Style<Options> = {
   meta: {
     title: 'Bottts',
     creator: 'Pablo Stanley',
+    contributor: 'Florian Körner',
     source: 'https://bottts.com/',
-    license: {
-      name: 'Other - Free for personal and commercial use.',
-      link: 'https://bottts.com/',
-    },
+    license: 'https://bottts.com/',
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {

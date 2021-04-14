@@ -9,11 +9,9 @@ export const style: Style<Options> = {
   meta: {
     title: 'Avataaars',
     creator: 'Pablo Stanley',
+    contributor: 'Florian Körner',
     source: 'https://avataaars.com/',
-    license: {
-      name: 'Other - Free for personal and commercial use.',
-      link: 'https://avataaars.com/',
-    },
+    license: 'https://avataaars.com/',
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {
@@ -33,13 +31,13 @@ export const style: Style<Options> = {
     let accessoriesColor = utils.getAccessoriesColor(options, prng);
     let hatColor = utils.getHatColor(options, prng);
     let hairColor = utils.getHairColor(options, prng);
-  
+
     const group = (content: string, x: number, y: number) => {
       return content.length > 0 ? `<g transform="translate(${x}, ${y})">${content}</g>` : '';
     };
-  
+
     const topPath = group(top.path(top.isHat ? hatColor : hairColor), 7, 0);
-  
+
     let body = `
       ${group(skinType(skinColor), 40, 36)}
       ${group(clotheType(clotheColor, clotheGraphicType()), 8, 170)}
@@ -53,7 +51,7 @@ export const style: Style<Options> = {
       ${accessoriesType ? group(accessoriesType(accessoriesColor), 69, 85) : ''}
       ${2 === top.zIndex ? topPath : ''}
     `;
-  
+
     if (options.style === 'circle') {
       body = `
         <path d="M260 160c0 66.274-53.726 120-120 120S20 226.274 20 160 73.726 40 140 40s120 53.726 120 120z" fill="${
@@ -66,14 +64,14 @@ export const style: Style<Options> = {
           ${body}
         </g>
       `;
-  
+
       options.background = undefined;
     }
-  
+
     return {
       attributes: {
         viewBox: '0 0 280 280',
-        fill: 'none'
+        fill: 'none',
       },
       body,
     };

@@ -9,11 +9,9 @@ export const style: Style<Options> = {
   meta: {
     title: 'Avatar Illustration System',
     creator: 'Micah Lanier',
+    contributor: 'Florian Körner',
     source: 'https://www.figma.com/community/file/829741575478342595',
-    license: {
-      name: 'CC BY 4.0',
-      link: 'https://creativecommons.org/licenses/by/4.0/',
-    },
+    license: 'https://creativecommons.org/licenses/by/4.0/',
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {

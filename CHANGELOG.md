@@ -32,6 +32,8 @@
 
 - JSON Schema added to each avatar style. Used for API, Types and upcoming features.
 
+- Metadata in generated avatars with author and license information.
+
 #### @dicebear/avatars
 
 - New Option `backgroundColor`
@@ -216,7 +218,8 @@
 
 #### @dicebear/avatars
 
-- Removed unused webpack build. We will completely switch to microbundle with version 5 and also support CDNs like unpkg.
+- Removed unused webpack build. We will completely switch to microbundle with version 5 and also support CDNs like
+  unpkg.
 
 ## [4.5.4] - 2021-02-24
 
