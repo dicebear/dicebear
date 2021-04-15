@@ -1,3 +1,12 @@
+/**
+ * --------------------------------------------------------------------------
+ * DiceBear (@dicebear/avatars)
+ *
+ * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars/LICENSE)
+ * Copyright (c) 2021 Florian Körner
+ * --------------------------------------------------------------------------
+ */
+
 import type { JSONSchema7 } from 'json-schema';
 import coreSchema from './schema.json';
 

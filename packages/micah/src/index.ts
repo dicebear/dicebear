@@ -1,3 +1,16 @@
+/**
+ * --------------------------------------------------------------------------
+ * DiceBear Micah (@dicebear/micah)
+ *
+ * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/micah/LICENSE)
+ * Copyright (c) 2021 Florian Körner
+ *
+ * Design "Avatar Illustration System" by Micah Lanier licensed under CC BY 4.0
+ * Source: https://www.figma.com/community/file/829741575478342595
+ * License: https://creativecommons.org/licenses/by/4.0/
+ * --------------------------------------------------------------------------
+ */
+
 import { utils } from '@dicebear/avatars';
 import { style } from './core';
 

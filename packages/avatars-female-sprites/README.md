@@ -5,18 +5,6 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/dicebear/dicebear/blob/main/LICENSE" target="_blank">
-        <img src="https://img.shields.io/github/license/dicebear/avatars.svg?style=flat-square" alt="License">
-    </a>
-    <a href="https://www.npmjs.com/package/@dicebear/avatars-female-sprites" target="_blank-sprites">
-        <img src="https://img.shields.io/npm/v/@dicebear/avatars-female-sprites.svg?style=flat-square" alt="Latest Version">
-    </a>
-    <a href="https://github.com/dicebear/dicebear/stargazers" target="_blank">
-        <img src="https://img.shields.io/github/stars/dicebear/dicebear?style=flat-square" alt="Stargazers">
-    </a>
-</p>
-
-<p align="center">
   <a href="https://dicebear.com/styles/female">
     Read Documentation
   </a>

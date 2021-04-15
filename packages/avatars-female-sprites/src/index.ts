@@ -1,3 +1,13 @@
+/**
+ * --------------------------------------------------------------------------
+ * DiceBear Female (@dicebear/avatars-female-sprites)
+ *
+ * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars-female-sprites/LICENSE)
+ * Copyright (c) 2012 Plastic Jam
+ * Copyright (c) 2021 Florian Körner
+ * --------------------------------------------------------------------------
+ */
+
 import { utils } from '@dicebear/avatars';
 import { style } from './core';
 

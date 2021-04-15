@@ -1,3 +1,12 @@
+/**
+ * --------------------------------------------------------------------------
+ * DiceBear Jdenticon (@dicebear/avatars-jdenticon-sprites)
+ *
+ * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars-jdenticon-sprites/LICENSE)
+ * Copyright (c) 2021 Florian Körner
+ * --------------------------------------------------------------------------
+ */
+
 import { utils } from '@dicebear/avatars';
 import { style } from './core';
 

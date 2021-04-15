@@ -1,3 +1,15 @@
+/**
+ * --------------------------------------------------------------------------
+ * DiceBear Bottts (@dicebear/avatars-bottts-sprites)
+ *
+ * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars-bottts-sprites/LICENSE)
+ * Copyright (c) 2021 Florian Körner
+ *
+ * Design by Pablo Stanley - Free for personal and commercial use.
+ * https://bottts.com/
+ * --------------------------------------------------------------------------
+ */
+
 import { utils } from '@dicebear/avatars';
 import { style } from './core';
 
