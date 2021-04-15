@@ -89,11 +89,11 @@ export function getMetadataWorkTitle<O extends Options>(style: Style<O>) {
 
 export function getMetadataWorkCreator<O extends Options>(style: Style<O>) {
   if (style.meta.creator) {
+    let creators = Array.isArray(style.meta.creator) ? style.meta.creator : [style.meta.creator];
+
     return `
       <dc:creator>
-        <cc:Agent>
-          <dc:title>${style.meta.creator}</dc:title>
-        </cc:Agent>
+        ${getMetadataWorkAgents(creators)}
       </dc:creator>
     `;
   }
@@ -119,16 +119,26 @@ export function getMetadataWorkLicense<O extends Options>(style: Style<O>) {
 
 export function getMetadataWorkContributor<O extends Options>(style: Style<O>) {
   if (style.meta.contributor) {
+    let contributors = Array.isArray(style.meta.contributor) ? style.meta.contributor : [style.meta.contributor];
+
     return `
       <dc:contributor>
-        <cc:Agent>
-          <dc:title>${style.meta.contributor}</dc:title>
-        </cc:Agent>
+        ${getMetadataWorkAgents(contributors)}
       </dc:contributor>
     `;
   }
 
   return '';
+}
+
+export function getMetadataWorkAgents(agents: string[]) {
+  return agents.map(
+    (agent) => `
+      <cc:Agent>
+        <dc:title>${agent}</dc:title>
+      </cc:Agent>
+    `
+  );
 }
 
 export function getMetadataLicense<O extends Options>(style: Style<O>) {

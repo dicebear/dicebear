@@ -69,10 +69,10 @@ export interface StyleCreateResult {
 
 export interface StyleMeta {
   title?: string;
-  creator?: string;
+  creator?: string | string[];
   source?: string;
   license?: string;
-  contributor?: string;
+  contributor?: string | string[];
 }
 
 export interface Style<O extends {}> {
