@@ -1,4 +1,7 @@
-export default {
+import type { ValuesType } from 'utility-types';
+import { Eyes } from '../options';
+
+export const eyes: Record<Exclude<ValuesType<Eyes>, 'close' | 'dizzy' | 'roll'>, () => string> = {
   squint: () => `
     <path d="M44 20.727c0 4.268-6.268 7.727-14 7.727s-14-3.46-14-7.727S22.268 13 30 13s14 3.46 14 7.727zm52 0c0 4.268-6.268 7.727-14 7.727s-14-3.46-14-7.727S74.268 13 82 13s14 3.46 14 7.727z" fill="#fff"/>
     <path d="M32.82 28.297c-.91.103-1.854.157-2.82.157-.966 0-1.91-.054-2.82-.157a6 6 0 115.64 0zm52 0c-.91.103-1.854.157-2.82.157-.966 0-1.91-.054-2.82-.157a6 6 0 115.64 0z" fill="#000" fill-opacity=".7"/>

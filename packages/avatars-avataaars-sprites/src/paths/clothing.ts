@@ -1,4 +1,10 @@
-export default {
+import type { ValuesType } from 'utility-types';
+import { Clothes } from '../options';
+
+export const clothing: Record<
+  Exclude<ValuesType<Clothes>, 'blazer' | 'shirt' | 'sweater'>,
+  (color: string, clotheGraphic?: string) => string
+> = {
   blazerAndShirt: (color: string) => `
     <path d="M132.5 51.828c18.502 0 33.5-9.617 33.5-21.48 0-.353-.013-.704-.04-1.053 36.976 3.03 66.04 34 66.04 71.757V110H32v-8.948c0-38.1 29.592-69.287 67.045-71.833-.03.374-.045.75-.045 1.129 0 11.863 14.998 21.48 33.5 21.48z" fill="#E6E6E6"/>
     <path d="M132.5 58.761c21.89 0 39.635-12.05 39.635-26.913 0-.603-.029-1.2-.086-1.793a72.056 72.056 0 00-6.089-.76c.027.349.04.7.04 1.053 0 11.863-14.998 21.48-33.5 21.48-18.502 0-33.5-9.617-33.5-21.48 0-.379.015-.755.045-1.128-2.05.139-4.077.364-6.077.672a18.594 18.594 0 00-.103 1.956c0 14.864 17.745 26.913 39.635 26.913z" fill="#000" fill-opacity=".16"/>

@@ -1,4 +1,7 @@
-export default {
+import type { ValuesType } from 'utility-types';
+import { Mouth } from '../options';
+
+export const mouth: Record<Exclude<ValuesType<Mouth>, 'scream'>, (color: string) => string> = {
   concerned: () => `
     <path fill-rule="evenodd" clip-rule="evenodd" d="M35.118 29.872C36.176 20.38 44.226 13 54 13c9.804 0 17.874 7.426 18.892 16.96.082.767-.775 2.04-1.85 2.04H37.088c-1.08 0-2.075-1.178-1.97-2.128z" fill="#000" fill-opacity=".7"/>
     <path d="M69.586 32H38.414c1.306-4.617 5.55-8 10.586-8 1.8 0 3.5.433 5 1.2 1.5-.767 3.2-1.2 5-1.2 5.035 0 9.28 3.383 10.586 8z" fill="#FF4F6D"/>

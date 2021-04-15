@@ -48,6 +48,7 @@
   },
   "properties": {
     "base": {
+      "title": "Base",
       "type": "array",
       "items": {
         "type": "string",
@@ -56,10 +57,12 @@
       "default": ["standard"]
     },
     "baseColor": {
+      "title": "Base Color",
       "$ref": "#/definitions/colors",
       "default": ["apricot", "coast", "topaz"]
     },
     "earrings": {
+      "title": "Earrings",
       "type": "array",
       "items": {
         "type": "string",
@@ -68,13 +71,16 @@
       "default": ["hoop", "stud"]
     },
     "earringColor": {
+      "title": "Earring Color",
       "$ref": "#/definitions/colors"
     },
     "earringsProbability": {
+      "title": "Earrings Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 30
     },
     "eyebrows": {
+      "title": "Eyebrows",
       "type": "array",
       "items": {
         "type": "string",
@@ -83,10 +89,12 @@
       "default": ["down", "eyelashesDown", "eyelashesUp", "up"]
     },
     "eyebrowColor": {
+      "title": "Eyebrow Color",
       "$ref": "#/definitions/colors",
       "default": ["black"]
     },
     "ears": {
+      "title": "Ears",
       "type": "array",
       "items": {
         "type": "string",
@@ -95,6 +103,7 @@
       "default": ["attached"]
     },
     "eyes": {
+      "title": "Eyes",
       "type": "array",
       "items": {
         "type": "string",
@@ -103,10 +112,12 @@
       "default": ["eyes", "eyesShadow", "round", "smiling"]
     },
     "eyeColor": {
+      "title": "Eye Color",
       "$ref": "#/definitions/colors",
       "default": ["calm", "azure", "seashell", "mellow", "white"]
     },
     "facialHair": {
+      "title": "Facial Hair",
       "type": "array",
       "items": {
         "type": "string",
@@ -115,14 +126,17 @@
       "default": ["beard", "scruff"]
     },
     "facialHairColor": {
+      "title": "Facial Hair Color",
       "$ref": "#/definitions/colors",
       "default": ["topaz"]
     },
     "facialHairProbability": {
+      "title": "Facial Hair Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 10
     },
     "glasses": {
+      "title": "Glasses",
       "type": "array",
       "items": {
         "type": "string",
@@ -131,13 +145,16 @@
       "default": ["round", "square"]
     },
     "glassesColor": {
+      "title": "Glasses Color",
       "$ref": "#/definitions/colors"
     },
     "glassesProbability": {
+      "title": "Glasses Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 30
     },
     "mouth": {
+      "title": "Mouth",
       "type": "array",
       "items": {
         "type": "string",
@@ -146,6 +163,7 @@
       "default": ["frown", "laughing", "nervous", "pucker", "sad", "smile", "smirk", "surprised"]
     },
     "nose": {
+      "title": "Nose",
       "type": "array",
       "items": {
         "type": "string",
@@ -154,6 +172,7 @@
       "default": ["curve", "pointed", "round"]
     },
     "shirt": {
+      "title": "Shirt",
       "type": "array",
       "items": {
         "type": "string",
@@ -162,9 +181,11 @@
       "default": ["collared", "crew", "open"]
     },
     "shirtColor": {
+      "title": "Shirt Color",
       "$ref": "#/definitions/colors"
     },
     "hair": {
+      "title": "Hair",
       "type": "array",
       "items": {
         "type": "string",
@@ -173,9 +194,11 @@
       "default": ["dannyPhantom", "dougFunny", "fonze", "full", "mrClean", "mrT", "pixie", "turban"]
     },
     "hairColor": {
+      "title": "Hair Color",
       "$ref": "#/definitions/colors"
     },
     "hairProbability": {
+      "title": "Hair Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 100
     }
