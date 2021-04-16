@@ -35,8 +35,8 @@ export default function Teaser() {
                     <div className="text-center text-lg-left">
                       <img src={'img/logo.svg'} alt="DiceBear Avatars" className="logo mb-5" />
                       <p className="text-white lead">
-                        Avatars is an avatar placeholder library for designers and developers. You can choose between
-                        simple identicons and lovely designed characters.
+                        DiceBear is an avatar library for designers and developers. You can choose between simple
+                        identicons and lovely designed characters.
                       </p>
                       <p className="text-white lead mb-5">
                         And best of all: We provide a simple and free HTTP API that you can use right away!

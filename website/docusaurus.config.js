@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   title: 'DiceBear Avatars',
-  tagline: 'Avatars is an avatar placeholder library for designers and developers. ',
+  tagline: 'DiceBear is an avatar library for designers and developers.',
   url: 'https://avatars.dicebear.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
