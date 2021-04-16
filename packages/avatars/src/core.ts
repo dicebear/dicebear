@@ -44,9 +44,12 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
   /** @deprecated - will be removed with version 5.0 */
   if (options.base64) {
     // @see https://www.base64encoder.io/javascript/
-    return encodeURIComponent(avatar).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+    let encoded = encodeURIComponent(avatar).replace(/%([0-9A-F]{2})/g, function (match, p1) {
       return String.fromCharCode(parseInt(`0x${p1}`));
     });
+
+    // @ts-ignore
+    return `data:image/svg+xml;base64,${btoa(encoded)}`;
   }
 
   return avatar;
