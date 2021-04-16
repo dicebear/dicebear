@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/micah",
-  "version": "4.6.0-rc.0",
+  "version": "4.6.0-rc.1",
   "description": "Micah sprite collection for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -34,7 +34,7 @@
     "build:options": "json2ts -i schema.json -o src/options.ts"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.6.0-rc.0",
+    "@dicebear/avatars": "^4.6.0-rc.1",
     "@tsconfig/node12": "^1.0.7",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
