@@ -3,7 +3,7 @@ import { Options } from './options';
 import * as utils from './utils';
 import { palette } from './colors';
 
-import schema from './schema.json';
+import { schema } from './schema';
 
 export const style: Style<Options> = {
   meta: {
@@ -13,7 +13,7 @@ export const style: Style<Options> = {
     source: 'https://avataaars.com/',
     license: 'https://avataaars.com/',
   },
-  schema: schema as StyleSchema,
+  schema,
   create: ({ prng, options }) => {
     let noseType = utils.getNoseType();
     let skinType = utils.getSkinType();

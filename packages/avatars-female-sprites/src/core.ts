@@ -1,7 +1,7 @@
 import Color from '@dicebear/avatars/lib/color';
 import { Style, StyleSchema } from '@dicebear/avatars';
 import { Options } from './options';
-import schema from './schema.json';
+import { schema } from './schema';
 
 export const style: Style<Options> = {
   meta: {
@@ -11,7 +11,7 @@ export const style: Style<Options> = {
     source: 'https://github.com/dicebear/dicebear',
     license: 'https://opensource.org/licenses/MIT',
   },
-  schema: schema as StyleSchema,
+  schema,
   create: ({ prng, options }) => {
     let skinColor = prng.pick([
       new Color('#FFDBAC'),

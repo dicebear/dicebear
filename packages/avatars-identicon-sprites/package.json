@@ -28,10 +28,12 @@
   "scripts": {
     "test": "jest",
     "prepublishOnly": "npm run build",
-    "prebuild": "rm -rf lib/ || true",
+    "prebuild": "shx rm -rf lib",
     "build": "yarn run build:schema && yarn run build:options && yarn run build:ts",
     "build:ts": "tsc",
-    "build:schema": "json-dereference -s schema.json -o src/schema.json",
+    "build:schema": "yarn run build:schema:dereference && yarn run build:schema:module",
+    "build:schema:dereference": "json-dereference -s schema.json -o src/schema.json",
+    "build:schema:module": "replace-in-file --configFile=config/schema.replace.js && shx mv src/schema.json src/schema.ts",
     "build:options": "json2ts -i schema.json -o src/options.ts"
   },
   "dependencies": {
@@ -44,6 +46,8 @@
     "@types/node": "^10.11.6",
     "jest": "^26.6.3",
     "json-dereference-cli": "^0.1.2",
+    "replace-in-file": "^6.2.0",
+    "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.3"
   },

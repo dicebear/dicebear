@@ -1,7 +1,7 @@
 import { Style, StyleSchema, ColorCollection, utils } from '@dicebear/avatars';
 import Color from '@dicebear/avatars/lib/color';
 import { Options } from './options';
-import schema from './schema.json';
+import { schema } from './schema';
 
 // @ts-ignore
 import initials from 'initials';
@@ -13,7 +13,7 @@ export const style: Style<Options> = {
     source: 'https://github.com/dicebear/dicebear',
     license: 'https://creativecommons.org/publicdomain/zero/1.0/',
   },
-  schema: schema as StyleSchema,
+  schema,
   create: ({ prng, options }) => {
     let defaults = utils.schema.defaults(schema as StyleSchema);
     let backgroundColors: string[] = [];

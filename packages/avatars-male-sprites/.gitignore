@@ -10,4 +10,4 @@ lib
 
 # Generated files
 src/options.ts
-src/schema.json
+src/schema.ts

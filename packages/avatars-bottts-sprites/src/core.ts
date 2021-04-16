@@ -1,7 +1,7 @@
 import { Style, StyleSchema, utils, Color as ColorType, ColorCollection, Prng } from '@dicebear/avatars';
 import Color from '@dicebear/avatars/lib/color';
 import { Options } from './options';
-import schema from './schema.json';
+import { schema } from './schema';
 
 import eyesCollection from './eyes';
 import faceCollection from './face';
@@ -26,7 +26,7 @@ export const style: Style<Options> = {
     source: 'https://bottts.com/',
     license: 'https://bottts.com/',
   },
-  schema: schema as StyleSchema,
+  schema,
   create: ({ prng, options }) => {
     let defaults = utils.schema.defaults(schema as StyleSchema);
     let colorsCollection: Array<ColorType> = [];

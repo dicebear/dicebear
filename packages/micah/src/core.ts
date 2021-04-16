@@ -3,7 +3,7 @@ import { utils } from '@dicebear/avatars';
 import type { Options } from './options';
 import * as paths from './paths';
 import * as colors from './colors';
-import schema from './schema.json';
+import { schema } from './schema';
 
 export const style: Style<Options> = {
   meta: {
@@ -13,7 +13,7 @@ export const style: Style<Options> = {
     source: 'https://www.figma.com/community/file/829741575478342595',
     license: 'https://creativecommons.org/licenses/by/4.0/',
   },
-  schema: schema as StyleSchema,
+  schema,
   create: ({ prng, options }) => {
     const pickColor = (values: string[], filter: string[] = []): string => {
       let result: string[] = values

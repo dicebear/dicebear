@@ -3,7 +3,7 @@ import { outer } from 'gridy-avatars/dist/avatars';
 import { Style, StyleCreateResultAttributes, StyleSchema } from '@dicebear/avatars';
 import Parser from '@dicebear/avatars/lib/parser';
 import { Options } from './options';
-import schema from './schema.json';
+import { schema } from './schema';
 
 // See https://github.com/dicebear/dicebear/issues/64
 let fixDeterministicClipARegExp = /clipPath id="clip-a-([0-9]*)"/;
@@ -25,7 +25,7 @@ export const style: Style<Options> = {
     source: 'https://github.com/darosh/gridy-avatars',
     license: 'https://opensource.org/licenses/MIT',
   },
-  schema: schema as StyleSchema,
+  schema,
   create: ({ prng, options }) => {
     let body = prng.integer(0, 7);
     let bodyColor = prng.integer(0, 7);

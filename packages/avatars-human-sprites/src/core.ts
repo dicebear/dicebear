@@ -2,7 +2,7 @@ import { create as createMale } from '@dicebear/avatars-male-sprites';
 import { create as createFemale } from '@dicebear/avatars-female-sprites';
 import { Style, StyleSchema } from '@dicebear/avatars';
 import { Options } from './options';
-import schema from './schema.json';
+import { schema } from './schema';
 
 export const style: Style<Options> = {
   meta: {
@@ -12,7 +12,7 @@ export const style: Style<Options> = {
     source: 'https://github.com/dicebear/dicebear',
     license: 'https://opensource.org/licenses/MIT',
   },
-  schema: schema as StyleSchema,
+  schema,
   create: ({ prng, options }) => {
     if (prng.bool(50)) {
       return createMale({ prng, options });

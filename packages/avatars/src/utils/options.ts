@@ -1,7 +1,6 @@
 import type { Style, StyleOptions } from '../types';
-import coreSchema from '../schema.json';
+import { schema as coreSchema } from '../schema';
 import * as schema from './schema';
-import { JSONSchema7 } from 'json-schema';
 
 export function merge<O extends {}>(style: Style<O>, options: StyleOptions<O>): StyleOptions<O> {
   let optionSources: StyleOptions<O>[] = [
@@ -10,7 +9,7 @@ export function merge<O extends {}>(style: Style<O>, options: StyleOptions<O>): 
       /** @ts-ignore @deprecated - will be removed with version 5.0 */
       userAgent: typeof window !== 'undefined' && window.navigator && window.navigator.userAgent,
     } as StyleOptions<O>,
-    schema.defaults(coreSchema as JSONSchema7) as StyleOptions<O>,
+    schema.defaults(coreSchema) as StyleOptions<O>,
     schema.defaults(style.schema) as StyleOptions<O>,
     options,
   ];
@@ -25,16 +24,13 @@ export function merge<O extends {}>(style: Style<O>, options: StyleOptions<O>): 
 }
 
 export function createAliasProxy<O extends {}>(style: Style<O>) {
-  let aliasMap = [...schema.aliases(coreSchema as JSONSchema7), ...schema.aliases(style.schema)].reduce(
-    (map, aliases) => {
-      aliases.forEach((alias) => {
-        map.set(alias, aliases[0]);
-      });
+  let aliasMap = [...schema.aliases(coreSchema), ...schema.aliases(style.schema)].reduce((map, aliases) => {
+    aliases.forEach((alias) => {
+      map.set(alias, aliases[0]);
+    });
 
-      return map;
-    },
-    new Map<string | symbol, string>()
-  );
+    return map;
+  }, new Map<string | symbol, string>());
 
   return new Proxy({} as StyleOptions<O>, {
     get: (obj, key) => {
