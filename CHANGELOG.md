@@ -38,6 +38,11 @@
 
 - New Option `backgroundColor`
 
+#### @dicebear/micah
+
+- New avatar style based on the "Avatar Illustration System" by Micah Lanier.  
+  https://www.figma.com/community/file/829741575478342595
+
 #### @dicebear/avatars-avataaars-sprites
 
 - New option values for `accessoriesColor`, `clotheColor` and `hatColor`:
