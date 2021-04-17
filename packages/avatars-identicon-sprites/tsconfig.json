@@ -1,7 +1,6 @@
 {
   "extends": "@tsconfig/node12/tsconfig.json",
   "compilerOptions": {
-    "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./lib",
   },
