@@ -1,6 +1,6 @@
 /// <reference types="../typings/pure-color" />
 
-import type { JSONSchema7 } from 'json-schema';
+import type { JSONSchema4 } from 'json-schema';
 import type { Options } from './options';
 
 export interface Prng {
@@ -45,7 +45,7 @@ export interface ColorCollection {
   yellow: Color;
 }
 
-export type StyleSchema = JSONSchema7;
+export type StyleSchema = JSONSchema4;
 
 export type StyleOptions<O extends {}> = Partial<O & Options>;
 

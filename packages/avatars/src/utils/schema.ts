@@ -1,6 +1,6 @@
-import type { JSONSchema7 } from 'json-schema';
+import { StyleSchema } from '../types';
 
-export function defaults(schema: JSONSchema7) {
+export function defaults(schema: StyleSchema) {
   let result: Record<string, unknown> = {};
   let properties = schema.properties || {};
 
@@ -15,7 +15,7 @@ export function defaults(schema: JSONSchema7) {
   return result;
 }
 
-export function aliases(schema: JSONSchema7) {
+export function aliases(schema: StyleSchema) {
   let result: Record<string, string[]> = {};
   let properties = schema.properties || {};
 
@@ -34,11 +34,13 @@ export function aliases(schema: JSONSchema7) {
 
   return Object.values(result)
     .filter((keys) => keys.length > 1)
-    .map(keys => keys.sort().sort((a, b) => {
-      if (a.length === b.length) {
-        return 0;
-      }
+    .map((keys) =>
+      keys.sort().sort((a, b) => {
+        if (a.length === b.length) {
+          return 0;
+        }
 
-      return a.length > b.length ? 1 : -1;
-    }));
+        return a.length > b.length ? 1 : -1;
+      })
+    );
 }
