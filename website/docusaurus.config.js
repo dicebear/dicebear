@@ -36,7 +36,7 @@ module.exports = {
           position: 'left',
         },
         {
-          to: 'integrations/serverless',
+          to: 'integrations/api-server',
           activeBasePath: 'integrations',
           label: 'Integrations',
           position: 'left',

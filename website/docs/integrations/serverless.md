@@ -3,8 +3,8 @@ title: Serverless
 slug: /integrations/serverless
 ---
 
-You can also host the HTTP API yourself. The API is based on [Cloudflare Workers](https://workers.cloudflare.com/) and
-the [Serverless Framework](https://www.serverless.com/). A free Cloudflare Workers account contains
+The serverless API implementation is based on [Cloudflare Workers](https://workers.cloudflare.com/) and the
+[Serverless Framework](https://www.serverless.com/). A free Cloudflare Workers account contains
 [100.000 free requests](https://developers.cloudflare.com/workers/platform/pricing). So just give it a try.
 
 ## Installation
