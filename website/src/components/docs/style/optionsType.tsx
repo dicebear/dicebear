@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSchema } from '@dicebear/avatars';
+import { JSONSchema4 } from 'json-schema';
 
 type Props = {
   fields: StyleSchema[];
@@ -9,6 +10,15 @@ export default function OptionsType({ fields }: Props) {
   return (
     <>
       {fields.map((field, fieldIndex) => {
+        let items: JSONSchema4[] = [];
+
+        // Array type currently not implemented.
+        if (field.items && false === Array.isArray(field.items)) {
+          const fieldItems = field.items as JSONSchema4;
+
+          items = fieldItems.anyOf ?? [fieldItems];
+        }
+
         return (
           <React.Fragment key={fieldIndex}>
             {fieldIndex > 0 && <div className="text-center small mt-1">or</div>}
@@ -43,12 +53,12 @@ export default function OptionsType({ fields }: Props) {
                 </p>
               )}
 
-              {field.items && (
+              {items.length > 0 && (
                 <>
                   <p>
                     <strong>Items:</strong>
                   </p>
-                  <OptionsType fields={Array.isArray(field.items) ? field.items : [field.items]} />
+                  <OptionsType fields={items} />
                 </>
               )}
             </div>
