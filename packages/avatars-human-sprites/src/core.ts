@@ -10,7 +10,10 @@ export const style: Style<Options> = {
     creator: 'Plastic Jam',
     contributor: 'Florian Körner',
     source: 'https://github.com/dicebear/dicebear',
-    license: 'https://opensource.org/licenses/MIT',
+    license: {
+      name: 'MIT',
+      url: 'https://github.com/dicebear/dicebear/blob/v4/packages/avatars-human-sprites/LICENSE',
+    },
   },
   schema,
   create: ({ prng, options }) => {

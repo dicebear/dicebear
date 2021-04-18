@@ -14,6 +14,7 @@ module.exports = {
         'styles/initials',
         'styles/jdenticon',
         'styles/male',
+        'styles/micah',
       ],
     },
   ],

@@ -24,7 +24,10 @@ export const style: Style<Options> = {
     creator: 'Pablo Stanley',
     contributor: 'Florian Körner',
     source: 'https://bottts.com/',
-    license: 'https://bottts.com/',
+    license: {
+      name: 'Other - Free for personal and commercial use',
+      url: 'https://bottts.com/',
+    },
   },
   schema,
   create: ({ prng, options }) => {

@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 import spriteCollections from '../../options';
 import Link from '@docusaurus/Link';
-import Avatars from '@dicebear/avatars';
+import { createAvatar } from '@dicebear/avatars';
 
 type State = {
   spriteCollection: SpriteCollection;
@@ -183,8 +183,9 @@ export default class Generator extends React.Component<{}, State> {
   getAvatarSvg() {
     let options = this.getAvatarOptions();
 
-    return new Avatars(this.state.spriteCollection.style).create(this.state.seed, {
+    return createAvatar(this.state.spriteCollection.style, {
       ...options,
+      seed: this.state.seed,
       base64: true,
     });
   }
@@ -269,7 +270,13 @@ export default class Generator extends React.Component<{}, State> {
                   maxLength={512}
                 />
               </div>
-              <small className="form-text text-muted text-center">Don't use sensitive or personal data as seed!</small>
+              <small className="form-text text-muted text-center">
+                Don't use sensitive or personal data as seed! And please check the{' '}
+                <Link to="/licenses" className="text-muted font-weight-bolder">
+                  design licenses
+                </Link>{' '}
+                before use.
+              </small>
             </div>
           </div>
 

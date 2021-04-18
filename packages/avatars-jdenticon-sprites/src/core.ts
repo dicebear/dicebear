@@ -9,7 +9,10 @@ export const style: Style<Options> = {
     title: 'Jdenticon',
     creator: 'Daniel Mester Pirttijärvi',
     source: 'https://github.com/dmester/jdenticon',
-    license: 'https://opensource.org/licenses/MIT',
+    license: {
+      name: 'MIT',
+      url: 'https://github.com/dmester/jdenticon/blob/master/LICENSE',
+    },
   },
   schema,
   create: ({ prng, options }) => {

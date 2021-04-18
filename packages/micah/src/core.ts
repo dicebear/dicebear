@@ -1,4 +1,4 @@
-import type { Style, StyleSchema } from '@dicebear/avatars';
+import type { Style } from '@dicebear/avatars';
 import { utils } from '@dicebear/avatars';
 import type { Options } from './options';
 import * as paths from './paths';
@@ -11,7 +11,10 @@ export const style: Style<Options> = {
     creator: 'Micah Lanier',
     contributor: 'Florian Körner',
     source: 'https://www.figma.com/community/file/829741575478342595',
-    license: 'https://creativecommons.org/licenses/by/4.0/',
+    license: {
+      name: 'CC BY 4.0',
+      url: 'https://creativecommons.org/licenses/by/4.0/',
+    },
   },
   schema,
   create: ({ prng, options }) => {

@@ -71,7 +71,10 @@ export interface StyleMeta {
   title?: string;
   creator?: string | string[];
   source?: string;
-  license?: string;
+  license?: {
+    name: string;
+    url: string;
+  };
   contributor?: string | string[];
 }
 

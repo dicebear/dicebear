@@ -1,0 +1,52 @@
+---
+title: Human
+slug: /styles/human
+---
+
+import { schema as coreSchema } from '@dicebear/avatars';
+import * as style from '@dicebear/avatars-human-sprites';
+import Examples from '@site/src/components/docs/style/examples';
+import Options from '@site/src/components/docs/style/options';
+
+<Examples style={style} />
+
+This avatar style combines [male](https://www.npmjs.com/package/@dicebear/avatars-male-sprites) and
+[female](https://www.npmjs.com/package/@dicebear/avatars-female-sprites) and selects the gender randomly.
+
+## Usage
+
+### HTTP-API (recommended)
+
+Our free HTTP-API is the easiest way to use this avatar style. Just use the following URL as image source.
+
+    https://avatars.dicebear.com/api/human/:seed.svg
+
+See the [HTTP API documentation](/docs/http-api) for more information.
+
+### NPM
+
+Install the Avatars and this avatar style with the following command.
+
+    npm install --save @dicebear/avatars @dicebear/avatars-human-sprites
+
+Now you are ready to create your first Avatar.
+
+```js
+import { createAvatar } from `@dicebear/avatars`;
+import * as style from `@dicebear/avatars-human-sprites`;
+
+let svg = createAvatar(style, {
+  seed: 'custom-seed',
+  // ... and other options
+});
+```
+
+## Options
+
+### Base options
+
+<Options schema={coreSchema} />
+
+### Style options
+
+<Options schema={style.schema} />

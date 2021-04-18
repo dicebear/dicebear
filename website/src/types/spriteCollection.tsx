@@ -1,12 +1,13 @@
-import type { SpriteCollection as SpriteCollectionStyle } from "@dicebear/avatars";
+import type { Style } from '@dicebear/avatars';
 
 type SpriteCollection<U = string | number> = {
   id: string;
-  style: SpriteCollectionStyle;
+  name: string;
+  style: Style;
   options: Record<
     string,
     {
-      type: "select" | "checkbox" | "range" | "switch" | "number" | "color";
+      type: 'select' | 'checkbox' | 'range' | 'switch' | 'number' | 'color';
       values?: U[];
       defaultValue: U;
       alias?: string;

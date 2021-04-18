@@ -53,3 +53,24 @@
 .navbar__title {
   font-weight: 700;
 }
+
+table {
+  display: table;
+}
+
+.small {
+  font-size: 0.875rem;
+}
+
+.line-height-120 {
+  line-height: 120%;
+}
+
+.box {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}

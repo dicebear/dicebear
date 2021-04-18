@@ -1,0 +1,51 @@
+---
+title: Identicon
+slug: /styles/identicon
+---
+
+import { schema as coreSchema } from '@dicebear/avatars';
+import * as style from '@dicebear/avatars-identicon-sprites';
+import Examples from '@site/src/components/docs/style/examples';
+import Options from '@site/src/components/docs/style/options';
+
+<Examples style={style} />
+
+Inspired by [donpark/identicon](https://github.com/donpark/identicon)
+
+## Usage
+
+### HTTP-API (recommended)
+
+Our free HTTP-API is the easiest way to use this avatar style. Just use the following URL as image source.
+
+    https://avatars.dicebear.com/api/identicon/:seed.svg
+
+See the [HTTP API documentation](/docs/http-api) for more information.
+
+### NPM
+
+Install the Avatars and this avatar style with the following command.
+
+    npm install --save @dicebear/avatars @dicebear/avatars-identicon-sprites
+
+Now you are ready to create your first Avatar.
+
+```js
+import { createAvatar } from `@dicebear/avatars`;
+import * as style from `@dicebear/avatars-identicon-sprites`;
+
+let svg = createAvatar(style, {
+  seed: 'custom-seed',
+  // ... and other options
+});
+```
+
+## Options
+
+### Base options
+
+<Options schema={coreSchema} />
+
+### Style options
+
+<Options schema={style.schema} />

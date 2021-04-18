@@ -5,6 +5,12 @@
 </p>
 
 <p align="center">
+  While our code is MIT licensed, the design is licensed under
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. See <a href="https://dicebear.com/licenses">license overview</a>
+  for more information.
+</p>
+
+<p align="center">
   <a href="https://dicebear.com/styles/micah">
     Read Documentation
   </a>

@@ -23,7 +23,10 @@ export const style: Style<Options> = {
     title: 'Gridy Avatars',
     creator: 'Jan Forst',
     source: 'https://github.com/darosh/gridy-avatars',
-    license: 'https://opensource.org/licenses/MIT',
+    license: {
+      name: 'MIT',
+      url: 'https://github.com/darosh/gridy-avatars/blob/master/LICENSE',
+    },
   },
   schema,
   create: ({ prng, options }) => {

@@ -16,12 +16,19 @@ You also need to add a [avatar style](/styles). In our example, we will use the 
 Now you are ready to create your first Avatar.
 
 ```js
-import Avatars from '@dicebear/avatars';
-import sprites from '@dicebear/avatars-male-sprites';
+import { createAvatar } from `@dicebear/avatars`;
+import * as style from `@dicebear/avatars-identicon-sprites`;
 
-let options = {};
-let avatars = new Avatars(sprites, options);
-let svg = avatars.create('custom-seed');
+let svg = createAvatar(style, {
+  seed: 'custom-seed',
+  // ... and other options
+});
 ```
 
 You can also omit seed to create a completely random avatar.
+
+:::note  
+We provide a large number of avatar styles from different designers. The designs are licensed under different licenses
+that the designers can choose themselves. Some licenses require attribution. For a quick overview we have created an
+[license overview](/licenses) for you.  
+:::

@@ -8,7 +8,10 @@ export const style: Style<Options> = {
     title: 'Identicon',
     creator: 'Florian Körner',
     source: 'https://github.com/dicebear/dicebear',
-    license: 'https://creativecommons.org/publicdomain/zero/1.0/',
+    license: {
+      name: 'CC0 1.0',
+      url: 'https://creativecommons.org/publicdomain/zero/1.0/',
+    },
   },
   schema,
   create: ({ prng, options }) => {

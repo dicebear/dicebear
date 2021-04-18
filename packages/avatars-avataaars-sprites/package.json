@@ -23,6 +23,7 @@
   "types": "lib/index.d.ts",
   "files": [
     "LICENSE",
+    "README.md",
     "lib"
   ],
   "scripts": {

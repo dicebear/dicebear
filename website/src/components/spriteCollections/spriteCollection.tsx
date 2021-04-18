@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { createAvatar } from '@dicebear/avatars';
 
 import { GoBook } from 'react-icons/go';
 
@@ -14,11 +15,11 @@ export default class SpriteCollection extends React.Component<Props> {
         <div>
           <div className="row pb-2">
             <div className="offset-3 col-6">
-              <img src={`https://avatars.dicebear.com/api/${this.props.id}/seed.svg`} alt={this.props.id} />
+              <img src={createAvatar(this.props.style, { seed: 'seed', dataUri: true })} alt={this.props.id} />
             </div>
           </div>
           <h3 className="display-3 text-center mb-0">{this.props.id}</h3>
-          <p className="text-muted text-center mb-5">@dicebear/avatars-{this.props.id}-sprites</p>
+          <p className="text-muted text-center mb-5">{this.props.name}</p>
         </div>
         <div className="text-center">
           <Link

@@ -11,7 +11,10 @@ export const style: Style<Options> = {
     creator: 'Pablo Stanley',
     contributor: 'Florian Körner',
     source: 'https://avataaars.com/',
-    license: 'https://avataaars.com/',
+    license: {
+      name: 'Other - Free for personal and commercial use',
+      url: 'https://avataaars.com/',
+    },
   },
   schema,
   create: ({ prng, options }) => {

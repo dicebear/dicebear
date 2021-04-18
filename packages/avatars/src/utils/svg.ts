@@ -111,7 +111,7 @@ export function getMetadataWorkSource<O extends Options>(style: Style<O>) {
 
 export function getMetadataWorkLicense<O extends Options>(style: Style<O>) {
   if (style.meta.license) {
-    return `<cc:license rdf:resource="${style.meta.license}" />`;
+    return `<cc:license rdf:resource="${style.meta.license.url}" />`;
   }
 
   return '';
@@ -142,7 +142,7 @@ export function getMetadataWorkAgents(agents: string[]) {
 }
 
 export function getMetadataLicense<O extends Options>(style: Style<O>) {
-  let match = style.meta.license?.match(
+  let match = style.meta.license?.url.match(
     /^https?:\/\/creativecommons.org\/(?:licenses|publicdomain)\/([a-z\-]+)\/\d.\d\//
   );
 
@@ -165,7 +165,7 @@ export function getMetadataLicense<O extends Options>(style: Style<O>) {
       });
 
       return `
-        <cc:License rdf:about="${style.meta.license}">
+        <cc:License rdf:about="${style.meta.license?.url}">
           ${result}
         </cc:License>
       `;

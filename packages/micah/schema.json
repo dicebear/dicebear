@@ -4,31 +4,29 @@
   "definitions": {
     "colors": {
       "type": "array",
-      "items": {
-        "oneOf": [
-          {
-            "type": "string",
-            "enum": [
-              "apricot",
-              "coast",
-              "topaz",
-              "lavender",
-              "sky",
-              "salmon",
-              "canary",
-              "calm",
-              "azure",
-              "seashell",
-              "mellow",
-              "black",
-              "white"
-            ]
-          },
-          {
-            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
-          }
-        ]
-      },
+      "items": [
+        {
+          "type": "string",
+          "enum": [
+            "apricot",
+            "coast",
+            "topaz",
+            "lavender",
+            "sky",
+            "salmon",
+            "canary",
+            "calm",
+            "azure",
+            "seashell",
+            "mellow",
+            "black",
+            "white"
+          ]
+        },
+        {
+          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+        }
+      ],
       "default": [
         "apricot",
         "coast",

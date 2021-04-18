@@ -72,6 +72,10 @@ module.exports = {
           title: 'More',
           items: [
             {
+              label: 'Licenses',
+              to: '/licenses',
+            },
+            {
               label: 'Frequently Asked Questions',
               to: '/faq',
             },
@@ -101,7 +105,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/DiceBear/avatars/edit/v4/website/',
+          editUrl: 'https://github.com/DiceBear/avatars/edit/main/website/',
           routeBasePath: '/',
         },
         theme: {

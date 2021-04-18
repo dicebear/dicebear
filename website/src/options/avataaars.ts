@@ -1,198 +1,105 @@
-import defaults from "./defaults";
+import defaults from './defaults';
+import { schema } from '@dicebear/avatars-avataaars-sprites';
 
 export default {
   ...defaults,
   style: {
-    type: "select",
-    values: ["transparent", "circle"],
-    defaultValue: "transparent",
-  },
-  mode: {
-    type: "select",
-    values: ["include", "exclude"],
-    defaultValue: "include",
+    type: 'select',
+    // @ts-ignore
+    values: schema.properties.style.enum,
+    defaultValue: 'transparent',
   },
   top: {
-    type: "checkbox",
-    values: ["longHair", "shortHair", "eyepatch", "hat", "hijab", "turban"],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.top.items.enum,
     defaultValue: [],
   },
   topChance: {
-    type: "range",
+    type: 'range',
     values: [0, 100],
     defaultValue: 90,
   },
   hatColor: {
-    type: "checkbox",
-    values: [
-      "black",
-      "blue",
-      "gray",
-      "heather",
-      "pastel",
-      "pink",
-      "red",
-      "white",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.hatColor.items.enum,
     defaultValue: [],
   },
   hairColor: {
-    type: "checkbox",
-    values: [
-      "auburn",
-      "black",
-      "blonde",
-      "brown",
-      "pastel",
-      "platinum",
-      "red",
-      "gray",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.hairColor.items.enum,
     defaultValue: [],
   },
   accessories: {
-    type: "checkbox",
-    values: [
-      "kurt",
-      "prescription01",
-      "prescription02",
-      "round",
-      "sunglasses",
-      "wayfarers",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.accessories.items.enum,
     defaultValue: [],
   },
   accessoriesChance: {
-    type: "range",
+    type: 'range',
     values: [0, 100],
     defaultValue: 10,
   },
   accessoriesColor: {
-    type: "checkbox",
-    values: [
-      "black",
-      "blue",
-      "gray",
-      "heather",
-      "pastel",
-      "pink",
-      "red",
-      "white",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.accessoriesColor.items.enum,
     defaultValue: [],
   },
   facialHair: {
-    type: "checkbox",
-    values: [
-      "medium",
-      "light",
-      "majestic",
-      "fancy",
-      "magnum",
-      "pastel",
-      "gray",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.facialHair.items.enum,
     defaultValue: [],
   },
   facialHairChance: {
-    type: "range",
+    type: 'range',
     values: [0, 100],
     defaultValue: 10,
   },
   facialHairColor: {
-    type: "checkbox",
-    values: [
-      "auburn",
-      "black",
-      "blonde",
-      "brown",
-      "pastel",
-      "platinum",
-      "red",
-      "gray",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.facialHairColor.items.enum,
     defaultValue: [],
   },
   clothes: {
-    type: "checkbox",
-    values: ["blazer", "sweater", "shirt", "hoodie", "overall"],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.clothes.items.enum,
     defaultValue: [],
   },
   clothesColor: {
-    type: "checkbox",
-    values: [
-      "black",
-      "blue",
-      "gray",
-      "heather",
-      "pastel",
-      "pink",
-      "red",
-      "white",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.clothesColor.items.enum,
     defaultValue: [],
   },
   eyes: {
-    type: "checkbox",
-    values: [
-      "close",
-      "cry",
-      "default",
-      "dizzy",
-      "roll",
-      "happy",
-      "hearts",
-      "side",
-      "squint",
-      "surprised",
-      "wink",
-      "winkWacky",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.eyes.items.enum,
     defaultValue: [],
   },
   eyebrow: {
-    type: "checkbox",
-    values: [
-      "angry",
-      "default",
-      "flat",
-      "raised",
-      "sad",
-      "unibrow",
-      "up",
-      "frown",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.eyebrow.items.enum,
     defaultValue: [],
   },
   mouth: {
-    type: "checkbox",
-    values: [
-      "concerned",
-      "default",
-      "disbelief",
-      "eating",
-      "grimace",
-      "sad",
-      "scream",
-      "serious",
-      "smile",
-      "tongue",
-      "twinkle",
-      "vomit",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.mouth.items.enum,
     defaultValue: [],
   },
   skin: {
-    type: "checkbox",
-    values: [
-      "tanned",
-      "yellow",
-      "pale",
-      "light",
-      "brown",
-      "darkBrown",
-      "black",
-    ],
+    type: 'checkbox',
+    // @ts-ignore
+    values: schema.properties.skin.items.enum,
     defaultValue: [],
   },
 };
