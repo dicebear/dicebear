@@ -1,37 +1,46 @@
 {
   "title": "Options",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "properties": {
     "colors": {
+      "title": "Colors",
       "type": "array",
       "items": {
         "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollection"
       }
     },
     "colorful": {
+      "title": "Colorful",
+      "description": "Use different colors for body parts",
       "type": "boolean"
     },
     "primaryColorLevel": {
+      "title": "Primary Color Level",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel",
       "default": 600
     },
     "secondaryColorLevel": {
+      "title": "Primaray Secondary Level",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel",
       "default": 400
     },
     "textureChance": {
+      "title": "Texture Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 50
     },
     "mouthChance": {
+      "title": "Mouth Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 100
     },
     "sidesChance": {
+      "title": "Sides Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 100
     },
     "topChance": {
+      "title": "Top Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 100
     }

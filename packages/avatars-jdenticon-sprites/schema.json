@@ -1,8 +1,9 @@
 {
   "title": "Options",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "properties": {
     "hues": {
+      "title": "Hues",
       "type": "array",
       "items": {
         "type": "integer",
@@ -11,6 +12,7 @@
       }
     },
     "colorLightness": {
+      "title": "Color Lightness",
       "type": "array",
       "minItems": 2,
       "maxItems": 2,
@@ -21,6 +23,7 @@
       }
     },
     "grayscaleLightness": {
+      "title": "Grayscale Lightness",
       "type": "array",
       "minItems": 2,
       "maxItems": 2,
@@ -31,11 +34,13 @@
       }
     },
     "colorSaturation": {
+      "title": "Color Saturation",
       "type": "integer",
       "minimum": 0,
       "maximum": 100
     },
     "grayscaleSaturation": {
+      "title": "Grayscale Saturation",
       "type": "integer",
       "minimum": 0,
       "maximum": 100

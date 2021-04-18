@@ -19,11 +19,11 @@ export default function Options({ schema }: Props) {
     <table className="table">
       <tbody>
         {Object.keys(schema.properties || {}).map((key) => {
-          const propertyAliases = (aliases[key] || []).filter(
-            (alias) => !(schema.properties || {})[alias].description?.includes('@deprecated')
+          const propertyAliases = (aliases[key] || []).filter((alias) =>
+            (!(schema.properties || {})[alias] as StyleSchema).description?.includes('@deprecated')
           );
 
-          const property = (schema.properties || {})[key];
+          const property = (schema.properties || {})[key] as StyleSchema;
           const isDepecated = property.description?.includes('@deprecated');
           const isPrimary = propertyAliases.length === 0 || aliases[key][aliases[key].length - 1] === key;
 
@@ -73,7 +73,7 @@ export default function Options({ schema }: Props) {
                     ))}
                 </p>
 
-                <OptionsType fields={property.oneOf ?? [property]} />
+                <OptionsType fields={(property.oneOf as StyleSchema[]) ?? [property]} />
               </td>
             </tr>
           );

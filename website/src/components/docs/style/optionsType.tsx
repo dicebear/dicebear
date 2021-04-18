@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StyleSchema } from '@dicebear/avatars';
-import { JSONSchema4 } from 'json-schema';
 
 type Props = {
   fields: StyleSchema[];
@@ -10,13 +9,13 @@ export default function OptionsType({ fields }: Props) {
   return (
     <>
       {fields.map((field, fieldIndex) => {
-        let items: JSONSchema4[] = [];
+        let items: StyleSchema[] = [];
 
         // Array type currently not implemented.
         if (field.items && false === Array.isArray(field.items)) {
-          const fieldItems = field.items as JSONSchema4;
+          const fieldItems = field.items as StyleSchema;
 
-          items = fieldItems.anyOf ?? [fieldItems];
+          items = (fieldItems.anyOf as StyleSchema[]) ?? [fieldItems];
         }
 
         return (

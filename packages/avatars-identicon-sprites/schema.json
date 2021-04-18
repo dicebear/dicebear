@@ -1,14 +1,16 @@
 {
   "title": "Options",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "properties": {
     "colors": {
+      "title": "Colors",
       "type": "array",
       "items": {
         "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollection"
       }
     },
     "colorLevel": {
+      "title": "Color Level",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/colorCollectionLevel",
       "default": 600
     }
