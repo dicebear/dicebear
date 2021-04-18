@@ -1,4 +1,4 @@
-<h1 align="center"><img src="https://dicebear.com/api/human/1.svg" width="124" /> <br />human</h1>
+<h1 align="center"><img src="https://dicebear.com/api/human/1.svg?mood=happy" width="124" /> <br />human</h1>
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear Avatars</a>.</strong><br />
   Designed by <a href="https://github.com/FlorianKoerner">Florian Körner</a>. Heavy inspired by <a href="https://github.com/matveyco/8biticon">8biticon</a>.

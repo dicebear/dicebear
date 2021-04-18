@@ -49,16 +49,21 @@ export const style: Style<Options> = {
     const eyebrowColor = pickColor(options.eyebrowColor ?? [], [baseColor, glassesColor, eyeColor]);
     const facialHairColor = pickColor(options.facialHairColor ?? [], [baseColor]);
 
+    const earringsPath = pickPath(paths.earrings, options.earrings);
+    const glassesPath = pickPath(paths.glasses, options.glasses);
+    const hairPath = pickPath(paths.hair, options.hair);
+    const facialHairPath = pickPath(paths.facialHair, options.facialHair);
+
     const shirt = pickPath(paths.shirt, options.shirt);
-    const earrings = prng.bool(options.earringsProbability) && pickPath(paths.earrings, options.earrings);
+    const earrings = prng.bool(options.earringsProbability) && earringsPath;
     const ears = pickPath(paths.ears, options.ears);
     const nose = pickPath(paths.nose, options.nose);
-    const glasses = prng.bool(options.glassesProbability) && pickPath(paths.glasses, options.glasses);
+    const glasses = prng.bool(options.glassesProbability) && glassesPath;
     const eyes = pickPath(paths.eyes, options.eyes);
     const eyebrows = pickPath(paths.eyebrows, options.eyebrows);
     const mouth = pickPath(paths.mouth, options.mouth);
-    const hair = prng.bool(options.hairProbability) && pickPath(paths.hair, options.hair);
-    const facialHair = prng.bool(options.facialHairProbability) && pickPath(paths.facialHair, options.facialHair);
+    const hair = prng.bool(options.hairProbability) && hairPath;
+    const facialHair = prng.bool(options.facialHairProbability) && facialHairPath;
     const base = pickPath(paths.base, options.base);
 
     return {
