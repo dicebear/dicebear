@@ -19,8 +19,8 @@ export default function Options({ schema }: Props) {
     <table className="table">
       <tbody>
         {Object.keys(schema.properties || {}).map((key) => {
-          const propertyAliases = (aliases[key] || []).filter((alias) =>
-            (!(schema.properties || {})[alias] as StyleSchema).description?.includes('@deprecated')
+          const propertyAliases = (aliases[key] || []).filter(
+            (alias) => !((schema.properties || {})[alias] as StyleSchema).description?.includes('@deprecated')
           );
 
           const property = (schema.properties || {})[key] as StyleSchema;
