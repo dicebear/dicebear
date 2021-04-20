@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-initials-sprites",
-  "version": "4.6.0",
+  "version": "4.7.0-alpha.0",
   "description": "Initials avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -43,7 +43,7 @@
     "initials": "^3.0.1"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.6.0",
+    "@dicebear/avatars": "^4.7.0-alpha.0",
     "@tsconfig/node12": "^1.0.7",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
