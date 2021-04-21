@@ -50,7 +50,7 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@dicebear/avatars": "^4.6.0-rc.1"
+    "@dicebear/avatars": "^4.6.1"
   },
   "publishConfig": {
     "access": "public"
