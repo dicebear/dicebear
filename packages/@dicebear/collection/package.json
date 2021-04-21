@@ -1,0 +1,56 @@
+{
+  "name": "@dicebear/collection",
+  "version": "4.6.1",
+  "description": "All offical dicebear avatar styles in one dependency",
+  "keywords": [
+    "dicebear"
+  ],
+  "homepage": "https://dicebear.com",
+  "bugs": {
+    "url": "https://github.com/dicebear/dicebear/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dicebear/dicebear.git"
+  },
+  "license": "MIT",
+  "author": "Florian Körner <contact@florian-koerner.com>",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "lib"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "prebuild": "shx rm -rf lib",
+    "build": "yarn run build:ts",
+    "build:ts": "tsc"
+  },
+  "dependencies": {
+    "@dicebear/avatars-avataaars-sprites": "~4.6.1",
+    "@dicebear/avatars-bottts-sprites": "~4.6.1",
+    "@dicebear/avatars-female-sprites": "~4.6.1",
+    "@dicebear/avatars-gridy-sprites": "~4.6.1",
+    "@dicebear/avatars-human-sprites": "~4.6.1",
+    "@dicebear/avatars-identicon-sprites": "~4.6.1",
+    "@dicebear/avatars-initials-sprites": "~4.6.1",
+    "@dicebear/avatars-jdenticon-sprites": "~4.6.1",
+    "@dicebear/avatars-male-sprites": "~4.6.1",
+    "@dicebear/micah": "~4.6.1"
+  },
+  "devDependencies": {
+    "@dicebear/avatars": "^4.6.1",
+    "@tsconfig/node12": "^1.0.7",
+    "@types/node": "^10.11.6",
+    "shx": "^0.3.3",
+    "typescript": "^4.2.3"
+  },
+  "peerDependencies": {
+    "@dicebear/avatars": "^4.6.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

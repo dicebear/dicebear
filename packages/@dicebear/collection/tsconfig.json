@@ -1,0 +1,8 @@
+{
+  "extends": "@tsconfig/node12/tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "./lib",
+  },
+  "include": ["./src/index.ts"]
+}
