@@ -1,6 +1,6 @@
 {
   "name": "dicebear",
-  "version": "4.6.1",
+  "version": "4.6.2",
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "bin": "bin/index.js",
   "repository": "https://github.com/dicebear/dicebear",
