@@ -55,7 +55,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@dicebear/avatars": "^4.6.0-rc.1"
+    "@dicebear/avatars": "^4.6.1"
   },
   "publishConfig": {
     "access": "public"
