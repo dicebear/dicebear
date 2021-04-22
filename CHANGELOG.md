@@ -17,6 +17,7 @@
 
 - Error `ReferenceError: Can't find variable: exports` in svelte. See
   [#123](https://github.com/dicebear/dicebear/issues/123)
+- File sizes reduced by automatically removing unnecessary whitespaces from template strings.
 
 ## [4.6.2] - 2021-04-21
 
