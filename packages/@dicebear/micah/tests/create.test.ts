@@ -1,6 +1,6 @@
 import * as avatars from '@dicebear/avatars';
 import { StyleOptions } from '@dicebear/avatars';
-import * as style from '../lib';
+import * as style from '../dist';
 import * as fs from 'fs';
 import * as path from 'path';
 

@@ -1,5 +1,5 @@
 // @ts-ignore
-import jdenticon from 'jdenticon';
+import jdenticon from 'jdenticon/dist/jdenticon';
 import { Style, StyleSchema } from '@dicebear/avatars';
 import { Options } from './options';
 import { schema } from './schema';

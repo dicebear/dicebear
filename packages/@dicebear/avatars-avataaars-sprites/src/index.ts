@@ -1,5 +1,4 @@
-/**
- * --------------------------------------------------------------------------
+/*!
  * DiceBear Avataaars (@dicebear/avatars-avataaars-sprites)
  *
  * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars-avataaars-sprites/LICENSE)
@@ -7,7 +6,6 @@
  *
  * Design by Pablo Stanley - Free for personal and commercial use.
  * https://avataaars.com/
- * --------------------------------------------------------------------------
  */
 
 import { utils } from '@dicebear/avatars';

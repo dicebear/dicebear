@@ -1,4 +1,4 @@
-import { utils } from '../../lib';
+import { utils } from '../../dist';
 
 test('Defaults should be returned in options.', () => {
   const options = utils.options.merge(

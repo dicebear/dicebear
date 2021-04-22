@@ -1,4 +1,4 @@
-import { utils, schema } from '../../lib/';
+import { utils, schema } from '../../dist/';
 
 test('All standards must be returned unless undefined.', () => {
   expect(
@@ -15,7 +15,7 @@ test('All standards must be returned unless undefined.', () => {
     })
   ).toEqual({
     foo: 'FOO',
-    bar: 123
+    bar: 123,
   });
 });
 

@@ -1,10 +1,8 @@
-/**
- * --------------------------------------------------------------------------
+/*!
  * DiceBear Gridy (@dicebear/avatars-gridy-sprites)
  *
  * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars-gridy-sprites/LICENSE)
  * Copyright (c) 2021 Florian Körner
- * --------------------------------------------------------------------------
  */
 
 import { utils } from '@dicebear/avatars';

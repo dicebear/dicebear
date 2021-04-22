@@ -1,10 +1,8 @@
-/**
- * --------------------------------------------------------------------------
+/*!
  * DiceBear (@dicebear/avatars)
  *
  * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars/LICENSE)
  * Copyright (c) 2021 Florian Körner
- * --------------------------------------------------------------------------
  */
 
 export { default, SpriteCollection } from './core.legacy';

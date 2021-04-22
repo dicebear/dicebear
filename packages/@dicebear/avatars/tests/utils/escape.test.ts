@@ -1,4 +1,4 @@
-import { utils } from '../../lib';
+import { utils } from '../../dist';
 
 test('XML must be escaped.', () => {
   expect(utils.escape.xml(`<script type="text/javascript">alert('Bad code')></script>`)).toEqual(

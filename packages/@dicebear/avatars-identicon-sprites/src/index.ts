@@ -1,10 +1,8 @@
-/**
- * --------------------------------------------------------------------------
+/*!
  * DiceBear Identicon (@dicebear/avatars-identicon-sprites)
  *
  * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars-identicon-sprites/LICENSE)
  * Copyright (c) 2021 Florian Körner
- * --------------------------------------------------------------------------
  */
 
 import { utils } from '@dicebear/avatars';

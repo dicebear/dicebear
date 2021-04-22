@@ -2,7 +2,7 @@
   "extends": "@tsconfig/node12/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "./lib",
+    "outDir": "./dist",
   },
   "include": ["./src/index.ts"]
 }
