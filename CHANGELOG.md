@@ -1,5 +1,23 @@
 # Changelog
 
+## [4.7.0] - TBA
+
+### Added
+
+- `esm`, `cjs` and `umd` bundles for all packages.
+- New package `@dicebear/collection` to install all official avatar styles at once.
+
+### Changed
+
+#### @dicebear/avatars-bottts-sprites
+
+- No longer uses the deprecated `Color` class.
+
+### Fixed
+
+- Error `ReferenceError: Can't find variable: exports` in svelte. See
+  [#123](https://github.com/dicebear/dicebear/issues/123)
+
 ## [4.6.2] - 2021-04-21
 
 ### Fixed

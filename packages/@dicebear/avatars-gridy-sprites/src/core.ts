@@ -1,7 +1,7 @@
 // @ts-ignore
 import { outer } from 'gridy-avatars/dist/avatars';
 import { Style, StyleCreateResultAttributes, StyleSchema } from '@dicebear/avatars';
-import Parser from '@dicebear/avatars/lib/parser';
+import legacy from '@dicebear/avatars';
 import { Options } from './options';
 import { schema } from './schema';
 
@@ -48,7 +48,7 @@ export const style: Style<Options> = {
       svg = fixDeterministic(svg, id);
     }
 
-    let parsed = Parser.parse(svg);
+    let parsed = legacy.parser.parse(svg);
     let parsedHead: Array<typeof parsed> = [];
     let parsedBody: Array<typeof parsed> = [];
 
@@ -62,8 +62,8 @@ export const style: Style<Options> = {
 
     return {
       attributes: parsed.attributes as StyleCreateResultAttributes,
-      head: parsedHead.map((v) => Parser.stringify(v)).join(''),
-      body: parsedBody.map((v) => Parser.stringify(v)).join(''),
+      head: parsedHead.map((v) => legacy.parser.stringify(v)).join(''),
+      body: parsedBody.map((v) => legacy.parser.stringify(v)).join(''),
     };
   },
 };

@@ -17,6 +17,7 @@ export type SpriteCollection<O = {}> = (random: Random, options?: O & Options) =
 export default class Avatars<O extends {}> {
   public static random = Random;
   public static color = Color;
+  public static parser = Parser;
 
   protected spriteCollection: SpriteCollection<O>;
   protected defaultOptions?: O & Options;
@@ -36,28 +37,28 @@ export default class Avatars<O extends {}> {
    */
   public create(seed?: string, options?: O & Options) {
     const style: Style<O> = {
-        meta: {},
-        schema: {},
-        create: ({ prng, options: styleOptions }) => {
-            let svg = Parser.parse(this.spriteCollection(new Random(prng.seed), styleOptions as O));
-            let head: INode[] = [];
-            let body: INode[] = [];
+      meta: {},
+      schema: {},
+      create: ({ prng, options: styleOptions }) => {
+        let svg = Parser.parse(this.spriteCollection(new Random(prng.seed), styleOptions as O));
+        let head: INode[] = [];
+        let body: INode[] = [];
 
-            svg.children.forEach((child) => {
-                if (this.isBody(child)) {
-                    body.push(child);
-                } else {
-                    head.push(child);
-                }
-            });
+        svg.children.forEach((child) => {
+          if (this.isBody(child)) {
+            body.push(child);
+          } else {
+            head.push(child);
+          }
+        });
 
-            return {
-                attributes: svg.attributes as StyleCreateResultAttributes,
-                head: head.map(v => Parser.stringify(v)).join(''),
-                body: body.map(v => Parser.stringify(v)).join('')
-            }
-        }
-    }
+        return {
+          attributes: svg.attributes as StyleCreateResultAttributes,
+          head: head.map((v) => Parser.stringify(v)).join(''),
+          body: body.map((v) => Parser.stringify(v)).join(''),
+        };
+      },
+    };
 
     // @ts-ignore
     return createAvatar(style, { ...this.defaultOptions, ...options, seed });

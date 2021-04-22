@@ -6,4 +6,5 @@ yarn-error.log
 node_modules
 
 # Build files
+dist
 lib

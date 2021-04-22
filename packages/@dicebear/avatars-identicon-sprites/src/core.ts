@@ -1,5 +1,4 @@
-import { Style, StyleSchema, ColorCollection, utils } from '@dicebear/avatars';
-import Color from '@dicebear/avatars/lib/color';
+import legacy, { Style, StyleSchema, ColorCollection, utils } from '@dicebear/avatars';
 import { Options } from './options';
 import { schema } from './schema';
 
@@ -19,13 +18,13 @@ export const style: Style<Options> = {
 
     let colors: string[] = [];
 
-    Object.keys(Color.collection).forEach((color) => {
+    Object.keys(legacy.color.collection).forEach((color) => {
       if (
         options.colors === undefined ||
         options.colors.length === 0 ||
         options.colors.indexOf(color as keyof ColorCollection) !== -1
       ) {
-        let colorCollection = Color.collection[color as keyof ColorCollection];
+        let colorCollection = legacy.color.collection[color as keyof ColorCollection];
 
         colors.push(colorCollection[options.colorLevel || (defaults.colorLevel as keyof typeof colorCollection)]);
       }

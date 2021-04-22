@@ -1,5 +1,4 @@
-import Color from '@dicebear/avatars/lib/color';
-import { Style, StyleSchema } from '@dicebear/avatars';
+import legacy, { Style, StyleSchema } from '@dicebear/avatars';
 import { Options } from './options';
 import { schema } from './schema';
 
@@ -17,108 +16,108 @@ export const style: Style<Options> = {
   schema,
   create: ({ prng, options }) => {
     let skinColor = prng.pick([
-      new Color('#FFDBAC'),
-      new Color('#F5CFA0'),
-      new Color('#EAC393'),
-      new Color('#E0B687'),
-      new Color('#CB9E6E'),
-      new Color('#B68655'),
-      new Color('#A26D3D'),
-      new Color('#8D5524'),
+      new legacy.color('#FFDBAC'),
+      new legacy.color('#F5CFA0'),
+      new legacy.color('#EAC393'),
+      new legacy.color('#E0B687'),
+      new legacy.color('#CB9E6E'),
+      new legacy.color('#B68655'),
+      new legacy.color('#A26D3D'),
+      new legacy.color('#8D5524'),
     ]);
 
     let hairColor = prng
       .pick([
-        new Color('#090806'),
-        new Color('#2c222b'),
-        new Color('#71635a'),
-        new Color('#b7a69e'),
-        new Color('#d6c4c2'),
-        new Color('#cabfb1'),
-        new Color('#dcd0ba'),
-        new Color('#fff5e1'),
-        new Color('#e6cea8'),
-        new Color('#e5c8a8'),
-        new Color('#debc99'),
-        new Color('#b89778'),
-        new Color('#a56b46'),
-        new Color('#b55239'),
-        new Color('#8d4a43'),
-        new Color('#91553d'),
-        new Color('#533d32'),
-        new Color('#3b3024'),
-        new Color('#554838'),
-        new Color('#4e433f'),
-        new Color('#504444'),
-        new Color('#6a4e42'),
-        new Color('#a7856a'),
-        new Color('#977961'),
+        new legacy.color('#090806'),
+        new legacy.color('#2c222b'),
+        new legacy.color('#71635a'),
+        new legacy.color('#b7a69e'),
+        new legacy.color('#d6c4c2'),
+        new legacy.color('#cabfb1'),
+        new legacy.color('#dcd0ba'),
+        new legacy.color('#fff5e1'),
+        new legacy.color('#e6cea8'),
+        new legacy.color('#e5c8a8'),
+        new legacy.color('#debc99'),
+        new legacy.color('#b89778'),
+        new legacy.color('#a56b46'),
+        new legacy.color('#b55239'),
+        new legacy.color('#8d4a43'),
+        new legacy.color('#91553d'),
+        new legacy.color('#533d32'),
+        new legacy.color('#3b3024'),
+        new legacy.color('#554838'),
+        new legacy.color('#4e433f'),
+        new legacy.color('#504444'),
+        new legacy.color('#6a4e42'),
+        new legacy.color('#a7856a'),
+        new legacy.color('#977961'),
       ])
       .brighterOrDarkerThan(skinColor, 17);
 
     let eyesColor = prng.pick([
-      new Color('#76778b'),
-      new Color('#697b94'),
-      new Color('#647b90'),
-      new Color('#5b7c8b'),
-      new Color('#588387'),
+      new legacy.color('#76778b'),
+      new legacy.color('#697b94'),
+      new legacy.color('#647b90'),
+      new legacy.color('#5b7c8b'),
+      new legacy.color('#588387'),
     ]);
 
     let eyebrowsColor = hairColor.clone().darkerThan(skinColor, 7).darkerThan(hairColor, 10);
 
     let accessoriesColor = prng.pick([
-      new Color('#daa520'),
-      new Color('#ffd700'),
-      new Color('#eee8aa'),
-      new Color('#fafad2'),
-      new Color('#d3d3d3'),
-      new Color('#a9a9a9'),
+      new legacy.color('#daa520'),
+      new legacy.color('#ffd700'),
+      new legacy.color('#eee8aa'),
+      new legacy.color('#fafad2'),
+      new legacy.color('#d3d3d3'),
+      new legacy.color('#a9a9a9'),
     ]);
 
     let mouthColor = prng
       .pick([
-        new Color('#dbac98'),
-        new Color('#d29985'),
-        new Color('#c98276'),
-        new Color('#e35d6a'),
-        new Color('#e32153'),
-        new Color('#de0f0d'),
+        new legacy.color('#dbac98'),
+        new legacy.color('#d29985'),
+        new legacy.color('#c98276'),
+        new legacy.color('#e35d6a'),
+        new legacy.color('#e32153'),
+        new legacy.color('#de0f0d'),
       ])
       .brighterOrDarkerThan(skinColor, 10);
 
     let glassesColor = prng.pick([
-      new Color('#5f705c'),
-      new Color('#43677d'),
-      new Color('#5e172d'),
-      new Color('#ffb67a'),
-      new Color('#a04b5d'),
-      new Color('#191919'),
-      new Color('#323232'),
-      new Color('#4b4b4b'),
+      new legacy.color('#5f705c'),
+      new legacy.color('#43677d'),
+      new legacy.color('#5e172d'),
+      new legacy.color('#ffb67a'),
+      new legacy.color('#a04b5d'),
+      new legacy.color('#191919'),
+      new legacy.color('#323232'),
+      new legacy.color('#4b4b4b'),
     ]);
 
     let clothesColor = prng.pick([
-      new Color('#d11141'),
-      new Color('#00b159'),
-      new Color('#00aedb'),
-      new Color('#f37735'),
-      new Color('#ffc425'),
-      new Color('#740001'),
-      new Color('#ae0001'),
-      new Color('#eeba30'),
-      new Color('#96ceb4'),
-      new Color('#ffeead'),
-      new Color('#ff6f69'),
-      new Color('#ffcc5c'),
-      new Color('#88d8b0'),
+      new legacy.color('#d11141'),
+      new legacy.color('#00b159'),
+      new legacy.color('#00aedb'),
+      new legacy.color('#f37735'),
+      new legacy.color('#ffc425'),
+      new legacy.color('#740001'),
+      new legacy.color('#ae0001'),
+      new legacy.color('#eeba30'),
+      new legacy.color('#96ceb4'),
+      new legacy.color('#ffeead'),
+      new legacy.color('#ff6f69'),
+      new legacy.color('#ffcc5c'),
+      new legacy.color('#88d8b0'),
     ]);
 
     let hatColor = prng.pick([
-      new Color('#cc6192'),
-      new Color('#2663a3'),
-      new Color('#a62116'),
-      new Color('#3d8a6b'),
-      new Color('#614f8a'),
+      new legacy.color('#cc6192'),
+      new legacy.color('#2663a3'),
+      new legacy.color('#a62116'),
+      new legacy.color('#3d8a6b'),
+      new legacy.color('#614f8a'),
     ]);
 
     let mouth = [];

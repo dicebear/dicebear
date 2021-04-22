@@ -1,5 +1,4 @@
-import { Style, StyleSchema, utils, Color as ColorType, ColorCollection, Prng } from '@dicebear/avatars';
-import Color from '@dicebear/avatars/lib/color';
+import legacy, { Style, StyleSchema, utils, Color as ColorType, ColorCollection, Prng } from '@dicebear/avatars';
 import { Options } from './options';
 import { schema } from './schema';
 
@@ -34,37 +33,32 @@ export const style: Style<Options> = {
     let defaults = utils.schema.defaults(schema as StyleSchema);
     let colorsCollection: Array<ColorType> = [];
 
-    Object.keys(Color.collection).forEach((color) => {
+    Object.keys(legacy.color.collection).forEach((color) => {
       if (
         options.colors === undefined ||
         options.colors.length === 0 ||
         options.colors.indexOf(color as keyof ColorCollection) !== -1
       ) {
-        colorsCollection.push(Color.collection[color as keyof ColorCollection]);
+        colorsCollection.push(legacy.color.collection[color as keyof ColorCollection]);
       }
     });
 
     let primaryColorCollection = prng.pick(colorsCollection);
     let secondaryColorCollection = prng.pick(colorsCollection);
 
-    let primaryColor = new Color(
+    let primaryColor =
       primaryColorCollection[
         options.primaryColorLevel || (defaults.primaryColorLevel as keyof typeof primaryColorCollection)
-      ]
-    );
-
-    let secondaryColor = new Color(
+      ];
+    let secondaryColor =
       primaryColorCollection[
         options.secondaryColorLevel || (defaults.secondaryColorLevel as keyof typeof primaryColorCollection)
-      ]
-    );
-
+      ];
     if (options.colorful) {
-      secondaryColor = new Color(
+      secondaryColor =
         secondaryColorCollection[
           options.secondaryColorLevel || (defaults.secondaryColorLevel as keyof typeof primaryColorCollection)
-        ]
-      );
+        ];
     }
 
     let eyes = prng.pick(eyesCollection);

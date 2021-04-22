@@ -1,6 +1,4 @@
-import Color from '@dicebear/avatars/lib/color';
-
-export default (color: Color) => {
+export default (color: string) => {
   return `
         <g opacity="0.9">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M32.5 41C41.6127 41 49 32.9411 49 23C49 13.0589 41.6127 5 32.5 5C23.3873 5 16 13.0589 16 23C16 32.9411 23.3873 41 32.5 41Z" stroke="#2A3544" stroke-width="6"/>
@@ -14,7 +12,7 @@ export default (color: Color) => {
             <path fill-rule="evenodd" clip-rule="evenodd" d="M145 0C143.895 0 143 0.89543 143 2V20C143 21.1046 143.895 22 145 22H157C158.105 22 159 21.1046 159 20V2C159 0.895431 158.105 0 157 0H145ZM23 27C21.8954 27 21 27.8954 21 29V47C21 48.1046 21.8954 49 23 49H35C36.1046 49 37 48.1046 37 47V29C37 27.8954 36.1046 27 35 27H23ZM24 60C22.8954 60 22 60.8954 22 62V70C22 71.1046 22.8954 72 24 72H36C37.1046 72 38 71.1046 38 70V62C38 60.8954 37.1046 60 36 60H24ZM143 44C143 42.8954 143.895 42 145 42H157C158.105 42 159 42.8954 159 44V62C159 63.1046 158.105 64 157 64H145C143.895 64 143 63.1046 143 62V44Z" fill="white"/>
         </mask>
         <g mask="url(#sidesCables01Mask0)">
-            <rect width="180" height="76" fill="${color.hex}"/>
+            <rect width="180" height="76" fill="${color}"/>
         </g>
     `;
 };
