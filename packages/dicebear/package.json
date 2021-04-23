@@ -1,10 +1,35 @@
 {
   "name": "dicebear",
-  "version": "4.7.0-rc.0",
+  "version": "4.6.3",
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "bin": "bin/index.js",
   "repository": "https://github.com/dicebear/dicebear",
   "author": "Florian Körner <contact@florian-koerner.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "prebuild": "shx rm -rf lib",
+    "build": "yarn run build:ts",
+    "build:ts": "tsc"
+  },
+  "dependencies": {
+    "@dicebear/avatars": "~4.6.3",
+    "@dicebear/collection": "~4.6.3",
+    "ajv": "^8.1.0",
+    "commander": "^7.2.0",
+    "fs-extra": "^9.1.0",
+    "json-schema-merge-allof": "^0.8.1",
+    "sade": "^1.7.4",
+    "update-notifier": "^5.1.0"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/fs-extra": "^9.0.11",
+    "@types/json-schema": "^7.0.7",
+    "@types/json-schema-merge-allof": "^0.6.0",
+    "@types/sade": "^1.7.2",
+    "@types/update-notifier": "^5.0.0",
+    "fs-extra": "^9.1.0"
+  }
 }
