@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.3] - 2021-04-23
+
+### Fixed
+
+- `@dicebear/avatars` peer dependency fixed - again
+
 ## [4.6.2] - 2021-04-21
 
 ### Fixed
