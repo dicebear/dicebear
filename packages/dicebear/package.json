@@ -21,6 +21,7 @@
     "fs-extra": "^9.1.0",
     "json-schema-merge-allof": "^0.8.1",
     "sade": "^1.7.4",
+    "sharp": "^0.28.1",
     "update-notifier": "^5.1.0"
   },
   "devDependencies": {
@@ -29,6 +30,7 @@
     "@types/json-schema": "^7.0.7",
     "@types/json-schema-merge-allof": "^0.6.0",
     "@types/sade": "^1.7.2",
+    "@types/sharp": "^0.28.0",
     "@types/update-notifier": "^5.0.0",
     "fs-extra": "^9.1.0"
   }
