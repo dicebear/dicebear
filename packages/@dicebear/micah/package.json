@@ -32,12 +32,7 @@
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "yarn run build:schema && yarn run build:options && yarn run build:js",
-    "build:js": "tsc --emitDeclarationOnly && rollup -c",
-    "build:schema": "yarn run build:schema:dereference && yarn run build:schema:module",
-    "build:schema:dereference": "json-dereference -s schema.json -o src/schema.json",
-    "build:schema:module": "replace-in-file --configFile=config/schema.replace.js && shx mv src/schema.json src/schema.ts",
-    "build:options": "json2ts -i schema.json -o src/options.ts"
+    "build": "node ../build/bin --name DiceBear.Micah"
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.6.3",

@@ -1,0 +1,33 @@
+{
+  "name": "@dicebear/build",
+  "version": "4.6.3",
+  "description": "Build tools for DiceBear",
+  "repository": "https://github.com/dicebear/dicebear",
+  "author": "Florian Körner <contact@florian-koerner.com>",
+  "license": "MIT",
+  "private": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "prebuild": "shx rm -rf lib",
+    "build": "yarn run build:ts",
+    "build:ts": "tsc"
+  },
+  "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^9.0.7",
+    "@rollup/plugin-commonjs": "^18.0.0",
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "json-schema-to-typescript": "^10.1.4",
+    "rollup": "^2.45.2",
+    "rollup-plugin-re": "^1.0.7",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.1",
+    "@types/yargs": "^16.0.1",
+    "type-fest": "^1.0.2"
+  }
+}

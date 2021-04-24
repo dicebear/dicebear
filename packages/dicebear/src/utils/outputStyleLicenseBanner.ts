@@ -2,7 +2,7 @@ import type { Style } from '@dicebear/avatars';
 import chalk from 'chalk';
 import link from 'terminal-link';
 
-export function outputLicenseBanner(name: string, style: Style<any>) {
+export function outputStyleLicenseBanner(name: string, style: Style<any>) {
   let banner = ['-'.repeat(64)];
   let creator = Array.isArray(style.meta.creator) ? style.meta.creator.join(', ') : style.meta.creator;
 

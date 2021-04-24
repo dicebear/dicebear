@@ -28,8 +28,7 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "yarn run build:js",
-    "build:js": "tsc && rollup -c"
+    "build": "node ../build/bin --name DiceBear.Collection"
   },
   "dependencies": {
     "@dicebear/avatars-avataaars-sprites": "~4.6.3",
@@ -45,14 +44,9 @@
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.6.3",
-    "@rollup/plugin-commonjs": "^18.0.0",
-    "@rollup/plugin-node-resolve": "^11.2.1",
-    "@rollup/plugin-typescript": "^8.2.1",
+    "@dicebear/build": "^4.6.3",
     "@tsconfig/node12": "^1.0.7",
     "@types/node": "^10.11.6",
-    "rollup": "^2.45.2",
-    "rollup-plugin-re": "^1.0.7",
-    "rollup-plugin-terser": "^7.0.2",
     "shx": "^0.3.3",
     "typescript": "^4.2.3"
   },

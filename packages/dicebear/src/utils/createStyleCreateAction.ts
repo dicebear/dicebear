@@ -2,7 +2,7 @@ import { Style, createAvatar, StyleSchema } from '@dicebear/avatars';
 import * as path from 'path';
 import fs from 'fs-extra';
 import { validateInputBySchema } from './validateInputBySchema';
-import { outputLicenseBanner } from './outputLicenseBanner';
+import { outputStyleLicenseBanner } from './outputStyleLicenseBanner';
 import sharp from 'sharp';
 import cliProgress from 'cli-progress';
 
@@ -12,7 +12,7 @@ export function createStyleCreateAction(name: string, style: Style<any>, schema:
     const validated = validateInputBySchema(options, schema);
     const promises = [];
 
-    outputLicenseBanner(name, style);
+    outputStyleLicenseBanner(name, style);
 
     bar.start(validated.count as number, 0);
 

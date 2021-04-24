@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@dicebear/avatars": "~4.6.3",
+    "@dicebear/build": "~4.6.3",
     "@dicebear/collection": "~4.6.3",
     "ajv": "^8.1.0",
     "chalk": "^4.1.1",
