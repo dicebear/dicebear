@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/recommended/tsconfig.json",
+  "extends": "@tsconfig/node12/tsconfig.json",
   "compilerOptions": {
     "resolveJsonModule": true,
     "outDir": "./lib",

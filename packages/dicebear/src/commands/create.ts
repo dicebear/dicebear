@@ -9,30 +9,23 @@ const create = new Command('create');
 
 Object.keys(styles).forEach((name) => {
   const style: Style<any> = styles[name as keyof typeof styles];
-
-  const countProperty: StyleSchema = {
-    title: 'Count',
-    description: 'Defines how many avatars to create. Does not work in combination with a "seed".',
-    type: 'number',
-    default: 1,
-  };
-
-  const formatProperty: StyleSchema = {
-    title: 'Format',
-    type: 'string',
-    enum: ['svg', 'png', 'jpg', 'jpeg'],
-    default: 'svg',
-  };
-
   const schema = mergeAllOf(
     {
       allOf: [
         {
           properties: {
-            c: countProperty,
-            count: countProperty,
-            f: formatProperty,
-            format: formatProperty,
+            count: {
+              title: 'Count',
+              description: 'Defines how many avatars to create. Does not work in combination with a "seed".',
+              type: 'number',
+              default: 1,
+            },
+            format: {
+              title: 'Format',
+              type: 'string',
+              enum: ['svg', 'png', 'jpg', 'jpeg'],
+              default: 'svg',
+            },
           },
         },
         coreSchema,
