@@ -1,9 +1,10 @@
-// @ts-ignore
-import replace from 'rollup-plugin-re';
 import commonjs from '@rollup/plugin-commonjs';
-import typescript from 'rollup-plugin-typescript2';
 import { PackageJson } from 'type-fest';
 import type { InputOptions, OutputOptions } from 'rollup';
+
+import { babel } from '../utils/rollup/babel';
+import { replace } from '../utils/rollup/replace';
+import { typescript } from '../utils/rollup/typescript';
 
 export function createCjsAndEsConfig(pkg: PackageJson) {
   let external: RegExp[] = [];
@@ -19,25 +20,7 @@ export function createCjsAndEsConfig(pkg: PackageJson) {
   const input: InputOptions = {
     input: 'src/index.ts',
     external,
-    plugins: [
-      replace({
-        patterns: [
-          {
-            test: /^[ ]{2,}/gm,
-            replace: '',
-          },
-        ],
-      }),
-      commonjs(),
-      typescript({
-        tsconfigOverride: {
-          compilerOptions: {
-            module: 'ESNext',
-            target: 'esnext',
-          },
-        },
-      }),
-    ],
+    plugins: [replace(), commonjs(), typescript(), babel()],
   };
 
   const output: OutputOptions[] = [
