@@ -6,6 +6,7 @@
 
 - `esm`, `cjs` and `umd` bundles for all packages.
 - New package `@dicebear/collection` to install all official avatar styles at once.
+- New CLI `dicebear` to create avatars and build avatar styles.
 
 ### Changed
 

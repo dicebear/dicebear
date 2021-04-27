@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import updateNotifier from 'update-notifier';
 
 import { create } from './commands/create';
-import { build } from './commands/build';
+import { project } from './commands/project';
 
 (async () => {
   const packageJson = '../package.json';
@@ -15,7 +15,7 @@ import { build } from './commands/build';
   program.version(pkg.version, '-v, --version');
 
   program.addCommand(create);
-  program.addCommand(build);
+  program.addCommand(project);
 
   await program.parseAsync(process.argv);
 })();
