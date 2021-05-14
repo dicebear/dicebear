@@ -3,6 +3,7 @@ module.exports = function (context, options) {
     name: 'tailwindcss-plugin',
     configurePostCss(postcssOptions) {
       postcssOptions.plugins.push(
+        require('postcss-for'),
         require('postcss-import'),
         require('tailwindcss'),
         require('postcss-preset-env')({

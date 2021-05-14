@@ -1,0 +1,80 @@
+:root {
+  --ifm-navbar-height: 100px;
+  --ifm-menu-link-padding-vertical: 10px;
+  --ifm-menu-link-padding-horizontal: 16px;
+  --ifm-toc-border-color: transparent;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container,
+.docs-wrapper {
+  @apply tw-container;
+}
+
+.docs-wrapper .container {
+  padding: 0;
+}
+
+.docs-wrapper [class*='docItemContainer'] {
+  padding: 0;
+}
+
+@media (min-width: 997px) {
+  .docs-wrapper [class*='docMainContainer'] {
+    margin-left: 40px;
+  }
+}
+
+.docs-wrapper .menu {
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+.padding-vert--lg {
+  padding-top: 0 !important;
+}
+
+svg {
+  display: inline-block;
+}
+
+.tw-row {
+  --gutter: 32px;
+
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(var(--gutter) / 2 * -1);
+  margin-right: calc(var(--gutter) / 2 * -1);
+}
+
+.tw-row > [class*='tw-col-'] {
+  padding-left: calc(var(--gutter) / 2);
+  padding-right: calc(var(--gutter) / 2);
+}
+
+.tw-gutter-vertical {
+  margin-top: calc(var(--gutter) / 2 * -1);
+  margin-bottom: calc(var(--gutter) / 2 * -1);
+}
+
+.tw-gutter-vertical > [class*='tw-col-'] {
+  padding-top: calc(var(--gutter) / 2);
+  padding-bottom: calc(var(--gutter) / 2);
+}
+
+@responsive {
+  @for $i from 1 to 12 {
+    .tw-col-$i {
+      flex: 0 0 calc(100% / 12 * $(i));
+      max-width: calc(100% / 12 * $(i));
+    }
+
+    .tw-offset-$i {
+      margin-left: calc(100% / 12 * $(i));
+    }
+  }
+}

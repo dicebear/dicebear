@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default function HeaderLogo() {
+export function HeaderLogo() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="234" height="40" fill="none">
       <path

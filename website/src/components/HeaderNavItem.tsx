@@ -6,7 +6,7 @@ type Props = {
   href: string;
 };
 
-export default function HeaderNavItem({ href, children }: PropsWithChildren<Props>) {
+export function HeaderNavItem({ href, children }: PropsWithChildren<Props>) {
   return (
     <Link
       to={href}

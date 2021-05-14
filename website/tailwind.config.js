@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   purge: ['./src/**/*.html', './src/**/*.js', './src/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'
@@ -13,7 +15,15 @@ module.exports = {
         xl: '1280px',
       },
     },
-    extend: {},
+    extend: {
+      colors: {
+        'light-blue': colors.lightBlue,
+      },
+      lineHeight: {
+        '12/10': '1.2',
+        '14/10': '1.4',
+      },
+    },
   },
   variants: {
     extend: {},
