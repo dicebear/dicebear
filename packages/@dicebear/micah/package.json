@@ -8,13 +8,14 @@
     "micah",
     "svg"
   ],
-  "homepage": "https://dicebear.com",
+  "homepage": "https://github.com/dicebear/dicebear/tree/master/packages/@dicebear/micah",
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dicebear/dicebear.git"
+    "url": "git@github.com:dicebear/dicebear.git",
+    "directory": "/packages/@dicebear/micah"
   },
   "license": "MIT",
   "author": "Florian Körner <contact@florian-koerner.com>",

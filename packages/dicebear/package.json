@@ -3,7 +3,11 @@
   "version": "4.6.3",
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "bin": "bin/index.js",
-  "repository": "https://github.com/dicebear/dicebear",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dicebear/dicebear.git",
+    "directory": "/packages/dicebear"
+  },
   "author": "Florian Körner <contact@florian-koerner.com>",
   "license": "MIT",
   "private": false,
@@ -46,5 +50,6 @@
     "@types/update-notifier": "^5.0.0",
     "@types/validate-npm-package-name": "^3.0.2",
     "fs-extra": "^9.1.0"
-  }
+  },
+  "homepage": "https://github.com/dicebear/dicebear/tree/master/packages/dicebear"
 }

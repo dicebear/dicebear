@@ -2,7 +2,11 @@
   "name": "@dicebear/build",
   "version": "4.6.3",
   "description": "Build tools for DiceBear",
-  "repository": "https://github.com/dicebear/dicebear",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dicebear/dicebear.git",
+    "directory": "/packages/@dicebear/build"
+  },
   "author": "Florian Körner <contact@florian-koerner.com>",
   "license": "MIT",
   "private": false,
@@ -32,5 +36,6 @@
     "@tsconfig/node12": "^1.0.1",
     "@types/yargs": "^16.0.1",
     "type-fest": "^1.0.2"
-  }
+  },
+  "homepage": "https://github.com/dicebear/dicebear/tree/master/packages/@dicebear/build"
 }

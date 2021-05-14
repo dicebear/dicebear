@@ -11,13 +11,14 @@
     "monsters",
     "robots"
   ],
-  "homepage": "https://dicebear.com",
+  "homepage": "https://github.com/dicebear/dicebear/tree/master/packages/@dicebear/avatars-gridy-sprites",
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dicebear/dicebear.git"
+    "url": "git@github.com:dicebear/dicebear.git",
+    "directory": "/packages/@dicebear/avatars-gridy-sprites"
   },
   "license": "MIT",
   "author": "Florian Körner <contact@florian-koerner.com>",
