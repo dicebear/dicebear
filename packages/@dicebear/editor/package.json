@@ -1,0 +1,54 @@
+{
+  "name": "@dicebear/editor",
+  "version": "4.6.3",
+  "description": "Options editor for DiceBear Avatars",
+  "keywords": [
+    "dicebear",
+    "svelte"
+  ],
+  "homepage": "https://github.com/dicebear/dicebear/tree/master/packages/@dicebear/editor",
+  "bugs": {
+    "url": "https://github.com/dicebear/dicebear/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dicebear/dicebear.git",
+    "directory": "/packages/@dicebear/editor"
+  },
+  "license": "MIT",
+  "author": "Florian Körner <contact@florian-koerner.com>",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "browser": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "test": "svelte-check",
+    "prepublishOnly": "npm run build",
+    "prebuild": "shx rm -rf dist",
+    "build": "rollup -c && svelte-type-generator",
+    "watch": "rollup -c -w"
+  },
+  "dependencies": {
+    "svelte": "^3.0.0"
+  },
+  "devDependencies": {
+    "@dicebear/build": "^4.6.3",
+    "@tsconfig/svelte": "^1.0.0",
+    "rollup": "^2.3.4",
+    "rollup-plugin-svelte": "^7.0.0",
+    "svelte-check": "^1.0.0",
+    "svelte-preprocess": "^4.0.0",
+    "svelte-type-generator": "^1.1.0"
+  },
+  "peerDependencies": {
+    "@dicebear/avatars": "^4.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
