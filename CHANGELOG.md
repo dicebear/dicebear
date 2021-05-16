@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.4] - 2021-05-16
+
+### Fixed
+
+- `@dicebear/avatars` Regular expressions optimized
+
 ## [4.6.3] - 2021-04-23
 
 ### Fixed
