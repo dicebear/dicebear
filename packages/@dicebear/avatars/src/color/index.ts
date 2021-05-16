@@ -31,12 +31,12 @@ export default class Color implements ColorInterface {
     if (color[0] == '#') {
       this.hex = color;
     } else {
-      let match = /(rgb|rgba|hsv)\((.*?)\)/.exec(color);
+      let match = /^(rgb|rgba|hsv)\(([0-9\%\,\.\s]+)\)$/.exec(color.trim());
 
       if (match) {
         let values = match[2].split(',').map((val) => parseInt(val.trim()));
 
-        switch (match[1].trim()) {
+        switch (match[1]) {
           case 'rgb':
             this.rgb = values;
 

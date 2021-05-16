@@ -264,7 +264,7 @@ export function removeWhitespace(svg: string): string {
       // Remove breaking lines
       .replace(/\n/g, ' ')
       // Remove space between tags
-      .replace(/>(\s+)</g, '><')
+      .replace(/>\s+</g, '><')
       // Reduce whitespace
       .replace(/\s{2,}/g, ' ')
       // Create self closing tags
