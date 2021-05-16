@@ -259,17 +259,17 @@ export function createAttrString(attributes: StyleCreateResultAttributes): strin
 export function removeWhitespace(svg: string): string {
   return (
     svg
-      // Remove space before tag
-      .replace(/[\n\r\s]+</g, '<')
-      // Remove space after tag
-      .replace(/>[\n\r\s]+/g, '>')
+      // Remove spaces at both ends of the string
+      .trim()
       // Remove breaking lines
-      .replace(/[\n\r]+/g, ' ')
+      .replace(/\n/g, ' ')
+      // Remove space between tags
+      .replace(/>(\s+)</g, '><')
       // Reduce whitespace
-      .replace(/[\s]{2,}/g, ' ')
+      .replace(/\s{2,}/g, ' ')
       // Create self closing tags
       .replace(/<([^\/>]+)><\/[^>]+>/gi, '<$1/>')
-      // Remove whitespace before self tag self close
+      // Remove whitespace before tag close
       .replace(/\s(\/?>)/g, '$1')
   );
 }

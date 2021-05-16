@@ -31,7 +31,7 @@ export default class Color implements ColorInterface {
     if (color[0] == '#') {
       this.hex = color;
     } else {
-      let match = /(.*)\((.*)\)/.exec(color);
+      let match = /(rgb|rgba|hsv)\((.*?)\)/.exec(color);
 
       if (match) {
         let values = match[2].split(',').map((val) => parseInt(val.trim()));
