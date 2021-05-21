@@ -22,7 +22,9 @@
     "@mdx-js/react": "^1.6.21",
     "@n8tb1t/use-scroll-position": "^2.0.3",
     "@primer/octicons-react": "^13.0.0",
+    "canvg": "^3.0.7",
     "clsx": "^1.1.1",
+    "qs": "^6.10.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "svelte-adapter": "^0.4.0",
@@ -43,6 +45,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.0.0-beta.0",
     "@tsconfig/docusaurus": "^1.0.2",
+    "@types/qs": "^6.9.6",
     "@types/react": "^17.0.4",
     "@types/react-helmet": "^6.1.1",
     "@types/react-router-dom": "^5.1.7",

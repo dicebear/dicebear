@@ -1,1 +1,1 @@
-export { default as Editor } from './editor.svelte';
+export { default as Editor } from './components/editor.svelte';
