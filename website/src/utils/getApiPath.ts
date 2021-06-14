@@ -8,7 +8,7 @@ export function getApiPath<T>(style: keyof typeof styles, { seed, ...options }: 
     arrayFormat: 'brackets',
   });
 
-  let url = `https://api.dicebear.com/${style}/${seed ?? ''}.svg`;
+  let url = `https://api.dicebear.com/${style}/${encodeURIComponent(seed ?? '')}.svg`;
 
   if (qs) {
     url += `?${qs}`;

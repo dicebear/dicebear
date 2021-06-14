@@ -9,13 +9,15 @@ import { downloadPng } from '../utils/downloadPng';
 import { getFilename } from '../utils/getFilename';
 import { getApiPath } from '../utils/getApiPath';
 import { Link } from '@docusaurus/router';
+import clsx from 'clsx';
 
 type Props = {};
 
 export function Configurator({}: Props) {
+  const [mode, setMode] = React.useState<'prng' | 'piece-by-piece'>('prng');
   const [style, setStyle] = React.useState(Object.keys(styles)[0] as keyof typeof styles);
   const [options, setOptions] = React.useState<StyleOptions<any>>({
-    seed: 'custom-seed',
+    seed: 'John Doe',
   });
 
   const meta = React.useMemo(() => styles[style].meta, [style]);
@@ -54,6 +56,53 @@ export function Configurator({}: Props) {
     <div className="tw-container">
       <div className="tw-row">
         <div className="tw-col-7">
+          <div className="tw-font-medium tw-border-b-2 tw-mb-4 tw-py-0.5">Mode</div>
+          <div className="tw-grid tw-grid-cols-2 tw-gap-4 tw-mb-8">
+            <div
+              className={clsx(
+                'tw-rounded tw-py-2 tw-px-3 tw-border tw-cursor-pointer tw-transition-colors tw-duration-75',
+                mode === 'prng' ? 'tw-border-blue-400 tw-bg-blue-50' : 'tw-border-gray-200 hover:tw-border-blue-400'
+              )}
+              onClick={() => setMode('prng')}
+            >
+              <div className="tw-font-medium">PRNG Mode</div>
+              <div>Create avatars with the PRNG using a seed.</div>
+            </div>
+            <div
+              className={clsx(
+                'tw-rounded tw-py-2 tw-px-3 tw-border tw-cursor-pointer tw-transition-colors tw-duration-75',
+                mode === 'piece-by-piece'
+                  ? 'tw-border-blue-400 tw-bg-blue-50'
+                  : 'tw-border-gray-200 hover:tw-border-blue-400'
+              )}
+              onClick={() => setMode('piece-by-piece')}
+            >
+              <div className="tw-font-medium">Piece-By-Piece Mode</div>
+              <div>Create your individual avatar piece by piece.</div>
+            </div>
+          </div>
+          <div className="tw-font-medium tw-border-b-2 tw-mb-4 tw-py-0.5">Style</div>
+          <div className="tw-grid tw-grid-cols-6 tw-gap-4 tw-mb-8">
+            {Object.keys(styles).map((key) => {
+              return (
+                <div
+                  key={key}
+                  className={clsx(
+                    'tw-rounded tw-p-2 tw-pb-1 tw-border tw-cursor-pointer tw-transition-colors tw-duration-75',
+                    style === key ? 'tw-border-blue-400 tw-bg-blue-50' : 'tw-border-gray-200 hover:tw-border-blue-400'
+                  )}
+                  onClick={() => setStyle(key as keyof typeof styles)}
+                >
+                  <img
+                    src={createAvatar(styles[key], { seed: 'John Doe', dataUri: true })}
+                    alt={key}
+                    className="tw-mb-1"
+                  />
+                  <div className="tw-text-center tw-text-sm">{key}</div>
+                </div>
+              );
+            })}
+          </div>
           <div ref={container} />
         </div>
 
