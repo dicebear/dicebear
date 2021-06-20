@@ -1,11 +1,15 @@
 import { StyleSchema } from '../types';
 
+export function properties(schema: StyleSchema) {
+  return schema.properties || {};
+}
+
 export function defaults(schema: StyleSchema) {
   let result: Record<string, unknown> = {};
-  let properties = schema.properties || {};
+  let props = properties(schema);
 
-  Object.keys(properties).forEach((key) => {
-    let val = properties[key];
+  Object.keys(props).forEach((key) => {
+    let val = props[key];
 
     if (typeof val === 'object' && undefined !== val.default) {
       result[key] = val.default;
@@ -17,10 +21,10 @@ export function defaults(schema: StyleSchema) {
 
 export function aliases(schema: StyleSchema) {
   let result: Record<string, string[]> = {};
-  let properties = schema.properties || {};
+  let props = properties(schema);
 
-  Object.keys(properties).forEach((key) => {
-    let val = properties[key];
+  Object.keys(props).forEach((key) => {
+    let val = props[key];
 
     if (typeof val === 'object') {
       let title = val.title;
@@ -43,4 +47,18 @@ export function aliases(schema: StyleSchema) {
         return a.length > b.length ? 1 : -1;
       })
     );
+}
+
+export function aliasesMap(schema: StyleSchema) {
+  let result = new Map<string, string>();
+
+  for (let row of aliases(schema)) {
+    let [key, ...values] = row.reverse();
+
+    for (let val of values) {
+      result.set(val, key);
+    }
+  }
+
+  return result;
 }

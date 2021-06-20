@@ -14,7 +14,7 @@ import clsx from 'clsx';
 type Props = {};
 
 export function Configurator({}: Props) {
-  const [mode, setMode] = React.useState<'prng' | 'piece-by-piece'>('prng');
+  const [mode, setMode] = React.useState<'prng' | 'fixed'>('prng');
   const [style, setStyle] = React.useState(Object.keys(styles)[0] as keyof typeof styles);
   const [options, setOptions] = React.useState<StyleOptions<any>>({
     seed: 'John Doe',
@@ -41,7 +41,8 @@ export function Configurator({}: Props) {
       component.current = new Editor({
         target: container.current,
         props: {
-          name: 'Florian',
+          style: styles[style],
+          mode: mode,
         },
       });
 
@@ -50,7 +51,7 @@ export function Configurator({}: Props) {
         component.current = null;
       };
     }
-  }, [container.current]);
+  }, [container.current, style, mode]);
 
   return (
     <div className="tw-container">
@@ -71,13 +72,11 @@ export function Configurator({}: Props) {
             <div
               className={clsx(
                 'tw-rounded tw-py-2 tw-px-3 tw-border tw-cursor-pointer tw-transition-colors tw-duration-75',
-                mode === 'piece-by-piece'
-                  ? 'tw-border-blue-400 tw-bg-blue-50'
-                  : 'tw-border-gray-200 hover:tw-border-blue-400'
+                mode === 'fixed' ? 'tw-border-blue-400 tw-bg-blue-50' : 'tw-border-gray-200 hover:tw-border-blue-400'
               )}
-              onClick={() => setMode('piece-by-piece')}
+              onClick={() => setMode('fixed')}
             >
-              <div className="tw-font-medium">Piece-By-Piece Mode</div>
+              <div className="tw-font-medium">Fixed Mode</div>
               <div>Create your individual avatar piece by piece.</div>
             </div>
           </div>

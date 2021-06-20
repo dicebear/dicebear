@@ -24,29 +24,23 @@ export function merge<O extends {}>(style: Style<O>, options: StyleOptions<O>): 
 }
 
 export function createAliasProxy<O extends {}>(style: Style<O>) {
-  let aliasMap = [...schema.aliases(coreSchema), ...schema.aliases(style.schema)].reduce((map, aliases) => {
-    aliases.forEach((alias) => {
-      map.set(alias, aliases[0]);
-    });
-
-    return map;
-  }, new Map<string | symbol, string>());
+  let aliasMap = new Map([...schema.aliasesMap(coreSchema), ...schema.aliasesMap(style.schema)]);
 
   return new Proxy({} as StyleOptions<O>, {
     get: (obj, key) => {
-      let originalKey = (aliasMap.get(key) ?? key) as keyof StyleOptions<O>;
+      let originalKey = (aliasMap.get(key.toString()) ?? key) as keyof StyleOptions<O>;
 
       return obj[originalKey];
     },
     set: (obj, key, value) => {
-      let originalKey = (aliasMap.get(key) ?? key) as keyof StyleOptions<O>;
+      let originalKey = (aliasMap.get(key.toString()) ?? key) as keyof StyleOptions<O>;
 
       obj[originalKey] = value;
 
       return true;
     },
     deleteProperty: (obj, key) => {
-      let originalKey = (aliasMap.get(key) ?? key) as keyof StyleOptions<O>;
+      let originalKey = (aliasMap.get(key.toString()) ?? key) as keyof StyleOptions<O>;
 
       delete obj[originalKey];
 

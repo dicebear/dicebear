@@ -1,32 +1,43 @@
 <script lang="ts">
-  export let name: string;
+  import { Style, utils, schema } from '@dicebear/avatars';
+  import type { Defaults, HiddenFields, Mode } from '../types';
 
+  export let style: Style<any>;
+  export let mode: Mode;
+  export let defaults: Defaults;
+  export let hiddenFields: HiddenFields = [];
+
+  $: aliases = new Map([...utils.schema.aliasesMap(schema), ...utils.schema.aliasesMap(style.schema)]);
+
+  $: properties = {
+    ...utils.schema.properties(schema),
+    ...utils.schema.properties(style.schema),
+  };
+
+  $: fields = Object.keys(properties).filter((field) => {
+    const property = properties[field];
+
+    if (typeof property === 'boolean') {
+      return false;
+    }
+
+    if (property.description?.match(/@deprecated/)) {
+      return false;
+    }
+
+    if (mode === 'fixed' && field.match(/(Probability$|Chance$|^seed$)/)) {
+      return false;
+    }
+
+    return false === aliases.has(field) && false === hiddenFields.includes(field);
+  });
 </script>
 
 <main>
-  <h1>Hello {name}!</h1>
-  <p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+  {#each fields as field}
+    <div>{field}</div>
+  {/each}
 </main>
 
 <style>
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
-  }
-
 </style>
