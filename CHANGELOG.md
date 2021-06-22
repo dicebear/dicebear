@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.5] - 2021-06-22
+
+### Fixed
+
+- `@dicebear/micah` A filter is no longer applied to a color palette with only one color.
+
 ## [4.6.4] - 2021-05-16
 
 ### Fixed

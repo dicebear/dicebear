@@ -10,6 +10,21 @@ const data: Array<StyleOptions<style.Options>> = [
   { seed, backgroundColor: '#FF0000' },
   { seed, baseColor: ['sky'] },
   { seed, baseColor: ['sky'], hairColor: ['lavender'] },
+  {
+    seed,
+    backgroundColor: 'topaz',
+    baseColor: ['topaz'],
+    hairColor: ['topaz'],
+    hairProbability: 100,
+    earringColor: ['topaz'],
+    earringsProbability: 100,
+    eyebrowColor: ['topaz'],
+    facialHairColor: ['topaz'],
+    facialHairProbability: 100,
+    glassesColor: ['topaz'],
+    glassesProbability: 100,
+    shirtColor: ['topaz'],
+  },
 ];
 
 data.forEach((options, key) => {
