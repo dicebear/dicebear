@@ -19,9 +19,12 @@ export const style: Style<Options> = {
   schema,
   create: ({ prng, options }) => {
     const pickColor = (values: string[], filter: string[] = []): string => {
-      let result: string[] = values
-        .map((val) => colors[val as keyof typeof colors] || val)
-        .filter((val) => false === filter.includes(val));
+      let result: string[] = values.map((val) => colors[val as keyof typeof colors] || val);
+
+      // If only one color was given, that color was explicitly selected. Then do not perform any filtering.
+      if (values.length > 1) {
+        result = result.filter((val) => false === filter.includes(val));
+      }
 
       if (result.length === 0) {
         result.push('transparent');
