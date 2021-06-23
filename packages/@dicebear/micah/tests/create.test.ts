@@ -25,6 +25,11 @@ const data: Array<StyleOptions<style.Options>> = [
     glassesProbability: 100,
     shirtColor: ['topaz'],
   },
+  {
+    seed,
+    hair: ['dougFunny'],
+    hairColor: ['lavender'],
+  },
 ];
 
 data.forEach((options, key) => {
