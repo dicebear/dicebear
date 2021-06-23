@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/micah",
-  "version": "4.6.8",
+  "version": "4.6.7",
   "description": "Micah avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -37,7 +37,7 @@
     "build:options": "json2ts -i schema.json -o src/options.ts"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.6.8",
+    "@dicebear/avatars": "^4.6.7",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
