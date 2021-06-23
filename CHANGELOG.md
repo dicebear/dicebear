@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.9] - 2021-06-23
+
+### Fixed
+
+- `@dicebear/micah` Fixed `facialHair` / `mouth` contrast #132
+
 ## [4.6.8] - 2021-06-23
 
 ### Fixed

@@ -40,6 +40,13 @@ const data: Array<StyleOptions<style.Options>> = [
     eyes: ['eyesShadow'],
     eyeShadowColor: ['mellow'],
   },
+  {
+    seed,
+    hair: ['mrT'],
+    facialHair: ['beard'],
+    facialHairColor: ['black'],
+    facialHairProbability: 100,
+  },
 ];
 
 data.forEach((options, key) => {

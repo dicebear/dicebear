@@ -33,14 +33,16 @@ export const style: Style<Options> = {
       return prng.pick(result);
     };
 
-    const pickPath = <T>(paths: Record<string, T>, values: string[] = []): T | undefined => {
-      let result: Array<T | undefined> = values.map((val) => paths[val]);
+    const pickPath = <T extends {}, K extends keyof T>(
+      paths: T,
+      values: K[] = []
+    ): { path: T[K] | undefined; key: K } => {
+      const key = prng.pick(values);
 
-      if (result.length === 0) {
-        result.push(undefined);
-      }
-
-      return prng.pick(result);
+      return {
+        path: paths[key],
+        key,
+      };
     };
 
     const baseColor = pickColor(options.baseColor ?? []);
@@ -52,22 +54,25 @@ export const style: Style<Options> = {
     const eyebrowColor = pickColor(options.eyebrowColor ?? [], [baseColor, glassesColor, eyeShadowColor]);
     const facialHairColor = pickColor(options.facialHairColor ?? [], [baseColor]);
 
-    const earringsPath = pickPath(paths.earrings, options.earrings);
-    const glassesPath = pickPath(paths.glasses, options.glasses);
-    const hairPath = pickPath(paths.hair, options.hair);
-    const facialHairPath = pickPath(paths.facialHair, options.facialHair);
+    const { path: earringsPath } = pickPath(paths.earrings, options.earrings);
+    const { path: glassesPath } = pickPath(paths.glasses, options.glasses);
+    const { path: hairPath } = pickPath(paths.hair, options.hair);
+    const { path: facialHairPath, key: facialHairPathKey } = pickPath(paths.facialHair, options.facialHair);
 
-    const shirt = pickPath(paths.shirt, options.shirt);
+    const shirt = pickPath(paths.shirt, options.shirt).path;
     const earrings = prng.bool(options.earringsProbability) && earringsPath;
-    const ears = pickPath(paths.ears, options.ears);
-    const nose = pickPath(paths.nose, options.nose);
+    const ears = pickPath(paths.ears, options.ears).path;
+    const nose = pickPath(paths.nose, options.nose).path;
     const glasses = prng.bool(options.glassesProbability) && glassesPath;
-    const eyes = pickPath(paths.eyes, options.eyes);
-    const eyebrows = pickPath(paths.eyebrows, options.eyebrows);
-    const mouth = pickPath(paths.mouth, options.mouth);
+    const eyes = pickPath(paths.eyes, options.eyes).path;
+    const eyebrows = pickPath(paths.eyebrows, options.eyebrows).path;
+    const mouth = pickPath(paths.mouth, options.mouth).path;
     const hair = prng.bool(options.hairProbability) && hairPath;
     const facialHair = prng.bool(options.facialHairProbability) && facialHairPath;
-    const base = pickPath(paths.base, options.base);
+    const base = pickPath(paths.base, options.base).path;
+
+    const isBlackFacialHairColor = facialHairColor.match(/^#0+$/);
+    const mouthColor = facialHair && facialHairPathKey === 'beard' && isBlackFacialHairColor ? '#434343' : '#000';
 
     return {
       attributes: {
@@ -77,7 +82,7 @@ export const style: Style<Options> = {
       body: `
         ${base ? utils.svg.createGroup({ children: base(baseColor), x: 90, y: 43 }) : ''}
         ${facialHair ? utils.svg.createGroup({ children: facialHair(facialHairColor), x: 124, y: 145.3 }) : ''}
-        ${mouth ? utils.svg.createGroup({ children: mouth('#000'), x: 180, y: 203 }) : ''}
+        ${mouth ? utils.svg.createGroup({ children: mouth(mouthColor), x: 180, y: 203 }) : ''}
         ${eyebrows ? utils.svg.createGroup({ children: eyebrows(eyebrowColor), x: 120, y: 122 }) : ''}
         ${hair ? utils.svg.createGroup({ children: hair(hairColor), x: 59, y: 31 }) : ''}
         ${eyes ? utils.svg.createGroup({ children: eyes(eyeShadowColor), x: 152, y: 139 }) : ''}
