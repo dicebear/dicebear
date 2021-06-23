@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.6] - 2021-06-23
+
+### Fixed
+
+- `@dicebear/micah` the `dougFunny` hair style is always black #131
+
 ## [4.6.5] - 2021-06-22
 
 ### Fixed
