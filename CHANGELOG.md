@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.8] - 2021-06-23
+
+### Fixed
+
+- Reference error #123
+
 ## [4.6.7] - 2021-06-23
 
 ### Fixed

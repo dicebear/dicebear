@@ -44,7 +44,7 @@
     "svgson": "^5.2.1"
   },
   "devDependencies": {
-    "@tsconfig/node12": "^1.0.7",
+    "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "jest": "^26.6.3",
     "json-dereference-cli": "^0.1.2",
