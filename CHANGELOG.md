@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.6.7] - 2021-06-23
+
+### Fixed
+
+- `@dicebear/avatars` Aliases from styles were not noticed
+
+### Added
+
+- `@dicebear/micah` `eyeShadowColor` option as a better name for `eyeColor` #130
+
+### Deprecated
+
+- `@dicebear/micah` `eyeColor` option => use `eyeShadowColor` instead #130
+
 ## [4.6.6] - 2021-06-23
 
 ### Fixed

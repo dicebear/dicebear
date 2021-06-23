@@ -44,6 +44,11 @@
         "black",
         "white"
       ]
+    },
+    "eyeShadowColor": {
+      "title": "Eye Shadow Color",
+      "$ref": "#/definitions/colors",
+      "default": ["calm", "azure", "seashell", "mellow", "white"]
     }
   },
   "properties": {
@@ -111,10 +116,12 @@
       },
       "default": ["eyes", "eyesShadow", "round", "smiling"]
     },
+    "eyeShadowColor": {
+      "$ref": "#/definitions/eyeShadowColor"
+    },
     "eyeColor": {
-      "title": "Eye Color",
-      "$ref": "#/definitions/colors",
-      "default": ["calm", "azure", "seashell", "mellow", "white"]
+      "$ref": "#/definitions/eyeShadowColor",
+      "description": "@deprecated use `eyeShadowColor` instead."
     },
     "facialHair": {
       "title": "Facial Hair",
