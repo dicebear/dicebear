@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-male-sprites",
-  "version": "4.6.8",
+  "version": "4.6.9",
   "description": "Pixel art male avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -42,7 +42,7 @@
     "@types/json-schema": "^7.0.7"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.6.8",
+    "@dicebear/avatars": "^4.6.9",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
