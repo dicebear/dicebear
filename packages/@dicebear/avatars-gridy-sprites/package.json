@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-gridy-sprites",
-  "version": "4.6.8",
+  "version": "4.6.9",
   "description": "Gridy Avatars avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -44,7 +44,7 @@
     "gridy-avatars": "^1.1.3"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.6.8",
+    "@dicebear/avatars": "^4.6.9",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
