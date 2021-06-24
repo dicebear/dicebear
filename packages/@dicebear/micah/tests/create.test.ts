@@ -30,6 +30,16 @@ const data: Array<StyleOptions<style.Options>> = [
     hair: ['dougFunny'],
     hairColor: ['lavender'],
   },
+  {
+    seed,
+    eyes: ['eyesShadow'],
+    eyeColor: ['mellow'],
+  },
+  {
+    seed,
+    eyes: ['eyesShadow'],
+    eyeShadowColor: ['mellow'],
+  },
 ];
 
 data.forEach((options, key) => {

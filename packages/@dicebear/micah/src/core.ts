@@ -48,8 +48,8 @@ export const style: Style<Options> = {
     const shirtColor = pickColor(options.shirtColor ?? [], [baseColor]);
     const earringColor = pickColor(options.earringColor ?? [], [baseColor, hairColor]);
     const glassesColor = pickColor(options.glassesColor ?? [], [baseColor, hairColor]);
-    const eyeColor = pickColor(options.eyeColor ?? [], [baseColor, glassesColor]);
-    const eyebrowColor = pickColor(options.eyebrowColor ?? [], [baseColor, glassesColor, eyeColor]);
+    const eyeShadowColor = pickColor(options.eyeShadowColor ?? [], [baseColor, glassesColor]);
+    const eyebrowColor = pickColor(options.eyebrowColor ?? [], [baseColor, glassesColor, eyeShadowColor]);
     const facialHairColor = pickColor(options.facialHairColor ?? [], [baseColor]);
 
     const earringsPath = pickPath(paths.earrings, options.earrings);
@@ -80,7 +80,7 @@ export const style: Style<Options> = {
         ${mouth ? utils.svg.createGroup({ children: mouth('#000'), x: 180, y: 203 }) : ''}
         ${eyebrows ? utils.svg.createGroup({ children: eyebrows(eyebrowColor), x: 120, y: 122 }) : ''}
         ${hair ? utils.svg.createGroup({ children: hair(hairColor), x: 59, y: 31 }) : ''}
-        ${eyes ? utils.svg.createGroup({ children: eyes(eyeColor), x: 152, y: 139 }) : ''}
+        ${eyes ? utils.svg.createGroup({ children: eyes(eyeShadowColor), x: 152, y: 139 }) : ''}
         ${glasses ? utils.svg.createGroup({ children: glasses(glassesColor), x: 112, y: 131 }) : ''}
         ${nose ? utils.svg.createGroup({ children: nose('#000'), x: 186.37, y: 168.42 }) : ''}
         ${ears ? utils.svg.createGroup({ children: ears(baseColor), x: 94, y: 174 }) : ''}

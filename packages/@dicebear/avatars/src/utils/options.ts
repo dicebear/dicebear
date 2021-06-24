@@ -1,6 +1,7 @@
 import type { Style, StyleOptions } from '../types';
 import { schema as coreSchema } from '../schema';
 import * as schema from './schema';
+import * as helper from './helper';
 
 export function merge<O extends {}>(style: Style<O>, options: StyleOptions<O>): StyleOptions<O> {
   let optionSources: StyleOptions<O>[] = [
@@ -16,35 +17,43 @@ export function merge<O extends {}>(style: Style<O>, options: StyleOptions<O>): 
 
   let result = createAliasProxy(style);
 
-  optionSources.forEach((optionSource) => {
-    result = Object.assign(result, optionSource);
+  optionSources.forEach((optionSource: Record<string, any>) => {
+    result = Object.assign(result, helper.omit(optionSource, '_aliases'));
   });
 
-  return result as StyleOptions<O>;
+  return result;
 }
 
-export function createAliasProxy<O extends {}>(style: Style<O>) {
-  let aliasMap = new Map([...schema.aliasesMap(coreSchema), ...schema.aliasesMap(style.schema)]);
+export function createAliasProxy<O extends {}>(style: Style<O>): StyleOptions<O> {
+  let aliasMap = new Map([
+    ...Array.from(schema.aliasesMap(coreSchema)),
+    ...Array.from(schema.aliasesMap(style.schema)),
+  ]);
 
-  return new Proxy({} as StyleOptions<O>, {
-    get: (obj, key) => {
-      let originalKey = (aliasMap.get(key.toString()) ?? key) as keyof StyleOptions<O>;
+  return new Proxy(
+    {
+      _aliases: aliasMap,
+    } as { _aliases: Map<string | symbol, string> } & StyleOptions<O>,
+    {
+      get: (obj, key) => {
+        let originalKey = (obj._aliases.get(key) ?? key) as keyof StyleOptions<O>;
 
-      return obj[originalKey];
-    },
-    set: (obj, key, value) => {
-      let originalKey = (aliasMap.get(key.toString()) ?? key) as keyof StyleOptions<O>;
+        return obj[originalKey];
+      },
+      set: (obj, key, value) => {
+        let originalKey = (obj._aliases.get(key) ?? key) as keyof StyleOptions<O>;
 
-      obj[originalKey] = value;
+        obj[originalKey] = value;
 
-      return true;
-    },
-    deleteProperty: (obj, key) => {
-      let originalKey = (aliasMap.get(key.toString()) ?? key) as keyof StyleOptions<O>;
+        return true;
+      },
+      deleteProperty: (obj, key) => {
+        let originalKey = (obj._aliases.get(key) ?? key) as keyof StyleOptions<O>;
 
-      delete obj[originalKey];
+        delete obj[originalKey];
 
-      return true;
-    },
-  });
+        return true;
+      },
+    }
+  );
 }
