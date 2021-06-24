@@ -33,7 +33,7 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
-    "@tsconfig/node12": "^1.0.1",
+    "@tsconfig/recommended": "^1.0.0",
     "@types/yargs": "^16.0.1",
     "type-fest": "^1.0.2"
   },
