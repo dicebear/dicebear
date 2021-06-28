@@ -14,7 +14,7 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf lib",
-    "build": "yarn run build:ts",
+    "build": "npm run build:ts",
     "build:ts": "tsc"
   },
   "dependencies": {

@@ -10,8 +10,9 @@ import spawn from 'cross-spawn';
   const schemaDir = path.resolve(__dirname, '../../../schema');
 
   // Build docs
-  spawn.sync('yarn', ['--cwd', path.resolve(__dirname, '../../..'), 'workspace', '@dicebear/website', 'run', 'build'], {
+  spawn.sync('npm', ['run', 'build', '--workspace', '@dicebear/website'], {
     stdio: 'inherit',
+    cwd: path.resolve(__dirname, '../../..'),
   });
 
   // Connect client
