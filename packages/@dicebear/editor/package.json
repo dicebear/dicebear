@@ -39,6 +39,7 @@
   "devDependencies": {
     "@dicebear/build": "^4.6.3",
     "@tsconfig/svelte": "^1.0.0",
+    "@types/json-schema": "^7.0.7",
     "rollup": "^2.3.4",
     "rollup-plugin-svelte": "^7.0.0",
     "svelte-check": "^1.0.0",

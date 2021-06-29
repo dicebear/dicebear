@@ -3,6 +3,7 @@
   "compilerOptions": {
     "declaration": true,
     "outDir": "./dist",
+    "importsNotUsedAsValues": "remove"
   },
   "include": ["./src/index.ts"]
 }

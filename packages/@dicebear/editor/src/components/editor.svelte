@@ -1,16 +1,19 @@
 <script lang="ts">
-  import { Style, utils, schema } from '@dicebear/avatars';
+  import { Style, utils, schema as coreSchema } from '@dicebear/avatars';
   import type { Defaults, HiddenFields, Mode } from '../types';
+
+  import * as schemaUtil from '../utils/schema';
+  import * as propertyUtil from '../utils/property';
 
   export let style: Style<any>;
   export let mode: Mode;
   export let defaults: Defaults;
   export let hiddenFields: HiddenFields = [];
 
-  $: aliases = new Map([...utils.schema.aliasesMap(schema), ...utils.schema.aliasesMap(style.schema)]);
+  $: aliases = new Map([...utils.schema.aliasesMap(coreSchema), ...utils.schema.aliasesMap(style.schema)]);
 
   $: properties = {
-    ...utils.schema.properties(schema),
+    ...utils.schema.properties(coreSchema),
     ...utils.schema.properties(style.schema),
   };
 
@@ -31,6 +34,18 @@
 
     return false === aliases.has(field) && false === hiddenFields.includes(field);
   });
+
+  $: schema = schemaUtil.omitXOf(style.schema);
+
+  $: {
+    for (let field of fields) {
+      try {
+        console.log(propertyUtil.convertToField(schema, field));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
 </script>
 
 <main>
