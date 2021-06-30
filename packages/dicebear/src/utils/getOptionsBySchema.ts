@@ -1,7 +1,9 @@
 import { Option } from 'commander';
-import { utils, StyleSchema } from '@dicebear/avatars';
+import type { StyleSchema } from '@dicebear/avatars';
 
-export function createOptionsBySchema(schema: StyleSchema) {
+export async function getOptionsBySchema(schema: StyleSchema) {
+  const { utils } = await import('@dicebear/avatars');
+
   const result: InstanceType<typeof Option>[] = [];
   const aliases = utils.schema.aliases(schema);
 

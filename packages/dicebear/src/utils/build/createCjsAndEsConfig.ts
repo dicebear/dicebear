@@ -2,9 +2,9 @@ import commonjs from '@rollup/plugin-commonjs';
 import { PackageJson } from 'type-fest';
 import type { InputOptions, OutputOptions } from 'rollup';
 
-import { babel } from '../utils/rollup/babel';
-import { replace } from '../utils/rollup/replace';
-import { typescript } from '../utils/rollup/typescript';
+import { babel } from './rollup/babel';
+import { replace } from './rollup/replace';
+import { typescript } from './rollup/typescript';
 
 export function createCjsAndEsConfig(pkg: PackageJson) {
   let external: RegExp[] = [];

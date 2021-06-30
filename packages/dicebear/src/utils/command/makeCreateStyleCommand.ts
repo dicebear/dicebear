@@ -1,13 +1,53 @@
-import { Style, createAvatar, StyleSchema } from '@dicebear/avatars';
+import type { Style } from '@dicebear/avatars';
+import { Command } from 'commander';
 import * as path from 'path';
 import fs from 'fs-extra';
-import { validateInputBySchema } from './validateInputBySchema';
-import { outputStyleLicenseBanner } from './outputStyleLicenseBanner';
 import sharp from 'sharp';
 import cliProgress from 'cli-progress';
+import { validateInputBySchema } from '../validateInputBySchema';
+import { outputStyleLicenseBanner } from '../outputStyleLicenseBanner';
+import { getOptionsBySchema } from '../getOptionsBySchema';
+import mergeAllOf from 'json-schema-merge-allof';
 
-export function createStyleCreateAction(name: string, style: Style<any>, schema: StyleSchema) {
-  return async (outputPath = '.', options = {}) => {
+export async function makeCreateStyleCommand(name: string, style: Style<any>) {
+  const { createAvatar, schema: coreSchema } = await import('@dicebear/avatars');
+
+  const schema = mergeAllOf(
+    {
+      allOf: [
+        {
+          properties: {
+            count: {
+              title: 'Count',
+              description: 'Defines how many avatars to create. Does not work in combination with a "seed".',
+              type: 'number',
+              default: 1,
+            },
+            format: {
+              title: 'Format',
+              type: 'string',
+              enum: ['svg', 'png', 'jpg', 'jpeg'],
+              default: 'svg',
+            },
+          },
+        },
+        coreSchema,
+        style.schema,
+      ],
+      additionalItems: true,
+    },
+    { ignoreAdditionalProperties: true }
+  );
+
+  const cmd = new Command(name);
+
+  cmd.arguments('[outputPath]');
+
+  for (let option of await getOptionsBySchema(schema)) {
+    cmd.addOption(option);
+  }
+
+  cmd.action(async (outputPath = '.', options = {}) => {
     const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
     const validated = validateInputBySchema(options, schema);
     const promises = [];
@@ -57,5 +97,7 @@ export function createStyleCreateAction(name: string, style: Style<any>, schema:
     await Promise.all(promises);
 
     bar.stop();
-  };
+  });
+
+  return cmd;
 }

@@ -1,21 +1,22 @@
 import { Command } from 'commander';
 import updateNotifier from 'update-notifier';
 
-import { create } from './commands/create';
-import { project } from './commands/project';
+import { installRequiredPackages } from './utils/installRequiredPackages';
+import { getPackageJson } from './utils/getPackageJson';
+import { makeCreateCommand } from './utils/command/makeCreateCommand';
+import { makeProjectCommand } from './utils/command/makeProjectCommand';
 
 (async () => {
-  const packageJson = '../package.json';
-  const pkg = await import(packageJson);
+  await installRequiredPackages();
+
+  const pkg = await getPackageJson();
+  const program = new Command('dicebear');
 
   updateNotifier({ pkg }).notify();
 
-  const program = new Command('dicebear');
-
   program.version(pkg.version, '-v, --version');
-
-  program.addCommand(create);
-  program.addCommand(project);
+  program.addCommand(await makeCreateCommand());
+  program.addCommand(await makeProjectCommand());
 
   await program.parseAsync(process.argv);
 })();
