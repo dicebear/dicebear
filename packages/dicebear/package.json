@@ -49,7 +49,7 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.0",
+    "@tsconfig/node14": "^1.0.1",
     "@types/cli-progress": "^3.9.1",
     "@types/cross-spawn": "^6.0.2",
     "@types/download": "^6.2.4",

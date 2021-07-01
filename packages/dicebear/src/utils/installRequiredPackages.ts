@@ -16,7 +16,7 @@ export async function installRequiredPackages() {
     '@dicebear/collection': pkg.version,
   };
 
-  const installSpinner = ora('Check and install avatars packages').start();
+  const installSpinner = ora('Check and install dicebear packages').start();
 
   try {
     try {
