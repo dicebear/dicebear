@@ -33,7 +33,7 @@
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "node ../build/bin --name DiceBear.Micah"
+    "build": "dicebear project build DiceBear.Micah"
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.6.3",

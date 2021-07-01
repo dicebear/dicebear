@@ -1,5 +1,5 @@
-import { createCjsAndEsConfig } from '@dicebear/build/lib/utils/createCjsAndEsConfig';
-import { createUmdConfig } from '@dicebear/build/lib/utils/createUmdConfig';
+import { createCjsAndEsConfig } from 'dicebear/lib/utils/build/createCjsAndEsConfig';
+import { createUmdConfig } from 'dicebear/lib/utils/build/createUmdConfig';
 
 import sveltePlugin from 'rollup-plugin-svelte';
 import sveltePreprocess from 'svelte-preprocess';

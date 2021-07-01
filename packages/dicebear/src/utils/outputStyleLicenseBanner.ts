@@ -1,3 +1,4 @@
+// @ts-ignore
 import type { Style } from '@dicebear/avatars';
 import chalk from 'chalk';
 import link from 'terminal-link';

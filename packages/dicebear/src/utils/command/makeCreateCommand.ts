@@ -1,11 +1,13 @@
 import { Command } from 'commander';
 import { makeCreateStyleCommand } from './makeCreateStyleCommand';
+// @ts-ignore
 import type { Style } from '@dicebear/avatars';
 
 export async function makeCreateCommand() {
   const cmd = new Command('create');
 
   try {
+    // @ts-ignore
     const { default: omitted, ...styles } = await import('@dicebear/collection');
 
     for (let name of Object.keys(styles)) {

@@ -36,7 +36,7 @@
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist lib",
-    "build": "node ../build/bin --name DiceBear && tsc"
+    "build": "dicebear project build DiceBear && tsc"
   },
   "dependencies": {
     "@types/json-schema": "^7.0.7",
@@ -44,7 +44,7 @@
     "svgson": "^5.2.1"
   },
   "devDependencies": {
-    "@dicebear/build": "^4.6.3",
+    "dicebear": "^4.6.3",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "jest": "^26.6.3",

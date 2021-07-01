@@ -1,7 +1,7 @@
-import type { StyleSchema } from '@dicebear/avatars';
 import Ajv from 'ajv';
+import { JSONSchema7 } from 'json-schema';
 
-export function validateInputBySchema(input: Record<string, string | number>, schema: StyleSchema) {
+export function validateInputBySchema(input: Record<string, string | number>, schema: JSONSchema7) {
   const validator = new Ajv({
     strict: false,
     coerceTypes: true,

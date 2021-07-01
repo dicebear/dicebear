@@ -1,11 +1,12 @@
 import { Option } from 'commander';
-import type { StyleSchema } from '@dicebear/avatars';
+import { JSONSchema7 } from 'json-schema';
 
-export async function getOptionsBySchema(schema: StyleSchema) {
+export async function getOptionsBySchema(schema: JSONSchema7) {
+  // @ts-ignore
   const { utils } = await import('@dicebear/avatars');
 
   const result: InstanceType<typeof Option>[] = [];
-  const aliases = utils.schema.aliases(schema);
+  const aliases: string[][] = utils.schema.aliases(schema);
 
   for (var key in schema.properties) {
     if (false === schema.properties.hasOwnProperty(key)) {

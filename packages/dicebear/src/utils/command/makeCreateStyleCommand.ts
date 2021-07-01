@@ -1,3 +1,4 @@
+// @ts-ignore
 import type { Style } from '@dicebear/avatars';
 import { Command } from 'commander';
 import * as path from 'path';
@@ -10,6 +11,7 @@ import { getOptionsBySchema } from '../getOptionsBySchema';
 import mergeAllOf from 'json-schema-merge-allof';
 
 export async function makeCreateStyleCommand(name: string, style: Style<any>) {
+  // @ts-ignore
   const { createAvatar, schema: coreSchema } = await import('@dicebear/avatars');
 
   const schema = mergeAllOf(

@@ -1,6 +1,7 @@
 # Cache and log files
 .DS_Store
 yarn-error.log
+.rpt2_cache
 
 # Dependencies
 node_modules

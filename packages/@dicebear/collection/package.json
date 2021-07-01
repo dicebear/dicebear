@@ -29,7 +29,7 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "node ../build/bin --name DiceBear.Collection"
+    "build": "dicebear project build DiceBear.Collection"
   },
   "dependencies": {
     "@dicebear/avatars-avataaars-sprites": "~4.6.3",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.6.3",
-    "@dicebear/build": "^4.6.3",
+    "dicebear": "^4.6.3",
     "@tsconfig/recommended": "^1.0.0",
     "@types/node": "^10.11.6",
     "shx": "^0.3.3",

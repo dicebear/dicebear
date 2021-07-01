@@ -46,6 +46,8 @@
       }
     }
   }
+
+  console.log(defaults);
 </script>
 
 <main>

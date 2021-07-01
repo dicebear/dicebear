@@ -1,3 +1,5 @@
+/// <reference types="./types" />
+
 import { Command } from 'commander';
 import updateNotifier from 'update-notifier';
 

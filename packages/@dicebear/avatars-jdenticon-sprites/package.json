@@ -34,14 +34,14 @@
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "node ../build/bin --name DiceBear.Jdenticon"
+    "build": "dicebear project build DiceBear.Jdenticon"
   },
   "dependencies": {
     "jdenticon": "^2.1.1"
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.6.3",
-    "@dicebear/build": "^4.6.3",
+    "dicebear": "^4.6.3",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
