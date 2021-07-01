@@ -2,7 +2,7 @@ import download from 'download';
 import ora from 'ora';
 import validateName from 'validate-npm-package-name';
 import { replaceInFile } from 'replace-in-file';
-import spawn from 'cross-spawn';
+import execa from 'execa';
 import chalk from 'chalk';
 import * as path from 'path';
 import * as fs from 'fs-extra';
@@ -59,12 +59,12 @@ export async function makeProjectNewCommand() {
     const dependencySpinner = ora('Install dependencies').start();
 
     try {
-      await spawn.sync('yarn', ['install'], { cwd: target });
+      await execa('yarn', ['install'], { cwd: target, stdio: 'ignore' });
 
       dependencySpinner.succeed();
     } catch {
       try {
-        await spawn.sync('npm', ['install'], { cwd: target });
+        await execa('npm', ['install'], { cwd: target, stdio: 'ignore' });
 
         dependencySpinner.succeed();
       } catch {

@@ -1,6 +1,6 @@
 {
   "name": "dicebear",
-  "version": "4.7.0-rc.0",
+  "version": "4.6.3",
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "bin": "bin/index.js",
   "repository": {
@@ -28,7 +28,6 @@
     "chalk": "^4.1.1",
     "cli-progress": "^3.9.0",
     "commander": "^7.2.0",
-    "cross-spawn": "^7.0.3",
     "download": "^8.0.0",
     "execa": "^4.1.0",
     "fs-extra": "^9.1.0",
@@ -42,6 +41,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "sade": "^1.7.4",
+    "semver": "^5.7.1",
     "sharp": "^0.28.1",
     "terminal-link": "^2.1.1",
     "update-notifier": "^5.1.0",
@@ -57,6 +57,7 @@
     "@types/json-schema": "^7.0.7",
     "@types/json-schema-merge-allof": "^0.6.0",
     "@types/sade": "^1.7.2",
+    "@types/semver": "^7.3.6",
     "@types/sharp": "^0.28.0",
     "@types/update-notifier": "^5.0.0",
     "@types/validate-npm-package-name": "^3.0.2"

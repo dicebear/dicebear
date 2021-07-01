@@ -15,6 +15,7 @@ import { makeProjectCommand } from './utils/command/makeProjectCommand';
   updateNotifier({ pkg }).notify();
 
   program.version(pkg.version, '-v, --version');
+
   program.addCommand(await makeCreateCommand());
   program.addCommand(await makeProjectCommand());
 

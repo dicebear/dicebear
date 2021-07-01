@@ -3,13 +3,20 @@ import { makeCreateStyleCommand } from './makeCreateStyleCommand';
 import type { Style } from '@dicebear/avatars';
 
 export async function makeCreateCommand() {
-  const { default: omitted, ...styles } = await import('@dicebear/collection');
   const cmd = new Command('create');
 
-  for (let name of Object.keys(styles)) {
-    const style: Style<any> = styles[name as keyof typeof styles];
+  try {
+    const { default: omitted, ...styles } = await import('@dicebear/collection');
 
-    cmd.addCommand(await makeCreateStyleCommand(name, style));
+    for (let name of Object.keys(styles)) {
+      const style: Style<any> = styles[name as keyof typeof styles];
+
+      cmd.addCommand(await makeCreateStyleCommand(name, style));
+    }
+  } catch {
+    cmd.action(() => {
+      throw new Error('Could not load `@dicebear/collection`.');
+    });
   }
 
   return cmd;
