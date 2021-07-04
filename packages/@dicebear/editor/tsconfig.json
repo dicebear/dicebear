@@ -1,9 +1,6 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
-  "compilerOptions": {
-    "declaration": true,
-    "outDir": "./dist",
-    "importsNotUsedAsValues": "remove"
-  },
-  "include": ["./src/index.ts"]
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

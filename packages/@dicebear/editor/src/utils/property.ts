@@ -1,6 +1,6 @@
-import { StyleSchema } from '@dicebear/avatars';
-import { JSONSchema7 } from 'json-schema';
-import { Field } from '../types';
+import type { StyleSchema } from '@dicebear/avatars';
+import type { JSONSchema7 } from 'json-schema';
+import type { Field } from '../types';
 
 export function convertToField(schema: StyleSchema, name: string): Field {
   const property = schema.properties[name];

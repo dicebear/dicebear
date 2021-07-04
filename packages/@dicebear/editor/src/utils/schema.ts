@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
+import type { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 
 export function omitXOf<T extends JSONSchema7Definition>(definition: T, manipulateInput = false): T {
   if (typeof definition === 'boolean') {

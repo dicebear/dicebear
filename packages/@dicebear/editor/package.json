@@ -18,13 +18,14 @@
   "license": "MIT",
   "author": "Florian Körner <contact@florian-koerner.com>",
   "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
+  "svelte": "src/index.js",
   "files": [
     "LICENSE",
     "README.md",
-    "dist"
+    "dist",
+    "types",
+    "src"
   ],
   "scripts": {
     "test": "svelte-check",
@@ -37,14 +38,23 @@
     "svelte": "^3.0.0"
   },
   "devDependencies": {
-    "dicebear": "^4.6.3",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-typescript": "^8.0.0",
     "@tsconfig/svelte": "^1.0.0",
     "@types/json-schema": "^7.0.7",
     "rollup": "^2.3.4",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "sveld": "^0.8.0",
+    "svelte": "^3.0.0",
     "svelte-check": "^1.0.0",
     "svelte-preprocess": "^4.0.0",
-    "svelte-type-generator": "^1.1.0"
+    "svelte-type-generator": "^1.1.0",
+    "tslib": "^2.0.0",
+    "typescript": "^4.0.0"
   },
   "peerDependencies": {
     "@dicebear/avatars": "^4.6.0"

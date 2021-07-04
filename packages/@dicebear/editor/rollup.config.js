@@ -1,36 +1,47 @@
-import { createCjsAndEsConfig } from 'dicebear/lib/utils/build/createCjsAndEsConfig';
-import { createUmdConfig } from 'dicebear/lib/utils/build/createUmdConfig';
-
-import sveltePlugin from 'rollup-plugin-svelte';
+import svelte from 'rollup-plugin-svelte';
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
-import * as path from 'path';
+import typescript from '@rollup/plugin-typescript';
+import sveld from 'sveld';
+import pkg from './package.json';
 
 const production = !process.env.ROLLUP_WATCH;
 
-export default async () => {
-  const pkg = await import(path.resolve(__dirname, 'package.json'));
-
-  const cjsAndEsConfig = createCjsAndEsConfig(pkg);
-  const umdConfig = createUmdConfig('DiceBear.Editor', pkg);
-
-  const svelte = sveltePlugin({
-    preprocess: sveltePreprocess({ sourceMap: !production }),
-    emitCss: false,
-    compilerOptions: {
-      dev: !production,
+export default {
+  input: pkg.svelte,
+  external: ['@dicebear/avatars'],
+  output: {
+    sourcemap: !production,
+    format: 'umd',
+    name: 'DiceBear.Editor',
+    file: pkg.main,
+    globals: {
+      '@dicebear/avatars': 'DiceBear',
     },
-  });
-
-  return [
-    {
-      ...cjsAndEsConfig.input,
-      plugins: [svelte, ...cjsAndEsConfig.input.plugins],
-      output: cjsAndEsConfig.output,
-    },
-    {
-      ...umdConfig.input,
-      plugins: [svelte, ...umdConfig.input.plugins],
-      output: umdConfig.output,
-    },
-  ];
+  },
+  plugins: [
+    svelte({
+      preprocess: sveltePreprocess({ sourceMap: !production }),
+      emitCss: false,
+      compilerOptions: {
+        dev: !production,
+      },
+    }),
+    resolve({
+      browser: true,
+      dedupe: ['svelte'],
+    }),
+    commonjs(),
+    typescript({
+      sourceMap: !production,
+      inlineSources: !production,
+    }),
+    sveld(),
+    production && terser(),
+  ],
+  watch: {
+    clearScreen: false,
+  },
 };

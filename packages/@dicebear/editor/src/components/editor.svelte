@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Style, utils, schema as coreSchema } from '@dicebear/avatars';
+  import { utils, schema as coreSchema } from '@dicebear/avatars';
+  import type { Style } from '@dicebear/avatars';
   import type { Defaults, HiddenFields, Mode } from '../types';
 
   import * as schemaUtil from '../utils/schema';
