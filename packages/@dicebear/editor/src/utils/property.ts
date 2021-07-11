@@ -41,6 +41,7 @@ export function convertToField(schema: StyleSchema, name: string): Field {
       case 'string':
         return {
           type: 'text',
+          pattern: property.pattern,
         };
 
       default:

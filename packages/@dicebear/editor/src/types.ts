@@ -13,6 +13,7 @@ export type Options<O> = {
 
 export type TextField = {
   type: 'text';
+  pattern?: string;
 };
 
 export type NumberField = {
