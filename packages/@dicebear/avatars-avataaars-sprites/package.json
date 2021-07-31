@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-avataaars-sprites",
-  "version": "4.6.9",
+  "version": "4.6.10",
   "description": "avataaars avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -41,7 +41,7 @@
     "@types/json-schema": "^7.0.7"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.6.9",
+    "@dicebear/avatars": "^4.6.10",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
