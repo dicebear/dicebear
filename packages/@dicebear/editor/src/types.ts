@@ -11,27 +11,38 @@ export type Options<O> = {
   hiddenFields?: HiddenFields;
 };
 
-export type TextField = {
+export interface BaseField {
+  name: string;
+  title?: string;
+}
+
+export interface TextField extends BaseField {
   type: 'text';
   pattern?: string;
-};
+}
 
-export type NumberField = {
+export interface NumberField extends BaseField {
   type: 'number';
   min?: number;
   max?: number;
-};
+}
 
-export type SelectField = {
+export interface RangeField extends BaseField {
+  type: 'range';
+  min?: number;
+  max?: number;
+}
+
+export interface SelectField extends BaseField {
   type: 'select';
   options: Array<{
     value: JSONSchema7Type;
     preview: (options: StyleOptions<any>) => string;
   }>;
-};
+}
 
-export type CheckboxField = {
+export interface CheckboxField extends BaseField {
   type: 'checkbox';
-};
+}
 
-export type Field = TextField | NumberField | SelectField | CheckboxField;
+export type Field = TextField | NumberField | RangeField | SelectField | CheckboxField;
