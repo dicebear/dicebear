@@ -20,6 +20,68 @@
   [#123](https://github.com/dicebear/dicebear/issues/123)
 - File sizes reduced by automatically removing unnecessary whitespaces from template strings.
 
+## [4.6.10] - 2021-07-31
+
+### Fixed
+
+- `@dicebear/avatars-avataaars-sprites` Avataaars clotheGraphics doesn't work #135
+
+## [4.6.10] - 2021-07-31
+
+### Fixed
+
+- `@dicebear/avatars-avataaars-sprites` Avataaars clotheGraphics doesn't work #135
+
+## [4.6.9] - 2021-06-23
+
+### Fixed
+
+- `@dicebear/micah` Fixed `facialHair` / `mouth` contrast #132
+
+## [4.6.8] - 2021-06-23
+
+### Fixed
+
+- Reference error #123
+
+## [4.6.7] - 2021-06-23
+
+### Fixed
+
+- `@dicebear/avatars` Aliases from styles were not noticed
+
+### Added
+
+- `@dicebear/micah` `eyeShadowColor` option as a better name for `eyeColor` #130
+
+### Deprecated
+
+- `@dicebear/micah` `eyeColor` option => use `eyeShadowColor` instead #130
+
+## [4.6.6] - 2021-06-23
+
+### Fixed
+
+- `@dicebear/micah` the `dougFunny` hair style is always black #131
+
+## [4.6.5] - 2021-06-22
+
+### Fixed
+
+- `@dicebear/micah` A filter is no longer applied to a color palette with only one color.
+
+## [4.6.4] - 2021-05-16
+
+### Fixed
+
+- `@dicebear/avatars` Regular expressions optimized
+
+## [4.6.3] - 2021-04-23
+
+### Fixed
+
+- `@dicebear/avatars` peer dependency fixed - again
+
 ## [4.6.2] - 2021-04-21
 
 ### Fixed

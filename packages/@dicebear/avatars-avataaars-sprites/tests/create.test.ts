@@ -13,6 +13,7 @@ const data: Array<StyleOptions<style.Options>> = [
   { seed, width: 100 },
   { seed, height: 100 },
   { seed, height: 100 },
+  { seed, clothes: ['graphicShirt'], clotheGraphics: ['skullOutline'] },
 ];
 
 data.forEach((options, key) => {
