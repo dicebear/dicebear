@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.10] - 2021-07-31
+
+### Fixed
+
+- `@dicebear/avatars-avataaars-sprites` Avataaars clotheGraphics doesn't work #135
+
 ## [4.6.9] - 2021-06-23
 
 ### Fixed
