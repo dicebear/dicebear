@@ -8,27 +8,33 @@
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
-    "clear": "docusaurus clear",
     "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids"
+    "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@dicebear/avatars": "^4.6.3",
-    "@dicebear/collection": "^4.6.3",
-    "@dicebear/editor": "^4.6.3",
-    "@docusaurus/core": "2.0.0-beta.0",
-    "@docusaurus/preset-classic": "2.0.0-beta.0",
+    "@dicebear/avatars": "^4.6.0",
+    "@dicebear/avatars-avataaars-sprites": "^4.6.0",
+    "@dicebear/avatars-bottts-sprites": "^4.6.0",
+    "@dicebear/avatars-female-sprites": "^4.6.0",
+    "@dicebear/avatars-gridy-sprites": "^4.6.0",
+    "@dicebear/avatars-human-sprites": "^4.6.0",
+    "@dicebear/avatars-identicon-sprites": "^4.6.0",
+    "@dicebear/avatars-initials-sprites": "^4.6.0",
+    "@dicebear/avatars-jdenticon-sprites": "^4.6.0",
+    "@dicebear/avatars-male-sprites": "^4.6.0",
+    "@dicebear/micah": "^4.6.0",
+    "@docusaurus/core": "2.0.0-alpha.73",
+    "@docusaurus/preset-classic": "2.0.0-alpha.73",
     "@mdx-js/react": "^1.6.21",
-    "@n8tb1t/use-scroll-position": "^2.0.3",
-    "@primer/octicons-react": "^13.0.0",
-    "canvg": "^3.0.7",
+    "bootstrap": "^4.5.3",
     "clsx": "^1.1.1",
-    "qs": "^6.10.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "svelte-adapter": "^0.4.0",
-    "uniqid": "^5.3.0"
+    "docusaurus-plugin-sass": "^0.1.11",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-icons": "^4.1.0",
+    "react-tooltip": "^4.2.11",
+    "reactstrap": "^8.7.1",
+    "sass": "^1.35.1"
   },
   "browserslist": {
     "production": [
@@ -43,19 +49,14 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.0.0-beta.0",
+    "@docusaurus/module-type-aliases": "^2.0.0-alpha.73",
     "@tsconfig/docusaurus": "^1.0.2",
-    "@types/qs": "^6.9.6",
-    "@types/react": "^17.0.4",
-    "@types/react-helmet": "^6.1.1",
-    "@types/react-router-dom": "^5.1.7",
-    "@types/uniqid": "^5.3.0",
-    "autoprefixer": "^10.2.5",
-    "postcss": "^8.2.15",
-    "postcss-for": "^2.1.1",
-    "postcss-import": "^14.0.2",
-    "postcss-preset-env": "^6.7.0",
-    "tailwindcss": "^2.1.2",
-    "typescript": "^4.2.4"
+    "@types/json-schema": "^7.0.7",
+    "@types/react": "^17.0.0",
+    "@types/react-helmet": "^6.1.0",
+    "@types/react-router-dom": "^5.1.6",
+    "btoa": "^1.2.1",
+    "buffer": "^6.0.3",
+    "typescript": "^4.1.2"
   }
 }

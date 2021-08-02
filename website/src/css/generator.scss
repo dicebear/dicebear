@@ -1,0 +1,78 @@
+.generator {
+  position: relative;
+  background: #19b5fe;
+  padding: 56px 10px 0;
+  margin: 0 -10px 20px;
+  z-index: 1;
+  top: 0;
+}
+
+.generator--options {
+  padding-top: 0;
+  z-index: 0;
+}
+
+.generator-body {
+  position: relative;
+  background: #fff;
+  border-radius: 0.25rem;
+  padding: 15px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+
+  .dropdown-toggle {
+    border-color: $gray-400;
+
+    &:hover {
+      border-color: $secondary;
+    }
+  }
+
+  .form-group:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.generator-avatar {
+  position: absolute;
+  left: calc(50% - 50px);
+  padding: 4px;
+  border-radius: 0.3rem;
+  top: -40px;
+  background: #19b5fe;
+  z-index: 1;
+
+  img {
+    display: inline-block;
+    border-radius: 0.25rem;
+    width: 100px;
+    background: #fff;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+}
+
+.generator-head {
+  margin-bottom: 60px;
+  line-height: 1;
+
+  a {
+    color: $gray-400;
+    transition: $transition-base;
+
+    &:hover {
+      color: $gray-500;
+    }
+  }
+}
+
+.generator-create-your-own {
+  text-align: center;
+  color: #fff;
+  font-size: $lead-font-size;
+  font-weight: $lead-font-weight;
+  font-style: italic;
+
+  img {
+    margin-left: 16px;
+    vertical-align: -2px;
+  }
+}

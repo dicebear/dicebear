@@ -1,61 +1,70 @@
-/** @type {import('@docusaurus/types').DocusaurusConfig} */
+const path = require('path');
+
 module.exports = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  url: 'https://your-docusaurus-test-site.com',
+  title: 'DiceBear Avatars',
+  tagline: 'DiceBear is an avatar library for designers and developers.',
+  url: 'https://avatars.dicebear.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  favicon: 'favicon.ico',
+  organizationName: 'DiceBear', // Usually your GitHub org/user name.
+  projectName: 'avatars', // Usually your repo name.
   themeConfig: {
+    sidebarCollapsible: false,
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
+    },
     navbar: {
-      title: 'My Site',
+      title: 'DiceBear Avatars',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'DiceBear Avatars',
+        src: 'img/favicon.svg',
       },
       items: [
         {
-          type: 'doc',
-          docId: 'intro',
+          to: 'docs',
+          activeBasePath: 'docs',
+          label: 'Docs',
           position: 'left',
-          label: 'Tutorial',
         },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          to: 'styles',
+          activeBasePath: 'styles',
+          label: 'Styles',
+          position: 'left',
+        },
+        {
+          to: 'integrations/cli',
+          activeBasePath: 'integrations',
+          label: 'Integrations',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/DiceBear/avatars',
           label: 'GitHub',
           position: 'right',
         },
       ],
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
         {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'GitHub',
+              href: 'https://github.com/DiceBear/avatars',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Status',
+              href: 'https://dicebear.betteruptime.com/',
             },
             {
               label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              href: 'https://twitter.com/dicebearcom',
             },
           ],
         },
@@ -63,13 +72,30 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: 'Licenses',
+              to: '/licenses',
+            },
+            {
+              label: 'Frequently Asked Questions',
+              to: '/faq',
+            },
+          ],
+        },
+        {
+          title: 'Legal',
+          items: [
+            {
+              label: 'Privacy Policy',
+              to: '/legal/privacy-policy',
+            },
+            {
+              label: 'Legal Notice / Impressum',
+              to: '/legal/legal-notice',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Documentation realized with <a href="https://v2.docusaurus.io/">docusaurus</a>, <a href="https://getbootstrap.com/">bootstrap</a> and <a href="https://octicons.github.com/">octicons</a>.`,
     },
   },
   presets: [
@@ -79,13 +105,14 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/',
+          editUrl: 'https://github.com/DiceBear/avatars/edit/main/website/',
+          routeBasePath: '/',
         },
         theme: {
-          customCss: require.resolve('./src/css/index.css'),
+          customCss: require.resolve('./src/css/index.scss'),
         },
       },
     ],
   ],
-  plugins: [require.resolve('./plugins/tailwindcss-plugin')],
+  plugins: ['docusaurus-plugin-sass', path.resolve(__dirname, 'src/plugins/buffer-plugin')],
 };
