@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-initials-sprites",
-  "version": "4.6.3",
+  "version": "4.7.0",
   "description": "Initials avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -41,11 +41,11 @@
     "initials": "^3.0.1"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.6.3",
-    "dicebear": "^4.6.3",
+    "@dicebear/avatars": "^4.7.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
+    "dicebear": "^4.7.0",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",

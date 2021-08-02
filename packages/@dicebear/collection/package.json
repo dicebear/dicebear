@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/collection",
-  "version": "4.6.3",
+  "version": "4.7.0",
   "description": "All offical dicebear avatar styles in one package",
   "keywords": [
     "dicebear"
@@ -32,22 +32,22 @@
     "build": "dicebear project build DiceBear.Collection"
   },
   "dependencies": {
-    "@dicebear/avatars-avataaars-sprites": "~4.6.3",
-    "@dicebear/avatars-bottts-sprites": "~4.6.3",
-    "@dicebear/avatars-female-sprites": "~4.6.3",
-    "@dicebear/avatars-gridy-sprites": "~4.6.3",
-    "@dicebear/avatars-human-sprites": "~4.6.3",
-    "@dicebear/avatars-identicon-sprites": "~4.6.3",
-    "@dicebear/avatars-initials-sprites": "~4.6.3",
-    "@dicebear/avatars-jdenticon-sprites": "~4.6.3",
-    "@dicebear/avatars-male-sprites": "~4.6.3",
-    "@dicebear/micah": "~4.6.3"
+    "@dicebear/avatars-avataaars-sprites": "^4.7.0",
+    "@dicebear/avatars-bottts-sprites": "^4.7.0",
+    "@dicebear/avatars-female-sprites": "^4.7.0",
+    "@dicebear/avatars-gridy-sprites": "^4.7.0",
+    "@dicebear/avatars-human-sprites": "^4.7.0",
+    "@dicebear/avatars-identicon-sprites": "^4.7.0",
+    "@dicebear/avatars-initials-sprites": "^4.7.0",
+    "@dicebear/avatars-jdenticon-sprites": "^4.7.0",
+    "@dicebear/avatars-male-sprites": "^4.7.0",
+    "@dicebear/micah": "^4.7.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.6.3",
-    "dicebear": "^4.6.3",
+    "@dicebear/avatars": "^4.7.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/node": "^10.11.6",
+    "dicebear": "^4.7.0",
     "shx": "^0.3.3",
     "typescript": "^4.2.3"
   },
