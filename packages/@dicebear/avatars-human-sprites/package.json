@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-human-sprites",
-  "version": "4.7.1",
+  "version": "4.7.0",
   "description": "Pixel art human avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -40,15 +40,15 @@
     "build": "dicebear project build DiceBear.Human"
   },
   "dependencies": {
-    "@dicebear/avatars-female-sprites": "^4.7.1",
-    "@dicebear/avatars-male-sprites": "^4.7.1"
+    "@dicebear/avatars-female-sprites": "^4.7.0",
+    "@dicebear/avatars-male-sprites": "^4.7.0"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.7.1",
+    "@dicebear/avatars": "^4.7.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear": "^4.7.1",
+    "dicebear": "^4.7.0",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
