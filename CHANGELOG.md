@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.7.1] - 2021-08-02
+
+### Fixed
+
+- `dicebear` missing files in package
+
 ## [4.7.0] - 2021-08-02
 
 ### Added

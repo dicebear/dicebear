@@ -11,6 +11,12 @@
   "author": "Florian Körner <contact@florian-koerner.com>",
   "license": "MIT",
   "private": false,
+  "files": [
+    "bin",
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf lib",
