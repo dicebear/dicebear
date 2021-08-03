@@ -117,7 +117,7 @@ type RequestCollection = Record<
     let isHit = cols[0] === 'HIT';
     let statusCode = parseInt(cols[1]);
     let isError = statusCode >= 400;
-    let apiMatch = cols[7].match(/(\d+\.\d+)\/(?:v2|api)/);
+    let apiMatch = cols[7].match(/(\d+\.\d+)?\/(?:v2|api)/);
     let isDocs = docsSites.includes(cols[7]);
 
     if (null === apiMatch && false === isDocs) {
