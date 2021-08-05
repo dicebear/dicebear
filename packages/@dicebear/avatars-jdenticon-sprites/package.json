@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-jdenticon-sprites",
-  "version": "4.7.1",
+  "version": "4.7.2",
   "description": "Jdenticon avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -40,7 +40,7 @@
     "jdenticon": "^2.1.1"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.7.1",
+    "@dicebear/avatars": "^4.7.2",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
