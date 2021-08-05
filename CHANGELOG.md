@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.7.2] - 2021-08-05
+
+### Fixed
+
+- `dicebear` Fixed dependency management
+
 ## [4.7.1] - 2021-08-02
 
 ### Fixed
