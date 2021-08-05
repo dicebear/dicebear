@@ -5,36 +5,42 @@ slug: /integrations/cli
 
 With the official DiceBear CLI you can create hundreds of avatars in no time.
 
+## Installation
+
+```
+npm install -g dicebear
+```
+
 ## Create avatars
 
 #### List available avatars styles
 
 ```
-npx dicebear create
+dicebear create --help
 ```
 
 ### List avatar style options
 
 ```
-npx dicebear create <avatar-style> --help
+dicebear create <avatar-style> --help
 ```
 
 ### Create avatar in SVG format
 
 ```
-npx dicebear create <avatar-style>
+dicebear create <avatar-style>
 ```
 
 ### Create avatar in PNG or JPG format
 
 ```
-npx dicebear create <avatar-style> --format <png|jpg>
+dicebear create <avatar-style> --format <png|jpg>
 ```
 
 ### Create more than one avatar
 
 ```
-npx dicebear create <avatar-style> --count <count>
+dicebear create <avatar-style> --count <count>
 ```
 
 ## Information
@@ -42,19 +48,19 @@ npx dicebear create <avatar-style> --count <count>
 ### Show CLI version
 
 ```
-npx dicebear --version
+dicebear --version
 ```
 
-## Manage own avatar style (beta)
+## Manage own avatar style
 
 ### Create new avatar style
 
 ```
-npx dicebear project new <package-name>
+dicebear project new <package-name>
 ```
 
 ### Build avatar style
 
 ```
-npx dicebear project build <umd-name>
+dicebear project build <umd-name>
 ```
