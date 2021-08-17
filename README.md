@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://dicebear.com/">
+  <a href="https://dicebear.com/" target="_blank">
     Read Documentation
   </a>
 </p>
