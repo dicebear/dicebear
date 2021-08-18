@@ -1,5 +1,7 @@
 <h1 align="center"><img src="https://dicebear.com/api/male/seed.svg?mood=happy" width="124" /> <br />DiceBear</h1>
-<p align="center"><strong>DiceBear is an avatar library for designers and developers.</strong></p>
+<p align="center"><strong>DiceBear is an avatar library for designers and developers.</strong> 
+<br />
+And best of all, We provide a simple and free HTTP API that you can use right away!</p>
 
 <p align="center">
     <a href="https://github.com/dicebear/avatars/blob/master/LICENSE" target="_blank">
