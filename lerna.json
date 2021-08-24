@@ -1,8 +1,6 @@
 {
   "npmClient": "npm",
-  "packages": [
-    "packages/@dicebear/*"
-  ],
+  "packages": ["packages/*", "packages/@dicebear/*"],
   "concurrency": 1,
   "version": "4.7.2"
 }

@@ -37,7 +37,7 @@
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "dicebear project build DiceBear.Human"
+    "build": "dicebear-project build DiceBear.Human"
   },
   "dependencies": {
     "@dicebear/avatars-female-sprites": "^4.7.2",
@@ -48,7 +48,7 @@
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear": "^4.7.1",
+    "dicebear-project": "^4.7.2",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",

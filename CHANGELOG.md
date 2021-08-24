@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.7.3] - 2021-08-25
+
+### Added
+
+- `dicebear-project` Cli to create new dicebear avatar styles
+
+### Changed
+
+- `dicebear` Moved cli to mono repository
+
+### Deprecated
+
+- `dicebear` project commands are deprecated. Use new `dicebear-project` cli instead.
+
 ## [4.7.2] - 2021-08-05
 
 ### Fixed

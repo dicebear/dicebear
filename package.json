@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": {
     "packages": [
+      "packages/*",
       "packages/@dicebear/*",
       "scripts",
       "website"
@@ -11,7 +12,7 @@
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
-    "publish": "lerna publish --force-publish"
+    "force-publish": "lerna publish --force-publish"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
