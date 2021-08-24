@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/micah",
-  "version": "4.7.2",
+  "version": "4.7.3",
   "description": "Micah avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -36,7 +36,7 @@
     "build": "dicebear-project build DiceBear.Micah"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.7.2",
+    "@dicebear/avatars": "^4.7.3",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-typescript": "^8.2.1",
