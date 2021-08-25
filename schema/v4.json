@@ -3,7 +3,7 @@
   "definitions": {
     "color": {
       "type": "string",
-      "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})+$"
+      "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
     },
     "colorCollection": {
       "type": "string",
