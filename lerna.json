@@ -5,5 +5,5 @@
     "packages/@dicebear/*"
   ],
   "concurrency": 1,
-  "version": "4.7.3"
+  "version": "4.7.4"
 }
