@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.7.4] - 2021-08-25
+
+### Fixed
+
+- `@dicebear/avatars` Fixed color regex
+- `dicebear-project` Fixed missing dependency `json-schema-to-typescript`.
+
 ## [4.7.3] - 2021-08-25
 
 ### Added

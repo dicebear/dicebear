@@ -35,6 +35,7 @@
     "download": "^8.0.0",
     "execa": "^4.1.0",
     "fs-extra": "^9.1.0",
+    "json-schema-to-typescript": "^10.1.4",
     "ora": "^5.4.0",
     "replace-in-file": "^6.2.0",
     "rollup": "^2.45.2",
