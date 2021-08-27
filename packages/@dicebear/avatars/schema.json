@@ -16,16 +16,19 @@
     },
     "width": {
       "title": "Width",
+      "description": "@deprecated use size instead",
       "type": "integer",
       "minimum": 1
     },
     "height": {
       "title": "Height",
+      "description": "@deprecated use size instead",
       "type": "integer",
       "minimum": 1
     },
     "margin": {
       "title": "Margin",
+      "description": "@deprecated use scale instead",
       "type": "integer",
       "minimum": 0,
       "maximum": 25,
@@ -68,6 +71,25 @@
       "description": "@deprecated",
       "type": "string"
     },
+    "flip": {
+      "title": "Flip",
+      "type": "boolean",
+      "default": false
+    },
+    "rotate": {
+      "title": "Rotate",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 360,
+      "default": 0
+    },
+    "scale": {
+      "title": "Scale",
+      "type": "integer",
+      "minimum": 50,
+      "maximum": 150,
+      "default": 100
+    },
     "radius": {
       "$ref": "#/definitions/radius"
     },
@@ -85,6 +107,11 @@
     },
     "h": {
       "$ref": "#/definitions/height"
+    },
+    "size": {
+      "title": "Size",
+      "type": "integer",
+      "minimum": 1
     },
     "margin": {
       "$ref": "#/definitions/margin"

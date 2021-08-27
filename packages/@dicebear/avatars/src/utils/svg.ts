@@ -190,36 +190,31 @@ export function getViewBox(result: StyleCreateResult) {
   };
 }
 
-export function addMargin<O extends Options>(result: StyleCreateResult, options: O) {
-  if (undefined === options.margin) {
+/**
+ * @deprecated use addScale instead
+ */
+export function addMargin<O extends Options>(result: StyleCreateResult, options: O | number) {
+  const margin = typeof options === 'number' ? options : options.margin ?? 0;
+
+  return addScale(result, margin * 2);
+}
+
+/**
+ * @deprecated use addViewboxMask instead
+ */
+export function addRadius<O extends Options>(result: StyleCreateResult, options: O) {
+  if (undefined === options.radius) {
     return result.body;
   }
 
-  let viewBox = getViewBox(result);
-  let translateX = (viewBox.width * options.margin) / 100;
-  let translateY = (viewBox.height * options.margin) / 100;
-  let scale = 1 - (options.margin * 2) / 100;
-  let rectWidth = viewBox.width.toString();
-  let rectHeight = viewBox.height.toString();
-  let rectX = viewBox.x.toString();
-  let rectY = viewBox.y.toString();
-
-  return `
-    <g transform="${`translate(${translateX}, ${translateY})`}">
-      <g transform="${`scale(${scale})`}">
-        <rect fill="none" width="${rectWidth}" height="${rectHeight}" x="${rectX}" y="${rectY}" />
-        ${result.body}
-      </g>
-    </g>
-  `;
+  return addViewboxMask(result, options.radius);
 }
 
+/**
+ * @deprecated
+ */
 export function addBackgroundColor<O extends Options>(result: StyleCreateResult, options: O) {
-  let viewBox = getViewBox(result);
-  let width = viewBox.width.toString();
-  let height = viewBox.height.toString();
-  let x = viewBox.x.toString();
-  let y = viewBox.y.toString();
+  let { width, height, x, y } = getViewBox(result);
 
   return `
     <rect fill="${options.backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />
@@ -227,18 +222,63 @@ export function addBackgroundColor<O extends Options>(result: StyleCreateResult,
   `;
 }
 
-export function addRadius<O extends Options>(result: StyleCreateResult, options: O) {
-  if (undefined === options.radius) {
-    return result.body;
-  }
-
+export function getTransformHelperRectDimensions(result: StyleCreateResult) {
   let viewBox = getViewBox(result);
-  let width = viewBox.width.toString();
-  let height = viewBox.height.toString();
-  let rx = ((viewBox.width * options.radius) / 100).toString();
-  let ry = ((viewBox.height * options.radius) / 100).toString();
-  let x = viewBox.x.toString();
-  let y = viewBox.y.toString();
+
+  let width = viewBox.width * 100;
+  let height = viewBox.height * 100;
+
+  let x = (width / 2) * -1 - viewBox.width / 2;
+  let y = (height / 2) * -1 - viewBox.height / 2;
+
+  return {
+    width,
+    height,
+    x,
+    y,
+  };
+}
+
+export function addTransformHelperRect(result: StyleCreateResult, backgroundColor: string) {
+  let { width, height, x, y } = getTransformHelperRectDimensions(result);
+
+  return `
+    <rect fill="${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />
+    ${result.body}
+  `;
+}
+
+export function addScale(result: StyleCreateResult, scale: number) {
+  return `
+    <g transform="scale(${scale / 100})" transform-origin="50% 50%">
+      ${result.body}
+    </g>
+  `;
+}
+
+export function addRotate(result: StyleCreateResult, rotate: number) {
+  return `
+    <g transform="rotate(${rotate})" transform-origin="50% 50%">
+      ${result.body}
+    </g>
+  `;
+}
+
+export function addFlip(result: StyleCreateResult) {
+  let viewBox = getViewBox(result);
+
+  return `
+    <g transform="scale(-1 1) translate(${viewBox.width * -1} 0)">
+      ${result.body}
+    </g>
+  `;
+}
+
+export function addViewboxMask(result: StyleCreateResult, radius: number) {
+  let { width, height, x, y } = getViewBox(result);
+
+  let rx = radius ? (width * radius) / 100 : 0;
+  let ry = radius ? (height * radius) / 100 : 0;
 
   return `
     <mask id="avatarsRadiusMask">

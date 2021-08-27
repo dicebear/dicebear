@@ -7,6 +7,8 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
   let prngInstance = utils.prng.create(options.seed);
   let result = style.create({ prng: prngInstance, options });
 
+  result.body = utils.svg.addTransformHelperRect(result, options.backgroundColor ?? 'none');
+
   if (options.width) {
     result.attributes.width = options.width.toString();
   }
@@ -15,17 +17,28 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     result.attributes.height = options.height.toString();
   }
 
+  if (options.size) {
+    result.attributes.width = options.size.toString();
+    result.attributes.height = options.size.toString();
+  }
+
   if (options.margin) {
     result.body = utils.svg.addMargin(result, options);
   }
 
-  if (options.backgroundColor) {
-    result.body = utils.svg.addBackgroundColor(result, options);
+  if (options.scale && options.scale !== 100) {
+    result.body = utils.svg.addScale(result, options.scale);
   }
 
-  if (options.radius) {
-    result.body = utils.svg.addRadius(result, options);
+  if (options.flip) {
+    result.body = utils.svg.addFlip(result);
   }
+
+  if (options.rotate) {
+    result.body = utils.svg.addRotate(result, options.rotate);
+  }
+
+  result.body = utils.svg.addViewboxMask(result, options.radius ?? 0);
 
   const hasMetadata = Boolean(result.head?.match(/<metadata([^>]*)>/));
 
