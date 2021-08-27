@@ -8,3 +8,5 @@ export * as initials from '@dicebear/avatars-initials-sprites';
 export * as jdenticon from '@dicebear/avatars-jdenticon-sprites';
 export * as male from '@dicebear/avatars-male-sprites';
 export * as micah from '@dicebear/micah';
+export * as croodles from '@dicebear/croodles';
+export * as croodlesNeutral from '@dicebear/croodles-neutral';

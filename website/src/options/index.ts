@@ -1,3 +1,5 @@
+import SpriteCollection from '../types/spriteCollection';
+
 import avataaarsOptions from './avataaars';
 import botttsOptions from './bottts';
 import femaleOptions from './female';
@@ -8,78 +10,82 @@ import initialsOptions from './initials';
 import jdenticonOptions from './jdenticon';
 import maleOptions from './male';
 import micahOptions from './micah';
+import croodlesOptions from './croodles';
+import croodlesNeutralOptions from './croodlesNeutral';
 
-import * as avataaars from '@dicebear/avatars-avataaars-sprites';
-import * as bottts from '@dicebear/avatars-bottts-sprites';
-import * as female from '@dicebear/avatars-female-sprites';
-import * as human from '@dicebear/avatars-human-sprites';
-import * as gridy from '@dicebear/avatars-gridy-sprites';
-import * as identicon from '@dicebear/avatars-identicon-sprites';
-import * as initials from '@dicebear/avatars-initials-sprites';
-import * as jdenticon from '@dicebear/avatars-jdenticon-sprites';
-import * as male from '@dicebear/avatars-male-sprites';
-import * as micah from '@dicebear/micah';
-import SpriteCollection from '../types/spriteCollection';
+import * as collection from '@dicebear/collection';
 
 export default [
   {
     id: 'male',
     name: '@dicebear/avatars-male-sprites',
-    style: male,
+    style: collection.male,
     options: maleOptions,
   },
   {
     id: 'female',
     name: '@dicebear/avatars-female-sprites',
-    style: female,
+    style: collection.female,
     options: femaleOptions,
   },
   {
     id: 'human',
     name: '@dicebear/avatars-human-sprites',
-    style: human,
+    style: collection.human,
     options: humanOptions,
   },
   {
     id: 'avataaars',
     name: '@dicebear/avatars-avataaars-sprites',
-    style: avataaars,
+    style: collection.avataaars,
     options: avataaarsOptions,
   },
   {
     id: 'bottts',
     name: '@dicebear/avatars-bottts-sprites',
-    style: bottts,
+    style: collection.bottts,
     options: botttsOptions,
   },
   {
     id: 'micah',
     name: '@dicebear/micah',
-    style: micah,
+    style: collection.micah,
     options: micahOptions,
+  },
+  {
+    id: 'croodles',
+    name: '@dicebear/croodles',
+    style: collection.croodles,
+    options: croodlesOptions,
+  },
+  {
+    id: 'croodles-neutral',
+    name: '@dicebear/croodles-neutral',
+    style: collection.croodlesNeutral,
+    options: croodlesNeutralOptions,
   },
   {
     id: 'initials',
     name: '@dicebear/avatars-initials-sprites',
-    style: initials,
+    style: collection.initials,
     options: initialsOptions,
   },
   {
     id: 'identicon',
     name: '@dicebear/avatars-identicon-sprites',
-    style: identicon,
+    style: collection.identicon,
     options: identiconOptions,
   },
   {
     id: 'jdenticon',
     name: '@dicebear/avatars-jdenticon-sprites',
-    style: jdenticon,
+    style: collection.jdenticon,
     options: jdenticonOptions,
   },
   {
     id: 'gridy',
     name: '@dicebear/avatars-gridy-sprites',
-    style: gridy,
+    style: collection.gridy,
     options: gridyOptions,
   },
 ] as SpriteCollection[];

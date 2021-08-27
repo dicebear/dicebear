@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.8.0] - 2021-08-27
+
+### Added
+
+- `@dicebear/croodles` New Avatar style by vijay verma.
+- `@dicebear/croodles-neutral` New Avatar style by vijay verma.
+
 ## [4.7.4] - 2021-08-25
 
 ### Fixed
