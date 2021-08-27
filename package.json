@@ -5,6 +5,7 @@
     "packages": [
       "packages/*",
       "packages/@dicebear/*",
+      "plugins/*",
       "scripts",
       "website"
     ]

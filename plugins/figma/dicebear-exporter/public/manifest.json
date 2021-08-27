@@ -1,0 +1,8 @@
+{
+  "name": "DiceBear Exporter",
+  "id": "1005765655729342787",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "index.html",
+  "editorType": ["figma"]
+}
