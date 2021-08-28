@@ -37,6 +37,7 @@ export const style: Style<Options> = {
     }
 
     const colors: ColorPickCollection = {
+      'base': pickColor(prng, 'base', options.baseColor ?? []),
       'top': pickColor(prng, 'top', options.topColor ?? []),
     }
 

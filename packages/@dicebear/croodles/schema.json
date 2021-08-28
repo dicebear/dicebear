@@ -269,6 +269,27 @@
         "variant01"
       ]
     },
+    "baseColor": {
+      "title": "Base Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "transparent",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "transparent"
+      ]
+    },
     "topColor": {
       "title": "Top Color",
       "type": "array",
