@@ -12,7 +12,6 @@ const data: Array<StyleOptions<style.Options>> = [
   { seed, radius: 25 },
   { seed, width: 100 },
   { seed, height: 100 },
-  { seed, height: 100 },
   { seed, clothes: ['graphicShirt'], clotheGraphics: ['skullOutline'] },
 ];
 

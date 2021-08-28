@@ -16,7 +16,6 @@
 - `@dicebear/avatars` `margin` option is deprecated. Use `scale` instead.
 - `@dicebear/avatars` SVG Util `addMargin` is deprecated. Use `addScale` instead.
 - `@dicebear/avatars` SVG Util `addRadius` is deprecated. Use `addViewboxMask` instead.
-- `@dicebear/avatars` SVG Util `addBackgroundColor` is deprecated.
 
 ## [4.7.4] - 2021-08-25
 

@@ -7,27 +7,23 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
   let prngInstance = utils.prng.create(options.seed);
   let result = style.create({ prng: prngInstance, options });
 
-  result.body = utils.svg.addTransformHelperRect(result, options.backgroundColor ?? 'none');
-
-  if (options.width) {
-    result.attributes.width = options.width.toString();
-  }
-
-  if (options.height) {
-    result.attributes.height = options.height.toString();
-  }
-
   if (options.size) {
     result.attributes.width = options.size.toString();
     result.attributes.height = options.size.toString();
-  }
+  } else {
+    if (options.width) {
+      result.attributes.width = options.width.toString();
+    }
 
-  if (options.margin) {
-    result.body = utils.svg.addMargin(result, options);
+    if (options.height) {
+      result.attributes.height = options.height.toString();
+    }
   }
 
   if (options.scale && options.scale !== 100) {
     result.body = utils.svg.addScale(result, options.scale);
+  } else if (options.margin) {
+    result.body = utils.svg.addMargin(result, options);
   }
 
   if (options.flip) {
@@ -36,6 +32,10 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
 
   if (options.rotate) {
     result.body = utils.svg.addRotate(result, options.rotate);
+  }
+
+  if (options.backgroundColor) {
+    result.body = utils.svg.addBackgroundColor(result, options.backgroundColor);
   }
 
   result.body = utils.svg.addViewboxMask(result, options.radius ?? 0);

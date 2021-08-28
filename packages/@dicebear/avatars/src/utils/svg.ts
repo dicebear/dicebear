@@ -210,37 +210,10 @@ export function addRadius<O extends Options>(result: StyleCreateResult, options:
   return addViewboxMask(result, options.radius);
 }
 
-/**
- * @deprecated
- */
-export function addBackgroundColor<O extends Options>(result: StyleCreateResult, options: O) {
+export function addBackgroundColor<O extends Options>(result: StyleCreateResult, options: O | string) {
   let { width, height, x, y } = getViewBox(result);
 
-  return `
-    <rect fill="${options.backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />
-    ${result.body}
-  `;
-}
-
-export function getTransformHelperRectDimensions(result: StyleCreateResult) {
-  let viewBox = getViewBox(result);
-
-  let width = viewBox.width * 100;
-  let height = viewBox.height * 100;
-
-  let x = (width / 2) * -1 - viewBox.width / 2;
-  let y = (height / 2) * -1 - viewBox.height / 2;
-
-  return {
-    width,
-    height,
-    x,
-    y,
-  };
-}
-
-export function addTransformHelperRect(result: StyleCreateResult, backgroundColor: string) {
-  let { width, height, x, y } = getTransformHelperRectDimensions(result);
+  let backgroundColor = typeof options === 'string' ? options : options.backgroundColor ?? 'transparent';
 
   return `
     <rect fill="${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />
@@ -249,26 +222,35 @@ export function addTransformHelperRect(result: StyleCreateResult, backgroundColo
 }
 
 export function addScale(result: StyleCreateResult, scale: number) {
+  let { width, height, x, y } = getViewBox(result);
+
+  let percent = (scale - 100) / 100;
+
+  let translateX = (width / 2 + x) * percent * -1;
+  let translateY = (height / 2 + y) * percent * -1;
+
   return `
-    <g transform="scale(${scale / 100})" transform-origin="50% 50%">
+    <g transform="translate(${translateX} ${translateY}) scale(${scale / 100})">
       ${result.body}
     </g>
   `;
 }
 
 export function addRotate(result: StyleCreateResult, rotate: number) {
+  let { width, height, x, y } = getViewBox(result);
+
   return `
-    <g transform="rotate(${rotate})" transform-origin="50% 50%">
+    <g transform="rotate(${rotate}, ${width / 2 + x}, ${height / 2 + y})">
       ${result.body}
     </g>
   `;
 }
 
 export function addFlip(result: StyleCreateResult) {
-  let viewBox = getViewBox(result);
+  let { width, x } = getViewBox(result);
 
   return `
-    <g transform="scale(-1 1) translate(${viewBox.width * -1} 0)">
+    <g transform="scale(-1 1) translate(${width * -1 - x * 2} 0)">
       ${result.body}
     </g>
   `;

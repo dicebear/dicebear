@@ -5,13 +5,17 @@ import * as path from 'path';
 
 const seed = 'test';
 const data: Array<StyleOptions<{}>> = [
-  { seed },
   { seed, backgroundColor: '#FF0000' },
   { seed, backgroundColor: '#FF0000', margin: 10 },
   { seed, backgroundColor: '#FF0000', margin: 10, radius: 25 },
-  { seed, width: 100 },
-  { seed, height: 100 },
-  { seed, width: 100, height: 100 },
+  { seed, backgroundColor: '#FF0000', width: 100 },
+  { seed, backgroundColor: '#FF0000', height: 100 },
+  { seed, backgroundColor: '#FF0000', width: 100, height: 100 },
+  { seed, backgroundColor: '#FF0000', rotate: 90 },
+  { seed, backgroundColor: '#FF0000', scale: 50 },
+  { seed, backgroundColor: '#FF0000', flip: true },
+  { seed, backgroundColor: '#FF0000', size: 100 },
+  { seed, backgroundColor: '#FF0000', size: 100, rotate: 120, scale: 50, flip: true, radius: 25 },
 ];
 
 const style: Style<{}> = {
@@ -19,10 +23,15 @@ const style: Style<{}> = {
   schema: {},
   create: () => ({
     attributes: {
-      viewBox: '0 0 1 1',
+      viewBox: '-25 -25 100 100',
       version: '1.1',
     },
-    body: `<text x="50%" y="50%" style=" font-family: Arial,sans-serif; font-size: 0.5px" fill="#000" text-anchor="middle" dy="0.178">FK</text>`,
+    body: `
+      <rect width="25" height="25" fill="#00FFFF"/>
+      <rect x="25" width="25" height="25" fill="#FFFF00"/>
+      <rect y="25" width="25" height="25" fill="#FF00FF"/>
+      <rect x="25" y="25" width="25" height="25" fill="black"/>
+    `,
   }),
 };
 
