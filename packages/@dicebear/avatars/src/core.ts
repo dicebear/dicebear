@@ -35,7 +35,11 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
   }
 
   if (options.backgroundColor) {
-    result.body = utils.svg.addBackgroundColor(result, options.backgroundColor);
+    let backgroundColor = Array.isArray(options.backgroundColor)
+      ? prngInstance.pick(options.backgroundColor)
+      : options.backgroundColor;
+
+    result.body = utils.svg.addBackgroundColor(result, backgroundColor);
   }
 
   result.body = utils.svg.addViewboxMask(result, options.radius ?? 0);

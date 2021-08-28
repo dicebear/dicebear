@@ -43,6 +43,12 @@
         {
           "type": "string",
           "enum": ["transparent"]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
         }
       ],
       "default": "transparent"

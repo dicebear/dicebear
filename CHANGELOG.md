@@ -10,6 +10,10 @@
 - `@dicebear/avatars` New `flip` option.
 - `@dicebear/avatars` New `size` option as replacement for `width` and `height` options.
 
+### Changed
+
+- `@dicebear/avatars` Option `backgroundColor` can now also handle an array. A random value is then selected via PRNG.
+
 ### Deprecated
 
 - `@dicebear/avatars` `width` and `height` options are deprecated. Use `size` instead.
