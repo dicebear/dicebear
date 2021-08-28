@@ -30,12 +30,12 @@ export default {
     values: [0, 360],
     defaultValue: 0,
   },
-  x: {
+  translateX: {
     type: 'range',
     values: [-100, 100],
     defaultValue: 0,
   },
-  y: {
+  translateY: {
     type: 'range',
     values: [-100, 100],
     defaultValue: 0,

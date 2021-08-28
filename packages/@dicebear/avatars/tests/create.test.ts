@@ -15,9 +15,19 @@ const data: Array<StyleOptions<{}>> = [
   { seed, backgroundColor: '#FF0000', scale: 50 },
   { seed, backgroundColor: '#FF0000', flip: true },
   { seed, backgroundColor: '#FF0000', size: 100 },
-  { seed, backgroundColor: '#FF0000', x: -50 },
-  { seed, backgroundColor: '#FF0000', y: 50 },
-  { seed, backgroundColor: '#FF0000', size: 100, rotate: 120, scale: 50, flip: true, radius: 25, x: -50, y: 50 },
+  { seed, backgroundColor: '#FF0000', translateX: -50 },
+  { seed, backgroundColor: '#FF0000', translateY: 50 },
+  {
+    seed,
+    backgroundColor: '#FF0000',
+    size: 100,
+    rotate: 120,
+    scale: 50,
+    flip: true,
+    radius: 25,
+    translateX: -50,
+    translateY: 50,
+  },
 ];
 
 const style: Style<{}> = {

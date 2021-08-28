@@ -236,7 +236,7 @@ export function addScale(result: StyleCreateResult, scale: number) {
   `;
 }
 
-export function addTransform(result: StyleCreateResult, x?: number, y?: number) {
+export function addTranslate(result: StyleCreateResult, x?: number, y?: number) {
   let viewBox = getViewBox(result);
 
   let translateX = (viewBox.width + viewBox.x * 2) * ((x ?? 0) / 100);

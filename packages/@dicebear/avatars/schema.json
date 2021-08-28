@@ -135,14 +135,14 @@
     "b": {
       "$ref": "#/definitions/backgroundColor"
     },
-    "x": {
+    "translateX": {
       "title": "Translate X%",
       "type": "integer",
       "minimum": -100,
       "maximum": 100,
       "default": 0
     },
-    "y": {
+    "translateY": {
       "title": "Translate Y%",
       "type": "integer",
       "minimum": -100,

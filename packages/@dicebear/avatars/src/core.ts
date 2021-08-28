@@ -34,8 +34,8 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     result.body = utils.svg.addRotate(result, options.rotate);
   }
 
-  if (options.x || options.y) {
-    result.body = utils.svg.addTransform(result, options.x, options.y);
+  if (options.translateX || options.translateY) {
+    result.body = utils.svg.addTranslate(result, options.translateX, options.translateY);
   }
 
   if (options.backgroundColor) {
