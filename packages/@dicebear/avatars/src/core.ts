@@ -20,7 +20,7 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     }
   }
 
-  if (options.scale && options.scale !== 100) {
+  if (options.scale !== undefined && options.scale !== 100) {
     result.body = utils.svg.addScale(result, options.scale);
   } else if (options.margin) {
     result.body = utils.svg.addMargin(result, options);
@@ -32,6 +32,10 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
 
   if (options.rotate) {
     result.body = utils.svg.addRotate(result, options.rotate);
+  }
+
+  if (options.x || options.y) {
+    result.body = utils.svg.addTransform(result, options.x, options.y);
   }
 
   if (options.backgroundColor) {

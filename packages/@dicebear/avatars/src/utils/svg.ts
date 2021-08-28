@@ -224,13 +224,26 @@ export function addBackgroundColor<O extends Options>(result: StyleCreateResult,
 export function addScale(result: StyleCreateResult, scale: number) {
   let { width, height, x, y } = getViewBox(result);
 
-  let percent = (scale - 100) / 100;
+  let percent = scale ? (scale - 100) / 100 : 0;
 
   let translateX = (width / 2 + x) * percent * -1;
   let translateY = (height / 2 + y) * percent * -1;
 
   return `
     <g transform="translate(${translateX} ${translateY}) scale(${scale / 100})">
+      ${result.body}
+    </g>
+  `;
+}
+
+export function addTransform(result: StyleCreateResult, x?: number, y?: number) {
+  let viewBox = getViewBox(result);
+
+  let translateX = (viewBox.width + viewBox.x * 2) * ((x ?? 0) / 100);
+  let translateY = (viewBox.height + viewBox.y * 2) * ((y ?? 0) / 100);
+
+  return `
+    <g transform="translate(${translateX} ${translateY})">
       ${result.body}
     </g>
   `;

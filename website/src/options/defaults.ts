@@ -1,5 +1,5 @@
 export default {
-  background: {
+  backgroundColor: {
     type: 'color',
     defaultValue: '#ffffff',
     alias: 'b',
@@ -17,7 +17,7 @@ export default {
   },
   scale: {
     type: 'range',
-    values: [50, 150],
+    values: [0, 200],
     defaultValue: 100,
   },
   flip: {
@@ -28,6 +28,16 @@ export default {
   rotate: {
     type: 'range',
     values: [0, 360],
+    defaultValue: 0,
+  },
+  x: {
+    type: 'range',
+    values: [-100, 100],
+    defaultValue: 0,
+  },
+  y: {
+    type: 'range',
+    values: [-100, 100],
     defaultValue: 0,
   },
 };

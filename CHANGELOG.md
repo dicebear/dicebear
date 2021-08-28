@@ -9,6 +9,7 @@
 - `@dicebear/avatars` New `rotate` option.
 - `@dicebear/avatars` New `flip` option.
 - `@dicebear/avatars` New `size` option as replacement for `width` and `height` options.
+- `@dicebear/avatars` New `x` any `y` translate options.
 
 ### Changed
 
