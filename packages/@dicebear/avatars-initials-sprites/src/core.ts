@@ -21,7 +21,11 @@ export const style: Style<Options> = {
     let backgroundColors: string[] = [];
 
     if (options.background && options.background !== 'transparent') {
-      backgroundColors.push(options.background);
+      if (Array.isArray(options.background)) {
+        backgroundColors.push(...options.background);
+      } else {
+        backgroundColors.push(options.background);
+      }
 
       options.background = undefined;
     } else {
