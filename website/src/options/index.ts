@@ -14,6 +14,7 @@ import croodlesOptions from './croodles';
 import croodlesNeutralOptions from './croodlesNeutral';
 import pixelArtOptions from './pixelArt';
 import pixelArtNeutralOptions from './pixelArtNeutral';
+import openPeepsOptions from './openPeeps';
 
 import * as collection from '@dicebear/collection';
 
@@ -35,6 +36,12 @@ export default [
     name: '@dicebear/avatars-bottts-sprites',
     style: collection.bottts,
     options: botttsOptions,
+  },
+  {
+    id: 'open-peeps',
+    name: '@dicebear/open-peeps',
+    style: collection.openPeeps,
+    options: openPeepsOptions,
   },
   {
     id: 'micah',
