@@ -1,0 +1,609 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "beard": {
+      "title": "Beard",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "beardPropability": {
+      "title": "Beard Propability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 10
+    },
+    "eyes": {
+      "title": "Eyes",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant13",
+          "variant12",
+          "variant11",
+          "variant10",
+          "variant09",
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant13",
+        "variant12",
+        "variant11",
+        "variant10",
+        "variant09",
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "eyebrows": {
+      "title": "Eyebrows",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant13",
+          "variant12",
+          "variant11",
+          "variant10",
+          "variant09",
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant13",
+        "variant12",
+        "variant11",
+        "variant10",
+        "variant09",
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "mouth": {
+      "title": "Mouth",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "surprised03",
+          "surprised02",
+          "happy09",
+          "happy08",
+          "happy07",
+          "happy06",
+          "happy05",
+          "happy04",
+          "happy03",
+          "happy02",
+          "happy01",
+          "sad08",
+          "sad07",
+          "sad06",
+          "sad05",
+          "sad04",
+          "sad03",
+          "sad02",
+          "sad01",
+          "surprised01"
+        ]
+      },
+      "default": [
+        "surprised03",
+        "surprised02",
+        "happy09",
+        "happy08",
+        "happy07",
+        "happy06",
+        "happy05",
+        "happy04",
+        "happy03",
+        "happy02",
+        "happy01",
+        "sad08",
+        "sad07",
+        "sad06",
+        "sad05",
+        "sad04",
+        "sad03",
+        "sad02",
+        "sad01",
+        "surprised01"
+      ]
+    },
+    "hair": {
+      "title": "Hair",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "short11",
+          "short10",
+          "short09",
+          "short08",
+          "short07",
+          "short06",
+          "short05",
+          "short04",
+          "short03",
+          "short02",
+          "long15",
+          "short01",
+          "long14",
+          "long13",
+          "long12",
+          "long11",
+          "long10",
+          "long09",
+          "long08",
+          "long07",
+          "long06",
+          "long05",
+          "long04",
+          "long03",
+          "long02",
+          "long01"
+        ]
+      },
+      "default": [
+        "short11",
+        "short10",
+        "short09",
+        "short08",
+        "short07",
+        "short06",
+        "short05",
+        "short04",
+        "short03",
+        "short02",
+        "long15",
+        "short01",
+        "long14",
+        "long13",
+        "long12",
+        "long11",
+        "long10",
+        "long09",
+        "long08",
+        "long07",
+        "long06",
+        "long05",
+        "long04",
+        "long03",
+        "long02",
+        "long01"
+      ]
+    },
+    "hairPropability": {
+      "title": "Hair Propability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 95
+    },
+    "accessories": {
+      "title": "Accessories",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "accessoriesPropability": {
+      "title": "Accessories Propability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 10
+    },
+    "glasses": {
+      "title": "Glasses",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "glassesPropability": {
+      "title": "Glasses Propability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 20
+    },
+    "hat": {
+      "title": "Hat",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant01",
+          "variant02",
+          "variant03",
+          "variant04",
+          "variant05",
+          "variant06",
+          "variant07",
+          "variant08",
+          "variant09",
+          "variant10",
+          "variant11",
+          "variant12"
+        ]
+      },
+      "default": [
+        "variant01",
+        "variant02",
+        "variant03",
+        "variant04",
+        "variant05",
+        "variant06",
+        "variant07",
+        "variant08",
+        "variant09",
+        "variant10",
+        "variant11",
+        "variant12"
+      ]
+    },
+    "hatPropability": {
+      "title": "Hat Propability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 10
+    },
+    "clothing": {
+      "title": "Clothing",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant25",
+          "variant24",
+          "variant23",
+          "variant22",
+          "variant21",
+          "variant20",
+          "variant19",
+          "variant18",
+          "variant17",
+          "variant16",
+          "variant15",
+          "variant14",
+          "variant13",
+          "variant12",
+          "variant11",
+          "variant10",
+          "variant09",
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant25",
+        "variant24",
+        "variant23",
+        "variant22",
+        "variant21",
+        "variant20",
+        "variant19",
+        "variant18",
+        "variant17",
+        "variant16",
+        "variant15",
+        "variant14",
+        "variant13",
+        "variant12",
+        "variant11",
+        "variant10",
+        "variant09",
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "skinColor": {
+      "title": "Skin Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "variant01",
+              "variant02",
+              "variant03",
+              "variant04",
+              "variant05",
+              "variant06",
+              "variant07",
+              "variant08"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "variant01",
+        "variant02",
+        "variant03",
+        "variant04",
+        "variant05",
+        "variant06",
+        "variant07",
+        "variant08"
+      ]
+    },
+    "hairColor": {
+      "title": "Hair Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "variant01",
+              "variant02",
+              "variant03",
+              "variant04",
+              "variant05",
+              "variant06",
+              "variant07",
+              "variant08",
+              "variant09",
+              "variant10"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "variant01",
+        "variant02",
+        "variant03",
+        "variant04",
+        "variant05",
+        "variant06",
+        "variant07",
+        "variant08",
+        "variant09",
+        "variant10"
+      ]
+    },
+    "mouthColor": {
+      "title": "Mouth Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "variant01",
+              "variant02",
+              "variant03",
+              "variant04"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "variant01",
+        "variant02",
+        "variant03",
+        "variant04"
+      ]
+    },
+    "accessoriesColor": {
+      "title": "Accessories Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "gold01",
+              "gold02",
+              "gold03",
+              "silver01",
+              "silver02"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "gold01",
+        "gold02",
+        "gold03",
+        "silver01",
+        "silver02"
+      ]
+    },
+    "glassesColor": {
+      "title": "Glasses Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "green01",
+              "blue01",
+              "red01",
+              "black01",
+              "black02",
+              "black03"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "green01",
+        "blue01",
+        "red01",
+        "black01",
+        "black02",
+        "black03"
+      ]
+    },
+    "hatColor": {
+      "title": "Hat Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "pink01",
+              "blue01",
+              "green01",
+              "purple01",
+              "red01",
+              "black01",
+              "gray01"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "pink01",
+        "blue01",
+        "green01",
+        "purple01",
+        "red01",
+        "black01",
+        "gray01"
+      ]
+    },
+    "clothesColor": {
+      "title": "Clothes Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "yellow01",
+              "yellow02",
+              "yellow03",
+              "red01",
+              "red02",
+              "red03",
+              "blue01",
+              "blue02",
+              "blue03",
+              "green01",
+              "green02",
+              "green03"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "yellow01",
+        "yellow02",
+        "yellow03",
+        "red01",
+        "red02",
+        "red03",
+        "blue01",
+        "blue02",
+        "blue03",
+        "green01",
+        "green02",
+        "green03"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

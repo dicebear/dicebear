@@ -10,3 +10,5 @@ export * as male from '@dicebear/avatars-male-sprites';
 export * as micah from '@dicebear/micah';
 export * as croodles from '@dicebear/croodles';
 export * as croodlesNeutral from '@dicebear/croodles-neutral';
+export * as pixelArt from '@dicebear/pixel-art';
+export * as pixelArtNeutral from '@dicebear/pixel-art-neutral';

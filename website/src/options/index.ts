@@ -12,10 +12,24 @@ import maleOptions from './male';
 import micahOptions from './micah';
 import croodlesOptions from './croodles';
 import croodlesNeutralOptions from './croodlesNeutral';
+import pixelArtOptions from './pixelArt';
+import pixelArtNeutralOptions from './pixelArtNeutral';
 
 import * as collection from '@dicebear/collection';
 
 export default [
+  {
+    id: 'pixel-art',
+    name: '@dicebear/pixel-art',
+    style: collection.pixelArt,
+    options: pixelArtOptions,
+  },
+  {
+    id: 'pixel-art-neutral',
+    name: '@dicebear/pixel-art-neutral',
+    style: collection.pixelArtNeutral,
+    options: pixelArtNeutralOptions,
+  },
   {
     id: 'male',
     name: '@dicebear/avatars-male-sprites',

@@ -1,13 +1,13 @@
 export const templates = {
   // .editorconfig
-  ".editorconfig": `
+  '.editorconfig': `
 [*]
 indent_size = 2
 tab_width = 2
 `,
 
   // .gitignore
-  ".gitignore": `
+  '.gitignore': `
 # Cache and log files
 .DS_Store
 yarn-error.log
@@ -24,12 +24,12 @@ src/schema.ts
 `,
 
   // .prettierignore
-  ".prettierignore": `
+  '.prettierignore': `
 package.json
 `,
 
   // .prettierrc
-  ".prettierrc": `
+  '.prettierrc': `
 {
   "printWidth": 120,
   "singleQuote": true,
@@ -37,8 +37,8 @@ package.json
 }
 `,
 
-  // license.md
-  "license.md": `
+  // LICENSE.md
+  'LICENSE.md': `
 MIT License
 
 Copyright (c) {{year}} Florian Körner
@@ -66,7 +66,7 @@ SOFTWARE.
 `,
 
   // readme.md
-  "README.md": `
+  'README.md': `
 <h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />{{title}}</h1>
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear Avatars</a>.</strong><br />
@@ -159,7 +159,7 @@ npm run test
 `,
 
   // jest.config.js
-  "jest.config.js": `
+  'jest.config.js': `
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -167,7 +167,7 @@ module.exports = {
 `,
 
   // package.json
-  "package.json": `
+  'package.json': `
 {
   "name": "{{{packageName}}}",
   "version": "{{{packageVersion}}}",
@@ -215,7 +215,7 @@ module.exports = {
 `,
 
   // tsconfig.json
-  "tsconfig.json": `
+  'tsconfig.json': `
 {
   "extends": "@tsconfig/node12/tsconfig.json",
   "compilerOptions": {
@@ -227,7 +227,7 @@ module.exports = {
 `,
 
   // tests/create.test.ts
-  "tests/create.test.ts": `
+  'tests/create.test.ts': `
 import * as avatars from '@dicebear/avatars';
 import { StyleOptions } from '@dicebear/avatars';
 import * as style from '../dist';
@@ -263,7 +263,7 @@ data.forEach((options, key) => {
 `,
 
   // src/index.ts
-  "src/index.ts": `
+  'src/index.ts': `
 /*!
  * {{{title}}} ({{packageName}})
  *
@@ -295,7 +295,7 @@ export default utils.style.createLegacyWrapper(style);
 `,
 
   // src/core.ts
-  "src/core.ts": `
+  'src/core.ts': `
 import type { Style } from '@dicebear/avatars';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
@@ -359,7 +359,7 @@ export const style: Style<Options> = {
 `,
 
   // src/static-types.ts
-  "src/static-types.ts": `
+  'src/static-types.ts': `
 export type ColorGroup = Record<string, ColorGroupItem>;
 export type ColorGroupCollection = Record<string, ColorGroup>;
 export type ColorGroupItem = string;
@@ -382,14 +382,14 @@ export type ComponentPick =
 `,
 
   // src/colors/index.ts
-  "src/colors/index.ts": `
+  'src/colors/index.ts': `
 {{#each colors}}
 export { {{@key}} } from './{{@key}}';
 {{/each}}
 `,
 
   // src/colors/{{name}}.ts
-  "src/colors/{{name}}.ts": `
+  'src/colors/{{name}}.ts': `
 import type { ColorGroup } from "../static-types";
 
 export const {{name}}: ColorGroup = {
@@ -400,14 +400,14 @@ export const {{name}}: ColorGroup = {
 `,
 
   // src/components/index.ts
-  "src/components/index.ts": `
+  'src/components/index.ts': `
 {{#each components}}
 export { {{@key}} } from './{{@key}}';
 {{/each}}
 `,
 
   // src/components/{{name}}.ts
-  "src/components/{{name}}.ts": `
+  'src/components/{{name}}.ts': `
 import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
 
 export const {{name}}: ComponentGroup = {
@@ -418,7 +418,7 @@ export const {{name}}: ComponentGroup = {
 `,
 
   // src/utils/pickColor.ts
-  "src/utils/pickColor.ts": `
+  'src/utils/pickColor.ts': `
 import type { Prng } from '@dicebear/avatars';
 import type { ColorGroupCollection, ColorPick } from '../static-types';
 
@@ -441,7 +441,7 @@ export function pickColor(prng: Prng, group: string, values: string[]): ColorPic
 `,
 
   // src/utils/pickComponent.ts
-  "src/utils/pickComponent.ts": `
+  'src/utils/pickComponent.ts': `
 import type { Prng } from '@dicebear/avatars';
 import type { ComponentGroupCollection, ComponentPick } from '../static-types';
 

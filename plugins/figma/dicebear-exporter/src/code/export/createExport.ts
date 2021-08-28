@@ -1,14 +1,14 @@
-import { templates } from "../templates";
-import { prepareExport } from "./prepareExport";
+import { templates } from '../templates';
+import { prepareExport } from './prepareExport';
 // @ts-ignore
-import * as handlebars from "handlebars/dist/cjs/handlebars.js";
-import { createTemplateString } from "./createTemplateString";
-import { JSONSchema7Definition } from "json-schema";
-import { normalizeCamelCase } from "../utils/normalizeCamelCase";
-import { filterDefaults } from "../utils/filterDefaults";
-import { normalizeName } from "../utils/normalizeName";
+import * as handlebars from 'handlebars/dist/cjs/handlebars.js';
+import { createTemplateString } from './createTemplateString';
+import { JSONSchema7Definition } from 'json-schema';
+import { normalizeCamelCase } from '../utils/normalizeCamelCase';
+import { filterDefaults } from '../utils/filterDefaults';
+import { normalizeName } from '../utils/normalizeName';
 
-handlebars.registerHelper("isNull", function (val: unknown, options: unknown) {
+handlebars.registerHelper('isNull', function (val: unknown, options: unknown) {
   if (val === null) {
     // @ts-ignore
     return options.fn(this);
@@ -22,23 +22,23 @@ export async function createExport() {
   const exportData = prepareExport();
 
   const files: Record<string, string> = {
-    ".editorconfig": templates[".editorconfig"],
-    ".gitignore": templates[".gitignore"],
-    ".prettierignore": templates[".prettierignore"],
-    ".prettierrc": templates[".prettierrc"],
-    "license.md": handlebars.compile(templates["license.md"])({
+    '.editorconfig': templates['.editorconfig'],
+    '.gitignore': templates['.gitignore'],
+    '.prettierignore': templates['.prettierignore'],
+    '.prettierrc': templates['.prettierrc'],
+    'LICENSE.md': handlebars.compile(templates['LICENSE.md'])({
       year: new Date().getFullYear(),
       contributor: exportData.frame.settings.contributor,
     }),
-    "jest.config.js": templates["jest.config.js"],
-    "package.json": handlebars.compile(templates["package.json"])({
+    'jest.config.js': templates['jest.config.js'],
+    'package.json': handlebars.compile(templates['package.json'])({
       umdName: exportData.frame.settings.umdName,
       packageName: exportData.frame.settings.packageName,
       packageVersion: exportData.frame.settings.packageVersion,
     }),
-    "tsconfig.json": templates["tsconfig.json"],
-    "tests/create.test.ts": templates["tests/create.test.ts"],
-    "src/index.ts": handlebars.compile(templates["src/index.ts"])({
+    'tsconfig.json': templates['tsconfig.json'],
+    'tests/create.test.ts': templates['tests/create.test.ts'],
+    'src/index.ts': handlebars.compile(templates['src/index.ts'])({
       title: exportData.frame.settings.title,
       year: new Date().getFullYear(),
       packageName: exportData.frame.settings.packageName,
@@ -48,7 +48,7 @@ export async function createExport() {
       contributor: exportData.frame.settings.contributor,
       source: exportData.frame.settings.source,
     }),
-    "src/core.ts": handlebars.compile(templates["src/core.ts"])({
+    'src/core.ts': handlebars.compile(templates['src/core.ts'])({
       title: exportData.frame.settings.title,
       creator: exportData.frame.settings.creator,
       licenseName: exportData.frame.settings.licenseName,
@@ -58,29 +58,19 @@ export async function createExport() {
       components: exportData.components,
       colors: exportData.colors,
       size: (figma.getNodeById(exportData.frame.id) as FrameNode).width,
-      body: await createTemplateString(
-        figma.getNodeById(exportData.frame.id) as FrameNode
-      ),
+      body: await createTemplateString(figma.getNodeById(exportData.frame.id) as FrameNode),
     }),
-    "src/static-types.ts": templates["src/static-types.ts"],
-    "src/colors/index.ts": handlebars.compile(templates["src/colors/index.ts"])(
-      {
-        colors: exportData.colors,
-      }
-    ),
-    "src/components/index.ts": handlebars.compile(
-      templates["src/components/index.ts"]
-    )({
-      components: exportData.components,
-    }),
-    "src/utils/pickColor.ts": handlebars.compile(
-      templates["src/utils/pickColor.ts"]
-    )({
+    'src/static-types.ts': templates['src/static-types.ts'],
+    'src/colors/index.ts': handlebars.compile(templates['src/colors/index.ts'])({
       colors: exportData.colors,
     }),
-    "src/utils/pickComponent.ts": handlebars.compile(
-      templates["src/utils/pickComponent.ts"]
-    )({
+    'src/components/index.ts': handlebars.compile(templates['src/components/index.ts'])({
+      components: exportData.components,
+    }),
+    'src/utils/pickColor.ts': handlebars.compile(templates['src/utils/pickColor.ts'])({
+      colors: exportData.colors,
+    }),
+    'src/utils/pickComponent.ts': handlebars.compile(templates['src/utils/pickComponent.ts'])({
       components: exportData.components,
     }),
   };
@@ -88,9 +78,7 @@ export async function createExport() {
   const schemaProperties: Record<string, JSONSchema7Definition> = {};
 
   // Components
-  const componentTemplate = handlebars.compile(
-    templates["src/components/{{name}}.ts"]
-  );
+  const componentTemplate = handlebars.compile(templates['src/components/{{name}}.ts']);
 
   for (const componentGroupName in exportData.components) {
     if (false === exportData.components.hasOwnProperty(componentGroupName)) {
@@ -102,18 +90,18 @@ export async function createExport() {
 
     schemaProperties[componentGroupName] = {
       title: normalizeCamelCase(componentGroupName),
-      type: "array",
+      type: 'array',
       items: {
-        type: "string",
+        type: 'string',
         enum: Object.keys(componentGroup.collection),
       },
       default: filterDefaults(componentGroup.settings.defaults),
     };
 
-    if (typeof componentGroup.settings.propability === "number") {
+    if (typeof componentGroup.settings.propability === 'number') {
       schemaProperties[`${componentGroupName}Propability`] = {
         title: `${normalizeCamelCase(componentGroupName)} Propability`,
-        $ref: "https://dicebear.com/schema/v4.json#/definitions/probability",
+        $ref: 'https://dicebear.com/schema/v4.json#/definitions/probability',
         default: componentGroup.settings.propability,
       };
     }
@@ -123,9 +111,7 @@ export async function createExport() {
         continue;
       }
 
-      const componentNode = figma.getNodeById(
-        componentGroup.collection[componentName].id
-      ) as ComponentNode;
+      const componentNode = figma.getNodeById(componentGroup.collection[componentName].id) as ComponentNode;
 
       components[componentName] = await createTemplateString(componentNode);
     }
@@ -137,7 +123,7 @@ export async function createExport() {
   }
 
   // Colors
-  const colorTemplate = handlebars.compile(templates["src/colors/{{name}}.ts"]);
+  const colorTemplate = handlebars.compile(templates['src/colors/{{name}}.ts']);
 
   for (const colorGroupName in exportData.colors) {
     if (false === exportData.colors.hasOwnProperty(colorGroupName)) {
@@ -148,15 +134,15 @@ export async function createExport() {
 
     schemaProperties[`${colorGroupName}Color`] = {
       title: `${normalizeCamelCase(colorGroupName)} Color`,
-      type: "array",
+      type: 'array',
       items: {
         anyOf: [
           {
-            type: "string",
+            type: 'string',
             enum: Object.keys(colorGroup.collection),
           },
           {
-            $ref: "https://dicebear.com/schema/v4.json#/definitions/color",
+            $ref: 'https://dicebear.com/schema/v4.json#/definitions/color',
           },
         ],
       },
@@ -172,8 +158,8 @@ export async function createExport() {
   // Schema JSON
   files[`schema.json`] = JSON.stringify(
     {
-      title: "Options",
-      $schema: "http://json-schema.org/draft-07/schema#",
+      title: 'Options',
+      $schema: 'http://json-schema.org/draft-07/schema#',
       properties: schemaProperties,
       additionalProperties: false,
     },
@@ -182,16 +168,14 @@ export async function createExport() {
   );
 
   // Readme
-  files["README.md"] = handlebars.compile(templates["README.md"])({
+  files['README.md'] = handlebars.compile(templates['README.md'])({
     title: exportData.frame.settings.title,
     source: exportData.frame.settings.source,
     creator: exportData.frame.settings.creator,
     licenseName: exportData.frame.settings.licenseName,
     licenseUrl: exportData.frame.settings.licenseUrl,
     packageName: exportData.frame.settings.packageName,
-    isMitLicensed:
-      exportData.frame.settings.licenseName &&
-      exportData.frame.settings.licenseName === "MIT",
+    isMitLicensed: exportData.frame.settings.licenseName && exportData.frame.settings.licenseName === 'MIT',
     properties: schemaProperties,
   });
 
