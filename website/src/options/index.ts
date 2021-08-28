@@ -25,30 +25,6 @@ export default [
     options: pixelArtOptions,
   },
   {
-    id: 'pixel-art-neutral',
-    name: '@dicebear/pixel-art-neutral',
-    style: collection.pixelArtNeutral,
-    options: pixelArtNeutralOptions,
-  },
-  {
-    id: 'male',
-    name: '@dicebear/avatars-male-sprites',
-    style: collection.male,
-    options: maleOptions,
-  },
-  {
-    id: 'female',
-    name: '@dicebear/avatars-female-sprites',
-    style: collection.female,
-    options: femaleOptions,
-  },
-  {
-    id: 'human',
-    name: '@dicebear/avatars-human-sprites',
-    style: collection.human,
-    options: humanOptions,
-  },
-  {
     id: 'avataaars',
     name: '@dicebear/avatars-avataaars-sprites',
     style: collection.avataaars,
@@ -79,6 +55,12 @@ export default [
     options: croodlesNeutralOptions,
   },
   {
+    id: 'pixel-art-neutral',
+    name: '@dicebear/pixel-art-neutral',
+    style: collection.pixelArtNeutral,
+    options: pixelArtNeutralOptions,
+  },
+  {
     id: 'initials',
     name: '@dicebear/avatars-initials-sprites',
     style: collection.initials,
@@ -101,5 +83,23 @@ export default [
     name: '@dicebear/avatars-gridy-sprites',
     style: collection.gridy,
     options: gridyOptions,
+  },
+  {
+    id: 'male',
+    name: '@dicebear/avatars-male-sprites',
+    style: collection.male,
+    options: maleOptions,
+  },
+  {
+    id: 'female',
+    name: '@dicebear/avatars-female-sprites',
+    style: collection.female,
+    options: femaleOptions,
+  },
+  {
+    id: 'human',
+    name: '@dicebear/avatars-human-sprites',
+    style: collection.human,
+    options: humanOptions,
   },
 ] as SpriteCollection[];

@@ -1,5 +1,7 @@
 import defaults from './defaults';
-import { schema } from '@dicebear/avatars-avataaars-sprites';
+import { avataaars as style } from '@dicebear/collection';
+
+const schema = style.schema;
 
 export default {
   ...defaults,

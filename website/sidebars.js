@@ -7,6 +7,8 @@ module.exports = {
       Styles: [
         'styles/avataaars',
         'styles/bottts',
+        'styles/croodles',
+        'styles/croodles-neutral',
         'styles/female',
         'styles/gridy',
         'styles/human',
@@ -15,6 +17,8 @@ module.exports = {
         'styles/jdenticon',
         'styles/male',
         'styles/micah',
+        'styles/pixel-art',
+        'styles/pixel-art-neutral',
       ],
     },
   ],

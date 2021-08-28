@@ -4,6 +4,8 @@
 
 ### Added
 
+- `@dicebear/pixel-art` New Avatar style as replacement for `male`, `female` and `human`
+- `@dicebear/pixel-art-neutral` New Avatar style
 - `@dicebear/croodles` New Avatar style by vijay verma.
 - `@dicebear/croodles-neutral` New Avatar style by vijay verma.
 - `@dicebear/avatars` New `rotate` option.
@@ -22,6 +24,9 @@
 - `@dicebear/avatars` `margin` option is deprecated. Use `scale` instead.
 - `@dicebear/avatars` SVG Util `addMargin` is deprecated. Use `addScale` instead.
 - `@dicebear/avatars` SVG Util `addRadius` is deprecated. Use `addViewboxMask` instead.
+- `@dicebear/avatars-male-style` Use `@dicebear/pixel-art` instead.
+- `@dicebear/avatars-female-style` Use `@dicebear/pixel-art` instead.
+- `@dicebear/avatars-human-style` Use `@dicebear/pixel-art` instead.
 
 ## [4.7.4] - 2021-08-25
 
