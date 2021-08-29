@@ -41,7 +41,12 @@
     "@dicebear/avatars-initials-sprites": "^4.8.0",
     "@dicebear/avatars-jdenticon-sprites": "^4.8.0",
     "@dicebear/avatars-male-sprites": "^4.8.0",
-    "@dicebear/micah": "^4.8.0"
+    "@dicebear/croodles": "^4.8.0",
+    "@dicebear/croodles-neutral": "^4.8.0",
+    "@dicebear/micah": "^4.8.0",
+    "@dicebear/open-peeps": "^4.8.0",
+    "@dicebear/pixel-art": "^4.8.0",
+    "@dicebear/pixel-art-neutral": "^4.8.0"
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.8.0",

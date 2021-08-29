@@ -1,9 +1,16 @@
 # Changelog
 
-## [4.8.0] - 2021-08-27
+## [4.8.1] - 2021-08-29
+
+### Fixed
+
+- `@dicebear/collection` Missing dependencies
+
+## [4.8.0] - 2021-08-29
 
 ### Added
 
+- `@dicebear/open-peeps` New Avatar style by Pablo Stanley.
 - `@dicebear/pixel-art` New Avatar style as replacement for `male`, `female` and `human`
 - `@dicebear/pixel-art-neutral` New Avatar style
 - `@dicebear/croodles` New Avatar style by vijay verma.
