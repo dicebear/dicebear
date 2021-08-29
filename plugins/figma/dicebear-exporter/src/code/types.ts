@@ -8,6 +8,7 @@ export type FrameSettings = {
   source: string;
   licenseName: string;
   licenseUrl: string;
+  backgroundColorGroupName: string;
 };
 
 export type ComponentGroupSettings = {
@@ -41,6 +42,7 @@ export type ExportComponentGroup = {
 };
 
 export type ExportColorGroup = {
+  isUsedByComponents: boolean;
   settings: ColorGroupSettings;
   collection: Record<string, ExportColor>;
 };

@@ -157,29 +157,31 @@
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 20
     },
-    "skinColor": {
-      "title": "Skin Color",
-      "type": "array",
-      "items": {
-        "anyOf": [
-          {
-            "type": "string",
-            "enum": [
-              "variant01",
-              "variant02",
-              "variant03",
-              "variant04",
-              "variant05",
-              "variant06",
-              "variant07",
-              "variant08"
+    "backgroundColor": {
+      "title": "Background Color",
+      "oneOf": [
+        {
+          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+        },
+        {
+          "type": "string",
+          "pattern": "^#[0-9a-zA-Z]+$"
+        },
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#[0-9a-zA-Z]+$"
+              },
+              {
+                "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+              }
             ]
-          },
-          {
-            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
-        ]
-      },
+        }
+      ],
       "default": [
         "variant01",
         "variant02",

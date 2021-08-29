@@ -10,9 +10,7 @@ test('Defaults should be returned in options.', () => {
     {}
   );
 
-  expect(options.b).toEqual('transparent');
-  expect(options.background).toEqual('transparent');
-  expect(options.backgroundColor).toEqual('transparent');
+  expect(options.radius).toEqual(0);
 });
 
 test('All aliases should be overwritten.', () => {

@@ -1,3 +1,3 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
-export const activeStage = writable("frame");
+export const activeStage = writable('package');

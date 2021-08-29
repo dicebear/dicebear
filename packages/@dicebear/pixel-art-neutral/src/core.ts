@@ -30,18 +30,20 @@ export const style: Style<Options> = {
     }
 
     const colors: ColorPickCollection = {
-      'skin': pickColor(prng, 'skin', options.skinColor ?? []),
       'hair': pickColor(prng, 'hair', options.hairColor ?? []),
       'mouth': pickColor(prng, 'mouth', options.mouthColor ?? []),
       'glasses': pickColor(prng, 'glasses', options.glassesColor ?? []),
     }
+
+    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
+    options.backgroundColor = pickColor(prng, 'skin', backgroundColor ?? []).value;
 
     return {
       attributes: {
         viewBox: '0 0 14 14',
         fill: 'none',
       },
-      body: `<path fill="#fff" d="M0 0h14v14H0z"/><path fill="${colors.skin.value}" d="M0 0h14v14H0z"/><g transform="translate(-3 -3)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="translate(-3 -3)">${components.eyebrows?.value(components, colors) ?? ''}</g><g transform="translate(-3 -2)">${components.mouth?.value(components, colors) ?? ''}</g><g transform="translate(-3 -3)">${components.glasses?.value(components, colors) ?? ''}</g>`,
+      body: `<g transform="translate(-3 -3)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="translate(-3 -3)">${components.eyebrows?.value(components, colors) ?? ''}</g><g transform="translate(-3 -2)">${components.mouth?.value(components, colors) ?? ''}</g><g transform="translate(-3 -3)">${components.glasses?.value(components, colors) ?? ''}</g>`,
     };
   },
 };

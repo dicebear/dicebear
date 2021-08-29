@@ -343,9 +343,16 @@ export const style: Style<Options> = {
 
     const colors: ColorPickCollection = {
       {{#each colors}}
+      {{#if this.isUsedByComponents}}
       '{{@key}}': pickColor(prng, '{{@key}}', options.{{@key}}Color ?? []),
+      {{/if}}
       {{/each}}
     }
+
+    {{#if backgroundColorGroupName}}
+    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
+    options.backgroundColor = pickColor(prng, '{{backgroundColorGroupName}}', backgroundColor ?? []).value;
+    {{/if}}
 
     return {
       attributes: {
@@ -384,7 +391,13 @@ export type ComponentPick =
   // src/colors/index.ts
   'src/colors/index.ts': `
 {{#each colors}}
+{{#if this.isUsedByComponents}}
 export { {{@key}} } from './{{@key}}';
+{{else}}
+{{#isEqual @key ../backgroundColorGroupName}}
+export { {{@key}} } from './{{@key}}';
+{{/isEqual}}
+{{/if}}
 {{/each}}
 `,
 

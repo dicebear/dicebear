@@ -18,6 +18,16 @@ handlebars.registerHelper('isNull', function (val: unknown, options: unknown) {
   return options.inverse(this);
 });
 
+handlebars.registerHelper('isEqual', function (val: unknown, val2: unknown, options: unknown) {
+  if (val === val2) {
+    // @ts-ignore
+    return options.fn(this);
+  }
+
+  // @ts-ignore
+  return options.inverse(this);
+});
+
 export async function createExport() {
   const exportData = prepareExport();
 
@@ -55,6 +65,7 @@ export async function createExport() {
       licenseUrl: exportData.frame.settings.licenseUrl,
       contributor: exportData.frame.settings.contributor,
       source: exportData.frame.settings.source,
+      backgroundColorGroupName: exportData.frame.settings.backgroundColorGroupName,
       components: exportData.components,
       colors: exportData.colors,
       size: (figma.getNodeById(exportData.frame.id) as FrameNode).width,
@@ -63,16 +74,13 @@ export async function createExport() {
     'src/static-types.ts': templates['src/static-types.ts'],
     'src/colors/index.ts': handlebars.compile(templates['src/colors/index.ts'])({
       colors: exportData.colors,
+      backgroundColorGroupName: exportData.frame.settings.backgroundColorGroupName,
     }),
     'src/components/index.ts': handlebars.compile(templates['src/components/index.ts'])({
       components: exportData.components,
     }),
-    'src/utils/pickColor.ts': handlebars.compile(templates['src/utils/pickColor.ts'])({
-      colors: exportData.colors,
-    }),
-    'src/utils/pickComponent.ts': handlebars.compile(templates['src/utils/pickComponent.ts'])({
-      components: exportData.components,
-    }),
+    'src/utils/pickColor.ts': templates['src/utils/pickColor.ts'],
+    'src/utils/pickComponent.ts': templates['src/utils/pickComponent.ts'],
   };
 
   const schemaProperties: Record<string, JSONSchema7Definition> = {};
@@ -132,22 +140,61 @@ export async function createExport() {
 
     const colorGroup = exportData.colors[colorGroupName];
 
-    schemaProperties[`${colorGroupName}Color`] = {
-      title: `${normalizeCamelCase(colorGroupName)} Color`,
-      type: 'array',
-      items: {
-        anyOf: [
-          {
-            type: 'string',
-            enum: Object.keys(colorGroup.collection),
-          },
+    if (
+      false === colorGroup.isUsedByComponents &&
+      colorGroupName !== exportData.frame.settings.backgroundColorGroupName
+    ) {
+      continue;
+    }
+
+    if (colorGroup.isUsedByComponents) {
+      schemaProperties[`${colorGroupName}Color`] = {
+        title: `${normalizeCamelCase(colorGroupName)} Color`,
+        type: 'array',
+        items: {
+          anyOf: [
+            {
+              type: 'string',
+              enum: Object.keys(colorGroup.collection),
+            },
+            {
+              $ref: 'https://dicebear.com/schema/v4.json#/definitions/color',
+            },
+          ],
+        },
+        default: filterDefaults(colorGroup.settings.defaults),
+      };
+    }
+
+    if (exportData.frame.settings.backgroundColorGroupName === colorGroupName) {
+      schemaProperties[`backgroundColor`] = {
+        title: `Background Color`,
+        oneOf: [
           {
             $ref: 'https://dicebear.com/schema/v4.json#/definitions/color',
           },
+          {
+            type: 'string',
+            pattern: '^#[0-9a-zA-Z]+$',
+          },
+          {
+            type: 'array',
+            items: {
+              anyOf: [
+                {
+                  type: 'string',
+                  pattern: '^#[0-9a-zA-Z]+$',
+                },
+                {
+                  $ref: 'https://dicebear.com/schema/v4.json#/definitions/color',
+                },
+              ],
+            },
+          },
         ],
-      },
-      default: filterDefaults(colorGroup.settings.defaults),
-    };
+        default: filterDefaults(colorGroup.settings.defaults),
+      };
+    }
 
     files[`src/colors/${colorGroupName}.ts`] = colorTemplate({
       name: colorGroupName,

@@ -1,19 +1,33 @@
 <script>
-  import { state } from "../stores/state";
-  import { activeStage } from "../stores/activeStage";
+  import { state } from '../stores/state';
+  import { activeStage } from '../stores/activeStage';
 
-  import MenuItem from "./MenuItem.svelte";
-  import FrameForm from "./FrameForm.svelte";
-  import ColorsGroupForm from "./ColorsGroupForm.svelte";
-  import ComponentGroupForm from "./ComponentGroupForm.svelte";
+  import MenuItem from './MenuItem.svelte';
+  import BackgroundForm from './BackgroundForm.svelte';
+  import PackageForm from './PackageForm.svelte';
+  import LicenseForm from './LicenseForm.svelte';
+  import ColorsGroupForm from './ColorsGroupForm.svelte';
+  import ComponentGroupForm from './ComponentGroupForm.svelte';
 
-  $: activeStageSplit = $activeStage.split(":");
+  $: activeStageSplit = $activeStage.split(':');
+
+  $: colors = Object.entries($state.data.colors)
+    .filter(([key, val]) => {
+      return val.isUsedByComponents || $state.data.frame.settings.backgroundColorGroupName === key;
+    })
+    .reduce((result, [key, val]) => {
+      result[key] = val;
+
+      return result;
+    }, {});
 </script>
 
 <div class="left">
   <div class="menu-wrapper">
     <div class="menu-section">Frame</div>
-    <MenuItem stage={"frame"}>Settings</MenuItem>
+    <MenuItem stage={'package'}>Package</MenuItem>
+    <MenuItem stage={'license'}>License</MenuItem>
+    <MenuItem stage={'background'}>Background</MenuItem>
   </div>
 
   {#if Object.keys($state.data.components).length > 0}
@@ -27,22 +41,26 @@
     </div>
   {/if}
 
-  {#if Object.keys($state.data.colors).length > 0}
+  {#if Object.keys(colors).length > 0}
     <div class="menu-wrapper">
       <div class="menu-section">Colors</div>
-      {#each Object.keys($state.data.colors) as colorGroup}
+      {#each Object.keys(colors) as colorGroup}
         <MenuItem stage={`colors:${colorGroup}`}>{colorGroup}</MenuItem>
       {/each}
     </div>
   {/if}
 </div>
 <div class="right">
-  {#if activeStageSplit[0] === "components"}
+  {#if activeStageSplit[0] === 'components'}
     <ComponentGroupForm componentGroup={activeStageSplit[1]} />
-  {:else if activeStageSplit[0] === "colors"}
+  {:else if activeStageSplit[0] === 'colors'}
     <ColorsGroupForm colorGroup={activeStageSplit[1]} />
-  {:else if activeStageSplit[0] === "frame"}
-    <FrameForm />
+  {:else if activeStageSplit[0] === 'package'}
+    <PackageForm />
+  {:else if activeStageSplit[0] === 'license'}
+    <LicenseForm />
+  {:else if activeStageSplit[0] === 'background'}
+    <BackgroundForm />
   {/if}
 </div>
 

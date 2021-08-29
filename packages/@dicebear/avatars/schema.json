@@ -42,16 +42,23 @@
         },
         {
           "type": "string",
-          "enum": ["transparent"]
+          "pattern": "^#[0-9a-zA-Z]+$"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+            "oneOf": [
+              {
+                "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+              },
+              {
+                "type": "string",
+                "pattern": "^#[0-9a-zA-Z]+$"
+              }
+            ]
           }
         }
-      ],
-      "default": "transparent"
+      ]
     }
   },
   "properties": {

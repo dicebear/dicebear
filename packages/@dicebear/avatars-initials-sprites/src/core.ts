@@ -20,7 +20,7 @@ export const style: Style<Options> = {
     let defaults = utils.schema.defaults(schema as StyleSchema);
     let backgroundColors: string[] = [];
 
-    if (options.background && options.background !== 'transparent') {
+    if (options.background) {
       if (Array.isArray(options.background)) {
         backgroundColors.push(...options.background);
       } else {
