@@ -446,32 +446,6 @@
         "variant10"
       ]
     },
-    "mouthColor": {
-      "title": "Mouth Color",
-      "type": "array",
-      "items": {
-        "anyOf": [
-          {
-            "type": "string",
-            "enum": [
-              "variant01",
-              "variant02",
-              "variant03",
-              "variant04"
-            ]
-          },
-          {
-            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
-          }
-        ]
-      },
-      "default": [
-        "variant01",
-        "variant02",
-        "variant03",
-        "variant04"
-      ]
-    },
     "accessoriesColor": {
       "title": "Accessories Color",
       "type": "array",
@@ -500,20 +474,18 @@
         "silver02"
       ]
     },
-    "glassesColor": {
-      "title": "Glasses Color",
+    "mouthColor": {
+      "title": "Mouth Color",
       "type": "array",
       "items": {
         "anyOf": [
           {
             "type": "string",
             "enum": [
-              "green01",
-              "blue01",
-              "red01",
-              "black01",
-              "black02",
-              "black03"
+              "variant01",
+              "variant02",
+              "variant03",
+              "variant04"
             ]
           },
           {
@@ -522,44 +494,10 @@
         ]
       },
       "default": [
-        "green01",
-        "blue01",
-        "red01",
-        "black01",
-        "black02",
-        "black03"
-      ]
-    },
-    "hatColor": {
-      "title": "Hat Color",
-      "type": "array",
-      "items": {
-        "anyOf": [
-          {
-            "type": "string",
-            "enum": [
-              "pink01",
-              "blue01",
-              "green01",
-              "purple01",
-              "red01",
-              "black01",
-              "gray01"
-            ]
-          },
-          {
-            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
-          }
-        ]
-      },
-      "default": [
-        "pink01",
-        "blue01",
-        "green01",
-        "purple01",
-        "red01",
-        "black01",
-        "gray01"
+        "variant01",
+        "variant02",
+        "variant03",
+        "variant04"
       ]
     },
     "clothesColor": {
@@ -602,6 +540,68 @@
         "green01",
         "green02",
         "green03"
+      ]
+    },
+    "hatColor": {
+      "title": "Hat Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "pink01",
+              "blue01",
+              "green01",
+              "purple01",
+              "red01",
+              "black01",
+              "gray01"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "pink01",
+        "blue01",
+        "green01",
+        "purple01",
+        "red01",
+        "black01",
+        "gray01"
+      ]
+    },
+    "glassesColor": {
+      "title": "Glasses Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "green01",
+              "blue01",
+              "red01",
+              "black01",
+              "black02",
+              "black03"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "green01",
+        "blue01",
+        "red01",
+        "black01",
+        "black02",
+        "black03"
       ]
     }
   },

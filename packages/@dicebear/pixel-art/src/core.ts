@@ -42,19 +42,50 @@ export const style: Style<Options> = {
     const colors: ColorPickCollection = {
       'skin': pickColor(prng, 'skin', options.skinColor ?? []),
       'hair': pickColor(prng, 'hair', options.hairColor ?? []),
-      'mouth': pickColor(prng, 'mouth', options.mouthColor ?? []),
       'accessories': pickColor(prng, 'accessories', options.accessoriesColor ?? []),
-      'glasses': pickColor(prng, 'glasses', options.glassesColor ?? []),
-      'hat': pickColor(prng, 'hat', options.hatColor ?? []),
+      'mouth': pickColor(prng, 'mouth', options.mouthColor ?? []),
       'clothes': pickColor(prng, 'clothes', options.clothesColor ?? []),
+      'hat': pickColor(prng, 'hat', options.hatColor ?? []),
+      'glasses': pickColor(prng, 'glasses', options.glassesColor ?? []),
     }
+
 
     return {
       attributes: {
         viewBox: '0 0 20 20',
         fill: 'none',
       },
-      body: `<path d="M6 4V3h8v1h1v1h1v3h1v3h-1v2h-1v1h-1v1h-2v1h4v1h1v3H3v-3h1v-1h4v-1H6v-1H5v-1H4v-2H3V8h1V5h1V4h1Z" fill="${colors.skin.value}"/><path d="M6 3v1H5v1H4v3H3v3h1v2h1v1h1v1h8v-1h1v-1h1v-2h1V8h-1V5h-1V4h-1V3H6Z" fill="#fff" fill-opacity=".1"/><g>${components.beard?.value(components, colors) ?? ''}</g><g>${components.eyes?.value(components, colors) ?? ''}</g><g>${components.eyebrows?.value(components, colors) ?? ''}</g><g>${components.mouth?.value(components, colors) ?? ''}</g><g>${components.hair?.value(components, colors) ?? ''}</g><g>${components.accessories?.value(components, colors) ?? ''}</g><g>${components.glasses?.value(components, colors) ?? ''}</g><g>${components.hat?.value(components, colors) ?? ''}</g><g>${components.clothing?.value(components, colors) ?? ''}</g>`,
+      body: `
+  <path d="M6 4V3h8v1h1v1h1v3h1v3h-1v2h-1v1h-1v1h-2v1h4v1h1v3H3v-3h1v-1h4v-1H6v-1H5v-1H4v-2H3V8h1V5h1V4h1Z" fill="${colors.skin.value}"/>
+  <path d="M6 3v1H5v1H4v3H3v3h1v2h1v1h1v1h8v-1h1v-1h1v-2h1V8h-1V5h-1V4h-1V3H6Z" fill="#fff" fill-opacity=".1"/>
+  <g>
+    ${components.beard?.value(components, colors) ?? ''}
+  </g>
+  <g>
+    ${components.eyes?.value(components, colors) ?? ''}
+  </g>
+  <g>
+    ${components.eyebrows?.value(components, colors) ?? ''}
+  </g>
+  <g>
+    ${components.mouth?.value(components, colors) ?? ''}
+  </g>
+  <g>
+    ${components.hair?.value(components, colors) ?? ''}
+  </g>
+  <g>
+    ${components.accessories?.value(components, colors) ?? ''}
+  </g>
+  <g>
+    ${components.glasses?.value(components, colors) ?? ''}
+  </g>
+  <g>
+    ${components.hat?.value(components, colors) ?? ''}
+  </g>
+  <g>
+    ${components.clothing?.value(components, colors) ?? ''}
+  </g>
+`,
     };
   },
 };

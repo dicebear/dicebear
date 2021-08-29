@@ -43,7 +43,20 @@ export const style: Style<Options> = {
         viewBox: '0 0 14 14',
         fill: 'none',
       },
-      body: `<g transform="translate(-3 -3)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="translate(-3 -3)">${components.eyebrows?.value(components, colors) ?? ''}</g><g transform="translate(-3 -2)">${components.mouth?.value(components, colors) ?? ''}</g><g transform="translate(-3 -3)">${components.glasses?.value(components, colors) ?? ''}</g>`,
+      body: `
+  <g transform="translate(-3 -3)">
+    ${components.eyes?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(-3 -3)">
+    ${components.eyebrows?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(-3 -2)">
+    ${components.mouth?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(-3 -3)">
+    ${components.glasses?.value(components, colors) ?? ''}
+  </g>
+`,
     };
   },
 };

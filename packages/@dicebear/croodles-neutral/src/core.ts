@@ -31,12 +31,23 @@ export const style: Style<Options> = {
     const colors: ColorPickCollection = {
     }
 
+
     return {
       attributes: {
         viewBox: '0 0 128 128',
         fill: 'none',
       },
-      body: `<g transform="translate(7 4)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="translate(47 46)">${components.nose?.value(components, colors) ?? ''}</g><g transform="translate(30 93)">${components.mouth?.value(components, colors) ?? ''}</g>`,
+      body: `
+  <g transform="translate(7 4)">
+    ${components.eyes?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(47 46)">
+    ${components.nose?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(30 93)">
+    ${components.mouth?.value(components, colors) ?? ''}
+  </g>
+`,
     };
   },
 };

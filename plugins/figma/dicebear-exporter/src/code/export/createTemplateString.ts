@@ -13,6 +13,10 @@ export async function createTemplateString(node: FrameNode | ComponentNode) {
 
   // Optimize the svg
   result = optimize(result, {
+    js2svg: {
+      indent: 2,
+      pretty: true,
+    },
     plugins: [
       {
         name: 'preset-default',

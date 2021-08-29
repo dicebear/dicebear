@@ -37,16 +37,21 @@ export const style: Style<Options> = {
     }
 
     const colors: ColorPickCollection = {
-      'base': pickColor(prng, 'base', options.baseColor ?? []),
       'top': pickColor(prng, 'top', options.topColor ?? []),
+      'base': pickColor(prng, 'base', options.baseColor ?? []),
     }
+
 
     return {
       attributes: {
         viewBox: '0 0 256 256',
         fill: 'none',
       },
-      body: `<g>${components.face?.value(components, colors) ?? ''}</g>`,
+      body: `
+  <g>
+    ${components.face?.value(components, colors) ?? ''}
+  </g>
+`,
     };
   },
 };
