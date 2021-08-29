@@ -175,7 +175,7 @@ export async function createExport() {
           },
           {
             type: 'string',
-            pattern: '^#[0-9a-zA-Z]+$',
+            pattern: '^[0-9a-zA-Z]+$',
           },
           {
             type: 'array',
@@ -183,7 +183,7 @@ export async function createExport() {
               anyOf: [
                 {
                   type: 'string',
-                  pattern: '^#[0-9a-zA-Z]+$',
+                  pattern: '^[0-9a-zA-Z]+$',
                 },
                 {
                   $ref: 'https://dicebear.com/schema/v4.json#/definitions/color',

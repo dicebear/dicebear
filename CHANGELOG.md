@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.8.2] - 2021-08-29
+
+### Fixed
+
+- Background color pattern
+
 ## [4.8.1] - 2021-08-29
 
 ### Fixed
