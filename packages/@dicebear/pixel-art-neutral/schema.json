@@ -152,8 +152,8 @@
         "variant01"
       ]
     },
-    "glassesPropability": {
-      "title": "Glasses Propability",
+    "glassesProbability": {
+      "title": "Glasses Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 20
     },

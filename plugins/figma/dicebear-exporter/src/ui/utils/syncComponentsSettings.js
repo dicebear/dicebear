@@ -6,17 +6,17 @@ export function syncComponentsSettings(newComponents, oldComponents) {
       continue;
     }
 
-    let propability = parseInt(newComponents[key].settings.propability);
+    let probability = parseInt(newComponents[key].settings.probability);
 
-    if (isNaN(propability)) {
-      propability = null;
-    } else if (propability > 100) {
-      propability = 100;
-    } else if (propability < 0) {
-      propability = 0;
+    if (isNaN(probability)) {
+      probability = null;
+    } else if (probability > 100) {
+      probability = 100;
+    } else if (probability < 0) {
+      probability = 0;
     }
 
-    newComponents[key].settings.propability = propability;
+    newComponents[key].settings.probability = probability;
 
     if (
       false ===

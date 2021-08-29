@@ -29,10 +29,10 @@ export const style: Style<Options> = {
     const components: ComponentPickCollection = {
       'face': faceComponent,
       'nose': noseComponent,
-      'beard': prng.bool(options.beardPropability) ? beardComponent : undefined,
+      'beard': prng.bool(options.beardProbability) ? beardComponent : undefined,
       'mouth': mouthComponent,
       'top': topComponent,
-      'mustache': prng.bool(options.mustachePropability) ? mustacheComponent : undefined,
+      'mustache': prng.bool(options.mustacheProbability) ? mustacheComponent : undefined,
       'eyes': eyesComponent,
     }
 

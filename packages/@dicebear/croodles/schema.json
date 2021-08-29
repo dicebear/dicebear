@@ -79,8 +79,8 @@
         "variant01"
       ]
     },
-    "beardPropability": {
-      "title": "Beard Propability",
+    "beardProbability": {
+      "title": "Beard Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 10
     },
@@ -221,8 +221,8 @@
         "variant01"
       ]
     },
-    "mustachePropability": {
-      "title": "Mustache Propability",
+    "mustacheProbability": {
+      "title": "Mustache Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 10
     },

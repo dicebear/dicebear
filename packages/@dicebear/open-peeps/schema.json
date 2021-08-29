@@ -223,8 +223,8 @@
         "moustache9"
       ]
     },
-    "facialHairPropability": {
-      "title": "Facial Hair Propability",
+    "facialHairProbability": {
+      "title": "Facial Hair Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 10
     },
@@ -243,8 +243,8 @@
         "respirator"
       ]
     },
-    "maskPropability": {
-      "title": "Mask Propability",
+    "maskProbability": {
+      "title": "Mask Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 5
     },
@@ -275,8 +275,8 @@
         "sunglasses2"
       ]
     },
-    "accessoriesPropability": {
-      "title": "Accessories Propability",
+    "accessoriesProbability": {
+      "title": "Accessories Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 20
     },

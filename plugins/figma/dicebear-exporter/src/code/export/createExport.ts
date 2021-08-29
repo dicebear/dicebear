@@ -106,11 +106,11 @@ export async function createExport() {
       default: filterDefaults(componentGroup.settings.defaults),
     };
 
-    if (typeof componentGroup.settings.propability === 'number') {
-      schemaProperties[`${componentGroupName}Propability`] = {
-        title: `${normalizeCamelCase(componentGroupName)} Propability`,
+    if (typeof componentGroup.settings.probability === 'number') {
+      schemaProperties[`${componentGroupName}Probability`] = {
+        title: `${normalizeCamelCase(componentGroupName)} Probability`,
         $ref: 'https://dicebear.com/schema/v4.json#/definitions/probability',
-        default: componentGroup.settings.propability,
+        default: componentGroup.settings.probability,
       };
     }
 

@@ -26,7 +26,7 @@ export const style: Style<Options> = {
       'eyes': eyesComponent,
       'eyebrows': eyebrowsComponent,
       'mouth': mouthComponent,
-      'glasses': prng.bool(options.glassesPropability) ? glassesComponent : undefined,
+      'glasses': prng.bool(options.glassesProbability) ? glassesComponent : undefined,
     }
 
     const colors: ColorPickCollection = {

@@ -13,7 +13,7 @@ export type FrameSettings = {
 
 export type ComponentGroupSettings = {
   defaults: Record<string, boolean>;
-  propability: number | null;
+  probability: number | null;
 };
 
 export type ExportComponent = {

@@ -21,8 +21,8 @@
         "variant01"
       ]
     },
-    "beardPropability": {
-      "title": "Beard Propability",
+    "beardProbability": {
+      "title": "Beard Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 10
     },
@@ -214,8 +214,8 @@
         "long01"
       ]
     },
-    "hairPropability": {
-      "title": "Hair Propability",
+    "hairProbability": {
+      "title": "Hair Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 95
     },
@@ -238,8 +238,8 @@
         "variant01"
       ]
     },
-    "accessoriesPropability": {
-      "title": "Accessories Propability",
+    "accessoriesProbability": {
+      "title": "Accessories Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 10
     },
@@ -268,8 +268,8 @@
         "variant01"
       ]
     },
-    "glassesPropability": {
-      "title": "Glasses Propability",
+    "glassesProbability": {
+      "title": "Glasses Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 20
     },
@@ -308,8 +308,8 @@
         "variant12"
       ]
     },
-    "hatPropability": {
-      "title": "Hat Propability",
+    "hatProbability": {
+      "title": "Hat Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
       "default": 10
     },

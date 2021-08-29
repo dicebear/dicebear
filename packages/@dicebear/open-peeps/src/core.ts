@@ -27,9 +27,9 @@ export const style: Style<Options> = {
     const components: ComponentPickCollection = {
       'head': headComponent,
       'face': faceComponent,
-      'facialHair': prng.bool(options.facialHairPropability) ? facialHairComponent : undefined,
-      'mask': prng.bool(options.maskPropability) ? maskComponent : undefined,
-      'accessories': prng.bool(options.accessoriesPropability) ? accessoriesComponent : undefined,
+      'facialHair': prng.bool(options.facialHairProbability) ? facialHairComponent : undefined,
+      'mask': prng.bool(options.maskProbability) ? maskComponent : undefined,
+      'accessories': prng.bool(options.accessoriesProbability) ? accessoriesComponent : undefined,
     }
 
     const colors: ColorPickCollection = {

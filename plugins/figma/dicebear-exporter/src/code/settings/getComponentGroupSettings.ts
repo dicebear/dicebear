@@ -5,7 +5,7 @@ export function getComponentGroupSettings(
 ): ComponentGroupSettings {
   return {
     defaults: {},
-    propability: null,
+    probability: null,
     ...JSON.parse(
       figma.root.getPluginData(`components/${componentGroup}/settings`) || "{}"
     ),

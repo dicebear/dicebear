@@ -333,10 +333,10 @@ export const style: Style<Options> = {
 
     const components: ComponentPickCollection = {
       {{#each components}}
-      {{#isNull this.settings.propability.length}}
+      {{#isNull this.settings.probability.length}}
       '{{@key}}': {{@key}}Component,
       {{else}}
-      '{{@key}}': prng.bool(options.{{@key}}Propability) ? {{@key}}Component : undefined,
+      '{{@key}}': prng.bool(options.{{@key}}Probability) ? {{@key}}Component : undefined,
       {{/isNull}}
       {{/each}}
     }

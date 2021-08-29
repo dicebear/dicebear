@@ -8,11 +8,11 @@
 
 <div class="form">
   <div class="section">
-    <Label>Propability (in percent)</Label>
+    <Label>Probability (in percent)</Label>
     <Input
       type="number"
       placeholder="Leave blank to disable option"
-      bind:value={$state.data.components[componentGroup].settings.propability}
+      bind:value={$state.data.components[componentGroup].settings.probability}
     />
   </div>
 

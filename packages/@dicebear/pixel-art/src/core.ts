@@ -28,14 +28,14 @@ export const style: Style<Options> = {
     const clothingComponent = pickComponent(prng, 'clothing', options.clothing);
 
     const components: ComponentPickCollection = {
-      'beard': prng.bool(options.beardPropability) ? beardComponent : undefined,
+      'beard': prng.bool(options.beardProbability) ? beardComponent : undefined,
       'eyes': eyesComponent,
       'eyebrows': eyebrowsComponent,
       'mouth': mouthComponent,
-      'hair': prng.bool(options.hairPropability) ? hairComponent : undefined,
-      'accessories': prng.bool(options.accessoriesPropability) ? accessoriesComponent : undefined,
-      'glasses': prng.bool(options.glassesPropability) ? glassesComponent : undefined,
-      'hat': prng.bool(options.hatPropability) ? hatComponent : undefined,
+      'hair': prng.bool(options.hairProbability) ? hairComponent : undefined,
+      'accessories': prng.bool(options.accessoriesProbability) ? accessoriesComponent : undefined,
+      'glasses': prng.bool(options.glassesProbability) ? glassesComponent : undefined,
+      'hat': prng.bool(options.hatProbability) ? hatComponent : undefined,
       'clothing': clothingComponent,
     }
 
