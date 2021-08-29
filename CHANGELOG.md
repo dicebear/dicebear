@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.8.3] - 2021-08-29
+
+### Fixed
+
+- Background schema validation (oneOf => anyOf)
+
 ## [4.8.2] - 2021-08-29
 
 ### Fixed

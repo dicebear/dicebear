@@ -159,7 +159,7 @@
     },
     "backgroundColor": {
       "title": "Background Color",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
         },

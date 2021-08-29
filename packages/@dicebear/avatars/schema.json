@@ -36,7 +36,7 @@
     },
     "backgroundColor": {
       "title": "Background Color",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
         },
@@ -47,7 +47,7 @@
         {
           "type": "array",
           "items": {
-            "oneOf": [
+            "anyOf": [
               {
                 "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
               },

@@ -169,7 +169,7 @@ export async function createExport() {
     if (exportData.frame.settings.backgroundColorGroupName === colorGroupName) {
       schemaProperties[`backgroundColor`] = {
         title: `Background Color`,
-        oneOf: [
+        anyOf: [
           {
             $ref: 'https://dicebear.com/schema/v4.json#/definitions/color',
           },
