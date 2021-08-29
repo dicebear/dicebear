@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/collection",
-  "version": "4.8.1",
+  "version": "4.8.2",
   "description": "All offical dicebear avatar styles in one package",
   "keywords": [
     "dicebear"
@@ -32,27 +32,27 @@
     "build": "dicebear-project build DiceBear.Collection"
   },
   "dependencies": {
-    "@dicebear/avatars-avataaars-sprites": "^4.8.1",
-    "@dicebear/avatars-bottts-sprites": "^4.8.1",
-    "@dicebear/avatars-female-sprites": "^4.8.1",
-    "@dicebear/avatars-gridy-sprites": "^4.8.1",
-    "@dicebear/avatars-human-sprites": "^4.8.1",
-    "@dicebear/avatars-identicon-sprites": "^4.8.1",
-    "@dicebear/avatars-initials-sprites": "^4.8.1",
-    "@dicebear/avatars-jdenticon-sprites": "^4.8.1",
-    "@dicebear/avatars-male-sprites": "^4.8.1",
-    "@dicebear/croodles": "^4.8.1",
-    "@dicebear/croodles-neutral": "^4.8.1",
-    "@dicebear/micah": "^4.8.1",
-    "@dicebear/open-peeps": "^4.8.1",
-    "@dicebear/pixel-art": "^4.8.1",
-    "@dicebear/pixel-art-neutral": "^4.8.1"
+    "@dicebear/avatars-avataaars-sprites": "^4.8.2",
+    "@dicebear/avatars-bottts-sprites": "^4.8.2",
+    "@dicebear/avatars-female-sprites": "^4.8.2",
+    "@dicebear/avatars-gridy-sprites": "^4.8.2",
+    "@dicebear/avatars-human-sprites": "^4.8.2",
+    "@dicebear/avatars-identicon-sprites": "^4.8.2",
+    "@dicebear/avatars-initials-sprites": "^4.8.2",
+    "@dicebear/avatars-jdenticon-sprites": "^4.8.2",
+    "@dicebear/avatars-male-sprites": "^4.8.2",
+    "@dicebear/croodles": "^4.8.2",
+    "@dicebear/croodles-neutral": "^4.8.2",
+    "@dicebear/micah": "^4.8.2",
+    "@dicebear/open-peeps": "^4.8.2",
+    "@dicebear/pixel-art": "^4.8.2",
+    "@dicebear/pixel-art-neutral": "^4.8.2"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.8.1",
+    "@dicebear/avatars": "^4.8.2",
     "@tsconfig/recommended": "^1.0.0",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^4.8.1",
+    "dicebear-project": "^4.8.2",
     "shx": "^0.3.3",
     "typescript": "^4.2.3"
   },
