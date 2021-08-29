@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "4.8.0-alpha.0",
+  "version": "4.8.0-alpha.1",
   "description": "An avatar library for designers and developers.",
   "keywords": [
     "avatar",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
-    "dicebear-project": "^4.8.0-alpha.0",
+    "dicebear-project": "^4.8.0-alpha.1",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
@@ -54,5 +54,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "a081e38b1593d87f1d32abf632e3792c16f702fd"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-avataaars-sprites",
-  "version": "4.8.0-alpha.0",
+  "version": "4.8.0-alpha.1",
   "description": "avataaars avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -37,11 +37,11 @@
     "build": "dicebear-project build DiceBear.Avataaars"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.8.0-alpha.0",
+    "@dicebear/avatars": "^4.8.0-alpha.1",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^4.8.0-alpha.0",
+    "dicebear-project": "^4.8.0-alpha.1",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
@@ -53,5 +53,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "a081e38b1593d87f1d32abf632e3792c16f702fd"
 }
