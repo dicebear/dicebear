@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.8.4] - 2021-08-29
+
+### Fixed
+
+- Typo (propability => probability)
+
 ## [4.8.3] - 2021-08-29
 
 ### Fixed
