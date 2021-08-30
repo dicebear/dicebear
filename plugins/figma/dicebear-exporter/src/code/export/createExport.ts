@@ -81,6 +81,12 @@ export async function createExport() {
     }),
     'src/utils/pickColor.ts': templates['src/utils/pickColor.ts'],
     'src/utils/pickComponent.ts': templates['src/utils/pickComponent.ts'],
+    'src/hooks/onCreate.ts': handlebars.compile(templates['src/hooks/onCreate.ts'])({
+      content: exportData.frame.settings.onCreateHook,
+    }),
+    'src/hooks/onSchemaLoad.ts': handlebars.compile(templates['src/hooks/onSchemaLoad.ts'])({
+      content: exportData.frame.settings.onSchemaLoadHook,
+    }),
   };
 
   const schemaProperties: Record<string, JSONSchema7Definition> = {};

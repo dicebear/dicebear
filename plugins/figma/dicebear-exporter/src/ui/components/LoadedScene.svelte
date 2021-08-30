@@ -6,6 +6,7 @@
   import BackgroundForm from './BackgroundForm.svelte';
   import PackageForm from './PackageForm.svelte';
   import LicenseForm from './LicenseForm.svelte';
+  import HookForm from './HookForm.svelte';
   import ColorsGroupForm from './ColorsGroupForm.svelte';
   import ComponentGroupForm from './ComponentGroupForm.svelte';
 
@@ -28,6 +29,7 @@
     <MenuItem stage={'package'}>Package</MenuItem>
     <MenuItem stage={'license'}>License</MenuItem>
     <MenuItem stage={'background'}>Background</MenuItem>
+    <MenuItem stage={'hook'}>Hooks</MenuItem>
   </div>
 
   {#if Object.keys($state.data.components).length > 0}
@@ -61,6 +63,8 @@
     <LicenseForm />
   {:else if activeStageSplit[0] === 'background'}
     <BackgroundForm />
+  {:else if activeStageSplit[0] === 'hook'}
+    <HookForm />
   {/if}
 </div>
 

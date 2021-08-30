@@ -9,6 +9,8 @@ export type FrameSettings = {
   licenseName: string;
   licenseUrl: string;
   backgroundColorGroupName: string;
+  onCreateHook: string;
+  onSchemaLoadHook: string;
 };
 
 export type ComponentGroupSettings = {

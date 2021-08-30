@@ -303,6 +303,10 @@ import type { ComponentPickCollection, ColorPickCollection } from './static-type
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
 import { pickColor } from './utils/pickColor';
+import { onCreate } from './hooks/onCreate';
+import { onSchemaLoad } from './hooks/onSchemaLoad';
+
+onSchemaLoad({ schema });
 
 export const style: Style<Options> = {
   meta: {
@@ -353,6 +357,9 @@ export const style: Style<Options> = {
     const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
     options.backgroundColor = pickColor(prng, '{{backgroundColorGroupName}}', backgroundColor ?? []).value;
     {{/if}}
+
+    // Hooks
+    onCreate({ prng, options, components, colors });
 
     return {
       attributes: {
@@ -475,4 +482,39 @@ export function pickComponent(prng: Prng, group: string, values: string[] = []):
   }
 }  
 `,
+
+  // src/hooks/onCreate.ts
+  'src/hooks/onCreate.ts': `
+import { Prng, StyleOptions } from "@dicebear/avatars";
+
+import { Options } from "../options";
+import { ColorPickCollection, ComponentPickCollection } from "../static-types";
+
+type Props = { prng: Prng, options: StyleOptions<Options>, components: ComponentPickCollection, colors: ColorPickCollection } 
+
+export function onCreate({ prng, options, components, colors }: Props) {
+  {{#if content}}
+  {{{content}}}
+  {{else}}
+  // Write your modifications here
+  {{/if}}
+}  
+`,
+
+  // src/hooks/onSchemaLoad.ts
+  'src/hooks/onSchemaLoad.ts': `
+import { StyleSchema } from "@dicebear/avatars";
+
+type Props = {
+  schema: StyleSchema
+}
+
+export function onSchemaLoad({ schema }: Props) {
+  {{#if content}}
+  {{{content}}}
+  {{else}}
+  // Write your modifications here
+  {{/if}}
+}  
+`
 };

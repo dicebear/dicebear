@@ -1,4 +1,4 @@
-import { ExportColorGroup, FrameSettings } from '../types';
+import { FrameSettings } from '../types';
 
 export function getFrameSettings(frame: FrameNode, colorGroups: string[]): FrameSettings {
   const data: FrameSettings = {
@@ -12,6 +12,8 @@ export function getFrameSettings(frame: FrameNode, colorGroups: string[]): Frame
     licenseName: 'CC BY 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
     backgroundColorGroupName: '',
+    onCreateHook: '',
+    onSchemaLoadHook: '',
     ...JSON.parse(frame.getPluginData(`settings`) || '{}'),
   };
 
