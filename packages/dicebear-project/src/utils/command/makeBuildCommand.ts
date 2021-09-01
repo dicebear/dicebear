@@ -4,7 +4,7 @@ import { PackageJson } from 'type-fest';
 import { compileFromFile } from 'json-schema-to-typescript';
 import { createUmdConfig } from '../build/createUmdConfig';
 import { createCjsAndEsConfig } from '../build/createCjsAndEsConfig';
-import { dereference } from '@apidevtools/json-schema-ref-parser';
+import jsonRefParser from '@apidevtools/json-schema-ref-parser';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 
@@ -24,7 +24,7 @@ export async function makeBuildCommand() {
     if (await fs.pathExists(schemaPath)) {
       console.log('Create dereferences src/schema.ts from schema.json');
 
-      const schema = await dereference(schemaPath);
+      const schema = await jsonRefParser.dereference(schemaPath);
 
       delete schema.definitions;
 

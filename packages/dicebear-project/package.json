@@ -37,6 +37,7 @@
     "fs-extra": "^9.1.0",
     "json-schema-to-typescript": "^10.1.4",
     "ora": "^5.4.0",
+    "typescript": "^4.4.2",
     "replace-in-file": "^6.2.0",
     "rollup": "^2.45.2",
     "rollup-plugin-re": "^1.0.7",
@@ -53,8 +54,7 @@
     "@types/semver": "^7.3.6",
     "@types/update-notifier": "^5.0.0",
     "@types/validate-npm-package-name": "^3.0.2",
-    "shx": "^0.3.3",
-    "typescript": "^4.3.5"
+    "shx": "^0.3.3"
   },
   "homepage": "https://github.com/dicebear/dicebear",
   "gitHead": "a081e38b1593d87f1d32abf632e3792c16f702fd"
