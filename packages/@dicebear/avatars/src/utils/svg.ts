@@ -196,7 +196,7 @@ export function getViewBox(result: StyleCreateResult) {
 export function addMargin<O extends Options>(result: StyleCreateResult, options: O | number) {
   const margin = typeof options === 'number' ? options : options.margin ?? 0;
 
-  return addScale(result, margin * 2);
+  return addScale(result, 100 - margin * 2);
 }
 
 /**

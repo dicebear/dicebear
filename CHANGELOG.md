@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.8.5] - 2021-09-01
+
+### Fixed
+
+- `@dicebear/avatars` margin option #149
+
 ## [4.8.4] - 2021-08-29
 
 ### Fixed
