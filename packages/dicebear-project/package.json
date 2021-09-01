@@ -1,6 +1,6 @@
 {
   "name": "dicebear-project",
-  "version": "4.8.4",
+  "version": "4.8.5",
   "description": "Project CLI for DiceBear - An avatar library for designers and developers",
   "bin": "bin/index.js",
   "types": "lib/index.d.ts",
@@ -37,12 +37,12 @@
     "fs-extra": "^9.1.0",
     "json-schema-to-typescript": "^10.1.4",
     "ora": "^5.4.0",
-    "typescript": "^4.4.2",
     "replace-in-file": "^6.2.0",
     "rollup": "^2.45.2",
     "rollup-plugin-re": "^1.0.7",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
+    "typescript": "^4.4.2",
     "update-notifier": "^5.1.0",
     "validate-npm-package-name": "^3.0.0"
   },
