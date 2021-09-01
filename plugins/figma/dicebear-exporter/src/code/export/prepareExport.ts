@@ -96,5 +96,13 @@ export function prepareExport() {
     }
   }
 
+  exportData.frame.settings.componentGroupAliases = exportData.frame.settings.componentGroupAliases.filter(
+    (val) => componentGroups.has(val.name) && val.alias && false === componentGroups.has(val.name)
+  );
+
+  exportData.frame.settings.colorGroupAliases = exportData.frame.settings.colorGroupAliases.filter(
+    (val) => colorGroups.has(val.name) && val.alias && false === colorGroups.has(val.name)
+  );
+
   return exportData;
 }

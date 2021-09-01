@@ -9,10 +9,6 @@
     <Label>onCreate</Label>
     <Textarea bind:value={$state.data.frame.settings.onCreateHook} rows={10}></Textarea>
   </div>
-  <div class="section">
-    <Label>onSchemaLoad</Label>
-    <Textarea bind:value={$state.data.frame.settings.onSchemaLoadHook} rows={10}></Textarea>
-  </div>
 </div>
 
 <style lang="scss">

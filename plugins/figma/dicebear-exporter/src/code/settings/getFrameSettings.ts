@@ -13,7 +13,8 @@ export function getFrameSettings(frame: FrameNode, colorGroups: string[]): Frame
     licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
     backgroundColorGroupName: '',
     onCreateHook: '',
-    onSchemaLoadHook: '',
+    componentGroupAliases: [],
+    colorGroupAliases: [],
     ...JSON.parse(frame.getPluginData(`settings`) || '{}'),
   };
 

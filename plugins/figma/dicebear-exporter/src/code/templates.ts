@@ -304,9 +304,6 @@ import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
 import { pickColor } from './utils/pickColor';
 import { onCreate } from './hooks/onCreate';
-import { onSchemaLoad } from './hooks/onSchemaLoad';
-
-onSchemaLoad({ schema });
 
 export const style: Style<Options> = {
   meta: {
@@ -500,21 +497,4 @@ export function onCreate({ prng, options, components, colors }: Props) {
   {{/if}}
 }  
 `,
-
-  // src/hooks/onSchemaLoad.ts
-  'src/hooks/onSchemaLoad.ts': `
-import { StyleSchema } from "@dicebear/avatars";
-
-type Props = {
-  schema: StyleSchema
-}
-
-export function onSchemaLoad({ schema }: Props) {
-  {{#if content}}
-  {{{content}}}
-  {{else}}
-  // Write your modifications here
-  {{/if}}
-}  
-`
 };

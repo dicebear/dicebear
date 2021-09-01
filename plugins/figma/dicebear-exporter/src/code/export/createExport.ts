@@ -84,12 +84,24 @@ export async function createExport() {
     'src/hooks/onCreate.ts': handlebars.compile(templates['src/hooks/onCreate.ts'])({
       content: exportData.frame.settings.onCreateHook,
     }),
-    'src/hooks/onSchemaLoad.ts': handlebars.compile(templates['src/hooks/onSchemaLoad.ts'])({
-      content: exportData.frame.settings.onSchemaLoadHook,
-    }),
   };
 
   const schemaProperties: Record<string, JSONSchema7Definition> = {};
+
+  // Aliases
+  for (const item of exportData.frame.settings.componentGroupAliases) {
+    schemaProperties[item.alias] = {
+      $ref: `#/properties/${item.name}`,
+      description: item.deprecated ? `@deprecated use ${item.name} instead.` : `Alias for ${item.name}`,
+    };
+  }
+
+  for (const item of exportData.frame.settings.colorGroupAliases) {
+    schemaProperties[`${item.alias}Color`] = {
+      $ref: `#/properties/${item.name}Color`,
+      description: item.deprecated ? `@deprecated use ${item.name} instead.` : `Alias for ${item.name}`,
+    };
+  }
 
   // Components
   const componentTemplate = handlebars.compile(templates['src/components/{{name}}.ts']);
