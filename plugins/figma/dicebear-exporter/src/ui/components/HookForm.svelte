@@ -6,8 +6,12 @@
 
 <div class="form">
   <div class="section">
-    <Label>onCreate</Label>
-    <Textarea bind:value={$state.data.frame.settings.onCreateHook} rows={10}></Textarea>
+    <Label>onPreCreateHook</Label>
+    <Textarea bind:value={$state.data.frame.settings.onPreCreateHook} rows={10} />
+  </div>
+  <div class="section">
+    <Label>onPostCreateHook</Label>
+    <Textarea bind:value={$state.data.frame.settings.onPostCreateHook} rows={10} />
   </div>
 </div>
 

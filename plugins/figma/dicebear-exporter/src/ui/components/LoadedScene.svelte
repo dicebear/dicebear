@@ -7,7 +7,8 @@
   import PackageForm from './PackageForm.svelte';
   import LicenseForm from './LicenseForm.svelte';
   import HookForm from './HookForm.svelte';
-  import ColorsGroupForm from './ColorsGroupForm.svelte';
+  import AliasForm from './AliasForm.svelte';
+  import ColorGroupForm from './ColorGroupForm.svelte';
   import ComponentGroupForm from './ComponentGroupForm.svelte';
 
   $: activeStageSplit = $activeStage.split(':');
@@ -29,6 +30,7 @@
     <MenuItem stage={'package'}>Package</MenuItem>
     <MenuItem stage={'license'}>License</MenuItem>
     <MenuItem stage={'background'}>Background</MenuItem>
+    <MenuItem stage={'alias'}>Aliases</MenuItem>
     <MenuItem stage={'hook'}>Hooks</MenuItem>
   </div>
 
@@ -36,7 +38,7 @@
     <div class="menu-wrapper">
       <div class="menu-section">Components</div>
       {#each Object.keys($state.data.components) as componentGroup}
-        <MenuItem stage={`components:${componentGroup}`}>
+        <MenuItem stage={`component:${componentGroup}`}>
           {componentGroup}
         </MenuItem>
       {/each}
@@ -47,16 +49,16 @@
     <div class="menu-wrapper">
       <div class="menu-section">Colors</div>
       {#each Object.keys(colors) as colorGroup}
-        <MenuItem stage={`colors:${colorGroup}`}>{colorGroup}</MenuItem>
+        <MenuItem stage={`color:${colorGroup}`}>{colorGroup}</MenuItem>
       {/each}
     </div>
   {/if}
 </div>
 <div class="right">
-  {#if activeStageSplit[0] === 'components'}
+  {#if activeStageSplit[0] === 'component'}
     <ComponentGroupForm componentGroup={activeStageSplit[1]} />
-  {:else if activeStageSplit[0] === 'colors'}
-    <ColorsGroupForm colorGroup={activeStageSplit[1]} />
+  {:else if activeStageSplit[0] === 'color'}
+    <ColorGroupForm colorGroup={activeStageSplit[1]} />
   {:else if activeStageSplit[0] === 'package'}
     <PackageForm />
   {:else if activeStageSplit[0] === 'license'}
@@ -65,6 +67,8 @@
     <BackgroundForm />
   {:else if activeStageSplit[0] === 'hook'}
     <HookForm />
+  {:else if activeStageSplit[0] === 'alias'}
+    <AliasForm />
   {/if}
 </div>
 

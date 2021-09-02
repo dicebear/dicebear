@@ -9,7 +9,8 @@ export type FrameSettings = {
   licenseName: string;
   licenseUrl: string;
   backgroundColorGroupName: string;
-  onCreateHook: string;
+  onPreCreateHook: string;
+  onPostCreateHook: string;
   componentGroupAliases: Array<{
     name: string;
     alias: string;

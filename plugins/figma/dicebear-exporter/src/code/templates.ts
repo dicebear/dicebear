@@ -303,7 +303,12 @@ import type { ComponentPickCollection, ColorPickCollection } from './static-type
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
 import { pickColor } from './utils/pickColor';
-import { onCreate } from './hooks/onCreate';
+{{#if hasPreCreateHook}}
+import { onPreCreate } from './hooks/onPreCreate';
+{{/if}}
+{{#if hasPostCreateHook}}
+import { onPostCreate } from './hooks/onPostCreate';
+{{/if}}
 
 export const style: Style<Options> = {
   meta: {
@@ -328,6 +333,10 @@ export const style: Style<Options> = {
   },
   schema,
   create: ({ prng, options }) => {
+    {{#if hasPreCreateHook}}
+    onPreCreate({ prng, options });
+    {{/if}}
+
     {{#each components}}
     const {{@key}}Component = pickComponent(prng, '{{@key}}', options.{{@key}});
     {{/each}}
@@ -355,8 +364,9 @@ export const style: Style<Options> = {
     options.backgroundColor = pickColor(prng, '{{backgroundColorGroupName}}', backgroundColor ?? []).value;
     {{/if}}
 
-    // Hooks
-    onCreate({ prng, options, components, colors });
+    {{#if hasPostCreateHook}}
+    onPostCreate({ prng, options, components, colors });
+    {{/if}}
 
     return {
       attributes: {
@@ -480,8 +490,8 @@ export function pickComponent(prng: Prng, group: string, values: string[] = []):
 }  
 `,
 
-  // src/hooks/onCreate.ts
-  'src/hooks/onCreate.ts': `
+  // src/hooks/onPreCreate.ts
+  'src/hooks/onPreCreate.ts': `
 import { Prng, StyleOptions } from "@dicebear/avatars";
 
 import { Options } from "../options";
@@ -489,12 +499,30 @@ import { ColorPickCollection, ComponentPickCollection } from "../static-types";
 
 type Props = { prng: Prng, options: StyleOptions<Options>, components: ComponentPickCollection, colors: ColorPickCollection } 
 
-export function onCreate({ prng, options, components, colors }: Props) {
+export function onPreCreate({ prng, options, components, colors }: Props) {
   {{#if content}}
   {{{content}}}
   {{else}}
   // Write your modifications here
   {{/if}}
-}  
+}
+`,
+
+  // src/hooks/onPostCreate.ts
+  'src/hooks/onPostCreate.ts': `
+import { Prng, StyleOptions } from "@dicebear/avatars";
+
+import { Options } from "../options";
+import { ColorPickCollection, ComponentPickCollection } from "../static-types";
+
+type Props = { prng: Prng, options: StyleOptions<Options>, components: ComponentPickCollection, colors: ColorPickCollection } 
+
+export function onPostCreate({ prng, options, components, colors }: Props) {
+  {{#if content}}
+  {{{content}}}
+  {{else}}
+  // Write your modifications here
+  {{/if}}
+}
 `,
 };
