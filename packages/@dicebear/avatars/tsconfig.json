@@ -4,5 +4,5 @@
     "declaration": true,
     "outDir": "./lib",
   },
-  "include": ["./src/index.ts"]
+  "include": ["./src/**/*.ts"]
 }

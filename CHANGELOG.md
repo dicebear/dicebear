@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.8.6] - 2021-09-02
+
+### Fixed
+
+- Cannot find module './options' or its corresponding type declarations. #150
+
 ## [4.8.5] - 2021-09-01
 
 ### Fixed

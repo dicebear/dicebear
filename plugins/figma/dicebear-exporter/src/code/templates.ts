@@ -222,7 +222,7 @@ module.exports = {
     "declaration": true,
     "outDir": "./dist",
   },
-  "include": ["./src/index.ts"]
+  "include": ["./src/**/*.ts"]
 }
 `,
 
