@@ -54,23 +54,25 @@
     </div>
   {/if}
 </div>
-<div class="right">
-  {#if activeStageSplit[0] === 'component'}
-    <ComponentGroupForm componentGroup={activeStageSplit[1]} />
-  {:else if activeStageSplit[0] === 'color'}
-    <ColorGroupForm colorGroup={activeStageSplit[1]} />
-  {:else if activeStageSplit[0] === 'package'}
-    <PackageForm />
-  {:else if activeStageSplit[0] === 'license'}
-    <LicenseForm />
-  {:else if activeStageSplit[0] === 'background'}
-    <BackgroundForm />
-  {:else if activeStageSplit[0] === 'hook'}
-    <HookForm />
-  {:else if activeStageSplit[0] === 'alias'}
-    <AliasForm />
-  {/if}
-</div>
+{#key $activeStage}
+  <div class="right">
+    {#if activeStageSplit[0] === 'component'}
+      <ComponentGroupForm componentGroup={activeStageSplit[1]} />
+    {:else if activeStageSplit[0] === 'color'}
+      <ColorGroupForm colorGroup={activeStageSplit[1]} />
+    {:else if activeStageSplit[0] === 'package'}
+      <PackageForm />
+    {:else if activeStageSplit[0] === 'license'}
+      <LicenseForm />
+    {:else if activeStageSplit[0] === 'background'}
+      <BackgroundForm />
+    {:else if activeStageSplit[0] === 'hook'}
+      <HookForm />
+    {:else if activeStageSplit[0] === 'alias'}
+      <AliasForm />
+    {/if}
+  </div>
+{/key}
 
 <style lang="scss">
   .left {

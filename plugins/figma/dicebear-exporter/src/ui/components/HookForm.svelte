@@ -1,5 +1,8 @@
 <script>
-  import { Textarea } from 'figma-plugin-ds-svelte';
+  import { AceEditor } from 'svelte-ace';
+  import 'brace/mode/typescript';
+  import 'brace/theme/chrome';
+
   import { state } from '../stores/state';
   import Label from './Label.svelte';
 </script>
@@ -7,11 +10,29 @@
 <div class="form">
   <div class="section">
     <Label>onPreCreateHook</Label>
-    <Textarea bind:value={$state.data.frame.settings.onPreCreateHook} rows={10} />
+    <AceEditor
+      width="100%"
+      height="200px"
+      lang="typescript"
+      theme="chrome"
+      bind:value={$state.data.frame.settings.onPreCreateHook}
+      options={{
+        showGutter: false,
+      }}
+    />
   </div>
   <div class="section">
     <Label>onPostCreateHook</Label>
-    <Textarea bind:value={$state.data.frame.settings.onPostCreateHook} rows={10} />
+    <AceEditor
+      width="100%"
+      height="200px"
+      lang="typescript"
+      theme="chrome"
+      bind:value={$state.data.frame.settings.onPostCreateHook}
+      options={{
+        showGutter: false,
+      }}
+    />
   </div>
 </div>
 

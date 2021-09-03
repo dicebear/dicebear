@@ -33,6 +33,7 @@
     "sass": "^1.37.5",
     "spinkit": "^2.0.1",
     "svelte": "^3.42.1",
+    "svelte-ace": "^1.0.21",
     "svelte-preprocess": "^4.7.4",
     "svgo": "^2.4.0",
     "svgson": "^5.2.1",

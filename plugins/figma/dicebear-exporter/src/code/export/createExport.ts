@@ -31,9 +31,6 @@ handlebars.registerHelper('isEqual', function (val: unknown, val2: unknown, opti
 export async function createExport() {
   const exportData = prepareExport();
 
-  const hasPreCreateHook = exportData.frame.settings.onPreCreateHook.trim().length > 0;
-  const hasPostCreateHook = exportData.frame.settings.onPostCreateHook.trim().length > 0;
-
   const files: Record<string, string> = {
     '.editorconfig': templates['.editorconfig'],
     '.gitignore': templates['.gitignore'],
@@ -73,8 +70,6 @@ export async function createExport() {
       colors: exportData.colors,
       size: (figma.getNodeById(exportData.frame.id) as FrameNode).width,
       body: await createTemplateString(figma.getNodeById(exportData.frame.id) as FrameNode),
-      hasPreCreateHook,
-      hasPostCreateHook,
     }),
     'src/static-types.ts': templates['src/static-types.ts'],
     'src/colors/index.ts': handlebars.compile(templates['src/colors/index.ts'])({
@@ -86,19 +81,13 @@ export async function createExport() {
     }),
     'src/utils/pickColor.ts': templates['src/utils/pickColor.ts'],
     'src/utils/pickComponent.ts': templates['src/utils/pickComponent.ts'],
+    'src/hooks/onPreCreate.ts': handlebars.compile(templates['src/hooks/onPreCreate.ts'])({
+      content: exportData.frame.settings.onPreCreateHook.replace(/\n/g, '\n  '),
+    }),
+    'src/hooks/onPostCreate.ts': handlebars.compile(templates['src/hooks/onPostCreate.ts'])({
+      content: exportData.frame.settings.onPostCreateHook.replace(/\n/g, '\n  '),
+    }),
   };
-
-  if (hasPreCreateHook) {
-    files['src/hooks/onPreCreate.ts'] = handlebars.compile(templates['src/hooks/onPreCreate.ts'])({
-      content: exportData.frame.settings.onPreCreateHook,
-    });
-  }
-
-  if (hasPostCreateHook) {
-    files['src/hooks/onPostCreate.ts'] = handlebars.compile(templates['src/hooks/onPostCreate.ts'])({
-      content: exportData.frame.settings.onPostCreateHook,
-    });
-  }
 
   const schemaProperties: Record<string, JSONSchema7Definition> = {};
 

@@ -303,12 +303,8 @@ import type { ComponentPickCollection, ColorPickCollection } from './static-type
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
 import { pickColor } from './utils/pickColor';
-{{#if hasPreCreateHook}}
 import { onPreCreate } from './hooks/onPreCreate';
-{{/if}}
-{{#if hasPostCreateHook}}
 import { onPostCreate } from './hooks/onPostCreate';
-{{/if}}
 
 export const style: Style<Options> = {
   meta: {
@@ -333,10 +329,8 @@ export const style: Style<Options> = {
   },
   schema,
   create: ({ prng, options }) => {
-    {{#if hasPreCreateHook}}
     onPreCreate({ prng, options });
 
-    {{/if}}
     {{#each components}}
     const {{@key}}Component = pickComponent(prng, '{{@key}}', options.{{@key}});
     {{/each}}
@@ -364,10 +358,8 @@ export const style: Style<Options> = {
     options.backgroundColor = pickColor(prng, '{{backgroundColorGroupName}}', backgroundColor ?? []).value;
     {{/if}}
 
-    {{#if hasPostCreateHook}}
     onPostCreate({ prng, options, components, colors });
 
-    {{/if}}
     return {
       attributes: {
         viewBox: '0 0 {{size}} {{size}}',
@@ -497,9 +489,9 @@ import { Prng, StyleOptions } from "@dicebear/avatars";
 import { Options } from "../options";
 import { ColorPickCollection, ComponentPickCollection } from "../static-types";
 
-type Props = { prng: Prng, options: StyleOptions<Options>, components: ComponentPickCollection, colors: ColorPickCollection } 
+type Props = { prng: Prng, options: StyleOptions<Options> } 
 
-export function onPreCreate({ prng, options, components, colors }: Props) {
+export function onPreCreate({ prng, options }: Props) {
   {{#if content}}
   {{{content}}}
   {{else}}
