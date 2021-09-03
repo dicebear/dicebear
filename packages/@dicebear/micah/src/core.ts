@@ -67,32 +67,32 @@ export const style: Style<Options> = {
 
     return {
       attributes: {
-        viewBox: '0 0 380 380',
+        viewBox: '0 0 360 360',
         fill: 'none',
       },
       body: `
-  <g transform="translate(90 43)">
+  <g transform="translate(80 23)">
     ${components.base?.value(components, colors) ?? ''}
   </g>
-  <g transform="translate(180 203)">
+  <g transform="translate(170 183)">
     ${components.mouth?.value(components, colors) ?? ''}
   </g>
-  <g transform="translate(120 122)">
+  <g transform="translate(110 102)">
     ${components.eyebrows?.value(components, colors) ?? ''}
   </g>
-  <g transform="translate(59 31)">
+  <g transform="translate(49 11)">
     ${components.hair?.value(components, colors) ?? ''}
   </g>
-  <g transform="translate(152 139)">
+  <g transform="translate(142 119)">
     ${components.eyes?.value(components, colors) ?? ''}
   </g>
-  <g transform="rotate(-8 1297.445 -1248.42)">
+  <g transform="rotate(-8 1149.438 -1186.916)">
     ${components.nose?.value(components, colors) ?? ''}
   </g>
-  <g transform="translate(94 174)">
+  <g transform="translate(84 154)">
     ${components.ears?.value(components, colors) ?? ''}
   </g>
-  <g transform="translate(63 292)">
+  <g transform="translate(53 272)">
     ${components.shirt?.value(components, colors) ?? ''}
   </g>
 `,
