@@ -1,5 +1,6 @@
 import { findAllInstanceNodes } from '../queries/findAllInstanceNodes';
 import { findAllNodesWithColor } from '../queries/findAllNodesWithColor';
+import { fastFindAll } from '../utils/fastFindAll';
 import { getColorsByNode } from '../utils/getColorsByNode';
 import { getNameParts } from '../utils/getNameParts';
 import { readNodeExportInfo } from '../utils/readNodeExportInfo';
@@ -13,10 +14,10 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
 
   const nodeClone = node.clone();
 
-  // For the export, clip-path must be set in Figma so that the viewport has the correct height and width.
-  nodeClone.clipsContent = true;
-
   try {
+    // For the export, clip-path must be set in Figma so that the viewport has the correct height and width.
+    nodeClone.clipsContent = true;
+
     for (const instanceNode of findAllInstanceNodes(nodeClone)) {
       const mainComponent = instanceNode.mainComponent!;
 
@@ -41,6 +42,12 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
       instanceNode.mainComponent = cloneComponent;
 
       writeNodeExportInfo(instanceNode, nodeExportInfo);
+    }
+
+    // Figma flat boolean nodes when exporting. In doing so, ids and their information will be lost.
+    // That's why we do it ourselves here, so Figma can't delete any information.
+    for (const boNode of fastFindAll(nodeClone.children, (node) => node.type == 'BOOLEAN_OPERATION')) {
+      figma.flatten([boNode], boNode.parent!, boNode.parent!.children.indexOf(boNode as SceneNode));
     }
 
     for (const colorNode of findAllNodesWithColor(nodeClone)) {
