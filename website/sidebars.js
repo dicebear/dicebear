@@ -18,6 +18,7 @@ module.exports = {
         'styles/male',
         'styles/micah',
         'styles/open-peeps',
+        'styles/personas',
         'styles/pixel-art',
         'styles/pixel-art-neutral',
       ],

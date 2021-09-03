@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.9.0] - TBA
+
+### Added
+
+- `@dicebear/personas` New Avatar style by draftbit.com.
+
+### Changed
+
+- `@dicebear/micah` Rewritten via Figma plugin.
+
 ## [4.8.6] - 2021-09-02
 
 ### Fixed

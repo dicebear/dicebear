@@ -15,6 +15,7 @@ import croodlesNeutralOptions from './croodlesNeutral';
 import pixelArtOptions from './pixelArt';
 import pixelArtNeutralOptions from './pixelArtNeutral';
 import openPeepsOptions from './openPeeps';
+import personasOptions from './personas';
 
 import * as collection from '@dicebear/collection';
 
@@ -54,6 +55,12 @@ export default [
     name: '@dicebear/croodles',
     style: collection.croodles,
     options: croodlesOptions,
+  },
+  {
+    id: 'personas',
+    name: '@dicebear/personas',
+    style: collection.personas,
+    options: personasOptions,
   },
   {
     id: 'croodles-neutral',
