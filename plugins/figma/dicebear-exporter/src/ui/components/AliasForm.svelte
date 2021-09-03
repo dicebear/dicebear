@@ -1,11 +1,11 @@
 <script>
-  import { Input, IconButton, IconPlus, IconMinus } from 'figma-plugin-ds-svelte';
+  import { Input, IconButton, IconPlus, IconMinus, Switch } from 'figma-plugin-ds-svelte';
   import { state } from '../stores/state';
   import Label from './Label.svelte';
   import Select from './Select.svelte';
 
-  let componentAliases = $state.data.frame.settings.componentGroupAliases;
-  let colorAliases = $state.data.frame.settings.colorGroupAliases;
+  let componentGroupAliases = $state.data.frame.settings.componentGroupAliases;
+  let colorGroupAliases = $state.data.frame.settings.colorGroupAliases;
 
   $: componentSelect = Object.keys($state.data.components).map((key) => {
     return { value: key, label: key, group: null, selected: false };
@@ -16,41 +16,41 @@
   });
 
   $: {
-    $state.data.frame.settings.componentAliases = componentAliases;
+    $state.data.frame.settings.componentGroupAliases = componentGroupAliases;
   }
 
   $: {
-    $state.data.frame.settings.colorAliases = colorAliases;
+    $state.data.frame.settings.colorGroupAliases = colorGroupAliases;
   }
 
   function addComponentAlias() {
-    componentAliases.push({
+    componentGroupAliases.push({
       name: '',
       alias: '',
       deprecated: false,
     });
 
-    componentAliases = [...componentAliases];
+    componentGroupAliases = [...componentGroupAliases];
   }
 
   function addColorAlias() {
-    colorAliases.push({
+    colorGroupAliases.push({
       name: '',
       alias: '',
       deprecated: false,
     });
 
-    colorAliases = [...colorAliases];
+    colorGroupAliases = [...colorGroupAliases];
   }
 
   function removeComponentAlias(index) {
-    componentAliases.splice(index, 1);
-    componentAliases = [...componentAliases];
+    componentGroupAliases.splice(index, 1);
+    componentGroupAliases = [...componentGroupAliases];
   }
 
   function removeColorAlias(index) {
-    colorAliases.splice(index, 1);
-    colorAliases = [...colorAliases];
+    colorGroupAliases.splice(index, 1);
+    colorGroupAliases = [...colorGroupAliases];
   }
 </script>
 
@@ -60,7 +60,7 @@
       <Label>Component Aliases</Label>
       <IconButton on:click={addComponentAlias} iconName={IconPlus} />
     </div>
-    {#each componentAliases as componentAlias, key}
+    {#each componentGroupAliases as componentAlias, key}
       <div class="section-item">
         <div class="section-item-name">
           <div class="section-item-name-select">
@@ -70,6 +70,9 @@
         </div>
         <div class="section-item-alias">
           <Input bind:value={componentAlias.alias} placeholder="Alias name" />
+        </div>
+        <div class="section-item-deprecated">
+          <Switch bind:checked={componentAlias.deprecated}>Deprecated</Switch>
         </div>
       </div>
     {/each}
@@ -82,7 +85,7 @@
       <Label>Color Aliases</Label>
       <IconButton on:click={addColorAlias} iconName={IconPlus} />
     </div>
-    {#each colorAliases as colorAlias, key}
+    {#each colorGroupAliases as colorAlias, key}
       <div class="section-item">
         <div class="section-item-name">
           <div class="section-item-name-select">
@@ -92,6 +95,9 @@
         </div>
         <div class="section-item-alias">
           <Input bind:value={colorAlias.alias} placeholder="Alias name" />
+        </div>
+        <div class="section-item-deprecated">
+          <Switch bind:checked={colorAlias.deprecated}>Deprecated</Switch>
         </div>
       </div>
     {/each}

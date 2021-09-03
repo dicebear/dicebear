@@ -335,8 +335,8 @@ export const style: Style<Options> = {
   create: ({ prng, options }) => {
     {{#if hasPreCreateHook}}
     onPreCreate({ prng, options });
-    {{/if}}
 
+    {{/if}}
     {{#each components}}
     const {{@key}}Component = pickComponent(prng, '{{@key}}', options.{{@key}});
     {{/each}}
@@ -366,8 +366,8 @@ export const style: Style<Options> = {
 
     {{#if hasPostCreateHook}}
     onPostCreate({ prng, options, components, colors });
-    {{/if}}
 
+    {{/if}}
     return {
       attributes: {
         viewBox: '0 0 {{size}} {{size}}',
