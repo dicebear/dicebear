@@ -47,7 +47,10 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
     // Figma flat boolean nodes when exporting. In doing so, ids and their information will be lost.
     // That's why we do it ourselves here, so Figma can't delete any information.
     for (const boNode of fastFindAll(nodeClone.children, (node) => node.type == 'BOOLEAN_OPERATION')) {
-      figma.flatten([boNode], boNode.parent!, boNode.parent!.children.indexOf(boNode as SceneNode));
+      const wasMask = 'isMask' in boNode && boNode.isMask;
+      const newNode = figma.flatten([boNode], boNode.parent!, boNode.parent!.children.indexOf(boNode as SceneNode));
+
+      newNode.isMask = wasMask;
     }
 
     for (const colorNode of findAllNodesWithColor(nodeClone)) {
