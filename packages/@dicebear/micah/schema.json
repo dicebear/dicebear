@@ -1,8 +1,232 @@
 {
   "title": "Options",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "definitions": {
-    "colors": {
+  "properties": {
+    "eyeColor": {
+      "$ref": "#/properties/eyeShadowColor",
+      "description": "@deprecated use eyeShadow instead."
+    },
+    "base": {
+      "title": "Base",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "standard"
+        ]
+      },
+      "default": [
+        "standard"
+      ]
+    },
+    "mouth": {
+      "title": "Mouth",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "surprised",
+          "laughing",
+          "nervous",
+          "smile",
+          "sad",
+          "pucker",
+          "frown",
+          "smirk"
+        ]
+      },
+      "default": [
+        "surprised",
+        "laughing",
+        "nervous",
+        "smile",
+        "sad",
+        "pucker",
+        "frown",
+        "smirk"
+      ]
+    },
+    "eyebrows": {
+      "title": "Eyebrows",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "up",
+          "down",
+          "eyelashesUp",
+          "eyelashesDown"
+        ]
+      },
+      "default": [
+        "up",
+        "down",
+        "eyelashesUp",
+        "eyelashesDown"
+      ]
+    },
+    "hair": {
+      "title": "Hair",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "fonze",
+          "mrT",
+          "dougFunny",
+          "mrClean",
+          "dannyPhantom",
+          "full",
+          "turban",
+          "pixie"
+        ]
+      },
+      "default": [
+        "fonze",
+        "mrT",
+        "dougFunny",
+        "mrClean",
+        "dannyPhantom",
+        "full",
+        "turban",
+        "pixie"
+      ]
+    },
+    "hairProbability": {
+      "title": "Hair Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 100
+    },
+    "eyes": {
+      "title": "Eyes",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "eyes",
+          "round",
+          "eyesShadow",
+          "smiling"
+        ]
+      },
+      "default": [
+        "eyes",
+        "round",
+        "eyesShadow",
+        "smiling"
+      ]
+    },
+    "nose": {
+      "title": "Nose",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "curve",
+          "pointed",
+          "tound"
+        ]
+      },
+      "default": [
+        "curve",
+        "pointed",
+        "tound"
+      ]
+    },
+    "ears": {
+      "title": "Ears",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "attached",
+          "detached"
+        ]
+      },
+      "default": [
+        "attached",
+        "detached"
+      ]
+    },
+    "shirt": {
+      "title": "Shirt",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "open",
+          "crew",
+          "collared"
+        ]
+      },
+      "default": [
+        "open",
+        "crew",
+        "collared"
+      ]
+    },
+    "earrings": {
+      "title": "Earrings",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "hoop",
+          "stud"
+        ]
+      },
+      "default": [
+        "hoop",
+        "stud"
+      ]
+    },
+    "earringsProbability": {
+      "title": "Earrings Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 30
+    },
+    "glasses": {
+      "title": "Glasses",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "round",
+          "square"
+        ]
+      },
+      "default": [
+        "round",
+        "square"
+      ]
+    },
+    "glassesProbability": {
+      "title": "Glasses Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 30
+    },
+    "facialHair": {
+      "title": "Facial Hair",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "beard",
+          "scruff"
+        ]
+      },
+      "default": [
+        "beard",
+        "scruff"
+      ]
+    },
+    "facialHairProbability": {
+      "title": "Facial Hair Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 10
+    },
+    "baseColor": {
+      "title": "Base Color",
       "type": "array",
       "items": {
         "anyOf": [
@@ -32,182 +256,336 @@
       "default": [
         "apricot",
         "coast",
-        "topaz",
-        "lavender",
-        "sky",
-        "salmon",
-        "canary",
-        "calm",
+        "topaz"
+      ]
+    },
+    "earringColor": {
+      "title": "Earring Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "apricot",
         "azure",
-        "seashell",
-        "mellow",
         "black",
+        "calm",
+        "canary",
+        "coast",
+        "lavender",
+        "mellow",
+        "salmon",
+        "seashell",
+        "sky",
+        "topaz",
         "white"
       ]
     },
     "eyeShadowColor": {
       "title": "Eye Shadow Color",
-      "$ref": "#/definitions/colors",
-      "default": ["calm", "azure", "seashell", "mellow", "white"]
-    }
-  },
-  "properties": {
-    "base": {
-      "title": "Base",
       "type": "array",
       "items": {
-        "type": "string",
-        "enum": ["standard"]
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
       },
-      "default": ["standard"]
-    },
-    "baseColor": {
-      "title": "Base Color",
-      "$ref": "#/definitions/colors",
-      "default": ["apricot", "coast", "topaz"]
-    },
-    "earrings": {
-      "title": "Earrings",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": ["hoop", "stud"]
-      },
-      "default": ["hoop", "stud"]
-    },
-    "earringColor": {
-      "title": "Earring Color",
-      "$ref": "#/definitions/colors"
-    },
-    "earringsProbability": {
-      "title": "Earrings Probability",
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
-      "default": 30
-    },
-    "eyebrows": {
-      "title": "Eyebrows",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": ["down", "eyelashesDown", "eyelashesUp", "up"]
-      },
-      "default": ["down", "eyelashesDown", "eyelashesUp", "up"]
+      "default": [
+        "azure",
+        "calm",
+        "mellow",
+        "seashell",
+        "white"
+      ]
     },
     "eyebrowColor": {
       "title": "Eyebrow Color",
-      "$ref": "#/definitions/colors",
-      "default": ["black"]
-    },
-    "ears": {
-      "title": "Ears",
       "type": "array",
       "items": {
-        "type": "string",
-        "enum": ["attached"]
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
       },
-      "default": ["attached"]
-    },
-    "eyes": {
-      "title": "Eyes",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": ["eyes", "eyesShadow", "round", "smiling"]
-      },
-      "default": ["eyes", "eyesShadow", "round", "smiling"]
-    },
-    "eyeShadowColor": {
-      "$ref": "#/definitions/eyeShadowColor"
-    },
-    "eyeColor": {
-      "$ref": "#/definitions/eyeShadowColor",
-      "description": "@deprecated use `eyeShadowColor` instead."
-    },
-    "facialHair": {
-      "title": "Facial Hair",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": ["beard", "scruff"]
-      },
-      "default": ["beard", "scruff"]
+      "default": [
+        "black"
+      ]
     },
     "facialHairColor": {
       "title": "Facial Hair Color",
-      "$ref": "#/definitions/colors",
-      "default": ["topaz"]
-    },
-    "facialHairProbability": {
-      "title": "Facial Hair Probability",
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
-      "default": 10
-    },
-    "glasses": {
-      "title": "Glasses",
       "type": "array",
       "items": {
-        "type": "string",
-        "enum": ["round", "square"]
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
       },
-      "default": ["round", "square"]
+      "default": [
+        "topaz"
+      ]
     },
     "glassesColor": {
       "title": "Glasses Color",
-      "$ref": "#/definitions/colors"
-    },
-    "glassesProbability": {
-      "title": "Glasses Probability",
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
-      "default": 30
-    },
-    "mouth": {
-      "title": "Mouth",
       "type": "array",
       "items": {
-        "type": "string",
-        "enum": ["frown", "laughing", "nervous", "pucker", "sad", "smile", "smirk", "surprised"]
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
       },
-      "default": ["frown", "laughing", "nervous", "pucker", "sad", "smile", "smirk", "surprised"]
-    },
-    "nose": {
-      "title": "Nose",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": ["curve", "pointed", "round"]
-      },
-      "default": ["curve", "pointed", "round"]
-    },
-    "shirt": {
-      "title": "Shirt",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": ["collared", "crew", "open"]
-      },
-      "default": ["collared", "crew", "open"]
-    },
-    "shirtColor": {
-      "title": "Shirt Color",
-      "$ref": "#/definitions/colors"
-    },
-    "hair": {
-      "title": "Hair",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": ["dannyPhantom", "dougFunny", "fonze", "full", "mrClean", "mrT", "pixie", "turban"]
-      },
-      "default": ["dannyPhantom", "dougFunny", "fonze", "full", "mrClean", "mrT", "pixie", "turban"]
+      "default": [
+        "apricot",
+        "azure",
+        "black",
+        "calm",
+        "canary",
+        "coast",
+        "lavender",
+        "mellow",
+        "salmon",
+        "seashell",
+        "sky",
+        "topaz",
+        "white"
+      ]
     },
     "hairColor": {
       "title": "Hair Color",
-      "$ref": "#/definitions/colors"
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "apricot",
+        "azure",
+        "black",
+        "calm",
+        "canary",
+        "coast",
+        "lavender",
+        "mellow",
+        "salmon",
+        "seashell",
+        "sky",
+        "topaz",
+        "white"
+      ]
     },
-    "hairProbability": {
-      "title": "Hair Probability",
-      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
-      "default": 100
+    "mouthColor": {
+      "title": "Mouth Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "black"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "black"
+      ]
+    },
+    "shirtColor": {
+      "title": "Shirt Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "apricot",
+        "azure",
+        "black",
+        "calm",
+        "canary",
+        "coast",
+        "lavender",
+        "mellow",
+        "salmon",
+        "seashell",
+        "sky",
+        "topaz",
+        "white"
+      ]
+    },
+    "backgroundColor": {
+      "title": "Background Color",
+      "anyOf": [
+        {
+          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+        },
+        {
+          "type": "string",
+          "pattern": "^[0-9a-zA-Z]+$"
+        },
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-zA-Z]+$"
+              },
+              {
+                "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+              }
+            ]
+          }
+        }
+      ],
+      "default": [
+        "azure",
+        "calm",
+        "mellow",
+        "seashell"
+      ]
     }
   },
   "additionalProperties": false

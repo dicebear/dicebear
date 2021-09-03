@@ -1,15 +1,17 @@
 import type { Style } from '@dicebear/avatars';
-import { utils } from '@dicebear/avatars';
 import type { Options } from './options';
-import * as paths from './paths';
-import * as colors from './colors';
+import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+
 import { schema } from './schema';
+import { pickComponent } from './utils/pickComponent';
+import { pickColor } from './utils/pickColor';
+import { onPreCreate } from './hooks/onPreCreate';
+import { onPostCreate } from './hooks/onPostCreate';
 
 export const style: Style<Options> = {
   meta: {
     title: 'Avatar Illustration System',
     creator: 'Micah Lanier',
-    contributor: 'Florian Körner',
     source: 'https://www.figma.com/community/file/829741575478342595',
     license: {
       name: 'CC BY 4.0',
@@ -18,80 +20,82 @@ export const style: Style<Options> = {
   },
   schema,
   create: ({ prng, options }) => {
-    const pickColor = (values: string[], filter: string[] = []): string => {
-      let result: string[] = values.map((val) => colors[val as keyof typeof colors] || val);
+    onPreCreate({ prng, options });
 
-      // If only one color was given, that color was explicitly selected. Then do not perform any filtering.
-      if (values.length > 1) {
-        result = result.filter((val) => false === filter.includes(val));
-      }
+    const baseComponent = pickComponent(prng, 'base', options.base);
+    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
+    const eyebrowsComponent = pickComponent(prng, 'eyebrows', options.eyebrows);
+    const hairComponent = pickComponent(prng, 'hair', options.hair);
+    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
+    const noseComponent = pickComponent(prng, 'nose', options.nose);
+    const earsComponent = pickComponent(prng, 'ears', options.ears);
+    const shirtComponent = pickComponent(prng, 'shirt', options.shirt);
+    const earringsComponent = pickComponent(prng, 'earrings', options.earrings);
+    const glassesComponent = pickComponent(prng, 'glasses', options.glasses);
+    const facialHairComponent = pickComponent(prng, 'facialHair', options.facialHair);
 
-      if (result.length === 0) {
-        result.push('transparent');
-      }
+    const components: ComponentPickCollection = {
+      'base': baseComponent,
+      'mouth': mouthComponent,
+      'eyebrows': eyebrowsComponent,
+      'hair': prng.bool(options.hairProbability) ? hairComponent : undefined,
+      'eyes': eyesComponent,
+      'nose': noseComponent,
+      'ears': earsComponent,
+      'shirt': shirtComponent,
+      'earrings': prng.bool(options.earringsProbability) ? earringsComponent : undefined,
+      'glasses': prng.bool(options.glassesProbability) ? glassesComponent : undefined,
+      'facialHair': prng.bool(options.facialHairProbability) ? facialHairComponent : undefined,
+    }
 
-      return prng.pick(result);
-    };
+    const colors: ColorPickCollection = {
+      'base': pickColor(prng, 'base', options.baseColor ?? []),
+      'earring': pickColor(prng, 'earring', options.earringColor ?? []),
+      'eyeShadow': pickColor(prng, 'eyeShadow', options.eyeShadowColor ?? []),
+      'eyebrow': pickColor(prng, 'eyebrow', options.eyebrowColor ?? []),
+      'facialHair': pickColor(prng, 'facialHair', options.facialHairColor ?? []),
+      'glasses': pickColor(prng, 'glasses', options.glassesColor ?? []),
+      'hair': pickColor(prng, 'hair', options.hairColor ?? []),
+      'mouth': pickColor(prng, 'mouth', options.mouthColor ?? []),
+      'shirt': pickColor(prng, 'shirt', options.shirtColor ?? []),
+    }
 
-    const pickPath = <T extends {}, K extends keyof T>(
-      paths: T,
-      values: K[] = []
-    ): { path: T[K] | undefined; key: K } => {
-      const key = prng.pick(values);
+    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
+    options.backgroundColor = pickColor(prng, 'background', backgroundColor ?? []).value;
 
-      return {
-        path: paths[key],
-        key,
-      };
-    };
-
-    const baseColor = pickColor(options.baseColor ?? []);
-    const hairColor = pickColor(options.hairColor ?? [], [baseColor]);
-    const shirtColor = pickColor(options.shirtColor ?? [], [baseColor]);
-    const earringColor = pickColor(options.earringColor ?? [], [baseColor, hairColor]);
-    const glassesColor = pickColor(options.glassesColor ?? [], [baseColor, hairColor]);
-    const eyeShadowColor = pickColor(options.eyeShadowColor ?? [], [baseColor, glassesColor]);
-    const eyebrowColor = pickColor(options.eyebrowColor ?? [], [baseColor, glassesColor, eyeShadowColor]);
-    const facialHairColor = pickColor(options.facialHairColor ?? [], [baseColor]);
-
-    const { path: earringsPath } = pickPath(paths.earrings, options.earrings);
-    const { path: glassesPath } = pickPath(paths.glasses, options.glasses);
-    const { path: hairPath } = pickPath(paths.hair, options.hair);
-    const { path: facialHairPath, key: facialHairPathKey } = pickPath(paths.facialHair, options.facialHair);
-
-    const shirt = pickPath(paths.shirt, options.shirt).path;
-    const earrings = prng.bool(options.earringsProbability) && earringsPath;
-    const ears = pickPath(paths.ears, options.ears).path;
-    const nose = pickPath(paths.nose, options.nose).path;
-    const glasses = prng.bool(options.glassesProbability) && glassesPath;
-    const eyes = pickPath(paths.eyes, options.eyes).path;
-    const eyebrows = pickPath(paths.eyebrows, options.eyebrows).path;
-    const mouth = pickPath(paths.mouth, options.mouth).path;
-    const hair = prng.bool(options.hairProbability) && hairPath;
-    const facialHair = prng.bool(options.facialHairProbability) && facialHairPath;
-    const base = pickPath(paths.base, options.base).path;
-
-    const isBlackFacialHairColor = facialHairColor.match(/^#0+$/);
-    const mouthColor = facialHair && facialHairPathKey === 'beard' && isBlackFacialHairColor ? '#434343' : '#000';
+    onPostCreate({ prng, options, components, colors });
 
     return {
       attributes: {
-        viewBox: '0 0 360 360',
+        viewBox: '0 0 380 380',
         fill: 'none',
       },
       body: `
-        ${base ? utils.svg.createGroup({ children: base(baseColor), x: 90, y: 43 }) : ''}
-        ${facialHair ? utils.svg.createGroup({ children: facialHair(facialHairColor), x: 124, y: 145.3 }) : ''}
-        ${mouth ? utils.svg.createGroup({ children: mouth(mouthColor), x: 180, y: 203 }) : ''}
-        ${eyebrows ? utils.svg.createGroup({ children: eyebrows(eyebrowColor), x: 120, y: 122 }) : ''}
-        ${hair ? utils.svg.createGroup({ children: hair(hairColor), x: 59, y: 31 }) : ''}
-        ${eyes ? utils.svg.createGroup({ children: eyes(eyeShadowColor), x: 152, y: 139 }) : ''}
-        ${glasses ? utils.svg.createGroup({ children: glasses(glassesColor), x: 112, y: 131 }) : ''}
-        ${nose ? utils.svg.createGroup({ children: nose('#000'), x: 186.37, y: 168.42 }) : ''}
-        ${ears ? utils.svg.createGroup({ children: ears(baseColor), x: 94, y: 174 }) : ''}
-        ${earrings ? utils.svg.createGroup({ children: earrings(earringColor), x: 97, y: 209 }) : ''}
-        ${shirt ? utils.svg.createGroup({ children: shirt(shirtColor), x: 63, y: 292 }) : ''}
-      `,
+  <g transform="translate(90 43)">
+    ${components.base?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(180 203)">
+    ${components.mouth?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(120 122)">
+    ${components.eyebrows?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(59 31)">
+    ${components.hair?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(152 139)">
+    ${components.eyes?.value(components, colors) ?? ''}
+  </g>
+  <g transform="rotate(-8 1297.445 -1248.42)">
+    ${components.nose?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(94 174)">
+    ${components.ears?.value(components, colors) ?? ''}
+  </g>
+  <g transform="translate(63 292)">
+    ${components.shirt?.value(components, colors) ?? ''}
+  </g>
+`,
     };
   },
 };

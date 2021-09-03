@@ -1,10 +1,10 @@
 /*!
- * DiceBear Micah (@dicebear/micah)
+ * Avatar Illustration System (@dicebear/micah)
  *
- * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/micah/LICENSE)
+ * Code licensed under MIT License.
  * Copyright (c) 2021 Florian Körner
  *
- * Design "Avatar Illustration System" by Micah Lanier licensed under CC BY 4.0
+ * Design "Avatar Illustration System" by Micah Lanier licensed under CC BY 4.0.
  * Source: https://www.figma.com/community/file/829741575478342595
  * License: https://creativecommons.org/licenses/by/4.0/
  */
@@ -18,4 +18,4 @@ export { create, meta, schema };
 export { Options } from './options';
 
 /** @deprecated will be removed in Version 5.0 */
-export default utils.style.createLegacyWrapper({ create, meta, schema });
+export default utils.style.createLegacyWrapper(style);

@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@dicebear/avatars": "^4.8.6",
-    "@tsconfig/node12": "^1.0.7",
+    "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
     "dicebear-project": "^4.8.6",

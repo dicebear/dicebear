@@ -51,19 +51,19 @@ const data: Array<StyleOptions<style.Options>> = [
 
 data.forEach((options, key) => {
   test(`Create avatar #${key}`, async () => {
-    const svgPath = path.resolve(__dirname, 'svg', `${key}.svg`);
+    const svgComponent = path.resolve(__dirname, 'svg', `${key}.svg`);
 
-    if (false === fs.existsSync(svgPath)) {
-      if (false === fs.existsSync(path.dirname(svgPath))) {
-        fs.mkdirSync(path.dirname(svgPath));
+    if (false === fs.existsSync(svgComponent)) {
+      if (false === fs.existsSync(path.dirname(svgComponent))) {
+        fs.mkdirSync(path.dirname(svgComponent));
       }
 
-      fs.writeFileSync(svgPath, avatars.createAvatar(style, options), { encoding: 'utf-8' });
+      fs.writeFileSync(svgComponent, avatars.createAvatar(style, options), { encoding: 'utf-8' });
     }
 
-    const svg = fs.readFileSync(svgPath, { encoding: 'utf-8' });
+    const svg = fs.readFileSync(svgComponent, { encoding: 'utf-8' });
 
     expect(avatars.createAvatar(style, options)).toEqual(svg);
-    expect(new avatars.default(style.default, options).create(seed)).toEqual(svg);
+    expect(new avatars.default(style.default, options).create(options.seed)).toEqual(svg);
   });
 });

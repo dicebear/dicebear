@@ -37,8 +37,8 @@ package.json
 }
 `,
 
-  // LICENSE.md
-  'LICENSE.md': `
+  // LICENSE
+  LICENSE: `
 MIT License
 
 Copyright (c) {{year}} Florian Körner
@@ -194,22 +194,27 @@ module.exports = {
   "scripts": {
     "test": "jest",
     "prepublishOnly": "npm run build",
+    "prebuild": "shx rm -rf dist",
     "build": "dicebear-project build {{umdName}}"
   },
   "dependencies": {},
   "devDependencies": {
     "@dicebear/avatars": "^4.7.4",
-    "@tsconfig/node12": "^1.0.7",
+    "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
     "dicebear-project": "^4.7.4",
     "jest": "^26.6.3",
+    "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.3",
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
     "@dicebear/avatars": "^4.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
 `,
@@ -217,7 +222,7 @@ module.exports = {
   // tsconfig.json
   'tsconfig.json': `
 {
-  "extends": "@tsconfig/node12/tsconfig.json",
+  "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
     "outDir": "./dist",
@@ -487,7 +492,6 @@ export function pickComponent(prng: Prng, group: string, values: string[] = []):
 import { Prng, StyleOptions } from "@dicebear/avatars";
 
 import { Options } from "../options";
-import { ColorPickCollection, ComponentPickCollection } from "../static-types";
 
 type Props = { prng: Prng, options: StyleOptions<Options> } 
 

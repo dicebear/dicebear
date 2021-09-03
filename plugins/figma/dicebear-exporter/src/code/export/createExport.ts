@@ -36,7 +36,7 @@ export async function createExport() {
     '.gitignore': templates['.gitignore'],
     '.prettierignore': templates['.prettierignore'],
     '.prettierrc': templates['.prettierrc'],
-    'LICENSE.md': handlebars.compile(templates['LICENSE.md'])({
+    LICENSE: handlebars.compile(templates['LICENSE'])({
       year: new Date().getFullYear(),
       contributor: exportData.frame.settings.contributor,
     }),
