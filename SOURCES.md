@@ -21,3 +21,7 @@ https://www.figma.com/file/oa0iScDLrh1tVFzSud2Dwc/personas?node-id=1%3A169
 # miniavs
 
 https://www.figma.com/file/Vh7N9shKJTNHNo9prUzkZe/miniavs?node-id=274%3A4378
+
+# big-smile
+
+https://www.figma.com/file/3Te9c70BX2Aj4IUP35sWhF/big-smile?node-id=11%3A38

@@ -17,6 +17,7 @@ import pixelArtNeutralOptions from './pixelArtNeutral';
 import openPeepsOptions from './openPeeps';
 import personasOptions from './personas';
 import miniavsOptions from './miniavs';
+import bigSmileOptions from './big-smile';
 
 import * as collection from '@dicebear/collection';
 
@@ -32,6 +33,12 @@ export default [
     name: '@dicebear/avatars-avataaars-sprites',
     style: collection.avataaars,
     options: avataaarsOptions,
+  },
+  {
+    id: 'big-smile',
+    name: '@dicebear/big-smile',
+    style: collection.bigSmile,
+    options: bigSmileOptions,
   },
   {
     id: 'bottts',

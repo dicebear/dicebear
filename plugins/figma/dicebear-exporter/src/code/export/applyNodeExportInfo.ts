@@ -29,10 +29,28 @@ export async function applyNodeExportInfo(svg: string) {
 
     if (nodeExportInfo.fillColorGroup) {
       resultNode.attributes.fill = `color::${nodeExportInfo.fillColorGroup}`;
+
+      // Remove fills from children
+      for (const child of resultNode.children) {
+        mapSvgsonNodes(child, (childNode) => {
+          delete childNode.attributes.fill;
+
+          return childNode;
+        });
+      }
     }
 
     if (nodeExportInfo.strokeColorGroup) {
       resultNode.attributes.stroke = `color::${nodeExportInfo.strokeColorGroup}`;
+
+      // Remove strokes from children
+      for (const child of resultNode.children) {
+        mapSvgsonNodes(child, (childNode) => {
+          delete childNode.attributes.stroke;
+
+          return childNode;
+        });
+      }
     }
 
     if (nodeExportInfo.scale) {
