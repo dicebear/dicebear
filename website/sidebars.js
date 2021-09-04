@@ -17,6 +17,7 @@ module.exports = {
         'styles/jdenticon',
         'styles/male',
         'styles/micah',
+        'styles/miniavs',
         'styles/open-peeps',
         'styles/personas',
         'styles/pixel-art',

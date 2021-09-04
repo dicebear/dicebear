@@ -16,6 +16,7 @@ import pixelArtOptions from './pixelArt';
 import pixelArtNeutralOptions from './pixelArtNeutral';
 import openPeepsOptions from './openPeeps';
 import personasOptions from './personas';
+import miniavsOptions from './miniavs';
 
 import * as collection from '@dicebear/collection';
 
@@ -49,6 +50,12 @@ export default [
     name: '@dicebear/micah',
     style: collection.micah,
     options: micahOptions,
+  },
+  {
+    id: 'miniavs',
+    name: '@dicebear/micah',
+    style: collection.miniavs,
+    options: miniavsOptions,
   },
   {
     id: 'croodles',

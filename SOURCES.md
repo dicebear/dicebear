@@ -17,3 +17,7 @@ https://www.figma.com/file/YHb4ShTgmO8Lqhkz1plLfL/micah?node-id=259%3A555
 # personas
 
 https://www.figma.com/file/oa0iScDLrh1tVFzSud2Dwc/personas?node-id=1%3A169
+
+# miniavs
+
+https://www.figma.com/file/Vh7N9shKJTNHNo9prUzkZe/miniavs?node-id=274%3A4378

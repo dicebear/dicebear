@@ -14,3 +14,4 @@ export * as pixelArt from '@dicebear/pixel-art';
 export * as pixelArtNeutral from '@dicebear/pixel-art-neutral';
 export * as openPeeps from '@dicebear/open-peeps';
 export * as personas from '@dicebear/personas';
+export * as miniavs from '@dicebear/miniavs';
