@@ -217,7 +217,7 @@
     "hairProbability": {
       "title": "Hair Probability",
       "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
-      "default": 95
+      "default": 100
     },
     "accessories": {
       "title": "Accessories",

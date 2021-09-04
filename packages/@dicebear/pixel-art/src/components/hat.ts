@@ -30,7 +30,7 @@ export const hat: ComponentGroup = {
   <path d="M5 6h1V5h1V4h1V3H7v1H6v1H5v1Z" fill="#fff" fill-opacity=".2"/>
 `,
   'variant09': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M5 2v2H3v2h14V4h-2V2H5Z" fill="${colors.hat.value}"/>
+  <path d="M5 1v2H3v2h14V3h-2V1H5Z" fill="${colors.hat.value}"/>
   <path d="M14 3V0h-1v3h1Z" fill="#fff" fill-opacity=".2"/>
 `,
   'variant10': (components: ComponentPickCollection, colors: ColorPickCollection) => `
@@ -38,7 +38,7 @@ export const hat: ComponentGroup = {
   <path fill-rule="evenodd" clip-rule="evenodd" d="M15 3V0h-1v3h1Zm-2-3v2h-1V0h1Z" fill="#fff" fill-opacity=".2"/>
 `,
   'variant11': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M3 4v2h14V4h-1V3h-1V2H5v1H4v1H3Z" fill="${colors.hat.value}"/>
+  <path d="M3 3v2h14V3h-1V2h-1V1H5v1H4v1H3Z" fill="${colors.hat.value}"/>
   <path fill-rule="evenodd" clip-rule="evenodd" d="M14 1v4h-1V1h1Zm-2 0v4h-1V1h1Z" fill="#fff" fill-opacity=".2"/>
 `,
   'variant12': (components: ComponentPickCollection, colors: ColorPickCollection) => `

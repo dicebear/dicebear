@@ -5,6 +5,7 @@
 ### Added
 
 - `@dicebear/personas` New Avatar style by draftbit.com.
+- `@dicebear/miniavs` New Avatar style by Webpixels.
 
 ### Changed
 

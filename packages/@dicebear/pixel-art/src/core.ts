@@ -5,6 +5,8 @@ import type { ComponentPickCollection, ColorPickCollection } from './static-type
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
 import { pickColor } from './utils/pickColor';
+import { onPreCreate } from './hooks/onPreCreate';
+import { onPostCreate } from './hooks/onPostCreate';
 
 export const style: Style<Options> = {
   meta: {
@@ -17,6 +19,8 @@ export const style: Style<Options> = {
   },
   schema,
   create: ({ prng, options }) => {
+    onPreCreate({ prng, options });
+
     const beardComponent = pickComponent(prng, 'beard', options.beard);
     const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
     const eyebrowsComponent = pickComponent(prng, 'eyebrows', options.eyebrows);
@@ -49,6 +53,8 @@ export const style: Style<Options> = {
       'glasses': pickColor(prng, 'glasses', options.glassesColor ?? []),
     }
 
+
+    onPostCreate({ prng, options, components, colors });
 
     return {
       attributes: {
