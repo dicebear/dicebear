@@ -160,41 +160,6 @@
         "soulPatch"
       ]
     },
-    "backgroundColor": {
-      "title": "Background Color",
-      "anyOf": [
-        {
-          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
-        },
-        {
-          "type": "string",
-          "pattern": "^[0-9a-zA-Z]+$"
-        },
-        {
-          "type": "array",
-          "items": {
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "^[0-9a-zA-Z]+$"
-              },
-              {
-                "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
-              }
-            ]
-          }
-        }
-      ],
-      "default": [
-        "blue",
-        "turquoise",
-        "purple",
-        "green",
-        "red",
-        "yellow",
-        "pink"
-      ]
-    },
     "hairColor": {
       "title": "Hair Color",
       "type": "array",

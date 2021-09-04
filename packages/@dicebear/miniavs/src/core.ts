@@ -48,8 +48,6 @@ export const style: Style<Options> = {
       'body': pickColor(prng, 'body', options.bodyColor ?? []),
     }
 
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
-    options.backgroundColor = pickColor(prng, 'background', backgroundColor ?? []).value;
 
     onPostCreate({ prng, options, components, colors });
 
