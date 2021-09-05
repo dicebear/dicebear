@@ -25,3 +25,7 @@ https://www.figma.com/file/Vh7N9shKJTNHNo9prUzkZe/miniavs?node-id=274%3A4378
 # big-smile
 
 https://www.figma.com/file/3Te9c70BX2Aj4IUP35sWhF/big-smile?node-id=11%3A38
+
+# big-ears
+
+https://www.figma.com/file/KhTfMFWWniVgZmGVFL0KK6/big-ears?node-id=202%3A1017

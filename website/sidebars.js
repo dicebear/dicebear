@@ -6,6 +6,8 @@ module.exports = {
     {
       Styles: [
         'styles/avataaars',
+        'styles/big-ears',
+        'styles/big-ears-neutral',
         'styles/big-smile',
         'styles/bottts',
         'styles/croodles',

@@ -16,3 +16,5 @@ export * as openPeeps from '@dicebear/open-peeps';
 export * as personas from '@dicebear/personas';
 export * as miniavs from '@dicebear/miniavs';
 export * as bigSmile from '@dicebear/big-smile';
+export * as bigEars from '@dicebear/big-ears';
+export * as bigEarsNeutral from '@dicebear/big-ears-neutral';

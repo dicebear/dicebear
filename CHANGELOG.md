@@ -7,6 +7,8 @@
 - `@dicebear/personas` New Avatar style by draftbit.com.
 - `@dicebear/miniavs` New Avatar style by Webpixels.
 - `@dicebear/big-smile` New Avatar style by Ashley Seo.
+- `@dicebear/big-ears` New Avatar style by The Visual Team.
+- `@dicebear/big-ears-neutral` New Avatar style by The Visual Team.
 
 ### Changed
 
