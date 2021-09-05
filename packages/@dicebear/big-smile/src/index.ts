@@ -1,5 +1,5 @@
 /*!
- * Custom Avatar (@dicebear/big-smile)
+ * Big Smile (@dicebear/big-smile)
  *
  * Code licensed under MIT License.
  * Copyright (c) 2021 Florian Körner

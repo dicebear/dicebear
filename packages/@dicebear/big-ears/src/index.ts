@@ -1,5 +1,5 @@
 /*!
- * Face Generator (@dicebear/big-ears)
+ * Big Ears (@dicebear/big-ears)
  *
  * Code licensed under MIT License.
  * Copyright (c) 2021 Florian Körner
