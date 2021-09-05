@@ -16,8 +16,8 @@ You also need to add a [avatar style](/styles). In our example, we will use the 
 Now you are ready to create your first Avatar.
 
 ```js
-import { createAvatar } from '@dicebear/avatars';
-import * as style from '@dicebear/avatars-identicon-sprites';
+const { createAvatar } = require('@dicebear/avatars')
+const { create } = require('@dicebear/avatars-initials-sprites');
 
 let svg = createAvatar(style, {
   seed: 'custom-seed',
