@@ -233,8 +233,7 @@ module.exports = {
 
   // tests/create.test.ts
   'tests/create.test.ts': `
-import * as avatars from '@dicebear/avatars';
-import { StyleOptions } from '@dicebear/avatars';
+import { createAvatar, StyleOptions } from '@dicebear/avatars';
 import * as style from '../dist';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -256,15 +255,14 @@ data.forEach((options, key) => {
         fs.mkdirSync(path.dirname(svgComponent));
       }
 
-      fs.writeFileSync(svgComponent, avatars.createAvatar(style, options), { encoding: 'utf-8' });
+      fs.writeFileSync(svgComponent, createAvatar(style, options), { encoding: 'utf-8' });
     }
 
     const svg = fs.readFileSync(svgComponent, { encoding: 'utf-8' });
 
-    expect(avatars.createAvatar(style, options)).toEqual(svg);
-    expect(new avatars.default(style.default, options).create(options.seed)).toEqual(svg);
+    expect(createAvatar(style, options)).toEqual(svg);
   });
-});
+});  
 `,
 
   // src/index.ts
@@ -287,16 +285,12 @@ data.forEach((options, key) => {
 {{/if}}
  */
 
-import { utils } from '@dicebear/avatars';
 import { style } from './core';
 
 let { create, meta, schema } = style;
 
 export { create, meta, schema };
 export { Options } from './options';
-
-/** @deprecated will be removed in Version 5.0 */
-export default utils.style.createLegacyWrapper(style);
 `,
 
   // src/core.ts
