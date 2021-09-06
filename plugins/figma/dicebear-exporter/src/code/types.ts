@@ -9,6 +9,7 @@ export type FrameSettings = {
   licenseName: string;
   licenseUrl: string;
   backgroundColorGroupName: string;
+  shapeRendering: string;
   onPreCreateHook: string;
   onPostCreateHook: string;
   componentGroupAliases: Array<{

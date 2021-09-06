@@ -28,6 +28,9 @@ export async function createTemplateString(node: FrameNode | ComponentNode) {
           },
         },
       },
+      // The default preset includes this plugin, but executes it too early.
+      // Therefore repeated at this point, so that really all unnecessary groups are removed.
+      'collapseGroups',
     ],
   }).data.trim();
 

@@ -7,14 +7,6 @@
   let componentGroupAliases = $state.data.frame.settings.componentGroupAliases;
   let colorGroupAliases = $state.data.frame.settings.colorGroupAliases;
 
-  $: componentSelect = Object.keys($state.data.components).map((key) => {
-    return { value: key, label: key, group: null, selected: false };
-  });
-
-  $: colorSelect = Object.keys($state.data.colors).map((key) => {
-    return { value: key, label: key, group: null, selected: false };
-  });
-
   $: {
     $state.data.frame.settings.componentGroupAliases = componentGroupAliases;
   }
@@ -64,7 +56,7 @@
       <div class="section-item">
         <div class="section-item-name">
           <div class="section-item-name-select">
-            <Select items={componentSelect} bind:value={componentAlias.name} />
+            <Select items={Object.keys($state.data.components)} bind:value={componentAlias.name} />
           </div>
           <IconButton on:click={() => removeComponentAlias(key)} iconName={IconMinus} />
         </div>
@@ -89,7 +81,7 @@
       <div class="section-item">
         <div class="section-item-name">
           <div class="section-item-name-select">
-            <Select items={colorSelect} bind:value={colorAlias.name} />
+            <Select items={Object.keys($state.data.colors)} bind:value={colorAlias.name} />
           </div>
           <IconButton on:click={() => removeColorAlias(key)} iconName={IconMinus} />
         </div>

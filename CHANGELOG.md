@@ -5,6 +5,7 @@
 ### Added
 
 - `@dicebear/initials` as replacement for `@dicebear/avatars-initials-sprites`
+- `@dicebear/identicon` as replacement for `@dicebear/avatars-identicon-sprites`
 
 ### Removed
 
@@ -12,6 +13,7 @@
 - `@dicebear/avatars-female-sprites` Use `@dicebear/pixel-art` instead.
 - `@dicebear/avatars-human-sprites` Use `@dicebear/pixel-art` instead.
 - `@dicebear/avatars-initials-sprites` Use `@dicebear/initials` instead.
+- `@dicebear/avatars-iniidenticontials-sprites` Use `@dicebear/identicon` instead.
 
 ## [4.9.0] - 21-09-05
 
@@ -227,7 +229,7 @@ No notable changes.
 
   ```js
   import Avatars from `@dicebear/avatars`;
-  import style from `@dicebear/avatars-identicon-sprites`;
+  import style from `@dicebear/identicon`;
 
   let options = {};
   let seed = 'custom-seed';
@@ -239,7 +241,7 @@ No notable changes.
 
   ```js
   import { createAvatar } from `@dicebear/avatars`;
-  import * as style from `@dicebear/avatars-identicon-sprites`;
+  import * as style from `@dicebear/identicon`;
 
   let svg = createAvatar(style, {
     seed: 'custom-seed',

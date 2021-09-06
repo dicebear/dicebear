@@ -1,0 +1,213 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "row1": {
+      "title": "Row1",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "xooox",
+          "xxoxx",
+          "xoxox",
+          "oxxxo",
+          "xxxxx",
+          "oxoxo",
+          "ooxoo"
+        ]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ]
+    },
+    "row1Probability": {
+      "title": "Row1 Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 88
+    },
+    "row2": {
+      "title": "Row2",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "xooox",
+          "xxoxx",
+          "xoxox",
+          "oxxxo",
+          "xxxxx",
+          "oxoxo",
+          "ooxoo"
+        ]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ]
+    },
+    "row2Probability": {
+      "title": "Row2 Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 88
+    },
+    "row3": {
+      "title": "Row3",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "xooox",
+          "xxoxx",
+          "xoxox",
+          "oxxxo",
+          "xxxxx",
+          "oxoxo",
+          "ooxoo"
+        ]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ]
+    },
+    "row3Probability": {
+      "title": "Row3 Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 88
+    },
+    "row4": {
+      "title": "Row4",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "xooox",
+          "xxoxx",
+          "xoxox",
+          "oxxxo",
+          "xxxxx",
+          "oxoxo",
+          "ooxoo"
+        ]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ]
+    },
+    "row4Probability": {
+      "title": "Row4 Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 88
+    },
+    "row5": {
+      "title": "Row5",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "xooox",
+          "xxoxx",
+          "xoxox",
+          "oxxxo",
+          "xxxxx",
+          "oxoxo",
+          "ooxoo"
+        ]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ]
+    },
+    "row5Probability": {
+      "title": "Row5 Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 88
+    },
+    "rowColor": {
+      "title": "Row Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "red",
+              "amber",
+              "blue",
+              "blueGray",
+              "brown",
+              "cyan",
+              "deepOrange",
+              "deepPurple",
+              "green",
+              "grey",
+              "indigo",
+              "lightBlue",
+              "lightGreen",
+              "lime",
+              "orange",
+              "pink",
+              "purple",
+              "teal",
+              "yellow"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "red",
+        "amber",
+        "blue",
+        "blueGray",
+        "brown",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "grey",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "teal",
+        "yellow"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

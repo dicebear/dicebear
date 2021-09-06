@@ -11,6 +11,7 @@ export function getFrameSettings(frame: FrameNode, colorGroups: string[]): Frame
     source: '',
     licenseName: 'CC BY 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+    shapeRendering: 'auto',
     backgroundColorGroupName: '',
     onPreCreateHook: '',
     onPostCreateHook: '',

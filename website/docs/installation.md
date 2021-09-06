@@ -17,7 +17,7 @@ Now you are ready to create your first Avatar.
 
 ```js
 import { createAvatar } from '@dicebear/avatars';
-import * as style from '@dicebear/avatars-identicon-sprites';
+import * as style from '@dicebear/identicon';
 
 let svg = createAvatar(style, {
   seed: 'custom-seed',

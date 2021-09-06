@@ -70,6 +70,7 @@ export async function createExport() {
       colors: exportData.colors,
       size: (figma.getNodeById(exportData.frame.id) as FrameNode).width,
       body: await createTemplateString(figma.getNodeById(exportData.frame.id) as FrameNode),
+      shapeRendering: exportData.frame.settings.shapeRendering,
     }),
     'src/static-types.ts': templates['src/static-types.ts'],
     'src/colors/index.ts': handlebars.compile(templates['src/colors/index.ts'])({

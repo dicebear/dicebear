@@ -363,6 +363,7 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 {{size}} {{size}}',
         fill: 'none',
+        'shape-rendering': '{{shapeRendering}}'
       },
       body: {{{body}}},
     };

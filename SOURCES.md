@@ -29,3 +29,7 @@ https://www.figma.com/file/3Te9c70BX2Aj4IUP35sWhF/big-smile?node-id=11%3A38
 # big-ears
 
 https://www.figma.com/file/KhTfMFWWniVgZmGVFL0KK6/big-ears?node-id=202%3A1017
+
+# identicon
+
+https://www.figma.com/file/np7zgQo9412LDvi1mA1UmK/identicon?node-id=1%3A34

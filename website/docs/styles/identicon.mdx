@@ -26,13 +26,13 @@ See the [HTTP API documentation](/docs/http-api) for more information.
 
 Install the Avatars and this avatar style with the following command.
 
-    npm install --save @dicebear/avatars @dicebear/avatars-identicon-sprites
+    npm install --save @dicebear/avatars @dicebear/identicon
 
 Now you are ready to create your first Avatar.
 
 ```js
 import { createAvatar } from '@dicebear/avatars';
-import * as style from '@dicebear/avatars-identicon-sprites';
+import * as style from '@dicebear/identicon';
 
 let svg = createAvatar(style, {
   seed: 'custom-seed',

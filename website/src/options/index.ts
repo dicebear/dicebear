@@ -71,7 +71,7 @@ export default [
   },
   {
     id: 'identicon',
-    name: '@dicebear/avatars-identicon-sprites',
+    name: '@dicebear/identicon',
     style: collection.identicon,
     options: identiconOptions,
   },
