@@ -1,7 +1,7 @@
 /*!
- * DiceBear Initials (@dicebear/avatars-initials-sprites)
+ * DiceBear Initials (@dicebear/initials)
  *
- * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/avatars-initials-sprites/LICENSE)
+ * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/initials/LICENSE)
  * Copyright (c) 2021 Florian Körner
  */
 

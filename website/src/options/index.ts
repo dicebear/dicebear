@@ -77,7 +77,7 @@ export default [
   },
   {
     id: 'initials',
-    name: '@dicebear/avatars-initials-sprites',
+    name: '@dicebear/initials',
     style: collection.initials,
     options: initialsOptions,
   },

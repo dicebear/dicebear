@@ -491,7 +491,7 @@ No notable changes.
 
 ### Fixed
 
-- Text position was wrong in `@dicebear/avatars-initials-sprites` when a font size was specified.
+- Text position was wrong in `@dicebear/initials` when a font size was specified.
 
 ### Removed
 

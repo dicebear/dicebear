@@ -38,7 +38,7 @@
     "@dicebear/avatars-gridy-sprites": "^4.9.0",
     "@dicebear/avatars-human-sprites": "^4.9.0",
     "@dicebear/avatars-identicon-sprites": "^4.9.0",
-    "@dicebear/avatars-initials-sprites": "^4.9.0",
+    "@dicebear/initials": "^4.9.0",
     "@dicebear/avatars-jdenticon-sprites": "^4.9.0",
     "@dicebear/avatars-male-sprites": "^4.9.0",
     "@dicebear/big-ears": "^4.9.0",

@@ -4,7 +4,7 @@ export * as female from '@dicebear/avatars-female-sprites';
 export * as gridy from '@dicebear/avatars-gridy-sprites';
 export * as human from '@dicebear/avatars-human-sprites';
 export * as identicon from '@dicebear/avatars-identicon-sprites';
-export * as initials from '@dicebear/avatars-initials-sprites';
+export * as initials from '@dicebear/initials';
 export * as jdenticon from '@dicebear/avatars-jdenticon-sprites';
 export * as male from '@dicebear/avatars-male-sprites';
 export * as micah from '@dicebear/micah';
