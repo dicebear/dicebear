@@ -1,6 +1,19 @@
 # Changelog
 
-## [4.9.0] - TBA
+## [5.0.0] - TBA
+
+### Added
+
+- `@dicebear/initials` as replacement for `@dicebear/avatars-initials-sprites`
+
+### Removed
+
+- `@dicebear/avatars-male-sprites` Use `@dicebear/pixel-art` instead.
+- `@dicebear/avatars-female-sprites` Use `@dicebear/pixel-art` instead.
+- `@dicebear/avatars-human-sprites` Use `@dicebear/pixel-art` instead.
+- `@dicebear/avatars-initials-sprites` Use `@dicebear/initials` instead.
+
+## [4.9.0] - 21-09-05
 
 ### Added
 
