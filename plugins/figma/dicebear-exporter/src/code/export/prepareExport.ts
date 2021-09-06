@@ -28,7 +28,7 @@ export function prepareExport() {
   let queueItem;
 
   for (const [colorGroupName, colorGroup] of colorGroups) {
-    const settings = getColorGroupSettings(colorGroupName);
+    const settings = getColorGroupSettings(frameSelection, colorGroupName);
     const exportColorGroup: ExportColorGroup = (exportData.colors[colorGroupName] = {
       isUsedByComponents: false,
       settings: {
@@ -73,7 +73,7 @@ export function prepareExport() {
       const componentGroupName = getNameParts(instance.mainComponent.name).group;
 
       if (undefined === exportData.components[componentGroupName]) {
-        const settings = getComponentGroupSettings(componentGroupName);
+        const settings = getComponentGroupSettings(frameSelection, componentGroupName);
         const componentGroup: ExportComponentGroup = (exportData.components[componentGroupName] = {
           settings: {
             ...settings,
@@ -95,14 +95,6 @@ export function prepareExport() {
       }
     }
   }
-
-  exportData.frame.settings.componentGroupAliases = exportData.frame.settings.componentGroupAliases.filter(
-    (val) => componentGroups.has(val.name) && val.alias && false === componentGroups.has(val.alias)
-  );
-
-  exportData.frame.settings.colorGroupAliases = exportData.frame.settings.colorGroupAliases.filter(
-    (val) => colorGroups.has(val.name) && val.alias && false === colorGroups.has(val.alias)
-  );
 
   return exportData;
 }

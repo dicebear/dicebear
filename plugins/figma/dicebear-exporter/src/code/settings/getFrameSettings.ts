@@ -1,30 +1,32 @@
 import { FrameSettings } from '../types';
 
 export function getFrameSettings(frame: FrameNode, colorGroups: string[]): FrameSettings {
+  const titlePlaceholder = 'My Avatar Style';
+
   const data: FrameSettings = {
-    umdName: '',
     packageName: '',
     packageVersion: '',
     title: '',
     creator: '',
     contributor: '',
+    sourceTitle: '',
     source: '',
     licenseName: 'CC BY 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+    shapeRendering: 'auto',
     backgroundColorGroupName: '',
     onPreCreateHook: '',
     onPostCreateHook: '',
-    componentGroupAliases: [],
-    colorGroupAliases: [],
+    precision: 3,
     ...JSON.parse(frame.getPluginData(`settings`) || '{}'),
   };
 
   if (!data.title) {
-    data.title = 'My Avatar Style';
+    data.title = titlePlaceholder;
   }
 
-  if (!data.umdName) {
-    data.umdName = 'DiceBear.MyAvatarStyle';
+  if (!data.sourceTitle || data.sourceTitle === titlePlaceholder) {
+    data.sourceTitle = data.title;
   }
 
   if (!data.packageName) {

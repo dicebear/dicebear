@@ -6,7 +6,6 @@
       "packages/*",
       "packages/@dicebear/*",
       "plugins/figma/*",
-      "scripts",
       "website"
     ]
   },

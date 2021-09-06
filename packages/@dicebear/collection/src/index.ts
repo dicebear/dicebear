@@ -1,22 +1,41 @@
-export * as adventurer from '@dicebear/adventurer';
-export * as adventurerNeutral from '@dicebear/adventurer-neutral';
-export * as avataaars from '@dicebear/avatars-avataaars-sprites';
-export * as bottts from '@dicebear/avatars-bottts-sprites';
-export * as female from '@dicebear/avatars-female-sprites';
-export * as gridy from '@dicebear/avatars-gridy-sprites';
-export * as human from '@dicebear/avatars-human-sprites';
-export * as identicon from '@dicebear/avatars-identicon-sprites';
-export * as initials from '@dicebear/avatars-initials-sprites';
-export * as jdenticon from '@dicebear/avatars-jdenticon-sprites';
-export * as male from '@dicebear/avatars-male-sprites';
-export * as micah from '@dicebear/micah';
-export * as croodles from '@dicebear/croodles';
-export * as croodlesNeutral from '@dicebear/croodles-neutral';
-export * as pixelArt from '@dicebear/pixel-art';
-export * as pixelArtNeutral from '@dicebear/pixel-art-neutral';
-export * as openPeeps from '@dicebear/open-peeps';
-export * as personas from '@dicebear/personas';
-export * as miniavs from '@dicebear/miniavs';
-export * as bigSmile from '@dicebear/big-smile';
-export * as bigEars from '@dicebear/big-ears';
-export * as bigEarsNeutral from '@dicebear/big-ears-neutral';
+import * as adventurer from '@dicebear/adventurer';
+import * as adventurerNeutral from '@dicebear/adventurer-neutral';
+import * as avataaars from '@dicebear/avataaars';
+import * as avataaarsNeutral from '@dicebear/avataaars-neutral';
+import * as bottts from '@dicebear/bottts';
+import * as botttsNeutral from '@dicebear/bottts-neutral';
+import * as identicon from '@dicebear/identicon';
+import * as initials from '@dicebear/initials';
+import * as micah from '@dicebear/micah';
+import * as croodles from '@dicebear/croodles';
+import * as croodlesNeutral from '@dicebear/croodles-neutral';
+import * as pixelArt from '@dicebear/pixel-art';
+import * as pixelArtNeutral from '@dicebear/pixel-art-neutral';
+import * as openPeeps from '@dicebear/open-peeps';
+import * as personas from '@dicebear/personas';
+import * as miniavs from '@dicebear/miniavs';
+import * as bigSmile from '@dicebear/big-smile';
+import * as bigEars from '@dicebear/big-ears';
+import * as bigEarsNeutral from '@dicebear/big-ears-neutral';
+
+export {
+  adventurer,
+  adventurerNeutral,
+  avataaars,
+  avataaarsNeutral,
+  bottts,
+  botttsNeutral,
+  identicon,
+  initials,
+  micah,
+  croodles,
+  croodlesNeutral,
+  pixelArt,
+  pixelArtNeutral,
+  openPeeps,
+  personas,
+  miniavs,
+  bigSmile,
+  bigEars,
+  bigEarsNeutral,
+};

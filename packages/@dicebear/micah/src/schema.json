@@ -1,0 +1,494 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "base": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["standard"] },
+      "default": ["standard"]
+    },
+    "baseColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "coast",
+              "topaz",
+              "lavender",
+              "sky",
+              "salmon",
+              "canary",
+              "calm",
+              "azure",
+              "seashell",
+              "mellow",
+              "black",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": ["apricot", "coast", "topaz"]
+    },
+    "earringColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "apricot",
+        "azure",
+        "black",
+        "calm",
+        "canary",
+        "coast",
+        "lavender",
+        "mellow",
+        "salmon",
+        "seashell",
+        "sky",
+        "topaz",
+        "white"
+      ]
+    },
+    "earrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["hoop", "stud"] },
+      "default": ["hoop", "stud"]
+    },
+    "earringsProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 30
+    },
+    "ears": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["attached", "detached"] },
+      "default": ["attached", "detached"]
+    },
+    "eyeShadowColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": ["azure", "calm", "mellow", "seashell", "white"]
+    },
+    "eyebrowColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": ["black"]
+    },
+    "eyebrows": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["up", "down", "eyelashesUp", "eyelashesDown"]
+      },
+      "default": ["up", "down", "eyelashesUp", "eyelashesDown"]
+    },
+    "eyes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["eyes", "round", "eyesShadow", "smiling"]
+      },
+      "default": ["eyes", "round", "eyesShadow", "smiling"]
+    },
+    "eyesColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": ["black"]
+    },
+    "facialHair": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["beard", "scruff"] },
+      "default": ["beard", "scruff"]
+    },
+    "facialHairColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": ["topaz"]
+    },
+    "facialHairProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 10
+    },
+    "glasses": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["round", "square"] },
+      "default": ["round", "square"]
+    },
+    "glassesColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "apricot",
+        "azure",
+        "black",
+        "calm",
+        "canary",
+        "coast",
+        "lavender",
+        "mellow",
+        "salmon",
+        "seashell",
+        "sky",
+        "topaz",
+        "white"
+      ]
+    },
+    "glassesProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 30
+    },
+    "hair": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "fonze",
+          "mrT",
+          "dougFunny",
+          "mrClean",
+          "dannyPhantom",
+          "full",
+          "turban",
+          "pixie"
+        ]
+      },
+      "default": [
+        "fonze",
+        "mrT",
+        "dougFunny",
+        "mrClean",
+        "dannyPhantom",
+        "full",
+        "turban",
+        "pixie"
+      ]
+    },
+    "hairColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "apricot",
+        "azure",
+        "black",
+        "calm",
+        "canary",
+        "coast",
+        "lavender",
+        "mellow",
+        "salmon",
+        "seashell",
+        "sky",
+        "topaz",
+        "white"
+      ]
+    },
+    "hairProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 100
+    },
+    "mouth": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "surprised",
+          "laughing",
+          "nervous",
+          "smile",
+          "sad",
+          "pucker",
+          "frown",
+          "smirk"
+        ]
+      },
+      "default": [
+        "surprised",
+        "laughing",
+        "nervous",
+        "smile",
+        "sad",
+        "pucker",
+        "frown",
+        "smirk"
+      ]
+    },
+    "mouthColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          { "type": "string", "enum": ["black"] }
+        ]
+      },
+      "default": ["black"]
+    },
+    "nose": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["curve", "pointed", "tound"] },
+      "default": ["curve", "pointed", "tound"]
+    },
+    "shirt": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["open", "crew", "collared"] },
+      "default": ["open", "crew", "collared"]
+    },
+    "shirtColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "apricot",
+        "azure",
+        "black",
+        "calm",
+        "canary",
+        "coast",
+        "lavender",
+        "mellow",
+        "salmon",
+        "seashell",
+        "sky",
+        "topaz",
+        "white"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

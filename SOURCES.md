@@ -26,10 +26,30 @@ https://www.figma.com/file/Vh7N9shKJTNHNo9prUzkZe/miniavs?node-id=274%3A4378
 
 https://www.figma.com/file/3Te9c70BX2Aj4IUP35sWhF/big-smile?node-id=11%3A38
 
-# big-ears
+# big-ears / big-ears-neutral
 
 https://www.figma.com/file/KhTfMFWWniVgZmGVFL0KK6/big-ears?node-id=202%3A1017
 
 # adventurer / adventurer-neutral
 
 https://www.figma.com/file/Iebd5sD90Hvs14Gwhdov0R/adventurer?node-id=29%3A34
+
+# identicon
+
+https://www.figma.com/file/np7zgQo9412LDvi1mA1UmK/identicon?node-id=1%3A34
+
+# avataaars / avataaars-neutral
+
+https://www.figma.com/file/HBLdITkkTnLs4M09BmCe4h/avataaars?node-id=10%3A108
+
+# bottts / bottts-neutral
+
+https://www.figma.com/file/4nf3pyoOuM1U9Pa8M0cL6u/bottts?node-id=4%3A3172
+
+# gridy
+
+https://www.figma.com/file/d1Arpco5FTMsJILGaoEvM4/gridy?node-id=5%3A140
+
+# shapes
+
+https://www.figma.com/file/gIuwt9OU5MHUXsUaBzK6XU/shapes?node-id=9%3A68

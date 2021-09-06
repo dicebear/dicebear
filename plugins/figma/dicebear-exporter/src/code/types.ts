@@ -1,26 +1,18 @@
 export type FrameSettings = {
   title: string;
-  umdName: string;
   packageName: string;
   packageVersion: string;
   creator: string;
   contributor: string;
+  sourceTitle: string;
   source: string;
   licenseName: string;
   licenseUrl: string;
   backgroundColorGroupName: string;
+  shapeRendering: string;
   onPreCreateHook: string;
   onPostCreateHook: string;
-  componentGroupAliases: Array<{
-    name: string;
-    alias: string;
-    deprecated: boolean;
-  }>;
-  colorGroupAliases: Array<{
-    name: string;
-    alias: string;
-    deprecated: boolean;
-  }>;
+  precision: number;
 };
 
 export type ComponentGroupSettings = {

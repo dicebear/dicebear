@@ -1,7 +1,7 @@
 <script>
-  import { Input, Switch } from "figma-plugin-ds-svelte";
-  import { state } from "../stores/state";
-  import Label from "./Label.svelte";
+  import { Input, Switch } from 'figma-plugin-ds-svelte';
+  import { state } from '../stores/state';
+  import Label from './Label.svelte';
 
   export let componentGroup;
 </script>

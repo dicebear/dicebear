@@ -1,3 +1,4 @@
+export { base } from './base';
 export { eyes } from './eyes';
 export { eyebrows } from './eyebrows';
 export { mouth } from './mouth';

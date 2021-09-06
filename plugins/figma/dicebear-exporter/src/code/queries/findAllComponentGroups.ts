@@ -1,5 +1,5 @@
-import { getNameParts } from "../utils/getNameParts";
-import { findChildrenComponentNodes } from "./findChildrenComponentNodes";
+import { getNameParts } from '../utils/getNameParts';
+import { findChildrenComponentNodes } from './findChildrenComponentNodes';
 
 export function findAllComponentGroups() {
   const componentGroups = new Map();
@@ -8,9 +8,7 @@ export function findAllComponentGroups() {
     const components = findChildrenComponentNodes(page);
 
     for (const component of components) {
-      const { group: componentGroupName, name: componentName } = getNameParts(
-        component.name
-      );
+      const { group: componentGroupName, name: componentName } = getNameParts(component.name);
 
       if (false === componentGroups.has(componentGroupName)) {
         componentGroups.set(componentGroupName, new Map());

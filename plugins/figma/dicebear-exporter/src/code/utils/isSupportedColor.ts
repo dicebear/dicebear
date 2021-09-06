@@ -1,4 +1,4 @@
-import { getNameParts } from "./getNameParts";
+import { getNameParts } from './getNameParts';
 
 export function isSupportedColor(color: PaintStyle): boolean {
   const colorGroupName = getNameParts(color.name).group;
@@ -7,6 +7,6 @@ export function isSupportedColor(color: PaintStyle): boolean {
     colorGroupName.length > 0 &&
     false === color.remote &&
     color.paints.length === 1 &&
-    color.paints?.[0].type === "SOLID"
+    color.paints?.[0].type === 'SOLID'
   );
 }

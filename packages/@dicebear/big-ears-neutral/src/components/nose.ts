@@ -1,44 +1,68 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const nose: ComponentGroup = {
-  'variant12': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M22.59 34.44a16.901 16.901 0 0 0-.59 4.442c0 9.323 7.558 16.882 16.882 16.882 9.323 0 16.882-7.559 16.882-16.882 0-1.538-.206-3.027-.591-4.443-1.95 7.169-8.505 12.44-16.291 12.44S24.54 41.608 22.59 34.439Z" fill="#000" fill-opacity=".19"/>
-`,
-  'variant11': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M5.59 34.439A16.902 16.902 0 0 0 5 38.882c0 9.323 7.558 16.882 16.882 16.882h33.763c9.324 0 16.882-7.559 16.882-16.882 0-1.538-.205-3.027-.59-4.443-1.95 7.168-8.506 12.44-16.292 12.44H21.882c-7.786 0-14.341-5.272-16.291-12.44Z" fill="#000" fill-opacity=".19"/>
-`,
-  'variant10': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M18.631 38.342c1.366 3.924 5.099 6.74 9.489 6.74.293 0 .583-.013.87-.037 1.148 4.284 5.057 7.439 9.704 7.439 4.646 0 8.555-3.155 9.703-7.44.287.025.577.038.87.038 4.39 0 8.122-2.816 9.489-6.74a10.03 10.03 0 0 1 .556 3.304c0 5.548-4.497 10.045-10.045 10.045-.293 0-.583-.012-.87-.037-1.148 4.284-5.057 7.44-9.703 7.44-4.647 0-8.556-3.156-9.704-7.44-.287.025-.577.037-.87.037-5.548 0-10.045-4.497-10.045-10.045 0-1.157.196-2.27.556-3.304Z" fill="#000" fill-opacity=".19"/>
-`,
-  'variant09': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M16.59 46.197A11.278 11.278 0 0 0 16 49.81c0 6.237 5.056 11.294 11.294 11.294.33 0 .655-.015.978-.042 1.29 4.816 5.686 8.363 10.91 8.363 5.223 0 9.619-3.547 10.91-8.363.322.027.648.041.977.041 6.238 0 11.294-5.056 11.294-11.293 0-1.264-.208-2.48-.59-3.614-1.508 4.465-5.73 7.68-10.704 7.68-.33 0-.655-.015-.978-.043-1.29 4.817-5.686 8.364-10.91 8.364-5.223 0-9.619-3.547-10.91-8.364-.322.028-.648.042-.977.042-4.974 0-9.196-3.214-10.703-7.68Z" fill="#000" fill-opacity=".19"/>
-`,
-  'variant08': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g fill="#000" fill-opacity=".19">
-    <rect x="25.885" y="51.461" width="11.691" height="8.885" rx="4.443" transform="rotate(-90 25.885 51.461)"/>
-    <rect x="43.656" y="51.461" width="11.691" height="8.885" rx="4.443" transform="rotate(-90 43.656 51.461)"/>
-    <path d="M61.242 41.382c.121-.816.184-1.65.184-2.5C61.426 29.558 53.867 22 44.544 22H33.882C24.558 22 17 29.558 17 38.882c0 .85.063 1.684.184 2.5C18.392 33.244 25.408 27 33.882 27h10.662c8.474 0 15.49 6.244 16.698 14.382Z"/>
-  </g>
-`,
-  'variant07': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M17.17 34.474a17.03 17.03 0 0 0-.17 2.408v3.289c0 9.323 7.558 16.882 16.882 16.882h10.236C53.442 57.053 61 49.494 61 40.17v-3.29c0-.817-.058-1.62-.17-2.407-1.17 8.183-8.206 14.473-16.712 14.473H33.882c-8.506 0-15.543-6.29-16.712-14.473Z" fill="#000" fill-opacity=".19"/>
-`,
-  'variant06': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M36.928 14v26.928C33.285 41.71 26 44.91 26 51.466c0 8.195 7.285 10.537 10.928 11.708" stroke="#000" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-`,
-  'variant05': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M38.928 28C35.285 28.78 28 31.98 28 38.537c0 8.196 7.285 10.538 10.928 11.708" stroke="#000" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-`,
-  'variant04': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M37.786 22c-7.091 9.462-20.21 28.903-15.955 30.968 4.255 2.064 18.614 2.58 25.262 2.58" stroke="#000" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-`,
-  'variant03': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M33.363 22c-7.092 9.462-12.041 31.484-7.787 33.548 4.255 2.065 10.446 0 17.094 0" stroke="#000" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-`,
-  'variant02': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M42.35 22c-.672 5.358-3.023 16.276-7.055 17.08-5.038 1.004-11.085-8.038-13.1-2.01-2.016 6.028 12.093 21.098 22.17 18.084" stroke="#000" stroke-opacity=".5" stroke-width="3.728" stroke-linecap="round" stroke-linejoin="round"/>
-`,
-  'variant01': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="m24.617 39.342-.249 2.603C23.544 50.553 30.312 58 38.96 58c8.832 0 15.659-7.753 14.54-16.514l-.245-1.924c-1.475 6.447-7.246 11.385-14.295 11.385-7.108 0-12.946-5.032-14.342-11.605Z" fill="#000" fill-opacity=".19"/>
-`,
-}
+  variant12: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M22.6 34.4a17 17 0 1 0 32.6 0 16.9 16.9 0 0 1-32.6 0Z" fill="#000" fill-opacity=".2"/>`,
+  variant11: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M5.6 34.4a17 17 0 0 0 16.3 21.4h33.7A16.9 16.9 0 0 0 72 34.4C70 41.6 63.4 47 55.6 47H22c-7.8 0-14.4-5.3-16.3-12.5Z" fill="#000" fill-opacity=".2"/>`,
+  variant10: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M18.6 38.3A10 10 0 0 0 29 45a10 10 0 0 0 19.4 0h.9a10 10 0 0 0 9.5-6.7 10 10 0 0 1-10.4 13.4 10 10 0 0 1-19.4 0H28a10 10 0 0 1-9.5-13.4Z" fill="#000" fill-opacity=".2"/>`,
+  variant09: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M16.6 46.2A11.3 11.3 0 0 0 28.3 61 11.3 11.3 0 0 0 50 61h1a11.3 11.3 0 0 0 10.7-15A11.3 11.3 0 0 1 50 53.9a11.3 11.3 0 0 1-21.8 0h-1c-5 0-9.2-3.1-10.7-7.6Z" fill="#000" fill-opacity=".2"/>`,
+  variant08: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<g fill="#000" fill-opacity=".2"><rect x="25.9" y="51.5" width="11.7" height="8.9" rx="4.4" transform="rotate(-90 25.9 51.5)"/><rect x="43.7" y="51.5" width="11.7" height="8.9" rx="4.4" transform="rotate(-90 43.7 51.5)"/><path d="M61.2 41.4c.2-.8.2-1.7.2-2.5C61.4 29.6 54 22 44.5 22H34a16.9 16.9 0 0 0-16.7 19.4A16.9 16.9 0 0 1 33.9 27h10.6C53 27 60 33.2 61.2 41.4Z"/></g>`,
+  variant07: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M17.2 34.5a17 17 0 0 0-.2 2.4v3.3C17 49.5 24.6 57 33.9 57H44C53.4 57 61 49.5 61 40V37c0-.8 0-1.6-.2-2.4a16.9 16.9 0 0 1-16.7 14.4H34c-8.5 0-15.6-6.2-16.7-14.4Z" fill="#000" fill-opacity=".2"/>`,
+  variant06: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M37 14v27c-3.7.7-11 4-11 10.5 0 8.2 7.3 10.5 11 11.7" stroke="#000" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
+  variant05: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M39 28c-3.7.8-11 4-11 10.5 0 8.2 7.3 10.6 11 11.7" stroke="#000" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
+  variant04: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M37.8 22c-7.1 9.5-20.2 29-16 31 4.3 2 18.6 2.5 25.3 2.5" stroke="#000" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
+  variant03: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M33.4 22c-7.1 9.5-12 31.5-7.8 33.5 4.2 2.1 10.4 0 17 0" stroke="#000" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
+  variant02: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M42.4 22c-.7 5.4-3 16.3-7.1 17-5 1-11-8-13.1-2-2 6 12 21.2 22.2 18.2" stroke="#000" stroke-opacity=".5" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>`,
+  variant01: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="m24.6 39.3-.2 2.6a14.7 14.7 0 1 0 29-.4l-.1-2a14.7 14.7 0 0 1-28.7-.2Z" fill="#000" fill-opacity=".2"/>`,
+};

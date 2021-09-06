@@ -1,0 +1,601 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "accessories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "kurt",
+          "prescription01",
+          "prescription02",
+          "round",
+          "sunglasses",
+          "wayfarers"
+        ]
+      },
+      "default": [
+        "kurt",
+        "prescription01",
+        "prescription02",
+        "round",
+        "sunglasses",
+        "wayfarers"
+      ]
+    },
+    "accessoriesColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "blue01",
+              "blue02",
+              "blue03",
+              "gray01",
+              "gray02",
+              "heather",
+              "pastelBlue",
+              "pastelGreen",
+              "pastelOrange",
+              "pastelRed",
+              "pastelYellow",
+              "pink",
+              "red",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "blue01",
+        "blue02",
+        "blue03",
+        "gray01",
+        "gray02",
+        "heather",
+        "pastelBlue",
+        "pastelGreen",
+        "pastelOrange",
+        "pastelRed",
+        "pastelYellow",
+        "pink",
+        "red",
+        "white"
+      ]
+    },
+    "accessoriesProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 10
+    },
+    "backgroundColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          { "type": "string", "enum": ["blue01"] }
+        ]
+      },
+      "default": []
+    },
+    "clothesColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "blue01",
+              "blue02",
+              "blue03",
+              "gray01",
+              "gray02",
+              "heather",
+              "pastelBlue",
+              "pastelGreen",
+              "pastelOrange",
+              "pastelRed",
+              "pastelYellow",
+              "pink",
+              "red",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "blue01",
+        "blue02",
+        "blue03",
+        "gray01",
+        "gray02",
+        "heather",
+        "pastelBlue",
+        "pastelGreen",
+        "pastelOrange",
+        "pastelRed",
+        "pastelYellow",
+        "pink",
+        "red",
+        "white"
+      ]
+    },
+    "clothing": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "blazerAndShirt",
+          "blazerAndSweater",
+          "collarAndSweater",
+          "graphicShirt",
+          "hoodie",
+          "overall",
+          "shirtCrewNeck",
+          "shirtScoopNeck",
+          "shirtVNeck"
+        ]
+      },
+      "default": [
+        "blazerAndShirt",
+        "blazerAndSweater",
+        "collarAndSweater",
+        "graphicShirt",
+        "hoodie",
+        "overall",
+        "shirtCrewNeck",
+        "shirtScoopNeck",
+        "shirtVNeck"
+      ]
+    },
+    "clothingGraphic": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "bat",
+          "bear",
+          "cumbia",
+          "deer",
+          "diamond",
+          "hola",
+          "pizza",
+          "resist",
+          "skull",
+          "skullOutline"
+        ]
+      },
+      "default": [
+        "bat",
+        "bear",
+        "cumbia",
+        "deer",
+        "diamond",
+        "hola",
+        "pizza",
+        "resist",
+        "skull",
+        "skullOutline"
+      ]
+    },
+    "eyebrows": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "angryNatural",
+          "defaultNatural",
+          "flatNatural",
+          "frownNatural",
+          "raisedExcitedNatural",
+          "sadConcernedNatural",
+          "unibrowNatural",
+          "upDownNatural",
+          "angry",
+          "default",
+          "raisedExcited",
+          "sadConcerned",
+          "upDown"
+        ]
+      },
+      "default": [
+        "angryNatural",
+        "defaultNatural",
+        "flatNatural",
+        "frownNatural",
+        "raisedExcitedNatural",
+        "sadConcernedNatural",
+        "unibrowNatural",
+        "upDownNatural",
+        "angry",
+        "default",
+        "raisedExcited",
+        "sadConcerned",
+        "upDown"
+      ]
+    },
+    "eyes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "closed",
+          "cry",
+          "default",
+          "eyeRoll",
+          "happy",
+          "hearts",
+          "side",
+          "squint",
+          "surprised",
+          "winkWacky",
+          "wink",
+          "xDizzy"
+        ]
+      },
+      "default": [
+        "closed",
+        "cry",
+        "default",
+        "eyeRoll",
+        "happy",
+        "hearts",
+        "side",
+        "squint",
+        "surprised",
+        "winkWacky",
+        "wink",
+        "xDizzy"
+      ]
+    },
+    "facialHair": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "beardLight",
+          "beardMagestic",
+          "beardMedium",
+          "moustacheFancy",
+          "moustacheMagnum"
+        ]
+      },
+      "default": [
+        "beardLight",
+        "beardMagestic",
+        "beardMedium",
+        "moustacheFancy",
+        "moustacheMagnum"
+      ]
+    },
+    "facialHairColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "auburn",
+              "black",
+              "blonde",
+              "blondeGolden",
+              "brown",
+              "brownDark",
+              "pastelPink",
+              "platinum",
+              "red",
+              "silverGray"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "auburn",
+        "black",
+        "blonde",
+        "blondeGolden",
+        "brown",
+        "brownDark",
+        "pastelPink",
+        "platinum",
+        "red",
+        "silverGray"
+      ]
+    },
+    "facialHairProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 10
+    },
+    "hairColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "auburn",
+              "black",
+              "blonde",
+              "blondeGolden",
+              "brown",
+              "brownDark",
+              "pastelPink",
+              "platinum",
+              "red",
+              "silverGray"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "auburn",
+        "black",
+        "blonde",
+        "blondeGolden",
+        "brown",
+        "brownDark",
+        "pastelPink",
+        "platinum",
+        "red",
+        "silverGray"
+      ]
+    },
+    "hatColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "blue01",
+              "blue02",
+              "blue03",
+              "gray01",
+              "gray02",
+              "heather",
+              "pastelBlue",
+              "pastelGreen",
+              "pastelOrange",
+              "pastelRed",
+              "pastelYellow",
+              "pink",
+              "red",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "blue01",
+        "blue02",
+        "blue03",
+        "gray01",
+        "gray02",
+        "heather",
+        "pastelBlue",
+        "pastelGreen",
+        "pastelOrange",
+        "pastelRed",
+        "pastelYellow",
+        "pink",
+        "red",
+        "white"
+      ]
+    },
+    "mouth": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "concerned",
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "screamOpen",
+          "serious",
+          "smile",
+          "tongue",
+          "twinkle",
+          "vomit"
+        ]
+      },
+      "default": [
+        "concerned",
+        "default",
+        "disbelief",
+        "eating",
+        "grimace",
+        "sad",
+        "screamOpen",
+        "serious",
+        "smile",
+        "tongue",
+        "twinkle",
+        "vomit"
+      ]
+    },
+    "nose": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["default"] },
+      "default": ["default"]
+    },
+    "skinColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "brown",
+              "darkBrown",
+              "light",
+              "pale",
+              "tanned",
+              "yellow"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "brown",
+        "darkBrown",
+        "light",
+        "pale",
+        "tanned",
+        "yellow"
+      ]
+    },
+    "style": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["circle", "default"] },
+      "default": ["default"]
+    },
+    "top": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "eyepatch",
+          "hat",
+          "hijab",
+          "turban",
+          "winterHat1",
+          "winterHat02",
+          "winterHat03",
+          "winterHat04",
+          "bob",
+          "bun",
+          "curly",
+          "curvy",
+          "dreads",
+          "frida",
+          "fro",
+          "froBand",
+          "longButNotTooLong",
+          "miaWallace",
+          "shavedSides",
+          "straight02",
+          "straight01",
+          "straightAndStrand",
+          "dreads01",
+          "dreads02",
+          "frizzle",
+          "shaggy",
+          "shaggyMullet",
+          "shortCurly",
+          "shortFlat",
+          "shortRound",
+          "shortWaved",
+          "sides",
+          "theCaesar",
+          "theCaesarAndSidePart",
+          "bigHair"
+        ]
+      },
+      "default": [
+        "eyepatch",
+        "hat",
+        "hijab",
+        "turban",
+        "winterHat1",
+        "winterHat02",
+        "winterHat03",
+        "winterHat04",
+        "bob",
+        "bun",
+        "curly",
+        "curvy",
+        "dreads",
+        "frida",
+        "fro",
+        "froBand",
+        "longButNotTooLong",
+        "miaWallace",
+        "shavedSides",
+        "straight02",
+        "straight01",
+        "straightAndStrand",
+        "dreads01",
+        "dreads02",
+        "frizzle",
+        "shaggy",
+        "shaggyMullet",
+        "shortCurly",
+        "shortFlat",
+        "shortRound",
+        "shortWaved",
+        "sides",
+        "theCaesar",
+        "theCaesarAndSidePart",
+        "bigHair"
+      ]
+    },
+    "topProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 100
+    }
+  },
+  "additionalProperties": false
+}

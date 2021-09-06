@@ -1,12 +1,12 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
+import schema from './schema.json';
+import { getComponents } from './utils/getComponents';
+import { getColors } from './utils/getColors';
 import { onPreCreate } from './hooks/onPreCreate';
 import { onPostCreate } from './hooks/onPostCreate';
+import { dimensions } from './meta/components';
 
 export const style: Style<Options> = {
   meta: {
@@ -18,49 +18,71 @@ export const style: Style<Options> = {
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    onPreCreate({ prng, options });
+    onPreCreate({ prng, options, preview: false });
 
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
-    const eyebrowsComponent = pickComponent(prng, 'eyebrows', options.eyebrows);
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
-    const accessoiresComponent = pickComponent(prng, 'accessoires', options.accessoires);
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
-    const components: ComponentPickCollection = {
-      'eyes': eyesComponent,
-      'eyebrows': eyebrowsComponent,
-      'mouth': mouthComponent,
-      'accessoires': prng.bool(options.accessoiresProbability) ? accessoiresComponent : undefined,
-    }
+    onPostCreate({ prng, options, components, colors, preview: false });
 
-    const colors: ColorPickCollection = {
-    }
-
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
-    options.backgroundColor = pickColor(prng, 'skin', backgroundColor ?? []).value;
-
-    onPostCreate({ prng, options, components, colors });
+    options.backgroundColor = [colors.background.value];
 
     return {
       attributes: {
         viewBox: '0 0 400 400',
         fill: 'none',
+        'shape-rendering': 'auto',
       },
-      body: `
-  <g transform="translate(-279 -322)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.eyebrows?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.accessoires?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `<g transform="translate(-279 -322)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.eyebrows?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.accessoires?.value(components, colors) ?? ''
+      }</g>`,
     };
+  },
+  preview: ({ prng, options, property }) => {
+    const componentGroup = property.toString();
+    const colorGroup = property.toString().replace(/Color$/, '');
+
+    onPreCreate({ prng, options, preview: true });
+
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
+
+    onPostCreate({ prng, options, components, colors, preview: true });
+
+    options.backgroundColor = [colors.background.value];
+
+    if (componentGroup in components) {
+      const { width, height } = dimensions[componentGroup]!;
+
+      return {
+        attributes: {
+          viewBox: `0 0 ${width} ${height}`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: components[componentGroup]?.value(components, colors) ?? '',
+      };
+    }
+
+    if (colorGroup in colors) {
+      return {
+        attributes: {
+          viewBox: `0 0 1 1`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: `<rect width="1" height="1" fill="${colors[colorGroup].value}" />`,
+      };
+    }
+
+    return undefined;
   },
 };

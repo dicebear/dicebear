@@ -1,10 +1,11 @@
 // @ts-ignore
 import { optimize } from 'svgo/dist/svgo.browser.js';
+import { Export } from '../types';
 import { normalizeName } from '../utils/normalizeName';
 import { applyNodeExportInfo } from './applyNodeExportInfo';
 import { calculateNodeExportInfo } from './calculateNodeExportInfo';
 
-export async function createTemplateString(node: FrameNode | ComponentNode) {
+export async function createTemplateString(exportData: Export, node: FrameNode | ComponentNode) {
   // Calculate the export info for the node and export to svg
   let result = await calculateNodeExportInfo(node);
 
@@ -13,14 +14,11 @@ export async function createTemplateString(node: FrameNode | ComponentNode) {
 
   // Optimize the svg
   result = optimize(result, {
-    js2svg: {
-      indent: 2,
-      pretty: true,
-    },
     plugins: [
       {
         name: 'preset-default',
         params: {
+          floatPrecision: exportData.frame.settings.precision,
           overrides: {
             cleanupIDs: {
               prefix: normalizeName(node.name) + '-',
@@ -28,6 +26,9 @@ export async function createTemplateString(node: FrameNode | ComponentNode) {
           },
         },
       },
+      // The default preset includes this plugin, but executes it too early.
+      // Therefore repeated at this point, so that really all unnecessary groups are removed.
+      'collapseGroups',
     ],
   }).data.trim();
 
@@ -38,10 +39,10 @@ export async function createTemplateString(node: FrameNode | ComponentNode) {
   result = result.replace(/(\\|\$|\`)/g, '$1');
 
   // Replace colors
-  result = result.replace(/color::([a-z0-9]*)/gi, '${colors.$1.value}');
+  result = result.replace(/{{color::([a-z0-9]*)}}/gi, '${colors.$1.value}');
 
   // Replace components
-  result = result.replace(/component::([a-z0-9]*)/gi, "${components.$1?.value(components, colors) ?? ''}");
+  result = result.replace(/{{component::([a-z0-9]*)}}/gi, "${components.$1?.value(components, colors) ?? ''}");
 
   return '`' + result + '`';
 }

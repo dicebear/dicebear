@@ -1,18 +1,31 @@
-import { Prng, StyleOptions } from "@dicebear/avatars";
+import { Prng, StyleOptions } from '@dicebear/core';
 
-import { Options } from "../options";
+import { Options } from '../options';
 
-type Props = { prng: Prng, options: StyleOptions<Options> } 
+type Props = { prng: Prng; options: StyleOptions<Options>; preview: boolean };
 
-export function onPreCreate({ prng, options }: Props) {
+export function onPreCreate({ prng, options, preview }: Props) {
   // Prevent baseColor from being used a second time if possible.
-  options.baseColor = options.baseColor && options.baseColor.length > 0 ? [prng.pick(options.baseColor)] : [];
-  
-  for (const colorName of ['eyebrows', 'hair', 'eyes', 'nose', 'ears', 'shirt', 'earrings', 'glasses', 'facialHair']) {
+  options.baseColor =
+    options.baseColor && options.baseColor.length > 0
+      ? [prng.pick(options.baseColor)]
+      : [];
+
+  for (const colorName of [
+    'eyebrows',
+    'hair',
+    'eyes',
+    'nose',
+    'ears',
+    'shirt',
+    'earrings',
+    'glasses',
+    'facialHair',
+  ]) {
     // @ts-ignore
     const colorOption = options[`${colorName}Color`] ?? [];
     const index = colorOption.indexOf(options.baseColor[0]);
-  
+
     if (colorOption.length > 1 && index > -1) {
       colorOption.splice(index, 1);
     }

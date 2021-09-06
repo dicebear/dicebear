@@ -1,4 +1,4 @@
-import isEqual from "deep-equal";
+import isEqual from 'deep-equal';
 
 export function syncComponentsSettings(newComponents, oldComponents) {
   for (const key in newComponents) {
@@ -18,10 +18,7 @@ export function syncComponentsSettings(newComponents, oldComponents) {
 
     newComponents[key].settings.probability = probability;
 
-    if (
-      false ===
-      isEqual(newComponents[key].settings, oldComponents[key]?.settings)
-    ) {
+    if (false === isEqual(newComponents[key].settings, oldComponents[key]?.settings)) {
       parent.postMessage(
         {
           pluginMessage: {
@@ -29,7 +26,7 @@ export function syncComponentsSettings(newComponents, oldComponents) {
             data: newComponents[key].settings,
           },
         },
-        "*"
+        '*'
       );
     }
   }

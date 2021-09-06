@@ -1,10 +1,8 @@
-import { ColorGroupSettings } from "../types";
+import { ColorGroupSettings } from '../types';
 
-export function getColorGroupSettings(colorGroup: string): ColorGroupSettings {
+export function getColorGroupSettings(frame: FrameNode, colorGroup: string): ColorGroupSettings {
   return {
     defaults: {},
-    ...JSON.parse(
-      figma.root.getPluginData(`colors/${colorGroup}/settings`) || "{}"
-    ),
+    ...JSON.parse(frame.getPluginData(`colors/${colorGroup}/settings`) || '{}'),
   };
 }

@@ -3,11 +3,10 @@
   import { activeStage } from '../stores/activeStage';
 
   import MenuItem from './MenuItem.svelte';
-  import BackgroundForm from './BackgroundForm.svelte';
+  import GeneralForm from './GeneralForm.svelte';
   import PackageForm from './PackageForm.svelte';
   import LicenseForm from './LicenseForm.svelte';
   import HookForm from './HookForm.svelte';
-  import AliasForm from './AliasForm.svelte';
   import ColorGroupForm from './ColorGroupForm.svelte';
   import ComponentGroupForm from './ComponentGroupForm.svelte';
 
@@ -15,7 +14,10 @@
 
   $: colors = Object.entries($state.data.colors)
     .filter(([key, val]) => {
-      return val.isUsedByComponents || $state.data.frame.settings.backgroundColorGroupName === key;
+      return (
+        val.isUsedByComponents ||
+        $state.data.frame.settings.backgroundColorGroupName === key
+      );
     })
     .reduce((result, [key, val]) => {
       result[key] = val;
@@ -29,8 +31,7 @@
     <div class="menu-section">Frame</div>
     <MenuItem stage={'package'}>Package</MenuItem>
     <MenuItem stage={'license'}>License</MenuItem>
-    <MenuItem stage={'background'}>Background</MenuItem>
-    <MenuItem stage={'alias'}>Aliases</MenuItem>
+    <MenuItem stage={'general'}>General</MenuItem>
     <MenuItem stage={'hook'}>Hooks</MenuItem>
   </div>
 
@@ -64,12 +65,10 @@
       <PackageForm />
     {:else if activeStageSplit[0] === 'license'}
       <LicenseForm />
-    {:else if activeStageSplit[0] === 'background'}
-      <BackgroundForm />
+    {:else if activeStageSplit[0] === 'general'}
+      <GeneralForm />
     {:else if activeStageSplit[0] === 'hook'}
       <HookForm />
-    {:else if activeStageSplit[0] === 'alias'}
-      <AliasForm />
     {/if}
   </div>
 {/key}

@@ -1,0 +1,260 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "baseColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "amber",
+              "blue",
+              "blueGrey",
+              "brown",
+              "cyan",
+              "deepOrange",
+              "deepPurple",
+              "green",
+              "grey",
+              "indigo",
+              "lightBlue",
+              "lightGreen",
+              "lime",
+              "orange",
+              "pink",
+              "purple",
+              "red",
+              "teal",
+              "yellow"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "amber",
+        "blue",
+        "blueGrey",
+        "brown",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "grey",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "yellow"
+      ]
+    },
+    "eyes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "bulging",
+          "dizzy",
+          "eva",
+          "frame1",
+          "frame2",
+          "glow",
+          "happy",
+          "hearts",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "roundFrame02",
+          "sensor",
+          "shade01"
+        ]
+      },
+      "default": [
+        "bulging",
+        "dizzy",
+        "eva",
+        "frame1",
+        "frame2",
+        "glow",
+        "happy",
+        "hearts",
+        "robocop",
+        "round",
+        "roundFrame01",
+        "roundFrame02",
+        "sensor",
+        "shade01"
+      ]
+    },
+    "face": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "round01",
+          "round02",
+          "square01",
+          "square02",
+          "square03",
+          "square04"
+        ]
+      },
+      "default": [
+        "round01",
+        "round02",
+        "square01",
+        "square02",
+        "square03",
+        "square04"
+      ]
+    },
+    "mouth": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "bite",
+          "diagram",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ]
+      },
+      "default": [
+        "bite",
+        "diagram",
+        "grill01",
+        "grill02",
+        "grill03",
+        "smile01",
+        "smile02",
+        "square01",
+        "square02"
+      ]
+    },
+    "mouthProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 100
+    },
+    "sides": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "antenna01",
+          "antenna02",
+          "cables01",
+          "cables02",
+          "round",
+          "square",
+          "squareAssymetric"
+        ]
+      },
+      "default": [
+        "antenna01",
+        "antenna02",
+        "cables01",
+        "cables02",
+        "round",
+        "square",
+        "squareAssymetric"
+      ]
+    },
+    "sidesProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 100
+    },
+    "texture": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "camo01",
+          "camo02",
+          "circuits",
+          "dirty01",
+          "dirty02",
+          "dots",
+          "grunge01",
+          "grunge02"
+        ]
+      },
+      "default": [
+        "camo01",
+        "camo02",
+        "circuits",
+        "dirty01",
+        "dirty02",
+        "dots",
+        "grunge01",
+        "grunge02"
+      ]
+    },
+    "textureProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 50
+    },
+    "top": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "antenna",
+          "antennaCrooked",
+          "bulb01",
+          "glowingBulb01",
+          "glowingBulb02",
+          "horns",
+          "lights",
+          "pyramid",
+          "radar"
+        ]
+      },
+      "default": [
+        "antenna",
+        "antennaCrooked",
+        "bulb01",
+        "glowingBulb01",
+        "glowingBulb02",
+        "horns",
+        "lights",
+        "pyramid",
+        "radar"
+      ]
+    },
+    "topProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 100
+    }
+  },
+  "additionalProperties": false
+}

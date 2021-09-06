@@ -1,5 +1,5 @@
-import type { Style } from '@dicebear/avatars';
-import { createAvatar, schema as coreSchema } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
+import { createAvatar, schema as coreSchema } from '@dicebear/core';
 import { Command } from 'commander';
 import * as path from 'path';
 import fs from 'fs-extra';

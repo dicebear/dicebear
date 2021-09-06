@@ -1,5 +1,5 @@
 <script>
-  import { activeStage } from "../stores/activeStage";
+  import { activeStage } from '../stores/activeStage';
 
   export let stage;
 
@@ -10,7 +10,7 @@
 
 <button
   on:click={onClick}
-  class={`menu-item ${stage === $activeStage ? "active" : ""}`}
+  class={`menu-item ${stage === $activeStage ? 'active' : ''}`}
 >
   <slot />
 </button>

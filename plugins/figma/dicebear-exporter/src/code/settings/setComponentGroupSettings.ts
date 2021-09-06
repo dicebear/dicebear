@@ -1,11 +1,9 @@
-import { ComponentGroupSettings } from "../types";
+import { ComponentGroupSettings } from '../types';
 
 export function setComponentGroupSettings(
+  frame: FrameNode,
   componentGroup: string,
   settings: ComponentGroupSettings
 ): void {
-  figma.root.setPluginData(
-    `components/${componentGroup}/settings`,
-    JSON.stringify(settings)
-  );
+  frame.setPluginData(`components/${componentGroup}/settings`, JSON.stringify(settings));
 }

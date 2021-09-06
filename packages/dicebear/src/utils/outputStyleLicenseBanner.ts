@@ -1,5 +1,5 @@
 // @ts-ignore
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import chalk from 'chalk';
 import link from 'terminal-link';
 

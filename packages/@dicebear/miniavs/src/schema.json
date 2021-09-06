@@ -1,0 +1,141 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "blushes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["default"] },
+      "default": ["default"]
+    },
+    "blushesProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 50
+    },
+    "body": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["tShirt", "golf"] },
+      "default": ["tShirt", "golf"]
+    },
+    "bodyColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          { "type": "string", "enum": ["orange", "blue", "pink"] }
+        ]
+      },
+      "default": ["orange", "blue", "pink"]
+    },
+    "eyes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["normal", "confident", "happy"] },
+      "default": ["normal", "confident", "happy"]
+    },
+    "glasses": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["normal"] },
+      "default": ["normal"]
+    },
+    "glassesProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 20
+    },
+    "hair": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "balndess",
+          "slaughter",
+          "ponyTail",
+          "long",
+          "curly",
+          "stylish",
+          "elvis",
+          "classic02",
+          "classic01"
+        ]
+      },
+      "default": [
+        "balndess",
+        "slaughter",
+        "ponyTail",
+        "long",
+        "curly",
+        "stylish",
+        "elvis",
+        "classic02",
+        "classic01"
+      ]
+    },
+    "hairColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          { "type": "string", "enum": ["brown", "black", "red"] }
+        ]
+      },
+      "default": ["brown", "black", "red"]
+    },
+    "head": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["normal", "wide", "thin"] },
+      "default": ["normal", "wide", "thin"]
+    },
+    "mouth": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["default", "missingTooth"] },
+      "default": ["default", "missingTooth"]
+    },
+    "mustache": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["pencilThinBeard", "pencilThin", "horshoe", "freddy"]
+      },
+      "default": ["pencilThinBeard", "pencilThin", "horshoe", "freddy"]
+    },
+    "mustacheProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 20
+    },
+    "skinColor": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          { "type": "string", "enum": ["yellow", "white", "dark"] }
+        ]
+      },
+      "default": ["yellow", "white", "dark"]
+    }
+  },
+  "additionalProperties": false
+}

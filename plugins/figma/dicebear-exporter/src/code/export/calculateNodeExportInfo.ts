@@ -11,11 +11,11 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
   const cloneComponentRectangle = figma.createRectangle();
 
   cloneComponentRectangle.constraints = {
-      horizontal: 'STRETCH',
-      vertical: 'STRETCH',
-  }
+    horizontal: 'STRETCH',
+    vertical: 'STRETCH',
+  };
 
-  cloneComponent.name = 'Export Helper Component2';
+  cloneComponent.name = 'Export Helper Component';
   cloneComponent.insertChild(0, cloneComponentRectangle);
 
   const nodeClone = node.clone();
@@ -56,11 +56,15 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
 
     // Figma flat boolean nodes when exporting. In doing so, ids and their information will be lost.
     // That's why we do it ourselves here, so Figma can't delete any information.
-    for (const boNode of fastFindAll(nodeClone.children, (node) => node.type == 'BOOLEAN_OPERATION')) {
-      const wasMask = 'isMask' in boNode && boNode.isMask;
-      const newNode = figma.flatten([boNode], boNode.parent!, boNode.parent!.children.indexOf(boNode as SceneNode));
+    for (const boNode of fastFindAll(nodeClone.children, (node) => node.type == 'BOOLEAN_OPERATION' && node.visible)) {
+      try {
+        const wasMask = 'isMask' in boNode && boNode.isMask;
+        const newNode = figma.flatten([boNode], boNode.parent!, boNode.parent!.children.indexOf(boNode as SceneNode));
 
-      newNode.isMask = wasMask;
+        newNode.isMask = wasMask;
+      } catch {
+        // This is fine
+      }
     }
 
     for (const colorNode of findAllNodesWithColor(nodeClone)) {
@@ -98,6 +102,10 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
     nodeClone.remove();
     cloneComponent.remove();
 
-    throw e;
+    if (e && typeof e === 'object' && 'message' in e) {
+      throw new Error(`Error while exporting ${nodeClone.name}: ${(e as any).message}`);
+    } else {
+      throw e;
+    }
   }
 }

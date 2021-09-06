@@ -4,11 +4,13 @@
   export let items = [];
   export let value = '';
 
-  $: itemsClone = JSON.parse(JSON.stringify(items));
-  $: menuItems = itemsClone.map((item) => {
-    item.selected = item.value === value;
-
-    return item;
+  $: menuItems = items.map((item) => {
+    return {
+      value: item,
+      label: item ? item : '- None -',
+      group: null,
+      selected: item === value,
+    };
   });
 </script>
 

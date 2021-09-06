@@ -7,3 +7,4 @@ export { glasses } from './glasses';
 export { hair } from './hair';
 export { mouth } from './mouth';
 export { shirt } from './shirt';
+export { eyes } from './eyes';
