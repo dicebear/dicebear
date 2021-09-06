@@ -1,16 +1,22 @@
 import Ajv from 'ajv';
 import { JSONSchema7 } from 'json-schema';
 
-export function validateInputBySchema(input: Record<string, string | number>, schema: JSONSchema7) {
+export function validateInputBySchema(
+  input: Record<string, string | number>,
+  schema: JSONSchema7
+) {
   const validator = new Ajv({
     strict: false,
     coerceTypes: true,
     useDefaults: false,
-    removeAdditional: false,
+    removeAdditional: true,
   });
 
   const validate = validator.compile(schema);
-  const data: Record<string, string | number | string[] | number[] | boolean | boolean[]> = {};
+  const data: Record<
+    string,
+    string | number | string[] | number[] | boolean | boolean[]
+  > = {};
 
   for (var key in input) {
     if (false === input.hasOwnProperty(key)) {
@@ -32,10 +38,8 @@ export function validateInputBySchema(input: Record<string, string | number>, sc
 
   if (false === validate(data)) {
     if (validate.errors) {
-      for (var errorKey in validate.errors) {
-        if (validate.errors.hasOwnProperty(errorKey)) {
-          new Error(`${errorKey} - ${validate.errors[errorKey]}`);
-        }
+      for (var error of validate.errors) {
+        throw new Error(`${error.keyword} - ${error.message}`);
       }
     }
 

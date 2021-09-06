@@ -1,12 +1,11 @@
-import type { Style } from '@dicebear/avatars';
-import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type { Style, StyleSchema } from '@dicebear/core';
+import type { Options } from './types.js';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
-import { onPreCreate } from './hooks/onPreCreate';
-import { onPostCreate } from './hooks/onPostCreate';
+import { schema } from './schema.js';
+import { getComponents } from './utils/getComponents.js';
+import { getColors } from './utils/getColors.js';
+import { onPreCreate } from './hooks/onPreCreate.js';
+import { onPostCreate } from './hooks/onPostCreate.js';
 
 export const style: Style<Options> = {
   meta: {
@@ -18,49 +17,32 @@ export const style: Style<Options> = {
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     onPreCreate({ prng, options });
 
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
-    const cheekComponent = pickComponent(prng, 'cheek', options.cheek);
-    const noseComponent = pickComponent(prng, 'nose', options.nose);
-
-    const components: ComponentPickCollection = {
-      'mouth': mouthComponent,
-      'eyes': eyesComponent,
-      'cheek': prng.bool(options.cheekProbability) ? cheekComponent : undefined,
-      'nose': noseComponent,
-    }
-
-    const colors: ColorPickCollection = {
-    }
-
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
-    options.backgroundColor = pickColor(prng, 'skin', backgroundColor ?? []).value;
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
     onPostCreate({ prng, options, components, colors });
+
+    options.backgroundColor = [colors.background.value];
 
     return {
       attributes: {
         viewBox: '0 0 210 210',
         fill: 'none',
+        'shape-rendering': 'auto',
       },
-      body: `
-  <g transform="translate(86.79 138.86) scale(.71856)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(2 11) scale(.71856)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(14.934 89.19) scale(.71856)">
-    ${components.cheek?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(80.323 79.849) scale(.71856)">
-    ${components.nose?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `<g transform="translate(86.8 138.9) scale(.71856)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><g transform="translate(2 11) scale(.71856)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="translate(15 89.2) scale(.71856)">${
+        components.cheek?.value(components, colors) ?? ''
+      }</g><g transform="translate(80.3 79.8) scale(.71856)">${
+        components.nose?.value(components, colors) ?? ''
+      }</g>`,
     };
   },
 };

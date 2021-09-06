@@ -26,10 +26,34 @@ https://www.figma.com/file/Vh7N9shKJTNHNo9prUzkZe/miniavs?node-id=274%3A4378
 
 https://www.figma.com/file/3Te9c70BX2Aj4IUP35sWhF/big-smile?node-id=11%3A38
 
-# big-ears
+# big-ears / big-ears-neutral
 
 https://www.figma.com/file/KhTfMFWWniVgZmGVFL0KK6/big-ears?node-id=202%3A1017
 
 # adventurer / adventurer-neutral
 
 https://www.figma.com/file/Iebd5sD90Hvs14Gwhdov0R/adventurer?node-id=29%3A34
+
+# identicon
+
+https://www.figma.com/file/np7zgQo9412LDvi1mA1UmK/identicon?node-id=1%3A34
+
+# avataaars / avataaars-neutral
+
+https://www.figma.com/file/HBLdITkkTnLs4M09BmCe4h/avataaars?node-id=10%3A108
+
+# bottts / bottts-neutral
+
+https://www.figma.com/file/4nf3pyoOuM1U9Pa8M0cL6u/bottts?node-id=4%3A3172
+
+# lorelei / lorelei-neutral
+
+https://www.figma.com/file/FCwwMBxsRND9Mbtpg5PUic/lorelei?node-id=23%3A2151
+
+# icons
+
+https://www.figma.com/file/BRj9eonsORJ7GIUdm8gnu5/icons?node-id=1%3A7506
+
+# fun-emoji
+
+https://www.figma.com/file/tyuOazZuFlU6tAF9xmJTSM/fun-emoji?node-id=302%3A672

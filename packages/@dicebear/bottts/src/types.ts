@@ -1,0 +1,95 @@
+export interface Options {
+  sides?: (
+    | 'antenna01'
+    | 'antenna02'
+    | 'cables01'
+    | 'cables02'
+    | 'round'
+    | 'square'
+    | 'squareAssymetric'
+  )[];
+  sidesProbability?: number;
+  top?: (
+    | 'antenna'
+    | 'antennaCrooked'
+    | 'bulb01'
+    | 'glowingBulb01'
+    | 'glowingBulb02'
+    | 'horns'
+    | 'lights'
+    | 'pyramid'
+    | 'radar'
+  )[];
+  topProbability?: number;
+  face?: (
+    | 'round01'
+    | 'round02'
+    | 'square01'
+    | 'square02'
+    | 'square03'
+    | 'square04'
+  )[];
+  mouth?: (
+    | 'bite'
+    | 'diagram'
+    | 'grill01'
+    | 'grill02'
+    | 'grill03'
+    | 'smile01'
+    | 'smile02'
+    | 'square01'
+    | 'square02'
+  )[];
+  mouthProbability?: number;
+  eyes?: (
+    | 'bulging'
+    | 'dizzy'
+    | 'eva'
+    | 'frame1'
+    | 'frame2'
+    | 'glow'
+    | 'happy'
+    | 'hearts'
+    | 'robocop'
+    | 'round'
+    | 'roundFrame01'
+    | 'roundFrame02'
+    | 'sensor'
+    | 'shade01'
+  )[];
+  texture?: (
+    | 'camo01'
+    | 'camo02'
+    | 'circuits'
+    | 'dirty01'
+    | 'dirty02'
+    | 'dots'
+    | 'grunge01'
+    | 'grunge02'
+  )[];
+  textureProbability?: number;
+  baseColor?: string[];
+}
+
+export type ColorGroup = Record<string, ColorGroupItem>;
+export type ColorGroupCollection = Record<string, ColorGroup>;
+export type ColorGroupItem = string;
+export type ColorPickCollection = Record<string, ColorPick>;
+export type ColorPick = {
+  name: string;
+  value: ColorGroupItem;
+};
+
+export type ComponentGroup = Record<string, ComponentGroupItem>;
+export type ComponentGroupCollection = Record<string, ComponentGroup>;
+export type ComponentGroupItem = (
+  components: ComponentPickCollection,
+  colors: ColorPickCollection
+) => string;
+export type ComponentPickCollection = Record<string, ComponentPick>;
+export type ComponentPick =
+  | {
+      name: string;
+      value: ComponentGroupItem;
+    }
+  | undefined;

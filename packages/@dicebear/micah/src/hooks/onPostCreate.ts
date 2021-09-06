@@ -1,9 +1,17 @@
-import { Prng, StyleOptions } from "@dicebear/avatars";
+import { Prng, StyleOptions } from '@dicebear/core';
 
-import { Options } from "../options";
-import { ColorPickCollection, ComponentPickCollection } from "../static-types";
+import {
+  Options,
+  ColorPickCollection,
+  ComponentPickCollection,
+} from '../types.js';
 
-type Props = { prng: Prng, options: StyleOptions<Options>, components: ComponentPickCollection, colors: ColorPickCollection } 
+type Props = {
+  prng: Prng;
+  options: StyleOptions<Options>;
+  components: ComponentPickCollection;
+  colors: ColorPickCollection;
+};
 
 export function onPostCreate({ prng, options, components, colors }: Props) {
   // Ensure that the mouth remains visible. #132

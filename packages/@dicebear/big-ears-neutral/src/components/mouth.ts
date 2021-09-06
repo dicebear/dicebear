@@ -1,145 +1,198 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../types.js';
 
 export const mouth: ComponentGroup = {
-  'variant0708': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M-1.657 8.04a2.708 2.708 0 0 1 3.035 2.335c.676 5.182 8.366 18.808 37.164 20.212a2.708 2.708 0 1 1-.264 5.41C7.862 34.513-2.862 19.735-3.992 11.076A2.708 2.708 0 0 1-1.657 8.04Z" fill="#000"/>
-`,
-  'variant0707': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M16.812 33.347a2.534 2.534 0 0 1 3.51-.727c4.087 2.685 18.445 5.553 37.026-14.01a2.534 2.534 0 0 1 3.675 3.49C41.397 42.763 24.37 41.343 17.54 36.856a2.534 2.534 0 0 1-.727-3.509Z" fill="#000"/>
-`,
-  'variant0706': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M20.1 47.474a2.547 2.547 0 0 1 2.47-2.62c3.24-.096 8.057-.67 11.976-2.026 1.966-.68 3.53-1.496 4.56-2.404.985-.867 1.366-1.698 1.366-2.575 0-.877-.381-1.708-1.366-2.575-1.03-.908-2.594-1.725-4.56-2.404-3.92-1.355-8.735-1.93-11.976-2.025a2.547 2.547 0 0 1 .038-5.092c3.235-.048 8.04-.566 11.947-1.9 1.958-.67 3.513-1.485 4.537-2.401.973-.87 1.38-1.739 1.38-2.703 0-.964-.407-1.832-1.38-2.703-1.024-.916-2.579-1.731-4.537-2.4-3.907-1.335-8.712-1.853-11.947-1.9a2.547 2.547 0 1 1 .074-5.093c3.557.052 8.938.608 13.52 2.173 2.286.78 4.552 1.872 6.286 3.425 1.786 1.598 3.077 3.762 3.077 6.498s-1.29 4.9-3.077 6.498c-1.517 1.358-3.441 2.363-5.43 3.117 1.984.756 3.902 1.755 5.416 3.088 1.774 1.564 3.091 3.693 3.091 6.397s-1.317 4.833-3.091 6.397c-1.729 1.522-3.985 2.608-6.264 3.396-4.57 1.58-9.94 2.198-13.49 2.302a2.547 2.547 0 0 1-2.62-2.47Z" fill="#000"/>
-`,
-  'variant0705': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M-1.484 27.864c-1.462 1.183-2.982 2.41-4.516 3.521a3.183 3.183 0 0 1-3.734-5.156c1.401-1.015 2.69-2.057 4.07-3.173.723-.585 1.471-1.19 2.275-1.823 2.26-1.78 4.765-3.615 7.777-5.25 6.096-3.312 13.959-5.64 25.844-5.64 19.425 0 33.426 10.77 38.187 16.411a3.183 3.183 0 1 1-4.866 4.106c-3.836-4.545-16.172-14.15-33.321-14.15-10.975 0-17.766 2.13-22.806 4.867-2.557 1.389-4.74 2.976-6.876 4.658-.662.52-1.342 1.07-2.034 1.63Z" fill="#000"/>
-`,
-  'variant0704': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M-2.407 23.464c2.066-1.48 13.875-8.849 30.99-8.849s33.056 7.368 30.99 8.849c0 17.115-2.066-3.547-28.924-3.547-28.924 0-33.056 20.662-33.056 3.547Z" fill="#000"/>
-`,
-  'variant0703': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M-13.214 17.989a2.547 2.547 0 0 1 2.7 2.383c.19 3.017 1.344 7.61 4.124 11.38 2.7 3.66 6.956 6.605 13.708 6.605s11.009-2.945 13.708-6.605c2.78-3.77 3.935-8.363 4.124-11.38a2.547 2.547 0 0 1 5.087.08c.094 3.001 1.13 7.568 3.858 11.312 2.64 3.624 6.934 6.593 13.97 6.593 7.035 0 11.329-2.969 13.97-6.593 2.728-3.744 3.764-8.31 3.858-11.313a2.547 2.547 0 1 1 5.09.16c-.118 3.788-1.375 9.408-4.832 14.153-3.545 4.865-9.333 8.687-18.086 8.687-8.754 0-14.541-3.822-18.086-8.687a24.085 24.085 0 0 1-2.398-4.105 25.209 25.209 0 0 1-2.456 4.117c-3.561 4.828-9.279 8.675-17.807 8.675-8.528 0-14.245-3.846-17.807-8.675-3.48-4.72-4.872-10.313-5.108-14.087a2.547 2.547 0 0 1 2.383-2.7Z" fill="#000"/>
-`,
-  'variant0702': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M59.226 12.949c1.462-1.28 2.98-2.61 4.514-3.812a3.183 3.183 0 0 1 3.93 5.01c-1.403 1.1-2.693 2.23-4.073 3.439a222.67 222.67 0 0 1-2.274 1.974c-2.258 1.925-4.763 3.914-7.779 5.688-6.113 3.597-14.01 6.13-25.938 6.13-19.531 0-33.546-11.721-38.266-17.78a3.183 3.183 0 0 1 5.023-3.913c3.876 4.977 16.198 15.327 33.242 15.327 10.931 0 17.688-2.296 22.71-5.251 2.554-1.502 4.737-3.22 6.876-5.045.663-.566 1.343-1.16 2.035-1.767Z" fill="#000"/>
-`,
-  'variant0701': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.719 22.799c-2.066 1.48-13.875 8.848-30.99 8.848S-4.327 24.28-2.261 22.8c0-17.116 3.172 0 30.03 0 28.924 0 31.95-17.116 31.95 0Z" fill="#000"/>
-`,
-  'variant0405': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.246 32c0 17.115-13.874 4.132-30.99 4.132-17.115 0-30.99 12.983-30.99-4.132 0-17.115 13.875-30.99 30.99-30.99 17.116 0 30.99 13.875 30.99 30.99Z" fill="#DE8383"/>
-`,
-  'variant0605': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M-23.93 21.831c0-9.372 7.598-16.97 16.97-16.97h65.62c9.372 0 16.97 7.598 16.97 16.97 0 9.373-7.598 16.97-16.97 16.97H-6.96c-9.372 0-16.97-7.597-16.97-16.97Z" fill="#DE8383"/>
-`,
-  'variant0604': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M-22.468 25.07c0-9.372 7.598-16.97 16.97-16.97h65.62c9.373 0 16.97 7.598 16.97 16.97 0 9.373-7.597 16.971-16.97 16.971h-65.62c-9.372 0-16.97-7.598-16.97-16.97Z" fill="#F9F9F9"/>
-`,
-  'variant0603': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M-23.93 22.881c0-9.373 7.598-16.97 16.97-16.97h65.62c9.372 0 16.97 7.597 16.97 16.97 0 9.373-7.598 16.97-16.97 16.97H-6.96c-9.372 0-16.97-7.597-16.97-16.97Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M73.878 14.735c-2.967 5.367-8.686 9.003-15.254 9.003H-6.227c-6.568 0-12.286-3.636-15.254-9.003 2.968-5.368 8.686-9.003 15.254-9.003h64.852c6.567 0 12.286 3.635 15.253 9.003Z" fill="#F9F9F9"/>
-`,
-  'variant0602': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M-23.93 27.694c0-9.372 7.598-16.97 16.97-16.97h65.62c9.372 0 16.97 7.598 16.97 16.97 0 9.373-7.598 16.97-16.97 16.97H-6.96c-9.372 0-16.97-7.597-16.97-16.97Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M75.616 26.003h-99.533c.36-9.054 7.815-16.283 16.957-16.283h65.62c9.142 0 16.595 7.229 16.956 16.283Z" fill="#F9F9F9"/>
-`,
-  'variant0601': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M-23.93 25.418c0-9.373 7.598-16.97 16.97-16.97h65.62c9.372 0 16.97 7.597 16.97 16.97 0 9.373-7.598 16.97-16.97 16.97H-6.96c-9.372 0-16.97-7.597-16.97-16.97Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M71.751 34.945c-2.51 4.234-7.127 7.072-12.406 7.072h-67.71c-5.28 0-9.896-2.838-12.406-7.072 2.51-4.233 7.127-7.072 12.406-7.072h67.71c5.28 0 9.895 2.839 12.406 7.072Z" fill="#C06E6E"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M75.616 23.726h-99.533c.36-9.054 7.814-16.283 16.957-16.283h65.62c9.142 0 16.596 7.23 16.956 16.283Z" fill="#F9F9F9"/>
-`,
-  'variant0505': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M82.727 33.416c0 16.879-24.274 4.075-54.218 4.075-29.944 0-54.219 12.804-54.219-4.075 0-16.88 24.275-30.563 54.219-30.563 29.944 0 54.218 13.684 54.218 30.563Z" fill="#DE8383"/>
-`,
-  'variant0504': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M84.065 36.777c0 16.879-24.275 4.075-54.219 4.075-29.944 0-54.218 12.804-54.218-4.075 0-16.88 24.274-30.563 54.218-30.563 29.944 0 54.219 13.684 54.219 30.563Z" fill="#F9F9F9"/>
-`,
-  'variant0503': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M82.065 34.574c0 16.879-24.275 4.075-54.219 4.075-29.944 0-54.218 12.804-54.218-4.075 0-16.88 24.274-30.563 54.218-30.563 29.944 0 54.219 13.683 54.219 30.563Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M69.208 15.113c-9.796 3.209-24.82 5.262-41.665 5.262-16.522 0-31.293-1.975-41.096-5.078 9.639-7.19 24.646-11.811 41.504-11.811 16.714 0 31.61 4.543 41.257 11.627Z" fill="#F9F9F9"/>
-`,
-  'variant0502': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M81.065 37.139c0 16.879-24.274 4.075-54.218 4.075-29.945 0-54.22 12.804-54.22-4.075 0-16.88 24.275-30.563 54.22-30.563 29.944 0 54.218 13.684 54.218 30.563Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M74.157 22.2h-94.62c9.285-9.324 26.992-15.623 47.31-15.623 20.317 0 38.024 6.3 47.31 15.622Z" fill="#F9F9F9"/>
-`,
-  'variant0501': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M81.778 35.323c0 16.879-24.275 4.075-54.219 4.075-29.944 0-54.218 12.804-54.218-4.075 0-16.88 24.274-30.562 54.218-30.562 29.945 0 54.219 13.683 54.219 30.562Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M-23.588 42.444c7.432-11.882 27.526-20.397 51.147-20.397 23.622 0 43.716 8.515 51.148 20.397-4.167 2.76-12.313 1.467-22.83-.201-8.241-1.307-17.939-2.846-28.318-2.846-10.378 0-20.076 1.539-28.318 2.846-10.516 1.668-18.662 2.96-22.829.201Z" fill="#C06E6E"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M74.746 20.259h-94.373C-10.309 11.004 7.332 4.76 27.559 4.76c20.228 0 37.868 6.244 47.187 15.499Z" fill="#F9F9F9"/>
-`,
-  'variant0404': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.393 36.827c0 17.116-13.875 4.132-30.99 4.132s-30.99 12.983-30.99-4.132c0-17.115 13.875-30.99 30.99-30.99s30.99 13.875 30.99 30.99Z" fill="#F9F9F9"/>
-`,
-  'variant0403': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.393 34.638c0 17.115-13.875 4.132-30.99 4.132s-30.99 12.983-30.99-4.132c0-17.115 13.875-30.99 30.99-30.99s30.99 13.875 30.99 30.99Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M51.513 14.838c-5.582 3.366-14.383 5.537-24.284 5.537-9.554 0-18.083-2.022-23.685-5.188C9.225 8.15 17.923 3.647 27.672 3.647c9.586 0 18.156 4.353 23.84 11.19Z" fill="#F9F9F9"/>
-`,
-  'variant0402': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.393 39.326c0 17.115-13.875 4.132-30.99 4.132s-30.99 12.983-30.99-4.132c0-17.115 13.875-30.99 30.99-30.99s30.99 13.875 30.99 30.99Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M52.742 22.578H1.767C7.057 13.857 16.494 8.05 27.254 8.05c10.76 0 20.197 5.807 25.488 14.528Z" fill="#F9F9F9"/>
-`,
-  'variant0401': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.784 40.124c0 17.115-13.875 4.132-30.99 4.132s-30.99 12.983-30.99-4.132c0-17.115 13.875-30.99 30.99-30.99s30.99 13.875 30.99 30.99Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M1.382 47.311C5.796 35.766 16.797 27.587 29.67 27.587c12.872 0 23.873 8.18 28.288 19.724-2.422 2.3-6.826 1.035-12.434-.576C40.91 45.41 35.48 43.85 29.67 43.85c-5.811 0-11.24 1.56-15.855 2.885-5.608 1.611-10.011 2.876-12.433.576Z" fill="#C06E6E"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M53.933 21.979H4.576C9.987 13.668 19.022 8.223 29.254 8.223c10.232 0 19.268 5.444 24.68 13.756Z" fill="#F9F9F9"/>
-`,
-  'variant0305': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.686 18.454c0 17.116-13.875 30.99-30.99 30.99s-30.99-13.874-30.99-30.99c0-17.115 4.132-15.046 30.99-15.046 24.792 0 30.99-2.069 30.99 15.046Z" fill="#DE8383"/>
-`,
-  'variant0304': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M60.892 25.079c0 16.869-14.8 30.544-33.056 30.544-18.256 0-33.055-13.675-33.055-30.544 0-16.87 4.407-14.83 33.055-14.83 26.445 0 33.056-2.04 33.056 14.83Z" fill="#F9F9F9"/>
-`,
-  'variant0303': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M60.658 22.888c0 16.87-14.8 30.544-33.055 30.544-18.257 0-33.056-13.675-33.056-30.544s4.407-14.83 33.056-14.83c33.932 0 33.055-2.039 33.055 14.83Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M55.14 8.699c-5.032 4.834-15.353 9.085-27.268 9.085-11.518 0-21.546-3.972-26.747-8.604 2.837-1.248 8.71-1.228 20.397-1.186 2.325.008 4.881.017 7.69.017 2.566 0 4.93-.01 7.107-.017 9.405-.035 15.298-.058 18.82.705Z" fill="#F9F9F9"/>
-`,
-  'variant0302': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.981 18.382c0 16.915-14.072 30.627-31.43 30.627-17.36 0-31.432-13.712-31.432-30.627S.309 3.512 27.55 3.512c25.145 0 31.431-2.045 31.431 14.87Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M58.754 19.653h-62.49c-.013-.391-.02-.784-.02-1.178 0-15.854 3.33-15.823 23.391-15.639 2.381.022 4.999.046 7.874.046a726.1 726.1 0 0 0 7.277-.045c18.98-.186 23.988-.235 23.988 15.638 0 .394-.007.787-.02 1.178Z" fill="#F9F9F9"/>
-`,
-  'variant0301': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.98 19.105c0 16.915-14.072 30.627-31.43 30.627-17.36 0-31.432-13.712-31.432-30.627S.308 4.235 27.55 4.235c25.145 0 31.431-2.045 31.431 14.87Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M58.774 17.706h-62.66C-3.673 3.586.2 3.619 19.64 3.794c2.382.022 5 .045 7.876.045 2.628 0 5.05-.023 7.279-.044 18.393-.176 23.668-.227 23.979 13.91Z" fill="#F9F9F9"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M53.753 35.699c-5.654 8.09-15.216 13.407-26.06 13.407-11.04 0-20.75-5.511-26.362-13.85 5.663-4.544 15.17-7.526 25.945-7.526 11.12 0 20.89 3.176 26.477 7.969Z" fill="#C06E6E"/>
-`,
-  'variant0205': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.666 22.342c0 17.115-13.875 30.99-30.99 30.99s-30.99-13.875-30.99-30.99 13.875-4.132 30.99-4.132 30.99-12.983 30.99 4.132Z" fill="#DE8383"/>
-`,
-  'variant0204': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.935 15.593c0 17.115-13.874 30.99-30.99 30.99-17.114 0-30.989-13.875-30.989-30.99s13.875-4.132 30.99-4.132 30.99-12.983 30.99 4.132Z" fill="#F9F9F9"/>
-`,
-  'variant0203': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.935 15.014c0 17.116-13.874 30.99-30.99 30.99-17.114 0-30.989-13.874-30.989-30.99 0-17.115 13.875-4.131 30.99-4.131s30.99-12.984 30.99 4.132Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M56.294 6.973c-4.836 10.818-15.69 18.355-28.305 18.355S4.519 17.791-.317 6.973c2.562-1.665 6.813-.469 12.12 1.024 4.71 1.326 10.254 2.886 16.186 2.886s11.475-1.56 16.186-2.886c5.306-1.493 9.557-2.69 12.12-1.024Z" fill="#F9F9F9"/>
-`,
-  'variant0202': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.935 19.354c0 17.115-13.874 30.99-30.99 30.99-17.114 0-30.989-13.875-30.989-30.99s13.875-4.132 30.99-4.132 30.99-12.983 30.99 4.132Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M57.543 28.566H-1.652a30.98 30.98 0 0 1-1.392-9.212c0-11.183 5.923-9.516 14.804-7.017 4.71 1.325 10.254 2.885 16.186 2.885s11.475-1.56 16.186-2.885c8.88-2.5 14.803-4.166 14.803 7.017a30.98 30.98 0 0 1-1.392 9.212Z" fill="#F9F9F9"/>
-`,
-  'variant0201': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M58.247 16.353c0 16.879-13.72 30.562-30.646 30.562-16.925 0-30.645-13.683-30.645-30.562 0-16.88 13.72-4.075 30.645-4.075 16.925 0 30.646-12.804 30.646 4.075Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M56.83 25.378H-1.68c-.957-2.94-2.194-6.067-2.194-9.315 0-11.087 6.011-9.44 15.023-6.962 4.781 1.314 10.406 2.86 16.427 2.86 6.02 0 11.645-1.546 16.426-2.86 9.012-2.477 14.292-3.394 14.292 7.693 0 3.249-.506 5.644-1.462 8.584Z" fill="#F9F9F9"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M50.389 36.005c-5.43 6.992-13.71 11.46-22.99 11.46-9.052 0-17.155-4.252-22.585-10.952 4.122-5.003 12.875-8.456 23.007-8.456 9.785 0 18.284 3.22 22.567 7.948Z" fill="#C06E6E"/>
-`,
-  'variant0105': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.527 28.2c0 17.115-13.874 30.99-30.99 30.99-17.115 0-30.99-13.875-30.99-30.99 0-17.116 13.875-30.99 30.99-30.99 17.116 0 30.99 13.874 30.99 30.99Z" fill="#DE8383"/>
-`,
-  'variant0104': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.527 27.632c0 17.115-13.874 30.99-30.99 30.99-17.115 0-30.99-13.875-30.99-30.99 0-17.116 13.875-30.99 30.99-30.99 17.116 0 30.99 13.875 30.99 30.99Z" fill="#F9F9F9"/>
-`,
-  'variant0103': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.527 28.442c0 17.115-13.874 30.99-30.99 30.99-17.115 0-30.99-13.875-30.99-30.99 0-17.116 13.875-30.99 30.99-30.99 17.116 0 30.99 13.874 30.99 30.99Z" fill="#DE8383"/>
-  <path d="M55.442 13.013h-53.8c3.57-6.886 12.595-16.09 27.356-16.09 14.76 0 23.437 9.668 26.444 16.09Z" fill="#F9F9F9"/>
-`,
-  'variant0102': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g fill="#DE8383">
-    <path d="M59.782 28.137c0 17.115-13.875 30.99-30.99 30.99s-30.99-13.875-30.99-30.99 13.875-30.99 30.99-30.99 30.99 13.875 30.99 30.99Z"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M56.977 19.534H.656C5.449 8.81 16.493 1.338 28.998 1.338c12.505 0 23.186 7.472 27.98 18.196Z"/>
-  </g>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M56.977 15.145H.655C5.45 4.422 16.493-3.05 28.998-3.05s23.186 7.472 27.979 18.195Z" fill="#F9F9F9"/>
-`,
-  'variant0101': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M59.782 28.86c0 17.116-13.875 30.99-30.99 30.99s-30.99-13.874-30.99-30.99c0-17.115 13.875-30.99 30.99-30.99s30.99 13.875 30.99 30.99Z" fill="#DE8383"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M5.623 49.485c5.657-7.487 14.634-12.325 24.74-12.325 9.196 0 17.456 4.004 23.131 10.365-5.657 7.487-14.634 12.325-24.74 12.325-9.196 0-17.456-4.005-23.131-10.365Z" fill="#C06E6E"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M57.39 16.432H.473C5.273 5.505 16.209-2.129 28.932-2.129c12.723 0 23.659 7.634 28.458 18.561Z" fill="#F9F9F9"/>
-`,
-}
+  variant0708: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M-1.7 8c1.5-.2 2.9.9 3 2.4.8 5.2 8.4 18.8 37.2 20.2a2.7 2.7 0 1 1-.2 5.4C7.9 34.5-3 19.7-4 11c-.2-1.4.9-2.8 2.3-3Z" fill="#000"/>`,
+  variant0707: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M16.8 33.3a2.5 2.5 0 0 1 3.5-.7c4.1 2.7 18.5 5.6 37-14a2.5 2.5 0 0 1 3.7 3.5C41.4 42.8 24.4 41.3 17.5 36.9a2.5 2.5 0 0 1-.7-3.6Z" fill="#000"/>`,
+  variant0706: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M20 47.5c0-1.4 1.2-2.6 2.6-2.6 3.2-.1 8-.7 12-2 2-.8 3.5-1.6 4.5-2.5 1-.8 1.4-1.7 1.4-2.6 0-.8-.4-1.7-1.4-2.5-1-1-2.6-1.8-4.6-2.4-3.9-1.4-8.7-2-12-2a2.5 2.5 0 0 1 .1-5.1c3.2 0 8-.6 12-2 2-.6 3.5-1.4 4.5-2.3 1-1 1.4-1.8 1.4-2.8 0-1-.4-1.8-1.4-2.7-1-.9-2.6-1.7-4.5-2.4a42 42 0 0 0-12-1.9 2.5 2.5 0 0 1 0-5c3.6 0 9 .6 13.6 2.1 2.3.8 4.6 1.9 6.3 3.5 1.8 1.5 3 3.7 3 6.4 0 2.8-1.2 5-3 6.5a17.4 17.4 0 0 1-5.4 3.2c2 .7 3.9 1.7 5.4 3 1.7 1.6 3 3.7 3 6.4 0 2.8-1.3 4.9-3 6.4-1.8 1.6-4 2.7-6.3 3.4-4.6 1.6-10 2.2-13.5 2.3-1.4 0-2.6-1-2.6-2.4Z" fill="#000"/>`,
+  variant0705: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M-1.5 27.9-6 31.4a3.2 3.2 0 1 1-3.7-5.2l4-3.1 2.3-1.9c2.3-1.7 4.8-3.6 7.8-5.2a52 52 0 0 1 25.8-5.7 52.5 52.5 0 0 1 38.2 16.5 3.2 3.2 0 1 1-4.8 4 46.3 46.3 0 0 0-33.4-14c-11 0-17.7 2-22.8 4.8a48 48 0 0 0-6.9 4.6l-2 1.7Z" fill="#000"/>`,
+  variant0704: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M-2.4 23.5a57 57 0 0 1 31-8.9c17 0 33 7.4 31 8.9 0 17-2-3.6-29-3.6-28.9 0-33 20.7-33 3.6Z" fill="#000"/>`,
+  variant0703: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M-13.2 18c1.4 0 2.6 1 2.7 2.4.2 3 1.3 7.6 4.1 11.4a16 16 0 0 0 13.7 6.6c6.8 0 11-3 13.7-6.6 2.8-3.8 4-8.4 4.1-11.4a2.5 2.5 0 0 1 5.1 0c.1 3 1.2 7.6 3.9 11.4 2.6 3.6 7 6.6 14 6.6s11.3-3 14-6.6c2.7-3.8 3.7-8.3 3.8-11.3a2.5 2.5 0 0 1 5 .1c0 3.8-1.3 9.4-4.7 14.2A21.3 21.3 0 0 1 48 43.5a21.3 21.3 0 0 1-20.5-12.8c-.7 1.4-1.5 2.8-2.5 4a21.2 21.2 0 0 1-17.8 8.8c-8.5 0-14.2-3.9-17.8-8.7a27.7 27.7 0 0 1-5-14.1c-.2-1.4.9-2.6 2.3-2.7Z" fill="#000"/>`,
+  variant0702: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M59.2 13 63.7 9a3.2 3.2 0 0 1 4 5l-4.1 3.5-2.3 2a49 49 0 0 1-33.7 11.8 51 51 0 0 1-38.3-17.8 3.2 3.2 0 0 1 5-4c4 5 16.3 15.4 33.3 15.4 11 0 17.7-2.3 22.7-5.2a48 48 0 0 0 9-6.9Z" fill="#000"/>`,
+  variant0701: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.7 22.8a57 57 0 0 1-31 8.8c-17 0-33-7.3-31-8.8 0-17.1 3.2 0 30 0 29 0 32-17.1 32 0Z" fill="#000"/>`,
+  variant0405: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.2 32c0 17.1-13.8 4.1-31 4.1-17 0-31 13-31-4a31 31 0 1 1 62 0Z" fill="#DE8383"/>`,
+  variant0605: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M-24 21.8a17 17 0 0 1 17-17h65.7a17 17 0 0 1 0 34H-7a17 17 0 0 1-17-17Z" fill="#DE8383"/>`,
+  variant0604: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M-22.5 25a17 17 0 0 1 17-16.9h65.6a17 17 0 0 1 0 34H-5.5a17 17 0 0 1-17-17Z" fill="#F9F9F9"/>`,
+  variant0603: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M-24 22.9a17 17 0 0 1 17-17h65.7a17 17 0 0 1 0 34H-7a17 17 0 0 1-17-17Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M73.9 14.7c-3 5.4-8.7 9-15.3 9H-6.2c-6.6 0-12.3-3.6-15.3-9 3-5.3 8.7-9 15.3-9h64.8c6.6 0 12.3 3.7 15.3 9Z" fill="#F9F9F9"/>`,
+  variant0602: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M-24 27.7a17 17 0 0 1 17-17h65.7a17 17 0 0 1 0 34H-7a17 17 0 0 1-17-17Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M75.6 26h-99.5A17 17 0 0 1-7 9.7h65.6a17 17 0 0 1 17 16.3Z" fill="#F9F9F9"/>`,
+  variant0601: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M-24 25.4a17 17 0 0 1 17-17h65.7a17 17 0 1 1 0 34H-7a17 17 0 0 1-17-17Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M71.8 35c-2.6 4.2-7.2 7-12.5 7H-8.4c-5.2 0-9.9-2.8-12.4-7 2.5-4.3 7.2-7.1 12.4-7.1h67.7c5.3 0 10 2.8 12.5 7Z" fill="#C06E6E"/><path fill-rule="evenodd" clip-rule="evenodd" d="M75.6 23.7h-99.5A17 17 0 0 1-7 7.4h65.6a17 17 0 0 1 17 16.3Z" fill="#F9F9F9"/>`,
+  variant0505: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M82.7 33.4c0 16.9-24.2 4-54.2 4-30 0-54.2 12.9-54.2-4S-1.4 3 28.5 3c30 0 54.2 13.6 54.2 30.5Z" fill="#DE8383"/>`,
+  variant0504: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M84 36.8c0 16.9-24.2 4-54.2 4-29.9 0-54.2 12.9-54.2-4 0-17 24.3-30.6 54.2-30.6 30 0 54.3 13.7 54.3 30.6Z" fill="#F9F9F9"/>`,
+  variant0503: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M82 34.6c0 16.9-24.2 4-54.2 4-29.9 0-54.2 12.9-54.2-4C-26.4 17.6-2 4 27.8 4c30 0 54.3 13.7 54.3 30.6Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M69.2 15.1c-9.8 3.2-24.8 5.3-41.7 5.3-16.5 0-31.2-2-41-5.1A71 71 0 0 1 28 3.5C44.7 3.5 59.6 8 69.2 15Z" fill="#F9F9F9"/>`,
+  variant0502: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M81 37.1c0 17-24.2 4.1-54.2 4.1-29.9 0-54.2 12.8-54.2-4 0-17 24.3-30.6 54.2-30.6 30 0 54.3 13.7 54.3 30.5Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M74.2 22.2h-94.7c9.3-9.3 27-15.6 47.3-15.6 20.4 0 38 6.3 47.4 15.6Z" fill="#F9F9F9"/>`,
+  variant0501: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M81.8 35.3c0 17-24.3 4-54.2 4-30 0-54.3 13-54.3-4 0-16.9 24.3-30.5 54.3-30.5 30 0 54.2 13.6 54.2 30.5Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M-23.6 42.4C-16.2 30.6 4 22 27.6 22c23.6 0 43.7 8.6 51.1 20.4-4.2 2.8-12.3 1.5-22.8-.2a178 178 0 0 0-28.3-2.8A178 178 0 0 0-.8 42.2c-10.5 1.7-18.6 3-22.8.2Z" fill="#C06E6E"/><path fill-rule="evenodd" clip-rule="evenodd" d="M74.7 20.3h-94.3c9.3-9.3 27-15.5 47.2-15.5 20.2 0 37.8 6.2 47.1 15.5Z" fill="#F9F9F9"/>`,
+  variant0404: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M58.4 36.8c0 17.1-13.9 4.2-31 4.2s-31 13-31-4.2a31 31 0 1 1 62 0Z" fill="#F9F9F9"/>`,
+  variant0403: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M58.4 34.6c0 17.2-13.9 4.2-31 4.2s-31 13-31-4.2a31 31 0 0 1 62 0Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M51.5 14.8a49 49 0 0 1-24.3 5.6c-9.5 0-18-2-23.7-5.2a31 31 0 0 1 48-.4Z" fill="#F9F9F9"/>`,
+  variant0402: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M58.4 39.3c0 17.1-13.9 4.2-31 4.2s-31 13-31-4.2a31 31 0 0 1 62 0Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M52.7 22.6h-51A29.8 29.8 0 0 1 27.4 8C38 8 47.5 13.9 52.7 22.6Z" fill="#F9F9F9"/>`,
+  variant0401: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.8 40.1c0 17.1-13.9 4.2-31 4.2s-31 13-31-4.2a31 31 0 0 1 62 0Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.4 47.3a30.4 30.4 0 0 1 28.3-19.7c12.8 0 23.8 8.2 28.3 19.7-2.5 2.3-6.9 1-12.5-.6-4.6-1.3-10-2.8-15.8-2.8-5.8 0-11.3 1.5-15.9 2.8-5.6 1.6-10 3-12.4.6Z" fill="#C06E6E"/><path fill-rule="evenodd" clip-rule="evenodd" d="M54 22H4.5A29.5 29.5 0 0 1 29.3 8.2c10.2 0 19.2 5.5 24.6 13.8Z" fill="#F9F9F9"/>`,
+  variant0305: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.7 18.5a31 31 0 1 1-62 0c0-17.2 4.1-15 31-15 24.8 0 31-2.2 31 15Z" fill="#DE8383"/>`,
+  variant0304: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M60.9 25c0 17-14.8 30.6-33 30.6C9.5 55.6-5.3 42-5.3 25.1c0-16.9 4.4-14.9 33-14.9 26.5 0 33-2 33 14.9Z" fill="#F9F9F9"/>`,
+  variant0303: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M60.7 22.9c0 16.9-14.8 30.5-33 30.5C9.2 53.4-5.6 39.8-5.6 23S-1 8 27.6 8c34 0 33-2 33 14.8Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M55.1 8.7c-5 4.8-15.3 9-27.2 9A42 42 0 0 1 1 9.3C4 7.9 9.8 8 21.5 8a2115 2115 0 0 0 14.8 0c9.4 0 15.3 0 18.8.7Z" fill="#F9F9F9"/>`,
+  variant0302: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59 18.4A31 31 0 0 1 27.6 49 31 31 0 0 1-4 18.4c0-17 4.2-14.9 31.5-14.9 25 0 31.4-2 31.4 14.9Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M58.8 19.7H-3.7v-1.2C-3.8 2.6-.5 2.7 19.5 2.8a829.2 829.2 0 0 0 15.2 0c19-.1 24-.2 24 15.7v1.2Z" fill="#F9F9F9"/>`,
+  variant0301: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59 19.1a31 31 0 0 1-31.5 30.6A31 31 0 0 1-3.9 19.1c0-17 4.2-14.9 31.4-14.9 25.2 0 31.5-2 31.5 15Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M58.8 17.7H-4c.2-14.1 4.1-14 23.5-14l8 .1h7.2c18.4-.2 23.7-.2 24 14Z" fill="#F9F9F9"/><path fill-rule="evenodd" clip-rule="evenodd" d="M53.8 35.7A31.7 31.7 0 0 1 27.7 49c-11 0-20.8-5.5-26.4-13.8a42.7 42.7 0 0 1 26-7.6 42 42 0 0 1 26.5 8Z" fill="#C06E6E"/>`,
+  variant0205: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.7 22.3a31 31 0 0 1-62 0c0-17 13.9-4 31-4 17 0 31-13 31 4Z" fill="#DE8383"/>`,
+  variant0204: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59 15.6a31 31 0 1 1-62 0c0-17.1 13.8-4.1 31-4.1 17 0 31-13 31 4Z" fill="#F9F9F9"/>`,
+  variant0203: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59 15a31 31 0 0 1-62 0C-3-2 10.8 11 28 11c17 0 31-13 31 4.1Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M56.3 7A31 31 0 0 1-.3 7c2.5-1.7 6.8-.5 12.1 1 4.7 1.3 10.3 2.9 16.2 2.9 6 0 11.5-1.6 16.2-3 5.3-1.4 9.5-2.6 12-1Z" fill="#F9F9F9"/>`,
+  variant0202: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59 19.4a31 31 0 1 1-62 0c0-17.2 13.8-4.2 31-4.2 17 0 31-13 31 4.2Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M57.5 28.6H-1.7c-.9-3-1.3-6-1.3-9.2 0-11.2 5.9-9.6 14.8-7a59.5 59.5 0 0 0 16.1 2.8c6 0 11.5-1.5 16.2-2.9 9-2.5 14.8-4.1 14.8 7a31 31 0 0 1-1.4 9.3Z" fill="#F9F9F9"/>`,
+  variant0201: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M58.2 16.4a30.6 30.6 0 0 1-61.2 0c0-17 13.7-4.1 30.6-4.1 17 0 30.6-12.8 30.6 4Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M56.8 25.4H-1.7c-1-3-2.2-6-2.2-9.3 0-11.1 6-9.5 15-7A61.6 61.6 0 0 0 27.6 12c6 0 11.6-1.6 16.4-2.9 9-2.5 14.3-3.4 14.3 7.7 0 3.2-.5 5.6-1.5 8.6Z" fill="#F9F9F9"/><path fill-rule="evenodd" clip-rule="evenodd" d="M50.4 36a29 29 0 0 1-23 11.5 29 29 0 0 1-22.6-11c4.1-5 12.9-8.4 23-8.4 9.8 0 18.3 3.2 22.6 8Z" fill="#C06E6E"/>`,
+  variant0105: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.5 28.2a31 31 0 1 1-62 0 31 31 0 0 1 62 0Z" fill="#DE8383"/>`,
+  variant0104: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.5 27.6a31 31 0 1 1-62 0 31 31 0 0 1 62 0Z" fill="#F9F9F9"/>`,
+  variant0103: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.5 28.4a31 31 0 1 1-62 0 31 31 0 0 1 62 0Z" fill="#DE8383"/><path d="M55.4 13H1.6C5.2 6.1 14.2-3 29-3c14.8 0 23.4 9.6 26.4 16Z" fill="#F9F9F9"/>`,
+  variant0102: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<g fill="#DE8383"><path d="M59.8 28.1a31 31 0 1 1-62 0 31 31 0 0 1 62 0Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M57 19.5H.7A31.1 31.1 0 0 1 29 1.3c12.5 0 23.2 7.5 28 18.2Z"/></g><path fill-rule="evenodd" clip-rule="evenodd" d="M57 15.1H.7A31.1 31.1 0 0 1 29-3c12.5 0 23.2 7.5 28 18.2Z" fill="#F9F9F9"/>`,
+  variant0101: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M59.8 28.9a31 31 0 1 1-62 0 31 31 0 0 1 62 0Z" fill="#DE8383"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.6 49.5a31 31 0 0 1 47.9-2 31 31 0 0 1-47.9 2Z" fill="#C06E6E"/><path fill-rule="evenodd" clip-rule="evenodd" d="M57.4 16.4H.4a31 31 0 0 1 57 0Z" fill="#F9F9F9"/>`,
+};

@@ -1,24 +1,28 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../types.js';
 
 export const mustache: ComponentGroup = {
-  'variant04': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M65.257 21.112c-5.862-2.294-20.321-2.7-28.273 2.805-7.952 5.505-10.098 7.068-5.834 7.741 7.629 2.356 28.58-.745 31.639-2.58 3.058-1.835 3.825-5.35 3.315-7.262"/>
-    <path d="M85.423 20.058c-12.049-4.366-17.03-.961-18.596 2.599-.686 1.558-1.233 4.824 1.255 5.825 3.012 1.213 22.862 1.297 32.062-1.62 2.58-2.132-3.433-2.714-14.721-6.804Z"/>
-  </g>
-`,
-  'variant03': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M61.062 24.899C46.35 27.001 15.03 32.955 3 36.448M126.818 22.425c-14.713 2.102-46.493.893-58.511 1.649"/>
-    <path d="M60.3 25.264C45.585 27.366 22.36 36.946 8.826 38.45M123.452 26.203c-14.712 2.101-40.518-1.58-53.84-1.58M61.062 24.208C46.35 26.31 15.767 29.89 3.507 31.74M127.985 17c-14.713 2.102-47.486 4.399-59.747 6.25"/>
-  </g>
-`,
-  'variant02': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M32 22.97c5.981 4.56 20.77 10.944 32.073 0M68.734 22.075c3.024 3.769 17.294 9.03 29.911-1.075"/>
-  </g>
-`,
-  'variant01': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M63.256 24.108c-4.676-1.67-22.543 3.005-27.887 1.503-5.343-1.503-8.685-4.843-6.681-7.348 2.004-2.505 2.507-1.002 3.341 0 .668.802 1.532 1.518 2.877 1.238 2.038-.425 3.369-1.739 2.3-3.743-1.336-2.504-10.854-2.504-11.689 0-.835 2.505-1.837 10.688 7.347 12.691 9.184 2.004 29.056-3.673 30.392-2.838 1.336.834 13.54 2.14 22.892 1.64 9.351-.501 19.021-7.15 16.516-11.493-2.505-4.341-13.943-2.851-11.772-.347.757.607 2.601 1.527 3.919.348 1.646-1.475 4.482 1.225 0 5.331-3.294 3.018-24.042 6.035-29.53 3.018" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-`,
-}
+  variant04: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<g stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M65.3 21.1c-6-2.3-20.4-2.7-28.3 2.8-8 5.5-10.1 7-5.9 7.8A74 74 0 0 0 62.8 29a7 7 0 0 0 3.3-7.3"/><path d="M85.4 20c-12-4.3-17-1-18.6 2.7-.7 1.5-1.2 4.8 1.3 5.8 3 1.2 22.8 1.3 32-1.6 2.6-2.2-3.4-2.8-14.7-6.8Z"/></g>`,
+  variant03: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<g stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M61 24.9c-14.7 2.1-46 8-58 11.5M126.8 22.4c-14.7 2.1-46.5 1-58.5 1.7"/><path d="M60.3 25.3c-14.7 2-38 11.6-51.5 13.1M123.5 26.2c-14.8 2.1-40.6-1.6-53.9-1.6M61 24.2C46.4 26.3 15.9 30 3.6 31.7M128 17c-14.7 2.1-47.5 4.4-59.8 6.2"/></g>`,
+  variant02: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M32 23c6 4.5 20.8 11 32 0M68.7 22c3 3.8 17.3 9.1 30-1" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  variant01: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M63.3 24.1c-4.7-1.7-22.6 3-28 1.5-5.3-1.5-8.6-4.8-6.6-7.3s2.5-1 3.3 0c.7.8 1.6 1.5 3 1.2 2-.4 3.3-1.7 2.2-3.7-1.3-2.5-10.8-2.5-11.7 0-.8 2.5-1.8 10.6 7.4 12.6 9.1 2 29-3.6 30.4-2.8 1.3.8 13.5 2.2 22.8 1.7 9.4-.6 19-7.2 16.6-11.5-2.5-4.4-14-2.9-11.8-.4.7.6 2.6 1.5 4 .4 1.6-1.5 4.4 1.2 0 5.3-3.4 3-24.1 6-29.6 3" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+};

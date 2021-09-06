@@ -1,73 +1,70 @@
 {
   "name": "@dicebear/collection",
-  "version": "4.10.2",
-  "description": "All offical dicebear avatar styles in one package",
+  "version": "5.0.0-alpha.17",
+  "description": "Avatar style collection for DiceBear",
   "keywords": [
     "dicebear"
   ],
-  "homepage": "https://github.com/dicebear/dicebear/tree/master/packages/@dicebear/collection",
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:dicebear/dicebear.git",
-    "directory": "/packages/@dicebear/collection"
+    "url": "git+https://github.com/dicebear/dicebear.git"
   },
   "license": "MIT",
-  "author": "Florian Körner <contact@florian-koerner.com>",
-  "source": "src/index.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "browser": "dist/index.umd.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "files": [
     "LICENSE",
-    "README.md",
-    "dist"
+    "lib",
+    "README.md"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build",
-    "prebuild": "shx rm -rf dist",
-    "build": "dicebear-project build DiceBear.Collection"
+    "prebuild": "del-cli lib",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@dicebear/adventurer": "^4.10.2",
-    "@dicebear/adventurer-neutral": "^4.10.2",
-    "@dicebear/avatars-avataaars-sprites": "^4.10.2",
-    "@dicebear/avatars-bottts-sprites": "^4.10.2",
-    "@dicebear/avatars-female-sprites": "^4.10.2",
-    "@dicebear/avatars-gridy-sprites": "^4.10.2",
-    "@dicebear/avatars-human-sprites": "^4.10.2",
-    "@dicebear/avatars-identicon-sprites": "^4.10.2",
-    "@dicebear/avatars-initials-sprites": "^4.10.2",
-    "@dicebear/avatars-jdenticon-sprites": "^4.10.2",
-    "@dicebear/avatars-male-sprites": "^4.10.2",
-    "@dicebear/big-ears": "^4.10.2",
-    "@dicebear/big-ears-neutral": "^4.10.2",
-    "@dicebear/big-smile": "^4.10.2",
-    "@dicebear/croodles": "^4.10.2",
-    "@dicebear/croodles-neutral": "^4.10.2",
-    "@dicebear/micah": "^4.10.2",
-    "@dicebear/miniavs": "^4.10.2",
-    "@dicebear/open-peeps": "^4.10.2",
-    "@dicebear/personas": "^4.10.2",
-    "@dicebear/pixel-art": "^4.10.2",
-    "@dicebear/pixel-art-neutral": "^4.10.2"
+    "@dicebear/adventurer": "^5.0.0-alpha.17",
+    "@dicebear/adventurer-neutral": "^5.0.0-alpha.17",
+    "@dicebear/avataaars": "^5.0.0-alpha.17",
+    "@dicebear/avataaars-neutral": "^5.0.0-alpha.17",
+    "@dicebear/big-ears": "^5.0.0-alpha.17",
+    "@dicebear/big-ears-neutral": "^5.0.0-alpha.17",
+    "@dicebear/big-smile": "^5.0.0-alpha.17",
+    "@dicebear/bottts": "^5.0.0-alpha.17",
+    "@dicebear/bottts-neutral": "^5.0.0-alpha.17",
+    "@dicebear/croodles": "^5.0.0-alpha.17",
+    "@dicebear/croodles-neutral": "^5.0.0-alpha.17",
+    "@dicebear/fun-emoji": "^5.0.0-alpha.17",
+    "@dicebear/icons": "^5.0.0-alpha.17",
+    "@dicebear/identicon": "^5.0.0-alpha.17",
+    "@dicebear/initials": "^5.0.0-alpha.17",
+    "@dicebear/lorelei": "^5.0.0-alpha.17",
+    "@dicebear/lorelei-neutral": "^5.0.0-alpha.17",
+    "@dicebear/micah": "^5.0.0-alpha.17",
+    "@dicebear/miniavs": "^5.0.0-alpha.17",
+    "@dicebear/open-peeps": "^5.0.0-alpha.17",
+    "@dicebear/personas": "^5.0.0-alpha.17",
+    "@dicebear/pixel-art": "^5.0.0-alpha.17",
+    "@dicebear/pixel-art-neutral": "^5.0.0-alpha.17"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.10.2",
-    "@tsconfig/recommended": "^1.0.0",
-    "@types/node": "^10.11.6",
-    "dicebear-project": "^4.10.2",
-    "shx": "^0.3.3",
-    "typescript": "^4.2.3"
+    "@dicebear/core": "^5.0.0-alpha.17",
+    "@tsconfig/recommended": "^1.0.1",
+    "del-cli": "^4.0.1",
+    "typescript": "^4.6.3",
+    "uvu": "^0.5.3"
   },
   "peerDependencies": {
-    "@dicebear/avatars": "^4.6.0"
+    "@dicebear/core": "^5.0.0-alpha.10"
+  },
+  "engines": {
+    "node": "^14.13.1 || >=16.0.0"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "a081e38b1593d87f1d32abf632e3792c16f702fd"
+  }
 }

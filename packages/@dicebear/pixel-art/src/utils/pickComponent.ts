@@ -1,9 +1,18 @@
-import type { Prng } from '@dicebear/avatars';
-import type { ComponentGroupCollection, ComponentPick } from '../static-types';
+import type { Prng } from '@dicebear/core';
+import type { ComponentGroupCollection, ComponentPick } from '../types.js';
+import * as components from '../components/index.js';
 
-import * as components from '../components';
+type Props = {
+  prng: Prng;
+  group: string;
+  values?: string[];
+};
 
-export function pickComponent(prng: Prng, group: string, values: string[] = []): ComponentPick {
+export function pickComponent({
+  prng,
+  group,
+  values = [],
+}: Props): ComponentPick {
   const componentCollection: ComponentGroupCollection = components;
 
   const key = prng.pick(values);

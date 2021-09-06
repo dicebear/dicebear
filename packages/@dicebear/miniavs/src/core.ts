@@ -1,12 +1,11 @@
-import type { Style } from '@dicebear/avatars';
-import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type { Style, StyleSchema } from '@dicebear/core';
+import type { Options } from './types.js';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
-import { onPreCreate } from './hooks/onPreCreate';
-import { onPostCreate } from './hooks/onPostCreate';
+import { schema } from './schema.js';
+import { getComponents } from './utils/getComponents.js';
+import { getColors } from './utils/getColors.js';
+import { onPreCreate } from './hooks/onPreCreate.js';
+import { onPostCreate } from './hooks/onPostCreate.js';
 
 export const style: Style<Options> = {
   meta: {
@@ -18,36 +17,12 @@ export const style: Style<Options> = {
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     onPreCreate({ prng, options });
 
-    const headComponent = pickComponent(prng, 'head', options.head);
-    const bodyComponent = pickComponent(prng, 'body', options.body);
-    const hairComponent = pickComponent(prng, 'hair', options.hair);
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
-    const glassesComponent = pickComponent(prng, 'glasses', options.glasses);
-    const mustacheComponent = pickComponent(prng, 'mustache', options.mustache);
-    const blushesComponent = pickComponent(prng, 'blushes', options.blushes);
-
-    const components: ComponentPickCollection = {
-      'head': headComponent,
-      'body': bodyComponent,
-      'hair': hairComponent,
-      'mouth': mouthComponent,
-      'eyes': eyesComponent,
-      'glasses': prng.bool(options.glassesProbability) ? glassesComponent : undefined,
-      'mustache': prng.bool(options.mustacheProbability) ? mustacheComponent : undefined,
-      'blushes': prng.bool(options.blushesProbability) ? blushesComponent : undefined,
-    }
-
-    const colors: ColorPickCollection = {
-      'skin': pickColor(prng, 'skin', options.skinColor ?? []),
-      'hair': pickColor(prng, 'hair', options.hairColor ?? []),
-      'body': pickColor(prng, 'body', options.bodyColor ?? []),
-    }
-
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
     onPostCreate({ prng, options, components, colors });
 
@@ -55,30 +30,19 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 64 64',
         fill: 'none',
+        'shape-rendering': 'auto',
       },
-      body: `
-  <g>
-    ${components.head?.value(components, colors) ?? ''}
-  </g>
-  <g>
-    ${components.body?.value(components, colors) ?? ''}
-  </g>
-  <g>
-    ${components.hair?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(1)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(0 -1)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g>
-    ${components.glasses?.value(components, colors) ?? ''}
-  </g>
-  <g>
-    ${components.mustache?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `${components.head?.value(components, colors) ?? ''}${
+        components.body?.value(components, colors) ?? ''
+      }${
+        components.hair?.value(components, colors) ?? ''
+      }<g transform="translate(1)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><g transform="translate(0 -1)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g>${components.glasses?.value(components, colors) ?? ''}${
+        components.mustache?.value(components, colors) ?? ''
+      }`,
     };
   },
 };

@@ -22,9 +22,9 @@ jobs:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
 
-      - run: yarn install
-      - run: yarn build
-      - run: yarn test
+      - run: npm install
+      - run: npm build
+      - run: npm test
 
       - run: ./node_modules/.bin/lerna publish from-package --no-verify-access --dist-tag next --ignore-scripts --yes
         env:

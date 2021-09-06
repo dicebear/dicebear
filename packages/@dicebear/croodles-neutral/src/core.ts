@@ -1,10 +1,11 @@
-import type { Style } from '@dicebear/avatars';
-import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type { Style, StyleSchema } from '@dicebear/core';
+import type { Options } from './types.js';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
+import { schema } from './schema.js';
+import { getComponents } from './utils/getComponents.js';
+import { getColors } from './utils/getColors.js';
+import { onPreCreate } from './hooks/onPreCreate.js';
+import { onPostCreate } from './hooks/onPostCreate.js';
 
 export const style: Style<Options> = {
   meta: {
@@ -16,38 +17,28 @@ export const style: Style<Options> = {
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
-    const noseComponent = pickComponent(prng, 'nose', options.nose);
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
+    onPreCreate({ prng, options });
 
-    const components: ComponentPickCollection = {
-      'eyes': eyesComponent,
-      'nose': noseComponent,
-      'mouth': mouthComponent,
-    }
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
-    const colors: ColorPickCollection = {
-    }
-
+    onPostCreate({ prng, options, components, colors });
 
     return {
       attributes: {
         viewBox: '0 0 128 128',
         fill: 'none',
+        'shape-rendering': 'auto',
       },
-      body: `
-  <g transform="translate(7 4)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(47 46)">
-    ${components.nose?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(30 93)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `<g transform="translate(7 4)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="translate(47 46)">${
+        components.nose?.value(components, colors) ?? ''
+      }</g><g transform="translate(30 93)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g>`,
     };
   },
 };

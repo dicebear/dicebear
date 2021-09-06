@@ -1,66 +1,48 @@
-import type { Style } from '@dicebear/avatars';
-import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type { Style, StyleSchema } from '@dicebear/core';
+import type { Options } from './types.js';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
-import { onPreCreate } from './hooks/onPreCreate';
-import { onPostCreate } from './hooks/onPostCreate';
+import { schema } from './schema.js';
+import { getComponents } from './utils/getComponents.js';
+import { getColors } from './utils/getColors.js';
+import { onPreCreate } from './hooks/onPreCreate.js';
+import { onPostCreate } from './hooks/onPostCreate.js';
 
 export const style: Style<Options> = {
   meta: {
     title: 'Adventurer Neutral',
     creator: 'Lisa Wischofsky',
-    source: 'https://www.instagram.com/lischis_adventures/',
+    source: 'https://www.instagram.com/lischi_art/',
     license: {
       name: 'CC BY 4.0',
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     onPreCreate({ prng, options });
 
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
-    const eyebrowsComponent = pickComponent(prng, 'eyebrows', options.eyebrows);
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
-    const accessoiresComponent = pickComponent(prng, 'accessoires', options.accessoires);
-
-    const components: ComponentPickCollection = {
-      'eyes': eyesComponent,
-      'eyebrows': eyebrowsComponent,
-      'mouth': mouthComponent,
-      'accessoires': prng.bool(options.accessoiresProbability) ? accessoiresComponent : undefined,
-    }
-
-    const colors: ColorPickCollection = {
-    }
-
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
-    options.backgroundColor = pickColor(prng, 'skin', backgroundColor ?? []).value;
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
     onPostCreate({ prng, options, components, colors });
+
+    options.backgroundColor = [colors.background.value];
 
     return {
       attributes: {
         viewBox: '0 0 400 400',
         fill: 'none',
+        'shape-rendering': 'auto',
       },
-      body: `
-  <g transform="translate(-279 -322)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.eyebrows?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.accessoires?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `<g transform="translate(-279 -322)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.eyebrows?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.glasses?.value(components, colors) ?? ''
+      }</g>`,
     };
   },
 };

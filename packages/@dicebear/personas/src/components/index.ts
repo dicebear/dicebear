@@ -1,6 +1,6 @@
-export { eyes } from './eyes';
-export { hair } from './hair';
-export { body } from './body';
-export { mouth } from './mouth';
-export { nose } from './nose';
-export { facialHair } from './facialHair';
+export { eyes } from './eyes.js';
+export { hair } from './hair.js';
+export { body } from './body.js';
+export { mouth } from './mouth.js';
+export { nose } from './nose.js';
+export { facialHair } from './facialHair.js';

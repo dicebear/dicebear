@@ -1,10 +1,34 @@
-import { Prng, StyleOptions } from "@dicebear/avatars";
+import { Prng, StyleOptions } from '@dicebear/core';
 
-import { Options } from "../options";
-import { ColorPickCollection, ComponentPickCollection } from "../static-types";
+import {
+  Options,
+  ColorPickCollection,
+  ComponentPickCollection,
+} from '../types.js';
 
-type Props = { prng: Prng, options: StyleOptions<Options>, components: ComponentPickCollection, colors: ColorPickCollection } 
+type Props = {
+  prng: Prng;
+  options: StyleOptions<Options>;
+  components: ComponentPickCollection;
+  colors: ColorPickCollection;
+};
 
 export function onPostCreate({ prng, options, components, colors }: Props) {
-  // Write your modifications here
+  const invisibleEarringsHair = [
+    'long01',
+    'long04',
+    'long05',
+    'long06',
+    'long20',
+    'long22',
+    'long24',
+    'long26',
+  ];
+
+  if (
+    components.hair?.name &&
+    invisibleEarringsHair.includes(components.hair.name)
+  ) {
+    components.earrings = undefined;
+  }
 }

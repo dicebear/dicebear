@@ -1,24 +1,22 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../types.js';
 
 export const eyebrows: ComponentGroup = {
-  'up': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g stroke="${colors.eyebrow.value}" stroke-width="4" stroke-linecap="round">
-    <path d="M99 10.214c5.667-2.666 19-5.1 27 6.5M23.58 35.521c2.07-5.91 9.681-17.125 23.562-14.699"/>
-  </g>
-`,
-  'down': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g stroke="${colors.eyebrow.value}" stroke-width="4" stroke-linecap="round">
-    <path d="M27 26.5c6.167 2.5 21.1 3 31.5-15M94 4c5.167 5.333 18.1 12.8 28.5 0"/>
-  </g>
-`,
-  'eyelashesUp': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g stroke="${colors.eyebrow.value}" stroke-width="4" stroke-linecap="round">
-    <path d="M99 10.214c5.667-2.666 19-5.1 27 6.5M23.58 35.521c2.07-5.91 9.681-17.125 23.562-14.699M26.074 29.458l-6.148-5.427M122.961 11.157l6.148-5.427M32.523 23.814l-4.046-7.132M115.512 7.513l4.047-7.132M40.6 20.2l-2.202-7.9M106.436 6.9l2.201-7.9"/>
-  </g>
-`,
-  'eyelashesDown': (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <g stroke="${colors.eyebrow.value}" stroke-width="4" stroke-linecap="round">
-    <path d="M27 26.5c6.167 2.5 21.1 3 31.5-15M94 4c5.167 5.333 18.1 12.8 28.5 0M37.148 26.458 31 21.03M116.219 9.444l1.785-8.005M45.597 22.814l-4.046-7.132M108.142 9.018 109.08.87M52.674 17.2l-2.201-7.9M99.993 8.031l-.776-8.164"/>
-  </g>
-`,
-}
+  up: (components: ComponentPickCollection, colors: ColorPickCollection) =>
+    `<path d="M99 10.21c5.67-2.66 19-5.1 27 6.5M23.58 35.52c2.07-5.9 9.68-17.12 23.56-14.7" stroke="${colors.eyebrows.value}" stroke-width="4" stroke-linecap="round"/>`,
+  down: (components: ComponentPickCollection, colors: ColorPickCollection) =>
+    `<path d="M27 26.5c6.17 2.5 21.1 3 31.5-15M94 4c5.17 5.33 18.1 12.8 28.5 0" stroke="${colors.eyebrows.value}" stroke-width="4" stroke-linecap="round"/>`,
+  eyelashesUp: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M99 10.21c5.67-2.66 19-5.1 27 6.5M23.58 35.52c2.07-5.9 9.68-17.12 23.56-14.7M26.07 29.46l-6.14-5.43M122.96 11.16l6.15-5.43M32.52 23.81l-4.04-7.13M115.51 7.51l4.05-7.13M40.6 20.2l-2.2-7.9M106.44 6.9l2.2-7.9" stroke="${colors.eyebrows.value}" stroke-width="4" stroke-linecap="round"/>`,
+  eyelashesDown: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M27 26.5c6.17 2.5 21.1 3 31.5-15M94 4c5.17 5.33 18.1 12.8 28.5 0M37.15 26.46 31 21.03M116.22 9.44l1.78-8M45.6 22.81l-4.05-7.13M108.14 9.02l.94-8.15M52.67 17.2l-2.2-7.9M100 8.03l-.78-8.16" stroke="${colors.eyebrows.value}" stroke-width="4" stroke-linecap="round"/>`,
+};

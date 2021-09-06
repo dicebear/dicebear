@@ -1,7 +1,7 @@
-export { skin } from './skin';
-export { hair } from './hair';
-export { accessories } from './accessories';
-export { mouth } from './mouth';
-export { clothes } from './clothes';
-export { hat } from './hat';
-export { glasses } from './glasses';
+export { skin } from './skin.js';
+export { hair } from './hair.js';
+export { accessories } from './accessories.js';
+export { mouth } from './mouth.js';
+export { clothes } from './clothes.js';
+export { hat } from './hat.js';
+export { glasses } from './glasses.js';

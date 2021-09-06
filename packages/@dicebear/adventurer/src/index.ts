@@ -2,20 +2,16 @@
  * Adventurer (@dicebear/adventurer)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2021 Florian Körner
+ * Copyright (c) 2022 Florian Körner
  *
  * Design "Adventurer" by Lisa Wischofsky licensed under CC BY 4.0.
- * Source: https://www.instagram.com/lischis_adventures/
+ * Source: https://www.instagram.com/lischi_art/
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 
-import { utils } from '@dicebear/avatars';
-import { style } from './core';
+import { style } from './core.js';
 
-let { create, meta, schema } = style;
+const { create, meta, schema } = style;
 
 export { create, meta, schema };
-export { Options } from './options';
-
-/** @deprecated will be removed in Version 5.0 */
-export default utils.style.createLegacyWrapper(style);
+export type { Options } from './types.js';

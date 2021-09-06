@@ -1,61 +1,57 @@
 {
   "name": "dicebear",
-  "version": "4.10.2",
+  "version": "5.0.0-alpha.17",
+  "private": false,
   "description": "CLI for DiceBear - An avatar library for designers and developers",
-  "bin": "bin/index.js",
-  "types": "lib/index.d.ts",
+  "homepage": "https://github.com/dicebear/dicebear",
   "repository": {
     "type": "git",
-    "url": "git@github.com:dicebear/dicebear.git",
-    "directory": "/packages/dicebear"
+    "url": "git+https://github.com/dicebear/dicebear.git"
   },
-  "author": "Florian Körner <contact@florian-koerner.com>",
   "license": "MIT",
-  "private": false,
+  "author": "Florian Körner <contact@florian-koerner.com>",
+  "type": "module",
+  "exports": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "bin": "./bin/index.js",
   "files": [
-    "bin",
-    "lib",
     "LICENSE",
+    "lib",
     "README.md"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build",
-    "prebuild": "shx rm -rf lib",
-    "build": "npm run build:ts",
-    "build:ts": "tsc"
+    "prebuild": "del-cli lib",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^9.0.7",
-    "@dicebear/avatars": "^4.10.2",
-    "@dicebear/collection": "^4.10.2",
-    "ajv": "^8.1.0",
-    "chalk": "^4.1.1",
-    "cli-progress": "^3.9.0",
-    "commander": "^7.2.0",
-    "dicebear-project": "^4.10.2",
-    "download": "^8.0.0",
-    "execa": "^4.1.0",
-    "fs-extra": "^9.1.0",
+    "@dicebear/collection": "^5.0.0-alpha.17",
+    "@dicebear/core": "^5.0.0-alpha.17",
+    "@resvg/resvg-js": "^1.4.0",
+    "ajv": "^8.11.0",
+    "chalk": "^5.0.1",
+    "chalk-template": "^0.4.0",
+    "cli-progress": "^3.10.0",
+    "commander": "^9.2.0",
+    "exiftool-vendored": "^16.3.0",
+    "fs-extra": "^10.1.0",
     "json-schema-merge-allof": "^0.8.1",
-    "ora": "^5.4.0",
-    "replace-in-file": "^6.2.0",
-    "sharp": "^0.28.1",
-    "terminal-link": "^2.1.1",
+    "p-queue": "^7.2.0",
+    "sharp": "^0.30.4",
     "update-notifier": "^5.1.0"
   },
   "devDependencies": {
-    "@tsconfig/node14": "^1.0.1",
-    "@types/cli-progress": "^3.9.1",
-    "@types/download": "^6.2.4",
-    "@types/fs-extra": "^9.0.11",
-    "@types/json-schema": "^7.0.7",
-    "@types/json-schema-merge-allof": "^0.6.0",
-    "@types/semver": "^7.3.6",
-    "@types/sharp": "^0.28.0",
-    "@types/update-notifier": "^5.0.0",
-    "shx": "^0.3.3",
-    "typescript": "^4.3.5"
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/cli-progress": "^3.9.2",
+    "@types/fs-extra": "^9.0.13",
+    "@types/json-schema": "^7.0.11",
+    "@types/json-schema-merge-allof": "^0.6.1",
+    "@types/update-notifier": "^5.1.0",
+    "del-cli": "^4.0.1",
+    "typescript": "^4.6.3"
   },
-  "homepage": "https://github.com/dicebear/dicebear",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
   "gitHead": "a081e38b1593d87f1d32abf632e3792c16f702fd"
 }

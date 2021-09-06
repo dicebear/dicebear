@@ -2,20 +2,16 @@
  * Open Peeps (@dicebear/open-peeps)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2021 Florian Körner
+ * Copyright (c) 2022 Florian Körner
  *
  * Design "Open Peeps" by Pablo Stanley licensed under CC0 1.0.
  * Source: https://www.openpeeps.com/
  * License: https://creativecommons.org/publicdomain/zero/1.0/
  */
 
-import { utils } from '@dicebear/avatars';
-import { style } from './core';
+import { style } from './core.js';
 
-let { create, meta, schema } = style;
+const { create, meta, schema } = style;
 
 export { create, meta, schema };
-export { Options } from './options';
-
-/** @deprecated will be removed in Version 5.0 */
-export default utils.style.createLegacyWrapper(style);
+export type { Options } from './types.js';

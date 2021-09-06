@@ -1,7 +1,8 @@
+import fs from 'fs-extra';
 import type { Package } from 'update-notifier';
 
-export function getPackageJson(packageName?: string): Promise<Package> {
-  const packageJson = packageName ? `${packageName}/package.json` : '../../package.json';
+export function getPackageJson(): Promise<Package> {
+  const packageJson = new URL('../../package.json', import.meta.url).pathname;
 
-  return import(packageJson);
+  return fs.readJson(packageJson);
 }

@@ -1,5 +1,34 @@
 # Changelog
 
+## [5.0.0] - TBA
+
+### Added
+
+- `@dicebear/core` as replacement for `@dicebear/avatars`
+- `@dicebear/initials` as replacement for `@dicebear/avatars-initials-sprites`
+- `@dicebear/identicon` as replacement for `@dicebear/avatars-identicon-sprites`
+- `@dicebear/avataaars` as replacement for `@dicebear/avatars-avataaars-sprites`
+- `@dicebear/bottts` as replacement for `@dicebear/avatars-bottts-sprites`
+- `@dicebear/gridy` as replacement for `@dicebear/avatars-gridy-sprites`
+- `@dicebear/shapes` as replacement for `@dicebear/avatars-jdenticon-sprites`
+- `@dicebear/avataaars-neutral` Neutral version of `@dicebear/avataaars`
+- `@dicebear/bottts-neutral` Neutral version of `@dicebear/bottts`
+
+### Removed
+
+- `@dicebear/avatars` Use `@dicebear/core` instead.
+- `@dicebear/core` Alias options removed.
+- `@dicebear/core` Deprecated options and functions removed.
+- `@dicebear/avatars-male-sprites` Use `@dicebear/pixel-art` instead.
+- `@dicebear/avatars-female-sprites` Use `@dicebear/pixel-art` instead.
+- `@dicebear/avatars-human-sprites` Use `@dicebear/pixel-art` instead.
+- `@dicebear/avatars-initials-sprites` Use `@dicebear/initials` instead.
+- `@dicebear/avatars-identicon-sprites` Use `@dicebear/identicon` instead.
+- `@dicebear/avatars-avataaars-sprites` Use `@dicebear/avataaars` instead.
+- `@dicebear/avatars-bottts-sprites` Use `@dicebear/bottts` instead.
+- `@dicebear/avatars-gridy-sprites` Use `gridy-avatars` instead.
+- `@dicebear/avatars-jdenticon-sprites` Use `jdenticon` instead.
+
 ## [4.10.2] - 2021-12-22
 
 ## Fixed
@@ -26,7 +55,7 @@
 
 - License Files
 
-## [4.9.0] - 2021-09-05
+## [4.9.0] - 21-09-05
 
 ### Added
 
@@ -148,7 +177,7 @@
 
 ### Changed
 
-#### @dicebear/avatars-bottts-sprites
+#### @dicebear/bottts
 
 - No longer uses the deprecated `Color` class.
 
@@ -240,7 +269,7 @@ No notable changes.
 
   ```js
   import Avatars from `@dicebear/avatars`;
-  import style from `@dicebear/avatars-identicon-sprites`;
+  import style from `@dicebear/identicon`;
 
   let options = {};
   let seed = 'custom-seed';
@@ -252,7 +281,7 @@ No notable changes.
 
   ```js
   import { createAvatar } from `@dicebear/avatars`;
-  import * as style from `@dicebear/avatars-identicon-sprites`;
+  import * as style from `@dicebear/identicon`;
 
   let svg = createAvatar(style, {
     seed: 'custom-seed',
@@ -445,7 +474,7 @@ No notable changes.
     `dreads01`,`dreads02`,`frizzle`,`shaggy`,`shaggyMullet`,`shortCurly`,`shortFlat`,`shortRound`,`shortWaved`,`sides`,`theCaesar`
     and `theCaesarAndSidePart` instead
 
-#### @dicebear/avatars-gridy-sprites
+#### @dicebear/gridy
 
 - Change `deterministic` default to `true`.
 
@@ -517,7 +546,7 @@ No notable changes.
 
 ### Fixed
 
-- Text position was wrong in `@dicebear/avatars-initials-sprites` when a font size was specified.
+- Text position was wrong in `@dicebear/initials` when a font size was specified.
 
 ### Removed
 

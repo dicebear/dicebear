@@ -1,0 +1,50 @@
+{
+  "name": "@dicebear/core",
+  "version": "5.0.0-alpha.17",
+  "description": "An avatar library for designers and developers.",
+  "keywords": [
+    "avatar",
+    "identicon"
+  ],
+  "homepage": "https://dicebear.com",
+  "bugs": {
+    "url": "https://github.com/dicebear/dicebear/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dicebear/dicebear.git"
+  },
+  "license": "MIT",
+  "author": "Florian Körner <contact@florian-koerner.com>",
+  "type": "module",
+  "exports": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "LICENSE",
+    "lib",
+    "README.md"
+  ],
+  "scripts": {
+    "prebuild": "del-cli lib",
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "uvu tests"
+  },
+  "dependencies": {
+    "@dicebear/converter": "^5.0.0-alpha.17",
+    "@types/json-schema": "^7.0.7"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "del-cli": "^4.0.1",
+    "typescript": "^4.6.3",
+    "uvu": "^0.5.3"
+  },
+  "engines": {
+    "node": "^14.13.1 || >=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "a081e38b1593d87f1d32abf632e3792c16f702fd"
+}
