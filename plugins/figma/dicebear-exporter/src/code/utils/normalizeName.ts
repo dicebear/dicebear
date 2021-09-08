@@ -1,6 +1,6 @@
 export function normalizeName(name: string): string {
   return name
-    .replace(/[^a-z0-9]/gi, " ")
+    .replace(/[^a-z0-9]/gi, ' ')
     .trim()
     .split(/\s+/)
     .map((v, k) => {
@@ -10,5 +10,5 @@ export function normalizeName(name: string): string {
 
       return v.charAt(0).toUpperCase() + v.slice(1);
     })
-    .join("");
+    .join('');
 }

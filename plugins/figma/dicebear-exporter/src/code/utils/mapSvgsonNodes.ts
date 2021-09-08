@@ -1,4 +1,4 @@
-import type { INode } from "svgson";
+import type { INode } from 'svgson';
 
 export function mapSvgsonNodes(node: INode, cb: (value: INode) => INode) {
   const result = cb({ ...node });

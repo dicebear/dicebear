@@ -5,6 +5,7 @@ export type FrameSettings = {
   packageVersion: string;
   creator: string;
   contributor: string;
+  sourceTitle: string;
   source: string;
   licenseName: string;
   licenseUrl: string;

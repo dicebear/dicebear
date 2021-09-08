@@ -1,4 +1,4 @@
-import isEqual from "deep-equal";
+import isEqual from 'deep-equal';
 
 export function syncColorsSettings(newColors, oldColors) {
   for (const key in newColors) {
@@ -14,7 +14,7 @@ export function syncColorsSettings(newColors, oldColors) {
             data: newColors[key].settings,
           },
         },
-        "*"
+        '*'
       );
     }
   }

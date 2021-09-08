@@ -1,4 +1,4 @@
-import { ColorGroupSettings } from "../types";
+import { ColorGroupSettings } from '../types';
 
 export function setColorGroupSettings(
   colorGroup: string,

@@ -1,4 +1,4 @@
-import { ComponentGroupSettings } from "../types";
+import { ComponentGroupSettings } from '../types';
 
 export function getComponentGroupSettings(
   componentGroup: string
@@ -7,7 +7,7 @@ export function getComponentGroupSettings(
     defaults: {},
     probability: null,
     ...JSON.parse(
-      figma.root.getPluginData(`components/${componentGroup}/settings`) || "{}"
+      figma.root.getPluginData(`components/${componentGroup}/settings`) || '{}'
     ),
   };
 }

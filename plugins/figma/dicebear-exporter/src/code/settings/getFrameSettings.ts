@@ -1,6 +1,11 @@
 import { FrameSettings } from '../types';
 
-export function getFrameSettings(frame: FrameNode, colorGroups: string[]): FrameSettings {
+export function getFrameSettings(
+  frame: FrameNode,
+  colorGroups: string[]
+): FrameSettings {
+  const titlePlaceholder = 'My Avatar Style';
+
   const data: FrameSettings = {
     umdName: '',
     packageName: '',
@@ -8,6 +13,7 @@ export function getFrameSettings(frame: FrameNode, colorGroups: string[]): Frame
     title: '',
     creator: '',
     contributor: '',
+    sourceTitle: '',
     source: '',
     licenseName: 'CC BY 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
@@ -21,7 +27,11 @@ export function getFrameSettings(frame: FrameNode, colorGroups: string[]): Frame
   };
 
   if (!data.title) {
-    data.title = 'My Avatar Style';
+    data.title = titlePlaceholder;
+  }
+
+  if (!data.sourceTitle || data.sourceTitle === titlePlaceholder) {
+    data.sourceTitle = data.title;
   }
 
   if (!data.umdName) {

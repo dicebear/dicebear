@@ -1,36 +1,36 @@
 <script>
-  import { Button } from "figma-plugin-ds-svelte";
+  import { Button } from 'figma-plugin-ds-svelte';
 
-  import { state } from "../stores/state";
+  import { state } from '../stores/state';
 
-  import ErrorScene from "./ErrorScene.svelte";
-  import LoadingScene from "./LoadingScene.svelte";
-  import LoadedScene from "./LoadedScene.svelte";
+  import ErrorScene from './ErrorScene.svelte';
+  import LoadingScene from './LoadingScene.svelte';
+  import LoadedScene from './LoadedScene.svelte';
 
   function onExport() {
     parent.postMessage(
       {
         pluginMessage: {
-          type: "export",
+          type: 'export',
         },
       },
-      "*"
+      '*'
     );
   }
 </script>
 
 <div class="container">
   <div class="top">
-    {#if $state.type === "error"}
+    {#if $state.type === 'error'}
       <ErrorScene />
-    {:else if $state.type === "loaded"}
+    {:else if $state.type === 'loaded'}
       <LoadedScene />
     {:else}
       <LoadingScene />
     {/if}
   </div>
   <div class="bottom">
-    <Button disabled={$state.type !== "loaded"} on:click={onExport}
+    <Button disabled={$state.type !== 'loaded'} on:click={onExport}
       >Export</Button
     >
   </div>

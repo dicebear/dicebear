@@ -1,5 +1,5 @@
-import { getNameParts } from "../utils/getNameParts";
-import { findChildrenComponentNodes } from "./findChildrenComponentNodes";
+import { getNameParts } from '../utils/getNameParts';
+import { findChildrenComponentNodes } from './findChildrenComponentNodes';
 
 export function findAllComponentGroups() {
   const componentGroups = new Map();

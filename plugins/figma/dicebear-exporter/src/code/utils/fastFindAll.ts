@@ -1,4 +1,7 @@
-export function fastFindAll(nodes: readonly BaseNode[], filter: (elem: BaseNode) => boolean) {
+export function fastFindAll(
+  nodes: readonly BaseNode[],
+  filter: (elem: BaseNode) => boolean
+) {
   const result: BaseNode[] = [];
 
   for (let i = 0; i < nodes.length; i++) {

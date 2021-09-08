@@ -5,7 +5,12 @@
   export let value = '';
 
   $: menuItems = items.map((item) => {
-    return { value: item, label: item ? item : '- None -', group: null, selected: item === value };
+    return {
+      value: item,
+      label: item ? item : '- None -',
+      group: null,
+      selected: item === value,
+    };
   });
 </script>
 

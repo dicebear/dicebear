@@ -9,7 +9,10 @@
 <div class="form">
   <div class="section">
     <Label>Background Color</Label>
-    <Select items={backgroundColors} bind:value={$state.data.frame.settings.backgroundColorGroupName} />
+    <Select
+      items={backgroundColors}
+      bind:value={$state.data.frame.settings.backgroundColorGroupName}
+    />
   </div>
   <div class="section">
     <Label>Shape Rendering</Label>

@@ -31,7 +31,6 @@ package.json
   // .prettierrc
   '.prettierrc': `
 {
-  "printWidth": 120,
   "singleQuote": true,
   "proseWrap": "always"
 }
@@ -65,15 +64,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 `,
 
-  // readme.md
+  // README.md
   'README.md': `
 <h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />{{title}}</h1>
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear Avatars</a>.</strong><br />
   {{#if source}}
-    <a href="{{source}}">{{title}}</a>
+    <a href="{{source}}">{{sourceTitle}}</a>
   {{else}}
-    {{title}}
+    {{sourceTitle}}
   {{/if}}
   {{#if creator}}
     by {{creator}}
@@ -276,7 +275,7 @@ data.forEach((options, key) => {
  * Copyright (c) {{year}} {{{contributor}}}
 {{/if}}
  *
- * Design "{{{title}}}"{{#if creator}} by {{{creator}}}{{/if}}{{#if licenseName}} licensed under {{{licenseName}}}{{/if}}.
+ * Design "{{{sourceTitle}}}"{{#if creator}} by {{{creator}}}{{/if}}{{#if licenseName}} licensed under {{{licenseName}}}{{/if}}.
 {{#if source}}
  * Source: {{{source}}}
 {{/if}}
@@ -307,7 +306,7 @@ import { onPostCreate } from './hooks/onPostCreate';
 
 export const style: Style<Options> = {
   meta: {
-    title: '{{{title}}}',
+    title: '{{{sourceTitle}}}',
     {{#if creator}}
     creator: '{{{creator}}}',
     {{/if}}

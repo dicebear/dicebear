@@ -1,5 +1,11 @@
 <script>
-  import { Input, IconButton, IconPlus, IconMinus, Switch } from 'figma-plugin-ds-svelte';
+  import {
+    Input,
+    IconButton,
+    IconPlus,
+    IconMinus,
+    Switch,
+  } from 'figma-plugin-ds-svelte';
   import { state } from '../stores/state';
   import Label from './Label.svelte';
   import Select from './Select.svelte';
@@ -56,9 +62,15 @@
       <div class="section-item">
         <div class="section-item-name">
           <div class="section-item-name-select">
-            <Select items={Object.keys($state.data.components)} bind:value={componentAlias.name} />
+            <Select
+              items={Object.keys($state.data.components)}
+              bind:value={componentAlias.name}
+            />
           </div>
-          <IconButton on:click={() => removeComponentAlias(key)} iconName={IconMinus} />
+          <IconButton
+            on:click={() => removeComponentAlias(key)}
+            iconName={IconMinus}
+          />
         </div>
         <div class="section-item-alias">
           <Input bind:value={componentAlias.alias} placeholder="Alias name" />
@@ -81,9 +93,15 @@
       <div class="section-item">
         <div class="section-item-name">
           <div class="section-item-name-select">
-            <Select items={Object.keys($state.data.colors)} bind:value={colorAlias.name} />
+            <Select
+              items={Object.keys($state.data.colors)}
+              bind:value={colorAlias.name}
+            />
           </div>
-          <IconButton on:click={() => removeColorAlias(key)} iconName={IconMinus} />
+          <IconButton
+            on:click={() => removeColorAlias(key)}
+            iconName={IconMinus}
+          />
         </div>
         <div class="section-item-alias">
           <Input bind:value={colorAlias.alias} placeholder="Alias name" />

@@ -1,4 +1,4 @@
-import isEqual from "deep-equal";
+import isEqual from 'deep-equal';
 
 export function syncComponentsSettings(newComponents, oldComponents) {
   for (const key in newComponents) {
@@ -29,7 +29,7 @@ export function syncComponentsSettings(newComponents, oldComponents) {
             data: newComponents[key].settings,
           },
         },
-        "*"
+        '*'
       );
     }
   }

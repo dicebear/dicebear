@@ -1,4 +1,4 @@
-import { ComponentGroupSettings } from "../types";
+import { ComponentGroupSettings } from '../types';
 
 export function setComponentGroupSettings(
   componentGroup: string,

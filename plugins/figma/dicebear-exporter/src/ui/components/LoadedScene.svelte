@@ -15,7 +15,10 @@
 
   $: colors = Object.entries($state.data.colors)
     .filter(([key, val]) => {
-      return val.isUsedByComponents || $state.data.frame.settings.backgroundColorGroupName === key;
+      return (
+        val.isUsedByComponents ||
+        $state.data.frame.settings.backgroundColorGroupName === key
+      );
     })
     .reduce((result, [key, val]) => {
       result[key] = val;

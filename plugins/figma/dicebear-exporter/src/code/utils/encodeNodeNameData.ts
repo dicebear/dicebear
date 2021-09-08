@@ -14,5 +14,5 @@ export function encodeNodeNameData(data: Map<string, string>): string {
 
       return key;
     })
-    .join(" ");
+    .join(' ');
 }

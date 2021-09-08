@@ -1,6 +1,6 @@
 export function processTask(cb: () => Promise<{ type: string; data: any }>) {
   figma.ui.postMessage({
-    type: "loading",
+    type: 'loading',
     data: {},
   });
 
@@ -9,7 +9,7 @@ export function processTask(cb: () => Promise<{ type: string; data: any }>) {
       figma.ui.postMessage(await cb());
     } catch (e) {
       figma.ui.postMessage({
-        type: "error",
+        type: 'error',
         data: {
           message: e.message,
         },

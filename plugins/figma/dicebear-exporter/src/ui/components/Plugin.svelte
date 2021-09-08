@@ -1,16 +1,16 @@
 <script>
-  import { state } from "../stores/state";
-  import { createZip } from "../utils/createZip";
+  import { state } from '../stores/state';
+  import { createZip } from '../utils/createZip';
 
-  import Container from "./Container.svelte";
+  import Container from './Container.svelte';
 
   onmessage = (event) => {
     const message = event.data.pluginMessage;
 
     switch (message.type) {
-      case "export":
+      case 'export':
         createZip(message.data.files, message.data.name).then(() => {
-          parent.postMessage({ pluginMessage: { type: "init" } }, "*");
+          parent.postMessage({ pluginMessage: { type: 'init' } }, '*');
         });
         break;
 
@@ -19,7 +19,7 @@
     }
   };
 
-  $: parent.postMessage({ pluginMessage: { type: "init" } }, "*");
+  $: parent.postMessage({ pluginMessage: { type: 'init' } }, '*');
 </script>
 
 <Container />
