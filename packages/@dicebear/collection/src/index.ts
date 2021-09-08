@@ -1,4 +1,5 @@
-export * as avataaars from '@dicebear/avatars-avataaars-sprites';
+export * as avataaars from '@dicebear/avataaars';
+export * as avataaarsNeutral from '@dicebear/avataaars-neutral';
 export * as bottts from '@dicebear/avatars-bottts-sprites';
 export * as gridy from '@dicebear/avatars-gridy-sprites';
 export * as identicon from '@dicebear/identicon';

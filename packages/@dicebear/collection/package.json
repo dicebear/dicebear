@@ -32,7 +32,8 @@
     "build": "dicebear-project build DiceBear.Collection"
   },
   "dependencies": {
-    "@dicebear/avatars-avataaars-sprites": "^4.9.0",
+    "@dicebear/avataaars": "^4.9.0",
+    "@dicebear/avataaars-neutral": "^4.9.0",
     "@dicebear/avatars-bottts-sprites": "^4.9.0",
     "@dicebear/avatars-gridy-sprites": "^4.9.0",
     "@dicebear/identicon": "^4.9.0",
