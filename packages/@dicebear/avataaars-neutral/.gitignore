@@ -1,0 +1,13 @@
+# Cache and log files
+.DS_Store
+yarn-error.log
+
+# Dependencies
+node_modules
+
+# Build files
+dist
+
+# Generated files
+src/options.ts
+src/schema.ts

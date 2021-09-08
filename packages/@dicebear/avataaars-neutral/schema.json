@@ -1,0 +1,160 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "mouth": {
+      "title": "Mouth",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "concerned",
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "screamOpen",
+          "serious",
+          "smile",
+          "tongue",
+          "twinkle",
+          "vomit"
+        ]
+      },
+      "default": [
+        "concerned",
+        "default",
+        "disbelief",
+        "eating",
+        "grimace",
+        "sad",
+        "screamOpen",
+        "serious",
+        "smile",
+        "tongue",
+        "twinkle",
+        "vomit"
+      ]
+    },
+    "nose": {
+      "title": "Nose",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "default"
+        ]
+      },
+      "default": [
+        "default"
+      ]
+    },
+    "eyes": {
+      "title": "Eyes",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "closed",
+          "cry",
+          "default",
+          "eyeRoll",
+          "happy",
+          "hearts",
+          "side",
+          "squint",
+          "surprised",
+          "winkWacky",
+          "wink",
+          "xDizzy"
+        ]
+      },
+      "default": [
+        "closed",
+        "cry",
+        "default",
+        "eyeRoll",
+        "happy",
+        "hearts",
+        "side",
+        "squint",
+        "surprised",
+        "winkWacky",
+        "wink",
+        "xDizzy"
+      ]
+    },
+    "eyebrows": {
+      "title": "Eyebrows",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "angryNatural",
+          "defaultNatural",
+          "flatNatural",
+          "frownNatural",
+          "raisedExcitedNatural",
+          "sadConcernedNatural",
+          "unibrowNatural",
+          "upDownNatural",
+          "angry",
+          "default",
+          "raisedExcited",
+          "sadConcerned",
+          "upDown"
+        ]
+      },
+      "default": [
+        "angryNatural",
+        "defaultNatural",
+        "flatNatural",
+        "frownNatural",
+        "raisedExcitedNatural",
+        "sadConcernedNatural",
+        "unibrowNatural",
+        "upDownNatural",
+        "angry",
+        "default",
+        "raisedExcited",
+        "sadConcerned",
+        "upDown"
+      ]
+    },
+    "backgroundColor": {
+      "title": "Background Color",
+      "anyOf": [
+        {
+          "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+        },
+        {
+          "type": "string",
+          "pattern": "^[0-9a-zA-Z]+$"
+        },
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-zA-Z]+$"
+              },
+              {
+                "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+              }
+            ]
+          }
+        }
+      ],
+      "default": [
+        "black",
+        "brown",
+        "darkBrown",
+        "light",
+        "pale"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

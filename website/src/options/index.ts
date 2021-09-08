@@ -23,7 +23,7 @@ import * as collection from '@dicebear/collection';
 export default [
   {
     id: 'avataaars',
-    name: '@dicebear/avatars-avataaars-sprites',
+    name: '@dicebear/avataaars',
     style: collection.avataaars,
     options: avataaarsOptions,
   },

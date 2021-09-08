@@ -1,0 +1,591 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "style": {
+      "title": "Style",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "circle",
+          "default"
+        ]
+      },
+      "default": [
+        "default"
+      ]
+    },
+    "clothing": {
+      "title": "Clothing",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "blazerAndShirt",
+          "blazerAndSweater",
+          "collarAndSweater",
+          "graphicShirt",
+          "hoodie",
+          "overall",
+          "shirtCrewNeck",
+          "shirtScoopNeck",
+          "shirtVNeck"
+        ]
+      },
+      "default": [
+        "blazerAndShirt",
+        "blazerAndSweater",
+        "collarAndSweater",
+        "graphicShirt",
+        "hoodie",
+        "overall",
+        "shirtCrewNeck",
+        "shirtScoopNeck",
+        "shirtVNeck"
+      ]
+    },
+    "mouth": {
+      "title": "Mouth",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "concerned",
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "screamOpen",
+          "serious",
+          "smile",
+          "tongue",
+          "twinkle",
+          "vomit"
+        ]
+      },
+      "default": [
+        "concerned",
+        "default",
+        "disbelief",
+        "eating",
+        "grimace",
+        "sad",
+        "screamOpen",
+        "serious",
+        "smile",
+        "tongue",
+        "twinkle",
+        "vomit"
+      ]
+    },
+    "nose": {
+      "title": "Nose",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "default"
+        ]
+      },
+      "default": [
+        "default"
+      ]
+    },
+    "eyes": {
+      "title": "Eyes",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "closed",
+          "cry",
+          "default",
+          "eyeRoll",
+          "happy",
+          "hearts",
+          "side",
+          "squint",
+          "surprised",
+          "winkWacky",
+          "wink",
+          "xDizzy"
+        ]
+      },
+      "default": [
+        "closed",
+        "cry",
+        "default",
+        "eyeRoll",
+        "happy",
+        "hearts",
+        "side",
+        "squint",
+        "surprised",
+        "winkWacky",
+        "wink",
+        "xDizzy"
+      ]
+    },
+    "eyebrows": {
+      "title": "Eyebrows",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "angryNatural",
+          "defaultNatural",
+          "flatNatural",
+          "frownNatural",
+          "raisedExcitedNatural",
+          "sadConcernedNatural",
+          "unibrowNatural",
+          "upDownNatural",
+          "angry",
+          "default",
+          "raisedExcited",
+          "sadConcerned",
+          "upDown"
+        ]
+      },
+      "default": [
+        "angryNatural",
+        "defaultNatural",
+        "flatNatural",
+        "frownNatural",
+        "raisedExcitedNatural",
+        "sadConcernedNatural",
+        "unibrowNatural",
+        "upDownNatural",
+        "angry",
+        "default",
+        "raisedExcited",
+        "sadConcerned",
+        "upDown"
+      ]
+    },
+    "top": {
+      "title": "Top",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "eyepatch",
+          "hat",
+          "hijab",
+          "turban",
+          "winterHat1",
+          "winterHat02",
+          "winterHat03",
+          "winterHat04",
+          "bob",
+          "bun",
+          "curly",
+          "curvy",
+          "dreads",
+          "frida",
+          "fro",
+          "froBand",
+          "longButNotTooLong",
+          "miaWallace",
+          "shavedSides",
+          "straight02",
+          "straight01",
+          "straightAndStrand",
+          "dreads01",
+          "dreads02",
+          "frizzle",
+          "shaggy",
+          "shaggyMullet",
+          "shortCurly",
+          "shortFlat",
+          "shortRound",
+          "shortWaved",
+          "sides",
+          "theCaesar",
+          "theCaesarAndSidePart",
+          "bigHair"
+        ]
+      },
+      "default": [
+        "eyepatch",
+        "hat",
+        "hijab",
+        "turban",
+        "winterHat1",
+        "winterHat02",
+        "winterHat03",
+        "winterHat04",
+        "bob",
+        "bun",
+        "curly",
+        "curvy",
+        "dreads",
+        "frida",
+        "fro",
+        "froBand",
+        "longButNotTooLong",
+        "miaWallace",
+        "shavedSides",
+        "straight02",
+        "straight01",
+        "straightAndStrand",
+        "dreads01",
+        "dreads02",
+        "frizzle",
+        "shaggy",
+        "shaggyMullet",
+        "shortCurly",
+        "shortFlat",
+        "shortRound",
+        "shortWaved",
+        "sides",
+        "theCaesar",
+        "theCaesarAndSidePart",
+        "bigHair"
+      ]
+    },
+    "topProbability": {
+      "title": "Top Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 100
+    },
+    "facialHair": {
+      "title": "Facial Hair",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "beardLight",
+          "beardMagestic",
+          "beardMedium",
+          "moustacheFancy",
+          "moustacheMagnum"
+        ]
+      },
+      "default": [
+        "beardLight",
+        "beardMagestic",
+        "beardMedium",
+        "moustacheFancy",
+        "moustacheMagnum"
+      ]
+    },
+    "facialHairProbability": {
+      "title": "Facial Hair Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 10
+    },
+    "accessories": {
+      "title": "Accessories",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "kurt",
+          "prescription01",
+          "prescription02",
+          "round",
+          "sunglasses",
+          "wayfarers"
+        ]
+      },
+      "default": [
+        "kurt",
+        "prescription01",
+        "prescription02",
+        "round",
+        "sunglasses",
+        "wayfarers"
+      ]
+    },
+    "accessoriesProbability": {
+      "title": "Accessories Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 10
+    },
+    "clothingGraphic": {
+      "title": "Clothing Graphic",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "bat",
+          "bear",
+          "cumbia",
+          "deer",
+          "diamond",
+          "hola",
+          "pizza",
+          "resist",
+          "skull",
+          "skullOutline"
+        ]
+      },
+      "default": [
+        "bat",
+        "bear",
+        "cumbia",
+        "deer",
+        "diamond",
+        "hola",
+        "pizza",
+        "resist",
+        "skull",
+        "skullOutline"
+      ]
+    },
+    "accessoriesColor": {
+      "title": "Accessories Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "blue01",
+              "blue02",
+              "blue03",
+              "gray01",
+              "gray02",
+              "heather",
+              "pastelBlue",
+              "pastelGreen",
+              "pastelOrange",
+              "pastelRed",
+              "pastelYellow",
+              "pink",
+              "red",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "blue01",
+        "blue02",
+        "blue03",
+        "gray01",
+        "gray02",
+        "heather",
+        "pastelBlue",
+        "pastelGreen",
+        "pastelOrange",
+        "pastelRed",
+        "pastelYellow",
+        "pink",
+        "red",
+        "white"
+      ]
+    },
+    "clothesColor": {
+      "title": "Clothes Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "blue01",
+              "blue02",
+              "blue03",
+              "gray01",
+              "gray02",
+              "heather",
+              "pastelBlue",
+              "pastelGreen",
+              "pastelOrange",
+              "pastelRed",
+              "pastelYellow",
+              "pink",
+              "red",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "blue01",
+        "blue02",
+        "blue03",
+        "gray01",
+        "gray02",
+        "heather",
+        "pastelBlue",
+        "pastelGreen",
+        "pastelOrange",
+        "pastelRed",
+        "pastelYellow",
+        "pink",
+        "red",
+        "white"
+      ]
+    },
+    "hatColor": {
+      "title": "Hat Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "blue01",
+              "blue02",
+              "blue03",
+              "gray01",
+              "gray02",
+              "heather",
+              "pastelBlue",
+              "pastelGreen",
+              "pastelOrange",
+              "pastelRed",
+              "pastelYellow",
+              "pink",
+              "red",
+              "white"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "blue01",
+        "blue02",
+        "blue03",
+        "gray01",
+        "gray02",
+        "heather",
+        "pastelBlue",
+        "pastelGreen",
+        "pastelOrange",
+        "pastelRed",
+        "pastelYellow",
+        "pink",
+        "red",
+        "white"
+      ]
+    },
+    "hairColor": {
+      "title": "Hair Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "auburn",
+              "black",
+              "blonde",
+              "blondeGolden",
+              "brown",
+              "brownDark",
+              "pastelPink",
+              "platinum",
+              "red",
+              "silverGray"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "auburn",
+        "black",
+        "blonde",
+        "blondeGolden",
+        "brown",
+        "brownDark",
+        "pastelPink",
+        "platinum",
+        "red",
+        "silverGray"
+      ]
+    },
+    "skinColor": {
+      "title": "Skin Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "brown",
+              "darkBrown",
+              "light",
+              "pale",
+              "tanned",
+              "yellow"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "brown",
+        "darkBrown",
+        "light",
+        "pale"
+      ]
+    },
+    "facialHairColor": {
+      "title": "Facial Hair Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "auburn",
+              "black",
+              "blonde",
+              "blondeGolden",
+              "brown",
+              "brownDark",
+              "pastelPink",
+              "platinum",
+              "red",
+              "silverGray"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "auburn",
+        "black",
+        "blonde",
+        "blondeGolden",
+        "brown",
+        "brownDark",
+        "pastelPink",
+        "platinum",
+        "red",
+        "silverGray"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

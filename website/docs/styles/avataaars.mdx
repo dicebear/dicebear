@@ -10,14 +10,15 @@ import Options from '@site/src/components/docs/style/options';
 
 <Examples style={style} />
 
-Designed by [Pablo Stanley](https://twitter.com/pablostanley). The Sketch library can be found on
-[avataaars.com](https://avataaars.com/).
+Designed by [Pablo Stanley](https://twitter.com/pablostanley). The Sketch
+library can be found on [avataaars.com](https://avataaars.com/).
 
 ## Usage
 
 ### HTTP-API (recommended)
 
-Our free HTTP-API is the easiest way to use this avatar style. Just use the following URL as image source.
+Our free HTTP-API is the easiest way to use this avatar style. Just use the
+following URL as image source.
 
     https://avatars.dicebear.com/api/avataaars/:seed.svg
 
@@ -27,13 +28,13 @@ See the [HTTP API documentation](/docs/http-api) for more information.
 
 Install the Avatars and this avatar style with the following command.
 
-    npm install --save @dicebear/avatars @dicebear/avatars-avataaars-sprites
+    npm install --save @dicebear/avatars @dicebear/avataaars
 
 Now you are ready to create your first Avatar.
 
 ```js
 import { createAvatar } from '@dicebear/avatars';
-import * as style from '@dicebear/avatars-avataaars-sprites';
+import * as style from '@dicebear/avataaars';
 
 let svg = createAvatar(style, {
   seed: 'custom-seed',

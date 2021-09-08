@@ -26,10 +26,14 @@ https://www.figma.com/file/Vh7N9shKJTNHNo9prUzkZe/miniavs?node-id=274%3A4378
 
 https://www.figma.com/file/3Te9c70BX2Aj4IUP35sWhF/big-smile?node-id=11%3A38
 
-# big-ears
+# big-ears / big-ears-neutral
 
 https://www.figma.com/file/KhTfMFWWniVgZmGVFL0KK6/big-ears?node-id=202%3A1017
 
 # identicon
 
 https://www.figma.com/file/np7zgQo9412LDvi1mA1UmK/identicon?node-id=1%3A34
+
+# avataaars / avataaars-neutral
+
+https://www.figma.com/file/HBLdITkkTnLs4M09BmCe4h/avataaars?node-id=10%3A108
