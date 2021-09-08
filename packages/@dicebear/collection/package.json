@@ -34,7 +34,8 @@
   "dependencies": {
     "@dicebear/avataaars": "^4.9.0",
     "@dicebear/avataaars-neutral": "^4.9.0",
-    "@dicebear/avatars-bottts-sprites": "^4.9.0",
+    "@dicebear/bottts": "^4.9.0",
+    "@dicebear/bottts-neutral": "^4.9.0",
     "@dicebear/avatars-gridy-sprites": "^4.9.0",
     "@dicebear/identicon": "^4.9.0",
     "@dicebear/initials": "^4.9.0",

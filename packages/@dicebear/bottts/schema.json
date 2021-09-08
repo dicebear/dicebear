@@ -1,0 +1,250 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "sides": {
+      "title": "Sides",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "antenna01",
+          "antenna02",
+          "cables01",
+          "cables02",
+          "round",
+          "square",
+          "squareAssymetric"
+        ]
+      },
+      "default": [
+        "antenna01",
+        "antenna02",
+        "cables01",
+        "cables02",
+        "round",
+        "square",
+        "squareAssymetric"
+      ]
+    },
+    "sidesProbability": {
+      "title": "Sides Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 100
+    },
+    "top": {
+      "title": "Top",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "antenna",
+          "antennaCrooked",
+          "bulb01",
+          "glowingBulb01",
+          "glowingBulb02",
+          "horns",
+          "lights",
+          "pyramid",
+          "radar"
+        ]
+      },
+      "default": [
+        "antenna",
+        "antennaCrooked",
+        "bulb01",
+        "glowingBulb01",
+        "glowingBulb02",
+        "horns",
+        "lights",
+        "pyramid",
+        "radar"
+      ]
+    },
+    "topProbability": {
+      "title": "Top Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 100
+    },
+    "face": {
+      "title": "Face",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "round01",
+          "round02",
+          "square01",
+          "square02",
+          "square03",
+          "square04"
+        ]
+      },
+      "default": [
+        "round01",
+        "round02",
+        "square01",
+        "square02",
+        "square03",
+        "square04"
+      ]
+    },
+    "mouth": {
+      "title": "Mouth",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "bite",
+          "diagram",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ]
+      },
+      "default": [
+        "bite",
+        "diagram",
+        "grill01",
+        "grill02",
+        "grill03",
+        "smile01",
+        "smile02",
+        "square01",
+        "square02"
+      ]
+    },
+    "eyes": {
+      "title": "Eyes",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "bulging",
+          "dizzy",
+          "eva",
+          "frame1",
+          "frame2",
+          "glow",
+          "happy",
+          "hearts",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "roundFrame02",
+          "sensor",
+          "shade01"
+        ]
+      },
+      "default": [
+        "bulging",
+        "dizzy",
+        "eva",
+        "frame1",
+        "frame2",
+        "glow",
+        "happy",
+        "hearts",
+        "robocop",
+        "round",
+        "roundFrame01",
+        "roundFrame02",
+        "sensor",
+        "shade01"
+      ]
+    },
+    "texture": {
+      "title": "Texture",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "camo01",
+          "camo02",
+          "circuits",
+          "dirty01",
+          "dirty02",
+          "dots",
+          "grunge01",
+          "grunge02"
+        ]
+      },
+      "default": [
+        "camo01",
+        "camo02",
+        "circuits",
+        "dirty01",
+        "dirty02",
+        "dots",
+        "grunge01",
+        "grunge02"
+      ]
+    },
+    "textureProbability": {
+      "title": "Texture Probability",
+      "$ref": "https://dicebear.com/schema/v4.json#/definitions/probability",
+      "default": 50
+    },
+    "baseColor": {
+      "title": "Base Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "amber",
+              "blue",
+              "blueGrey",
+              "brown",
+              "cyan",
+              "deepOrange",
+              "deepPurple",
+              "green",
+              "grey",
+              "indigo",
+              "lightBlue",
+              "lightGreen",
+              "lime",
+              "orange",
+              "pink",
+              "purple",
+              "red",
+              "teal",
+              "yellow"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "amber",
+        "blue",
+        "blueGrey",
+        "brown",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "grey",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "yellow"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

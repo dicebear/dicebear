@@ -47,7 +47,7 @@ export default [
   },
   {
     id: 'bottts',
-    name: '@dicebear/avatars-bottts-sprites',
+    name: '@dicebear/bottts',
     style: collection.bottts,
     options: botttsOptions,
   },

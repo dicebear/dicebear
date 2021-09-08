@@ -37,3 +37,7 @@ https://www.figma.com/file/np7zgQo9412LDvi1mA1UmK/identicon?node-id=1%3A34
 # avataaars / avataaars-neutral
 
 https://www.figma.com/file/HBLdITkkTnLs4M09BmCe4h/avataaars?node-id=10%3A108
+
+# bottts / bottts-neutral
+
+https://www.figma.com/file/4nf3pyoOuM1U9Pa8M0cL6u/bottts?node-id=4%3A3172

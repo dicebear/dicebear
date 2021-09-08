@@ -7,6 +7,9 @@
 - `@dicebear/initials` as replacement for `@dicebear/avatars-initials-sprites`
 - `@dicebear/identicon` as replacement for `@dicebear/avatars-identicon-sprites`
 - `@dicebear/avataaars` as replacement for `@dicebear/avatars-avataaars-sprites`
+- `@dicebear/bottts` as replacement for `@dicebear/avatars-bottts-sprites`
+- `@dicebear/avataaars-neutral` Neutral version of `@dicebear/avataaars`
+- `@dicebear/bottts-neutral` Neutral version of `@dicebear/bottts`
 
 ### Removed
 
@@ -16,6 +19,7 @@
 - `@dicebear/avatars-initials-sprites` Use `@dicebear/initials` instead.
 - `@dicebear/avatars-identicon-sprites` Use `@dicebear/identicon` instead.
 - `@dicebear/avatars-avataaars-sprites` Use `@dicebear/avataaars` instead.
+- `@dicebear/avatars-bottts-sprites` Use `@dicebear/bottts` instead.
 
 ## [4.9.0] - 21-09-05
 
@@ -147,7 +151,7 @@
 
 ### Changed
 
-#### @dicebear/avatars-bottts-sprites
+#### @dicebear/bottts
 
 - No longer uses the deprecated `Color` class.
 
