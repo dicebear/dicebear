@@ -1,0 +1,256 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "body": {
+      "title": "Body",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "eyes": {
+      "title": "Eyes",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "mouth": {
+      "title": "Mouth",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "bodyColor": {
+      "title": "Body Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "amber",
+              "blue",
+              "blueGray",
+              "brown",
+              "cyan",
+              "deepOrange",
+              "deepPurple",
+              "green",
+              "grey",
+              "indigo",
+              "lightBlue",
+              "lightGreen",
+              "lime",
+              "orange",
+              "pink",
+              "purple",
+              "red",
+              "teal",
+              "yellow"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "amber",
+        "blue",
+        "blueGray",
+        "brown",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "grey",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "yellow"
+      ]
+    },
+    "eyesColor": {
+      "title": "Eyes Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "amber",
+              "blue",
+              "blueGray",
+              "brown",
+              "cyan",
+              "deepOrange",
+              "deepPurple",
+              "green",
+              "grey",
+              "indigo",
+              "lightBlue",
+              "lightGreen",
+              "lime",
+              "orange",
+              "pink",
+              "purple",
+              "red",
+              "teal",
+              "yellow"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "amber",
+        "blue",
+        "blueGray",
+        "brown",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "grey",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "yellow"
+      ]
+    },
+    "mouthColor": {
+      "title": "Mouth Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "amber",
+              "blue",
+              "blueGray",
+              "brown",
+              "cyan",
+              "deepOrange",
+              "deepPurple",
+              "green",
+              "grey",
+              "indigo",
+              "lightBlue",
+              "lightGreen",
+              "lime",
+              "orange",
+              "pink",
+              "purple",
+              "red",
+              "teal",
+              "yellow"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "amber",
+        "blue",
+        "blueGray",
+        "brown",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "grey",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "yellow"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -65,7 +65,7 @@ export default [
   },
   {
     id: 'gridy',
-    name: '@dicebear/avatars-gridy-sprites',
+    name: '@dicebear/gridy',
     style: collection.gridy,
     options: gridyOptions,
   },

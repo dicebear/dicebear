@@ -8,6 +8,7 @@
 - `@dicebear/identicon` as replacement for `@dicebear/avatars-identicon-sprites`
 - `@dicebear/avataaars` as replacement for `@dicebear/avatars-avataaars-sprites`
 - `@dicebear/bottts` as replacement for `@dicebear/avatars-bottts-sprites`
+- `@dicebear/gridy` as replacement for `@dicebear/avatars-gridy-sprites`
 - `@dicebear/avataaars-neutral` Neutral version of `@dicebear/avataaars`
 - `@dicebear/bottts-neutral` Neutral version of `@dicebear/bottts`
 
@@ -20,6 +21,7 @@
 - `@dicebear/avatars-identicon-sprites` Use `@dicebear/identicon` instead.
 - `@dicebear/avatars-avataaars-sprites` Use `@dicebear/avataaars` instead.
 - `@dicebear/avatars-bottts-sprites` Use `@dicebear/bottts` instead.
+- `@dicebear/avatars-gridy-sprites` Use `@dicebear/gridy` instead.
 
 ## [4.9.0] - 21-09-05
 
@@ -457,7 +459,7 @@ No notable changes.
     `dreads01`,`dreads02`,`frizzle`,`shaggy`,`shaggyMullet`,`shortCurly`,`shortFlat`,`shortRound`,`shortWaved`,`sides`,`theCaesar`
     and `theCaesarAndSidePart` instead
 
-#### @dicebear/avatars-gridy-sprites
+#### @dicebear/gridy
 
 - Change `deterministic` default to `true`.
 

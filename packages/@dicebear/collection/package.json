@@ -36,7 +36,7 @@
     "@dicebear/avataaars-neutral": "^4.9.0",
     "@dicebear/bottts": "^4.9.0",
     "@dicebear/bottts-neutral": "^4.9.0",
-    "@dicebear/avatars-gridy-sprites": "^4.9.0",
+    "@dicebear/gridy": "^4.9.0",
     "@dicebear/identicon": "^4.9.0",
     "@dicebear/initials": "^4.9.0",
     "@dicebear/avatars-jdenticon-sprites": "^4.9.0",

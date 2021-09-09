@@ -41,3 +41,7 @@ https://www.figma.com/file/HBLdITkkTnLs4M09BmCe4h/avataaars?node-id=10%3A108
 # bottts / bottts-neutral
 
 https://www.figma.com/file/4nf3pyoOuM1U9Pa8M0cL6u/bottts?node-id=4%3A3172
+
+# gridy
+
+https://www.figma.com/file/d1Arpco5FTMsJILGaoEvM4/gridy?node-id=5%3A140

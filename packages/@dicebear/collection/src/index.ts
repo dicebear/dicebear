@@ -2,7 +2,7 @@ export * as avataaars from '@dicebear/avataaars';
 export * as avataaarsNeutral from '@dicebear/avataaars-neutral';
 export * as bottts from '@dicebear/bottts';
 export * as botttsNeutral from '@dicebear/bottts-neutral';
-export * as gridy from '@dicebear/avatars-gridy-sprites';
+export * as gridy from '@dicebear/gridy';
 export * as identicon from '@dicebear/identicon';
 export * as initials from '@dicebear/initials';
 export * as jdenticon from '@dicebear/avatars-jdenticon-sprites';
