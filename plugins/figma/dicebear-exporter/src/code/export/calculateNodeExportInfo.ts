@@ -15,8 +15,10 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
   const nodeClone = node.clone();
 
   try {
-    // For the export, clip-path must be set in Figma so that the viewport has the correct height and width.
-    nodeClone.clipsContent = true;
+    if (nodeClone.type === 'FRAME') {
+      // For the export, clip-path must be set in Figma so that the viewport has the correct height and width.
+      nodeClone.clipsContent = true;
+    }
 
     for (const instanceNode of findAllInstanceNodes(nodeClone)) {
       const mainComponent = instanceNode.mainComponent!;
