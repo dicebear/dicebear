@@ -1,4 +1,4 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
@@ -30,20 +30,19 @@ export const style: Style<Options> = {
     const facialHairComponent = pickComponent(prng, 'facialHair', options.facialHair);
 
     const components: ComponentPickCollection = {
-      'eyes': eyesComponent,
-      'hair': hairComponent,
-      'body': bodyComponent,
-      'mouth': mouthComponent,
-      'nose': noseComponent,
-      'facialHair': facialHairComponent,
-    }
+      eyes: eyesComponent,
+      hair: hairComponent,
+      body: bodyComponent,
+      mouth: mouthComponent,
+      nose: noseComponent,
+      facialHair: facialHairComponent,
+    };
 
     const colors: ColorPickCollection = {
-      'hair': pickColor(prng, 'hair', options.hairColor ?? []),
-      'clothing': pickColor(prng, 'clothing', options.clothingColor ?? []),
-      'skin': pickColor(prng, 'skin', options.skinColor ?? []),
-    }
-
+      hair: pickColor(prng, 'hair', options.hairColor ?? []),
+      clothing: pickColor(prng, 'clothing', options.clothingColor ?? []),
+      skin: pickColor(prng, 'skin', options.skinColor ?? []),
+    };
 
     onPostCreate({ prng, options, components, colors });
 
@@ -53,7 +52,9 @@ export const style: Style<Options> = {
         fill: 'none',
       },
       body: `
-  <path d="M37 46.08V52a5 5 0 0 1-10 0v-5.92A14.035 14.035 0 0 1 18.58 37h-.08a4.5 4.5 0 0 1-.5-8.973V27c0-7.732 6.268-14 14-14s14 6.268 14 14v1.027A4.5 4.5 0 0 1 45.42 37 14.035 14.035 0 0 1 37 46.081Z" fill="${colors.skin.value}"/>
+  <path d="M37 46.08V52a5 5 0 0 1-10 0v-5.92A14.035 14.035 0 0 1 18.58 37h-.08a4.5 4.5 0 0 1-.5-8.973V27c0-7.732 6.268-14 14-14s14 6.268 14 14v1.027A4.5 4.5 0 0 1 45.42 37 14.035 14.035 0 0 1 37 46.081Z" fill="${
+    colors.skin.value
+  }"/>
   <mask id="personas-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="14" y="13" width="36" height="44">
     <path d="M37 46.08V52a5 5 0 0 1-10 0v-5.92A14.035 14.035 0 0 1 18.58 37h-.08a4.5 4.5 0 0 1-.5-8.973V27c0-7.732 6.268-14 14-14s14 6.268 14 14v1.027A4.5 4.5 0 0 1 45.42 37 14.035 14.035 0 0 1 37 46.081Z" fill="#fff"/>
   </mask>

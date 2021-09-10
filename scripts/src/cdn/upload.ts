@@ -7,7 +7,6 @@ import spawn from 'cross-spawn';
 
 (async () => {
   const websiteBuildDir = path.resolve(__dirname, '../../../website/build');
-  const schemaDir = path.resolve(__dirname, '../../../schema');
 
   // Build docs
   spawn.sync('npm', ['run', 'build', '--workspace', '@dicebear/website'], {
@@ -31,9 +30,6 @@ import spawn from 'cross-spawn';
     password: process.env.BUNNYCDN_FTP_PASSWORD,
   });
 
-  // Upload Schema
-  await client.uploadFromDir(schemaDir, 'schema');
-
   // Upload build
   await client.uploadFromDir(websiteBuildDir);
   await client.close();
@@ -48,7 +44,6 @@ import spawn from 'cross-spawn';
   const items = [
     '',
     ...(await directory.list(websiteBuildDir, { directories: true })),
-    ...(await directory.list(schemaDir, { files: true })),
   ];
 
   for (let i = 0; i < items.length; i++) {

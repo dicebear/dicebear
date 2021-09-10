@@ -1,4 +1,4 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
@@ -23,19 +23,20 @@ export const style: Style<Options> = {
     const glassesComponent = pickComponent(prng, 'glasses', options.glasses);
 
     const components: ComponentPickCollection = {
-      'eyes': eyesComponent,
-      'eyebrows': eyebrowsComponent,
-      'mouth': mouthComponent,
-      'glasses': prng.bool(options.glassesProbability) ? glassesComponent : undefined,
-    }
+      eyes: eyesComponent,
+      eyebrows: eyebrowsComponent,
+      mouth: mouthComponent,
+      glasses: prng.bool(options.glassesProbability) ? glassesComponent : undefined,
+    };
 
     const colors: ColorPickCollection = {
-      'hair': pickColor(prng, 'hair', options.hairColor ?? []),
-      'mouth': pickColor(prng, 'mouth', options.mouthColor ?? []),
-      'glasses': pickColor(prng, 'glasses', options.glassesColor ?? []),
-    }
+      hair: pickColor(prng, 'hair', options.hairColor ?? []),
+      mouth: pickColor(prng, 'mouth', options.mouthColor ?? []),
+      glasses: pickColor(prng, 'glasses', options.glassesColor ?? []),
+    };
 
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
+    const backgroundColor =
+      typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
     options.backgroundColor = pickColor(prng, 'skin', backgroundColor ?? []).value;
 
     return {

@@ -1,11 +1,14 @@
-import * as avatars from '@dicebear/avatars';
-import { StyleOptions } from '@dicebear/avatars';
+import * as avatars from '@dicebear/core';
+import { StyleOptions } from '@dicebear/core';
 import * as style from '../dist';
 import * as fs from 'fs';
 import * as path from 'path';
 
 const seed = 'test';
-const data: Array<StyleOptions<style.Options>> = [{ seed }, { seed, backgroundColor: '#FF0000' }];
+const data: Array<StyleOptions<style.Options>> = [
+  { seed },
+  { seed, backgroundColor: '#FF0000' },
+];
 
 data.forEach((options, key) => {
   test(`Create avatar #${key}`, async () => {
@@ -16,12 +19,16 @@ data.forEach((options, key) => {
         fs.mkdirSync(path.dirname(svgPath));
       }
 
-      fs.writeFileSync(svgPath, avatars.createAvatar(style, options), { encoding: 'utf-8' });
+      fs.writeFileSync(svgPath, avatars.createAvatar(style, options), {
+        encoding: 'utf-8',
+      });
     }
 
     const svg = fs.readFileSync(svgPath, { encoding: 'utf-8' });
 
     expect(avatars.createAvatar(style, options)).toEqual(svg);
-    expect(new avatars.default(style.default, options).create(seed)).toEqual(svg);
+    expect(new avatars.default(style.default, options).create(seed)).toEqual(
+      svg
+    );
   });
 });

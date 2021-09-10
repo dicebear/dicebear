@@ -1,6 +1,9 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type {
+  ComponentPickCollection,
+  ColorPickCollection,
+} from './static-types';
 
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
@@ -23,32 +26,55 @@ export const style: Style<Options> = {
   create: ({ prng, options }) => {
     onPreCreate({ prng, options });
 
-    const centerModifierComponent = pickComponent(prng, 'centerModifier', options.centerModifier);
-    const cornersModifierComponent = pickComponent(prng, 'cornersModifier', options.cornersModifier);
-    const sidesModifierComponent = pickComponent(prng, 'sidesModifier', options.sidesModifier);
-    const sidesWrapperComponent = pickComponent(prng, 'sidesWrapper', options.sidesWrapper);
+    const centerModifierComponent = pickComponent(
+      prng,
+      'centerModifier',
+      options.centerModifier
+    );
+    const cornersModifierComponent = pickComponent(
+      prng,
+      'cornersModifier',
+      options.cornersModifier
+    );
+    const sidesModifierComponent = pickComponent(
+      prng,
+      'sidesModifier',
+      options.sidesModifier
+    );
+    const sidesWrapperComponent = pickComponent(
+      prng,
+      'sidesWrapper',
+      options.sidesWrapper
+    );
     const sidesComponent = pickComponent(prng, 'sides', options.sides);
-    const cornersWrapperComponent = pickComponent(prng, 'cornersWrapper', options.cornersWrapper);
+    const cornersWrapperComponent = pickComponent(
+      prng,
+      'cornersWrapper',
+      options.cornersWrapper
+    );
     const cornersComponent = pickComponent(prng, 'corners', options.corners);
-    const centerWrapperComponent = pickComponent(prng, 'centerWrapper', options.centerWrapper);
+    const centerWrapperComponent = pickComponent(
+      prng,
+      'centerWrapper',
+      options.centerWrapper
+    );
     const centerComponent = pickComponent(prng, 'center', options.center);
 
     const components: ComponentPickCollection = {
-      'centerModifier': centerModifierComponent,
-      'cornersModifier': cornersModifierComponent,
-      'sidesModifier': sidesModifierComponent,
-      'sidesWrapper': sidesWrapperComponent,
-      'sides': sidesComponent,
-      'cornersWrapper': cornersWrapperComponent,
-      'corners': cornersComponent,
-      'centerWrapper': centerWrapperComponent,
-      'center': centerComponent,
-    }
+      centerModifier: centerModifierComponent,
+      cornersModifier: cornersModifierComponent,
+      sidesModifier: sidesModifierComponent,
+      sidesWrapper: sidesWrapperComponent,
+      sides: sidesComponent,
+      cornersWrapper: cornersWrapperComponent,
+      corners: cornersComponent,
+      centerWrapper: centerWrapperComponent,
+      center: centerComponent,
+    };
 
     const colors: ColorPickCollection = {
-      'base': pickColor(prng, 'base', options.baseColor ?? []),
-    }
-
+      base: pickColor(prng, 'base', options.baseColor ?? []),
+    };
 
     onPostCreate({ prng, options, components, colors });
 
@@ -56,7 +82,7 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 48 48',
         fill: 'none',
-        'shape-rendering': 'auto'
+        'shape-rendering': 'auto',
       },
       body: `
   ${components.centerModifier?.value(components, colors) ?? ''}

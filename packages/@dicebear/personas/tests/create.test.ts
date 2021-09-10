@@ -1,5 +1,5 @@
-import * as avatars from '@dicebear/avatars';
-import { StyleOptions } from '@dicebear/avatars';
+import * as avatars from '@dicebear/core';
+import { StyleOptions } from '@dicebear/core';
 import * as style from '../dist';
 import * as fs from 'fs';
 import * as path from 'path';

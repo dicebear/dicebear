@@ -1,6 +1,9 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type {
+  ComponentPickCollection,
+  ColorPickCollection,
+} from './static-types';
 
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
@@ -28,17 +31,23 @@ export const style: Style<Options> = {
     const eyebrowsComponent = pickComponent(prng, 'eyebrows', options.eyebrows);
 
     const components: ComponentPickCollection = {
-      'mouth': mouthComponent,
-      'nose': noseComponent,
-      'eyes': eyesComponent,
-      'eyebrows': eyebrowsComponent,
-    }
+      mouth: mouthComponent,
+      nose: noseComponent,
+      eyes: eyesComponent,
+      eyebrows: eyebrowsComponent,
+    };
 
-    const colors: ColorPickCollection = {
-    }
+    const colors: ColorPickCollection = {};
 
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
-    options.backgroundColor = pickColor(prng, 'skin', backgroundColor ?? []).value;
+    const backgroundColor =
+      typeof options.backgroundColor === 'string'
+        ? [options.backgroundColor]
+        : options.backgroundColor;
+    options.backgroundColor = pickColor(
+      prng,
+      'skin',
+      backgroundColor ?? []
+    ).value;
 
     onPostCreate({ prng, options, components, colors });
 
@@ -46,7 +55,7 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 112 112',
         fill: 'none',
-        'shape-rendering': 'auto'
+        'shape-rendering': 'auto',
       },
       body: `
   <g transform="translate(2 63)">

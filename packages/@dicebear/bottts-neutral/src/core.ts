@@ -1,6 +1,9 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type {
+  ComponentPickCollection,
+  ColorPickCollection,
+} from './static-types';
 
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
@@ -26,15 +29,21 @@ export const style: Style<Options> = {
     const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
 
     const components: ComponentPickCollection = {
-      'mouth': mouthComponent,
-      'eyes': eyesComponent,
-    }
+      mouth: mouthComponent,
+      eyes: eyesComponent,
+    };
 
-    const colors: ColorPickCollection = {
-    }
+    const colors: ColorPickCollection = {};
 
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
-    options.backgroundColor = pickColor(prng, 'base', backgroundColor ?? []).value;
+    const backgroundColor =
+      typeof options.backgroundColor === 'string'
+        ? [options.backgroundColor]
+        : options.backgroundColor;
+    options.backgroundColor = pickColor(
+      prng,
+      'base',
+      backgroundColor ?? []
+    ).value;
 
     onPostCreate({ prng, options, components, colors });
 
@@ -42,7 +51,7 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 120 120',
         fill: 'none',
-        'shape-rendering': 'auto'
+        'shape-rendering': 'auto',
       },
       body: `
   <g transform="translate(22 68)">

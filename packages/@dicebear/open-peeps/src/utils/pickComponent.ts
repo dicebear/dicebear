@@ -1,4 +1,4 @@
-import type { Prng } from '@dicebear/avatars';
+import type { Prng } from '@dicebear/core';
 import type { ComponentGroupCollection, ComponentPick } from '../static-types';
 
 import * as components from '../components';

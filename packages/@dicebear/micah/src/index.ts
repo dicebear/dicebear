@@ -9,7 +9,7 @@
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 
-import { utils } from '@dicebear/avatars';
+import { utils } from '@dicebear/core';
 import { style } from './core';
 
 let { create, meta, schema } = style;

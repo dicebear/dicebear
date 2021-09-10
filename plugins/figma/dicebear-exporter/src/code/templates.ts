@@ -106,13 +106,13 @@ SOFTWARE.
 Install the DiceBear package and this Avatar styles with the following command.
 
 \`\`\`
-npm install @dicebear/avatars {{packageName}} --save
+npm install @dicebear/core {{packageName}} --save
 \`\`\`
 
 Now you are ready to create your first Avatar.
 
 \`\`\`js
-import { createAvatar } from '@dicebear/avatars';
+import { createAvatar } from '@dicebear/core';
 import * as style from '{{packageName}}';
 
 let svg = createAvatar(style, {
@@ -198,7 +198,7 @@ module.exports = {
   },
   "dependencies": {},
   "devDependencies": {
-    "@dicebear/avatars": "^4.7.4",
+    "@dicebear/core": "^4.7.4",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
@@ -210,7 +210,7 @@ module.exports = {
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@dicebear/avatars": "^4.6.0"
+    "@dicebear/core": "^4.6.0"
   },
   "publishConfig": {
     "access": "public"
@@ -232,7 +232,7 @@ module.exports = {
 
   // tests/create.test.ts
   'tests/create.test.ts': `
-import { createAvatar, StyleOptions } from '@dicebear/avatars';
+import { createAvatar, StyleOptions } from '@dicebear/core';
 import * as style from '../dist';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -294,7 +294,7 @@ export { Options } from './options';
 
   // src/core.ts
   'src/core.ts': `
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
@@ -352,8 +352,7 @@ export const style: Style<Options> = {
     }
 
     {{#if backgroundColorGroupName}}
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
-    options.backgroundColor = pickColor(prng, '{{backgroundColorGroupName}}', backgroundColor ?? []).value;
+    options.backgroundColor = [pickColor(prng, '{{backgroundColorGroupName}}', options.backgroundColor ?? []).value];
     {{/if}}
 
     onPostCreate({ prng, options, components, colors });
@@ -437,7 +436,7 @@ export const {{name}}: ComponentGroup = {
 
   // src/utils/pickColor.ts
   'src/utils/pickColor.ts': `
-import type { Prng } from '@dicebear/avatars';
+import type { Prng } from '@dicebear/core';
 import type { ColorGroupCollection, ColorPick } from '../static-types';
 
 import * as colors from '../colors';
@@ -460,7 +459,7 @@ export function pickColor(prng: Prng, group: string, values: string[]): ColorPic
 
   // src/utils/pickComponent.ts
   'src/utils/pickComponent.ts': `
-import type { Prng } from '@dicebear/avatars';
+import type { Prng } from '@dicebear/core';
 import type { ComponentGroupCollection, ComponentPick } from '../static-types';
 
 import * as components from '../components';
@@ -483,7 +482,7 @@ export function pickComponent(prng: Prng, group: string, values: string[] = []):
 
   // src/hooks/onPreCreate.ts
   'src/hooks/onPreCreate.ts': `
-import { Prng, StyleOptions } from "@dicebear/avatars";
+import { Prng, StyleOptions } from "@dicebear/core";
 
 import { Options } from "../options";
 
@@ -500,7 +499,7 @@ export function onPreCreate({ prng, options }: Props) {
 
   // src/hooks/onPostCreate.ts
   'src/hooks/onPostCreate.ts': `
-import { Prng, StyleOptions } from "@dicebear/avatars";
+import { Prng, StyleOptions } from "@dicebear/core";
 
 import { Options } from "../options";
 import { ColorPickCollection, ComponentPickCollection } from "../static-types";

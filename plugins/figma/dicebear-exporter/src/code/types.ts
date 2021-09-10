@@ -13,16 +13,6 @@ export type FrameSettings = {
   shapeRendering: string;
   onPreCreateHook: string;
   onPostCreateHook: string;
-  componentGroupAliases: Array<{
-    name: string;
-    alias: string;
-    deprecated: boolean;
-  }>;
-  colorGroupAliases: Array<{
-    name: string;
-    alias: string;
-    deprecated: boolean;
-  }>;
 };
 
 export type ComponentGroupSettings = {

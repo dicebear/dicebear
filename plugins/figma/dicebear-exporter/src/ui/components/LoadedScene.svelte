@@ -7,7 +7,6 @@
   import PackageForm from './PackageForm.svelte';
   import LicenseForm from './LicenseForm.svelte';
   import HookForm from './HookForm.svelte';
-  import AliasForm from './AliasForm.svelte';
   import ColorGroupForm from './ColorGroupForm.svelte';
   import ComponentGroupForm from './ComponentGroupForm.svelte';
 
@@ -33,7 +32,6 @@
     <MenuItem stage={'package'}>Package</MenuItem>
     <MenuItem stage={'license'}>License</MenuItem>
     <MenuItem stage={'general'}>General</MenuItem>
-    <MenuItem stage={'alias'}>Aliases</MenuItem>
     <MenuItem stage={'hook'}>Hooks</MenuItem>
   </div>
 
@@ -71,8 +69,6 @@
       <GeneralForm />
     {:else if activeStageSplit[0] === 'hook'}
       <HookForm />
-    {:else if activeStageSplit[0] === 'alias'}
-      <AliasForm />
     {/if}
   </div>
 {/key}

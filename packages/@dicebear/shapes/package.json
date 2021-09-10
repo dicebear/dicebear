@@ -29,7 +29,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@dicebear/avatars": "^4.7.4",
+    "@dicebear/core": "^4.7.4",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
@@ -41,7 +41,7 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@dicebear/avatars": "^4.6.0"
+    "@dicebear/core": "^4.6.0"
   },
   "publishConfig": {
     "access": "public"

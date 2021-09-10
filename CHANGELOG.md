@@ -4,6 +4,7 @@
 
 ### Added
 
+- `@dicebear/core` as replacement for `@dicebear/avatars`
 - `@dicebear/initials` as replacement for `@dicebear/avatars-initials-sprites`
 - `@dicebear/identicon` as replacement for `@dicebear/avatars-identicon-sprites`
 - `@dicebear/avataaars` as replacement for `@dicebear/avatars-avataaars-sprites`
@@ -15,6 +16,9 @@
 
 ### Removed
 
+- `@dicebear/avatars` Use `@dicebear/core` instead.
+- `@dicebear/core` Alias options removed.
+- `@dicebear/core` Deprecated options and functions removed.
 - `@dicebear/avatars-male-sprites` Use `@dicebear/pixel-art` instead.
 - `@dicebear/avatars-female-sprites` Use `@dicebear/pixel-art` instead.
 - `@dicebear/avatars-human-sprites` Use `@dicebear/pixel-art` instead.

@@ -1,4 +1,4 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
@@ -35,31 +35,30 @@ export const style: Style<Options> = {
     const facialHairComponent = pickComponent(prng, 'facialHair', options.facialHair);
 
     const components: ComponentPickCollection = {
-      'base': baseComponent,
-      'mouth': mouthComponent,
-      'eyebrows': eyebrowsComponent,
-      'hair': prng.bool(options.hairProbability) ? hairComponent : undefined,
-      'eyes': eyesComponent,
-      'nose': noseComponent,
-      'ears': earsComponent,
-      'shirt': shirtComponent,
-      'earrings': prng.bool(options.earringsProbability) ? earringsComponent : undefined,
-      'glasses': prng.bool(options.glassesProbability) ? glassesComponent : undefined,
-      'facialHair': prng.bool(options.facialHairProbability) ? facialHairComponent : undefined,
-    }
+      base: baseComponent,
+      mouth: mouthComponent,
+      eyebrows: eyebrowsComponent,
+      hair: prng.bool(options.hairProbability) ? hairComponent : undefined,
+      eyes: eyesComponent,
+      nose: noseComponent,
+      ears: earsComponent,
+      shirt: shirtComponent,
+      earrings: prng.bool(options.earringsProbability) ? earringsComponent : undefined,
+      glasses: prng.bool(options.glassesProbability) ? glassesComponent : undefined,
+      facialHair: prng.bool(options.facialHairProbability) ? facialHairComponent : undefined,
+    };
 
     const colors: ColorPickCollection = {
-      'base': pickColor(prng, 'base', options.baseColor ?? []),
-      'earring': pickColor(prng, 'earring', options.earringColor ?? []),
-      'eyeShadow': pickColor(prng, 'eyeShadow', options.eyeShadowColor ?? []),
-      'eyebrow': pickColor(prng, 'eyebrow', options.eyebrowColor ?? []),
-      'facialHair': pickColor(prng, 'facialHair', options.facialHairColor ?? []),
-      'glasses': pickColor(prng, 'glasses', options.glassesColor ?? []),
-      'hair': pickColor(prng, 'hair', options.hairColor ?? []),
-      'mouth': pickColor(prng, 'mouth', options.mouthColor ?? []),
-      'shirt': pickColor(prng, 'shirt', options.shirtColor ?? []),
-    }
-
+      base: pickColor(prng, 'base', options.baseColor ?? []),
+      earring: pickColor(prng, 'earring', options.earringColor ?? []),
+      eyeShadow: pickColor(prng, 'eyeShadow', options.eyeShadowColor ?? []),
+      eyebrow: pickColor(prng, 'eyebrow', options.eyebrowColor ?? []),
+      facialHair: pickColor(prng, 'facialHair', options.facialHairColor ?? []),
+      glasses: pickColor(prng, 'glasses', options.glassesColor ?? []),
+      hair: pickColor(prng, 'hair', options.hairColor ?? []),
+      mouth: pickColor(prng, 'mouth', options.mouthColor ?? []),
+      shirt: pickColor(prng, 'shirt', options.shirtColor ?? []),
+    };
 
     onPostCreate({ prng, options, components, colors });
 

@@ -111,25 +111,6 @@ export async function createExport() {
 
   const schemaProperties: Record<string, JSONSchema7Definition> = {};
 
-  // Aliases
-  for (const item of exportData.frame.settings.componentGroupAliases) {
-    schemaProperties[item.alias] = {
-      $ref: `#/properties/${item.name}`,
-      description: item.deprecated
-        ? `@deprecated use ${item.name} instead.`
-        : `Alias for ${item.name}`,
-    };
-  }
-
-  for (const item of exportData.frame.settings.colorGroupAliases) {
-    schemaProperties[`${item.alias}Color`] = {
-      $ref: `#/properties/${item.name}Color`,
-      description: item.deprecated
-        ? `@deprecated use ${item.name} instead.`
-        : `Alias for ${item.name}`,
-    };
-  }
-
   // Components
   const componentTemplate = handlebars.compile(
     templates['src/components/{{name}}.ts']
@@ -218,29 +199,20 @@ export async function createExport() {
     if (exportData.frame.settings.backgroundColorGroupName === colorGroupName) {
       schemaProperties[`backgroundColor`] = {
         title: `Background Color`,
-        anyOf: [
-          {
-            $ref: 'https://dicebear.com/schema/v4.json#/definitions/color',
-          },
-          {
-            type: 'string',
-            pattern: '^[0-9a-zA-Z]+$',
-          },
-          {
-            type: 'array',
-            items: {
-              anyOf: [
-                {
-                  type: 'string',
-                  pattern: '^[0-9a-zA-Z]+$',
-                },
-                {
-                  $ref: 'https://dicebear.com/schema/v4.json#/definitions/color',
-                },
-              ],
+        type: 'array',
+        items: {
+          anyOf: [
+            {
+              type: 'string',
+              pattern:
+                '^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$',
             },
-          },
-        ],
+            {
+              type: 'string',
+              pattern: '^[0-9a-zA-Z]+$',
+            },
+          ],
+        },
         default: filterDefaults(colorGroup.settings.defaults),
       };
     }

@@ -21,8 +21,6 @@ export function getFrameSettings(
     backgroundColorGroupName: '',
     onPreCreateHook: '',
     onPostCreateHook: '',
-    componentGroupAliases: [],
-    colorGroupAliases: [],
     ...JSON.parse(frame.getPluginData(`settings`) || '{}'),
   };
 

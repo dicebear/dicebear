@@ -1,4 +1,4 @@
-import type { Prng } from '@dicebear/avatars';
+import type { Prng } from '@dicebear/core';
 import type { ColorGroupCollection, ColorPick } from '../static-types';
 
 import * as colors from '../colors';

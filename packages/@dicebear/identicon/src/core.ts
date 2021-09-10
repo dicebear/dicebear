@@ -1,4 +1,4 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
@@ -23,17 +23,16 @@ export const style: Style<Options> = {
     const row5Component = pickComponent(prng, 'row5', options.row5);
 
     const components: ComponentPickCollection = {
-      'row1': prng.bool(options.row1Probability) ? row1Component : undefined,
-      'row2': prng.bool(options.row2Probability) ? row2Component : undefined,
-      'row3': prng.bool(options.row3Probability) ? row3Component : undefined,
-      'row4': prng.bool(options.row4Probability) ? row4Component : undefined,
-      'row5': prng.bool(options.row5Probability) ? row5Component : undefined,
-    }
+      row1: prng.bool(options.row1Probability) ? row1Component : undefined,
+      row2: prng.bool(options.row2Probability) ? row2Component : undefined,
+      row3: prng.bool(options.row3Probability) ? row3Component : undefined,
+      row4: prng.bool(options.row4Probability) ? row4Component : undefined,
+      row5: prng.bool(options.row5Probability) ? row5Component : undefined,
+    };
 
     const colors: ColorPickCollection = {
-      'row': pickColor(prng, 'row', options.rowColor ?? []),
-    }
-
+      row: pickColor(prng, 'row', options.rowColor ?? []),
+    };
 
     onPostCreate({ prng, options, components, colors });
 
@@ -41,7 +40,7 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 5 5',
         fill: 'none',
-        'shape-rendering': 'crispEdges'
+        'shape-rendering': 'crispEdges',
       },
       body: `
   ${components.row1?.value(components, colors) ?? ''}

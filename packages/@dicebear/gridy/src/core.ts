@@ -1,6 +1,9 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type {
+  ComponentPickCollection,
+  ColorPickCollection,
+} from './static-types';
 
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
@@ -13,7 +16,8 @@ export const style: Style<Options> = {
     title: 'Gridy',
     creator: 'Jan Forst',
     contributor: 'Franck Gabriel',
-    source: 'https://github.com/darosh/gridys/tree/master/packages/gridy-app-avatars',
+    source:
+      'https://github.com/darosh/gridys/tree/master/packages/gridy-app-avatars',
     license: {
       name: 'MIT',
       url: 'https://github.com/darosh/gridys/blob/master/packages/gridy-app-avatars/LICENSE',
@@ -28,17 +32,16 @@ export const style: Style<Options> = {
     const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
 
     const components: ComponentPickCollection = {
-      'body': bodyComponent,
-      'eyes': eyesComponent,
-      'mouth': mouthComponent,
-    }
+      body: bodyComponent,
+      eyes: eyesComponent,
+      mouth: mouthComponent,
+    };
 
     const colors: ColorPickCollection = {
-      'body': pickColor(prng, 'body', options.bodyColor ?? []),
-      'eyes': pickColor(prng, 'eyes', options.eyesColor ?? []),
-      'mouth': pickColor(prng, 'mouth', options.mouthColor ?? []),
-    }
-
+      body: pickColor(prng, 'body', options.bodyColor ?? []),
+      eyes: pickColor(prng, 'eyes', options.eyesColor ?? []),
+      mouth: pickColor(prng, 'mouth', options.mouthColor ?? []),
+    };
 
     onPostCreate({ prng, options, components, colors });
 
@@ -46,7 +49,7 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 24 24',
         fill: 'none',
-        'shape-rendering': 'auto'
+        'shape-rendering': 'auto',
       },
       body: `
   ${components.body?.value(components, colors) ?? ''}

@@ -13,7 +13,7 @@ const production = !process.env.ROLLUP_WATCH;
 export function createUmdConfig(name: string, pkg: PackageJson) {
   const input: InputOptions = {
     input: 'src/index.ts',
-    external: ['@dicebear/avatars'],
+    external: ['@dicebear/core'],
     plugins: [replace(), nodeResolve(), commonjs(), typescript(), babel()],
   };
 
@@ -34,7 +34,7 @@ export function createUmdConfig(name: string, pkg: PackageJson) {
       format: 'umd',
       exports: 'named',
       globals: {
-        '@dicebear/avatars': 'DiceBear',
+        '@dicebear/core': 'DiceBear',
       },
     },
   ];

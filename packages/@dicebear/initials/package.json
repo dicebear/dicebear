@@ -41,7 +41,7 @@
     "initials": "^3.0.1"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.9.0",
+    "@dicebear/core": "^4.9.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
@@ -52,7 +52,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@dicebear/avatars": "^4.6.0"
+    "@dicebear/core": "^4.6.0"
   },
   "publishConfig": {
     "access": "public"

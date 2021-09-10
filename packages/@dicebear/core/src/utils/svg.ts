@@ -1,5 +1,9 @@
 import type { Options } from '../options';
-import type { Style, StyleCreateResult, StyleCreateResultAttributes } from '../types';
+import type {
+  Style,
+  StyleCreateResult,
+  StyleCreateResultAttributes,
+} from '../types';
 import * as escape from './escape';
 
 type CreateGroupProps = {
@@ -8,7 +12,10 @@ type CreateGroupProps = {
   y: number;
 };
 
-const ccLicenses: Record<string, { permits: string[]; requires: string[]; prohibits: string[] }> = {
+const ccLicenses: Record<
+  string,
+  { permits: string[]; requires: string[]; prohibits: string[] }
+> = {
   by: {
     permits: ['Reproduction', 'Distribution', 'DerivativeWorks'],
     requires: ['Notice', 'Attribution'],
@@ -89,7 +96,9 @@ export function getMetadataWorkTitle<O extends Options>(style: Style<O>) {
 
 export function getMetadataWorkCreator<O extends Options>(style: Style<O>) {
   if (style.meta.creator) {
-    let creators = Array.isArray(style.meta.creator) ? style.meta.creator : [style.meta.creator];
+    let creators = Array.isArray(style.meta.creator)
+      ? style.meta.creator
+      : [style.meta.creator];
 
     return `
       <dc:creator>
@@ -119,7 +128,9 @@ export function getMetadataWorkLicense<O extends Options>(style: Style<O>) {
 
 export function getMetadataWorkContributor<O extends Options>(style: Style<O>) {
   if (style.meta.contributor) {
-    let contributors = Array.isArray(style.meta.contributor) ? style.meta.contributor : [style.meta.contributor];
+    let contributors = Array.isArray(style.meta.contributor)
+      ? style.meta.contributor
+      : [style.meta.contributor];
 
     return `
       <dc:contributor>
@@ -190,30 +201,16 @@ export function getViewBox(result: StyleCreateResult) {
   };
 }
 
-/**
- * @deprecated use addScale instead
- */
-export function addMargin<O extends Options>(result: StyleCreateResult, options: O | number) {
-  const margin = typeof options === 'number' ? options : options.margin ?? 0;
-
-  return addScale(result, 100 - margin * 2);
-}
-
-/**
- * @deprecated use addViewboxMask instead
- */
-export function addRadius<O extends Options>(result: StyleCreateResult, options: O) {
-  if (undefined === options.radius) {
-    return result.body;
-  }
-
-  return addViewboxMask(result, options.radius);
-}
-
-export function addBackgroundColor<O extends Options>(result: StyleCreateResult, options: O | string) {
+export function addBackgroundColor<O extends Options>(
+  result: StyleCreateResult,
+  options: O | string
+) {
   let { width, height, x, y } = getViewBox(result);
 
-  let backgroundColor = typeof options === 'string' ? options : options.backgroundColor ?? 'transparent';
+  let backgroundColor =
+    typeof options === 'string'
+      ? options
+      : options.backgroundColor ?? 'transparent';
 
   return `
     <rect fill="${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />
@@ -236,7 +233,11 @@ export function addScale(result: StyleCreateResult, scale: number) {
   `;
 }
 
-export function addTranslate(result: StyleCreateResult, x?: number, y?: number) {
+export function addTranslate(
+  result: StyleCreateResult,
+  x?: number,
+  y?: number
+) {
   let viewBox = getViewBox(result);
 
   let translateX = (viewBox.width + viewBox.x * 2) * ((x ?? 0) / 100);
@@ -276,14 +277,16 @@ export function addViewboxMask(result: StyleCreateResult, radius: number) {
   let ry = radius ? (height * radius) / 100 : 0;
 
   return `
-    <mask id="avatarsRadiusMask">
+    <mask id="viewboxMask">
       <rect width="${width}" height="${height}" rx="${rx}" ry="${ry}" x="${x}" y="${y}" fill="#fff" />
     </mask>
-    <g mask="url(#avatarsRadiusMask)">${result.body}</g>
+    <g mask="url(#viewboxMask)">${result.body}</g>
   `;
 }
 
-export function createAttrString(attributes: StyleCreateResultAttributes): string {
+export function createAttrString(
+  attributes: StyleCreateResultAttributes
+): string {
   attributes = { ...getXmlnsAttributes(), ...attributes };
 
   return Object.keys(attributes)

@@ -1,4 +1,4 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
@@ -23,14 +23,12 @@ export const style: Style<Options> = {
     const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
 
     const components: ComponentPickCollection = {
-      'eyes': eyesComponent,
-      'nose': noseComponent,
-      'mouth': mouthComponent,
-    }
+      eyes: eyesComponent,
+      nose: noseComponent,
+      mouth: mouthComponent,
+    };
 
-    const colors: ColorPickCollection = {
-    }
-
+    const colors: ColorPickCollection = {};
 
     return {
       attributes: {

@@ -8,7 +8,7 @@
  * License: https://github.com/dicebear/dicebear/blob/main/packages/%40dicebear/pixel-art/LICENSE
  */
 
-import { utils } from '@dicebear/avatars';
+import { utils } from '@dicebear/core';
 import { style } from './core';
 
 let { create, meta, schema } = style;

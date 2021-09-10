@@ -18,14 +18,3 @@ test('All standards must be returned unless undefined.', () => {
     bar: 123,
   });
 });
-
-test('All aliases must be returned.', () => {
-  expect(utils.schema.aliases(schema)).toEqual([
-    ['s', 'seed'],
-    ['r', 'radius'],
-    ['w', 'width'],
-    ['h', 'height'],
-    ['m', 'margin'],
-    ['b', 'background', 'backgroundColor'],
-  ]);
-});

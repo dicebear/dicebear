@@ -1,6 +1,6 @@
 import { Option } from 'commander';
 import { JSONSchema7 } from 'json-schema';
-import { utils } from '@dicebear/avatars';
+import { utils } from '@dicebear/core';
 
 export async function getOptionsBySchema(schema: JSONSchema7) {
   const result: InstanceType<typeof Option>[] = [];
@@ -17,19 +17,33 @@ export async function getOptionsBySchema(schema: JSONSchema7) {
     const isPrimary = names[0] === key;
 
     if (isPrimary && typeof property === 'object') {
-      const options = names.map((name) => (name.length === 1 ? `-${name}` : `--${name}`));
+      const options = names.map((name) =>
+        name.length === 1 ? `-${name}` : `--${name}`
+      );
 
       const option = new Option(`${options.join(', ')} <value>`);
 
-      let description = [property.title, property.description].filter((v) => v).join(' - ');
+      let description = [property.title, property.description]
+        .filter((v) => v)
+        .join(' - ');
       let choices: string[] = [];
 
       if (property.enum) {
-        choices.push(...(property.enum.filter((v) => typeof v === 'string') as string[]));
+        choices.push(
+          ...(property.enum.filter((v) => typeof v === 'string') as string[])
+        );
       }
 
-      if (typeof property.items === 'object' && 'enum' in property.items && property.items.enum) {
-        choices.push(...(property.items.enum.filter((v) => typeof v === 'string') as string[]));
+      if (
+        typeof property.items === 'object' &&
+        'enum' in property.items &&
+        property.items.enum
+      ) {
+        choices.push(
+          ...(property.items.enum.filter(
+            (v) => typeof v === 'string'
+          ) as string[])
+        );
       }
 
       if (choices.length > 0) {
@@ -37,7 +51,11 @@ export async function getOptionsBySchema(schema: JSONSchema7) {
       }
 
       if (property.default !== undefined && property.default !== null) {
-        option.default(typeof property.default === 'boolean' ? property.default : property.default.toString());
+        option.default(
+          typeof property.default === 'boolean'
+            ? property.default
+            : property.default.toString()
+        );
       }
 
       option.description = description;

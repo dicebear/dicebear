@@ -29,7 +29,7 @@
     "build": "dicebear-project build DiceBear.Croodles"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.9.0",
+    "@dicebear/core": "^4.9.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
@@ -40,7 +40,7 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@dicebear/avatars": "^4.6.0"
+    "@dicebear/core": "^4.6.0"
   },
   "gitHead": "a081e38b1593d87f1d32abf632e3792c16f702fd"
 }

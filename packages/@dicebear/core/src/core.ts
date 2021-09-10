@@ -1,7 +1,10 @@
 import type { Style, StyleOptions } from './types';
 import * as utils from './utils';
 
-export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O> = {}) {
+export function createAvatar<O extends {}>(
+  style: Style<O>,
+  options: StyleOptions<O> = {}
+) {
   options = utils.options.merge(style, options);
 
   let prngInstance = utils.prng.create(options.seed);
@@ -10,20 +13,10 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
   if (options.size) {
     result.attributes.width = options.size.toString();
     result.attributes.height = options.size.toString();
-  } else {
-    if (options.width) {
-      result.attributes.width = options.width.toString();
-    }
-
-    if (options.height) {
-      result.attributes.height = options.height.toString();
-    }
   }
 
   if (options.scale !== undefined && options.scale !== 100) {
     result.body = utils.svg.addScale(result, options.scale);
-  } else if (options.margin) {
-    result.body = utils.svg.addMargin(result, options);
   }
 
   if (options.flip) {
@@ -35,13 +28,15 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
   }
 
   if (options.translateX || options.translateY) {
-    result.body = utils.svg.addTranslate(result, options.translateX, options.translateY);
+    result.body = utils.svg.addTranslate(
+      result,
+      options.translateX,
+      options.translateY
+    );
   }
 
   if (options.backgroundColor) {
-    let backgroundColor = Array.isArray(options.backgroundColor)
-      ? prngInstance.pick(options.backgroundColor)
-      : options.backgroundColor;
+    let backgroundColor = prngInstance.pick(options.backgroundColor ?? []);
 
     result.body = utils.svg.addBackgroundColor(result, backgroundColor);
   }
@@ -60,17 +55,6 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
 
   if (options.dataUri) {
     return `data:image/svg+xml;utf8,${encodeURIComponent(avatar)}`;
-  }
-
-  /** @deprecated - will be removed with version 5.0 */
-  if (options.base64) {
-    // @see https://www.base64encoder.io/javascript/
-    let encoded = encodeURIComponent(avatar).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-      return String.fromCharCode(parseInt(`0x${p1}`));
-    });
-
-    // @ts-ignore
-    return `data:image/svg+xml;base64,${btoa(encoded)}`;
   }
 
   return avatar;

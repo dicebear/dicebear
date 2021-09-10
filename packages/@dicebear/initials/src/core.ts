@@ -1,9 +1,29 @@
-import legacy, { Style, StyleSchema, ColorCollection, utils } from '@dicebear/avatars';
+import { Style, StyleSchema, utils } from '@dicebear/core';
 import { Options } from './options';
 import { schema } from './schema';
-
-// @ts-ignore
 import initials from 'initials';
+
+const colors: Record<string, string> = {
+  amber: 'rgba(255, 179, 0, 1)',
+  blue: 'rgba(30, 136, 229, 1)',
+  blueGrey: 'rgba(84, 110, 122, 1)',
+  brown: 'rgba(109, 76, 65, 1)',
+  cyan: 'rgba(0, 172, 193, 1)',
+  deepOrange: 'rgba(244, 81, 30, 1)',
+  deepPurple: 'rgba(94, 53, 177, 1)',
+  green: 'rgba(67, 160, 71, 1)',
+  grey: 'rgba(117, 117, 117, 1)',
+  indigo: 'rgba(57, 73, 171, 1)',
+  lightBlue: 'rgba(3, 155, 229, 1)',
+  lightGreen: 'rgba(124, 179, 66, 1)',
+  lime: 'rgba(192, 202, 51, 1)',
+  orange: 'rgba(251, 140, 0, 1)',
+  pink: 'rgba(216, 27, 96, 1)',
+  purple: 'rgba(142, 36, 170, 1)',
+  red: 'rgba(229, 57, 53, 1)',
+  teal: 'rgba(0, 137, 123, 1)',
+  yellow: 'rgba(253, 216, 53, 1)',
+};
 
 export const style: Style<Options> = {
   meta: {
@@ -18,53 +38,21 @@ export const style: Style<Options> = {
   schema,
   create: ({ prng, options }) => {
     let defaults = utils.schema.defaults(schema as StyleSchema);
-    let backgroundColors: string[] = [];
 
-    if (options.background) {
-      if (Array.isArray(options.background)) {
-        backgroundColors.push(...options.background);
-      } else {
-        backgroundColors.push(options.background);
-      }
+    options.backgroundColor = options.backgroundColor?.map(
+      (val) => colors[val] ?? val
+    );
 
-      options.background = undefined;
-    } else {
-      Object.keys(legacy.color.collection).forEach((backgroundColor) => {
-        if (
-          options.backgroundColors === undefined ||
-          options.backgroundColors.length === 0 ||
-          options.backgroundColors.indexOf(backgroundColor as keyof ColorCollection) !== -1
-        ) {
-          let colorCollection = legacy.color.collection[backgroundColor as keyof ColorCollection];
-
-          backgroundColors.push(
-            colorCollection[
-              options.backgroundColorLevel ?? (defaults.backgroundColorLevel as keyof typeof colorCollection)
-            ]
-          );
-        }
-      });
-    }
-
-    let backgroundColor = prng.pick(backgroundColors);
+    let fontFamily = 'Arial,sans-serif';
+    let fontSize = (options.fontSize ?? (defaults.fontSize as number)) / 100;
     let seedInitials = (initials(prng.seed.trim()) as string)
       .toLocaleUpperCase()
       .slice(0, options.chars ?? (defaults.chars as number));
-    let fontFamily = 'Arial,sans-serif';
-
-    let fontSize = (options.fontSize ?? (defaults.fontSize as number)) / 100;
 
     // prettier-ignore
     let svg = [
-      `<rect width="1" height="1" fill="${backgroundColor}"></rect>`,
-      options.margin ? `<g transform="translate(${options.margin / 100}, ${options.margin / 100})">` : '',
-      options.margin ? `<g transform="scale(${1 - (options.margin * 2) / 100})">` : '',
       `<text x="50%" y="50%" style="${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${fontSize}px" fill="#FFF" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
-      options.margin ? '</g>' : '',
-      options.margin ? '</g>' : ''
     ].join('');
-
-    options.margin = undefined;
 
     return {
       attributes: {

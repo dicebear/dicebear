@@ -1,6 +1,9 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
+import type {
+  ComponentPickCollection,
+  ColorPickCollection,
+} from './static-types';
 
 import { schema } from './schema';
 import { pickComponent } from './utils/pickComponent';
@@ -29,32 +32,51 @@ export const style: Style<Options> = {
     const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
     const eyebrowsComponent = pickComponent(prng, 'eyebrows', options.eyebrows);
     const topComponent = pickComponent(prng, 'top', options.top);
-    const facialHairComponent = pickComponent(prng, 'facialHair', options.facialHair);
-    const accessoriesComponent = pickComponent(prng, 'accessories', options.accessories);
-    const clothingGraphicComponent = pickComponent(prng, 'clothingGraphic', options.clothingGraphic);
+    const facialHairComponent = pickComponent(
+      prng,
+      'facialHair',
+      options.facialHair
+    );
+    const accessoriesComponent = pickComponent(
+      prng,
+      'accessories',
+      options.accessories
+    );
+    const clothingGraphicComponent = pickComponent(
+      prng,
+      'clothingGraphic',
+      options.clothingGraphic
+    );
 
     const components: ComponentPickCollection = {
-      'style': styleComponent,
-      'clothing': clothingComponent,
-      'mouth': mouthComponent,
-      'nose': noseComponent,
-      'eyes': eyesComponent,
-      'eyebrows': eyebrowsComponent,
-      'top': prng.bool(options.topProbability) ? topComponent : undefined,
-      'facialHair': prng.bool(options.facialHairProbability) ? facialHairComponent : undefined,
-      'accessories': prng.bool(options.accessoriesProbability) ? accessoriesComponent : undefined,
-      'clothingGraphic': clothingGraphicComponent,
-    }
+      style: styleComponent,
+      clothing: clothingComponent,
+      mouth: mouthComponent,
+      nose: noseComponent,
+      eyes: eyesComponent,
+      eyebrows: eyebrowsComponent,
+      top: prng.bool(options.topProbability) ? topComponent : undefined,
+      facialHair: prng.bool(options.facialHairProbability)
+        ? facialHairComponent
+        : undefined,
+      accessories: prng.bool(options.accessoriesProbability)
+        ? accessoriesComponent
+        : undefined,
+      clothingGraphic: clothingGraphicComponent,
+    };
 
     const colors: ColorPickCollection = {
-      'accessories': pickColor(prng, 'accessories', options.accessoriesColor ?? []),
-      'clothes': pickColor(prng, 'clothes', options.clothesColor ?? []),
-      'hat': pickColor(prng, 'hat', options.hatColor ?? []),
-      'hair': pickColor(prng, 'hair', options.hairColor ?? []),
-      'skin': pickColor(prng, 'skin', options.skinColor ?? []),
-      'facialHair': pickColor(prng, 'facialHair', options.facialHairColor ?? []),
-    }
-
+      accessories: pickColor(
+        prng,
+        'accessories',
+        options.accessoriesColor ?? []
+      ),
+      clothes: pickColor(prng, 'clothes', options.clothesColor ?? []),
+      hat: pickColor(prng, 'hat', options.hatColor ?? []),
+      hair: pickColor(prng, 'hair', options.hairColor ?? []),
+      skin: pickColor(prng, 'skin', options.skinColor ?? []),
+      facialHair: pickColor(prng, 'facialHair', options.facialHairColor ?? []),
+    };
 
     onPostCreate({ prng, options, components, colors });
 
@@ -62,7 +84,7 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 280 280',
         fill: 'none',
-        'shape-rendering': 'auto'
+        'shape-rendering': 'auto',
       },
       body: `
   <g transform="translate(8)">

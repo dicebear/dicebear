@@ -1,5 +1,5 @@
 import * as avatars from '../dist';
-import { StyleOptions, Style } from '@dicebear/avatars';
+import { StyleOptions, Style } from '@dicebear/core';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -58,7 +58,9 @@ data.forEach((options, key) => {
         fs.mkdirSync(path.dirname(svgPath));
       }
 
-      fs.writeFileSync(svgPath, avatars.createAvatar(style, options), { encoding: 'utf-8' });
+      fs.writeFileSync(svgPath, avatars.createAvatar(style, options), {
+        encoding: 'utf-8',
+      });
     }
 
     const svg = fs.readFileSync(svgPath, { encoding: 'utf-8' });

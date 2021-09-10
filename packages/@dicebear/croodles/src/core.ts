@@ -1,4 +1,4 @@
-import type { Style } from '@dicebear/avatars';
+import type { Style } from '@dicebear/core';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
@@ -27,20 +27,19 @@ export const style: Style<Options> = {
     const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
 
     const components: ComponentPickCollection = {
-      'face': faceComponent,
-      'nose': noseComponent,
-      'beard': prng.bool(options.beardProbability) ? beardComponent : undefined,
-      'mouth': mouthComponent,
-      'top': topComponent,
-      'mustache': prng.bool(options.mustacheProbability) ? mustacheComponent : undefined,
-      'eyes': eyesComponent,
-    }
+      face: faceComponent,
+      nose: noseComponent,
+      beard: prng.bool(options.beardProbability) ? beardComponent : undefined,
+      mouth: mouthComponent,
+      top: topComponent,
+      mustache: prng.bool(options.mustacheProbability) ? mustacheComponent : undefined,
+      eyes: eyesComponent,
+    };
 
     const colors: ColorPickCollection = {
-      'top': pickColor(prng, 'top', options.topColor ?? []),
-      'base': pickColor(prng, 'base', options.baseColor ?? []),
-    }
-
+      top: pickColor(prng, 'top', options.topColor ?? []),
+      base: pickColor(prng, 'base', options.baseColor ?? []),
+    };
 
     return {
       attributes: {
