@@ -7,106 +7,54 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "normal",
-          "wide",
-          "thin"
-        ]
+        "enum": ["normal", "wide", "thin"]
       },
-      "default": [
-        "normal",
-        "wide",
-        "thin"
-      ]
+      "default": ["normal", "wide", "thin"]
     },
     "body": {
       "title": "Body",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "tShirt",
-          "golf"
-        ]
+        "enum": ["tShirt", "golf"]
       },
-      "default": [
-        "tShirt",
-        "golf"
-      ]
+      "default": ["tShirt", "golf"]
     },
     "hair": {
       "title": "Hair",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "balndess",
-          "slaughter",
-          "ponyTail",
-          "long",
-          "curly",
-          "stylish",
-          "elvis",
-          "classic02",
-          "classic01"
-        ]
+        "enum": ["balndess", "slaughter", "ponyTail", "long", "curly", "stylish", "elvis", "classic02", "classic01"]
       },
-      "default": [
-        "balndess",
-        "slaughter",
-        "ponyTail",
-        "long",
-        "curly",
-        "stylish",
-        "elvis",
-        "classic02",
-        "classic01"
-      ]
+      "default": ["balndess", "slaughter", "ponyTail", "long", "curly", "stylish", "elvis", "classic02", "classic01"]
     },
     "mouth": {
       "title": "Mouth",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "default",
-          "missingTooth"
-        ]
+        "enum": ["default", "missingTooth"]
       },
-      "default": [
-        "default",
-        "missingTooth"
-      ]
+      "default": ["default", "missingTooth"]
     },
     "eyes": {
       "title": "Eyes",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "normal",
-          "confident",
-          "happy"
-        ]
+        "enum": ["normal", "confident", "happy"]
       },
-      "default": [
-        "normal",
-        "confident",
-        "happy"
-      ]
+      "default": ["normal", "confident", "happy"]
     },
     "glasses": {
       "title": "Glasses",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "normal"
-        ]
+        "enum": ["normal"]
       },
-      "default": [
-        "normal"
-      ]
+      "default": ["normal"]
     },
     "glassesProbability": {
       "title": "Glasses Probability",
@@ -118,19 +66,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "pencilThinBeard",
-          "pencilThin",
-          "horshoe",
-          "freddy"
-        ]
+        "enum": ["pencilThinBeard", "pencilThin", "horshoe", "freddy"]
       },
-      "default": [
-        "pencilThinBeard",
-        "pencilThin",
-        "horshoe",
-        "freddy"
-      ]
+      "default": ["pencilThinBeard", "pencilThin", "horshoe", "freddy"]
     },
     "mustacheProbability": {
       "title": "Mustache Probability",
@@ -142,13 +80,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "default"
-        ]
+        "enum": ["default"]
       },
-      "default": [
-        "default"
-      ]
+      "default": ["default"]
     },
     "blushesProbability": {
       "title": "Blushes Probability",
@@ -162,22 +96,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "yellow",
-              "white",
-              "dark"
-            ]
+            "enum": ["yellow", "white", "dark"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "yellow",
-        "white",
-        "dark"
-      ]
+      "default": ["yellow", "white", "dark"]
     },
     "hairColor": {
       "title": "Hair Color",
@@ -186,22 +112,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "brown",
-              "black",
-              "red"
-            ]
+            "enum": ["brown", "black", "red"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "brown",
-        "black",
-        "red"
-      ]
+      "default": ["brown", "black", "red"]
     },
     "bodyColor": {
       "title": "Body Color",
@@ -210,22 +128,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "orange",
-              "blue",
-              "pink"
-            ]
+            "enum": ["orange", "blue", "pink"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "orange",
-        "blue",
-        "pink"
-      ]
+      "default": ["orange", "blue", "pink"]
     }
   },
   "additionalProperties": false

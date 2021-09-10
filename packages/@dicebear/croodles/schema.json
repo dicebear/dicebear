@@ -7,16 +7,7 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant08",
-          "variant07",
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant08", "variant07", "variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
       },
       "default": [
         "variant08",
@@ -63,21 +54,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant05", "variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant05", "variant04", "variant03", "variant02", "variant01"]
     },
     "beardProbability": {
       "title": "Beard Probability",
@@ -207,19 +186,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant04", "variant03", "variant02", "variant01"]
     },
     "mustacheProbability": {
       "title": "Mustache Probability",
@@ -276,28 +245,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "yellow",
-              "purple",
-              "red",
-              "blue",
-              "green",
-              "black"
-            ]
+            "enum": ["yellow", "purple", "red", "blue", "green", "black"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "yellow",
-        "purple",
-        "red",
-        "blue",
-        "green",
-        "black"
-      ]
+      "default": ["yellow", "purple", "red", "blue", "green", "black"]
     },
     "baseColor": {
       "title": "Base Color",
@@ -306,19 +261,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "transparent",
-              "white"
-            ]
+            "enum": ["transparent", "white"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "transparent"
-      ]
+      "default": ["transparent"]
     }
   },
   "additionalProperties": false

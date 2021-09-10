@@ -10,9 +10,7 @@ export function findAllColorGroups() {
       continue;
     }
 
-    const { group: colorGroupName, name: colorName } = getNameParts(
-      paintStyle.name
-    );
+    const { group: colorGroupName, name: colorName } = getNameParts(paintStyle.name);
 
     if (false === colorGroups.has(colorGroupName)) {
       colorGroups.set(colorGroupName, new Map());

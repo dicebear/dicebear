@@ -1,10 +1,7 @@
 import type { Style, StyleOptions } from './types';
 import * as utils from './utils';
 
-export function createAvatar<O extends {}>(
-  style: Style<O>,
-  options: StyleOptions<O> = {}
-) {
+export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O> = {}) {
   options = utils.options.merge(style, options);
 
   let prngInstance = utils.prng.create(options.seed);
@@ -28,11 +25,7 @@ export function createAvatar<O extends {}>(
   }
 
   if (options.translateX || options.translateY) {
-    result.body = utils.svg.addTranslate(
-      result,
-      options.translateX,
-      options.translateY
-    );
+    result.body = utils.svg.addTranslate(result, options.translateX, options.translateY);
   }
 
   if (options.backgroundColor) {

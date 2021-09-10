@@ -17,9 +17,7 @@ export interface StyleCreateProps<O> {
   options: StyleOptions<O>;
 }
 
-export type StyleCreate<O extends {}> = (
-  props: StyleCreateProps<O>
-) => StyleCreateResult;
+export type StyleCreate<O extends {}> = (props: StyleCreateProps<O>) => StyleCreateResult;
 
 export interface StyleCreateResultAttributes {
   viewBox: string;

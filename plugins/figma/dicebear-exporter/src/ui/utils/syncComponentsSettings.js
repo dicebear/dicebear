@@ -18,10 +18,7 @@ export function syncComponentsSettings(newComponents, oldComponents) {
 
     newComponents[key].settings.probability = probability;
 
-    if (
-      false ===
-      isEqual(newComponents[key].settings, oldComponents[key]?.settings)
-    ) {
+    if (false === isEqual(newComponents[key].settings, oldComponents[key]?.settings)) {
       parent.postMessage(
         {
           pluginMessage: {

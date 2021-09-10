@@ -39,9 +39,7 @@ export const style: Style<Options> = {
   create: ({ prng, options }) => {
     let defaults = utils.schema.defaults(schema as StyleSchema);
 
-    options.backgroundColor = options.backgroundColor?.map(
-      (val) => colors[val] ?? val
-    );
+    options.backgroundColor = options.backgroundColor?.map((val) => colors[val] ?? val);
 
     let fontFamily = 'Arial,sans-serif';
     let fontSize = (options.fontSize ?? (defaults.fontSize as number)) / 100;

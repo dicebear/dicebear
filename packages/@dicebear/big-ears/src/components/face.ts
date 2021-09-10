@@ -1,51 +1,51 @@
 import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
 
 export const face: ComponentGroup = {
-  'variant10': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant10: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <ellipse cx="190" cy="198.5" rx="132" ry="152.5" fill="${colors.skin.value}"/>
   <path d="M322.034 192.432c-2.649 81.584-60.72 146.784-131.97 146.784-71.248 0-129.32-65.198-131.97-146.781a179.617 179.617 0 0 0-.094 5.824c0 84.283 59.127 152.608 132.064 152.608 72.938 0 132.065-68.325 132.065-152.608 0-1.951-.032-3.893-.095-5.827Z" fill="#000" fill-opacity=".19"/>
 `,
-  'variant09': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant09: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <path d="M190.5 37C120.636 37 64 102.138 64 182.489c0 .494.002.988.006 1.482-.004.493-.006.986-.006 1.48C64 265.82 120.636 361 190.5 361S317 265.82 317 185.451c0-.494-.002-.987-.006-1.48.004-.494.006-.988.006-1.482C317 102.138 260.364 37 190.5 37Z" fill="${colors.skin.value}"/>
   <path d="M64.046 181.498c-.03 1.313-.046 2.631-.046 3.953C64 265.82 120.636 361 190.5 361S317 265.82 317 185.451c0-1.322-.015-2.64-.046-3.953-1.82 79.497-57.739 171.573-126.454 171.573S65.867 260.995 64.046 181.498Z" fill="#000" fill-opacity=".19"/>
 `,
-  'variant08': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant08: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <circle cx="189.5" cy="199.5" r="133.5" fill="${colors.skin.value}"/>
   <path d="M323.311 192.3c-3.641 70.612-62.048 126.746-133.566 126.746-71.517 0-129.924-56.134-133.565-126.746a135.96 135.96 0 0 0-.18 7c0 73.866 59.88 133.745 133.745 133.745 73.866 0 133.746-59.879 133.746-133.745 0-2.348-.061-4.682-.18-7Z" fill="#000" fill-opacity=".19"/>
 `,
-  'variant07': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant07: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <path d="M324.99 212.995c.007-.539.01-1.08.01-1.621C325 139.784 264.558 55 190 55c-74.558 0-135 84.784-135 156.374 0 .541.004 1.082.01 1.621-.006.542-.01 1.083-.01 1.623 0 71.489 60.442 129.443 135 129.443 74.558 0 135-57.954 135-129.443 0-.54-.003-1.081-.01-1.623Z" fill="${colors.skin.value}"/>
   <path d="M324.63 204.805c-5.149 66.981-63.458 119.79-134.63 119.79S60.52 271.786 55.37 204.805c-.245 3.293-.37 6.567-.37 9.813 0 71.49 60.442 129.443 135 129.443 74.558 0 135-57.953 135-129.443 0-3.246-.125-6.52-.37-9.813Z" fill="#000" fill-opacity=".19"/>
 `,
-  'variant06': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant06: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <path d="M191.01 39c103.192 3.035 112.181 97.783 113.962 138.293.557 12.675 3.326 23.846 6.067 34.904 3.241 13.079 6.444 25.999 5.9 41.062.518 14.627-2.201 31.083-11.967 51.737C292.23 331.944 240.581 360.98 191.01 361c-52.162.022-102.34-30.529-115.649-65.104-9.166-23.812-11.788-41.616-11.307-56.433-.539-16.759 3.022-29.63 6.516-42.261 1.807-6.532 3.596-13.001 4.791-19.909.73-4.222 1.312-9.443 1.972-15.361C82.13 118.891 91.034 39 191.01 39Z" fill="${colors.skin.value}"/>
   <path d="M64.463 233.051c-1.524 16.074.372 35.498 10.898 62.844 13.31 34.576 63.487 65.126 115.649 65.105 49.571-.021 101.22-29.056 113.962-56.004 11.683-24.71 13.282-43.41 11.317-60.16-1.191 11.287-4.573 23.844-11.512 38.52-12.741 26.948-64.391 55.984-113.962 56.004-52.161.022-102.34-30.529-115.648-65.105-6.236-16.197-9.442-29.616-10.704-41.204Z" fill="#000" fill-opacity=".19"/>
 `,
-  'variant05': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant05: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <path d="M69 111.256C69 95.098 82.098 82 98.256 82h185.488C299.902 82 313 95.098 313 111.256v241.488C313 368.902 299.902 382 283.744 382H98.256C82.098 382 69 368.902 69 352.744V111.256Z" fill="${colors.skin.value}"/>
   <path d="M69 330.75v21.999c0 16.158 13.098 29.257 29.256 29.257h185.488c16.158 0 29.256-13.099 29.256-29.257V330.75c0 16.158-13.098 29.256-29.256 29.256H98.256C82.098 360.006 69 346.908 69 330.75Z" fill="#000" fill-opacity=".19"/>
 `,
-  'variant04': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant04: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <circle cx="190.193" cy="167.193" r="121.193" fill="${colors.skin.value}"/>
   <path fill="${colors.skin.value}" d="M69 164.499h242.385v191.215H69z"/>
   <path d="M69 336h242v20H69v-20Z" fill="#000" fill-opacity=".19"/>
 `,
-  'variant03': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant03: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <path d="M309 148H71v124h.262a25.1 25.1 0 0 0-.032 1.268c0 29.872 53.323 77.421 119.1 77.421 65.776 0 119.099-47.549 119.099-77.421 0-1.558-.145-3.1-.429-4.624V148Z" fill="${colors.skin.value}"/>
   <g fill="#000" fill-opacity=".19">
     <path d="M71.23 253.621v.839c0-.28.005-.56.015-.839h-.015ZM71.23 254.501v17.907h.015c-.01.286-.015.572-.015.859 0 29.872 53.323 77.421 119.099 77.421 65.777 0 119.1-47.549 119.1-77.421 0-.287-.005-.573-.015-.859h.015v-18.787h-.015c.01.286.015.572.015.859 0 29.873-53.323 77.421-119.1 77.421-65.761 0-119.075-47.527-119.099-77.4Z"/>
   </g>
   <path d="M309 152.5c0 55.859-54.196 101.784-119.947 101.784S70 209.001 70 153.142C70 97.282 123.302 52 189.053 52S309 96.64 309 152.5Z" fill="${colors.skin.value}"/>
 `,
-  'variant02': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant02: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <path d="M293.138 88.692c-35.179-49.97-121.535-63.3-172.855-30.563-51.32 32.737-62.752 87.106-55.15 146.705 3.075 24.103 6.941 43.021 9.055 63.419C80.747 331.548 167.096 363 192.717 363c40.333 0 108.289-44.317 116.766-94.747 7.724-45.952 6.929-42.321 7.526-63.419.596-21.099 11.308-66.172-23.871-116.142Z" fill="${colors.skin.value}"/>
   <path d="M76.21 279.71C98.773 327.322 168.845 351 191.771 351c38.95 0 102.879-38.863 118.027-85.215l-.468 2.79c-8.471 50.501-76.385 94.88-116.693 94.88-24.059 0-101.7-27.807-116.427-83.745Z" fill="#000" fill-opacity=".19"/>
 `,
-  'variant01': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  variant01: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <path d="M310 123.121H72.79v166.34h.015c-.01.297-.014.595-.014.894 0 31.116 53.101 80.645 118.604 80.645C256.899 371 310 321.471 310 290.355c0-.299-.005-.597-.015-.894H310v-166.34Z" fill="${colors.skin.value}"/>
   <g fill="#000" fill-opacity=".19">
     <path d="M72.79 269.891v.8c.002-.267.007-.534.015-.8h-.014ZM72.79 270.88v18.581h.015c-.01.297-.014.596-.014.895 0 31.116 53.101 80.644 118.604 80.644C256.899 371 310 321.472 310 290.356c0-.299-.005-.598-.015-.895H310v-19.57h-.015c.01.298.015.596.015.894 0 31.116-53.101 80.645-118.605 80.645-65.437 0-118.497-49.428-118.604-80.55Z"/>
   </g>
   <ellipse cx="190.5" cy="129" rx="119.5" ry="105" fill="${colors.skin.value}"/>
 `,
-}
+};

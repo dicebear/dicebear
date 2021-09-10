@@ -7,19 +7,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant04", "variant03", "variant02", "variant01"]
     },
     "beardProbability": {
       "title": "Beard Probability",
@@ -224,19 +214,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant04", "variant03", "variant02", "variant01"]
     },
     "accessoriesProbability": {
       "title": "Accessories Probability",
@@ -248,25 +228,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant07",
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant07", "variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant07",
-        "variant06",
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant07", "variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
     },
     "glassesProbability": {
       "title": "Glasses Probability",
@@ -453,26 +417,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "gold01",
-              "gold02",
-              "gold03",
-              "silver01",
-              "silver02"
-            ]
+            "enum": ["gold01", "gold02", "gold03", "silver01", "silver02"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "gold01",
-        "gold02",
-        "gold03",
-        "silver01",
-        "silver02"
-      ]
+      "default": ["gold01", "gold02", "gold03", "silver01", "silver02"]
     },
     "mouthColor": {
       "title": "Mouth Color",
@@ -481,24 +433,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "variant01",
-              "variant02",
-              "variant03",
-              "variant04"
-            ]
+            "enum": ["variant01", "variant02", "variant03", "variant04"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "variant01",
-        "variant02",
-        "variant03",
-        "variant04"
-      ]
+      "default": ["variant01", "variant02", "variant03", "variant04"]
     },
     "clothesColor": {
       "title": "Clothes Color",
@@ -549,30 +491,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "pink01",
-              "blue01",
-              "green01",
-              "purple01",
-              "red01",
-              "black01",
-              "gray01"
-            ]
+            "enum": ["pink01", "blue01", "green01", "purple01", "red01", "black01", "gray01"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "pink01",
-        "blue01",
-        "green01",
-        "purple01",
-        "red01",
-        "black01",
-        "gray01"
-      ]
+      "default": ["pink01", "blue01", "green01", "purple01", "red01", "black01", "gray01"]
     },
     "glassesColor": {
       "title": "Glasses Color",
@@ -581,28 +507,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "green01",
-              "blue01",
-              "red01",
-              "black01",
-              "black02",
-              "black03"
-            ]
+            "enum": ["green01", "blue01", "red01", "black01", "black02", "black03"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "green01",
-        "blue01",
-        "red01",
-        "black01",
-        "black02",
-        "black03"
-      ]
+      "default": ["green01", "blue01", "red01", "black01", "black02", "black03"]
     }
   },
   "additionalProperties": false

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "declaration": true,
     "resolveJsonModule": true,
-    "outDir": "./lib",
+    "outDir": "./lib"
   },
   "include": ["./src/**/*.ts"]
 }

@@ -169,23 +169,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant06",
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
     },
     "cheekProbability": {
       "title": "Cheek Probability",
@@ -252,13 +238,7 @@
           }
         }
       ],
-      "default": [
-        "variant01",
-        "variant02",
-        "variant03",
-        "variant04",
-        "variant05"
-      ]
+      "default": ["variant01", "variant02", "variant03", "variant04", "variant05"]
     }
   },
   "additionalProperties": false

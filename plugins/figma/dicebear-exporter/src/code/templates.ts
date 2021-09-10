@@ -31,6 +31,7 @@ package.json
   // .prettierrc
   '.prettierrc': `
 {
+  "printWidth": 120,
   "singleQuote": true,
   "proseWrap": "always"
 }

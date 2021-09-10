@@ -1,7 +1,14 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const style: ComponentGroup = {
-  'circle': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  circle: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   <circle cx="132" cy="160" r="120" fill="#E6E6E6"/>
   <mask id="styleCircle-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="12" y="40" width="240" height="240">
     <circle cx="132" cy="160" r="120" fill="#fff"/>
@@ -48,7 +55,10 @@ export const style: ComponentGroup = {
     </g>
   </g>
 `,
-  'default': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  default: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   <path d="M132 36c-30.928 0-56 25.072-56 56v6.166c-5.675.952-10 5.888-10 11.834v14c0 6.052 4.48 11.058 10.305 11.881 2.067 19.806 14.458 36.541 31.695 44.73V199h-4c-39.764 0-72 32.236-72 72v9h200v-9c0-39.764-32.236-72-72-72h-4v-18.389c17.237-8.189 29.628-24.924 31.695-44.73C193.52 135.058 198 130.052 198 124v-14c0-5.946-4.325-10.882-10-11.834V92c0-30.928-25.072-56-56-56Z" fill="#D0C6AC"/>
   <mask id="styleDefault-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="32" y="36" width="200" height="244">
     <path d="M132 36c-30.928 0-56 25.072-56 56v6.166c-5.675.952-10 5.888-10 11.834v14c0 6.052 4.48 11.058 10.305 11.881 2.067 19.806 14.458 36.541 31.695 44.73V199h-4c-39.764 0-72 32.236-72 72v9h200v-9c0-39.764-32.236-72-72-72h-4v-18.389c17.237-8.189 29.628-24.924 31.695-44.73C193.52 135.058 198 130.052 198 124v-14c0-5.946-4.325-10.882-10-11.834V92c0-30.928-25.072-56-56-56Z" fill="#D0C6AC"/>
@@ -83,4 +93,4 @@ export const style: ComponentGroup = {
     </g>
   </g>
 `,
-}
+};

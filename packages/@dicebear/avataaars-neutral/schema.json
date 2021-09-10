@@ -42,13 +42,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "default"
-        ]
+        "enum": ["default"]
       },
-      "default": [
-        "default"
-      ]
+      "default": ["default"]
     },
     "eyes": {
       "title": "Eyes",
@@ -147,13 +143,7 @@
           }
         }
       ],
-      "default": [
-        "black",
-        "brown",
-        "darkBrown",
-        "light",
-        "pale"
-      ]
+      "default": ["black", "brown", "darkBrown", "light", "pale"]
     }
   },
   "additionalProperties": false

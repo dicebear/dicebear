@@ -8,9 +8,7 @@ export function findAllComponentGroups() {
     const components = findChildrenComponentNodes(page);
 
     for (const component of components) {
-      const { group: componentGroupName, name: componentName } = getNameParts(
-        component.name
-      );
+      const { group: componentGroupName, name: componentName } = getNameParts(component.name);
 
       if (false === componentGroups.has(componentGroupName)) {
         componentGroups.set(componentGroupName, new Map());

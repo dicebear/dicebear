@@ -5,9 +5,7 @@ import link from 'terminal-link';
 
 export function outputStyleLicenseBanner(name: string, style: Style<any>) {
   let banner = ['-'.repeat(64)];
-  let creator = Array.isArray(style.meta.creator)
-    ? style.meta.creator.join(', ')
-    : style.meta.creator;
+  let creator = Array.isArray(style.meta.creator) ? style.meta.creator.join(', ') : style.meta.creator;
 
   if (style.meta.title && creator) {
     banner.push(chalk`{bold ${style.meta.title}} by {bold ${creator}}`);
@@ -24,9 +22,7 @@ export function outputStyleLicenseBanner(name: string, style: Style<any>) {
   }
 
   if (style.meta.license) {
-    banner.push(
-      `License: ${link(style.meta.license.name, style.meta.license.url)}`
-    );
+    banner.push(`License: ${link(style.meta.license.name, style.meta.license.url)}`);
   }
 
   banner.push('-'.repeat(64));

@@ -1,28 +1,28 @@
-import svelte from "rollup-plugin-svelte";
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import { terser } from "rollup-plugin-terser";
-import svg from "rollup-plugin-svg";
-import typescript from "rollup-plugin-typescript";
-import preprocess from "svelte-preprocess";
-import { babel } from "@rollup/plugin-babel";
+import svelte from 'rollup-plugin-svelte';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import { terser } from 'rollup-plugin-terser';
+import svg from 'rollup-plugin-svg';
+import typescript from 'rollup-plugin-typescript';
+import preprocess from 'svelte-preprocess';
+import { babel } from '@rollup/plugin-babel';
 
 /* Post CSS */
-import postcss from "rollup-plugin-postcss";
-import cssnano from "cssnano";
+import postcss from 'rollup-plugin-postcss';
+import cssnano from 'cssnano';
 
 /* Inline to single html */
-import htmlBundle from "rollup-plugin-html-bundle";
+import htmlBundle from 'rollup-plugin-html-bundle';
 
 const production = !process.env.ROLLUP_WATCH;
 
 export default [
   {
-    input: "src/ui/index.js",
+    input: 'src/ui/index.js',
     output: {
-      format: "iife",
-      name: "ui",
-      file: "src/build/bundle.js",
+      format: 'iife',
+      name: 'ui',
+      file: 'src/build/bundle.js',
     },
     plugins: [
       svelte({
@@ -38,19 +38,18 @@ export default [
       // https://github.com/rollup/plugins/tree/master/packages/commonjs
       resolve({
         browser: true,
-        dedupe: (importee) =>
-          importee === "svelte" || importee.startsWith("svelte/"),
-        extensions: [".svelte", ".mjs", ".js", ".json", ".node"],
+        dedupe: (importee) => importee === 'svelte' || importee.startsWith('svelte/'),
+        extensions: ['.svelte', '.mjs', '.js', '.json', '.node'],
       }),
       commonjs(),
       svg(),
       postcss({
-        extensions: [".css"],
+        extensions: ['.css'],
         plugins: [cssnano()],
       }),
       htmlBundle({
-        template: "src/ui/template.html",
-        target: "public/index.html",
+        template: 'src/ui/template.html',
+        target: 'public/index.html',
         inline: true,
       }),
 
@@ -63,11 +62,11 @@ export default [
     },
   },
   {
-    input: "src/code/index.ts",
+    input: 'src/code/index.ts',
     output: {
-      file: "public/code.js",
-      format: "cjs",
-      name: "code",
+      file: 'public/code.js',
+      format: 'cjs',
+      name: 'code',
     },
     plugins: [
       typescript(),
@@ -76,13 +75,13 @@ export default [
       }),
       commonjs(),
       babel({
-        babelHelpers: "bundled",
+        babelHelpers: 'bundled',
         compact: false,
         presets: [
           [
-            "@babel/preset-env",
+            '@babel/preset-env',
             {
-              useBuiltIns: "entry",
+              useBuiltIns: 'entry',
               corejs: 3,
             },
           ],

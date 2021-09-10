@@ -7,23 +7,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "open",
-          "sleep",
-          "wink",
-          "glasses",
-          "happy",
-          "sunglasses"
-        ]
+        "enum": ["open", "sleep", "wink", "glasses", "happy", "sunglasses"]
       },
-      "default": [
-        "open",
-        "sleep",
-        "wink",
-        "glasses",
-        "happy",
-        "sunglasses"
-      ]
+      "default": ["open", "sleep", "wink", "glasses", "happy", "sunglasses"]
     },
     "hair": {
       "title": "Hair",
@@ -81,84 +67,36 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "squared",
-          "rounded",
-          "small",
-          "checkered"
-        ]
+        "enum": ["squared", "rounded", "small", "checkered"]
       },
-      "default": [
-        "squared",
-        "rounded",
-        "small",
-        "checkered"
-      ]
+      "default": ["squared", "rounded", "small", "checkered"]
     },
     "mouth": {
       "title": "Mouth",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "smile",
-          "frown",
-          "surprise",
-          "pacifier",
-          "bigSmile",
-          "smirk",
-          "lips"
-        ]
+        "enum": ["smile", "frown", "surprise", "pacifier", "bigSmile", "smirk", "lips"]
       },
-      "default": [
-        "smile",
-        "frown",
-        "surprise",
-        "pacifier",
-        "bigSmile",
-        "smirk",
-        "lips"
-      ]
+      "default": ["smile", "frown", "surprise", "pacifier", "bigSmile", "smirk", "lips"]
     },
     "nose": {
       "title": "Nose",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "mediumRound",
-          "smallRound",
-          "wrinkles"
-        ]
+        "enum": ["mediumRound", "smallRound", "wrinkles"]
       },
-      "default": [
-        "mediumRound",
-        "smallRound",
-        "wrinkles"
-      ]
+      "default": ["mediumRound", "smallRound", "wrinkles"]
     },
     "facialHair": {
       "title": "Facial Hair",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "beardMustache",
-          "pyramid",
-          "walrus",
-          "goatee",
-          "shadow",
-          "soulPatch"
-        ]
+        "enum": ["beardMustache", "pyramid", "walrus", "goatee", "shadow", "soulPatch"]
       },
-      "default": [
-        "beardMustache",
-        "pyramid",
-        "walrus",
-        "goatee",
-        "shadow",
-        "soulPatch"
-      ]
+      "default": ["beardMustache", "pyramid", "walrus", "goatee", "shadow", "soulPatch"]
     },
     "hairColor": {
       "title": "Hair Color",
@@ -167,30 +105,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "black",
-              "brunette",
-              "red",
-              "pink",
-              "copper",
-              "blonde",
-              "grey"
-            ]
+            "enum": ["black", "brunette", "red", "pink", "copper", "blonde", "grey"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "black",
-        "brunette",
-        "red",
-        "pink",
-        "copper",
-        "blonde",
-        "grey"
-      ]
+      "default": ["black", "brunette", "red", "pink", "copper", "blonde", "grey"]
     },
     "clothingColor": {
       "title": "Clothing Color",
@@ -199,30 +121,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "blue",
-              "turquoise",
-              "purple",
-              "green",
-              "red",
-              "yellow",
-              "pink"
-            ]
+            "enum": ["blue", "turquoise", "purple", "green", "red", "yellow", "pink"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "blue",
-        "turquoise",
-        "purple",
-        "green",
-        "red",
-        "yellow",
-        "pink"
-      ]
+      "default": ["blue", "turquoise", "purple", "green", "red", "yellow", "pink"]
     },
     "skinColor": {
       "title": "Skin Color",
@@ -231,32 +137,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "tone1",
-              "tone2",
-              "tone3",
-              "tone4",
-              "tone5",
-              "tone6",
-              "tone7",
-              "tone8"
-            ]
+            "enum": ["tone1", "tone2", "tone3", "tone4", "tone5", "tone6", "tone7", "tone8"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "tone1",
-        "tone2",
-        "tone3",
-        "tone4",
-        "tone5",
-        "tone6",
-        "tone7",
-        "tone8"
-      ]
+      "default": ["tone1", "tone2", "tone3", "tone4", "tone5", "tone6", "tone7", "tone8"]
     }
   },
   "additionalProperties": false

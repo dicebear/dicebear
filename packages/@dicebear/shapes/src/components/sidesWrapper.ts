@@ -1,7 +1,14 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const sidesWrapper: ComponentGroup = {
-  'default': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  default: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   <g transform="translate(12)">
     ${components.sides?.value(components, colors) ?? ''}
   </g>
@@ -27,4 +34,4 @@ export const sidesWrapper: ComponentGroup = {
     ${components.sides?.value(components, colors) ?? ''}
   </g>
 `,
-}
+};

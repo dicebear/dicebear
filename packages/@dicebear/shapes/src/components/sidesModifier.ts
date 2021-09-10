@@ -1,10 +1,17 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const sidesModifier: ComponentGroup = {
-  'none': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  none: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   ${components.sidesWrapper?.value(components, colors) ?? ''}
 `,
-  'lightGray': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  lightGray: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   <mask id="sidesModifierLightGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.sidesWrapper?.value(components, colors) ?? ''}
   </mask>
@@ -12,7 +19,7 @@ export const sidesModifier: ComponentGroup = {
     <path fill="#E5E5E5" d="M0 0h48v48H0z"/>
   </g>
 `,
-  'gray': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  gray: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <mask id="sidesModifierGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.sidesWrapper?.value(components, colors) ?? ''}
   </mask>
@@ -20,7 +27,10 @@ export const sidesModifier: ComponentGroup = {
     <path fill="#737373" d="M0 0h48v48H0z"/>
   </g>
 `,
-  'lighten': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  lighten: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   <mask id="sidesModifierLighten-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.sidesWrapper?.value(components, colors) ?? ''}
   </mask>
@@ -29,4 +39,4 @@ export const sidesModifier: ComponentGroup = {
     <path fill="#fff" fill-opacity=".5" d="M0 0h48v48H0z"/>
   </g>
 `,
-}
+};

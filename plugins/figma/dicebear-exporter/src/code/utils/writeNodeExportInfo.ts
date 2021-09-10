@@ -5,14 +5,9 @@ import { encodeNodeNameData } from './encodeNodeNameData';
 import { decodeHtmlEntitites } from './decodeHtmlEntities';
 import { encodeHtmlEntities } from './encodeHtmlEntities';
 
-export function writeNodeExportInfo(
-  node: PageNode | SceneNode | INode,
-  exportInfo: NodeExportInfo | null
-): void {
+export function writeNodeExportInfo(node: PageNode | SceneNode | INode, exportInfo: NodeExportInfo | null): void {
   if ('attributes' in node) {
-    const nodeNameData = decodeNodeNameData(
-      decodeHtmlEntitites(node.attributes.id ?? '')
-    );
+    const nodeNameData = decodeNodeNameData(decodeHtmlEntitites(node.attributes.id ?? ''));
 
     if (exportInfo !== null) {
       nodeNameData.set('_export', JSON.stringify(exportInfo));

@@ -14,9 +14,7 @@ export async function makeBuildCommand() {
   cmd.arguments('<name>');
 
   cmd.action(async (name: string) => {
-    const pkg: PackageJson = await import(
-      path.resolve(process.cwd(), 'package.json')
-    );
+    const pkg: PackageJson = await import(path.resolve(process.cwd(), 'package.json'));
 
     const umdConfig = createUmdConfig(name, pkg);
     const cjsAndEsConfig = createCjsAndEsConfig(pkg);
@@ -33,9 +31,7 @@ export async function makeBuildCommand() {
       await fs.writeFile(
         path.resolve(process.cwd(), 'src/schema.ts'),
         `
-          import { StyleSchema } from '${
-            pkg.name === '@dicebear/core' ? './types' : '@dicebear/core'
-          }';
+          import { StyleSchema } from '${pkg.name === '@dicebear/core' ? './types' : '@dicebear/core'}';
   
           export const schema: StyleSchema = ${JSON.stringify(schema)};
         `
@@ -48,11 +44,7 @@ export async function makeBuildCommand() {
 
       const schemaTypes = await compileFromFile(schemaPath);
 
-      await fs.writeFile(
-        path.resolve(process.cwd(), 'src/options.ts'),
-        schemaTypes,
-        { encoding: 'utf-8' }
-      );
+      await fs.writeFile(path.resolve(process.cwd(), 'src/options.ts'), schemaTypes, { encoding: 'utf-8' });
     } else {
       console.log('schema.json not found - skip dereferencing');
       console.log('schema.json not found - skip creation src/options.ts');

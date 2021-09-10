@@ -216,16 +216,7 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant08",
-          "variant07",
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant08", "variant07", "variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
       },
       "default": [
         "variant08",
@@ -318,23 +309,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant06",
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
     },
     "cheekProbability": {
       "title": "Cheek Probability",
@@ -381,25 +358,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant07",
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant07", "variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant07",
-        "variant06",
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant07", "variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
     },
     "frontHair": {
       "title": "Front Hair",
@@ -481,26 +442,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "variant01",
-              "variant02",
-              "variant03",
-              "variant04",
-              "variant05"
-            ]
+            "enum": ["variant01", "variant02", "variant03", "variant04", "variant05"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "variant01",
-        "variant02",
-        "variant03",
-        "variant04",
-        "variant05"
-      ]
+      "default": ["variant01", "variant02", "variant03", "variant04", "variant05"]
     }
   },
   "additionalProperties": false

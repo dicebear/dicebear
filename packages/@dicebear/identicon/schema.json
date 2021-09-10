@@ -7,25 +7,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "xooox",
-          "xxoxx",
-          "xoxox",
-          "oxxxo",
-          "xxxxx",
-          "oxoxo",
-          "ooxoo"
-        ]
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
       },
-      "default": [
-        "xooox",
-        "xxoxx",
-        "xoxox",
-        "oxxxo",
-        "xxxxx",
-        "oxoxo",
-        "ooxoo"
-      ]
+      "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
     },
     "row1Probability": {
       "title": "Row1 Probability",
@@ -37,25 +21,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "xooox",
-          "xxoxx",
-          "xoxox",
-          "oxxxo",
-          "xxxxx",
-          "oxoxo",
-          "ooxoo"
-        ]
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
       },
-      "default": [
-        "xooox",
-        "xxoxx",
-        "xoxox",
-        "oxxxo",
-        "xxxxx",
-        "oxoxo",
-        "ooxoo"
-      ]
+      "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
     },
     "row2Probability": {
       "title": "Row2 Probability",
@@ -67,25 +35,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "xooox",
-          "xxoxx",
-          "xoxox",
-          "oxxxo",
-          "xxxxx",
-          "oxoxo",
-          "ooxoo"
-        ]
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
       },
-      "default": [
-        "xooox",
-        "xxoxx",
-        "xoxox",
-        "oxxxo",
-        "xxxxx",
-        "oxoxo",
-        "ooxoo"
-      ]
+      "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
     },
     "row3Probability": {
       "title": "Row3 Probability",
@@ -97,25 +49,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "xooox",
-          "xxoxx",
-          "xoxox",
-          "oxxxo",
-          "xxxxx",
-          "oxoxo",
-          "ooxoo"
-        ]
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
       },
-      "default": [
-        "xooox",
-        "xxoxx",
-        "xoxox",
-        "oxxxo",
-        "xxxxx",
-        "oxoxo",
-        "ooxoo"
-      ]
+      "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
     },
     "row4Probability": {
       "title": "Row4 Probability",
@@ -127,25 +63,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "xooox",
-          "xxoxx",
-          "xoxox",
-          "oxxxo",
-          "xxxxx",
-          "oxoxo",
-          "ooxoo"
-        ]
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
       },
-      "default": [
-        "xooox",
-        "xxoxx",
-        "xoxox",
-        "oxxxo",
-        "xxxxx",
-        "oxoxo",
-        "ooxoo"
-      ]
+      "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
     },
     "row5Probability": {
       "title": "Row5 Probability",

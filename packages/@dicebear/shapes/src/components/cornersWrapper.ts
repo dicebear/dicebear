@@ -1,7 +1,14 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const cornersWrapper: ComponentGroup = {
-  'default': (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  default: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   ${components.corners?.value(components, colors) ?? ''}
   <g transform="rotate(90 24 24)">
     ${components.corners?.value(components, colors) ?? ''}
@@ -13,4 +20,4 @@ export const cornersWrapper: ComponentGroup = {
     ${components.corners?.value(components, colors) ?? ''}
   </g>
 `,
-}
+};

@@ -7,70 +7,36 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "none",
-          "lightGray",
-          "gray",
-          "lighten"
-        ]
+        "enum": ["none", "lightGray", "gray", "lighten"]
       },
-      "default": [
-        "none",
-        "lightGray",
-        "gray",
-        "lighten"
-      ]
+      "default": ["none", "lightGray", "gray", "lighten"]
     },
     "cornersModifier": {
       "title": "Corners Modifier",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "none",
-          "lightGray",
-          "gray",
-          "lighten"
-        ]
+        "enum": ["none", "lightGray", "gray", "lighten"]
       },
-      "default": [
-        "none",
-        "lightGray",
-        "gray",
-        "lighten"
-      ]
+      "default": ["none", "lightGray", "gray", "lighten"]
     },
     "sidesModifier": {
       "title": "Sides Modifier",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "none",
-          "lightGray",
-          "gray",
-          "lighten"
-        ]
+        "enum": ["none", "lightGray", "gray", "lighten"]
       },
-      "default": [
-        "none",
-        "lightGray",
-        "gray",
-        "lighten"
-      ]
+      "default": ["none", "lightGray", "gray", "lighten"]
     },
     "sidesWrapper": {
       "title": "Sides Wrapper",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "default"
-        ]
+        "enum": ["default"]
       },
-      "default": [
-        "default"
-      ]
+      "default": ["default"]
     },
     "sides": {
       "title": "Sides",
@@ -108,13 +74,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "default"
-        ]
+        "enum": ["default"]
       },
-      "default": [
-        "default"
-      ]
+      "default": ["default"]
     },
     "corners": {
       "title": "Corners",
@@ -152,13 +114,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "default"
-        ]
+        "enum": ["default"]
       },
-      "default": [
-        "default"
-      ]
+      "default": ["default"]
     },
     "center": {
       "title": "Center",

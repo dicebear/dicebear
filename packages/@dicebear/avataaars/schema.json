@@ -7,14 +7,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "circle",
-          "default"
-        ]
+        "enum": ["circle", "default"]
       },
-      "default": [
-        "default"
-      ]
+      "default": ["default"]
     },
     "clothing": {
       "title": "Clothing",
@@ -85,13 +80,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "default"
-        ]
+        "enum": ["default"]
       },
-      "default": [
-        "default"
-      ]
+      "default": ["default"]
     },
     "eyes": {
       "title": "Eyes",
@@ -540,13 +531,7 @@
           }
         ]
       },
-      "default": [
-        "black",
-        "brown",
-        "darkBrown",
-        "light",
-        "pale"
-      ]
+      "default": ["black", "brown", "darkBrown", "light", "pale"]
     },
     "facialHairColor": {
       "title": "Facial Hair Color",

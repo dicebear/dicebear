@@ -233,15 +233,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "medicalMask",
-          "respirator"
-        ]
+        "enum": ["medicalMask", "respirator"]
       },
-      "default": [
-        "medicalMask",
-        "respirator"
-      ]
+      "default": ["medicalMask", "respirator"]
     },
     "maskProbability": {
       "title": "Mask Probability",
@@ -253,27 +247,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "eyepatch",
-          "glasses",
-          "glasses2",
-          "glasses3",
-          "glasses4",
-          "glasses5",
-          "sunglasses",
-          "sunglasses2"
-        ]
+        "enum": ["eyepatch", "glasses", "glasses2", "glasses3", "glasses4", "glasses5", "sunglasses", "sunglasses2"]
       },
-      "default": [
-        "eyepatch",
-        "glasses",
-        "glasses2",
-        "glasses3",
-        "glasses4",
-        "glasses5",
-        "sunglasses",
-        "sunglasses2"
-      ]
+      "default": ["eyepatch", "glasses", "glasses2", "glasses3", "glasses4", "glasses5", "sunglasses", "sunglasses2"]
     },
     "accessoriesProbability": {
       "title": "Accessories Probability",
@@ -287,26 +263,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "variant01",
-              "variant02",
-              "variant03",
-              "variant04",
-              "variant05"
-            ]
+            "enum": ["variant01", "variant02", "variant03", "variant04", "variant05"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "variant01",
-        "variant02",
-        "variant03",
-        "variant04",
-        "variant05"
-      ]
+      "default": ["variant01", "variant02", "variant03", "variant04", "variant05"]
     },
     "clothingColor": {
       "title": "Clothing Color",
@@ -315,30 +279,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "red01",
-              "orange01",
-              "yellow01",
-              "green01",
-              "tail01",
-              "blue01",
-              "pink01"
-            ]
+            "enum": ["red01", "orange01", "yellow01", "green01", "tail01", "blue01", "pink01"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "red01",
-        "orange01",
-        "yellow01",
-        "green01",
-        "tail01",
-        "blue01",
-        "pink01"
-      ]
+      "default": ["red01", "orange01", "yellow01", "green01", "tail01", "blue01", "pink01"]
     },
     "hairColor": {
       "title": "Hair Color",

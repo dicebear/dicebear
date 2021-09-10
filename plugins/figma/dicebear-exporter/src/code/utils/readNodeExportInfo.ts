@@ -3,9 +3,7 @@ import { NodeExportInfo } from '../types';
 import { decodeNodeNameData } from './decodeNodeNameData';
 import { decodeHtmlEntitites } from './decodeHtmlEntities';
 
-export function readNodeExportInfo(
-  node: PageNode | SceneNode | INode
-): NodeExportInfo {
+export function readNodeExportInfo(node: PageNode | SceneNode | INode): NodeExportInfo {
   const nodeNameData =
     'attributes' in node
       ? decodeNodeNameData(decodeHtmlEntitites(node.attributes.id ?? ''))

@@ -22,6 +22,7 @@
     "file-saver": "^2.0.5",
     "handlebars": "^4.7.7",
     "jszip": "^3.7.1",
+    "prettier": "^2.4.0",
     "ress": "^4.0.0",
     "rollup": "^2.56.0",
     "rollup-plugin-html-bundle": "^0.0.3",

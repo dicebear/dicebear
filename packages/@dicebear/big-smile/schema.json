@@ -7,67 +7,27 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "base"
-        ]
+        "enum": ["base"]
       },
-      "default": [
-        "base"
-      ]
+      "default": ["base"]
     },
     "mouth": {
       "title": "Mouth",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "openedSmile",
-          "unimpressed",
-          "gapSmile",
-          "openSad",
-          "teethSmile",
-          "awkwardSmile",
-          "braces",
-          "kawaii"
-        ]
+        "enum": ["openedSmile", "unimpressed", "gapSmile", "openSad", "teethSmile", "awkwardSmile", "braces", "kawaii"]
       },
-      "default": [
-        "openedSmile",
-        "unimpressed",
-        "gapSmile",
-        "openSad",
-        "teethSmile",
-        "awkwardSmile",
-        "braces",
-        "kawaii"
-      ]
+      "default": ["openedSmile", "unimpressed", "gapSmile", "openSad", "teethSmile", "awkwardSmile", "braces", "kawaii"]
     },
     "eyes": {
       "title": "Eyes",
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "cheery",
-          "normal",
-          "confused",
-          "starstruck",
-          "winking",
-          "sleepy",
-          "sad",
-          "angry"
-        ]
+        "enum": ["cheery", "normal", "confused", "starstruck", "winking", "sleepy", "sad", "angry"]
       },
-      "default": [
-        "cheery",
-        "normal",
-        "confused",
-        "starstruck",
-        "winking",
-        "sleepy",
-        "sad",
-        "angry"
-      ]
+      "default": ["cheery", "normal", "confused", "starstruck", "winking", "sleepy", "sad", "angry"]
     },
     "hair": {
       "title": "Hair",

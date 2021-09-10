@@ -29,9 +29,7 @@ export function prepareExport() {
 
   for (const [colorGroupName, colorGroup] of colorGroups) {
     const settings = getColorGroupSettings(colorGroupName);
-    const exportColorGroup: ExportColorGroup = (exportData.colors[
-      colorGroupName
-    ] = {
+    const exportColorGroup: ExportColorGroup = (exportData.colors[colorGroupName] = {
       isUsedByComponents: false,
       settings: {
         ...settings,
@@ -54,8 +52,7 @@ export function prepareExport() {
         },
       };
 
-      exportColorGroup.settings.defaults[colorName] =
-        settings.defaults[colorName] ?? true;
+      exportColorGroup.settings.defaults[colorName] = settings.defaults[colorName] ?? true;
     }
   }
 
@@ -73,15 +70,11 @@ export function prepareExport() {
         continue;
       }
 
-      const componentGroupName = getNameParts(
-        instance.mainComponent.name
-      ).group;
+      const componentGroupName = getNameParts(instance.mainComponent.name).group;
 
       if (undefined === exportData.components[componentGroupName]) {
         const settings = getComponentGroupSettings(componentGroupName);
-        const componentGroup: ExportComponentGroup = (exportData.components[
-          componentGroupName
-        ] = {
+        const componentGroup: ExportComponentGroup = (exportData.components[componentGroupName] = {
           settings: {
             ...settings,
             defaults: {},
@@ -89,16 +82,13 @@ export function prepareExport() {
           collection: {},
         });
 
-        for (const [componentName, component] of componentGroups.get(
-          componentGroupName
-        )) {
+        for (const [componentName, component] of componentGroups.get(componentGroupName)) {
           componentGroup.collection[componentName] = {
             id: component.id,
             name: component.name,
           };
 
-          componentGroup.settings.defaults[componentName] =
-            settings.defaults[componentName] ?? true;
+          componentGroup.settings.defaults[componentName] = settings.defaults[componentName] ?? true;
 
           queue.push(component);
         }

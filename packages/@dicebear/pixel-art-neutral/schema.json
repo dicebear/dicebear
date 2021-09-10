@@ -132,25 +132,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": [
-          "variant07",
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+        "enum": ["variant07", "variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
       },
-      "default": [
-        "variant07",
-        "variant06",
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      "default": ["variant07", "variant06", "variant05", "variant04", "variant03", "variant02", "variant01"]
     },
     "glassesProbability": {
       "title": "Glasses Probability",
@@ -238,24 +222,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "variant01",
-              "variant02",
-              "variant03",
-              "variant04"
-            ]
+            "enum": ["variant01", "variant02", "variant03", "variant04"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "variant01",
-        "variant02",
-        "variant03",
-        "variant04"
-      ]
+      "default": ["variant01", "variant02", "variant03", "variant04"]
     },
     "glassesColor": {
       "title": "Glasses Color",
@@ -264,28 +238,14 @@
         "anyOf": [
           {
             "type": "string",
-            "enum": [
-              "green01",
-              "blue01",
-              "red01",
-              "black01",
-              "black02",
-              "black03"
-            ]
+            "enum": ["green01", "blue01", "red01", "black01", "black02", "black03"]
           },
           {
             "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
           }
         ]
       },
-      "default": [
-        "green01",
-        "blue01",
-        "red01",
-        "black01",
-        "black02",
-        "black03"
-      ]
+      "default": ["green01", "blue01", "red01", "black01", "black02", "black03"]
     }
   },
   "additionalProperties": false

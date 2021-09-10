@@ -1,9 +1,6 @@
 import { FrameSettings } from '../types';
 
-export function getFrameSettings(
-  frame: FrameNode,
-  colorGroups: string[]
-): FrameSettings {
+export function getFrameSettings(frame: FrameNode, colorGroups: string[]): FrameSettings {
   const titlePlaceholder = 'My Avatar Style';
 
   const data: FrameSettings = {

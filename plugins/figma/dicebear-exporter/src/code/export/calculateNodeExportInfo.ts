@@ -52,16 +52,9 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
 
     // Figma flat boolean nodes when exporting. In doing so, ids and their information will be lost.
     // That's why we do it ourselves here, so Figma can't delete any information.
-    for (const boNode of fastFindAll(
-      nodeClone.children,
-      (node) => node.type == 'BOOLEAN_OPERATION'
-    )) {
+    for (const boNode of fastFindAll(nodeClone.children, (node) => node.type == 'BOOLEAN_OPERATION')) {
       const wasMask = 'isMask' in boNode && boNode.isMask;
-      const newNode = figma.flatten(
-        [boNode],
-        boNode.parent!,
-        boNode.parent!.children.indexOf(boNode as SceneNode)
-      );
+      const newNode = figma.flatten([boNode], boNode.parent!, boNode.parent!.children.indexOf(boNode as SceneNode));
 
       newNode.isMask = wasMask;
     }
@@ -71,15 +64,11 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
       const nodeColors = getColorsByNode(colorNode);
 
       if (nodeColors.has('fill')) {
-        nodeExportInfo.fillColorGroup = getNameParts(
-          nodeColors.get('fill')!.name
-        ).group;
+        nodeExportInfo.fillColorGroup = getNameParts(nodeColors.get('fill')!.name).group;
       }
 
       if (nodeColors.has('stroke')) {
-        nodeExportInfo.strokeColorGroup = getNameParts(
-          nodeColors.get('stroke')!.name
-        ).group;
+        nodeExportInfo.strokeColorGroup = getNameParts(nodeColors.get('stroke')!.name).group;
       }
 
       writeNodeExportInfo(colorNode, nodeExportInfo);

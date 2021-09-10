@@ -18,8 +18,7 @@ export async function makeCreateStyleCommand(name: string, style: Style<any>) {
           properties: {
             count: {
               title: 'Count',
-              description:
-                'Defines how many avatars to create. Does not work in combination with a "seed".',
+              description: 'Defines how many avatars to create. Does not work in combination with a "seed".',
               type: 'number',
               default: 1,
             },
@@ -48,10 +47,7 @@ export async function makeCreateStyleCommand(name: string, style: Style<any>) {
   }
 
   cmd.action(async (outputPath = '.', options = {}) => {
-    const bar = new cliProgress.SingleBar(
-      {},
-      cliProgress.Presets.shades_classic
-    );
+    const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
     const validated = validateInputBySchema(options, schema);
     const promises = [];
 
@@ -74,11 +70,7 @@ export async function makeCreateStyleCommand(name: string, style: Style<any>) {
             validated.height = validated.width;
           }
 
-          const fileName = path.resolve(
-            process.cwd(),
-            outputPath,
-            `${name}-${i}.${validated.format}`
-          );
+          const fileName = path.resolve(process.cwd(), outputPath, `${name}-${i}.${validated.format}`);
 
           let avatar = createAvatar(style, validated);
 
