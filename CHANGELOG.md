@@ -9,6 +9,7 @@
 - `@dicebear/avataaars` as replacement for `@dicebear/avatars-avataaars-sprites`
 - `@dicebear/bottts` as replacement for `@dicebear/avatars-bottts-sprites`
 - `@dicebear/gridy` as replacement for `@dicebear/avatars-gridy-sprites`
+- `@dicebear/shapes` as replacement for `@dicebear/avatars-jdenticon-sprites`
 - `@dicebear/avataaars-neutral` Neutral version of `@dicebear/avataaars`
 - `@dicebear/bottts-neutral` Neutral version of `@dicebear/bottts`
 
@@ -22,6 +23,7 @@
 - `@dicebear/avatars-avataaars-sprites` Use `@dicebear/avataaars` instead.
 - `@dicebear/avatars-bottts-sprites` Use `@dicebear/bottts` instead.
 - `@dicebear/avatars-gridy-sprites` Use `@dicebear/gridy` instead.
+- `@dicebear/avatars-jdenticon-sprites` Use `@dicebear/shapes` instead.
 
 ## [4.9.0] - 21-09-05
 

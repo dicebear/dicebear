@@ -1,0 +1,258 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "centerModifier": {
+      "title": "Center Modifier",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "none",
+          "lightGray",
+          "gray",
+          "lighten"
+        ]
+      },
+      "default": [
+        "none",
+        "lightGray",
+        "gray",
+        "lighten"
+      ]
+    },
+    "cornersModifier": {
+      "title": "Corners Modifier",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "none",
+          "lightGray",
+          "gray",
+          "lighten"
+        ]
+      },
+      "default": [
+        "none",
+        "lightGray",
+        "gray",
+        "lighten"
+      ]
+    },
+    "sidesModifier": {
+      "title": "Sides Modifier",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "none",
+          "lightGray",
+          "gray",
+          "lighten"
+        ]
+      },
+      "default": [
+        "none",
+        "lightGray",
+        "gray",
+        "lighten"
+      ]
+    },
+    "sidesWrapper": {
+      "title": "Sides Wrapper",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "default"
+        ]
+      },
+      "default": [
+        "default"
+      ]
+    },
+    "sides": {
+      "title": "Sides",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "shape10",
+          "shape09",
+          "shape08",
+          "shape07",
+          "shape06",
+          "shape05",
+          "shape04",
+          "shape03",
+          "shape02",
+          "shape01"
+        ]
+      },
+      "default": [
+        "shape10",
+        "shape09",
+        "shape08",
+        "shape07",
+        "shape06",
+        "shape05",
+        "shape04",
+        "shape03",
+        "shape02",
+        "shape01"
+      ]
+    },
+    "cornersWrapper": {
+      "title": "Corners Wrapper",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "default"
+        ]
+      },
+      "default": [
+        "default"
+      ]
+    },
+    "corners": {
+      "title": "Corners",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "shape10",
+          "shape09",
+          "shape08",
+          "shape07",
+          "shape06",
+          "shape05",
+          "shape04",
+          "shape03",
+          "shape02",
+          "shape01"
+        ]
+      },
+      "default": [
+        "shape10",
+        "shape09",
+        "shape08",
+        "shape07",
+        "shape06",
+        "shape05",
+        "shape04",
+        "shape03",
+        "shape02",
+        "shape01"
+      ]
+    },
+    "centerWrapper": {
+      "title": "Center Wrapper",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "default"
+        ]
+      },
+      "default": [
+        "default"
+      ]
+    },
+    "center": {
+      "title": "Center",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "shape1Inverted",
+          "shape1",
+          "shape2Inverted",
+          "shape2",
+          "shape3Inverted",
+          "shape3",
+          "shape4Inverted",
+          "shape4",
+          "shape5Inverted",
+          "shape5",
+          "shape6Inverted",
+          "shape6",
+          "shape7Inverted",
+          "shape7",
+          "shape8",
+          "shape9"
+        ]
+      },
+      "default": [
+        "shape1Inverted",
+        "shape1",
+        "shape2Inverted",
+        "shape2",
+        "shape3Inverted",
+        "shape3",
+        "shape4Inverted",
+        "shape4",
+        "shape5Inverted",
+        "shape5",
+        "shape6Inverted",
+        "shape6",
+        "shape7Inverted",
+        "shape7",
+        "shape8",
+        "shape9"
+      ]
+    },
+    "baseColor": {
+      "title": "Base Color",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "amber",
+              "blue",
+              "cyan",
+              "deepOrange",
+              "deepPurple",
+              "green",
+              "indigo",
+              "lightBlue",
+              "lightGreen",
+              "lime",
+              "orange",
+              "pink",
+              "purple",
+              "red",
+              "teal",
+              "yellow"
+            ]
+          },
+          {
+            "$ref": "https://dicebear.com/schema/v4.json#/definitions/color"
+          }
+        ]
+      },
+      "default": [
+        "amber",
+        "blue",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "yellow"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -5,7 +5,7 @@ export * as botttsNeutral from '@dicebear/bottts-neutral';
 export * as gridy from '@dicebear/gridy';
 export * as identicon from '@dicebear/identicon';
 export * as initials from '@dicebear/initials';
-export * as jdenticon from '@dicebear/avatars-jdenticon-sprites';
+export * as shapes from '@dicebear/shapes';
 export * as micah from '@dicebear/micah';
 export * as croodles from '@dicebear/croodles';
 export * as croodlesNeutral from '@dicebear/croodles-neutral';

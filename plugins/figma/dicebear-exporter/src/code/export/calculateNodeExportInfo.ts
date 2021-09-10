@@ -41,7 +41,11 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
 
       nodeExportInfo.componentGroup = getNameParts(mainComponent.name).group;
 
-      instanceNode.mainComponent = cloneComponent;
+      const width = instanceNode.width;
+      const height = instanceNode.height;
+
+      instanceNode.swapComponent(mainComponent);
+      instanceNode.resize(width, height);
 
       writeNodeExportInfo(instanceNode, nodeExportInfo);
     }

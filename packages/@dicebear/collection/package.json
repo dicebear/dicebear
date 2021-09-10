@@ -39,7 +39,7 @@
     "@dicebear/gridy": "^4.9.0",
     "@dicebear/identicon": "^4.9.0",
     "@dicebear/initials": "^4.9.0",
-    "@dicebear/avatars-jdenticon-sprites": "^4.9.0",
+    "@dicebear/shapes": "^4.9.0",
     "@dicebear/big-ears": "^4.9.0",
     "@dicebear/big-ears-neutral": "^4.9.0",
     "@dicebear/big-smile": "^4.9.0",

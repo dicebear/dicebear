@@ -45,3 +45,7 @@ https://www.figma.com/file/4nf3pyoOuM1U9Pa8M0cL6u/bottts?node-id=4%3A3172
 # gridy
 
 https://www.figma.com/file/d1Arpco5FTMsJILGaoEvM4/gridy?node-id=5%3A140
+
+# shapes
+
+https://www.figma.com/file/gIuwt9OU5MHUXsUaBzK6XU/shapes?node-id=9%3A68

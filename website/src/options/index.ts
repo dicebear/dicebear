@@ -83,7 +83,7 @@ export default [
   },
   {
     id: 'jdenticon',
-    name: '@dicebear/avatars-jdenticon-sprites',
+    name: '@dicebear/shapes',
     style: collection.jdenticon,
     options: jdenticonOptions,
   },
