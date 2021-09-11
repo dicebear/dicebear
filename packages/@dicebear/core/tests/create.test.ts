@@ -5,21 +5,17 @@ import * as path from 'path';
 
 const seed = 'test';
 const data: Array<StyleOptions<{}>> = [
-  { seed, backgroundColor: '#FF0000' },
-  { seed, backgroundColor: '#FF0000', margin: 10 },
-  { seed, backgroundColor: '#FF0000', margin: 10, radius: 25 },
-  { seed, backgroundColor: '#FF0000', width: 100 },
-  { seed, backgroundColor: '#FF0000', height: 100 },
-  { seed, backgroundColor: '#FF0000', width: 100, height: 100 },
-  { seed, backgroundColor: '#FF0000', rotate: 90 },
-  { seed, backgroundColor: '#FF0000', scale: 50 },
-  { seed, backgroundColor: '#FF0000', flip: true },
-  { seed, backgroundColor: '#FF0000', size: 100 },
-  { seed, backgroundColor: '#FF0000', translateX: -50 },
-  { seed, backgroundColor: '#FF0000', translateY: 50 },
+  { seed, backgroundColor: ['#FF0000'] },
+  { seed, backgroundColor: ['#FF0000'], scale: 20, radius: 25 },
+  { seed, backgroundColor: ['#FF0000'], rotate: 90 },
+  { seed, backgroundColor: ['#FF0000'], scale: 50 },
+  { seed, backgroundColor: ['#FF0000'], flip: true },
+  { seed, backgroundColor: ['#FF0000'], size: 100 },
+  { seed, backgroundColor: ['#FF0000'], translateX: -50 },
+  { seed, backgroundColor: ['#FF0000'], translateY: 50 },
   {
     seed,
-    backgroundColor: '#FF0000',
+    backgroundColor: ['#FF0000'],
     size: 100,
     rotate: 120,
     scale: 50,
@@ -47,8 +43,6 @@ const style: Style<{}> = {
   }),
 };
 
-const legacyStyle = avatars.utils.style.createLegacyWrapper(style);
-
 data.forEach((options, key) => {
   test(`Create avatar #${key}`, async () => {
     const svgPath = path.resolve(__dirname, 'svg', `${key}.svg`);
@@ -66,6 +60,5 @@ data.forEach((options, key) => {
     const svg = fs.readFileSync(svgPath, { encoding: 'utf-8' });
 
     expect(avatars.createAvatar(style, options)).toEqual(svg);
-    expect(new avatars.default(legacyStyle, options).create(seed)).toEqual(svg);
   });
 });

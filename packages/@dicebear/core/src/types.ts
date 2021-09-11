@@ -30,6 +30,23 @@ export interface StyleCreateResult {
   body: string;
 }
 
+export type StylePreview<O extends {}, K extends keyof StyleOptions<O> = keyof StyleOptions<O>> = (
+  option: K,
+  value: StyleOptions<O>[K]
+) => StylePreviewResult;
+
+export interface StylePreviewResultAttributes {
+  [key: string]: string;
+}
+
+export type StylePreviewResult =
+  | undefined
+  | {
+      attributes?: StyleCreateResultAttributes;
+      head?: string;
+      body: string;
+    };
+
 export interface StyleMeta {
   title?: string;
   creator?: string | string[];
@@ -45,4 +62,5 @@ export interface Style<O extends {}> {
   meta: StyleMeta;
   schema: StyleSchema;
   create: StyleCreate<O>;
+  preview?: StylePreview<O>;
 }

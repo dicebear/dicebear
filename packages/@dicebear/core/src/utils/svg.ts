@@ -190,10 +190,8 @@ export function getViewBox(result: StyleCreateResult) {
   };
 }
 
-export function addBackgroundColor<O extends Options>(result: StyleCreateResult, options: O | string) {
+export function addBackgroundColor(result: StyleCreateResult, backgroundColor: string) {
   let { width, height, x, y } = getViewBox(result);
-
-  let backgroundColor = typeof options === 'string' ? options : options.backgroundColor ?? 'transparent';
 
   return `
     <rect fill="${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />

@@ -302,11 +302,10 @@ export { Options } from './options';
   'src/core.ts': `
 import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
 import schema from './schema.json';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
+import { getComponents } from './utils/getComponents';
+import { getColors } from './utils/getColors';
 import { onPreCreate } from './hooks/onPreCreate';
 import { onPostCreate } from './hooks/onPostCreate';
 
@@ -314,54 +313,35 @@ export const style: Style<Options> = {
   meta: {
     title: '{{{sourceTitle}}}',
     {{#if creator}}
-    creator: '{{{creator}}}',
+      creator: '{{{creator}}}',
     {{/if}}
     {{#if contributor}}
-    contributor: '{{{contributor}}}',
+      contributor: '{{{contributor}}}',
     {{/if}}
     {{#if source}}
-    source: '{{{source}}}',
+      source: '{{{source}}}',
     {{/if}}
     {{#if licenseName}}
-    license: {
-      name: '{{{licenseName}}}',
-      {{#if licenseUrl}}
-      url: '{{{licenseUrl}}}',
-      {{/if}}
-    },
+      license: {
+        name: '{{{licenseName}}}',
+        {{#if licenseUrl}}
+        url: '{{{licenseUrl}}}',
+        {{/if}}
+      },
     {{/if}}
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     onPreCreate({ prng, options });
 
-    {{#each components}}
-    const {{@key}}Component = pickComponent(prng, '{{@key}}', options.{{@key}});
-    {{/each}}
-
-    const components: ComponentPickCollection = {
-      {{#each components}}
-      {{#isNull this.settings.probability.length}}
-      '{{@key}}': {{@key}}Component,
-      {{else}}
-      '{{@key}}': prng.bool(options.{{@key}}Probability) ? {{@key}}Component : undefined,
-      {{/isNull}}
-      {{/each}}
-    }
-
-    const colors: ColorPickCollection = {
-      {{#each colors}}
-      {{#if this.isUsedByComponents}}
-      '{{@key}}': pickColor(prng, '{{@key}}', options.{{@key}}Color ?? []),
-      {{/if}}
-      {{/each}}
-    }
-
-    {{#if backgroundColorGroupName}}
-    options.backgroundColor = [pickColor(prng, '{{backgroundColorGroupName}}', options.backgroundColor ?? []).value];
-    {{/if}}
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
     onPostCreate({ prng, options, components, colors });
+    
+    {{#if backgroundColorGroupName}}
+      options.backgroundColor = colors.background.value;
+    {{/if}}
 
     return {
       attributes: {
@@ -401,13 +381,13 @@ export type ComponentPick =
   // src/colors/index.ts
   'src/colors/index.ts': `
 {{#each colors}}
-{{#if this.isUsedByComponents}}
-export { {{@key}} } from './{{@key}}';
-{{else}}
-{{#isEqual @key ../backgroundColorGroupName}}
-export { {{@key}} } from './{{@key}}';
-{{/isEqual}}
-{{/if}}
+  {{#if this.isUsedByComponents}}
+    export { {{@key}} } from './{{@key}}';
+  {{else}}
+    {{#isEqual @key ../backgroundColorGroupName}}
+      export { {{@key}} } from './{{@key}}';
+    {{/isEqual}}
+  {{/if}}
 {{/each}}
 `,
 
@@ -416,16 +396,16 @@ export { {{@key}} } from './{{@key}}';
 import type { ColorGroup } from "../static-types";
 
 export const {{name}}: ColorGroup = {
-{{#each colors}}
-  '{{@key}}': 'rgba({{this.value.r}}, {{this.value.g}}, {{this.value.b}}, {{this.value.a}})',
-{{/each}}
+  {{#each colors}}
+    '{{@key}}': 'rgba({{this.value.r}}, {{this.value.g}}, {{this.value.b}}, {{this.value.a}})',
+  {{/each}}
 }
 `,
 
   // src/components/index.ts
   'src/components/index.ts': `
 {{#each components}}
-export { {{@key}} } from './{{@key}}';
+  export { {{@key}} } from './{{@key}}';
 {{/each}}
 `,
 
@@ -434,20 +414,92 @@ export { {{@key}} } from './{{@key}}';
 import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
 
 export const {{name}}: ComponentGroup = {
-{{#each components}}
-  '{{@key}}': (components: ComponentPickCollection, colors: ColorPickCollection) => {{{this}}},
-{{/each}}
+  {{#each components}}
+    '{{@key}}': (components: ComponentPickCollection, colors: ColorPickCollection) => {{{this}}},
+  {{/each}}
 }
+`,
+
+  // src/utils/getColors.ts
+  'src/utils/getColors.ts': `
+import type { Prng } from '@dicebear/core';
+import type { Options } from '../options';
+import type { ColorPickCollection } from '../static-types';
+import { pickColor } from './pickColor';
+
+type Props = {
+  prng: Prng,
+  options: Options
+}
+
+export function getColors({ prng, options }: Props): ColorPickCollection {
+  return {
+    {{#each colors}}
+      {{#if this.isUsedByComponents}}
+        '{{@key}}': pickColor({
+          prng,
+          group: '{{@key}}',
+          values: options.{{@key}}Color
+        }),
+      {{/if}}
+    {{/each}}
+    {{#if backgroundColorGroupName}}
+      background: pickColor({
+        prng,
+        group: '{{backgroundColorGroupName}}',
+        values: options.backgroundColor
+      }),
+    {{/if}}
+  }
+};
+`,
+
+  // src/utils/getComponents.ts
+  'src/utils/getComponents.ts': `
+import type { Prng } from '@dicebear/core';
+import type { Options } from '../options';
+import type { ComponentPickCollection } from '../static-types';
+import { pickComponent } from './pickComponent';
+
+type Props = {
+  prng: Prng,
+  options: Options
+}
+
+export function getComponents({ prng, options }: Props): ComponentPickCollection {
+  {{#each components}}
+    const {{@key}}Component = pickComponent({
+      prng,
+      group: '{{@key}}',
+      values: options.{{@key}}
+    });
+  {{/each}}
+
+  return {
+    {{#each components}}
+      {{#isNull this.settings.probability.length}}
+        '{{@key}}': {{@key}}Component,
+      {{else}}
+        '{{@key}}': prng.bool(options.{{@key}}Probability) ? {{@key}}Component : undefined,
+      {{/isNull}}
+    {{/each}}
+  }
+};
 `,
 
   // src/utils/pickColor.ts
   'src/utils/pickColor.ts': `
 import type { Prng } from '@dicebear/core';
 import type { ColorGroupCollection, ColorPick } from '../static-types';
-
 import * as colors from '../colors';
 
-export function pickColor(prng: Prng, group: string, values: string[]): ColorPick {
+type Props = {
+  prng: Prng,
+  group: string,
+  values?: string[]
+}
+
+export function pickColor({prng, group, values = []}: Props): ColorPick {
   const colorCollection: ColorGroupCollection = colors;
 
   if (values.length === 0) {
@@ -467,10 +519,15 @@ export function pickColor(prng: Prng, group: string, values: string[]): ColorPic
   'src/utils/pickComponent.ts': `
 import type { Prng } from '@dicebear/core';
 import type { ComponentGroupCollection, ComponentPick } from '../static-types';
-
 import * as components from '../components';
 
-export function pickComponent(prng: Prng, group: string, values: string[] = []): ComponentPick {
+type Props = {
+  prng: Prng,
+  group: string,
+  values?: string[]
+}
+
+export function pickComponent({ prng, group, values = []}: Props): ComponentPick {
   const componentCollection: ComponentGroupCollection = components;
 
   const key = prng.pick(values);
@@ -496,9 +553,9 @@ type Props = { prng: Prng, options: StyleOptions<Options> }
 
 export function onPreCreate({ prng, options }: Props) {
   {{#if content}}
-  {{{content}}}
+    {{{content}}}
   {{else}}
-  // Write your modifications here
+    // Write your modifications here
   {{/if}}
 }
 `,
@@ -514,9 +571,9 @@ type Props = { prng: Prng, options: StyleOptions<Options>, components: Component
 
 export function onPostCreate({ prng, options, components, colors }: Props) {
   {{#if content}}
-  {{{content}}}
+    {{{content}}}
   {{else}}
-  // Write your modifications here
+    // Write your modifications here
   {{/if}}
 }
 `,

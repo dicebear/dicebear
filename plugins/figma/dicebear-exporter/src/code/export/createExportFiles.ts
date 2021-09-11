@@ -86,6 +86,13 @@ export async function createExportFiles(exportData: Export) {
     'src/components/index.ts': handlebars.compile(templates['src/components/index.ts'])({
       components: exportData.components,
     }),
+    'src/utils/getColors.ts': handlebars.compile(templates['src/utils/getColors.ts'])({
+      colors: exportData.colors,
+      backgroundColorGroupName: exportData.frame.settings.backgroundColorGroupName,
+    }),
+    'src/utils/getComponents.ts': handlebars.compile(templates['src/utils/getComponents.ts'])({
+      components: exportData.components,
+    }),
     'src/utils/pickColor.ts': templates['src/utils/pickColor.ts'],
     'src/utils/pickComponent.ts': templates['src/utils/pickComponent.ts'],
     'src/hooks/onPreCreate.ts': handlebars.compile(templates['src/hooks/onPreCreate.ts'])({

@@ -4,8 +4,9 @@ import * as utils from './utils';
 export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O> = {}) {
   options = utils.options.merge(style, options);
 
-  let prngInstance = utils.prng.create(options.seed);
-  let result = style.create({ prng: prngInstance, options });
+  const prngInstance = utils.prng.create(options.seed);
+  const result = style.create({ prng: prngInstance, options });
+  const backgroundColor = prngInstance.pick(options.backgroundColor ?? []);
 
   if (options.size) {
     result.attributes.width = options.size.toString();
@@ -28,9 +29,7 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     result.body = utils.svg.addTranslate(result, options.translateX, options.translateY);
   }
 
-  if (options.backgroundColor) {
-    let backgroundColor = prngInstance.pick(options.backgroundColor ?? []);
-
+  if (backgroundColor && backgroundColor !== 'transparent') {
     result.body = utils.svg.addBackgroundColor(result, backgroundColor);
   }
 
