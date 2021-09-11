@@ -40,6 +40,11 @@ package.json
 MIT License
 
 Copyright (c) {{year}} Florian Körner
+{{#if isMitLicensed}}
+{{#if creator}}
+Copyright (c) {{year}} {{{creator}}}
+{{/if}}
+{{/if}}
 {{#if contributor}}
 Copyright (c) {{year}} {{{contributor}}}
 {{/if}}
@@ -334,6 +339,11 @@ data.forEach((options, key) => {
  *
  * Code licensed under MIT License.
  * Copyright (c) {{year}} Florian Körner
+{{#if isMitLicensed}}
+{{#if creator}}
+* Copyright (c) {{year}} {{{creator}}}
+{{/if}}
+{{/if}}
 {{#if contributor}}
  * Copyright (c) {{year}} {{{contributor}}}
 {{/if}}

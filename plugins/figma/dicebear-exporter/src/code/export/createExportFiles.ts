@@ -36,6 +36,8 @@ handlebars.registerHelper('isEqual', function (val: unknown, val2: unknown, opti
 });
 
 export async function createExportFiles(exportData: Export) {
+  const isMitLicensed = exportData.frame.settings.licenseName && exportData.frame.settings.licenseName === 'MIT';
+
   const files: Record<string, string> = {
     '.editorconfig': templates['.editorconfig'],
     '.gitignore': templates['.gitignore'],
@@ -43,7 +45,9 @@ export async function createExportFiles(exportData: Export) {
     '.prettierrc': templates['.prettierrc'],
     LICENSE: handlebars.compile(templates['LICENSE'])({
       year: new Date().getFullYear(),
+      creator: exportData.frame.settings.creator,
       contributor: exportData.frame.settings.contributor,
+      isMitLicensed,
     }),
     'jest.config.js': templates['jest.config.js'],
     'package.json': handlebars.compile(templates['package.json'])({
@@ -63,6 +67,7 @@ export async function createExportFiles(exportData: Export) {
       contributor: exportData.frame.settings.contributor,
       sourceTitle: exportData.frame.settings.sourceTitle,
       source: exportData.frame.settings.source,
+      isMitLicensed,
     }),
     'src/core.ts': handlebars.compile(templates['src/core.ts'])({
       creator: exportData.frame.settings.creator,
@@ -180,8 +185,8 @@ export async function createExportFiles(exportData: Export) {
     packageName: exportData.frame.settings.packageName,
     packageVersionMajor: exportData.frame.settings.packageVersion.split('.')[0] ?? '0',
     packageNameLastPart: exportData.frame.settings.packageName.split('/').pop() ?? '',
-    isMitLicensed: exportData.frame.settings.licenseName && exportData.frame.settings.licenseName === 'MIT',
     properties: schema.properties,
+    isMitLicensed,
   });
 
   return files;
