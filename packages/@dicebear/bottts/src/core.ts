@@ -34,21 +34,58 @@ export const style: Style<Options> = {
       },
       body: `
   <g transform="translate(0 66)">
-    ${components.sides?.value(components, colors) ?? ''}
+    ${components.sides?.value.render(components, colors) ?? ''}
   </g>
   <g transform="translate(41)">
-    ${components.top?.value(components, colors) ?? ''}
+    ${components.top?.value.render(components, colors) ?? ''}
   </g>
   <g transform="translate(25 44)">
-    ${components.face?.value(components, colors) ?? ''}
+    ${components.face?.value.render(components, colors) ?? ''}
   </g>
   <g transform="translate(52 124)">
-    ${components.mouth?.value(components, colors) ?? ''}
+    ${components.mouth?.value.render(components, colors) ?? ''}
   </g>
   <g transform="translate(38 76)">
-    ${components.eyes?.value(components, colors) ?? ''}
+    ${components.eyes?.value.render(components, colors) ?? ''}
   </g>
 `,
     };
+  },
+  preview: ({ prng, options, property }) => {
+    onPreCreate({ prng, options });
+
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
+
+    onPostCreate({ prng, options, components, colors });
+
+    const componentKey = property.toString();
+    if (componentKey in components) {
+      const width = components[componentKey]?.value.width ?? 0;
+      const height = components[componentKey]?.value.height ?? 0;
+
+      return {
+        attributes: {
+          viewBox: `0 0 ${width} ${height}`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: components[componentKey]?.value.render(components, colors) ?? '',
+      };
+    }
+
+    const colorKey = property.toString().replace(/Color$/, '');
+    if (colorKey !== property && colorKey in colors) {
+      return {
+        attributes: {
+          viewBox: '0 0 1 1',
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: `<rect width="1" height="1" fill="${colors[colorKey].value}" />`,
+      };
+    }
+
+    return undefined;
   },
 };

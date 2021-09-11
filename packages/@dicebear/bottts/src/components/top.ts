@@ -5,10 +5,13 @@ import type {
 } from '../static-types';
 
 export const top: ComponentGroup = {
-  antenna: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => `
+  antenna: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <mask id="topAntenna-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="38" y="5" width="24" height="47">
     <path d="M52 5h-4v31h-8a2 2 0 0 0-2 2v14h24V38a2 2 0 0 0-2-2h-8V5Z" fill="#E1E6E8"/>
   </mask>
@@ -20,10 +23,14 @@ export const top: ComponentGroup = {
   <circle cx="50" cy="8" r="8" fill="#FFE65C"/>
   <circle cx="53" cy="5" r="3" fill="#fff"/>
 `,
-  antennaCrooked: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => `
+  },
+  antennaCrooked: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <mask id="topAntennaCrooked-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="38" y="12" width="24" height="40">
     <path d="m53.568 39 1.976-4.615-6.191-10.675 2.895-10.626-2.894-.79-3.225 11.837 6.05 10.432L50.089 39H38v13h24V39h-8.432Z" fill="#E6E6E6"/>
   </mask>
@@ -35,10 +42,14 @@ export const top: ComponentGroup = {
   <circle cx="50" cy="8" r="8" fill="#FFE65C"/>
   <circle cx="53" cy="5" r="3" fill="#fff"/>
 `,
-  bulb01: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => `
+  },
+  bulb01: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <mask id="topBulb01-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="22" y="0" width="56" height="52">
     <path d="M48 0c-8.837 0-16 7.163-16 16v16a8 8 0 0 0 8 8H23a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h54a1 1 0 0 0 1-1V41a1 1 0 0 0-1-1H60a8 8 0 0 0 8-8V16c0-8.837-7.163-16-16-16h-4Z" fill="#59C4FF"/>
   </mask>
@@ -50,10 +61,14 @@ export const top: ComponentGroup = {
     <path d="m49.828 26-9-9L38 19.828l10 10V40h4V29.97l10.142-10.142L59.314 17l-9 9h-.486Z" fill="#fff" fill-opacity=".8"/>
   </g>
 `,
-  glowingBulb01: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => `
+  },
+  glowingBulb01: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <g filter="url(#topGlowingBulb01-a)">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M32 24c0-8.837 7.163-16 16-16h4c8.837 0 16 7.163 16 16v8a8 8 0 0 1-8 8H40a8 8 0 0 1-8-8v-8Z" fill="#fff" fill-opacity=".3"/>
   </g>
@@ -81,10 +96,14 @@ export const top: ComponentGroup = {
     </filter>
   </defs>
 `,
-  glowingBulb02: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => `
+  },
+  glowingBulb02: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <g filter="url(#topGlowingBulb02-a)">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M30 33c0-11.046 8.954-20 20-20s20 8.954 20 20v11H30V33Z" fill="#fff" fill-opacity=".3"/>
   </g>
@@ -112,7 +131,14 @@ export const top: ComponentGroup = {
     </filter>
   </defs>
 `,
-  horns: (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  },
+  horns: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <mask id="topHorns-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="12" width="84" height="40">
     <path d="M71.21 40C78.85 33.293 84.631 20.688 84 14c-.136-1.447 2-1.7 3 0 4.418 7.512 2.717 22.067 2.153 26H92v12H66V40h5.21ZM16.521 13.74c0 7.533 4.97 19.705 12.74 26.26H34v12H8V40h3.225c-.595-3.559-2.696-18.399 2.209-25.9.901-1.378 3.087-1.42 3.087-.36Z" fill="#E1E6E8"/>
   </mask>
@@ -123,10 +149,14 @@ export const top: ComponentGroup = {
     <path fill-rule="evenodd" clip-rule="evenodd" d="M15.456 13h16.113v27H20.82c-7.449-7.85-5.364-27-5.364-27ZM84.82 13h7.749v27H81.82c5.751-7.805 3-27 3-27Z" fill="#fff" fill-opacity=".4"/>
   </g>
 `,
-  lights: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => `
+  },
+  lights: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <mask id="topLights-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="10" y="22" width="80" height="30">
     <path d="M23 22a5 5 0 0 0-5 5v13h-6a2 2 0 0 0-2 2v10h80V42a2 2 0 0 0-2-2h-6V27a5 5 0 0 0-5-5h-6a5 5 0 0 0-5 5v13h-8V27a5 5 0 0 0-5-5h-6a5 5 0 0 0-5 5v13h-8V27a5 5 0 0 0-5-5h-6Z" fill="#E1E6E8"/>
   </mask>
@@ -139,10 +169,14 @@ export const top: ComponentGroup = {
     <rect x="72" y="28" width="4" height="8" rx="2" fill="#fff" fill-opacity=".6"/>
   </g>
 `,
-  pyramid: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => `
+  },
+  pyramid: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <mask id="topPyramid-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="18" y="8" width="64" height="44">
     <path fill-rule="evenodd" clip-rule="evenodd" d="m50 8 32 44H18L50 8Z" fill="#fff"/>
   </mask>
@@ -152,7 +186,14 @@ export const top: ComponentGroup = {
     <path fill="#fff" fill-opacity=".8" d="M50 4h30v48H50z"/>
   </g>
 `,
-  radar: (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  },
+  radar: {
+    width: 100,
+    height: 52,
+    render: (
+      components: ComponentPickCollection,
+      colors: ColorPickCollection
+    ) => `
   <mask id="topRadar-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="37" y="0" width="36" height="53">
     <path d="M43.799 28.397c-7.81-7.81-7.81-20.474 0-28.284l13.435 13.435 6.453-6.453a4.002 4.002 0 0 1 6.275-4.861 4 4 0 0 1-4.86 6.275l-6.454 6.453 13.435 13.435c-5.45 5.45-13.263 7.097-20.142 4.94v18.776h-4V31.58a20.024 20.024 0 0 1-4.142-3.184Z" fill="#E1E6E8"/>
   </mask>
@@ -163,4 +204,5 @@ export const top: ComponentGroup = {
     <circle cx="67.133" cy="7.406" r="5.657" transform="rotate(45 67.133 7.406)" fill="#fff" fill-opacity=".8"/>
   </g>
 `,
+  },
 };

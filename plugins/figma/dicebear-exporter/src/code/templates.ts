@@ -352,6 +352,43 @@ export const style: Style<Options> = {
       body: {{{body}}},
     };
   },
+  preview: ({ prng, options, property }) => {
+    onPreCreate({ prng, options });
+
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
+
+    onPostCreate({ prng, options, components, colors });
+    
+    const componentKey = property.toString();
+    if (componentKey in components) {
+      const width = components[componentKey]?.value.width ?? 0;
+      const height = components[componentKey]?.value.height ?? 0;
+
+      return {
+        attributes: {
+          viewBox: \`0 0 $\{width} $\{height}\`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: components[componentKey]?.value.render(components, colors) ?? '',
+      };
+    }
+    
+    const colorKey = property.toString().replace(/Color$/, '');
+    if (colorKey !== property && colorKey in colors) {
+      return {
+        attributes: {
+          viewBox: '0 0 1 1',
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: \`<rect width="1" height="1" fill="$\{colors[colorKey].value}" />\`,
+      };
+    }
+
+    return undefined;
+  },
 };
 `,
 
@@ -368,7 +405,14 @@ export type ColorPick = {
 
 export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
-export type ComponentGroupItem = (components: ComponentPickCollection, colors: ColorPickCollection) => string;
+export type ComponentGroupItem = {
+  width: number;
+  height: number;
+  render: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => string;
+}
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =
   | {
@@ -415,7 +459,11 @@ import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } fro
 
 export const {{name}}: ComponentGroup = {
   {{#each components}}
-    '{{@key}}': (components: ComponentPickCollection, colors: ColorPickCollection) => {{{this}}},
+    '{{@key}}': {
+      width: {{this.width}},
+      height: {{this.height}},
+      render: (components: ComponentPickCollection, colors: ColorPickCollection) => {{{this.template}}}
+    },
   {{/each}}
 }
 `,

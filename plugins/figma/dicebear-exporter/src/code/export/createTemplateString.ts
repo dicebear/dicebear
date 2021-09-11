@@ -44,7 +44,7 @@ export async function createTemplateString(node: FrameNode | ComponentNode) {
   result = result.replace(/color::([a-z0-9]*)/gi, '${colors.$1.value}');
 
   // Replace components
-  result = result.replace(/component::([a-z0-9]*)/gi, "${components.$1?.value(components, colors) ?? ''}");
+  result = result.replace(/component::([a-z0-9]*)/gi, "${components.$1?.value.render(components, colors) ?? ''}");
 
   return '`' + result + '`';
 }

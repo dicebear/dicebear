@@ -114,7 +114,14 @@ export async function createExportFiles(exportData: Export) {
     }
 
     const componentGroup = exportData.components[componentGroupName];
-    const components: Record<string, string> = {};
+    const components: Record<
+      string,
+      {
+        width: number;
+        height: number;
+        template: string;
+      }
+    > = {};
 
     for (const componentName in componentGroup.collection) {
       if (false === componentGroup.collection.hasOwnProperty(componentName)) {
@@ -123,7 +130,11 @@ export async function createExportFiles(exportData: Export) {
 
       const componentNode = figma.getNodeById(componentGroup.collection[componentName].id) as ComponentNode;
 
-      components[componentName] = await createTemplateString(componentNode);
+      components[componentName] = {
+        width: componentNode.width,
+        height: componentNode.height,
+        template: await createTemplateString(componentNode),
+      };
     }
 
     files[`src/components/${componentGroupName}.ts`] = componentTemplate({

@@ -30,19 +30,23 @@ export interface StyleCreateResult {
   body: string;
 }
 
-export type StylePreview<O extends {}, K extends keyof StyleOptions<O> = keyof StyleOptions<O>> = (
-  option: K,
-  value: StyleOptions<O>[K]
-) => StylePreviewResult;
+export interface StylePreviewProps<O> {
+  prng: Prng;
+  options: StyleOptions<O>;
+  property: keyof O;
+}
+
+export type StylePreview<O extends {}> = (props: StylePreviewProps<O>) => StylePreviewResult;
 
 export interface StylePreviewResultAttributes {
+  viewBox: string;
   [key: string]: string;
 }
 
 export type StylePreviewResult =
   | undefined
   | {
-      attributes?: StyleCreateResultAttributes;
+      attributes: StyleCreateResultAttributes;
       head?: string;
       body: string;
     };

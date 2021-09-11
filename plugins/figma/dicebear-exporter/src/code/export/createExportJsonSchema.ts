@@ -21,6 +21,7 @@ export function createExportJsonSchema(exportData: Export): JSONSchema7 {
         enum: Object.keys(componentGroup.collection),
       },
       default: filterDefaults(componentGroup.settings.defaults),
+      examples: Object.keys(componentGroup.collection).map((v) => [v]),
     };
 
     if (typeof componentGroup.settings.probability === 'number') {
@@ -57,6 +58,7 @@ export function createExportJsonSchema(exportData: Export): JSONSchema7 {
           ],
         },
         default: filterDefaults(colorGroup.settings.defaults),
+        examples: Object.keys(colorGroup.collection).map((v) => [v]),
       };
     }
 
@@ -76,6 +78,7 @@ export function createExportJsonSchema(exportData: Export): JSONSchema7 {
           ],
         },
         default: filterDefaults(colorGroup.settings.defaults),
+        examples: Object.keys(colorGroup.collection).map((v) => [v]),
       };
     }
   }

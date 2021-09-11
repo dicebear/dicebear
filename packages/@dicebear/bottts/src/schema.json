@@ -56,6 +56,27 @@
         "red",
         "teal",
         "yellow"
+      ],
+      "examples": [
+        ["amber"],
+        ["blue"],
+        ["blueGrey"],
+        ["brown"],
+        ["cyan"],
+        ["deepOrange"],
+        ["deepPurple"],
+        ["green"],
+        ["grey"],
+        ["indigo"],
+        ["lightBlue"],
+        ["lightGreen"],
+        ["lime"],
+        ["orange"],
+        ["pink"],
+        ["purple"],
+        ["red"],
+        ["teal"],
+        ["yellow"]
       ]
     },
     "eyes": {
@@ -94,6 +115,22 @@
         "roundFrame02",
         "sensor",
         "shade01"
+      ],
+      "examples": [
+        ["bulging"],
+        ["dizzy"],
+        ["eva"],
+        ["frame1"],
+        ["frame2"],
+        ["glow"],
+        ["happy"],
+        ["hearts"],
+        ["robocop"],
+        ["round"],
+        ["roundFrame01"],
+        ["roundFrame02"],
+        ["sensor"],
+        ["shade01"]
       ]
     },
     "face": {
@@ -116,6 +153,14 @@
         "square02",
         "square03",
         "square04"
+      ],
+      "examples": [
+        ["round01"],
+        ["round02"],
+        ["square01"],
+        ["square02"],
+        ["square03"],
+        ["square04"]
       ]
     },
     "mouth": {
@@ -144,6 +189,17 @@
         "smile02",
         "square01",
         "square02"
+      ],
+      "examples": [
+        ["bite"],
+        ["diagram"],
+        ["grill01"],
+        ["grill02"],
+        ["grill03"],
+        ["smile01"],
+        ["smile02"],
+        ["square01"],
+        ["square02"]
       ]
     },
     "sides": {
@@ -168,6 +224,15 @@
         "round",
         "square",
         "squareAssymetric"
+      ],
+      "examples": [
+        ["antenna01"],
+        ["antenna02"],
+        ["cables01"],
+        ["cables02"],
+        ["round"],
+        ["square"],
+        ["squareAssymetric"]
       ]
     },
     "sidesProbability": {
@@ -200,6 +265,16 @@
         "dots",
         "grunge01",
         "grunge02"
+      ],
+      "examples": [
+        ["camo01"],
+        ["camo02"],
+        ["circuits"],
+        ["dirty01"],
+        ["dirty02"],
+        ["dots"],
+        ["grunge01"],
+        ["grunge02"]
       ]
     },
     "textureProbability": {
@@ -234,6 +309,17 @@
         "lights",
         "pyramid",
         "radar"
+      ],
+      "examples": [
+        ["antenna"],
+        ["antennaCrooked"],
+        ["bulb01"],
+        ["glowingBulb01"],
+        ["glowingBulb02"],
+        ["horns"],
+        ["lights"],
+        ["pyramid"],
+        ["radar"]
       ]
     },
     "topProbability": {
