@@ -4,7 +4,6 @@ import { PackageJson } from 'type-fest';
 import { compileFromFile } from 'json-schema-to-typescript';
 import { createUmdConfig } from '../build/createUmdConfig';
 import { createCjsAndEsConfig } from '../build/createCjsAndEsConfig';
-import jsonRefParser from '@apidevtools/json-schema-ref-parser';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 
@@ -19,34 +18,13 @@ export async function makeBuildCommand() {
     const umdConfig = createUmdConfig(name, pkg);
     const cjsAndEsConfig = createCjsAndEsConfig(pkg);
 
-    const schemaPath = path.resolve(process.cwd(), 'schema.json');
+    const schemaPath = path.resolve(process.cwd(), 'src/schema.json');
 
     if (await fs.pathExists(schemaPath)) {
-      console.log('Create dereferences src/schema.ts from schema.json');
-
-      const schema = await jsonRefParser.dereference(schemaPath);
-
-      delete schema.definitions;
-
-      await fs.writeFile(
-        path.resolve(process.cwd(), 'src/schema.ts'),
-        `
-          import { StyleSchema } from '${pkg.name === '@dicebear/core' ? './types' : '@dicebear/core'}';
-  
-          export const schema: StyleSchema = ${JSON.stringify(schema)};
-        `
-          .replace(/^[ ]*/gm, '')
-          .trim(),
-        { encoding: 'utf-8' }
-      );
-
-      console.log('Create src/options.ts from schema.json');
-
       const schemaTypes = await compileFromFile(schemaPath);
 
       await fs.writeFile(path.resolve(process.cwd(), 'src/options.ts'), schemaTypes, { encoding: 'utf-8' });
     } else {
-      console.log('schema.json not found - skip dereferencing');
       console.log('schema.json not found - skip creation src/options.ts');
     }
 

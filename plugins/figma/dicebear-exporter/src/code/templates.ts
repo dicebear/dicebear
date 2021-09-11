@@ -20,7 +20,6 @@ dist
 
 # Generated files
 src/options.ts
-src/schema.ts
 `,
 
   // .prettierignore
@@ -229,6 +228,7 @@ module.exports = {
 {
   "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
+    "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./dist",
   },
@@ -300,11 +300,11 @@ export { Options } from './options';
 
   // src/core.ts
   'src/core.ts': `
-import type { Style } from '@dicebear/core';
+import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
 import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
-import { schema } from './schema';
+import schema from './schema.json';
 import { pickComponent } from './utils/pickComponent';
 import { pickColor } from './utils/pickColor';
 import { onPreCreate } from './hooks/onPreCreate';
@@ -331,7 +331,7 @@ export const style: Style<Options> = {
     },
     {{/if}}
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     onPreCreate({ prng, options });
 

@@ -1,6 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import { PackageJson } from 'type-fest';
 import type { InputOptions, OutputOptions } from 'rollup';
+import json from '@rollup/plugin-json';
 
 import { babel } from './rollup/babel';
 import { replace } from './rollup/replace';
@@ -20,7 +21,7 @@ export function createCjsAndEsConfig(pkg: PackageJson) {
   const input: InputOptions = {
     input: 'src/index.ts',
     external,
-    plugins: [replace(), commonjs(), typescript(), babel()],
+    plugins: [replace(), json(), commonjs(), typescript(), babel()],
   };
 
   const output: OutputOptions[] = [

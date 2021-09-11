@@ -1,11 +1,11 @@
-import type { Style } from '@dicebear/core';
+import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
 import type {
   ComponentPickCollection,
   ColorPickCollection,
 } from './static-types';
 
-import { schema } from './schema';
+import schema from './schema.json';
 import { pickComponent } from './utils/pickComponent';
 import { pickColor } from './utils/pickColor';
 import { onPreCreate } from './hooks/onPreCreate';
@@ -21,7 +21,7 @@ export const style: Style<Options> = {
       url: 'https://bottts.com/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     onPreCreate({ prng, options });
 

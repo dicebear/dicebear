@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import { PackageJson } from 'type-fest';
 import type { InputOptions, OutputOptions } from 'rollup';
+import json from '@rollup/plugin-json';
 
 import { babel } from './rollup/babel';
 import { replace } from './rollup/replace';
@@ -14,7 +15,7 @@ export function createUmdConfig(name: string, pkg: PackageJson) {
   const input: InputOptions = {
     input: 'src/index.ts',
     external: ['@dicebear/core'],
-    plugins: [replace(), nodeResolve(), commonjs(), typescript(), babel()],
+    plugins: [replace(), nodeResolve(), json(), commonjs(), typescript(), babel()],
   };
 
   if (production) {

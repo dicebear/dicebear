@@ -149,7 +149,7 @@ export async function createExportFiles(exportData: Export) {
   }
 
   // Schema JSON
-  files[`schema.json`] = JSON.stringify(schema);
+  files[`src/schema.json`] = JSON.stringify(schema);
 
   // Readme
   files['README.md'] = handlebars.compile(templates['README.md'])({

@@ -25,7 +25,6 @@
     "build:ts": "tsc"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^9.0.7",
     "@dicebear/core": "^4.9.0",
     "@dicebear/collection": "^4.9.0",
     "ajv": "^8.1.0",
