@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   title: 'DiceBear Avatars',
   tagline: 'DiceBear is an avatar library for designers and developers.',
-  url: 'https://avatars.dicebear.com',
+  url: 'https://dicebear.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   favicon: 'favicon.ico',

@@ -198,9 +198,9 @@ export default class Generator extends React.Component<{}, State> {
       arrayFormat: 'brackets',
     });
 
-    return `https://avatars.dicebear.com/api/${this.state.spriteCollection.id}/${encodeURIComponent(
-      this.state.seed
-    )}.svg${params ? '?' + params : ''}`;
+    return `https://dicebear.com/api/${this.state.spriteCollection.id}/${encodeURIComponent(this.state.seed)}.svg${
+      params ? '?' + params : ''
+    }`;
   }
 
   render() {

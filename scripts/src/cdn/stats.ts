@@ -95,7 +95,7 @@ type RequestCollection = Record<
   let docsReferrers: RequestCollection = {};
 
   const sitemap = new Sitemapper({
-    url: 'https://avatars.dicebear.com/sitemap.xml',
+    url: 'https://dicebear.com/sitemap.xml',
     timeout: 15000, // 15 seconds
   });
 

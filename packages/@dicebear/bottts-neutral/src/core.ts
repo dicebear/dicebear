@@ -1,13 +1,9 @@
-import type { Style } from '@dicebear/core';
+import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
-import type {
-  ComponentPickCollection,
-  ColorPickCollection,
-} from './static-types';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
+import schema from './schema.json';
+import { getComponents } from './utils/getComponents';
+import { getColors } from './utils/getColors';
 import { onPreCreate } from './hooks/onPreCreate';
 import { onPostCreate } from './hooks/onPostCreate';
 
@@ -17,35 +13,20 @@ export const style: Style<Options> = {
     creator: 'Pablo Stanley',
     source: 'https://bottts.com/',
     license: {
-      name: 'Free for personal and commercial use.',
+      name: 'Free for personal and commercial use',
       url: 'https://bottts.com/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     onPreCreate({ prng, options });
 
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
-
-    const components: ComponentPickCollection = {
-      mouth: mouthComponent,
-      eyes: eyesComponent,
-    };
-
-    const colors: ColorPickCollection = {};
-
-    const backgroundColor =
-      typeof options.backgroundColor === 'string'
-        ? [options.backgroundColor]
-        : options.backgroundColor;
-    options.backgroundColor = pickColor(
-      prng,
-      'base',
-      backgroundColor ?? []
-    ).value;
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
     onPostCreate({ prng, options, components, colors });
+
+    options.backgroundColor = colors.background.value;
 
     return {
       attributes: {
@@ -55,12 +36,49 @@ export const style: Style<Options> = {
       },
       body: `
   <g transform="translate(22 68)">
-    ${components.mouth?.value(components, colors) ?? ''}
+    ${components.mouth?.value.render(components, colors) ?? ''}
   </g>
   <g transform="translate(8 20)">
-    ${components.eyes?.value(components, colors) ?? ''}
+    ${components.eyes?.value.render(components, colors) ?? ''}
   </g>
 `,
     };
+  },
+  preview: ({ prng, options, property }) => {
+    onPreCreate({ prng, options });
+
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
+
+    onPostCreate({ prng, options, components, colors });
+
+    const componentKey = property.toString();
+    if (componentKey in components) {
+      const width = components[componentKey]?.value.width ?? 0;
+      const height = components[componentKey]?.value.height ?? 0;
+
+      return {
+        attributes: {
+          viewBox: `0 0 ${width} ${height}`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: components[componentKey]?.value.render(components, colors) ?? '',
+      };
+    }
+
+    const colorKey = property.toString().replace(/Color$/, '');
+    if (colorKey !== property && colorKey in colors) {
+      return {
+        attributes: {
+          viewBox: '0 0 1 1',
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: `<rect width="1" height="1" fill="${colors[colorKey].value}" />`,
+      };
+    }
+
+    return undefined;
   },
 };

@@ -16,11 +16,7 @@
   "module": "dist/index.es.js",
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "LICENSE",
-    "README.md",
-    "dist"
-  ],
+  "files": ["LICENSE", "README.md", "dist"],
   "scripts": {
     "test": "jest",
     "prepublishOnly": "npm run build",

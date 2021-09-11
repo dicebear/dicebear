@@ -37,8 +37,8 @@ let svg = createAvatar(style, {
 
 ## Options
 
-All [options from DiceBear](https://avatars.dicebear.com/docs/options) and
-additionally the following:
+All [options from DiceBear](https://dicebear.com/docs/options) and additionally
+the following:
 
 ### baseColor
 

@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  <a href="https://avatars.dicebear.com/integrations/cli">
+  <a href="https://dicebear.com/integrations/cli">
     Read Documentation
   </a>
 </p>

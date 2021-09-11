@@ -74,4 +74,4 @@ npm run deploy
 
 That's it. Your API should now be available in the worldwide network of Cloudflare. Create your first avatar:
 
-[_https://**your-domain.com**/4.5/api/male/seed.svg_](https://avatars.dicebear.com/4.5/api/male/seed.svg)
+[_https://**your-domain.com**/4.5/api/male/seed.svg_](https://dicebear.com/4.5/api/male/seed.svg)

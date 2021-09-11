@@ -14,7 +14,7 @@ export default function Teaser() {
   React.useEffect(() => {
     (async () => {
       if (window && window.fetch) {
-        const response = await fetch(`https://avatars.dicebear.com/stats.json`);
+        const response = await fetch(`https://dicebear.com/stats.json`);
 
         const json = await response.json();
 
