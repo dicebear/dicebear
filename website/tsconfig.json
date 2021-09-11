@@ -1,8 +1,0 @@
-{
-  "extends": "@tsconfig/docusaurus/tsconfig.json",
-  "include": ["src/"],
-  "compilerOptions": {
-    "strict": true,
-    "skipLibCheck": true
-  }
-}

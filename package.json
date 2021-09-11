@@ -5,9 +5,7 @@
     "packages": [
       "packages/*",
       "packages/@dicebear/*",
-      "plugins/figma/*",
-      "scripts",
-      "website"
+      "plugins/figma/*"
     ]
   },
   "scripts": {
