@@ -178,6 +178,8 @@ export async function createExportFiles(exportData: Export) {
     licenseName: exportData.frame.settings.licenseName,
     licenseUrl: exportData.frame.settings.licenseUrl,
     packageName: exportData.frame.settings.packageName,
+    packageVersionMajor: exportData.frame.settings.packageVersion.split('.')[0] ?? '0',
+    packageNameLastPart: exportData.frame.settings.packageName.split('/').pop() ?? '',
     isMitLicensed: exportData.frame.settings.licenseName && exportData.frame.settings.licenseName === 'MIT',
     properties: schema.properties,
   });

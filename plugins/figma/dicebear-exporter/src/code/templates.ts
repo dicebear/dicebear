@@ -102,23 +102,80 @@ SOFTWARE.
 
 ## Usage
 
-Install the DiceBear package and this Avatar styles with the following command.
+### ESM
+
+Install the DiceBear package and this avatar style with the following command:
 
 \`\`\`
-npm install @dicebear/core {{packageName}} --save
+npm install @dicebear/core@^5 {{packageName}}@^{{packageVersionMajor}} --save
 \`\`\`
 
-Now you are ready to create your first Avatar.
+Now you can create your first avatar.
 
 \`\`\`js
 import { createAvatar } from '@dicebear/core';
 import * as style from '{{packageName}}';
 
 let svg = createAvatar(style, {
-  seed: 'custom-seed',
-  // ... and other options
+  // ... options
 });
 \`\`\`
+
+### CJS
+
+Install the DiceBear package and this avatar style with the following command:
+
+\`\`\`
+npm install @dicebear/core@^5 {{packageName}}@^{{packageVersionMajor}} --save
+\`\`\`
+
+Now you can create your first avatar.
+
+\`\`\`js
+const { createAvatar } = require('@dicebear/core');
+const style = require('{{packageName}}');
+
+let svg = createAvatar(style, {
+  // ... options
+});
+\`\`\`
+
+### CDN
+
+Paste the following code into the \`head\` of your document:
+
+\`\`\`html
+<script src="https://unpkg.com/@dicebear/avatars@^5/dist/index.umd.js" crossorigin="anonymous" async></script>
+<script src="https://unpkg.com/{{packageName}}@^{{packageVersionMajor}}/dist/index.umd.js" crossorigin="anonymous" async></script>
+\`\`\`
+
+Now you can create your first avatar.
+
+\`\`\`js
+let svg = DiceBear.createAvatar(DiceBear.{{umdName}}, {
+  // ... options
+});
+\`\`\`
+
+### HTTP-API
+
+You can use this avatar style with the official API. For example, the URL can look like this:
+
+\`\`\`
+https://api.dicebear.com/5.x/{{packageNameLastPart}}/custom-seed.svg
+\`\`\`
+
+You can find the full documentation for the HTTP-API on the DiceBear homepage:  
+https://dicebear.com/docs/http-api
+
+### CLI
+
+\`\`\`
+npx dicebear create {{packageNameLastPart}}
+\`\`\`
+
+You can find the full documentation for the CLI on the DiceBear homepage:  
+https://dicebear.com/integrations/cli
 
 ## Options
 
@@ -203,11 +260,11 @@ module.exports = {
   },
   "dependencies": {},
   "devDependencies": {
-    "@dicebear/core": "^4.7.4",
+    "@dicebear/core": "^5.0.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^4.7.4",
+    "dicebear-project": "^5.0.0",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
@@ -215,7 +272,7 @@ module.exports = {
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@dicebear/core": "^4.6.0"
+    "@dicebear/core": "^5.0.0"
   },
   "publishConfig": {
     "access": "public"

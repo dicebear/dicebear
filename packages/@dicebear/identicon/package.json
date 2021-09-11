@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/identicon",
-  "version": "4.9.0",
+  "version": "5.0.0",
   "description": "Avatar style for DiceBear",
   "keywords": ["dicebear"],
   "bugs": {
@@ -29,11 +29,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@dicebear/core": "^4.7.4",
+    "@dicebear/core": "^5.0.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^4.7.4",
+    "dicebear-project": "^5.0.0",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",

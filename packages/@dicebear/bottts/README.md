@@ -17,23 +17,81 @@
 
 ## Usage
 
-Install the DiceBear package and this Avatar styles with the following command.
+### ESM
+
+Install the DiceBear package and this avatar style with the following command:
 
 ```
-npm install @dicebear/core @dicebear/bottts --save
+npm install @dicebear/core@^5 @dicebear/bottts@^5 --save
 ```
 
-Now you are ready to create your first Avatar.
+Now you can create your first avatar.
 
 ```js
 import { createAvatar } from '@dicebear/core';
 import * as style from '@dicebear/bottts';
 
 let svg = createAvatar(style, {
-  seed: 'custom-seed',
-  // ... and other options
+  // ... options
 });
 ```
+
+### CJS
+
+Install the DiceBear package and this avatar style with the following command:
+
+```
+npm install @dicebear/core@^5 @dicebear/bottts@^5 --save
+```
+
+Now you can create your first avatar.
+
+```js
+const { createAvatar } = require('@dicebear/core');
+const style = require('@dicebear/bottts');
+
+let svg = createAvatar(style, {
+  // ... options
+});
+```
+
+### CDN
+
+Paste the following code into the `head` of your document:
+
+```html
+<script src="https://unpkg.com/@dicebear/avatars@^5/dist/index.umd.js" crossorigin="anonymous" async></script>
+<script src="https://unpkg.com/@dicebear/bottts@^5/dist/index.umd.js" crossorigin="anonymous" async></script>
+```
+
+Now you can create your first avatar.
+
+```js
+let svg = DiceBear.createAvatar(DiceBear., {
+  // ... options
+});
+```
+
+### HTTP-API
+
+You can use this avatar style with the official API. For example, the URL can
+look like this:
+
+```
+https://api.dicebear.com/5.x/bottts/custom-seed.svg
+```
+
+You can find the full documentation for the HTTP-API on the DiceBear homepage:  
+https://dicebear.com/docs/http-api
+
+### CLI
+
+```
+npx dicebear create bottts
+```
+
+You can find the full documentation for the CLI on the DiceBear homepage:  
+https://dicebear.com/integrations/cli
 
 ## Options
 
