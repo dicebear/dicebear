@@ -1,6 +1,6 @@
 <h1 align="center"><img src="https://dicebear.com/api/croodles/1.svg" width="124" /> <br />Croodles Neutral</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear Avatars</a>.</strong><br />
+  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a>.</strong><br />
   Design <a href="https://www.figma.com/community/file/966199982810283152">Croodles - Doodle your face</a> by vijay verma licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
 </p>
 

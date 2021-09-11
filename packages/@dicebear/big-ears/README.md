@@ -1,6 +1,6 @@
 <h1 align="center"><img src="https://dicebear.com/api/big-ears/1.svg" width="124" /> <br />Big Ears</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear Avatars</a>.</strong><br />
+  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a>.</strong><br />
     <a href="https://www.figma.com/community/file/986078800058673824">Face Generator</a>
     by The Visual Team
     licensed under

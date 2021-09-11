@@ -33,7 +33,7 @@ export default function Teaser() {
                 <div className="col-12 offset-md-2 col-md-8 offset-lg-0 col-lg-11 offset-xl-1 col-xl-10">
                   <div className="min-vh-lg-100 d-flex align-items-center">
                     <div className="text-center text-lg-left">
-                      <img src={'img/logo.svg'} alt="DiceBear Avatars" className="logo mb-5" />
+                      <img src={'img/logo.svg'} alt="DiceBear" className="logo mb-5" />
                       <p className="text-white lead">
                         DiceBear is an avatar library for designers and developers. You can choose between simple
                         identicons and lovely designed characters.

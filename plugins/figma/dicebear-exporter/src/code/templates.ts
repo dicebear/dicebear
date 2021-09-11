@@ -67,7 +67,7 @@ SOFTWARE.
   'README.md': `
 <h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />{{title}}</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear Avatars</a>.</strong><br />
+  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a>.</strong><br />
   {{#if source}}
     <a href="{{source}}">{{sourceTitle}}</a>
   {{else}}

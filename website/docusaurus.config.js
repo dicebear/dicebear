@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  title: 'DiceBear Avatars',
+  title: 'DiceBear',
   tagline: 'DiceBear is an avatar library for designers and developers.',
   url: 'https://dicebear.com',
   baseUrl: '/',
@@ -17,9 +17,9 @@ module.exports = {
       respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'DiceBear Avatars',
+      title: 'DiceBear',
       logo: {
-        alt: 'DiceBear Avatars',
+        alt: 'DiceBear',
         src: 'img/favicon.svg',
       },
       items: [

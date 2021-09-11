@@ -1,6 +1,6 @@
 <h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />Bottts</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear Avatars</a>.</strong><br />
+  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a>.</strong><br />
     <a href="https://bottts.com/">Bottts</a>
     by Pablo Stanley
     licensed under

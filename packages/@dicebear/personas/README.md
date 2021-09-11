@@ -1,6 +1,6 @@
 <h1 align="center"><img src="https://dicebear.com/api/personas/0.svg" width="124" /> <br />Personas by Draftbit</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear Avatars</a>.</strong><br />
+  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a>.</strong><br />
     <a href="https://personas.draftbit.com/">Personas by Draftbit</a>
     by Draftbit - draftbit.com
     licensed under
