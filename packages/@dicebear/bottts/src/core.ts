@@ -17,7 +17,7 @@ export const style: Style<Options> = {
     creator: 'Pablo Stanley',
     source: 'https://bottts.com/',
     license: {
-      name: 'Free for personal and commercial use.',
+      name: 'Free for personal and commercial use',
       url: 'https://bottts.com/',
     },
   },

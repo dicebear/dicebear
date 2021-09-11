@@ -32,7 +32,6 @@ export function prettifyFiles(files) {
     if (parser) {
       files[fileName] = prettier.format(file, {
         parser,
-        printWidth: 120,
         singleQuote: true,
         proseWrap: 'always',
         plugins: [parserMarkdown, parserBabel],

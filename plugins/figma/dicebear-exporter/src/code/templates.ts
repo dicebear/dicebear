@@ -31,7 +31,6 @@ package.json
   // .prettierrc
   '.prettierrc': `
 {
-  "printWidth": 120,
   "singleQuote": true,
   "proseWrap": "always"
 }
@@ -130,6 +129,12 @@ All [options from DiceBear](https://avatars.dicebear.com/docs/options) and addit
 ### {{@key}}
 
 type: \`{{this.type}}\`  
+{{#isDefined this.minimum}}
+minimum: \`{{this.minimum}}\`  
+{{/isDefined}}
+{{#isDefined this.maximum}}
+maximum: \`{{this.maximum}}\`  
+{{/isDefined}}
 {{#if this.items.enum}}
 allowed: {{#each this.items.enum}}{{#if @key}}, {{/if}}\`{{this}}\`{{/each}}  
 {{/if}}

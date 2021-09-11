@@ -78,8 +78,6 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
       writeNodeExportInfo(colorNode, nodeExportInfo);
     }
 
-    console.log(node.name);
-
     const codes = await nodeClone.exportAsync({
       format: 'SVG',
       contentsOnly: true,
@@ -100,6 +98,10 @@ export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
     nodeClone.remove();
     cloneComponent.remove();
 
-    throw e;
+    if (e && typeof e === 'object' && 'message' in e) {
+      throw new Error(`Error while exporting ${nodeClone.name}: ${(e as any).message}`);
+    } else {
+      throw e;
+    }
   }
 }

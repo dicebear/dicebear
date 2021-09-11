@@ -3,6 +3,7 @@
     "target": "es6",
     "strict": true,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@figma",
