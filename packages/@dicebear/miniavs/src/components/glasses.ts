@@ -10,9 +10,9 @@ export const glasses: ComponentGroup = {
     colors: ColorPickCollection
   ) => `
   <g stroke="#000" stroke-width="2">
-    <circle cx="30.269" cy="36.269" r="4.269"/>
-    <circle cx="44.269" cy="36.269" r="4.269"/>
-    <path d="m33.985 35.106 7-.104"/>
+    <circle cx="30.27" cy="36.27" r="4.27"/>
+    <circle cx="44.27" cy="36.27" r="4.27"/>
+    <path d="m33.99 35.11 7-.1"/>
   </g>
 `,
 };
