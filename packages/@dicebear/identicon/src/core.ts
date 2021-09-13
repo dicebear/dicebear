@@ -42,6 +42,9 @@ export const style: Style<Options> = {
     };
   },
   preview: ({ prng, options, property }) => {
+    const componentGroup = property.toString();
+    const colorGroup = property.toString().replace(/Color$/, '');
+
     onPreCreate({ prng, options, preview: true });
 
     const components = getComponents({ prng, options });
@@ -49,30 +52,27 @@ export const style: Style<Options> = {
 
     onPostCreate({ prng, options, components, colors, preview: true });
 
-    const componentKey = property.toString();
-    if (componentKey in components) {
-      const width = dimensions[componentKey].width;
-      const height = dimensions[componentKey].height;
+    if (componentGroup in components) {
+      const { width, height } = dimensions[componentGroup]!;
 
       return {
         attributes: {
           viewBox: `0 0 ${width} ${height}`,
           fill: 'none',
-          'shape-rendering': 'auto',
+          'shape-rendering': 'crispEdges',
         },
-        body: components[componentKey]?.value(components, colors) ?? '',
+        body: components[componentGroup]?.value(components, colors) ?? '',
       };
     }
 
-    const colorKey = property.toString().replace(/Color$/, '');
-    if (colorKey !== property && colorKey in colors) {
+    if (colorGroup in colors) {
       return {
         attributes: {
-          viewBox: '0 0 1 1',
+          viewBox: `0 0 1 1`,
           fill: 'none',
-          'shape-rendering': 'auto',
+          'shape-rendering': 'crispEdges',
         },
-        body: `<rect width="1" height="1" fill="${colors[colorKey].value}" />`,
+        body: `<rect width="1" height="1" fill="${colors[colorGroup].value}" />`,
       };
     }
 
