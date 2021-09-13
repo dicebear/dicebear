@@ -1,40 +1,30 @@
-import type { Style } from '@dicebear/core';
+import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
+import schema from './schema.json';
+import { getComponents } from './utils/getComponents';
+import { getColors } from './utils/getColors';
 import { onPreCreate } from './hooks/onPreCreate';
 import { onPostCreate } from './hooks/onPostCreate';
+import { dimensions } from './meta/components';
 
 export const style: Style<Options> = {
   meta: {
     title: 'Identicon',
+    creator: 'Florian Körner',
+    license: {
+      name: 'CC0 1.0',
+      url: 'https://creativecommons.org/publicdomain/zero/1.0/',
+    },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    onPreCreate({ prng, options });
+    onPreCreate({ prng, options, preview: false });
 
-    const row1Component = pickComponent(prng, 'row1', options.row1);
-    const row2Component = pickComponent(prng, 'row2', options.row2);
-    const row3Component = pickComponent(prng, 'row3', options.row3);
-    const row4Component = pickComponent(prng, 'row4', options.row4);
-    const row5Component = pickComponent(prng, 'row5', options.row5);
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
-    const components: ComponentPickCollection = {
-      row1: prng.bool(options.row1Probability) ? row1Component : undefined,
-      row2: prng.bool(options.row2Probability) ? row2Component : undefined,
-      row3: prng.bool(options.row3Probability) ? row3Component : undefined,
-      row4: prng.bool(options.row4Probability) ? row4Component : undefined,
-      row5: prng.bool(options.row5Probability) ? row5Component : undefined,
-    };
-
-    const colors: ColorPickCollection = {
-      row: pickColor(prng, 'row', options.rowColor ?? []),
-    };
-
-    onPostCreate({ prng, options, components, colors });
+    onPostCreate({ prng, options, components, colors, preview: false });
 
     return {
       attributes: {
@@ -50,5 +40,42 @@ export const style: Style<Options> = {
   ${components.row5?.value(components, colors) ?? ''}
 `,
     };
+  },
+  preview: ({ prng, options, property }) => {
+    onPreCreate({ prng, options, preview: true });
+
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
+
+    onPostCreate({ prng, options, components, colors, preview: true });
+
+    const componentKey = property.toString();
+    if (componentKey in components) {
+      const width = dimensions[componentKey].width;
+      const height = dimensions[componentKey].height;
+
+      return {
+        attributes: {
+          viewBox: `0 0 ${width} ${height}`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: components[componentKey]?.value(components, colors) ?? '',
+      };
+    }
+
+    const colorKey = property.toString().replace(/Color$/, '');
+    if (colorKey !== property && colorKey in colors) {
+      return {
+        attributes: {
+          viewBox: '0 0 1 1',
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: `<rect width="1" height="1" fill="${colors[colorKey].value}" />`,
+      };
+    }
+
+    return undefined;
   },
 };

@@ -1,0 +1,302 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "body": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["squared", "rounded", "small", "checkered"]
+      },
+      "default": ["squared", "rounded", "small", "checkered"],
+      "examples": [["squared"], ["rounded"], ["small"], ["checkered"]]
+    },
+    "clothingColor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "blue",
+              "turquoise",
+              "purple",
+              "green",
+              "red",
+              "yellow",
+              "pink"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "blue",
+        "turquoise",
+        "purple",
+        "green",
+        "red",
+        "yellow",
+        "pink"
+      ],
+      "examples": [
+        ["blue"],
+        ["turquoise"],
+        ["purple"],
+        ["green"],
+        ["red"],
+        ["yellow"],
+        ["pink"]
+      ]
+    },
+    "eyes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["open", "sleep", "wink", "glasses", "happy", "sunglasses"]
+      },
+      "default": ["open", "sleep", "wink", "glasses", "happy", "sunglasses"],
+      "examples": [
+        ["open"],
+        ["sleep"],
+        ["wink"],
+        ["glasses"],
+        ["happy"],
+        ["sunglasses"]
+      ]
+    },
+    "facialHair": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "beardMustache",
+          "pyramid",
+          "walrus",
+          "goatee",
+          "shadow",
+          "soulPatch"
+        ]
+      },
+      "default": [
+        "beardMustache",
+        "pyramid",
+        "walrus",
+        "goatee",
+        "shadow",
+        "soulPatch"
+      ],
+      "examples": [
+        ["beardMustache"],
+        ["pyramid"],
+        ["walrus"],
+        ["goatee"],
+        ["shadow"],
+        ["soulPatch"]
+      ]
+    },
+    "hair": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "long",
+          "sideShave",
+          "shortCombover",
+          "curlyHighTop",
+          "bobCut",
+          "curly",
+          "pigtails",
+          "curlyBun",
+          "buzzcut",
+          "bobBangs",
+          "bald",
+          "balding",
+          "cap",
+          "bunUndercut",
+          "fade",
+          "beanie",
+          "straightBun",
+          "extraLong",
+          "shortComboverChops",
+          "mohawk"
+        ]
+      },
+      "default": [
+        "long",
+        "sideShave",
+        "shortCombover",
+        "curlyHighTop",
+        "bobCut",
+        "curly",
+        "pigtails",
+        "curlyBun",
+        "buzzcut",
+        "bobBangs",
+        "bald",
+        "balding",
+        "cap",
+        "bunUndercut",
+        "fade",
+        "beanie",
+        "straightBun",
+        "extraLong",
+        "shortComboverChops",
+        "mohawk"
+      ],
+      "examples": [
+        ["long"],
+        ["sideShave"],
+        ["shortCombover"],
+        ["curlyHighTop"],
+        ["bobCut"],
+        ["curly"],
+        ["pigtails"],
+        ["curlyBun"],
+        ["buzzcut"],
+        ["bobBangs"],
+        ["bald"],
+        ["balding"],
+        ["cap"],
+        ["bunUndercut"],
+        ["fade"],
+        ["beanie"],
+        ["straightBun"],
+        ["extraLong"],
+        ["shortComboverChops"],
+        ["mohawk"]
+      ]
+    },
+    "hairColor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "black",
+              "brunette",
+              "red",
+              "pink",
+              "copper",
+              "blonde",
+              "grey"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "black",
+        "brunette",
+        "red",
+        "pink",
+        "copper",
+        "blonde",
+        "grey"
+      ],
+      "examples": [
+        ["black"],
+        ["brunette"],
+        ["red"],
+        ["pink"],
+        ["copper"],
+        ["blonde"],
+        ["grey"]
+      ]
+    },
+    "mouth": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "smile",
+          "frown",
+          "surprise",
+          "pacifier",
+          "bigSmile",
+          "smirk",
+          "lips"
+        ]
+      },
+      "default": [
+        "smile",
+        "frown",
+        "surprise",
+        "pacifier",
+        "bigSmile",
+        "smirk",
+        "lips"
+      ],
+      "examples": [
+        ["smile"],
+        ["frown"],
+        ["surprise"],
+        ["pacifier"],
+        ["bigSmile"],
+        ["smirk"],
+        ["lips"]
+      ]
+    },
+    "nose": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["mediumRound", "smallRound", "wrinkles"]
+      },
+      "default": ["mediumRound", "smallRound", "wrinkles"],
+      "examples": [["mediumRound"], ["smallRound"], ["wrinkles"]]
+    },
+    "skinColor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "tone1",
+              "tone2",
+              "tone3",
+              "tone4",
+              "tone5",
+              "tone6",
+              "tone7",
+              "tone8"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "tone1",
+        "tone2",
+        "tone3",
+        "tone4",
+        "tone5",
+        "tone6",
+        "tone7",
+        "tone8"
+      ],
+      "examples": [
+        ["tone1"],
+        ["tone2"],
+        ["tone3"],
+        ["tone4"],
+        ["tone5"],
+        ["tone6"],
+        ["tone7"],
+        ["tone8"]
+      ]
+    }
+  },
+  "additionalProperties": false
+}

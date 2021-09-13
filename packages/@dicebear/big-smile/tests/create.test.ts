@@ -1,5 +1,4 @@
-import * as avatars from '@dicebear/core';
-import { StyleOptions } from '@dicebear/core';
+import { createAvatar, StyleOptions } from '@dicebear/core';
 import * as style from '../dist';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -21,12 +20,13 @@ data.forEach((options, key) => {
         fs.mkdirSync(path.dirname(svgComponent));
       }
 
-      fs.writeFileSync(svgComponent, avatars.createAvatar(style, options), { encoding: 'utf-8' });
+      fs.writeFileSync(svgComponent, createAvatar(style, options), {
+        encoding: 'utf-8',
+      });
     }
 
     const svg = fs.readFileSync(svgComponent, { encoding: 'utf-8' });
 
-    expect(avatars.createAvatar(style, options)).toEqual(svg);
-    expect(new avatars.default(style.default, options).create(options.seed)).toEqual(svg);
+    expect(createAvatar(style, options)).toEqual(svg);
   });
 });

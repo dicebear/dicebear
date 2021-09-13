@@ -1,6 +1,6 @@
 import { Style, StyleSchema, utils } from '@dicebear/core';
 import { Options } from './options';
-import { schema } from './schema';
+import schema from './schema.json';
 import initials from 'initials';
 
 const colors: Record<string, string> = {
@@ -35,7 +35,7 @@ export const style: Style<Options> = {
       url: 'https://creativecommons.org/publicdomain/zero/1.0/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
     let defaults = utils.schema.defaults(schema as StyleSchema);
 

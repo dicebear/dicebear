@@ -5,13 +5,9 @@
  * Copyright (c) 2021 Florian Körner
  */
 
-import { utils } from '@dicebear/core';
 import { style } from './core';
 
 let { create, meta, schema } = style;
 
 export { create, meta, schema };
 export { Options } from './options';
-
-/** @deprecated will be removed in Version 5.0 */
-export default utils.style.createLegacyWrapper({ create, meta, schema });

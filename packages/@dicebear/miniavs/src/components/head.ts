@@ -1,7 +1,14 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const head: ComponentGroup = {
-  normal: (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  normal: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   <path d="M45.887 36.1c0 8.5-1.257 18.859-10.887 19.82v9.95S31.357 68 26.5 68 18 64.523 18 64.523V42a5 5 0 0 1-1.303-9.829C15.36 22.643 17.51 13 32.002 13c14.587 0 14.235 11.08 13.957 19.815-.037 1.145-.072 2.25-.072 3.284Z" fill="${colors.skin.value}"/>
   <path d="M35 55.92c-.478.048-.978.072-1.498.072-8.883 0-13.9-7.153-15.502-14.605v23.135s3.643 3.477 8.5 3.477 8.5-2.13 8.5-2.13V55.92Z" fill="#000" fill-opacity=".07"/>
   <path d="M34.629 55.952c-.364.026-.74.04-1.128.04-6.53 0-10.97-3.866-13.501-8.875v.424l.001.695c0 5.385 2.614 9.75 8.276 9.75.484 0 .932.004 1.348.007 3.346.028 4.59.038 5.004-2.041ZM16.697 32.172A5.002 5.002 0 0 0 18 42c.047 0 .093 0 .14-.002a25.38 25.38 0 0 1-.71-5.898 46.698 46.698 0 0 1-.733-3.928Z" fill="#000" fill-opacity=".07"/>

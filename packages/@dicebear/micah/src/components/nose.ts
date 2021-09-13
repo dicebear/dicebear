@@ -1,10 +1,17 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const nose: ComponentGroup = {
   curve: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <path d="M16.5 7c-.333 3.833 0 12.2 4 15 5 3.5-.5 12-10.5 10" stroke="#000" stroke-width="4"/>
 `,
-  pointed: (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  pointed: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   <path d="M16.5 3c0 14 7 25 7 25S20 34 10 32" stroke="#000" stroke-width="4"/>
 `,
   tound: (components: ComponentPickCollection, colors: ColorPickCollection) => `

@@ -1,4 +1,8 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const row3: ComponentGroup = {
   xooox: (components: ComponentPickCollection, colors: ColorPickCollection) => `

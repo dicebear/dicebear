@@ -4,7 +4,7 @@
  * Code licensed under MIT License.
  * Copyright (c) 2021 Florian Körner
  *
- * Design "Avataaars" by Pablo Stanley licensed under Free for personal and commercial use..
+ * Design "Avataaars" by Pablo Stanley licensed under Free for personal and commercial use.
  * Source: https://avataaars.com/
  * License: https://avataaars.com/
  */

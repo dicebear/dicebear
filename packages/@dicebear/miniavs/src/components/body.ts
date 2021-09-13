@@ -1,7 +1,14 @@
-import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../static-types';
+import type {
+  ComponentGroup,
+  ComponentPickCollection,
+  ColorPickCollection,
+} from '../static-types';
 
 export const body: ComponentGroup = {
-  tShirt: (components: ComponentPickCollection, colors: ColorPickCollection) => `
+  tShirt: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) => `
   <rect x="7" y="60" width="40" height="23" rx="9" fill="${colors.body.value}"/>
 `,
   golf: (components: ComponentPickCollection, colors: ColorPickCollection) => `

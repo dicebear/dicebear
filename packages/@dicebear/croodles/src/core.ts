@@ -1,10 +1,12 @@
-import type { Style } from '@dicebear/core';
+import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
+import schema from './schema.json';
+import { getComponents } from './utils/getComponents';
+import { getColors } from './utils/getColors';
+import { onPreCreate } from './hooks/onPreCreate';
+import { onPostCreate } from './hooks/onPostCreate';
+import { dimensions } from './meta/components';
 
 export const style: Style<Options> = {
   meta: {
@@ -16,41 +18,61 @@ export const style: Style<Options> = {
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    const faceComponent = pickComponent(prng, 'face', options.face);
-    const noseComponent = pickComponent(prng, 'nose', options.nose);
-    const beardComponent = pickComponent(prng, 'beard', options.beard);
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
-    const topComponent = pickComponent(prng, 'top', options.top);
-    const mustacheComponent = pickComponent(prng, 'mustache', options.mustache);
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
+    onPreCreate({ prng, options, preview: false });
 
-    const components: ComponentPickCollection = {
-      face: faceComponent,
-      nose: noseComponent,
-      beard: prng.bool(options.beardProbability) ? beardComponent : undefined,
-      mouth: mouthComponent,
-      top: topComponent,
-      mustache: prng.bool(options.mustacheProbability) ? mustacheComponent : undefined,
-      eyes: eyesComponent,
-    };
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
-    const colors: ColorPickCollection = {
-      top: pickColor(prng, 'top', options.topColor ?? []),
-      base: pickColor(prng, 'base', options.baseColor ?? []),
-    };
+    onPostCreate({ prng, options, components, colors, preview: false });
 
     return {
       attributes: {
         viewBox: '0 0 256 256',
         fill: 'none',
+        'shape-rendering': 'auto',
       },
       body: `
-  <g>
-    ${components.face?.value(components, colors) ?? ''}
-  </g>
+  ${components.face?.value(components, colors) ?? ''}
 `,
     };
+  },
+  preview: ({ prng, options, property }) => {
+    const componentGroup = property.toString();
+    const colorGroup = property.toString().replace(/Color$/, '');
+
+    onPreCreate({ prng, options, preview: true });
+
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
+
+    onPostCreate({ prng, options, components, colors, preview: true });
+
+    if (componentGroup in components) {
+      const { width, height } = dimensions[componentGroup]!;
+
+      return {
+        attributes: {
+          viewBox: `0 0 ${width} ${height}`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: components[componentGroup]?.value(components, colors) ?? '',
+      };
+    }
+
+    if (colorGroup in colors) {
+      return {
+        attributes: {
+          viewBox: `0 0 1 1`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: `<rect width="1" height="1" fill="${colors[colorGroup].value}" />`,
+      };
+    }
+
+    return undefined;
   },
 };

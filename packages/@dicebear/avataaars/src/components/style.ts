@@ -14,7 +14,7 @@ export const style: ComponentGroup = {
     <circle cx="132" cy="160" r="120" fill="#fff"/>
   </mask>
   <g mask="url(#styleCircle-a)">
-    <path fill="#65C9FF" d="M12 40h240v240H12z"/>
+    <path d="M12 40h240v240H12V40Z" fill="${colors.background.value}"/>
   </g>
   <mask id="styleCircle-b" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="264" height="280">
     <path d="M264 0H0v160h12c0 66.274 53.726 120 120 120s120-53.726 120-120h12V0Z" fill="#000"/>

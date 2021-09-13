@@ -4,6 +4,7 @@ import * as handlebars from 'handlebars/dist/cjs/handlebars.js';
 import { createTemplateString } from './createTemplateString';
 import { Export } from '../types';
 import { createExportJsonSchema } from './createExportJsonSchema';
+import { objectMap } from '../utils/objectMap';
 
 handlebars.registerHelper('isDefined', function (val: unknown, options: unknown) {
   if (val !== undefined) {
@@ -37,6 +38,14 @@ handlebars.registerHelper('isEqual', function (val: unknown, val2: unknown, opti
 
 export async function createExportFiles(exportData: Export) {
   const isMitLicensed = exportData.frame.settings.licenseName && exportData.frame.settings.licenseName === 'MIT';
+  const componentsDimensions = objectMap(exportData.components, (val) => {
+    const componentNode = figma.getNodeById(Object.values(val.collection)[0].id) as ComponentNode;
+
+    return {
+      width: componentNode.width,
+      height: componentNode.height,
+    };
+  });
 
   const files: Record<string, string> = {
     '.editorconfig': templates['.editorconfig'],
@@ -84,6 +93,9 @@ export async function createExportFiles(exportData: Export) {
       shapeRendering: exportData.frame.settings.shapeRendering,
     }),
     'src/static-types.ts': templates['src/static-types.ts'],
+    'src/meta/components.ts': handlebars.compile(templates['src/meta/components.ts'])({
+      components: componentsDimensions,
+    }),
     'src/colors/index.ts': handlebars.compile(templates['src/colors/index.ts'])({
       colors: exportData.colors,
       backgroundColorGroupName: exportData.frame.settings.backgroundColorGroupName,
@@ -119,14 +131,7 @@ export async function createExportFiles(exportData: Export) {
     }
 
     const componentGroup = exportData.components[componentGroupName];
-    const components: Record<
-      string,
-      {
-        width: number;
-        height: number;
-        template: string;
-      }
-    > = {};
+    const components: Record<string, string> = {};
 
     for (const componentName in componentGroup.collection) {
       if (false === componentGroup.collection.hasOwnProperty(componentName)) {
@@ -135,11 +140,7 @@ export async function createExportFiles(exportData: Export) {
 
       const componentNode = figma.getNodeById(componentGroup.collection[componentName].id) as ComponentNode;
 
-      components[componentName] = {
-        width: componentNode.width,
-        height: componentNode.height,
-        template: await createTemplateString(componentNode),
-      };
+      components[componentName] = await createTemplateString(componentNode);
     }
 
     files[`src/components/${componentGroupName}.ts`] = componentTemplate({
@@ -186,6 +187,8 @@ export async function createExportFiles(exportData: Export) {
     packageVersionMajor: exportData.frame.settings.packageVersion.split('.')[0] ?? '0',
     packageNameLastPart: exportData.frame.settings.packageName.split('/').pop() ?? '',
     properties: schema.properties,
+    umdName: exportData.frame.settings.umdName,
+    isDicebearNamespace: exportData.frame.settings.packageName.split('/')[0] === '@dicebear',
     isMitLicensed,
   });
 

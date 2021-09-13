@@ -1,12 +1,12 @@
-import type { Style } from '@dicebear/core';
+import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
-import type { ComponentPickCollection, ColorPickCollection } from './static-types';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
+import schema from './schema.json';
+import { getComponents } from './utils/getComponents';
+import { getColors } from './utils/getColors';
 import { onPreCreate } from './hooks/onPreCreate';
 import { onPostCreate } from './hooks/onPostCreate';
+import { dimensions } from './meta/components';
 
 export const style: Style<Options> = {
   meta: {
@@ -18,38 +18,20 @@ export const style: Style<Options> = {
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    onPreCreate({ prng, options });
+    onPreCreate({ prng, options, preview: false });
 
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
-    const hairComponent = pickComponent(prng, 'hair', options.hair);
-    const bodyComponent = pickComponent(prng, 'body', options.body);
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
-    const noseComponent = pickComponent(prng, 'nose', options.nose);
-    const facialHairComponent = pickComponent(prng, 'facialHair', options.facialHair);
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
-    const components: ComponentPickCollection = {
-      eyes: eyesComponent,
-      hair: hairComponent,
-      body: bodyComponent,
-      mouth: mouthComponent,
-      nose: noseComponent,
-      facialHair: facialHairComponent,
-    };
-
-    const colors: ColorPickCollection = {
-      hair: pickColor(prng, 'hair', options.hairColor ?? []),
-      clothing: pickColor(prng, 'clothing', options.clothingColor ?? []),
-      skin: pickColor(prng, 'skin', options.skinColor ?? []),
-    };
-
-    onPostCreate({ prng, options, components, colors });
+    onPostCreate({ prng, options, components, colors, preview: false });
 
     return {
       attributes: {
         viewBox: '0 0 64 64',
         fill: 'none',
+        'shape-rendering': 'auto',
       },
       body: `
   <path d="M37 46.08V52a5 5 0 0 1-10 0v-5.92A14.035 14.035 0 0 1 18.58 37h-.08a4.5 4.5 0 0 1-.5-8.973V27c0-7.732 6.268-14 14-14s14 6.268 14 14v1.027A4.5 4.5 0 0 1 45.42 37 14.035 14.035 0 0 1 37 46.081Z" fill="${
@@ -73,17 +55,50 @@ export const style: Style<Options> = {
   <g transform="translate(23 36)">
     ${components.mouth?.value(components, colors) ?? ''}
   </g>
-  <g>
-    <g transform="translate(24 28)">
-      ${components.nose?.value(components, colors) ?? ''}
-    </g>
+  <g transform="translate(24 28)">
+    ${components.nose?.value(components, colors) ?? ''}
   </g>
-  <g>
-    <g transform="translate(14 26)">
-      ${components.facialHair?.value(components, colors) ?? ''}
-    </g>
+  <g transform="translate(14 26)">
+    ${components.facialHair?.value(components, colors) ?? ''}
   </g>
 `,
     };
+  },
+  preview: ({ prng, options, property }) => {
+    const componentGroup = property.toString();
+    const colorGroup = property.toString().replace(/Color$/, '');
+
+    onPreCreate({ prng, options, preview: true });
+
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
+
+    onPostCreate({ prng, options, components, colors, preview: true });
+
+    if (componentGroup in components) {
+      const { width, height } = dimensions[componentGroup]!;
+
+      return {
+        attributes: {
+          viewBox: `0 0 ${width} ${height}`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: components[componentGroup]?.value(components, colors) ?? '',
+      };
+    }
+
+    if (colorGroup in colors) {
+      return {
+        attributes: {
+          viewBox: `0 0 1 1`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: `<rect width="1" height="1" fill="${colors[colorGroup].value}" />`,
+      };
+    }
+
+    return undefined;
   },
 };

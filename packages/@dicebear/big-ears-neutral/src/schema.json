@@ -1,0 +1,33 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "backgroundColor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          { "type": "string", "pattern": "^[0-9a-zA-Z]+$" }
+        ]
+      },
+      "default": [
+        "variant01",
+        "variant02",
+        "variant03",
+        "variant04",
+        "variant05"
+      ],
+      "examples": [
+        ["variant01"],
+        ["variant02"],
+        ["variant03"],
+        ["variant04"],
+        ["variant05"]
+      ]
+    }
+  },
+  "additionalProperties": false
+}

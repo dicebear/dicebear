@@ -1,21 +1,18 @@
-import type { Style } from '@dicebear/core';
+import type { Style, StyleSchema } from '@dicebear/core';
 import type { Options } from './options';
-import type {
-  ComponentPickCollection,
-  ColorPickCollection,
-} from './static-types';
 
-import { schema } from './schema';
-import { pickComponent } from './utils/pickComponent';
-import { pickColor } from './utils/pickColor';
+import schema from './schema.json';
+import { getComponents } from './utils/getComponents';
+import { getColors } from './utils/getColors';
 import { onPreCreate } from './hooks/onPreCreate';
 import { onPostCreate } from './hooks/onPostCreate';
+import { dimensions } from './meta/components';
 
 export const style: Style<Options> = {
   meta: {
     title: 'Gridy',
     creator: 'Jan Forst',
-    contributor: 'Franck Gabriel',
+    contributor: 'FRANCK Gabriel',
     source:
       'https://github.com/darosh/gridys/tree/master/packages/gridy-app-avatars',
     license: {
@@ -23,27 +20,14 @@ export const style: Style<Options> = {
       url: 'https://github.com/darosh/gridys/blob/master/packages/gridy-app-avatars/LICENSE',
     },
   },
-  schema,
+  schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    onPreCreate({ prng, options });
+    onPreCreate({ prng, options, preview: false });
 
-    const bodyComponent = pickComponent(prng, 'body', options.body);
-    const eyesComponent = pickComponent(prng, 'eyes', options.eyes);
-    const mouthComponent = pickComponent(prng, 'mouth', options.mouth);
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
 
-    const components: ComponentPickCollection = {
-      body: bodyComponent,
-      eyes: eyesComponent,
-      mouth: mouthComponent,
-    };
-
-    const colors: ColorPickCollection = {
-      body: pickColor(prng, 'body', options.bodyColor ?? []),
-      eyes: pickColor(prng, 'eyes', options.eyesColor ?? []),
-      mouth: pickColor(prng, 'mouth', options.mouthColor ?? []),
-    };
-
-    onPostCreate({ prng, options, components, colors });
+    onPostCreate({ prng, options, components, colors, preview: false });
 
     return {
       attributes: {
@@ -73,5 +57,42 @@ export const style: Style<Options> = {
   </g>
 `,
     };
+  },
+  preview: ({ prng, options, property }) => {
+    const componentGroup = property.toString();
+    const colorGroup = property.toString().replace(/Color$/, '');
+
+    onPreCreate({ prng, options, preview: true });
+
+    const components = getComponents({ prng, options });
+    const colors = getColors({ prng, options });
+
+    onPostCreate({ prng, options, components, colors, preview: true });
+
+    if (componentGroup in components) {
+      const { width, height } = dimensions[componentGroup]!;
+
+      return {
+        attributes: {
+          viewBox: `0 0 ${width} ${height}`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: components[componentGroup]?.value(components, colors) ?? '',
+      };
+    }
+
+    if (colorGroup in colors) {
+      return {
+        attributes: {
+          viewBox: `0 0 1 1`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: `<rect width="1" height="1" fill="${colors[colorGroup].value}" />`,
+      };
+    }
+
+    return undefined;
   },
 };

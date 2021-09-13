@@ -1,7 +1,8 @@
-<h1 align="center"><img src="https://dicebear.com/api/pixel-art-neutral/1.svg?mood=happy" width="124" /> <br />pixel-art-neutral</h1>
+<h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />Pixel Art - Neutral</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a>.</strong><br />
-  Heavy inspired by <a href="https://github.com/matveyco/8biticon">8biticon</a>.
+  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
+    Pixel Art - Neutral
+    by Plastic Jam
 </p>
 
 <p align="center">

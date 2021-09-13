@@ -72,7 +72,7 @@ SOFTWARE.
   'README.md': `
 <h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />{{title}}</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a>.</strong><br />
+  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
   {{#if source}}
     <a href="{{source}}">{{sourceTitle}}</a>
   {{else}}
@@ -80,14 +80,6 @@ SOFTWARE.
   {{/if}}
   {{#if creator}}
     by {{creator}}
-  {{/if}}
-  {{#if licenseName}}
-    licensed under
-    {{#if licenseUrl}}
-      <a href="{{licenseUrl}}">{{licenseName}}</a>.
-    {{else}}
-      {{licenseName}}
-    {{/if}}
   {{/if}}
 </p>
 
@@ -103,6 +95,13 @@ SOFTWARE.
 </p>
 {{/unless}}
 
+{{#if isDicebearNamespace}}
+<p align="center">
+  <a href="https://dicebear.com/styles/{{packageNameLastPart}}">
+    Read Documentation
+  </a>
+</p>
+{{else}}
 ----
 
 ## Usage
@@ -112,7 +111,7 @@ SOFTWARE.
 Install the DiceBear package and this avatar style with the following command:
 
 \`\`\`
-npm install @dicebear/core@^5 {{packageName}}@^{{packageVersionMajor}} --save
+npm install @dicebear/core {{packageName}} --save
 \`\`\`
 
 Now you can create your first avatar.
@@ -131,7 +130,7 @@ let svg = createAvatar(style, {
 Install the DiceBear package and this avatar style with the following command:
 
 \`\`\`
-npm install @dicebear/core@^5 {{packageName}}@^{{packageVersionMajor}} --save
+npm install @dicebear/core {{packageName}} --save
 \`\`\`
 
 Now you can create your first avatar.
@@ -157,34 +156,14 @@ Paste the following code into the \`head\` of your document:
 Now you can create your first avatar.
 
 \`\`\`js
-let svg = DiceBear.createAvatar(DiceBear.{{umdName}}, {
+let svg = DiceBear.createAvatar({{umdName}}, {
   // ... options
 });
 \`\`\`
 
-### HTTP-API
-
-You can use this avatar style with the official API. For example, the URL can look like this:
-
-\`\`\`
-https://api.dicebear.com/5.x/{{packageNameLastPart}}/custom-seed.svg
-\`\`\`
-
-You can find the full documentation for the HTTP-API on the DiceBear homepage:  
-https://dicebear.com/docs/http-api
-
-### CLI
-
-\`\`\`
-npx dicebear create {{packageNameLastPart}}
-\`\`\`
-
-You can find the full documentation for the CLI on the DiceBear homepage:  
-https://dicebear.com/integrations/cli
-
 ## Options
 
-All [options from DiceBear](https://dicebear.com/docs/options) and additionally the following:
+All options from [DiceBear](https://dicebear.com/docs/options) and additionally the following:
 
 {{#each properties}}
 ### {{@key}}
@@ -222,6 +201,7 @@ npm run build
 \`\`\`
 npm run test
 \`\`\`
+{{/if}}
 `,
 
   // jest.config.js
@@ -375,6 +355,7 @@ import { getComponents } from './utils/getComponents';
 import { getColors } from './utils/getColors';
 import { onPreCreate } from './hooks/onPreCreate';
 import { onPostCreate } from './hooks/onPostCreate';
+import { dimensions } from './meta/components';
 
 export const style: Style<Options> = {
   meta: {
@@ -399,15 +380,15 @@ export const style: Style<Options> = {
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    onPreCreate({ prng, options });
+    onPreCreate({ prng, options, preview: false });
 
     const components = getComponents({ prng, options });
     const colors = getColors({ prng, options });
 
-    onPostCreate({ prng, options, components, colors });
+    onPostCreate({ prng, options, components, colors, preview: false });
     
     {{#if backgroundColorGroupName}}
-      options.backgroundColor = colors.background.value;
+      options.backgroundColor = [colors.background.value];
     {{/if}}
 
     return {
@@ -420,37 +401,37 @@ export const style: Style<Options> = {
     };
   },
   preview: ({ prng, options, property }) => {
-    onPreCreate({ prng, options });
+    const componentGroup = property.toString();
+    const colorGroup = property.toString().replace(/Color$/, '');
+
+    onPreCreate({ prng, options, preview: true });
 
     const components = getComponents({ prng, options });
     const colors = getColors({ prng, options });
 
-    onPostCreate({ prng, options, components, colors });
-    
-    const componentKey = property.toString();
-    if (componentKey in components) {
-      const width = components[componentKey]?.value.width ?? 0;
-      const height = components[componentKey]?.value.height ?? 0;
+    onPostCreate({ prng, options, components, colors, preview: true });
+
+    if (componentGroup in components) {
+      const { width, height } = dimensions[componentGroup]!;
 
       return {
         attributes: {
           viewBox: \`0 0 $\{width} $\{height}\`,
           fill: 'none',
-          'shape-rendering': 'auto',
+          'shape-rendering': '{{shapeRendering}}',
         },
-        body: components[componentKey]?.value.render(components, colors) ?? '',
+        body: components[componentGroup]?.value(components, colors) ?? '',
       };
     }
-    
-    const colorKey = property.toString().replace(/Color$/, '');
-    if (colorKey !== property && colorKey in colors) {
+
+    if (colorGroup in colors) {
       return {
         attributes: {
-          viewBox: '0 0 1 1',
+          viewBox: \`0 0 1 1\`,
           fill: 'none',
-          'shape-rendering': 'auto',
+          'shape-rendering': '{{shapeRendering}}',
         },
-        body: \`<rect width="1" height="1" fill="$\{colors[colorKey].value}" />\`,
+        body: \`<rect width="1" height="1" fill="$\{colors[colorGroup].value}" />\`,
       };
     }
 
@@ -472,14 +453,10 @@ export type ColorPick = {
 
 export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
-export type ComponentGroupItem = {
-  width: number;
-  height: number;
-  render: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => string;
-}
+export type ComponentGroupItem = (
+  components: ComponentPickCollection,
+  colors: ColorPickCollection
+) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =
   | {
@@ -513,6 +490,18 @@ export const {{name}}: ColorGroup = {
 }
 `,
 
+  // src/meta/components.ts
+  'src/meta/components.ts': `
+export const dimensions: Record<string, { width: number; height: number }> = {
+  {{#each components}}
+    '{{@key}}': {
+      width: {{this.width}},
+      height: {{this.height}}
+    },
+  {{/each}}
+}
+`,
+
   // src/components/index.ts
   'src/components/index.ts': `
 {{#each components}}
@@ -526,11 +515,7 @@ import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } fro
 
 export const {{name}}: ComponentGroup = {
   {{#each components}}
-    '{{@key}}': {
-      width: {{this.width}},
-      height: {{this.height}},
-      render: (components: ComponentPickCollection, colors: ColorPickCollection) => {{{this.template}}}
-    },
+    '{{@key}}': (components: ComponentPickCollection, colors: ColorPickCollection) => {{{this}}},
   {{/each}}
 }
 `,
@@ -664,9 +649,9 @@ import { Prng, StyleOptions } from "@dicebear/core";
 
 import { Options } from "../options";
 
-type Props = { prng: Prng, options: StyleOptions<Options> } 
+type Props = { prng: Prng, options: StyleOptions<Options>, preview: boolean } 
 
-export function onPreCreate({ prng, options }: Props) {
+export function onPreCreate({ prng, options, preview }: Props) {
   {{#if content}}
     {{{content}}}
   {{else}}
@@ -682,9 +667,15 @@ import { Prng, StyleOptions } from "@dicebear/core";
 import { Options } from "../options";
 import { ColorPickCollection, ComponentPickCollection } from "../static-types";
 
-type Props = { prng: Prng, options: StyleOptions<Options>, components: ComponentPickCollection, colors: ColorPickCollection } 
+type Props = {
+  prng: Prng,
+  options: StyleOptions<Options>,
+  components: ComponentPickCollection,
+  colors: ColorPickCollection,
+  preview: boolean
+} 
 
-export function onPostCreate({ prng, options, components, colors }: Props) {
+export function onPostCreate({ prng, options, components, colors, preview }: Props) {
   {{#if content}}
     {{{content}}}
   {{else}}

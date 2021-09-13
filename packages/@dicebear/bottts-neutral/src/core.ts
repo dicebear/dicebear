@@ -6,6 +6,7 @@ import { getComponents } from './utils/getComponents';
 import { getColors } from './utils/getColors';
 import { onPreCreate } from './hooks/onPreCreate';
 import { onPostCreate } from './hooks/onPostCreate';
+import { dimensions } from './meta/components';
 
 export const style: Style<Options> = {
   meta: {
@@ -19,14 +20,14 @@ export const style: Style<Options> = {
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    onPreCreate({ prng, options });
+    onPreCreate({ prng, options, preview: false });
 
     const components = getComponents({ prng, options });
     const colors = getColors({ prng, options });
 
-    onPostCreate({ prng, options, components, colors });
+    onPostCreate({ prng, options, components, colors, preview: false });
 
-    options.backgroundColor = colors.background.value;
+    options.backgroundColor = [colors.background.value];
 
     return {
       attributes: {
@@ -36,26 +37,27 @@ export const style: Style<Options> = {
       },
       body: `
   <g transform="translate(22 68)">
-    ${components.mouth?.value.render(components, colors) ?? ''}
+    ${components.mouth?.value(components, colors) ?? ''}
   </g>
   <g transform="translate(8 20)">
-    ${components.eyes?.value.render(components, colors) ?? ''}
+    ${components.eyes?.value(components, colors) ?? ''}
   </g>
 `,
     };
   },
   preview: ({ prng, options, property }) => {
-    onPreCreate({ prng, options });
+    const componentGroup = property.toString();
+    const colorGroup = property.toString().replace(/Color$/, '');
+
+    onPreCreate({ prng, options, preview: true });
 
     const components = getComponents({ prng, options });
     const colors = getColors({ prng, options });
 
-    onPostCreate({ prng, options, components, colors });
+    onPostCreate({ prng, options, components, colors, preview: true });
 
-    const componentKey = property.toString();
-    if (componentKey in components) {
-      const width = components[componentKey]?.value.width ?? 0;
-      const height = components[componentKey]?.value.height ?? 0;
+    if (componentGroup in components) {
+      const { width, height } = dimensions[componentGroup]!;
 
       return {
         attributes: {
@@ -63,19 +65,18 @@ export const style: Style<Options> = {
           fill: 'none',
           'shape-rendering': 'auto',
         },
-        body: components[componentKey]?.value.render(components, colors) ?? '',
+        body: components[componentGroup]?.value(components, colors) ?? '',
       };
     }
 
-    const colorKey = property.toString().replace(/Color$/, '');
-    if (colorKey !== property && colorKey in colors) {
+    if (colorGroup in colors) {
       return {
         attributes: {
-          viewBox: '0 0 1 1',
+          viewBox: `0 0 1 1`,
           fill: 'none',
           'shape-rendering': 'auto',
         },
-        body: `<rect width="1" height="1" fill="${colors[colorKey].value}" />`,
+        body: `<rect width="1" height="1" fill="${colors[colorGroup].value}" />`,
       };
     }
 

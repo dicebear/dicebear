@@ -2,9 +2,7 @@
   "name": "@dicebear/big-ears-neutral",
   "version": "5.0.0",
   "description": "Avatar style for DiceBear",
-  "keywords": [
-    "dicebear"
-  ],
+  "keywords": ["dicebear"],
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
@@ -18,17 +16,14 @@
   "module": "dist/index.es.js",
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "LICENSE",
-    "README.md",
-    "dist"
-  ],
+  "files": ["LICENSE", "README.md", "dist"],
   "scripts": {
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
     "build": "dicebear-project build DiceBear.BigEarsNeutral"
   },
+  "dependencies": {},
   "devDependencies": {
     "@dicebear/core": "^5.0.0",
     "@tsconfig/recommended": "^1.0.0",
@@ -42,7 +37,7 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@dicebear/core": "^4.6.0"
+    "@dicebear/core": "^5.0.0"
   },
   "publishConfig": {
     "access": "public"

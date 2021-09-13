@@ -1,0 +1,239 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "row1": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ],
+      "examples": [
+        ["xooox"],
+        ["xxoxx"],
+        ["xoxox"],
+        ["oxxxo"],
+        ["xxxxx"],
+        ["oxoxo"],
+        ["ooxoo"]
+      ]
+    },
+    "row1Probability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 88
+    },
+    "row2": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ],
+      "examples": [
+        ["xooox"],
+        ["xxoxx"],
+        ["xoxox"],
+        ["oxxxo"],
+        ["xxxxx"],
+        ["oxoxo"],
+        ["ooxoo"]
+      ]
+    },
+    "row2Probability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 88
+    },
+    "row3": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ],
+      "examples": [
+        ["xooox"],
+        ["xxoxx"],
+        ["xoxox"],
+        ["oxxxo"],
+        ["xxxxx"],
+        ["oxoxo"],
+        ["ooxoo"]
+      ]
+    },
+    "row3Probability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 88
+    },
+    "row4": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ],
+      "examples": [
+        ["xooox"],
+        ["xxoxx"],
+        ["xoxox"],
+        ["oxxxo"],
+        ["xxxxx"],
+        ["oxoxo"],
+        ["ooxoo"]
+      ]
+    },
+    "row4Probability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 88
+    },
+    "row5": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
+      },
+      "default": [
+        "xooox",
+        "xxoxx",
+        "xoxox",
+        "oxxxo",
+        "xxxxx",
+        "oxoxo",
+        "ooxoo"
+      ],
+      "examples": [
+        ["xooox"],
+        ["xxoxx"],
+        ["xoxox"],
+        ["oxxxo"],
+        ["xxxxx"],
+        ["oxoxo"],
+        ["ooxoo"]
+      ]
+    },
+    "row5Probability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 88
+    },
+    "rowColor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "red",
+              "amber",
+              "blue",
+              "blueGray",
+              "brown",
+              "cyan",
+              "deepOrange",
+              "deepPurple",
+              "green",
+              "grey",
+              "indigo",
+              "lightBlue",
+              "lightGreen",
+              "lime",
+              "orange",
+              "pink",
+              "purple",
+              "teal",
+              "yellow"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "red",
+        "amber",
+        "blue",
+        "blueGray",
+        "brown",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "grey",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "teal",
+        "yellow"
+      ],
+      "examples": [
+        ["red"],
+        ["amber"],
+        ["blue"],
+        ["blueGray"],
+        ["brown"],
+        ["cyan"],
+        ["deepOrange"],
+        ["deepPurple"],
+        ["green"],
+        ["grey"],
+        ["indigo"],
+        ["lightBlue"],
+        ["lightGreen"],
+        ["lime"],
+        ["orange"],
+        ["pink"],
+        ["purple"],
+        ["teal"],
+        ["yellow"]
+      ]
+    }
+  },
+  "additionalProperties": false
+}

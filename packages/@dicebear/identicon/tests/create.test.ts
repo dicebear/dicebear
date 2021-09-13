@@ -20,7 +20,9 @@ data.forEach((options, key) => {
         fs.mkdirSync(path.dirname(svgComponent));
       }
 
-      fs.writeFileSync(svgComponent, createAvatar(style, options), { encoding: 'utf-8' });
+      fs.writeFileSync(svgComponent, createAvatar(style, options), {
+        encoding: 'utf-8',
+      });
     }
 
     const svg = fs.readFileSync(svgComponent, { encoding: 'utf-8' });

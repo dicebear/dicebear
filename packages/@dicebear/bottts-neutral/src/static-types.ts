@@ -9,14 +9,10 @@ export type ColorPick = {
 
 export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
-export type ComponentGroupItem = {
-  width: number;
-  height: number;
-  render: (
-    components: ComponentPickCollection,
-    colors: ColorPickCollection
-  ) => string;
-};
+export type ComponentGroupItem = (
+  components: ComponentPickCollection,
+  colors: ColorPickCollection
+) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =
   | {
