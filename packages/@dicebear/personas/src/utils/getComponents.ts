@@ -49,6 +49,8 @@ export function getComponents({
     body: bodyComponent,
     mouth: mouthComponent,
     nose: noseComponent,
-    facialHair: facialHairComponent,
+    facialHair: prng.bool(options.facialHairProbability)
+      ? facialHairComponent
+      : undefined,
   };
 }

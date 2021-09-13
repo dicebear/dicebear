@@ -98,6 +98,12 @@
         ["soulPatch"]
       ]
     },
+    "facialHairProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 10
+    },
     "hair": {
       "type": "array",
       "items": {
