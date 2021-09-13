@@ -13,6 +13,7 @@ export type FrameSettings = {
   shapeRendering: string;
   onPreCreateHook: string;
   onPostCreateHook: string;
+  precision: number;
 };
 
 export type ComponentGroupSettings = {

@@ -38,6 +38,12 @@
         ["sunglasses2"]
       ]
     },
+    "accessoriesProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 20
+    },
     "clothingColor": {
       "type": "array",
       "items": {
@@ -240,6 +246,12 @@
         ["moustache8"],
         ["moustache9"]
       ]
+    },
+    "facialHairProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 10
     },
     "hairColor": {
       "type": "array",
@@ -452,6 +464,12 @@
       "items": { "type": "string", "enum": ["medicalMask", "respirator"] },
       "default": ["medicalMask", "respirator"],
       "examples": [["medicalMask"], ["respirator"]]
+    },
+    "maskProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 5
     },
     "skinColor": {
       "type": "array",

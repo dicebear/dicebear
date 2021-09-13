@@ -41,8 +41,12 @@ export function getComponents({
   return {
     head: headComponent,
     face: faceComponent,
-    facialHair: facialHairComponent,
-    mask: maskComponent,
-    accessories: accessoriesComponent,
+    facialHair: prng.bool(options.facialHairProbability)
+      ? facialHairComponent
+      : undefined,
+    mask: prng.bool(options.maskProbability) ? maskComponent : undefined,
+    accessories: prng.bool(options.accessoriesProbability)
+      ? accessoriesComponent
+      : undefined,
   };
 }

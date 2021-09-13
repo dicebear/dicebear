@@ -1,10 +1,11 @@
 // @ts-ignore
 import { optimize } from 'svgo/dist/svgo.browser.js';
+import { Export } from '../types';
 import { normalizeName } from '../utils/normalizeName';
 import { applyNodeExportInfo } from './applyNodeExportInfo';
 import { calculateNodeExportInfo } from './calculateNodeExportInfo';
 
-export async function createTemplateString(node: FrameNode | ComponentNode) {
+export async function createTemplateString(exportData: Export, node: FrameNode | ComponentNode) {
   // Calculate the export info for the node and export to svg
   let result = await calculateNodeExportInfo(node);
 
@@ -21,6 +22,7 @@ export async function createTemplateString(node: FrameNode | ComponentNode) {
       {
         name: 'preset-default',
         params: {
+          floatPrecision: exportData.frame.settings.precision,
           overrides: {
             cleanupIDs: {
               prefix: normalizeName(node.name) + '-',

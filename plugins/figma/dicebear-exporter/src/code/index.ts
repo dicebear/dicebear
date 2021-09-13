@@ -33,11 +33,11 @@ figma.ui.onmessage = async (msg) => {
           break;
 
         case 'components':
-          setComponentGroupSettings(typeSplit[2], msg.data);
+          setComponentGroupSettings(getFrameSelection(), typeSplit[2], msg.data);
           break;
 
         case 'colors':
-          setColorGroupSettings(typeSplit[2], msg.data);
+          setColorGroupSettings(getFrameSelection(), typeSplit[2], msg.data);
           break;
       }
       break;

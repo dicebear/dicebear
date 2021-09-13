@@ -13,7 +13,15 @@
           { "type": "string", "pattern": "^[0-9a-zA-Z]+$" }
         ]
       },
-      "default": ["black", "brown", "darkBrown", "light", "pale"],
+      "default": [
+        "black",
+        "brown",
+        "darkBrown",
+        "light",
+        "pale",
+        "tanned",
+        "yellow"
+      ],
       "examples": [
         ["black"],
         ["brown"],

@@ -51,10 +51,12 @@ export function getComponents({
   return {
     face: faceComponent,
     nose: noseComponent,
-    beard: beardComponent,
+    beard: prng.bool(options.beardProbability) ? beardComponent : undefined,
     mouth: mouthComponent,
     top: topComponent,
-    mustache: mustacheComponent,
+    mustache: prng.bool(options.mustacheProbability)
+      ? mustacheComponent
+      : undefined,
     eyes: eyesComponent,
   };
 }

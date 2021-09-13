@@ -28,7 +28,7 @@ export function prepareExport() {
   let queueItem;
 
   for (const [colorGroupName, colorGroup] of colorGroups) {
-    const settings = getColorGroupSettings(colorGroupName);
+    const settings = getColorGroupSettings(frameSelection, colorGroupName);
     const exportColorGroup: ExportColorGroup = (exportData.colors[colorGroupName] = {
       isUsedByComponents: false,
       settings: {
@@ -73,7 +73,7 @@ export function prepareExport() {
       const componentGroupName = getNameParts(instance.mainComponent.name).group;
 
       if (undefined === exportData.components[componentGroupName]) {
-        const settings = getComponentGroupSettings(componentGroupName);
+        const settings = getComponentGroupSettings(frameSelection, componentGroupName);
         const componentGroup: ExportComponentGroup = (exportData.components[componentGroupName] = {
           settings: {
             ...settings,

@@ -1,9 +1,9 @@
 import { ComponentGroupSettings } from '../types';
 
-export function getComponentGroupSettings(componentGroup: string): ComponentGroupSettings {
+export function getComponentGroupSettings(frame: FrameNode, componentGroup: string): ComponentGroupSettings {
   return {
     defaults: {},
     probability: null,
-    ...JSON.parse(figma.root.getPluginData(`components/${componentGroup}/settings`) || '{}'),
+    ...JSON.parse(frame.getPluginData(`components/${componentGroup}/settings`) || '{}'),
   };
 }

@@ -53,15 +53,15 @@ export const mouth: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="M27.05 8.442a2 2 0 1 1 3.9-.883C31.72 10.958 34.403 13 38 13s6.28-2.042 7.05-5.441a2 2 0 1 1 3.9.883C47.76 13.702 43.43 17 38 17s-9.76-3.298-10.95-8.558Z" fill="#000" fill-opacity=".6"/>
+  <path d="M27.05 8.44a2 2 0 1 1 3.9-.88C31.72 10.96 34.4 13 38 13c3.6 0 6.28-2.04 7.05-5.44a2 2 0 1 1 3.9.88C47.75 13.7 43.43 17 38 17s-9.76-3.3-10.95-8.56Z" fill="#000" fill-opacity=".6"/>
 `,
   smile02: (
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M18 10.222C18 21.785 24.474 28 38 28c13.518 0 20-6.338 20-17.778C58 9.496 57.174 8 55 8H21c-2.051 0-3 1.385-3 2.222Z" fill="#000" fill-opacity=".8"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M18 10.22C18 21.78 24.47 28 38 28c13.52 0 20-6.34 20-17.78C58 9.5 57.17 8 55 8H21c-2.05 0-3 1.38-3 2.22Z" fill="#000" fill-opacity=".8"/>
   <mask id="mouthSmile02-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="18" y="8" width="40" height="20">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M18 10.222C18 21.785 24.474 28 38 28c13.518 0 20-6.338 20-17.778C58 9.496 57.174 8 55 8H21c-2.051 0-3 1.385-3 2.222Z" fill="#fff"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M18 10.22C18 21.78 24.47 28 38 28c13.52 0 20-6.34 20-17.78C58 9.5 57.17 8 55 8H21c-2.05 0-3 1.38-3 2.22Z" fill="#fff"/>
   </mask>
   <g mask="url(#mouthSmile02-a)">
     <rect x="30" y="2" width="16" height="14" rx="2" fill="#fff"/>

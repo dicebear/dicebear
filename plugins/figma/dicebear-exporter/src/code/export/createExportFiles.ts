@@ -89,7 +89,7 @@ export async function createExportFiles(exportData: Export) {
       components: exportData.components,
       colors: exportData.colors,
       size: (figma.getNodeById(exportData.frame.id) as FrameNode).width,
-      body: await createTemplateString(figma.getNodeById(exportData.frame.id) as FrameNode),
+      body: await createTemplateString(exportData, figma.getNodeById(exportData.frame.id) as FrameNode),
       shapeRendering: exportData.frame.settings.shapeRendering,
     }),
     'src/static-types.ts': templates['src/static-types.ts'],
@@ -140,7 +140,7 @@ export async function createExportFiles(exportData: Export) {
 
       const componentNode = figma.getNodeById(componentGroup.collection[componentName].id) as ComponentNode;
 
-      components[componentName] = await createTemplateString(componentNode);
+      components[componentName] = await createTemplateString(exportData, componentNode);
     }
 
     files[`src/components/${componentGroupName}.ts`] = componentTemplate({

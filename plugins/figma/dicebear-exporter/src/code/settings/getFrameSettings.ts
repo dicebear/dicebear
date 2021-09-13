@@ -18,6 +18,7 @@ export function getFrameSettings(frame: FrameNode, colorGroups: string[]): Frame
     backgroundColorGroupName: '',
     onPreCreateHook: '',
     onPostCreateHook: '',
+    precision: 3,
     ...JSON.parse(frame.getPluginData(`settings`) || '{}'),
   };
 

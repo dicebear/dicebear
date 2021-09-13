@@ -47,7 +47,7 @@ export function getComponents({
     sides: prng.bool(options.sidesProbability) ? sidesComponent : undefined,
     top: prng.bool(options.topProbability) ? topComponent : undefined,
     face: faceComponent,
-    mouth: mouthComponent,
+    mouth: prng.bool(options.mouthProbability) ? mouthComponent : undefined,
     eyes: eyesComponent,
     texture: prng.bool(options.textureProbability)
       ? textureComponent

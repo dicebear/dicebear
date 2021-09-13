@@ -43,6 +43,12 @@
         ["variant01"]
       ]
     },
+    "beardProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 10
+    },
     "eyes": {
       "type": "array",
       "items": {
@@ -213,6 +219,12 @@
       },
       "default": ["variant04", "variant03", "variant02", "variant01"],
       "examples": [["variant04"], ["variant03"], ["variant02"], ["variant01"]]
+    },
+    "mustacheProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 10
     },
     "nose": {
       "type": "array",
