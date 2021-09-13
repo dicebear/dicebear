@@ -1,1 +1,9 @@
-
+export { hair } from './hair';
+export { face } from './face';
+export { mouth } from './mouth';
+export { ear } from './ear';
+export { eyes } from './eyes';
+export { cheek } from './cheek';
+export { nose } from './nose';
+export { sideburn } from './sideburn';
+export { frontHair } from './frontHair';
