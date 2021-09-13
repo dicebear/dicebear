@@ -11,7 +11,7 @@ export const body: ComponentGroup = {
   ) => `
   <g fill="${colors.body.value}">
     <path d="M12 19a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/>
-    <path d="M15.333 14H8.667C7.747 14 7 14.448 7 15v7c0 .552.746 1 1.667 1h6.666c.92 0 1.667-.448 1.667-1v-7c0-.552-.746-1-1.667-1Z"/>
+    <path d="M15.33 14H8.67C7.75 14 7 14.45 7 15v7c0 .55.75 1 1.67 1h6.66c.92 0 1.67-.45 1.67-1v-7c0-.55-.75-1-1.67-1Z"/>
   </g>
 `,
   variant07: (
@@ -19,21 +19,21 @@ export const body: ComponentGroup = {
     colors: ColorPickCollection
   ) => `
   <g fill="${colors.body.value}">
-    <path d="M6 4.192 3 21.005 12 23l9-1.995-3-16.813C16.96-.156 6.996.029 6 4.192Z"/>
-    <path d="M3.5 19.01a1.496 1.496 0 1 0 0-2.993 1.496 1.496 0 1 0 0 2.993ZM4.5 15.02a1.496 1.496 0 1 0 0-2.993 1.496 1.496 0 1 0 0 2.993ZM20.5 19.01a1.496 1.496 0 1 1 0-2.993 1.496 1.496 0 1 1 0 2.993ZM19.5 15.02a1.496 1.496 0 1 1 0-2.993 1.496 1.496 0 1 1 0 2.993Z"/>
+    <path d="M6 4.2 3 21l9 2 9-2-3-16.8C16.96-.17 7 .02 6 4.2Z"/>
+    <path d="M3.5 19a1.5 1.5 0 1 0 0-2.98 1.5 1.5 0 1 0 0 2.99ZM4.5 15.02a1.5 1.5 0 1 0 0-3 1.5 1.5 0 1 0 0 3ZM20.5 19a1.5 1.5 0 1 1 0-2.98 1.5 1.5 0 1 1 0 2.99ZM19.5 15.02a1.5 1.5 0 1 1 0-3 1.5 1.5 0 1 1 0 3Z"/>
   </g>
 `,
   variant06: (
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="M14.444 1 12 3.444 9.556 1 1 9.556 3.444 12 1 14.444 9.556 23 12 20.556 14.444 23 23 14.444 20.556 12 23 9.556 14.444 1Z" fill="${colors.body.value}"/>
+  <path d="M14.44 1 12 3.44 9.56 1 1 9.56 3.44 12 1 14.44 9.56 23 12 20.56 14.44 23 23 14.44 20.56 12 23 9.56 14.44 1Z" fill="${colors.body.value}"/>
 `,
   variant05: (
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" fill="${colors.body.value}"/>
+  <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="${colors.body.value}"/>
 `,
   variant04: (
     components: ComponentPickCollection,
@@ -45,7 +45,7 @@ export const body: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="m3.963 2 1.605 7.988L1 14.535l1.42 1.414 3.62-3.603L7.982 22h8.038l1.94-9.654 3.62 3.603L23 14.535l-4.568-4.547L20.037 2H3.963Z" fill="${colors.body.value}"/>
+  <path d="m3.96 2 1.6 7.99L1 14.54l1.42 1.4 3.62-3.6L7.98 22h8.04l1.94-9.65 3.62 3.6L23 14.54l-4.57-4.55L20.03 2H3.97Z" fill="${colors.body.value}"/>
 `,
   variant02: (
     components: ComponentPickCollection,
@@ -57,6 +57,6 @@ export const body: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="m7.102 2-1 4h-4l2 8-2 8h20l-2-8 2-8h-4l-1-4h-10Z" fill="${colors.body.value}"/>
+  <path d="m7.1 2-1 4h-4l2 8-2 8h20l-2-8 2-8h-4l-1-4h-10Z" fill="${colors.body.value}"/>
 `,
 };
