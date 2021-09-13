@@ -238,6 +238,51 @@
       "default": ["eyes", "round", "eyesShadow", "smiling"],
       "examples": [["eyes"], ["round"], ["eyesShadow"], ["smiling"]]
     },
+    "eyesColor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "apricot",
+              "azure",
+              "black",
+              "calm",
+              "canary",
+              "coast",
+              "lavender",
+              "mellow",
+              "salmon",
+              "seashell",
+              "sky",
+              "topaz",
+              "white"
+            ]
+          }
+        ]
+      },
+      "default": ["black"],
+      "examples": [
+        ["apricot"],
+        ["azure"],
+        ["black"],
+        ["calm"],
+        ["canary"],
+        ["coast"],
+        ["lavender"],
+        ["mellow"],
+        ["salmon"],
+        ["seashell"],
+        ["sky"],
+        ["topaz"],
+        ["white"]
+      ]
+    },
     "facialHair": {
       "type": "array",
       "items": { "type": "string", "enum": ["beard", "scruff"] },

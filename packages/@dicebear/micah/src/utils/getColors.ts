@@ -55,5 +55,10 @@ export function getColors({ prng, options }: Props): ColorPickCollection {
       group: 'shirt',
       values: options.shirtColor,
     }),
+    eyes: pickColor({
+      prng,
+      group: 'eyes',
+      values: options.eyesColor,
+    }),
   };
 }

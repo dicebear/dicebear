@@ -6,7 +6,7 @@ import type {
 
 export const facialHair: ComponentGroup = {
   beard: (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <path d="M146.126 49.154c9.489 39.604-14.925 79.402-54.529 88.891-23.307 5.584-46.68-.574-63.905-14.659C10.5 107.5 6.5 56 2.692 31.649c14 31.5 49.624 33.946 83.5 28.002 28.5-5.001 51.299-6.001 51.299-45.001 1.885 2.616 6.978 27.587 8.635 34.504Z" fill="${colors.facialHair.value}"/>
+  <path d="M146.13 49.15A73.74 73.74 0 0 1 27.69 123.4C10.5 107.5 6.5 56 2.7 31.65c14 31.5 49.62 33.94 83.5 28 28.5-5 51.3-6 51.3-45 1.88 2.62 6.97 27.59 8.63 34.5Z" fill="${colors.facialHair.value}"/>
 `,
   scruff: (
     components: ComponentPickCollection,

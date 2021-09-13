@@ -49,7 +49,7 @@ export const style: Style<Options> = {
   <g transform="translate(142 119)">
     ${components.eyes?.value(components, colors) ?? ''}
   </g>
-  <g transform="rotate(-8 1149.438 -1186.916)">
+  <g transform="rotate(-8 1149.44 -1186.92)">
     ${components.nose?.value(components, colors) ?? ''}
   </g>
   <g transform="translate(84 154)">

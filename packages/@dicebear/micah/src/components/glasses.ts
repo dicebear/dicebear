@@ -7,9 +7,9 @@ import type {
 export const glasses: ComponentGroup = {
   round: (components: ComponentPickCollection, colors: ColorPickCollection) => `
   <g stroke="${colors.glasses.value}" stroke-width="4">
-    <circle cx="123.5" cy="28" r="26"/>
-    <circle cx="56.5" cy="37" r="26"/>
-    <path d="M98.5 35a8 8 0 0 0-16 0M31 39 1 44.5"/>
+    <circle cx="122.5" cy="28" r="26"/>
+    <circle cx="55.5" cy="37" r="26"/>
+    <path d="M97.5 35a8 8 0 0 0-16 0M30 39 0 44.5"/>
   </g>
 `,
   square: (
@@ -17,8 +17,8 @@ export const glasses: ComponentGroup = {
     colors: ColorPickCollection
   ) => `
   <g stroke="${colors.glasses.value}" stroke-width="4">
-    <path d="M36.5 42.5 2 49.125" stroke-linecap="round"/>
-    <path d="m37.472 18.535 38.716-5.442a6 6 0 0 1 6.777 5.107l5.567 39.61a6 6 0 0 1-5.107 6.777l-34.472 4.845a6 6 0 0 1-6.654-4.478l-9.811-39.015a6 6 0 0 1 4.984-7.404ZM147.919 3.22l-38.716 5.44a6 6 0 0 0-5.107 6.777l5.567 39.611a6 6 0 0 0 6.777 5.107l34.472-4.845a6 6 0 0 0 5.162-6.139l-1.323-40.207a6 6 0 0 0-6.832-5.744ZM85.5 37.125l22-3.5"/>
+    <path d="M34.5 42.5 0 49.12" stroke-linecap="round"/>
+    <path d="M35.47 18.53 74.2 13.1a6 6 0 0 1 6.77 5.1l5.57 39.62a6 6 0 0 1-5.1 6.78l-34.48 4.84a6 6 0 0 1-6.65-4.48l-9.81-39.01a6 6 0 0 1 4.98-7.4ZM145.92 3.22 107.2 8.66a6 6 0 0 0-5.1 6.78l5.56 39.6a6 6 0 0 0 6.78 5.11l34.47-4.84a6 6 0 0 0 5.16-6.14l-1.32-40.2a6 6 0 0 0-6.83-5.75ZM83.5 37.12l22-3.5"/>
   </g>
 `,
 };
