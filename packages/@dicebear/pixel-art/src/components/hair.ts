@@ -105,7 +105,7 @@ export const hair: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M3 14.104V11h1v2h1v1l-2 .104ZM17 11v3h-2v-1h1v-2h1ZM3 8h1V5h1V4h1V3h8v1h1v1h1v3h1V4h-1V3h-1V2H5v1H4v1H3v4Z" fill="${colors.hair.value}"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M3 14.1V11h1v2h1v1l-2 .1ZM17 11v3h-2v-1h1v-2h1ZM3 8h1V5h1V4h1V3h8v1h1v1h1v3h1V4h-1V3h-1V2H5v1H4v1H3v4Z" fill="${colors.hair.value}"/>
 `,
   long09: (
     components: ComponentPickCollection,
@@ -123,7 +123,7 @@ export const hair: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="M4 5v3h1V5h2v1h1V5h1v1h1V5h5v3h1V5h1V3.016h-1V2h-2v1l-8 .016V2H4v1.016H3V5h1Z" fill="${colors.hair.value}"/>
+  <path d="M4 5v3h1V5h2v1h1V5h1v1h1V5h5v3h1V5h1V3h-1V2h-2v1H6V2H4v1H3v2h1Z" fill="${colors.hair.value}"/>
 `,
   long06: (
     components: ComponentPickCollection,
@@ -135,7 +135,7 @@ export const hair: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="M2 17h2v-1h4v-1H6v-1H5v-1H3.998L4 11H3V8h1V5h1V4h6V3h1v1h1V3h1v1h1v1h1v3h1v3h-1v2h-1v1h-1v1h-2v1h4v1h2V4h-1V3h-1V2h-1V1H5v1H4v1H3v1H2v13Z" fill="${colors.hair.value}"/>
+  <path d="M2 17h2v-1h4v-1H6v-1H5v-1H4v-2H3V8h1V5h1V4h6V3h1v1h1V3h1v1h1v1h1v3h1v3h-1v2h-1v1h-1v1h-2v1h4v1h2V4h-1V3h-1V2h-1V1H5v1H4v1H3v1H2v13Z" fill="${colors.hair.value}"/>
 `,
   long04: (
     components: ComponentPickCollection,

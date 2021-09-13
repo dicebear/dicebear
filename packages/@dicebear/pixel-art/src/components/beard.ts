@@ -27,6 +27,6 @@ export const beard: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path opacity=".9" d="M4 8v5h1v1h1v1h8v-1h1v-1h1V8h-1v2h-1v1h-1l-.059 1H7v-1H6v-1H5V8H4Z" fill="${colors.hair.value}"/>
+  <path opacity=".9" d="M4 8v5h1v1h1v1h8v-1h1v-1h1V8h-1v2h-1v1h-1v1H7v-1H6v-1H5V8H4Z" fill="${colors.hair.value}"/>
 `,
 };

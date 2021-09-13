@@ -45,7 +45,7 @@ export const clothing: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="M3 20v-3h1v-1h3v-1h1v1h1v1h2v-1h.965L12 15h1v1h3v1h1v3H3Z" fill="${colors.clothes.value}"/>
+  <path d="M3 20v-3h1v-1h3v-1h1v1h1v1h2v-1h1v-1h1v1h3v1h1v3H3Z" fill="${colors.clothes.value}"/>
   <path fill-rule="evenodd" clip-rule="evenodd" d="M6 16H4v1H3v3h6v-2H8v-1H6v-1Zm2 0h1-1Zm3 0h1-1Zm2 0h1v1h-2v1h-1v2h6v-3h-1v-1h-3Z" fill="#fff" fill-opacity=".2"/>
 `,
   variant19: (
@@ -87,7 +87,7 @@ export const clothing: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <path d="M3 20v-3h1v-1h4.027L8 15h4l.011 1H16v1h1v3H3Z" fill="${colors.clothes.value}"/>
+  <path d="M3 20v-3h1v-1h4v-1h4v1h4v1h1v3H3Z" fill="${colors.clothes.value}"/>
   <path d="M3 20v-3h1v-1h12v1h1v3H3Z" fill="#fff" fill-opacity=".2"/>
   <path d="M12 20v-1h3v1h-3Z" fill="#fff" fill-opacity=".2"/>
 `,

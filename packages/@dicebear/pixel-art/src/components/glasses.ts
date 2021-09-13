@@ -12,7 +12,7 @@ export const glasses: ComponentGroup = {
   <g fill-rule="evenodd" clip-rule="evenodd">
     <path opacity=".2" d="M5 7h3v3H5V7Zm7 0h3v3h-3V7Z" fill="#fff"/>
     <path opacity=".2" d="M7 7h1v1H7V7Zm7 0h1v1h-1V7Z" fill="#fff"/>
-    <path d="M12 10V7h3v3h-3Zm-1-4v1H9l-.036-1H4v1H3v1h1v3h5V8h2v3h5V8h1V7h-1V6h-5Zm-6 4V7h3v3H5Z" fill="${colors.glasses.value}"/>
+    <path d="M12 10V7h3v3h-3Zm-1-4v1H9V6H4v1H3v1h1v3h5V8h2v3h5V8h1V7h-1V6h-5Zm-6 4V7h3v3H5Z" fill="${colors.glasses.value}"/>
     <path d="M3 7h1v1H3V7Zm6 0h2v1H9V7Zm7 0h1v1h-1V7Z" fill="#fff" fill-opacity=".2"/>
   </g>
 `,
