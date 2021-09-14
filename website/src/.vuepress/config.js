@@ -1,5 +1,8 @@
 const { description } = require('../../package');
 const styles = require('@dicebear/collection');
+const camelCaseToKebabCase = require('./utils/camelCaseToKebabCase');
+const camelCaseToSpaceCase = require('./utils/camelCaseToSpaceCase');
+const path = require('path');
 
 module.exports = {
   /**
@@ -17,7 +20,7 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/config/#head
    */
   head: [
-    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+    ['meta', { name: 'theme-color', content: '#0284C7' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
   ],
@@ -28,6 +31,7 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/theme/default-theme-config.html
    */
   themeConfig: {
+    logo: '/logo.svg',
     repo: 'dicebear/dicebear',
     editLinks: true,
     docsDir: 'website',
@@ -47,33 +51,32 @@ module.exports = {
         text: 'Playground',
         link: '/playground/',
       },
-      {
-        text: 'Integrations',
-        link: '/integrations/',
-        items: [
-          { text: 'CLI', link: '/integrations/cli' },
-          { text: 'API Server', link: '/integrations/api-server' },
-          { text: 'Serverless', link: '/integrations/serverless' },
-        ],
-      },
     ],
     sidebar: {
       '/styles/': [
         {
-          title: 'Guide',
+          title: 'Styles',
+          path: '/styles/',
           collapsable: false,
           children: Object.keys(styles)
             .sort()
-            .map((style) =>
-              style
-                .split(/(?=[A-Z])/)
-                .map((v) => v.slice(0, 1).toLowerCase() + v.slice(1))
-                .join('-')
-            ),
+            .map((style) => {
+              return {
+                title: camelCaseToSpaceCase(style),
+                path: `/styles/${camelCaseToKebabCase(style)}/`,
+              };
+            }),
         },
       ],
     },
   },
+
+  additionalPages: Object.keys(styles).map((style) => {
+    return {
+      path: `/styles/${camelCaseToKebabCase(style)}/`,
+      filePath: path.resolve(__dirname, 'pages/styles/[style].md'),
+    };
+  }),
 
   /**
    * Apply plugins，ref：https://v1.vuepress.vuejs.org/zh/plugin/

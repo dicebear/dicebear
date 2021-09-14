@@ -2,11 +2,29 @@
   <ParentLayout>
     <template #page-bottom>
       <div class="legal-links">
-        <RouterLink to="/licenses/">Licenses</RouterLink>
-        &middot;
-        <RouterLink to="/legal/privacy-policy/">Privacy Policy</RouterLink>
-        &middot;
-        <RouterLink to="/legal/legal-notice/">Legal Notice / Impressum</RouterLink>
+        <ul>
+          <li>
+            <a href="https://twitter.com/legal/privacy-policy/">Twitter <OutboundLink /></a>
+          </li>
+          <li>
+            <a href="https://dicebear.betteruptime.com/">Status <OutboundLink /></a>
+          </li>
+          <li>
+            <a href="https://github.com/dicebear/dicebear">GitHub <OutboundLink /></a>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <RouterLink to="/licenses/">Licenses</RouterLink>
+          </li>
+          <li>
+            <RouterLink to="/legal/privacy-policy/">Privacy Policy</RouterLink>
+          </li>
+          <li>
+            <RouterLink to="/legal/legal-notice/">Legal Notice / Impressum</RouterLink>
+          </li>
+        </ul>
       </div>
     </template>
   </ParentLayout>
@@ -24,20 +42,32 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="stylus" scoped>
 .legal-links {
-  margin-top: 20px;
-  border-top: 1px solid #eaecef;
+  margin-top: 2rem;
+  padding: .75rem 0;
   text-align: center;
-  padding: 1rem 0;
 
-  a {
-    color: #4e6e8e;
-    font-weight: 400;
-    margin: 0 0.5rem;
+  ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: .25rem 0;
+    padding: 0;
+    color: darken($borderColor, 30%);
+    list-style-type: none;
 
-    &:hover {
-      color: #3eaf7c;
+    li {
+      margin: 0 0.5rem;
+    }
+
+    a {
+      font-weight: 400;
+      color: darken($borderColor, 30%);
+
+      &:hover {
+        color: darken($borderColor, 50%);
+      }
     }
   }
 }

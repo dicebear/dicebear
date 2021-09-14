@@ -1,1 +1,5 @@
+---
+pageClass: landing
+---
+
 # Home

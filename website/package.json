@@ -18,7 +18,6 @@
     "@dicebear/collection": "^5.0.0"
   },
   "devDependencies": {
-    "sass-loader": "^10.0.0",
     "vuepress": "^1.5.3"
   }
 }
