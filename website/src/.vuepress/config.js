@@ -52,23 +52,61 @@ module.exports = {
         link: '/playground/',
       },
     ],
-    sidebar: {
-      '/styles/': [
-        {
-          title: 'Styles',
-          path: '/styles/',
-          collapsable: false,
-          children: Object.keys(styles)
-            .sort()
-            .map((style) => {
-              return {
-                title: camelCaseToSpaceCase(style),
-                path: `/styles/${camelCaseToKebabCase(style)}/`,
-              };
-            }),
-        },
-      ],
-    },
+    sidebar: [
+      {
+        title: 'Docs',
+        collapsable: false,
+        children: [
+          {
+            title: 'Getting Started',
+            path: '/docs/',
+          },
+          {
+            title: 'Installation',
+            path: '/docs/installation/',
+          },
+          {
+            title: 'HTTP-API',
+            path: '/docs/http-api/',
+          },
+          {
+            title: 'CLI',
+            path: '/docs/cli/',
+          },
+          {
+            title: 'Options',
+            path: '/docs/options/',
+          },
+        ],
+      },
+      {
+        title: 'Styles',
+        collapsable: false,
+        children: [
+          {
+            title: 'Official Styles',
+            path: `/styles/`,
+            collapsable: false,
+            initialOpenGroupIndex: -1,
+            children: Object.keys(styles)
+              .sort()
+              .map((style) => {
+                return {
+                  title: camelCaseToSpaceCase(style),
+                  path: `/styles/${camelCaseToKebabCase(style)}/`,
+                };
+              }),
+          },
+          {
+            title: 'Build your own',
+            path: '/styles/build/',
+            collapsable: false,
+            initialOpenGroupIndex: -1,
+            children: ['/styles/build/with-figma', '/styles/build/with-template'],
+          },
+        ],
+      },
+    ],
   },
 
   additionalPages: Object.keys(styles).map((style) => {

@@ -1,19 +1,9 @@
-# Docs
+# Getting Started
 
-<template>
-  <div>
+## What is dicebear?
 
-**{{test}}**
+## How to use?
 
-  </div>
-</template>
+## How does it work?
 
-<script lang="ts">
-  export default {
-    data() {
-      return {
-        test: 'foo'
-      }
-    }
-  }
-</script>
+## How to contribute?
