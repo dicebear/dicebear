@@ -66,6 +66,10 @@ module.exports = {
             path: '/docs/installation/',
           },
           {
+            title: 'Options',
+            path: '/docs/options/',
+          },
+          {
             title: 'HTTP-API',
             path: '/docs/http-api/',
           },
@@ -74,8 +78,26 @@ module.exports = {
             path: '/docs/cli/',
           },
           {
-            title: 'Options',
-            path: '/docs/options/',
+            title: 'How to contribute?',
+            path: '/docs/contribute/',
+          },
+        ],
+      },
+      {
+        title: 'Frameworks',
+        collapsable: false,
+        children: [
+          {
+            title: 'React',
+            path: '/frameworks/react/',
+          },
+          {
+            title: 'Svelte',
+            path: '/frameworks/svelte/',
+          },
+          {
+            title: 'Vue',
+            path: '/frameworks/vue/',
           },
         ],
       },
@@ -83,6 +105,22 @@ module.exports = {
         title: 'Styles',
         collapsable: false,
         children: [
+          {
+            title: 'Create your own',
+            path: '/styles/create-your-own/',
+            collapsable: false,
+            initialOpenGroupIndex: -1,
+            children: [
+              {
+                title: 'With Figma',
+                path: '/styles/create-your-own/with-figma/',
+              },
+              {
+                title: 'From Scratch',
+                path: '/styles/create-your-own/from-scratch/',
+              },
+            ],
+          },
           {
             title: 'Official Styles',
             path: `/styles/`,
@@ -96,13 +134,6 @@ module.exports = {
                   path: `/styles/${camelCaseToKebabCase(style)}/`,
                 };
               }),
-          },
-          {
-            title: 'Build your own',
-            path: '/styles/build/',
-            collapsable: false,
-            initialOpenGroupIndex: -1,
-            children: ['/styles/build/with-figma', '/styles/build/with-template'],
           },
         ],
       },
