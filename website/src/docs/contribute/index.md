@@ -1,7 +1,7 @@
 # How to contribute?
 
-There are two ways you can contribute to this project. You can either contribute an avatar style or you can contribute
-to the underlying project. For example by adding tests or updating the documentation.
+There are several ways you can contribute to this project. You can contribute an avatar style or improve an existing
+one. Or you add tests or update the documentation.
 
 ## Requirements
 
@@ -91,6 +91,99 @@ Afterwards you have to add your changes to the stage and commit them.
 git add .
 git commit -m "Add: <YOUR_AVATAR_STYLE_NAME>"
 git push origin <YOUR_AVATAR_STYLE_NAME>
+```
+
+### Creating a Pull Request
+
+Follow
+[these instructions](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+to create a Pull Request.
+
+## Contribute changes to an existing avatar style
+
+Usually the official avatar styles were created with our [Figma Exporter](/styles/create-your-own/with-figma/) plugin.
+You can find the Figma source files in the [SOURCES.md](https://github.com/dicebear/dicebear/blob/main/SOURCES.md) file.
+So if you want to customize an avatar style, it's best to do the customization directly in Figma.
+
+In order to edit the files in Figma, you must
+[duplicate](https://help.figma.com/hc/en-us/articles/360038511533-Duplicate-files) them. Otherwise, the steps are
+identical to those in [Contributing an avatar style](#contributing-an-avatar-style) with the difference that you are
+working on an existing avatar style.
+
+## Contribute to a package
+
+You want to contribute to a package, like `@avatars/core` or the official CLI? All packages are written in
+[TypeScript](https://www.typescriptlang.org/) and you can find them in the `packages` folder.
+
+### Verifying your changes
+
+You can test your changes as follows:
+
+```
+npm install
+npm run build --workspace <PACKAGE_NAME>
+npm run test --workspace <PACKAGE_NAME>
+```
+
+If you are working on the CLI, you can test your changes _after_ the build by calling the CLI script directly as
+follows:
+
+```
+node packages/dicebear/bin/index.js <COMMAND>
+```
+
+### Branching and committing
+
+Once you are happy with the changes, create a branch so you can commit the changes.
+
+```
+git checkout -b <YOUR_BRANCH>
+```
+
+Afterwards you have to add your changes to the stage and commit them.
+
+```
+git add .
+git commit -m "Change: <YOUR_CHANGES>"
+git push origin <YOUR_BRANCH>
+```
+
+### Creating a Pull Request
+
+Follow
+[these instructions](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+to create a Pull Request.
+
+## Contribute to the documentation
+
+For the documentation and website we use Vuepress. A static website generator powered by Vue. You can find the source
+files in the `website` directory. You will also find a link to the source file of the respective page in the
+documentation below each page.
+
+### Verifying your changes
+
+You can start the website locally on your computer with the following command to check your changes:
+
+```
+npm run dev --workspace @dicebear/website
+```
+
+Open [http://localhost:8080/](http://localhost:8080/) in your browser to see your changes.
+
+### Branching and committing
+
+Once you are happy with the changes, create a branch so you can commit the changes.
+
+```
+git checkout -b <YOUR_BRANCH>
+```
+
+Afterwards you have to add your changes to the stage and commit them.
+
+```
+git add .
+git commit -m "Change: <YOUR_CHANGES>"
+git push origin <YOUR_BRANCH>
 ```
 
 ### Creating a Pull Request
