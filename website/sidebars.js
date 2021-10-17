@@ -5,6 +5,8 @@ module.exports = {
     'styles/overview',
     {
       Styles: [
+        'styles/adventurer',
+        'styles/adventurer-neutral',
         'styles/avataaars',
         'styles/big-ears',
         'styles/big-ears-neutral',
