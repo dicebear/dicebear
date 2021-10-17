@@ -17,10 +17,24 @@ import miniavsOptions from './miniavs';
 import bigSmileOptions from './bigSmile';
 import bigEarsOptions from './bigEars';
 import bigEarsNeutralOptions from './bigEarsNeutral';
+import adventurerOptions from './adventurer';
+import adventurerNeutralOptions from './adventurerNeutral';
 
 import * as collection from '@dicebear/collection';
 
 export default [
+  {
+    id: 'adventurer',
+    name: '@dicebear/adventurer',
+    style: collection.adventurer,
+    options: adventurerOptions,
+  },
+  {
+    id: 'adventurer-neutral',
+    name: '@dicebear/adventurer-neutral',
+    style: collection.adventurerNeutral,
+    options: adventurerNeutralOptions,
+  },
   {
     id: 'avataaars',
     name: '@dicebear/avatars-avataaars-sprites',

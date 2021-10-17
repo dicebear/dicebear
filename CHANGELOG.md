@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.10.0] - 2021-10-17
+
+### Added
+
+- `@dicebear/adventurer` New Avatar style by Lisa Wischofsky
+- `@dicebear/adventurer-neutral` New Avatar style by Lisa Wischofsky
+
 ## [4.9.1] - 2021-09-09
 
 ### Fixed

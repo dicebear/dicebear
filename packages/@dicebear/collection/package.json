@@ -41,6 +41,8 @@
     "@dicebear/avatars-initials-sprites": "^4.9.1",
     "@dicebear/avatars-jdenticon-sprites": "^4.9.1",
     "@dicebear/avatars-male-sprites": "^4.9.1",
+    "@dicebear/adventurer": "^4.9.1",
+    "@dicebear/adventurer-neutral": "^4.9.1",
     "@dicebear/big-ears": "^4.9.1",
     "@dicebear/big-ears-neutral": "^4.9.1",
     "@dicebear/big-smile": "^4.9.1",

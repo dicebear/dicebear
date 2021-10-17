@@ -32,7 +32,7 @@ export default class Generator extends React.Component<{}, State> {
 
     this.state = {
       spriteCollection: spriteCollections[0],
-      seed: '',
+      seed: 'your-custom-seed',
       advancedOptions: this.getSpriteCollectionAdvancedOptions(spriteCollections[0]),
       showAdvancedOptions: false,
       spriteDropdownOpen: false,
