@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.10.1] - 2021-10-27
+
+## Fixed
+
+- `@dicebear/adventurer` Mouth position
+- `@dicebear/adventurer-neutral` Mouth position
+
 ## [4.10.0] - 2021-10-17
 
 ### Added
