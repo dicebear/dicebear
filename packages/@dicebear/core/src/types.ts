@@ -26,14 +26,13 @@ export interface StyleCreateResultAttributes {
 
 export interface StyleCreateResult {
   attributes: StyleCreateResultAttributes;
-  head?: string;
   body: string;
 }
 
 export interface StylePreviewProps<O> {
   prng: Prng;
   options: StyleOptions<O>;
-  property: keyof O;
+  property: keyof StyleOptions<O>;
 }
 
 export type StylePreview<O extends {}> = (props: StylePreviewProps<O>) => StylePreviewResult;

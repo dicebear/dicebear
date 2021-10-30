@@ -62,6 +62,10 @@
       "minimum": -100,
       "maximum": 100,
       "default": 0
+    },
+    "clip": {
+      "type": "boolean",
+      "default": true
     }
   },
   "additionalProperties": false

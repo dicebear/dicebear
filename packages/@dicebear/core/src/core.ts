@@ -1,12 +1,22 @@
 import type { Style, StyleOptions } from './types';
 import * as utils from './utils';
 
-export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O> = {}) {
+export function createAvatar<O extends {}>(style: Style<O>, options?: StyleOptions<O>): string;
+export function createAvatar<O extends {}>(
+  style: Style<O>,
+  options: StyleOptions<O> = {},
+  previewProperty?: keyof O
+): string | undefined {
   options = utils.options.merge(style, options);
 
-  const prngInstance = utils.prng.create(options.seed);
-  const result = style.create({ prng: prngInstance, options });
-  const backgroundColor = prngInstance.pick(options.backgroundColor ?? []);
+  const prng = utils.prng.create(options.seed);
+  const result = previewProperty
+    ? style.preview?.({ prng, options, property: previewProperty })
+    : style.create({ prng: prng, options });
+
+  if (undefined === result) {
+    return undefined;
+  }
 
   if (options.size) {
     result.attributes.width = options.size.toString();
@@ -29,18 +39,21 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     result.body = utils.svg.addTranslate(result, options.translateX, options.translateY);
   }
 
-  if (backgroundColor && backgroundColor !== 'transparent') {
+  const backgroundColor = prng.pick(options.backgroundColor ?? []);
+  const hasBackgroundColor = backgroundColor && backgroundColor !== 'transparent';
+  const isBackgroundVisible = previewProperty ? previewProperty === 'backgroundColor' : true;
+
+  if (hasBackgroundColor && isBackgroundVisible) {
     result.body = utils.svg.addBackgroundColor(result, backgroundColor);
   }
 
-  result.body = utils.svg.addViewboxMask(result, options.radius ?? 0);
-
-  const hasMetadata = Boolean(result.head?.match(/<metadata([^>]*)>/));
+  if (options.radius || options.clip) {
+    result.body = utils.svg.addViewboxMask(result, options.radius ?? 0);
+  }
 
   let avatar = utils.svg.removeWhitespace(`
     <svg ${utils.svg.createAttrString(result.attributes)}>
-      ${hasMetadata ? '' : utils.svg.getMetadata(style)}
-      ${result.head ?? ''}
+      ${utils.svg.getMetadata(style)}
       ${result.body}
     </svg>
   `);
