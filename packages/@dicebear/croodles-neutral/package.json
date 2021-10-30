@@ -1,8 +1,10 @@
 {
   "name": "@dicebear/croodles-neutral",
-  "version": "5.0.0",
+  "version": "5.0.0-alpha.0",
   "description": "Avatar style for DiceBear",
-  "keywords": ["dicebear"],
+  "keywords": [
+    "dicebear"
+  ],
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
@@ -16,20 +18,23 @@
   "module": "dist/index.es.js",
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
-  "files": ["LICENSE", "README.md", "dist"],
+  "files": [
+    "LICENSE",
+    "README.md",
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
     "build": "dicebear-project build DiceBear.CroodlesNeutral"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@dicebear/core": "^5.0.0",
+    "@dicebear/core": "^5.0.0-alpha.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^5.0.0",
+    "dicebear-project": "^5.0.0-alpha.0",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",

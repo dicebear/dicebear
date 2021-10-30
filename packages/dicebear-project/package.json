@@ -1,6 +1,6 @@
 {
   "name": "dicebear-project",
-  "version": "5.0.0",
+  "version": "5.0.0-alpha.0",
   "description": "Project CLI for DiceBear - An avatar library for designers and developers",
   "bin": "bin/index.js",
   "types": "lib/index.d.ts",
