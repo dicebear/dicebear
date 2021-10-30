@@ -56,15 +56,27 @@ export function createPreview<O extends {}>(
   options = utils.options.merge(style, options);
 
   const prng = utils.prng.create(options.seed);
-  const result = style.preview?.({ prng, options, property });
 
-  if (undefined === result) {
-    return undefined;
-  }
+  let result = style.preview?.({ prng, options, property });
 
   const backgroundColor = prng.pick(options.backgroundColor ?? []);
   const hasBackgroundColor = backgroundColor && backgroundColor !== 'transparent';
   const isBackgroundVisible = property === 'backgroundColor';
+
+  if (undefined === result) {
+    if (hasBackgroundColor && isBackgroundVisible) {
+      result = {
+        attributes: {
+          viewBox: `0 0 1 1`,
+          fill: 'none',
+          'shape-rendering': 'auto',
+        },
+        body: ``,
+      };
+    } else {
+      return undefined;
+    }
+  }
 
   if (hasBackgroundColor && isBackgroundVisible) {
     result.body = utils.svg.addBackgroundColor(result, backgroundColor);

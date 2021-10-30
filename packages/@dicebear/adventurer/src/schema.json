@@ -1,0 +1,352 @@
+{
+  "title": "Options",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "accessoires": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "sunglasses",
+          "glasses",
+          "smallGlasses",
+          "mustache",
+          "blush",
+          "birthmark"
+        ]
+      },
+      "default": [
+        "sunglasses",
+        "glasses",
+        "smallGlasses",
+        "mustache",
+        "blush",
+        "birthmark"
+      ]
+    },
+    "accessoiresProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 10
+    },
+    "base": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["default"] },
+      "default": ["default"]
+    },
+    "eyebrows": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant10",
+          "variant09",
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant10",
+        "variant09",
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "eyes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant26",
+          "variant25",
+          "variant24",
+          "variant23",
+          "variant22",
+          "variant21",
+          "variant20",
+          "variant19",
+          "variant18",
+          "variant17",
+          "variant16",
+          "variant15",
+          "variant14",
+          "variant13",
+          "variant12",
+          "variant11",
+          "variant10",
+          "variant09",
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant26",
+        "variant25",
+        "variant24",
+        "variant23",
+        "variant22",
+        "variant21",
+        "variant20",
+        "variant19",
+        "variant18",
+        "variant17",
+        "variant16",
+        "variant15",
+        "variant14",
+        "variant13",
+        "variant12",
+        "variant11",
+        "variant10",
+        "variant09",
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "hair": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "short16",
+          "short15",
+          "short14",
+          "short13",
+          "short12",
+          "short11",
+          "short10",
+          "short09",
+          "short08",
+          "short07",
+          "short06",
+          "short05",
+          "short04",
+          "short03",
+          "long20",
+          "short02",
+          "short01",
+          "long19",
+          "long18",
+          "long17",
+          "long16",
+          "long15",
+          "long14",
+          "long13",
+          "long12",
+          "long11",
+          "long10",
+          "long09",
+          "long08",
+          "long07",
+          "long06",
+          "long05",
+          "long04",
+          "long03",
+          "long02",
+          "long01"
+        ]
+      },
+      "default": [
+        "short16",
+        "short15",
+        "short14",
+        "short13",
+        "short12",
+        "short11",
+        "short10",
+        "short09",
+        "short08",
+        "short07",
+        "short06",
+        "short05",
+        "short04",
+        "short03",
+        "long20",
+        "short02",
+        "short01",
+        "long19",
+        "long18",
+        "long17",
+        "long16",
+        "long15",
+        "long14",
+        "long13",
+        "long12",
+        "long11",
+        "long10",
+        "long09",
+        "long08",
+        "long07",
+        "long06",
+        "long05",
+        "long04",
+        "long03",
+        "long02",
+        "long01"
+      ]
+    },
+    "hairColor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "red01",
+              "red02",
+              "red03",
+              "blonde01",
+              "blonde02",
+              "blonde03",
+              "brown01",
+              "brown02",
+              "black",
+              "gray",
+              "green",
+              "blue",
+              "pink",
+              "purple"
+            ]
+          }
+        ]
+      },
+      "default": [
+        "red01",
+        "red02",
+        "red03",
+        "blonde01",
+        "blonde02",
+        "blonde03",
+        "brown01",
+        "brown02",
+        "black",
+        "gray",
+        "green",
+        "blue",
+        "pink",
+        "purple"
+      ]
+    },
+    "mouth": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant30",
+          "variant29",
+          "variant28",
+          "variant27",
+          "variant26",
+          "variant25",
+          "variant24",
+          "variant23",
+          "variant22",
+          "variant21",
+          "variant20",
+          "variant19",
+          "variant18",
+          "variant17",
+          "variant16",
+          "variant15",
+          "variant14",
+          "variant13",
+          "variant12",
+          "variant11",
+          "variant10",
+          "variant09",
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant30",
+        "variant29",
+        "variant28",
+        "variant27",
+        "variant26",
+        "variant25",
+        "variant24",
+        "variant23",
+        "variant22",
+        "variant21",
+        "variant20",
+        "variant19",
+        "variant18",
+        "variant17",
+        "variant16",
+        "variant15",
+        "variant14",
+        "variant13",
+        "variant12",
+        "variant11",
+        "variant10",
+        "variant09",
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "skinColor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "variant01",
+              "variant02",
+              "variant03",
+              "variant04",
+              "variant05"
+            ]
+          }
+        ]
+      },
+      "default": ["variant02", "variant03", "variant04", "variant05"]
+    }
+  },
+  "additionalProperties": false
+}

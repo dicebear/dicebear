@@ -22,14 +22,6 @@
         "round",
         "sunglasses",
         "wayfarers"
-      ],
-      "examples": [
-        ["kurt"],
-        ["prescription01"],
-        ["prescription02"],
-        ["round"],
-        ["sunglasses"],
-        ["wayfarers"]
       ]
     },
     "accessoriesColor": {
@@ -78,23 +70,6 @@
         "pink",
         "red",
         "white"
-      ],
-      "examples": [
-        ["black"],
-        ["blue01"],
-        ["blue02"],
-        ["blue03"],
-        ["gray01"],
-        ["gray02"],
-        ["heather"],
-        ["pastelBlue"],
-        ["pastelGreen"],
-        ["pastelOrange"],
-        ["pastelRed"],
-        ["pastelYellow"],
-        ["pink"],
-        ["red"],
-        ["white"]
       ]
     },
     "accessoriesProbability": {
@@ -114,8 +89,7 @@
           { "type": "string", "enum": ["blue01"] }
         ]
       },
-      "default": [],
-      "examples": [["blue01"]]
+      "default": []
     },
     "clothesColor": {
       "type": "array",
@@ -163,23 +137,6 @@
         "pink",
         "red",
         "white"
-      ],
-      "examples": [
-        ["black"],
-        ["blue01"],
-        ["blue02"],
-        ["blue03"],
-        ["gray01"],
-        ["gray02"],
-        ["heather"],
-        ["pastelBlue"],
-        ["pastelGreen"],
-        ["pastelOrange"],
-        ["pastelRed"],
-        ["pastelYellow"],
-        ["pink"],
-        ["red"],
-        ["white"]
       ]
     },
     "clothing": {
@@ -208,17 +165,6 @@
         "shirtCrewNeck",
         "shirtScoopNeck",
         "shirtVNeck"
-      ],
-      "examples": [
-        ["blazerAndShirt"],
-        ["blazerAndSweater"],
-        ["collarAndSweater"],
-        ["graphicShirt"],
-        ["hoodie"],
-        ["overall"],
-        ["shirtCrewNeck"],
-        ["shirtScoopNeck"],
-        ["shirtVNeck"]
       ]
     },
     "clothingGraphic": {
@@ -249,18 +195,6 @@
         "resist",
         "skull",
         "skullOutline"
-      ],
-      "examples": [
-        ["bat"],
-        ["bear"],
-        ["cumbia"],
-        ["deer"],
-        ["diamond"],
-        ["hola"],
-        ["pizza"],
-        ["resist"],
-        ["skull"],
-        ["skullOutline"]
       ]
     },
     "eyebrows": {
@@ -297,21 +231,6 @@
         "raisedExcited",
         "sadConcerned",
         "upDown"
-      ],
-      "examples": [
-        ["angryNatural"],
-        ["defaultNatural"],
-        ["flatNatural"],
-        ["frownNatural"],
-        ["raisedExcitedNatural"],
-        ["sadConcernedNatural"],
-        ["unibrowNatural"],
-        ["upDownNatural"],
-        ["angry"],
-        ["default"],
-        ["raisedExcited"],
-        ["sadConcerned"],
-        ["upDown"]
       ]
     },
     "eyes": {
@@ -346,20 +265,6 @@
         "winkWacky",
         "wink",
         "xDizzy"
-      ],
-      "examples": [
-        ["closed"],
-        ["cry"],
-        ["default"],
-        ["eyeRoll"],
-        ["happy"],
-        ["hearts"],
-        ["side"],
-        ["squint"],
-        ["surprised"],
-        ["winkWacky"],
-        ["wink"],
-        ["xDizzy"]
       ]
     },
     "facialHair": {
@@ -380,13 +285,6 @@
         "beardMedium",
         "moustacheFancy",
         "moustacheMagnum"
-      ],
-      "examples": [
-        ["beardLight"],
-        ["beardMagestic"],
-        ["beardMedium"],
-        ["moustacheFancy"],
-        ["moustacheMagnum"]
       ]
     },
     "facialHairColor": {
@@ -425,18 +323,6 @@
         "platinum",
         "red",
         "silverGray"
-      ],
-      "examples": [
-        ["auburn"],
-        ["black"],
-        ["blonde"],
-        ["blondeGolden"],
-        ["brown"],
-        ["brownDark"],
-        ["pastelPink"],
-        ["platinum"],
-        ["red"],
-        ["silverGray"]
       ]
     },
     "facialHairProbability": {
@@ -481,18 +367,6 @@
         "platinum",
         "red",
         "silverGray"
-      ],
-      "examples": [
-        ["auburn"],
-        ["black"],
-        ["blonde"],
-        ["blondeGolden"],
-        ["brown"],
-        ["brownDark"],
-        ["pastelPink"],
-        ["platinum"],
-        ["red"],
-        ["silverGray"]
       ]
     },
     "hatColor": {
@@ -541,23 +415,6 @@
         "pink",
         "red",
         "white"
-      ],
-      "examples": [
-        ["black"],
-        ["blue01"],
-        ["blue02"],
-        ["blue03"],
-        ["gray01"],
-        ["gray02"],
-        ["heather"],
-        ["pastelBlue"],
-        ["pastelGreen"],
-        ["pastelOrange"],
-        ["pastelRed"],
-        ["pastelYellow"],
-        ["pink"],
-        ["red"],
-        ["white"]
       ]
     },
     "mouth": {
@@ -592,27 +449,12 @@
         "tongue",
         "twinkle",
         "vomit"
-      ],
-      "examples": [
-        ["concerned"],
-        ["default"],
-        ["disbelief"],
-        ["eating"],
-        ["grimace"],
-        ["sad"],
-        ["screamOpen"],
-        ["serious"],
-        ["smile"],
-        ["tongue"],
-        ["twinkle"],
-        ["vomit"]
       ]
     },
     "nose": {
       "type": "array",
       "items": { "type": "string", "enum": ["default"] },
-      "default": ["default"],
-      "examples": [["default"]]
+      "default": ["default"]
     },
     "skinColor": {
       "type": "array",
@@ -644,22 +486,12 @@
         "pale",
         "tanned",
         "yellow"
-      ],
-      "examples": [
-        ["black"],
-        ["brown"],
-        ["darkBrown"],
-        ["light"],
-        ["pale"],
-        ["tanned"],
-        ["yellow"]
       ]
     },
     "style": {
       "type": "array",
       "items": { "type": "string", "enum": ["circle", "default"] },
-      "default": ["default"],
-      "examples": [["circle"], ["default"]]
+      "default": ["default"]
     },
     "top": {
       "type": "array",
@@ -739,43 +571,6 @@
         "theCaesar",
         "theCaesarAndSidePart",
         "bigHair"
-      ],
-      "examples": [
-        ["eyepatch"],
-        ["hat"],
-        ["hijab"],
-        ["turban"],
-        ["winterHat1"],
-        ["winterHat02"],
-        ["winterHat03"],
-        ["winterHat04"],
-        ["bob"],
-        ["bun"],
-        ["curly"],
-        ["curvy"],
-        ["dreads"],
-        ["frida"],
-        ["fro"],
-        ["froBand"],
-        ["longButNotTooLong"],
-        ["miaWallace"],
-        ["shavedSides"],
-        ["straight02"],
-        ["straight01"],
-        ["straightAndStrand"],
-        ["dreads01"],
-        ["dreads02"],
-        ["frizzle"],
-        ["shaggy"],
-        ["shaggyMullet"],
-        ["shortCurly"],
-        ["shortFlat"],
-        ["shortRound"],
-        ["shortWaved"],
-        ["sides"],
-        ["theCaesar"],
-        ["theCaesarAndSidePart"],
-        ["bigHair"]
       ]
     },
     "topProbability": {

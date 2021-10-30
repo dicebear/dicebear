@@ -21,15 +21,6 @@
         "pale",
         "tanned",
         "yellow"
-      ],
-      "examples": [
-        ["black"],
-        ["brown"],
-        ["darkBrown"],
-        ["light"],
-        ["pale"],
-        ["tanned"],
-        ["yellow"]
       ]
     },
     "eyebrows": {
@@ -66,21 +57,6 @@
         "raisedExcited",
         "sadConcerned",
         "upDown"
-      ],
-      "examples": [
-        ["angryNatural"],
-        ["defaultNatural"],
-        ["flatNatural"],
-        ["frownNatural"],
-        ["raisedExcitedNatural"],
-        ["sadConcernedNatural"],
-        ["unibrowNatural"],
-        ["upDownNatural"],
-        ["angry"],
-        ["default"],
-        ["raisedExcited"],
-        ["sadConcerned"],
-        ["upDown"]
       ]
     },
     "eyes": {
@@ -115,20 +91,6 @@
         "winkWacky",
         "wink",
         "xDizzy"
-      ],
-      "examples": [
-        ["closed"],
-        ["cry"],
-        ["default"],
-        ["eyeRoll"],
-        ["happy"],
-        ["hearts"],
-        ["side"],
-        ["squint"],
-        ["surprised"],
-        ["winkWacky"],
-        ["wink"],
-        ["xDizzy"]
       ]
     },
     "mouth": {
@@ -163,27 +125,12 @@
         "tongue",
         "twinkle",
         "vomit"
-      ],
-      "examples": [
-        ["concerned"],
-        ["default"],
-        ["disbelief"],
-        ["eating"],
-        ["grimace"],
-        ["sad"],
-        ["screamOpen"],
-        ["serious"],
-        ["smile"],
-        ["tongue"],
-        ["twinkle"],
-        ["vomit"]
       ]
     },
     "nose": {
       "type": "array",
       "items": { "type": "string", "enum": ["default"] },
-      "default": ["default"],
-      "examples": [["default"]]
+      "default": ["default"]
     }
   },
   "additionalProperties": false

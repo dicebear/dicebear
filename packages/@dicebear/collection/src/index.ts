@@ -1,3 +1,5 @@
+export * as adventurer from '@dicebear/adventurer';
+export * as adventurerNeutral from '@dicebear/adventurer-neutral';
 export * as avataaars from '@dicebear/avataaars';
 export * as avataaarsNeutral from '@dicebear/avataaars-neutral';
 export * as bottts from '@dicebear/bottts';

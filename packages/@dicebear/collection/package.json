@@ -32,6 +32,8 @@
     "build": "dicebear-project build DiceBear.Collection"
   },
   "dependencies": {
+    "@dicebear/adventurer": "^5.0.0",
+    "@dicebear/adventurer-neutral": "^5.0.0",
     "@dicebear/avataaars": "^5.0.0",
     "@dicebear/avataaars-neutral": "^5.0.0",
     "@dicebear/bottts": "^5.0.0",
