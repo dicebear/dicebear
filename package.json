@@ -12,12 +12,12 @@
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
-    "release-patch": "lerna publish patch --npm-tag latest",
-    "release-minor": "lerna publish minor --npm-tag latest",
-    "release-major": "lerna publish major --npm-tag latest",
-    "alpha-patch": "lerna publish prepatch --npm-tag next",
-    "alpha-minor": "lerna publish preminor --npm-tag next",
-    "alpha-major": "lerna publish premajor --npm-tag next"
+    "release-patch": "lerna publish patch --dist-tag latest",
+    "release-minor": "lerna publish minor --dist-tag latest",
+    "release-major": "lerna publish major --dist-tag latest",
+    "alpha-patch": "lerna publish prepatch --dist-tag next",
+    "alpha-minor": "lerna publish preminor --dist-tag next",
+    "alpha-major": "lerna publish premajor --dist-tag next"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
