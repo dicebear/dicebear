@@ -214,10 +214,8 @@ export const top: ComponentGroup = {
   <g transform="translate(49 72)">
     ${components.facialHair?.value(components, colors) ?? ''}
   </g>
-  <g>
-    <g transform="translate(62 85)">
-      ${components.accessories?.value(components, colors) ?? ''}
-    </g>
+  <g transform="translate(62 85)">
+    ${components.accessories?.value(components, colors) ?? ''}
   </g>
 `,
   fro: (components: ComponentPickCollection, colors: ColorPickCollection) => `

@@ -43,14 +43,12 @@ export const style: ComponentGroup = {
     <g transform="translate(76 82)">
       ${components.eyebrows?.value(components, colors) ?? ''}
     </g>
-    <g>
-      <mask id="styleCircle-d" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="264" height="280">
-        <path fill="#fff" d="M0 0h264v280H0z"/>
-      </mask>
-      <g mask="url(#styleCircle-d)">
-        <g transform="translate(-1)">
-          ${components.top?.value(components, colors) ?? ''}
-        </g>
+    <mask id="styleCircle-d" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="264" height="280">
+      <path fill="#fff" d="M0 0h264v280H0z"/>
+    </mask>
+    <g mask="url(#styleCircle-d)">
+      <g transform="translate(-1)">
+        ${components.top?.value(components, colors) ?? ''}
       </g>
     </g>
   </g>
@@ -82,14 +80,12 @@ export const style: ComponentGroup = {
   <g transform="translate(76 82)">
     ${components.eyebrows?.value(components, colors) ?? ''}
   </g>
-  <g>
-    <mask id="styleDefault-b" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="264" height="280">
-      <path fill="#fff" d="M0 0h264v280H0z"/>
-    </mask>
-    <g mask="url(#styleDefault-b)">
-      <g transform="translate(-1)">
-        ${components.top?.value(components, colors) ?? ''}
-      </g>
+  <mask id="styleDefault-b" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="264" height="280">
+    <path fill="#fff" d="M0 0h264v280H0z"/>
+  </mask>
+  <g mask="url(#styleDefault-b)">
+    <g transform="translate(-1)">
+      ${components.top?.value(components, colors) ?? ''}
     </g>
   </g>
 `,

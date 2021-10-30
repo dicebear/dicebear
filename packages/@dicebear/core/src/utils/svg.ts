@@ -286,3 +286,7 @@ export function removeWhitespace(svg: string): string {
       .replace(/\s(\/?>)/g, '$1')
   );
 }
+
+export function convertToDataUri(svg: string): string {
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}

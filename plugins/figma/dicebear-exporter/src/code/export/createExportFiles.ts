@@ -66,6 +66,10 @@ export async function createExportFiles(exportData: Export) {
     }),
     'tsconfig.json': templates['tsconfig.json'],
     'tests/create.test.ts': templates['tests/create.test.ts'],
+    'tests/preview.test.ts': handlebars.compile(templates['tests/preview.test.ts'])({
+      components: exportData.components,
+      colors: exportData.colors,
+    }),
     'src/index.ts': handlebars.compile(templates['src/index.ts'])({
       title: exportData.frame.settings.title,
       year: new Date().getFullYear(),

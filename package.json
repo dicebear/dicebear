@@ -12,7 +12,12 @@
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
-    "force-publish": "lerna publish --force-publish"
+    "release-patch": "npm run build && lerna publish patch --npm-tag latest",
+    "release-minor": "npm run build && lerna publish minor --npm-tag latest",
+    "release-major": "npm run build && lerna publish major --npm-tag latest",
+    "alpha-patch": "npm run build && lerna publish prepatch --npm-tag next",
+    "alpha-minor": "npm run build && lerna publish preminor --npm-tag next",
+    "alpha-major": "npm run build && lerna publish premajor --npm-tag next"
   },
   "devDependencies": {
     "lerna": "^4.0.0"

@@ -8,9 +8,15 @@ import { writeNodeExportInfo } from '../utils/writeNodeExportInfo';
 
 export async function calculateNodeExportInfo(node: ComponentNode | FrameNode) {
   const cloneComponent = figma.createComponent();
+  const cloneComponentRectangle = figma.createRectangle();
+
+  cloneComponentRectangle.constraints = {
+    horizontal: 'STRETCH',
+    vertical: 'STRETCH',
+  };
 
   cloneComponent.name = 'Export Helper Component';
-  cloneComponent.appendChild(figma.createRectangle());
+  cloneComponent.insertChild(0, cloneComponentRectangle);
 
   const nodeClone = node.clone();
 
