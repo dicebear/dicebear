@@ -10,7 +10,7 @@
 
 import { style } from './core';
 
-let { create, meta, schema } = style;
+let { create, preview, meta, schema } = style;
 
-export { create, meta, schema };
+export { create, preview, meta, schema };
 export { Options } from './options';

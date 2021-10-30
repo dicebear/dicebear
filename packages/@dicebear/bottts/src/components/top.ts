@@ -70,14 +70,14 @@ export const top: ComponentGroup = {
       <feOffset/>
       <feGaussianBlur stdDeviation="4"/>
       <feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"/>
-      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow"/>
-      <feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_101:619"/>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow_101:619" result="shape"/>
       <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
       <feOffset/>
       <feGaussianBlur stdDeviation="2"/>
       <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
       <feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"/>
-      <feBlend in2="shape" result="effect2_innerShadow"/>
+      <feBlend in2="shape" result="effect2_innerShadow_101:619"/>
     </filter>
   </defs>
 `,
@@ -101,14 +101,14 @@ export const top: ComponentGroup = {
       <feOffset/>
       <feGaussianBlur stdDeviation="4"/>
       <feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"/>
-      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow"/>
-      <feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_101:632"/>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow_101:632" result="shape"/>
       <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
       <feOffset/>
       <feGaussianBlur stdDeviation="2"/>
       <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
       <feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"/>
-      <feBlend in2="shape" result="effect2_innerShadow"/>
+      <feBlend in2="shape" result="effect2_innerShadow_101:632"/>
     </filter>
   </defs>
 `,

@@ -43,7 +43,7 @@ export const style: Style<Options> = {
   <g transform="translate(5 14)">
     ${components.mouth?.value(components, colors) ?? ''}
   </g>
-  <mask id="gridy-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="105" height="114">
+  <mask id="gridy-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
     ${components.body?.value(components, colors) ?? ''}
     <g transform="translate(4 7)">
       ${components.eyes?.value(components, colors) ?? ''}

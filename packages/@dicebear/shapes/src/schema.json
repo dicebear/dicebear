@@ -50,24 +50,6 @@
         "red",
         "teal",
         "yellow"
-      ],
-      "examples": [
-        ["amber"],
-        ["blue"],
-        ["cyan"],
-        ["deepOrange"],
-        ["deepPurple"],
-        ["green"],
-        ["indigo"],
-        ["lightBlue"],
-        ["lightGreen"],
-        ["lime"],
-        ["orange"],
-        ["pink"],
-        ["purple"],
-        ["red"],
-        ["teal"],
-        ["yellow"]
       ]
     },
     "center": {
@@ -110,24 +92,6 @@
         "shape7",
         "shape8",
         "shape9"
-      ],
-      "examples": [
-        ["shape1Inverted"],
-        ["shape1"],
-        ["shape2Inverted"],
-        ["shape2"],
-        ["shape3Inverted"],
-        ["shape3"],
-        ["shape4Inverted"],
-        ["shape4"],
-        ["shape5Inverted"],
-        ["shape5"],
-        ["shape6Inverted"],
-        ["shape6"],
-        ["shape7Inverted"],
-        ["shape7"],
-        ["shape8"],
-        ["shape9"]
       ]
     },
     "centerModifier": {
@@ -136,14 +100,12 @@
         "type": "string",
         "enum": ["none", "lightGray", "gray", "lighten"]
       },
-      "default": ["none", "lightGray", "gray", "lighten"],
-      "examples": [["none"], ["lightGray"], ["gray"], ["lighten"]]
+      "default": ["none", "lightGray", "gray", "lighten"]
     },
     "centerWrapper": {
       "type": "array",
       "items": { "type": "string", "enum": ["default"] },
-      "default": ["default"],
-      "examples": [["default"]]
+      "default": ["default"]
     },
     "corners": {
       "type": "array",
@@ -173,18 +135,6 @@
         "shape03",
         "shape02",
         "shape01"
-      ],
-      "examples": [
-        ["shape10"],
-        ["shape09"],
-        ["shape08"],
-        ["shape07"],
-        ["shape06"],
-        ["shape05"],
-        ["shape04"],
-        ["shape03"],
-        ["shape02"],
-        ["shape01"]
       ]
     },
     "cornersModifier": {
@@ -193,14 +143,12 @@
         "type": "string",
         "enum": ["none", "lightGray", "gray", "lighten"]
       },
-      "default": ["none", "lightGray", "gray", "lighten"],
-      "examples": [["none"], ["lightGray"], ["gray"], ["lighten"]]
+      "default": ["none", "lightGray", "gray", "lighten"]
     },
     "cornersWrapper": {
       "type": "array",
       "items": { "type": "string", "enum": ["default"] },
-      "default": ["default"],
-      "examples": [["default"]]
+      "default": ["default"]
     },
     "sides": {
       "type": "array",
@@ -230,18 +178,6 @@
         "shape03",
         "shape02",
         "shape01"
-      ],
-      "examples": [
-        ["shape10"],
-        ["shape09"],
-        ["shape08"],
-        ["shape07"],
-        ["shape06"],
-        ["shape05"],
-        ["shape04"],
-        ["shape03"],
-        ["shape02"],
-        ["shape01"]
       ]
     },
     "sidesModifier": {
@@ -250,14 +186,12 @@
         "type": "string",
         "enum": ["none", "lightGray", "gray", "lighten"]
       },
-      "default": ["none", "lightGray", "gray", "lighten"],
-      "examples": [["none"], ["lightGray"], ["gray"], ["lighten"]]
+      "default": ["none", "lightGray", "gray", "lighten"]
     },
     "sidesWrapper": {
       "type": "array",
       "items": { "type": "string", "enum": ["default"] },
-      "default": ["default"],
-      "examples": [["default"]]
+      "default": ["default"]
     }
   },
   "additionalProperties": false

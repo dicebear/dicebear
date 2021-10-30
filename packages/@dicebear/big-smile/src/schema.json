@@ -26,16 +26,6 @@
         "sunglasses",
         "faceMask",
         "mustache"
-      ],
-      "examples": [
-        ["catEars"],
-        ["glasses"],
-        ["sailormoonCrown"],
-        ["clownNose"],
-        ["sleepMask"],
-        ["sunglasses"],
-        ["faceMask"],
-        ["mustache"]
       ]
     },
     "accessoriesProbability": {
@@ -68,23 +58,12 @@
         "sleepy",
         "sad",
         "angry"
-      ],
-      "examples": [
-        ["cheery"],
-        ["normal"],
-        ["confused"],
-        ["starstruck"],
-        ["winking"],
-        ["sleepy"],
-        ["sad"],
-        ["angry"]
       ]
     },
     "face": {
       "type": "array",
       "items": { "type": "string", "enum": ["base"] },
-      "default": ["base"],
-      "examples": [["base"]]
+      "default": ["base"]
     },
     "hair": {
       "type": "array",
@@ -120,21 +99,6 @@
         "bangs",
         "halfShavedHead",
         "curlyShortHair"
-      ],
-      "examples": [
-        ["shortHair"],
-        ["mohawk"],
-        ["wavyBob"],
-        ["bowlCutHair"],
-        ["curlyBob"],
-        ["straightHair"],
-        ["braids"],
-        ["shavedHead"],
-        ["bunHair"],
-        ["froBun"],
-        ["bangs"],
-        ["halfShavedHead"],
-        ["curlyShortHair"]
       ]
     },
     "hairColor": {
@@ -169,16 +133,6 @@
         "variant06",
         "variant07",
         "variant08"
-      ],
-      "examples": [
-        ["variant01"],
-        ["variant02"],
-        ["variant03"],
-        ["variant04"],
-        ["variant05"],
-        ["variant06"],
-        ["variant07"],
-        ["variant08"]
       ]
     },
     "mouth": {
@@ -205,16 +159,6 @@
         "awkwardSmile",
         "braces",
         "kawaii"
-      ],
-      "examples": [
-        ["openedSmile"],
-        ["unimpressed"],
-        ["gapSmile"],
-        ["openSad"],
-        ["teethSmile"],
-        ["awkwardSmile"],
-        ["braces"],
-        ["kawaii"]
       ]
     },
     "skinColor": {
@@ -249,16 +193,6 @@
         "variant06",
         "variant07",
         "variant08"
-      ],
-      "examples": [
-        ["variant01"],
-        ["variant02"],
-        ["variant03"],
-        ["variant04"],
-        ["variant05"],
-        ["variant06"],
-        ["variant07"],
-        ["variant08"]
       ]
     }
   },

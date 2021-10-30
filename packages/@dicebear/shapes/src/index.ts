@@ -3,7 +3,7 @@
  *
  * Code licensed under MIT License.
  * Copyright (c) 2021 Florian Körner
- * Copyright (c) 2014-2021 Daniel Mester Pirttijärvi
+ * Copyright (c) 2021 Daniel Mester Pirttijärvi
  *
  * Design "Jdenticon" by Daniel Mester Pirttijärvi licensed under MIT.
  * Source: https://github.com/dmester/jdenticon
@@ -12,7 +12,7 @@
 
 import { style } from './core';
 
-let { create, meta, schema } = style;
+let { create, preview, meta, schema } = style;
 
-export { create, meta, schema };
+export { create, preview, meta, schema };
 export { Options } from './options';

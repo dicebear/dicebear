@@ -12,7 +12,7 @@ export const centerModifier: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <mask id="centerModifierLightGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="centerModifierLightGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.centerWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#centerModifierLightGray-a)">
@@ -20,7 +20,7 @@ export const centerModifier: ComponentGroup = {
   </g>
 `,
   gray: (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <mask id="centerModifierGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="centerModifierGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.centerWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#centerModifierGray-a)">
@@ -31,7 +31,7 @@ export const centerModifier: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <mask id="centerModifierLighten-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="centerModifierLighten-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.centerWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#centerModifierLighten-a)">

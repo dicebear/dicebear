@@ -23,25 +23,23 @@ export const accessories: ComponentGroup = {
   <g mask="url(#accessoriesCatEars-b)">
     <path d="M233.4 126.5c-21-.4-17.6 44.1-13.1 66.5l55.1-56a88.3 88.3 0 0 0-42-10.5Z" fill="#FFE7E2"/>
   </g>
-  <g>
-    <mask id="accessoriesCatEars-c" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="336" y="102" width="90" height="80">
-      <path d="M407 182a162 162 0 0 0-70.5-68.5l42-11.5 47.5 12.5-19 67.5Z" fill="#C4C4C4"/>
-    </mask>
-    <g mask="url(#accessoriesCatEars-c)">
+  <mask id="accessoriesCatEars-c" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="336" y="102" width="90" height="80">
+    <path d="M407 182a162 162 0 0 0-70.5-68.5l42-11.5 47.5 12.5-19 67.5Z" fill="#C4C4C4"/>
+  </mask>
+  <g mask="url(#accessoriesCatEars-c)">
+    <path d="M387.5 106.9c13.4.4 14.4 38.3 13.2 57.7-10.5-18-37.3-13.5-49.3-9.7-8.4-2.2-15.3-10.7-17.7-14.4 12.4-11.4 40.5-34.1 53.8-33.6Z" fill="#A09B9B"/>
+    <mask id="accessoriesCatEars-d" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="333" y="106" width="69" height="59">
       <path d="M387.5 106.9c13.4.4 14.4 38.3 13.2 57.7-10.5-18-37.3-13.5-49.3-9.7-8.4-2.2-15.3-10.7-17.7-14.4 12.4-11.4 40.5-34.1 53.8-33.6Z" fill="#A09B9B"/>
-      <mask id="accessoriesCatEars-d" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="333" y="106" width="69" height="59">
-        <path d="M387.5 106.9c13.4.4 14.4 38.3 13.2 57.7-10.5-18-37.3-13.5-49.3-9.7-8.4-2.2-15.3-10.7-17.7-14.4 12.4-11.4 40.5-34.1 53.8-33.6Z" fill="#A09B9B"/>
-      </mask>
-      <g fill="#C4C4C4" mask="url(#accessoriesCatEars-d)">
-        <path d="M334.8 137.5c4.6 3.5 10 8.2 12.3 10l-5.3-18-7 8ZM345.8 124.5l5.4-4.2L355 133l-9.2-8.6Z"/>
-      </g>
-      <path d="M401 172.5c-16.3-13.4-39.8-20.1-49.3-17.8 5.8-23.2 26.8-47.5 37.9-45 8.9 1.8 11.4 45.3 11.4 62.8Z" fill="#FEB3A4"/>
-      <mask id="accessoriesCatEars-e" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="351" y="109" width="50" height="65">
-        <path d="M401 174c-16.3-13.4-39.8-21.6-49.3-19.3 5.8-23.2 26.8-47.5 37.9-45 8.9 1.8 11.4 46.8 11.4 64.3Z" fill="#FEB3A4"/>
-      </mask>
-      <g mask="url(#accessoriesCatEars-e)">
-        <path d="M392.3 141.3c-9.4-14.9-30.9 3.9-40.5 15l54.2 18a93.3 93.3 0 0 0-13.7-33Z" fill="#FFE7E2"/>
-      </g>
+    </mask>
+    <g fill="#C4C4C4" mask="url(#accessoriesCatEars-d)">
+      <path d="M334.8 137.5c4.6 3.5 10 8.2 12.3 10l-5.3-18-7 8ZM345.8 124.5l5.4-4.2L355 133l-9.2-8.6Z"/>
+    </g>
+    <path d="M401 172.5c-16.3-13.4-39.8-20.1-49.3-17.8 5.8-23.2 26.8-47.5 37.9-45 8.9 1.8 11.4 45.3 11.4 62.8Z" fill="#FEB3A4"/>
+    <mask id="accessoriesCatEars-e" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="351" y="109" width="50" height="65">
+      <path d="M401 174c-16.3-13.4-39.8-21.6-49.3-19.3 5.8-23.2 26.8-47.5 37.9-45 8.9 1.8 11.4 46.8 11.4 64.3Z" fill="#FEB3A4"/>
+    </mask>
+    <g mask="url(#accessoriesCatEars-e)">
+      <path d="M392.3 141.3c-9.4-14.9-30.9 3.9-40.5 15l54.2 18a93.3 93.3 0 0 0-13.7-33Z" fill="#FFE7E2"/>
     </g>
   </g>
 `,

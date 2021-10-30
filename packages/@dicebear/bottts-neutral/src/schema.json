@@ -33,27 +33,6 @@
         "red",
         "teal",
         "yellow"
-      ],
-      "examples": [
-        ["amber"],
-        ["blue"],
-        ["blueGrey"],
-        ["brown"],
-        ["cyan"],
-        ["deepOrange"],
-        ["deepPurple"],
-        ["green"],
-        ["grey"],
-        ["indigo"],
-        ["lightBlue"],
-        ["lightGreen"],
-        ["lime"],
-        ["orange"],
-        ["pink"],
-        ["purple"],
-        ["red"],
-        ["teal"],
-        ["yellow"]
       ]
     },
     "eyes": {
@@ -92,22 +71,6 @@
         "roundFrame02",
         "sensor",
         "shade01"
-      ],
-      "examples": [
-        ["bulging"],
-        ["dizzy"],
-        ["eva"],
-        ["frame1"],
-        ["frame2"],
-        ["glow"],
-        ["happy"],
-        ["hearts"],
-        ["robocop"],
-        ["round"],
-        ["roundFrame01"],
-        ["roundFrame02"],
-        ["sensor"],
-        ["shade01"]
       ]
     },
     "mouth": {
@@ -136,17 +99,6 @@
         "smile02",
         "square01",
         "square02"
-      ],
-      "examples": [
-        ["bite"],
-        ["diagram"],
-        ["grill01"],
-        ["grill02"],
-        ["grill03"],
-        ["smile01"],
-        ["smile02"],
-        ["square01"],
-        ["square02"]
       ]
     }
   },

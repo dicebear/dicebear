@@ -61,6 +61,8 @@ export const style: Style<Options> = {
 
     onPostCreate({ prng, options, components, colors, preview: true });
 
+    options.backgroundColor = [colors.background.value];
+
     if (componentGroup in components) {
       const { width, height } = dimensions[componentGroup]!;
 

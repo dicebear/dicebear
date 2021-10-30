@@ -12,7 +12,7 @@ export const sidesModifier: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <mask id="sidesModifierLightGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="sidesModifierLightGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.sidesWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#sidesModifierLightGray-a)">
@@ -20,7 +20,7 @@ export const sidesModifier: ComponentGroup = {
   </g>
 `,
   gray: (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <mask id="sidesModifierGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="sidesModifierGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.sidesWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#sidesModifierGray-a)">
@@ -31,7 +31,7 @@ export const sidesModifier: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <mask id="sidesModifierLighten-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="sidesModifierLighten-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.sidesWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#sidesModifierLighten-a)">

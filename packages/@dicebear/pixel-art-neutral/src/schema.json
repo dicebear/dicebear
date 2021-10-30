@@ -22,16 +22,6 @@
         "variant06",
         "variant07",
         "variant08"
-      ],
-      "examples": [
-        ["variant01"],
-        ["variant02"],
-        ["variant03"],
-        ["variant04"],
-        ["variant05"],
-        ["variant06"],
-        ["variant07"],
-        ["variant08"]
       ]
     },
     "eyebrows": {
@@ -68,21 +58,6 @@
         "variant03",
         "variant02",
         "variant01"
-      ],
-      "examples": [
-        ["variant13"],
-        ["variant12"],
-        ["variant11"],
-        ["variant10"],
-        ["variant09"],
-        ["variant08"],
-        ["variant07"],
-        ["variant06"],
-        ["variant05"],
-        ["variant04"],
-        ["variant03"],
-        ["variant02"],
-        ["variant01"]
       ]
     },
     "eyes": {
@@ -119,21 +94,6 @@
         "variant03",
         "variant02",
         "variant01"
-      ],
-      "examples": [
-        ["variant13"],
-        ["variant12"],
-        ["variant11"],
-        ["variant10"],
-        ["variant09"],
-        ["variant08"],
-        ["variant07"],
-        ["variant06"],
-        ["variant05"],
-        ["variant04"],
-        ["variant03"],
-        ["variant02"],
-        ["variant01"]
       ]
     },
     "glasses": {
@@ -158,15 +118,6 @@
         "variant03",
         "variant02",
         "variant01"
-      ],
-      "examples": [
-        ["variant07"],
-        ["variant06"],
-        ["variant05"],
-        ["variant04"],
-        ["variant03"],
-        ["variant02"],
-        ["variant01"]
       ]
     },
     "glassesColor": {
@@ -190,22 +141,7 @@
           }
         ]
       },
-      "default": [
-        "green01",
-        "blue01",
-        "red01",
-        "black01",
-        "black02",
-        "black03"
-      ],
-      "examples": [
-        ["green01"],
-        ["blue01"],
-        ["red01"],
-        ["black01"],
-        ["black02"],
-        ["black03"]
-      ]
+      "default": ["green01", "blue01", "red01", "black01", "black02", "black03"]
     },
     "glassesProbability": {
       "type": "integer",
@@ -249,18 +185,6 @@
         "variant08",
         "variant09",
         "variant10"
-      ],
-      "examples": [
-        ["variant01"],
-        ["variant02"],
-        ["variant03"],
-        ["variant04"],
-        ["variant05"],
-        ["variant06"],
-        ["variant07"],
-        ["variant08"],
-        ["variant09"],
-        ["variant10"]
       ]
     },
     "mouth": {
@@ -311,28 +235,6 @@
         "sad02",
         "sad01",
         "surprised01"
-      ],
-      "examples": [
-        ["surprised03"],
-        ["surprised02"],
-        ["happy09"],
-        ["happy08"],
-        ["happy07"],
-        ["happy06"],
-        ["happy05"],
-        ["happy04"],
-        ["happy03"],
-        ["happy02"],
-        ["happy01"],
-        ["sad08"],
-        ["sad07"],
-        ["sad06"],
-        ["sad05"],
-        ["sad04"],
-        ["sad03"],
-        ["sad02"],
-        ["sad01"],
-        ["surprised01"]
       ]
     },
     "mouthColor": {
@@ -349,8 +251,7 @@
           }
         ]
       },
-      "default": ["variant01", "variant02", "variant03", "variant04"],
-      "examples": [["variant01"], ["variant02"], ["variant03"], ["variant04"]]
+      "default": ["variant01", "variant02", "variant03", "variant04"]
     }
   },
   "additionalProperties": false

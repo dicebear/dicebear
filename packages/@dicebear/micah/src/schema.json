@@ -5,8 +5,7 @@
     "base": {
       "type": "array",
       "items": { "type": "string", "enum": ["standard"] },
-      "default": ["standard"],
-      "examples": [["standard"]]
+      "default": ["standard"]
     },
     "baseColor": {
       "type": "array",
@@ -36,22 +35,7 @@
           }
         ]
       },
-      "default": ["apricot", "coast", "topaz"],
-      "examples": [
-        ["apricot"],
-        ["coast"],
-        ["topaz"],
-        ["lavender"],
-        ["sky"],
-        ["salmon"],
-        ["canary"],
-        ["calm"],
-        ["azure"],
-        ["seashell"],
-        ["mellow"],
-        ["black"],
-        ["white"]
-      ]
+      "default": ["apricot", "coast", "topaz"]
     },
     "earringColor": {
       "type": "array",
@@ -95,28 +79,12 @@
         "sky",
         "topaz",
         "white"
-      ],
-      "examples": [
-        ["apricot"],
-        ["azure"],
-        ["black"],
-        ["calm"],
-        ["canary"],
-        ["coast"],
-        ["lavender"],
-        ["mellow"],
-        ["salmon"],
-        ["seashell"],
-        ["sky"],
-        ["topaz"],
-        ["white"]
       ]
     },
     "earrings": {
       "type": "array",
       "items": { "type": "string", "enum": ["hoop", "stud"] },
-      "default": ["hoop", "stud"],
-      "examples": [["hoop"], ["stud"]]
+      "default": ["hoop", "stud"]
     },
     "earringsProbability": {
       "type": "integer",
@@ -127,8 +95,7 @@
     "ears": {
       "type": "array",
       "items": { "type": "string", "enum": ["attached", "detached"] },
-      "default": ["attached", "detached"],
-      "examples": [["attached"], ["detached"]]
+      "default": ["attached", "detached"]
     },
     "eyeShadowColor": {
       "type": "array",
@@ -158,22 +125,7 @@
           }
         ]
       },
-      "default": ["azure", "calm", "mellow", "seashell", "white"],
-      "examples": [
-        ["apricot"],
-        ["azure"],
-        ["black"],
-        ["calm"],
-        ["canary"],
-        ["coast"],
-        ["lavender"],
-        ["mellow"],
-        ["salmon"],
-        ["seashell"],
-        ["sky"],
-        ["topaz"],
-        ["white"]
-      ]
+      "default": ["azure", "calm", "mellow", "seashell", "white"]
     },
     "eyebrowColor": {
       "type": "array",
@@ -203,22 +155,7 @@
           }
         ]
       },
-      "default": ["black"],
-      "examples": [
-        ["apricot"],
-        ["azure"],
-        ["black"],
-        ["calm"],
-        ["canary"],
-        ["coast"],
-        ["lavender"],
-        ["mellow"],
-        ["salmon"],
-        ["seashell"],
-        ["sky"],
-        ["topaz"],
-        ["white"]
-      ]
+      "default": ["black"]
     },
     "eyebrows": {
       "type": "array",
@@ -226,8 +163,7 @@
         "type": "string",
         "enum": ["up", "down", "eyelashesUp", "eyelashesDown"]
       },
-      "default": ["up", "down", "eyelashesUp", "eyelashesDown"],
-      "examples": [["up"], ["down"], ["eyelashesUp"], ["eyelashesDown"]]
+      "default": ["up", "down", "eyelashesUp", "eyelashesDown"]
     },
     "eyes": {
       "type": "array",
@@ -235,8 +171,7 @@
         "type": "string",
         "enum": ["eyes", "round", "eyesShadow", "smiling"]
       },
-      "default": ["eyes", "round", "eyesShadow", "smiling"],
-      "examples": [["eyes"], ["round"], ["eyesShadow"], ["smiling"]]
+      "default": ["eyes", "round", "eyesShadow", "smiling"]
     },
     "eyesColor": {
       "type": "array",
@@ -266,28 +201,12 @@
           }
         ]
       },
-      "default": ["black"],
-      "examples": [
-        ["apricot"],
-        ["azure"],
-        ["black"],
-        ["calm"],
-        ["canary"],
-        ["coast"],
-        ["lavender"],
-        ["mellow"],
-        ["salmon"],
-        ["seashell"],
-        ["sky"],
-        ["topaz"],
-        ["white"]
-      ]
+      "default": ["black"]
     },
     "facialHair": {
       "type": "array",
       "items": { "type": "string", "enum": ["beard", "scruff"] },
-      "default": ["beard", "scruff"],
-      "examples": [["beard"], ["scruff"]]
+      "default": ["beard", "scruff"]
     },
     "facialHairColor": {
       "type": "array",
@@ -317,22 +236,7 @@
           }
         ]
       },
-      "default": ["topaz"],
-      "examples": [
-        ["apricot"],
-        ["azure"],
-        ["black"],
-        ["calm"],
-        ["canary"],
-        ["coast"],
-        ["lavender"],
-        ["mellow"],
-        ["salmon"],
-        ["seashell"],
-        ["sky"],
-        ["topaz"],
-        ["white"]
-      ]
+      "default": ["topaz"]
     },
     "facialHairProbability": {
       "type": "integer",
@@ -343,8 +247,7 @@
     "glasses": {
       "type": "array",
       "items": { "type": "string", "enum": ["round", "square"] },
-      "default": ["round", "square"],
-      "examples": [["round"], ["square"]]
+      "default": ["round", "square"]
     },
     "glassesColor": {
       "type": "array",
@@ -388,21 +291,6 @@
         "sky",
         "topaz",
         "white"
-      ],
-      "examples": [
-        ["apricot"],
-        ["azure"],
-        ["black"],
-        ["calm"],
-        ["canary"],
-        ["coast"],
-        ["lavender"],
-        ["mellow"],
-        ["salmon"],
-        ["seashell"],
-        ["sky"],
-        ["topaz"],
-        ["white"]
       ]
     },
     "glassesProbability": {
@@ -435,16 +323,6 @@
         "full",
         "turban",
         "pixie"
-      ],
-      "examples": [
-        ["fonze"],
-        ["mrT"],
-        ["dougFunny"],
-        ["mrClean"],
-        ["dannyPhantom"],
-        ["full"],
-        ["turban"],
-        ["pixie"]
       ]
     },
     "hairColor": {
@@ -489,21 +367,6 @@
         "sky",
         "topaz",
         "white"
-      ],
-      "examples": [
-        ["apricot"],
-        ["azure"],
-        ["black"],
-        ["calm"],
-        ["canary"],
-        ["coast"],
-        ["lavender"],
-        ["mellow"],
-        ["salmon"],
-        ["seashell"],
-        ["sky"],
-        ["topaz"],
-        ["white"]
       ]
     },
     "hairProbability": {
@@ -536,16 +399,6 @@
         "pucker",
         "frown",
         "smirk"
-      ],
-      "examples": [
-        ["surprised"],
-        ["laughing"],
-        ["nervous"],
-        ["smile"],
-        ["sad"],
-        ["pucker"],
-        ["frown"],
-        ["smirk"]
       ]
     },
     "mouthColor": {
@@ -559,20 +412,17 @@
           { "type": "string", "enum": ["black"] }
         ]
       },
-      "default": ["black"],
-      "examples": [["black"]]
+      "default": ["black"]
     },
     "nose": {
       "type": "array",
       "items": { "type": "string", "enum": ["curve", "pointed", "tound"] },
-      "default": ["curve", "pointed", "tound"],
-      "examples": [["curve"], ["pointed"], ["tound"]]
+      "default": ["curve", "pointed", "tound"]
     },
     "shirt": {
       "type": "array",
       "items": { "type": "string", "enum": ["open", "crew", "collared"] },
-      "default": ["open", "crew", "collared"],
-      "examples": [["open"], ["crew"], ["collared"]]
+      "default": ["open", "crew", "collared"]
     },
     "shirtColor": {
       "type": "array",
@@ -616,21 +466,6 @@
         "sky",
         "topaz",
         "white"
-      ],
-      "examples": [
-        ["apricot"],
-        ["azure"],
-        ["black"],
-        ["calm"],
-        ["canary"],
-        ["coast"],
-        ["lavender"],
-        ["mellow"],
-        ["salmon"],
-        ["seashell"],
-        ["sky"],
-        ["topaz"],
-        ["white"]
       ]
     }
   },

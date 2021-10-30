@@ -12,7 +12,7 @@ export const cornersModifier: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <mask id="cornersModifierLightGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="cornersModifierLightGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.cornersWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#cornersModifierLightGray-a)">
@@ -20,7 +20,7 @@ export const cornersModifier: ComponentGroup = {
   </g>
 `,
   gray: (components: ComponentPickCollection, colors: ColorPickCollection) => `
-  <mask id="cornersModifierGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="cornersModifierGray-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.cornersWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#cornersModifierGray-a)">
@@ -31,7 +31,7 @@ export const cornersModifier: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) => `
-  <mask id="cornersModifierLighten-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+  <mask id="cornersModifierLighten-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
     ${components.cornersWrapper?.value(components, colors) ?? ''}
   </mask>
   <g mask="url(#cornersModifierLighten-a)">

@@ -8,8 +8,7 @@
         "type": "string",
         "enum": ["squared", "rounded", "small", "checkered"]
       },
-      "default": ["squared", "rounded", "small", "checkered"],
-      "examples": [["squared"], ["rounded"], ["small"], ["checkered"]]
+      "default": ["squared", "rounded", "small", "checkered"]
     },
     "clothingColor": {
       "type": "array",
@@ -41,15 +40,6 @@
         "red",
         "yellow",
         "pink"
-      ],
-      "examples": [
-        ["blue"],
-        ["turquoise"],
-        ["purple"],
-        ["green"],
-        ["red"],
-        ["yellow"],
-        ["pink"]
       ]
     },
     "eyes": {
@@ -58,15 +48,7 @@
         "type": "string",
         "enum": ["open", "sleep", "wink", "glasses", "happy", "sunglasses"]
       },
-      "default": ["open", "sleep", "wink", "glasses", "happy", "sunglasses"],
-      "examples": [
-        ["open"],
-        ["sleep"],
-        ["wink"],
-        ["glasses"],
-        ["happy"],
-        ["sunglasses"]
-      ]
+      "default": ["open", "sleep", "wink", "glasses", "happy", "sunglasses"]
     },
     "facialHair": {
       "type": "array",
@@ -88,14 +70,6 @@
         "goatee",
         "shadow",
         "soulPatch"
-      ],
-      "examples": [
-        ["beardMustache"],
-        ["pyramid"],
-        ["walrus"],
-        ["goatee"],
-        ["shadow"],
-        ["soulPatch"]
       ]
     },
     "facialHairProbability": {
@@ -152,28 +126,6 @@
         "extraLong",
         "shortComboverChops",
         "mohawk"
-      ],
-      "examples": [
-        ["long"],
-        ["sideShave"],
-        ["shortCombover"],
-        ["curlyHighTop"],
-        ["bobCut"],
-        ["curly"],
-        ["pigtails"],
-        ["curlyBun"],
-        ["buzzcut"],
-        ["bobBangs"],
-        ["bald"],
-        ["balding"],
-        ["cap"],
-        ["bunUndercut"],
-        ["fade"],
-        ["beanie"],
-        ["straightBun"],
-        ["extraLong"],
-        ["shortComboverChops"],
-        ["mohawk"]
       ]
     },
     "hairColor": {
@@ -206,15 +158,6 @@
         "copper",
         "blonde",
         "grey"
-      ],
-      "examples": [
-        ["black"],
-        ["brunette"],
-        ["red"],
-        ["pink"],
-        ["copper"],
-        ["blonde"],
-        ["grey"]
       ]
     },
     "mouth": {
@@ -239,15 +182,6 @@
         "bigSmile",
         "smirk",
         "lips"
-      ],
-      "examples": [
-        ["smile"],
-        ["frown"],
-        ["surprise"],
-        ["pacifier"],
-        ["bigSmile"],
-        ["smirk"],
-        ["lips"]
       ]
     },
     "nose": {
@@ -256,8 +190,7 @@
         "type": "string",
         "enum": ["mediumRound", "smallRound", "wrinkles"]
       },
-      "default": ["mediumRound", "smallRound", "wrinkles"],
-      "examples": [["mediumRound"], ["smallRound"], ["wrinkles"]]
+      "default": ["mediumRound", "smallRound", "wrinkles"]
     },
     "skinColor": {
       "type": "array",
@@ -291,16 +224,6 @@
         "tone6",
         "tone7",
         "tone8"
-      ],
-      "examples": [
-        ["tone1"],
-        ["tone2"],
-        ["tone3"],
-        ["tone4"],
-        ["tone5"],
-        ["tone6"],
-        ["tone7"],
-        ["tone8"]
       ]
     }
   },

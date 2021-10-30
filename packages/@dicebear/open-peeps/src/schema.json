@@ -26,16 +26,6 @@
         "glasses5",
         "sunglasses",
         "sunglasses2"
-      ],
-      "examples": [
-        ["eyepatch"],
-        ["glasses"],
-        ["glasses2"],
-        ["glasses3"],
-        ["glasses4"],
-        ["glasses5"],
-        ["sunglasses"],
-        ["sunglasses2"]
       ]
     },
     "accessoriesProbability": {
@@ -74,15 +64,6 @@
         "tail01",
         "blue01",
         "pink01"
-      ],
-      "examples": [
-        ["red01"],
-        ["orange01"],
-        ["yellow01"],
-        ["green01"],
-        ["tail01"],
-        ["blue01"],
-        ["pink01"]
       ]
     },
     "face": {
@@ -153,38 +134,6 @@
         "suspicious",
         "tired",
         "veryAngry"
-      ],
-      "examples": [
-        ["angryWithFang"],
-        ["awe"],
-        ["blank"],
-        ["calm"],
-        ["cheeky"],
-        ["concerned"],
-        ["concernedFear"],
-        ["contempt"],
-        ["cute"],
-        ["cyclops"],
-        ["driven"],
-        ["eatingHappy"],
-        ["explaining"],
-        ["eyesClosed"],
-        ["fear"],
-        ["hectic"],
-        ["lovingGrin1"],
-        ["lovingGrin2"],
-        ["monster"],
-        ["old"],
-        ["rage"],
-        ["serious"],
-        ["smile"],
-        ["smileBig"],
-        ["smileLOL"],
-        ["smileTeethGap"],
-        ["solemn"],
-        ["suspicious"],
-        ["tired"],
-        ["veryAngry"]
       ]
     },
     "facialHair": {
@@ -227,24 +176,6 @@
         "moustache7",
         "moustache8",
         "moustache9"
-      ],
-      "examples": [
-        ["chin"],
-        ["full"],
-        ["full2"],
-        ["full3"],
-        ["full4"],
-        ["goatee1"],
-        ["goatee2"],
-        ["moustache1"],
-        ["moustache2"],
-        ["moustache3"],
-        ["moustache4"],
-        ["moustache5"],
-        ["moustache6"],
-        ["moustache7"],
-        ["moustache8"],
-        ["moustache9"]
       ]
     },
     "facialHairProbability": {
@@ -289,18 +220,6 @@
         "variant08",
         "variant09",
         "variant10"
-      ],
-      "examples": [
-        ["variant01"],
-        ["variant02"],
-        ["variant03"],
-        ["variant04"],
-        ["variant05"],
-        ["variant06"],
-        ["variant07"],
-        ["variant08"],
-        ["variant09"],
-        ["variant10"]
       ]
     },
     "head": {
@@ -407,63 +326,12 @@
         "turban",
         "twists",
         "twists2"
-      ],
-      "examples": [
-        ["afro"],
-        ["bangs"],
-        ["bangs2"],
-        ["bantuKnots"],
-        ["bear"],
-        ["bun"],
-        ["bun2"],
-        ["buns"],
-        ["cornrows"],
-        ["cornrows2"],
-        ["dreads1"],
-        ["dreads2"],
-        ["flatTop"],
-        ["flatTopLong"],
-        ["grayBun"],
-        ["grayMedium"],
-        ["grayShort"],
-        ["hatBeanie"],
-        ["hatHip"],
-        ["hijab"],
-        ["long"],
-        ["longAfro"],
-        ["longBangs"],
-        ["longCurly"],
-        ["medium1"],
-        ["medium2"],
-        ["medium3"],
-        ["mediumBangs"],
-        ["mediumBangs2"],
-        ["mediumBangs3"],
-        ["mediumStraight"],
-        ["mohawk"],
-        ["mohawk2"],
-        ["noHair1"],
-        ["noHair2"],
-        ["noHair3"],
-        ["pomp"],
-        ["shaved1"],
-        ["shaved2"],
-        ["shaved3"],
-        ["short1"],
-        ["short2"],
-        ["short3"],
-        ["short4"],
-        ["short5"],
-        ["turban"],
-        ["twists"],
-        ["twists2"]
       ]
     },
     "mask": {
       "type": "array",
       "items": { "type": "string", "enum": ["medicalMask", "respirator"] },
-      "default": ["medicalMask", "respirator"],
-      "examples": [["medicalMask"], ["respirator"]]
+      "default": ["medicalMask", "respirator"]
     },
     "maskProbability": {
       "type": "integer",
@@ -497,13 +365,6 @@
         "variant03",
         "variant04",
         "variant05"
-      ],
-      "examples": [
-        ["variant01"],
-        ["variant02"],
-        ["variant03"],
-        ["variant04"],
-        ["variant05"]
       ]
     }
   },
