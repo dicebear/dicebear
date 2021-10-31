@@ -40,7 +40,7 @@ export function create(seed?: string): Prng {
   return {
     seed,
     bool(likelihood: number = 50) {
-      return integer(0, 100) < likelihood;
+      return integer(0, 100) <= likelihood;
     },
     integer(min: number, max: number) {
       return integer(min, max);
