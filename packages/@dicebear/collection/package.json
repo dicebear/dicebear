@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/collection",
-  "version": "5.0.0-alpha.2",
+  "version": "5.0.0-alpha.3",
   "description": "All offical dicebear avatar styles in one package",
   "keywords": [
     "dicebear"
@@ -32,38 +32,38 @@
     "build": "dicebear-project build DiceBear.Collection"
   },
   "dependencies": {
-    "@dicebear/adventurer": "^5.0.0-alpha.2",
-    "@dicebear/adventurer-neutral": "^5.0.0-alpha.2",
-    "@dicebear/avataaars": "^5.0.0-alpha.2",
-    "@dicebear/avataaars-neutral": "^5.0.0-alpha.2",
-    "@dicebear/big-ears": "^5.0.0-alpha.2",
-    "@dicebear/big-ears-neutral": "^5.0.0-alpha.2",
-    "@dicebear/big-smile": "^5.0.0-alpha.2",
-    "@dicebear/bottts": "^5.0.0-alpha.2",
-    "@dicebear/bottts-neutral": "^5.0.0-alpha.2",
-    "@dicebear/croodles": "^5.0.0-alpha.2",
-    "@dicebear/croodles-neutral": "^5.0.0-alpha.2",
-    "@dicebear/gridy": "^5.0.0-alpha.2",
-    "@dicebear/identicon": "^5.0.0-alpha.2",
-    "@dicebear/initials": "^5.0.0-alpha.2",
-    "@dicebear/micah": "^5.0.0-alpha.2",
-    "@dicebear/miniavs": "^5.0.0-alpha.2",
-    "@dicebear/open-peeps": "^5.0.0-alpha.2",
-    "@dicebear/personas": "^5.0.0-alpha.2",
-    "@dicebear/pixel-art": "^5.0.0-alpha.2",
-    "@dicebear/pixel-art-neutral": "^5.0.0-alpha.2",
-    "@dicebear/shapes": "^5.0.0-alpha.2"
+    "@dicebear/adventurer": "^5.0.0-alpha.3",
+    "@dicebear/adventurer-neutral": "^5.0.0-alpha.3",
+    "@dicebear/avataaars": "^5.0.0-alpha.3",
+    "@dicebear/avataaars-neutral": "^5.0.0-alpha.3",
+    "@dicebear/big-ears": "^5.0.0-alpha.3",
+    "@dicebear/big-ears-neutral": "^5.0.0-alpha.3",
+    "@dicebear/big-smile": "^5.0.0-alpha.3",
+    "@dicebear/bottts": "^5.0.0-alpha.3",
+    "@dicebear/bottts-neutral": "^5.0.0-alpha.3",
+    "@dicebear/croodles": "^5.0.0-alpha.3",
+    "@dicebear/croodles-neutral": "^5.0.0-alpha.3",
+    "@dicebear/gridy": "^5.0.0-alpha.3",
+    "@dicebear/identicon": "^5.0.0-alpha.3",
+    "@dicebear/initials": "^5.0.0-alpha.3",
+    "@dicebear/micah": "^5.0.0-alpha.3",
+    "@dicebear/miniavs": "^5.0.0-alpha.3",
+    "@dicebear/open-peeps": "^5.0.0-alpha.3",
+    "@dicebear/personas": "^5.0.0-alpha.3",
+    "@dicebear/pixel-art": "^5.0.0-alpha.3",
+    "@dicebear/pixel-art-neutral": "^5.0.0-alpha.3",
+    "@dicebear/shapes": "^5.0.0-alpha.3"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.2",
+    "@dicebear/core": "^5.0.0-alpha.3",
     "@tsconfig/recommended": "^1.0.0",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^5.0.0-alpha.2",
+    "dicebear-project": "^5.0.0-alpha.3",
     "shx": "^0.3.3",
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.2"
+    "@dicebear/core": "^5.0.0-alpha.3"
   },
   "publishConfig": {
     "access": "public"
