@@ -245,7 +245,7 @@ module.exports = {
   },
   "dependencies": {},
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.3",
+    "@dicebear/core": "^5.0.0-alpha.4",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
@@ -257,7 +257,7 @@ module.exports = {
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.3"
+    "@dicebear/core": "^5.0.0-alpha.4"
   },
   "publishConfig": {
     "access": "public"

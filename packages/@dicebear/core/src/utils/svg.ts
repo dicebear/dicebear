@@ -280,10 +280,6 @@ export function removeWhitespace(svg: string): string {
       .replace(/>\s+</g, '><')
       // Reduce whitespace
       .replace(/\s{2,}/g, ' ')
-      // Create self closing tags
-      .replace(/<([^\/>]+)><\/[^>]+>/gi, '<$1/>')
-      // Remove whitespace before tag close
-      .replace(/\s(\/?>)/g, '$1')
   );
 }
 
