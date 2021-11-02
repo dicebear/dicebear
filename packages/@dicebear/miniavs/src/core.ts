@@ -33,19 +33,17 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'auto',
       },
-      body: `
-  ${components.head?.value(components, colors) ?? ''}
-  ${components.body?.value(components, colors) ?? ''}
-  ${components.hair?.value(components, colors) ?? ''}
-  <g transform="translate(1)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(0 -1)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  ${components.glasses?.value(components, colors) ?? ''}
-  ${components.mustache?.value(components, colors) ?? ''}
-`,
+      body: `${
+        components.headcomponent?.value(components, colors) ?? ''
+      }::body${
+        components.hair?.value(components, colors) ?? ''
+      }<g transform="translate(1)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><g transform="translate(0 -1)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g>${
+        components.glassescomponent?.value(components, colors) ?? ''
+      }::mustache`,
     };
   },
   preview: ({ prng, options, property }) => {

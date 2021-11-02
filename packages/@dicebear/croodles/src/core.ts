@@ -33,9 +33,7 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'auto',
       },
-      body: `
-  ${components.face?.value(components, colors) ?? ''}
-`,
+      body: `${components.face?.value(components, colors) ?? ''}`,
     };
   },
   preview: ({ prng, options, property }) => {

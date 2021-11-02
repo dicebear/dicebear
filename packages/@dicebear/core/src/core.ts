@@ -38,12 +38,11 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
     result.body = utils.svg.addViewboxMask(result, options.radius ?? 0);
   }
 
-  let avatar = utils.svg.removeWhitespace(`
-    <svg ${utils.svg.createAttrString(result.attributes)}>
-      ${utils.svg.getMetadata(style)}
-      ${result.body}
-    </svg>
-  `);
+  let avatar =
+    `<svg ${utils.svg.createAttrString(result.attributes)}>` +
+    `  ${utils.svg.getMetadata(style)}` +
+    `  ${result.body}` +
+    `</svg>`;
 
   return options.dataUri ? convertToDataUri(avatar) : avatar;
 }
@@ -82,12 +81,11 @@ export function createPreview<O extends {}>(
     result.body = utils.svg.addBackgroundColor(result, backgroundColor);
   }
 
-  let avatar = utils.svg.removeWhitespace(`
-    <svg ${utils.svg.createAttrString(result.attributes)}>
-      ${utils.svg.getMetadata(style)}
-      ${result.body}
-    </svg>
-  `);
+  let avatar =
+    `<svg ${utils.svg.createAttrString(result.attributes)}>` +
+    `  ${utils.svg.getMetadata(style)}` +
+    `  ${result.body}` +
+    `</svg>`;
 
   return options.dataUri ? convertToDataUri(avatar) : avatar;
 }

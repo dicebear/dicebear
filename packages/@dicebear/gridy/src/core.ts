@@ -35,27 +35,19 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'auto',
       },
-      body: `
-  ${components.body?.value(components, colors) ?? ''}
-  <g transform="translate(4 7)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(5 14)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <mask id="gridy-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-    ${components.body?.value(components, colors) ?? ''}
-    <g transform="translate(4 7)">
-      ${components.eyes?.value(components, colors) ?? ''}
-    </g>
-    <g transform="translate(5 14)">
-      ${components.mouth?.value(components, colors) ?? ''}
-    </g>
-  </mask>
-  <g mask="url(#gridy-a)">
-    <path fill="#fff" fill-opacity=".15" d="M0 0h12v24H0z"/>
-  </g>
-`,
+      body: `${
+        components.body?.value(components, colors) ?? ''
+      }<g transform="translate(4 7)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="translate(5 14)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><mask id="gridy-a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">${
+        components.body?.value(components, colors) ?? ''
+      }<g transform="translate(4 7)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="translate(5 14)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g></mask><g mask="url(#gridy-a)"><path fill="#fff" fill-opacity=".15" d="M0 0h12v24H0z"/></g>`,
     };
   },
   preview: ({ prng, options, property }) => {

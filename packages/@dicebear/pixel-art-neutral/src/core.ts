@@ -34,20 +34,15 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'auto',
       },
-      body: `
-  <g transform="translate(-3 -3)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-3 -3)">
-    ${components.eyebrows?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-3 -2)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-3 -3)">
-    ${components.glasses?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `<g transform="translate(-3 -3)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="translate(-3 -3)">${
+        components.eyebrows?.value(components, colors) ?? ''
+      }</g><g transform="translate(-3 -2)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><g transform="translate(-3 -3)">${
+        components.glasses?.value(components, colors) ?? ''
+      }</g>`,
     };
   },
   preview: ({ prng, options, property }) => {

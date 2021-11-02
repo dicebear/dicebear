@@ -35,20 +35,15 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'auto',
       },
-      body: `
-  <g transform="translate(-279 -322)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.eyebrows?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <g transform="translate(-279 -322)">
-    ${components.accessoires?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `<g transform="translate(-279 -322)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.eyebrows?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.accessoires?.value(components, colors) ?? ''
+      }</g>`,
     };
   },
   preview: ({ prng, options, property }) => {

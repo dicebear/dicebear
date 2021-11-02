@@ -61,22 +61,22 @@ export function getXmlnsAttributes() {
 }
 
 export function getMetadata<O extends Options>(style: Style<O>) {
-  return `
-    <metadata>
-      <rdf:RDF>
-        <cc:Work>
-          <dc:format>image/svg+xml</dc:format>
-          <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-          ${getMetadataWorkTitle(style)}
-          ${getMetadataWorkCreator(style)}
-          ${getMetadataWorkSource(style)}
-          ${getMetadataWorkLicense(style)}
-          ${getMetadataWorkContributor(style)}
-        </cc:Work>
-        ${getMetadataLicense(style)}
-      </rdf:RDF>
-    </metadata>
-  `;
+  return (
+    `<metadata>` +
+    `  <rdf:RDF>` +
+    `    <cc:Work>` +
+    `      <dc:format>image/svg+xml</dc:format>` +
+    `      <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />` +
+    `      ${getMetadataWorkTitle(style)}` +
+    `      ${getMetadataWorkCreator(style)}` +
+    `      ${getMetadataWorkSource(style)}` +
+    `      ${getMetadataWorkLicense(style)}` +
+    `      ${getMetadataWorkContributor(style)}` +
+    `    </cc:Work>` +
+    `    ${getMetadataLicense(style)}` +
+    `  </rdf:RDF>` +
+    `</metadata>`
+  );
 }
 
 export function getMetadataWorkTitle<O extends Options>(style: Style<O>) {
@@ -91,11 +91,7 @@ export function getMetadataWorkCreator<O extends Options>(style: Style<O>) {
   if (style.meta.creator) {
     let creators = Array.isArray(style.meta.creator) ? style.meta.creator : [style.meta.creator];
 
-    return `
-      <dc:creator>
-        ${getMetadataWorkAgents(creators)}
-      </dc:creator>
-    `;
+    return `<dc:creator>${getMetadataWorkAgents(creators)}</dc:creator>`;
   }
 
   return '';
@@ -121,24 +117,14 @@ export function getMetadataWorkContributor<O extends Options>(style: Style<O>) {
   if (style.meta.contributor) {
     let contributors = Array.isArray(style.meta.contributor) ? style.meta.contributor : [style.meta.contributor];
 
-    return `
-      <dc:contributor>
-        ${getMetadataWorkAgents(contributors)}
-      </dc:contributor>
-    `;
+    return `<dc:contributor>${getMetadataWorkAgents(contributors)}</dc:contributor>`;
   }
 
   return '';
 }
 
 export function getMetadataWorkAgents(agents: string[]) {
-  return agents.map(
-    (agent) => `
-      <cc:Agent>
-        <dc:title>${agent}</dc:title>
-      </cc:Agent>
-    `
-  );
+  return agents.map((agent) => `<cc:Agent><dc:title>${agent}</dc:title></cc:Agent>`);
 }
 
 export function getMetadataLicense<O extends Options>(style: Style<O>) {
@@ -164,11 +150,7 @@ export function getMetadataLicense<O extends Options>(style: Style<O>) {
         result += `<cc:prohibits rdf:resource="https://creativecommons.org/ns#${prohibits}" />`;
       });
 
-      return `
-        <cc:License rdf:about="${style.meta.license?.url}">
-          ${result}
-        </cc:License>
-      `;
+      return `<cc:License rdf:about="${style.meta.license?.url}">${result}</cc:License>`;
     }
   }
 
@@ -193,10 +175,7 @@ export function getViewBox(result: StyleCreateResult) {
 export function addBackgroundColor(result: StyleCreateResult, backgroundColor: string) {
   let { width, height, x, y } = getViewBox(result);
 
-  return `
-    <rect fill="${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />
-    ${result.body}
-  `;
+  return `<rect fill="${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />${result.body}`;
 }
 
 export function addScale(result: StyleCreateResult, scale: number) {
@@ -207,11 +186,7 @@ export function addScale(result: StyleCreateResult, scale: number) {
   let translateX = (width / 2 + x) * percent * -1;
   let translateY = (height / 2 + y) * percent * -1;
 
-  return `
-    <g transform="translate(${translateX} ${translateY}) scale(${scale / 100})">
-      ${result.body}
-    </g>
-  `;
+  return `<g transform="translate(${translateX} ${translateY}) scale(${scale / 100})">${result.body}</g>`;
 }
 
 export function addTranslate(result: StyleCreateResult, x?: number, y?: number) {
@@ -220,31 +195,19 @@ export function addTranslate(result: StyleCreateResult, x?: number, y?: number) 
   let translateX = (viewBox.width + viewBox.x * 2) * ((x ?? 0) / 100);
   let translateY = (viewBox.height + viewBox.y * 2) * ((y ?? 0) / 100);
 
-  return `
-    <g transform="translate(${translateX} ${translateY})">
-      ${result.body}
-    </g>
-  `;
+  return `<g transform="translate(${translateX} ${translateY})">${result.body}</g>`;
 }
 
 export function addRotate(result: StyleCreateResult, rotate: number) {
   let { width, height, x, y } = getViewBox(result);
 
-  return `
-    <g transform="rotate(${rotate}, ${width / 2 + x}, ${height / 2 + y})">
-      ${result.body}
-    </g>
-  `;
+  return `<g transform="rotate(${rotate}, ${width / 2 + x}, ${height / 2 + y})">${result.body}</g>`;
 }
 
 export function addFlip(result: StyleCreateResult) {
   let { width, x } = getViewBox(result);
 
-  return `
-    <g transform="scale(-1 1) translate(${width * -1 - x * 2} 0)">
-      ${result.body}
-    </g>
-  `;
+  return `<g transform="scale(-1 1) translate(${width * -1 - x * 2} 0)">${result.body}</g>`;
 }
 
 export function addViewboxMask(result: StyleCreateResult, radius: number) {
@@ -253,12 +216,12 @@ export function addViewboxMask(result: StyleCreateResult, radius: number) {
   let rx = radius ? (width * radius) / 100 : 0;
   let ry = radius ? (height * radius) / 100 : 0;
 
-  return `
-    <mask id="viewboxMask">
-      <rect width="${width}" height="${height}" rx="${rx}" ry="${ry}" x="${x}" y="${y}" fill="#fff" />
-    </mask>
-    <g mask="url(#viewboxMask)">${result.body}</g>
-  `;
+  return (
+    `<mask id="viewboxMask">` +
+    `  <rect width="${width}" height="${height}" rx="${rx}" ry="${ry}" x="${x}" y="${y}" fill="#fff" />` +
+    `</mask>` +
+    `<g mask="url(#viewboxMask)">${result.body}</g>`
+  );
 }
 
 export function createAttrString(attributes: StyleCreateResultAttributes): string {
@@ -267,20 +230,6 @@ export function createAttrString(attributes: StyleCreateResultAttributes): strin
   return Object.keys(attributes)
     .map((attr) => `${escape.xml(attr)}="${escape.xml(attributes[attr])}"`)
     .join(' ');
-}
-
-export function removeWhitespace(svg: string): string {
-  return (
-    svg
-      // Remove spaces at both ends of the string
-      .trim()
-      // Remove breaking lines
-      .replace(/\n/g, ' ')
-      // Remove space between tags
-      .replace(/>\s+</g, '><')
-      // Reduce whitespace
-      .replace(/\s{2,}/g, ' ')
-  );
 }
 
 export function convertToDataUri(svg: string): string {

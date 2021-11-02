@@ -33,23 +33,17 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'auto',
       },
-      body: `
-  <g transform="matrix(.85775 0 0 .85427 52 47)">
-    ${components.face?.value(components, colors) ?? ''}
-  </g>
-  <g transform="matrix(.85472 0 0 .855 19 -17)">
-    ${components.mouth?.value(components, colors) ?? ''}
-  </g>
-  <g transform="matrix(.85472 0 0 .855 19 -17)">
-    ${components.eyes?.value(components, colors) ?? ''}
-  </g>
-  <g transform="matrix(.85472 0 0 .85667 18 -15)">
-    ${components.hair?.value(components, colors) ?? ''}
-  </g>
-  <g transform="matrix(.85472 0 0 .85667 14 -12)">
-    ${components.accessories?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `<g transform="matrix(.85775 0 0 .85427 52 47)">${
+        components.face?.value(components, colors) ?? ''
+      }</g><g transform="matrix(.85472 0 0 .855 19 -17)">${
+        components.mouth?.value(components, colors) ?? ''
+      }</g><g transform="matrix(.85472 0 0 .855 19 -17)">${
+        components.eyes?.value(components, colors) ?? ''
+      }</g><g transform="matrix(.85472 0 0 .85667 18 -15)">${
+        components.hair?.value(components, colors) ?? ''
+      }</g><g transform="matrix(.85472 0 0 .85667 14 -12)">${
+        components.accessories?.value(components, colors) ?? ''
+      }</g>`,
     };
   },
   preview: ({ prng, options, property }) => {

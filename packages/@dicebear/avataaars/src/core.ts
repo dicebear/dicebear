@@ -33,11 +33,9 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'auto',
       },
-      body: `
-  <g transform="translate(8)">
-    ${components.style?.value(components, colors) ?? ''}
-  </g>
-`,
+      body: `<g transform="translate(8)">${
+        components.style?.value(components, colors) ?? ''
+      }</g>`,
     };
   },
   preview: ({ prng, options, property }) => {
