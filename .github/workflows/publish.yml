@@ -26,6 +26,6 @@ jobs:
       - run: yarn build
       - run: yarn test
 
-      - run: ./node_modules/.bin/lerna publish from-package --ignore-prepublish --yes
+      - run: ./node_modules/.bin/lerna publish from-package --no-verify-access --ignore-prepublish --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
