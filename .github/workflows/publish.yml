@@ -1,0 +1,33 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - v*
+    tags-ignore:
+      - v*-alpha.*
+      - v*-beta.*
+      - v*-rc.*
+
+jobs:
+  publish:
+    name: Publish Packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: yarn install
+      - run: yarn build
+      - run: yarn test
+
+      - run: ./node_modules/.bin/lerna publish from-git --ignore-prepublish --yes
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
