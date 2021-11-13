@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/adventurer-neutral",
-  "version": "4.10.1",
+  "version": "4.10.0",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -30,11 +30,11 @@
     "build": "dicebear-project build DiceBear.AdventurerNeutral"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.10.1",
+    "@dicebear/avatars": "^4.10.0",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^4.10.1",
+    "dicebear-project": "^4.10.0",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
