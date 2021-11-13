@@ -2,8 +2,6 @@ name: Publish
 
 on:
   push:
-    tags:
-      - v*
     tags-ignore:
       - v*-alpha.*
       - v*-beta.*
