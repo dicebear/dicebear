@@ -11,13 +11,7 @@
   },
   "scripts": {
     "build": "lerna run build",
-    "test": "lerna run test",
-    "release-patch": "lerna publish patch --dist-tag latest",
-    "release-minor": "lerna publish minor --dist-tag latest",
-    "release-major": "lerna publish major --dist-tag latest",
-    "alpha-patch": "lerna publish prepatch --dist-tag next",
-    "alpha-minor": "lerna publish preminor --dist-tag next",
-    "alpha-major": "lerna publish premajor --dist-tag next"
+    "test": "lerna run test"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
