@@ -13,8 +13,7 @@
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
-    "prepare-publish": "lerna version --force-publish ",
-    "make-publish": "lerna publish from-package --force-publish"
+    "prepare-publish": "lerna version --force-publish"
   },
   "devDependencies": {
     "lerna": "^4.0.0"

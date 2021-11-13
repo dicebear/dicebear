@@ -26,8 +26,6 @@ jobs:
       - run: yarn build
       - run: yarn test
 
-      - uses: fregante/setup-git-user@v1
-
-      - run: ./node_modules/.bin/lerna publish from-git --force-publish --ignore-prepublish --yes
+      - run: ./node_modules/.bin/lerna publish from-package --ignore-prepublish --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
