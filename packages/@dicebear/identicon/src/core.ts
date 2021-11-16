@@ -32,11 +32,11 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'crispEdges',
       },
-      body: `${
-        components.row1component?.value(components, colors) ?? ''
-      }::row2${
-        components.row3component?.value(components, colors) ?? ''
-      }::row4${components.row5?.value(components, colors) ?? ''}`,
+      body: `${components.row1?.value(components, colors) ?? ''}${
+        components.row2?.value(components, colors) ?? ''
+      }${components.row3?.value(components, colors) ?? ''}${
+        components.row4?.value(components, colors) ?? ''
+      }${components.row5?.value(components, colors) ?? ''}`,
     };
   },
   preview: ({ prng, options, property }) => {

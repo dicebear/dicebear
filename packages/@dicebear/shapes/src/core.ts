@@ -33,11 +33,9 @@ export const style: Style<Options> = {
         fill: 'none',
         'shape-rendering': 'auto',
       },
-      body: `${
-        components.centerModifiercomponent?.value(components, colors) ?? ''
-      }::cornersModifier${
-        components.sidesModifier?.value(components, colors) ?? ''
-      }`,
+      body: `${components.centerModifier?.value(components, colors) ?? ''}${
+        components.cornersModifier?.value(components, colors) ?? ''
+      }${components.sidesModifier?.value(components, colors) ?? ''}`,
     };
   },
   preview: ({ prng, options, property }) => {
