@@ -11,7 +11,8 @@
   },
   "scripts": {
     "build": "lerna run build",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "prepare-publish": "lerna version --force-publish"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
