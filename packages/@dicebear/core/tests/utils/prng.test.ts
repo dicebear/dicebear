@@ -1,7 +1,7 @@
-import { utils } from '../../dist';
+import { create as createPrng } from '../../src/utils/prng';
 
 test('Predictable PNGR integers', () => {
-  const pngr = utils.prng.create('test-seed-1');
+  const pngr = createPrng('test-seed-1');
 
   expect(pngr.integer(0, 10)).toEqual(2);
   expect(pngr.integer(0, 10)).toEqual(7);
@@ -17,7 +17,7 @@ test('Predictable PNGR integers', () => {
 });
 
 test('Predictable PNGR array values', () => {
-  const pngr = utils.prng.create('test-seed-2');
+  const pngr = createPrng('test-seed-2');
   const arr = ['A', 'B', 'C', 'D', 'E', 'F'];
 
   expect(pngr.pick(arr)).toEqual('A');
@@ -32,7 +32,7 @@ test('Predictable PNGR array values', () => {
 });
 
 test('Predictable PNGR booleans', () => {
-  const pngr = utils.prng.create('test-seed-3');
+  const pngr = createPrng('test-seed-3');
 
   expect(pngr.bool(100)).toEqual(true);
   expect(pngr.bool(100)).toEqual(true);

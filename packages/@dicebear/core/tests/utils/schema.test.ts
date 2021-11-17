@@ -1,8 +1,8 @@
-import { utils, schema } from '../../dist/';
+import { defaults as schemaDefaults } from '../../src/utils/schema';
 
 test('All standards must be returned unless undefined.', () => {
   expect(
-    utils.schema.defaults({
+    schemaDefaults({
       properties: {
         foo: {
           default: 'FOO',

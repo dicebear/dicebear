@@ -1,4 +1,6 @@
-import type { JSONSchema7 } from 'json-schema';
+// parcel bug workaround
+import type * as JSONSchema from 'json-schema';
+// import type { JSONSchema7 } from 'json-schema';
 import type { Options } from './options';
 
 export interface Prng {
@@ -8,7 +10,7 @@ export interface Prng {
   pick<T>(arr: T[]): T;
 }
 
-export type StyleSchema = JSONSchema7;
+export type StyleSchema = JSONSchema.JSONSchema7;
 
 export type StyleOptions<O extends {}> = Partial<O & Options>;
 

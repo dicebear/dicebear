@@ -63,18 +63,18 @@ export function getXmlnsAttributes() {
 export function getMetadata<O extends Options>(style: Style<O>) {
   return (
     `<metadata>` +
-    `  <rdf:RDF>` +
-    `    <cc:Work>` +
-    `      <dc:format>image/svg+xml</dc:format>` +
-    `      <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />` +
-    `      ${getMetadataWorkTitle(style)}` +
-    `      ${getMetadataWorkCreator(style)}` +
-    `      ${getMetadataWorkSource(style)}` +
-    `      ${getMetadataWorkLicense(style)}` +
-    `      ${getMetadataWorkContributor(style)}` +
-    `    </cc:Work>` +
-    `    ${getMetadataLicense(style)}` +
-    `  </rdf:RDF>` +
+    `<rdf:RDF>` +
+    `<cc:Work>` +
+    `<dc:format>image/svg+xml</dc:format>` +
+    `<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />` +
+    `${getMetadataWorkTitle(style)}` +
+    `${getMetadataWorkCreator(style)}` +
+    `${getMetadataWorkSource(style)}` +
+    `${getMetadataWorkLicense(style)}` +
+    `${getMetadataWorkContributor(style)}` +
+    `</cc:Work>` +
+    `${getMetadataLicense(style)}` +
+    `</rdf:RDF>` +
     `</metadata>`
   );
 }
@@ -218,7 +218,7 @@ export function addViewboxMask(result: StyleCreateResult, radius: number) {
 
   return (
     `<mask id="viewboxMask">` +
-    `  <rect width="${width}" height="${height}" rx="${rx}" ry="${ry}" x="${x}" y="${y}" fill="#fff" />` +
+    `<rect width="${width}" height="${height}" rx="${rx}" ry="${ry}" x="${x}" y="${y}" fill="#fff" />` +
     `</mask>` +
     `<g mask="url(#viewboxMask)">${result.body}</g>`
   );

@@ -5,12 +5,15 @@
  * Copyright (c) 2021 Florian Körner
  */
 
-import { JSONSchema7 } from 'json-schema';
+// parcel bug workaround
+import type * as JSONSchema from 'json-schema';
+// import type { JSONSchema7 } from 'json-schema';
 import untypedSchema from './schema.json';
 
-export const schema = untypedSchema as JSONSchema7;
+import { createAvatar } from './core';
+import type { Prng, Style, StyleOptions, StyleSchema } from './types';
+import { create as createPrng } from './utils/prng';
 
-export * from './core';
-export * from './types';
-export * from './options';
-export * as utils from './utils';
+const schema = untypedSchema as JSONSchema.JSONSchema7;
+
+export { createAvatar, createPrng, schema, Prng, Style, StyleOptions, StyleSchema };

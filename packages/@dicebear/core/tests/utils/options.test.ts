@@ -1,7 +1,7 @@
-import { utils } from '../../dist';
+import { merge as mergeOptions } from '../../src/utils/options';
 
 test('Defaults should be returned in options.', () => {
-  const options = utils.options.merge(
+  const options = mergeOptions(
     {
       create: () => ({ attributes: { viewBox: '' }, body: '' }),
       meta: {},

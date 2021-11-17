@@ -1,11 +1,13 @@
 import type { Style, StyleOptions } from './types';
-import * as utils from './utils';
+import * as svgUtils from './utils/svg';
+import { merge as mergeOptions } from './utils/options';
+import { create as createPrng } from './utils/prng';
 import { convertToDataUri } from './utils/svg';
 
 export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O> = {}): string {
-  options = utils.options.merge(style, options);
+  options = mergeOptions(style, options);
 
-  const prng = utils.prng.create(options.seed);
+  const prng = createPrng(options.seed);
   const result = style.create({ prng: prng, options });
   const backgroundColor = prng.pick(options.backgroundColor ?? []);
 
@@ -15,33 +17,33 @@ export function createAvatar<O extends {}>(style: Style<O>, options: StyleOption
   }
 
   if (options.scale !== undefined && options.scale !== 100) {
-    result.body = utils.svg.addScale(result, options.scale);
+    result.body = svgUtils.addScale(result, options.scale);
   }
 
   if (options.flip) {
-    result.body = utils.svg.addFlip(result);
+    result.body = svgUtils.addFlip(result);
   }
 
   if (options.rotate) {
-    result.body = utils.svg.addRotate(result, options.rotate);
+    result.body = svgUtils.addRotate(result, options.rotate);
   }
 
   if (options.translateX || options.translateY) {
-    result.body = utils.svg.addTranslate(result, options.translateX, options.translateY);
+    result.body = svgUtils.addTranslate(result, options.translateX, options.translateY);
   }
 
   if (backgroundColor && backgroundColor !== 'transparent') {
-    result.body = utils.svg.addBackgroundColor(result, backgroundColor);
+    result.body = svgUtils.addBackgroundColor(result, backgroundColor);
   }
 
   if (options.radius || options.clip) {
-    result.body = utils.svg.addViewboxMask(result, options.radius ?? 0);
+    result.body = svgUtils.addViewboxMask(result, options.radius ?? 0);
   }
 
   let avatar =
-    `<svg ${utils.svg.createAttrString(result.attributes)}>` +
-    `  ${utils.svg.getMetadata(style)}` +
-    `  ${result.body}` +
+    `<svg ${svgUtils.createAttrString(result.attributes)}>` +
+    `${svgUtils.getMetadata(style)}` +
+    `${result.body}` +
     `</svg>`;
 
   return options.dataUri ? convertToDataUri(avatar) : avatar;
@@ -52,9 +54,9 @@ export function createPreview<O extends {}>(
   options: StyleOptions<O>,
   property: keyof StyleOptions<O>
 ): string | undefined {
-  options = utils.options.merge(style, options);
+  options = mergeOptions(style, options);
 
-  const prng = utils.prng.create(options.seed);
+  const prng = createPrng(options.seed);
 
   let result = style.preview?.({ prng, options, property });
 
@@ -78,13 +80,13 @@ export function createPreview<O extends {}>(
   }
 
   if (hasBackgroundColor && isBackgroundVisible) {
-    result.body = utils.svg.addBackgroundColor(result, backgroundColor);
+    result.body = svgUtils.addBackgroundColor(result, backgroundColor);
   }
 
   let avatar =
-    `<svg ${utils.svg.createAttrString(result.attributes)}>` +
-    `  ${utils.svg.getMetadata(style)}` +
-    `  ${result.body}` +
+    `<svg ${svgUtils.createAttrString(result.attributes)}>` +
+    `${svgUtils.getMetadata(style)}` +
+    `${result.body}` +
     `</svg>`;
 
   return options.dataUri ? convertToDataUri(avatar) : avatar;
