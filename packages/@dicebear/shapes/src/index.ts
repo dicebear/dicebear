@@ -12,7 +12,7 @@
 
 import { style } from './core';
 
-let { create, preview, meta, schema } = style;
+const { create, preview, meta, schema } = style;
 
 export { create, preview, meta, schema };
-export { Options } from './options';
+export type { Options } from './options';

@@ -14,8 +14,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@dicebear/core": "^5.0.0-alpha.5",
-    "@dicebear/collection": "^5.0.0-alpha.5"
+    "@dicebear/core": "^5.0.0-alpha.6",
+    "@dicebear/collection": "^5.0.0-alpha.6"
   },
   "devDependencies": {
     "vuepress": "^1.5.3"

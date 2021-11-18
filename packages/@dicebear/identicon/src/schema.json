@@ -10,12 +10,6 @@
       },
       "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
     },
-    "row1Probability": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "default": 88
-    },
     "row2": {
       "type": "array",
       "items": {
@@ -23,12 +17,6 @@
         "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
       },
       "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
-    },
-    "row2Probability": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "default": 88
     },
     "row3": {
       "type": "array",
@@ -38,12 +26,6 @@
       },
       "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
     },
-    "row3Probability": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "default": 88
-    },
     "row4": {
       "type": "array",
       "items": {
@@ -52,12 +34,6 @@
       },
       "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
     },
-    "row4Probability": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "default": 88
-    },
     "row5": {
       "type": "array",
       "items": {
@@ -65,12 +41,6 @@
         "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
       },
       "default": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
-    },
-    "row5Probability": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "default": 88
     },
     "rowColor": {
       "type": "array",

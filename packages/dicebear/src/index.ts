@@ -3,7 +3,6 @@ import updateNotifier from 'update-notifier';
 
 import { getPackageJson } from './utils/getPackageJson';
 import { makeCreateCommand } from './utils/command/makeCreateCommand';
-import { makeProjectCommand } from './utils/command/makeProjectCommand';
 
 (async () => {
   const pkg = await getPackageJson();
@@ -14,7 +13,6 @@ import { makeProjectCommand } from './utils/command/makeProjectCommand';
   program.version(pkg.version, '-v, --version');
 
   program.addCommand(await makeCreateCommand());
-  program.addCommand(await makeProjectCommand());
 
   await program.parseAsync(process.argv);
 })();

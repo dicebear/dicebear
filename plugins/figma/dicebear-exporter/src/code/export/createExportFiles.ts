@@ -60,7 +60,6 @@ export async function createExportFiles(exportData: Export) {
     }),
     'jest.config.js': templates['jest.config.js'],
     'package.json': handlebars.compile(templates['package.json'])({
-      umdName: exportData.frame.settings.umdName,
       packageName: exportData.frame.settings.packageName,
       packageVersion: exportData.frame.settings.packageVersion,
     }),
@@ -191,7 +190,6 @@ export async function createExportFiles(exportData: Export) {
     packageVersionMajor: exportData.frame.settings.packageVersion.split('.')[0] ?? '0',
     packageNameLastPart: exportData.frame.settings.packageName.split('/').pop() ?? '',
     properties: schema.properties,
-    umdName: exportData.frame.settings.umdName,
     isDicebearNamespace: exportData.frame.settings.packageName.split('/')[0] === '@dicebear',
     isMitLicensed,
   });

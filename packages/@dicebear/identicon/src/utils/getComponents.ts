@@ -39,10 +39,10 @@ export function getComponents({
   });
 
   return {
-    row1: prng.bool(options.row1Probability) ? row1Component : undefined,
-    row2: prng.bool(options.row2Probability) ? row2Component : undefined,
-    row3: prng.bool(options.row3Probability) ? row3Component : undefined,
-    row4: prng.bool(options.row4Probability) ? row4Component : undefined,
-    row5: prng.bool(options.row5Probability) ? row5Component : undefined,
+    row1: row1Component,
+    row2: row2Component,
+    row3: row3Component,
+    row4: row4Component,
+    row5: row5Component,
   };
 }

@@ -22,6 +22,12 @@ jobs:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Cache parcel
+        uses: actions/cache@v2
+        with:
+          path: ~/.parcel-cache
+          key: ${{ runner.os }}-parcel
+
       - run: yarn install
       - run: yarn build
       - run: yarn test

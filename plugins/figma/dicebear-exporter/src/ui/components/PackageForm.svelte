@@ -19,11 +19,6 @@
     <Label>Package Version</Label>
     <Input bind:value={$state.data.frame.settings.packageVersion} />
   </div>
-
-  <div class="section">
-    <Label>UMD Name</Label>
-    <Input bind:value={$state.data.frame.settings.umdName} />
-  </div>
 </div>
 
 <style lang="scss">

@@ -255,6 +255,12 @@
         "purple"
       ]
     },
+    "hairProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 100
+    },
     "mouth": {
       "type": "array",
       "items": {

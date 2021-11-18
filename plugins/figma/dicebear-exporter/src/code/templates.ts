@@ -144,23 +144,6 @@ let svg = createAvatar(style, {
 });
 \`\`\`
 
-### CDN
-
-Paste the following code into the \`head\` of your document:
-
-\`\`\`html
-<script src="https://unpkg.com/@dicebear/avatars@^5/dist/index.umd.js" crossorigin="anonymous" async></script>
-<script src="https://unpkg.com/{{packageName}}@^{{packageVersionMajor}}/dist/index.umd.js" crossorigin="anonymous" async></script>
-\`\`\`
-
-Now you can create your first avatar.
-
-\`\`\`js
-let svg = DiceBear.createAvatar({{umdName}}, {
-  // ... options
-});
-\`\`\`
-
 ## Options
 
 All options from [DiceBear](https://dicebear.com/docs/options) and additionally the following:
@@ -227,10 +210,10 @@ module.exports = {
     "url": "git+https://github.com/dicebear/dicebear.git"
   },
   "license": "MIT",
+  "browserslist": ">.25%, not IE > 0, not dead",
   "source": "src/index.ts",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
-  "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "files": [
     "LICENSE",
@@ -241,23 +224,28 @@ module.exports = {
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "dicebear-project build {{umdName}}"
+    "build": "npm-run-all build:*",
+    "build:schema": "json2ts src/schema.json src/options.ts",
+    "build:parcel": "parcel build"
   },
   "dependencies": {},
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.5",
+    "@parcel/packager-ts": "^2.0.1",
+    "@parcel/transformer-typescript-types": "^2.0.1",
+    "@dicebear/core": "^5.0.0-alpha.6",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^5.0.0",
+    "json-schema-to-typescript": "^10.1.5",
+    "npm-run-all": "^4.1.5",
+    "parcel": "^2.0.1",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3",
-    "utility-types": "^3.10.0"
+    "typescript": "^4.5.2"
   },
   "peerDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.5"
+    "@dicebear/core": "^5.0.0-alpha.6"
   },
   "publishConfig": {
     "access": "public"
@@ -377,10 +365,10 @@ data.forEach((params, key) => {
 
 import { style } from './core';
 
-let { create, preview, meta, schema } = style;
+const { create, preview, meta, schema } = style;
 
 export { create, preview, meta, schema };
-export { Options } from './options';
+export type { Options } from './options';
 `,
 
   // src/core.ts

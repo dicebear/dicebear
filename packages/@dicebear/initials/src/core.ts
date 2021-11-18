@@ -1,4 +1,4 @@
-import { Style, StyleSchema, utils } from '@dicebear/core';
+import { Style, StyleSchema } from '@dicebear/core';
 import { Options } from './options';
 import schema from './schema.json';
 import initials from 'initials';
@@ -37,15 +37,13 @@ export const style: Style<Options> = {
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    let defaults = utils.schema.defaults(schema as StyleSchema);
-
     options.backgroundColor = options.backgroundColor?.map((val) => colors[val] ?? val);
 
     let fontFamily = 'Arial,sans-serif';
-    let fontSize = (options.fontSize ?? (defaults.fontSize as number)) / 100;
+    let fontSize = (options.fontSize ?? 50) / 100;
     let seedInitials = (initials(prng.seed.trim()) as string)
       .toLocaleUpperCase()
-      .slice(0, options.chars ?? (defaults.chars as number));
+      .slice(0, options.chars ?? 2);
 
     // prettier-ignore
     let svg = [

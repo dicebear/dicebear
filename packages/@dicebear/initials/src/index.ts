@@ -10,4 +10,4 @@ import { style } from './core';
 let { create, meta, schema } = style;
 
 export { create, meta, schema };
-export { Options } from './options';
+export type { Options } from './options';

@@ -10,10 +10,9 @@ import type * as JSONSchema from 'json-schema';
 // import type { JSONSchema7 } from 'json-schema';
 import untypedSchema from './schema.json';
 
-import { createAvatar } from './core';
-import type { Prng, Style, StyleOptions, StyleSchema } from './types';
-import { create as createPrng } from './utils/prng';
-
 const schema = untypedSchema as JSONSchema.JSONSchema7;
 
-export { createAvatar, createPrng, schema, Prng, Style, StyleOptions, StyleSchema };
+export { schema };
+export { createAvatar, createPreview } from './core';
+export { create as createPrng } from './utils/prng';
+export type { Prng, Style, StyleOptions, StyleSchema } from './types';

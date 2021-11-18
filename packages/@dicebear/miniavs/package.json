@@ -2,9 +2,7 @@
   "name": "@dicebear/miniavs",
   "version": "5.0.0-alpha.6",
   "description": "Avatar style for DiceBear",
-  "keywords": [
-    "dicebear"
-  ],
+  "keywords": ["dicebear"],
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
@@ -13,36 +11,38 @@
     "url": "git+https://github.com/dicebear/dicebear.git"
   },
   "license": "MIT",
+  "browserslist": ">.25%, not IE > 0, not dead",
   "source": "src/index.ts",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
-  "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "LICENSE",
-    "README.md",
-    "dist"
-  ],
+  "files": ["LICENSE", "README.md", "dist"],
   "scripts": {
     "test": "jest",
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "dicebear-project build DiceBear.Miniavs"
+    "build": "npm-run-all build:*",
+    "build:schema": "json2ts src/schema.json src/options.ts",
+    "build:parcel": "parcel build"
   },
+  "dependencies": {},
   "devDependencies": {
+    "@parcel/packager-ts": "^2.0.1",
+    "@parcel/transformer-typescript-types": "^2.0.1",
     "@dicebear/core": "^5.0.0-alpha.6",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^5.0.0-alpha.6",
+    "json-schema-to-typescript": "^10.1.5",
+    "npm-run-all": "^4.1.5",
+    "parcel": "^2.0.1",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3",
-    "utility-types": "^3.10.0"
+    "typescript": "^4.5.2"
   },
   "peerDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.5"
+    "@dicebear/core": "^5.0.0-alpha.6"
   },
   "publishConfig": {
     "access": "public"

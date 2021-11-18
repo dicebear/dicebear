@@ -4,7 +4,6 @@ export function getFrameSettings(frame: FrameNode, colorGroups: string[]): Frame
   const titlePlaceholder = 'My Avatar Style';
 
   const data: FrameSettings = {
-    umdName: '',
     packageName: '',
     packageVersion: '',
     title: '',
@@ -28,10 +27,6 @@ export function getFrameSettings(frame: FrameNode, colorGroups: string[]): Frame
 
   if (!data.sourceTitle || data.sourceTitle === titlePlaceholder) {
     data.sourceTitle = data.title;
-  }
-
-  if (!data.umdName) {
-    data.umdName = 'DiceBear.MyAvatarStyle';
   }
 
   if (!data.packageName) {

@@ -1,6 +1,5 @@
 export type FrameSettings = {
   title: string;
-  umdName: string;
   packageName: string;
   packageVersion: string;
   creator: string;

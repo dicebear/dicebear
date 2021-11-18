@@ -51,6 +51,6 @@ export function getComponents({
     accessoires: prng.bool(options.accessoiresProbability)
       ? accessoiresComponent
       : undefined,
-    hair: hairComponent,
+    hair: prng.bool(options.hairProbability) ? hairComponent : undefined,
   };
 }
