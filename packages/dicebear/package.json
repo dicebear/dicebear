@@ -1,6 +1,6 @@
 {
   "name": "dicebear",
-  "version": "5.0.0-alpha.7",
+  "version": "5.0.0-alpha.8",
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "bin": "bin/index.js",
   "types": "lib/index.d.ts",
@@ -25,8 +25,8 @@
     "build:ts": "tsc"
   },
   "dependencies": {
-    "@dicebear/collection": "^5.0.0-alpha.7",
-    "@dicebear/core": "^5.0.0-alpha.7",
+    "@dicebear/collection": "^5.0.0-alpha.8",
+    "@dicebear/core": "^5.0.0-alpha.8",
     "ajv": "^8.1.0",
     "chalk": "^4.1.1",
     "cli-progress": "^3.9.0",
