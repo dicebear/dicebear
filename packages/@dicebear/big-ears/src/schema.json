@@ -4,6 +4,7 @@
   "properties": {
     "cheek": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -32,6 +33,7 @@
     },
     "ear": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -58,6 +60,7 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -132,6 +135,7 @@
     },
     "face": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -162,6 +166,7 @@
     },
     "frontHair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -196,6 +201,7 @@
     },
     "hair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -286,6 +292,7 @@
     },
     "hairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -324,6 +331,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -410,6 +418,7 @@
     },
     "nose": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -444,6 +453,7 @@
     },
     "sideburn": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -468,6 +478,7 @@
     },
     "skinColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

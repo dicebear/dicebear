@@ -4,6 +4,7 @@
   "properties": {
     "accessories": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -26,6 +27,7 @@
     },
     "accessoriesColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -80,6 +82,7 @@
     },
     "backgroundColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -93,6 +96,7 @@
     },
     "clothesColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -141,6 +145,7 @@
     },
     "clothing": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -169,6 +174,7 @@
     },
     "clothingGraphic": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -199,6 +205,7 @@
     },
     "eyebrows": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -235,6 +242,7 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -269,6 +277,7 @@
     },
     "facialHair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -289,6 +298,7 @@
     },
     "facialHairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -333,6 +343,7 @@
     },
     "hairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -371,6 +382,7 @@
     },
     "hatColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -419,6 +431,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -453,11 +466,13 @@
     },
     "nose": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["default"] },
       "default": ["default"]
     },
     "skinColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -490,11 +505,13 @@
     },
     "style": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["circle", "default"] },
       "default": ["default"]
     },
     "top": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [

@@ -4,6 +4,7 @@
   "properties": {
     "baseColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -54,6 +55,7 @@
     },
     "center": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -96,6 +98,7 @@
     },
     "centerModifier": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["none", "lightGray", "gray", "lighten"]
@@ -104,11 +107,13 @@
     },
     "centerWrapper": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["default"] },
       "default": ["default"]
     },
     "corners": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -139,6 +144,7 @@
     },
     "cornersModifier": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["none", "lightGray", "gray", "lighten"]
@@ -147,11 +153,13 @@
     },
     "cornersWrapper": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["default"] },
       "default": ["default"]
     },
     "sides": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -182,6 +190,7 @@
     },
     "sidesModifier": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["none", "lightGray", "gray", "lighten"]
@@ -190,6 +199,7 @@
     },
     "sidesWrapper": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["default"] },
       "default": ["default"]
     }

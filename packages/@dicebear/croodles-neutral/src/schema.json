@@ -4,6 +4,7 @@
   "properties": {
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -46,6 +47,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -92,6 +94,7 @@
     },
     "nose": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [

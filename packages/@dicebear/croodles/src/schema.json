@@ -4,6 +4,7 @@
   "properties": {
     "baseColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -17,6 +18,7 @@
     },
     "beard": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -43,6 +45,7 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -85,6 +88,7 @@
     },
     "face": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -111,6 +115,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -157,6 +162,7 @@
     },
     "mustache": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["variant04", "variant03", "variant02", "variant01"]
@@ -171,6 +177,7 @@
     },
     "nose": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -199,6 +206,7 @@
     },
     "top": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -269,6 +277,7 @@
     },
     "topColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

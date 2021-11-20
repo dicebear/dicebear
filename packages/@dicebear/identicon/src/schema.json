@@ -4,6 +4,7 @@
   "properties": {
     "row1": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
@@ -12,6 +13,7 @@
     },
     "row2": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
@@ -20,6 +22,7 @@
     },
     "row3": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
@@ -28,6 +31,7 @@
     },
     "row4": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
@@ -36,6 +40,7 @@
     },
     "row5": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["xooox", "xxoxx", "xoxox", "oxxxo", "xxxxx", "oxoxo", "ooxoo"]
@@ -44,6 +49,7 @@
     },
     "rowColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

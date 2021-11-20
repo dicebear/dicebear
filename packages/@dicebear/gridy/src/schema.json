@@ -4,6 +4,7 @@
   "properties": {
     "body": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -30,6 +31,7 @@
     },
     "bodyColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -86,6 +88,7 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -112,6 +115,7 @@
     },
     "eyesColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -168,6 +172,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -194,6 +199,7 @@
     },
     "mouthColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

@@ -4,6 +4,7 @@
   "properties": {
     "accessories": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["variant04", "variant03", "variant02", "variant01"]
@@ -12,6 +13,7 @@
     },
     "accessoriesColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -34,6 +36,7 @@
     },
     "beard": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["variant04", "variant03", "variant02", "variant01"]
@@ -48,6 +51,7 @@
     },
     "clothesColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -90,6 +94,7 @@
     },
     "clothing": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -150,6 +155,7 @@
     },
     "eyebrows": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -186,6 +192,7 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -222,6 +229,7 @@
     },
     "glasses": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -246,6 +254,7 @@
     },
     "glassesColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -275,6 +284,7 @@
     },
     "hair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -337,6 +347,7 @@
     },
     "hairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -381,6 +392,7 @@
     },
     "hat": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -415,6 +427,7 @@
     },
     "hatColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -453,6 +466,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -503,6 +517,7 @@
     },
     "mouthColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -519,6 +534,7 @@
     },
     "skinColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

@@ -5,6 +5,7 @@
     "backgroundColor": {
       "title": "Background Color",
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

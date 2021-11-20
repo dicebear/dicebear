@@ -4,6 +4,7 @@
   "properties": {
     "body": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["squared", "rounded", "small", "checkered"]
@@ -12,6 +13,7 @@
     },
     "clothingColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -44,6 +46,7 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["open", "sleep", "wink", "glasses", "happy", "sunglasses"]
@@ -52,6 +55,7 @@
     },
     "facialHair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -80,6 +84,7 @@
     },
     "hair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -130,6 +135,7 @@
     },
     "hairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -162,6 +168,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -186,6 +193,7 @@
     },
     "nose": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["mediumRound", "smallRound", "wrinkles"]
@@ -194,6 +202,7 @@
     },
     "skinColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

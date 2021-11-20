@@ -4,6 +4,7 @@
   "properties": {
     "blushes": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["default"] },
       "default": ["default"]
     },
@@ -15,11 +16,13 @@
     },
     "body": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["tShirt", "golf"] },
       "default": ["tShirt", "golf"]
     },
     "bodyColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -33,11 +36,13 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["normal", "confident", "happy"] },
       "default": ["normal", "confident", "happy"]
     },
     "glasses": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["normal"] },
       "default": ["normal"]
     },
@@ -49,6 +54,7 @@
     },
     "hair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -77,6 +83,7 @@
     },
     "hairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -90,16 +97,19 @@
     },
     "head": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["normal", "wide", "thin"] },
       "default": ["normal", "wide", "thin"]
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["default", "missingTooth"] },
       "default": ["default", "missingTooth"]
     },
     "mustache": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["pencilThinBeard", "pencilThin", "horshoe", "freddy"]
@@ -114,6 +124,7 @@
     },
     "skinColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

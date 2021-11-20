@@ -4,11 +4,13 @@
   "properties": {
     "base": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["standard"] },
       "default": ["standard"]
     },
     "baseColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -39,6 +41,7 @@
     },
     "earringColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -83,6 +86,7 @@
     },
     "earrings": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["hoop", "stud"] },
       "default": ["hoop", "stud"]
     },
@@ -94,11 +98,13 @@
     },
     "ears": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["attached", "detached"] },
       "default": ["attached", "detached"]
     },
     "eyeShadowColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -129,6 +135,7 @@
     },
     "eyebrowColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -159,6 +166,7 @@
     },
     "eyebrows": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["up", "down", "eyelashesUp", "eyelashesDown"]
@@ -167,6 +175,7 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": ["eyes", "round", "eyesShadow", "smiling"]
@@ -175,6 +184,7 @@
     },
     "eyesColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -205,11 +215,13 @@
     },
     "facialHair": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["beard", "scruff"] },
       "default": ["beard", "scruff"]
     },
     "facialHairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -246,11 +258,13 @@
     },
     "glasses": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["round", "square"] },
       "default": ["round", "square"]
     },
     "glassesColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -301,6 +315,7 @@
     },
     "hair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -327,6 +342,7 @@
     },
     "hairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -377,6 +393,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -403,6 +420,7 @@
     },
     "mouthColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -416,16 +434,19 @@
     },
     "nose": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["curve", "pointed", "tound"] },
       "default": ["curve", "pointed", "tound"]
     },
     "shirt": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["open", "crew", "collared"] },
       "default": ["open", "crew", "collared"]
     },
     "shirtColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

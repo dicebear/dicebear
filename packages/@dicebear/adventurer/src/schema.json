@@ -4,6 +4,8 @@
   "properties": {
     "accessoires": {
       "type": "array",
+      "uniqueItems": true,
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -32,11 +34,13 @@
     },
     "base": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["default"] },
       "default": ["default"]
     },
     "eyebrows": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -67,6 +71,7 @@
     },
     "eyes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -129,6 +134,7 @@
     },
     "hair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -211,6 +217,7 @@
     },
     "hairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -263,6 +270,7 @@
     },
     "mouth": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -333,6 +341,7 @@
     },
     "skinColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

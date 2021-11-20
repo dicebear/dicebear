@@ -38,6 +38,7 @@
     },
     "backgroundColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {

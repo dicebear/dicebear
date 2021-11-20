@@ -16,6 +16,7 @@ export function createExportJsonSchema(exportData: Export): JSONSchema7 {
 
     schemaProperties[componentGroupName] = {
       type: 'array',
+      uniqueItems: true,
       items: {
         type: 'string',
         enum: Object.keys(componentGroup.collection),
@@ -44,6 +45,7 @@ export function createExportJsonSchema(exportData: Export): JSONSchema7 {
     if (colorGroup.isUsedByComponents) {
       schemaProperties[`${colorGroupName}Color`] = {
         type: 'array',
+        uniqueItems: true,
         items: {
           anyOf: [
             {
@@ -63,6 +65,7 @@ export function createExportJsonSchema(exportData: Export): JSONSchema7 {
     if (exportData.frame.settings.backgroundColorGroupName === colorGroupName) {
       schemaProperties[`backgroundColor`] = {
         type: 'array',
+        uniqueItems: true,
         items: {
           anyOf: [
             {

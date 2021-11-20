@@ -4,6 +4,7 @@
   "properties": {
     "accessories": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -36,6 +37,7 @@
     },
     "clothingColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -68,6 +70,7 @@
     },
     "face": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -138,6 +141,7 @@
     },
     "facialHair": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -186,6 +190,7 @@
     },
     "hairColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
@@ -224,6 +229,7 @@
     },
     "head": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
@@ -330,6 +336,7 @@
     },
     "mask": {
       "type": "array",
+      "uniqueItems": true,
       "items": { "type": "string", "enum": ["medicalMask", "respirator"] },
       "default": ["medicalMask", "respirator"]
     },
@@ -341,6 +348,7 @@
     },
     "skinColor": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
