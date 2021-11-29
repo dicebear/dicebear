@@ -29,7 +29,8 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "shx rm -rf dist",
-    "build": "parcel build"
+    "build": "parcel build",
+    "postbuild": "node ./build/parcel-cjs-fix.js"
   },
   "dependencies": {
     "@dicebear/adventurer": "^5.0.0-alpha.9",
