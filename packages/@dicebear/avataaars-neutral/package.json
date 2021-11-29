@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avataaars-neutral",
-  "version": "5.0.0-alpha.9",
+  "version": "5.0.0-alpha.10",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -32,7 +32,7 @@
     "build:parcel": "parcel build"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.9",
+    "@dicebear/core": "^5.0.0-alpha.10",
     "@parcel/packager-ts": "^2.0.1",
     "@parcel/transformer-typescript-types": "^2.0.1",
     "@tsconfig/recommended": "^1.0.0",

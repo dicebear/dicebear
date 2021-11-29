@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/initials",
-  "version": "5.0.0-alpha.9",
+  "version": "5.0.0-alpha.10",
   "description": "Initials avatar style for DiceBear",
   "keywords": [
     "dicebear",
@@ -43,7 +43,7 @@
     "initials": "^3.0.1"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.9",
+    "@dicebear/core": "^5.0.0-alpha.10",
     "@parcel/packager-ts": "^2.0.1",
     "@parcel/transformer-typescript-types": "^2.0.1",
     "@tsconfig/recommended": "^1.0.0",
