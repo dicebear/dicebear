@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-identicon-sprites",
-  "version": "4.10.1",
+  "version": "4.10.2",
   "description": "Pixel art identicon avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -37,11 +37,11 @@
     "build": "dicebear-project build DiceBear.Identicon"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.10.1",
+    "@dicebear/avatars": "^4.10.2",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^4.10.1",
+    "dicebear-project": "^4.10.2",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
