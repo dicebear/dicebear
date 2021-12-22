@@ -12,7 +12,13 @@ export function defaults(schema: StyleSchema) {
     let val = props[key];
 
     if (typeof val === 'object' && undefined !== val.default) {
-      result[key] = val.default;
+      if (Array.isArray(val.default)) {
+        result[key] = [...val.default];
+      } else if (typeof val.default === 'object') {
+        result[key] = { ...val.default };
+      } else {
+        result[key] = val.default;
+      }
     }
   });
 

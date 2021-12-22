@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.10.2] - 2021-12-22
+
+## Fixed
+
+- `@dicebear/avatars` For the defaults, a copy is now returned instead of a reference.
+
 ## [4.10.1] - 2021-11-13
 
 ## Fixed
