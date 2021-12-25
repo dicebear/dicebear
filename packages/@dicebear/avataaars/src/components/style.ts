@@ -2,7 +2,7 @@ import type {
   ComponentGroup,
   ComponentPickCollection,
   ColorPickCollection,
-} from '../static-types';
+} from '../types.js';
 
 export const style: ComponentGroup = {
   circle: (components: ComponentPickCollection, colors: ColorPickCollection) =>

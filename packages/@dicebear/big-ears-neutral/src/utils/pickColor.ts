@@ -1,6 +1,6 @@
 import type { Prng } from '@dicebear/core';
-import type { ColorGroupCollection, ColorPick } from '../static-types';
-import * as colors from '../colors';
+import type { ColorGroupCollection, ColorPick } from '../types.js';
+import * as colors from '../colors/index.js';
 
 type Props = {
   prng: Prng;

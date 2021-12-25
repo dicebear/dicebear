@@ -6,7 +6,4 @@ yarn-error.log
 node_modules
 
 # Build files
-dist
-
-# Generated files
-src/options.ts
+lib

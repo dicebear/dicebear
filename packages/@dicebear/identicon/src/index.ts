@@ -8,9 +8,9 @@
  * License: https://creativecommons.org/publicdomain/zero/1.0/
  */
 
-import { style } from './core';
+import { style } from './core.js';
 
 const { create, preview, meta, schema } = style;
 
 export { create, preview, meta, schema };
-export type { Options } from './options';
+export type { Options } from './types.js';

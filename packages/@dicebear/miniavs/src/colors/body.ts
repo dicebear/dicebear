@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const body: ColorGroup = {
   orange: 'rgba(224, 90, 51, 1)',

@@ -1,4 +1,4 @@
-export { eyes } from './eyes';
-export { eyebrows } from './eyebrows';
-export { mouth } from './mouth';
-export { glasses } from './glasses';
+export { eyes } from './eyes.js';
+export { eyebrows } from './eyebrows.js';
+export { mouth } from './mouth.js';
+export { glasses } from './glasses.js';

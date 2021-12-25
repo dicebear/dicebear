@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const skin: ColorGroup = {
   black: 'rgba(97, 67, 53, 1)',

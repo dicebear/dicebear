@@ -1,8 +1,8 @@
-export { head } from './head';
-export { body } from './body';
-export { hair } from './hair';
-export { mouth } from './mouth';
-export { eyes } from './eyes';
-export { glasses } from './glasses';
-export { mustache } from './mustache';
-export { blushes } from './blushes';
+export { head } from './head.js';
+export { body } from './body.js';
+export { hair } from './hair.js';
+export { mouth } from './mouth.js';
+export { eyes } from './eyes.js';
+export { glasses } from './glasses.js';
+export { mustache } from './mustache.js';
+export { blushes } from './blushes.js';

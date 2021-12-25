@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const hair: ColorGroup = {
   black: 'rgba(54, 44, 71, 1)',

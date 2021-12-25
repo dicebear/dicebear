@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const row: ColorGroup = {
   red: 'rgba(229, 57, 53, 1)',

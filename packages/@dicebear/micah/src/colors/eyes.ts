@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const eyes: ColorGroup = {
   apricot: 'rgba(249, 201, 182, 1)',

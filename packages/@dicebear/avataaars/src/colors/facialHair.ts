@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const facialHair: ColorGroup = {
   auburn: 'rgba(165, 87, 40, 1)',

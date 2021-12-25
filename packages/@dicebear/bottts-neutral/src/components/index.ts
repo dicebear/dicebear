@@ -1,2 +1,2 @@
-export { mouth } from './mouth';
-export { eyes } from './eyes';
+export { mouth } from './mouth.js';
+export { eyes } from './eyes.js';

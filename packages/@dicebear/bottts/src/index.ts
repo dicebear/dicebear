@@ -9,9 +9,9 @@
  * License: https://bottts.com/
  */
 
-import { style } from './core';
+import { style } from './core.js';
 
 const { create, preview, meta, schema } = style;
 
 export { create, preview, meta, schema };
-export type { Options } from './options';
+export type { Options } from './types.js';

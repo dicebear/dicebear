@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const clothes: ColorGroup = {
   black: 'rgba(38, 46, 51, 1)',

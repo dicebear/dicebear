@@ -1,7 +1,6 @@
 import type { Prng } from '@dicebear/core';
-import type { Options } from '../options';
-import type { ComponentPickCollection } from '../static-types';
-import { pickComponent } from './pickComponent';
+import type { Options, ComponentPickCollection } from '../types.js';
+import { pickComponent } from './pickComponent.js';
 
 type Props = {
   prng: Prng;

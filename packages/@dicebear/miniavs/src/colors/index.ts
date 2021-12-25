@@ -1,3 +1,3 @@
-export { skin } from './skin';
-export { hair } from './hair';
-export { body } from './body';
+export { skin } from './skin.js';
+export { hair } from './hair.js';
+export { body } from './body.js';

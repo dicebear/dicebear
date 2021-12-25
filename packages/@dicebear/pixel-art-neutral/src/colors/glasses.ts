@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const glasses: ColorGroup = {
   green01: 'rgba(95, 112, 92, 1)',

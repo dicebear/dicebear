@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const hat: ColorGroup = {
   pink01: 'rgba(204, 97, 146, 1)',

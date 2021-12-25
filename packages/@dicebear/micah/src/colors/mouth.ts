@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const mouth: ColorGroup = {
   black: 'rgba(0, 0, 0, 1)',

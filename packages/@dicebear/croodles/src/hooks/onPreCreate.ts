@@ -1,6 +1,6 @@
 import { Prng, StyleOptions } from '@dicebear/core';
 
-import { Options } from '../options';
+import { Options } from '../types.js';
 
 type Props = { prng: Prng; options: StyleOptions<Options>; preview: boolean };
 

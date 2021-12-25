@@ -1,12 +1,12 @@
 import type { Style, StyleSchema } from '@dicebear/core';
-import type { Options } from './options';
+import type { Options } from './types.js';
 
-import schema from './schema.json';
-import { getComponents } from './utils/getComponents';
-import { getColors } from './utils/getColors';
-import { onPreCreate } from './hooks/onPreCreate';
-import { onPostCreate } from './hooks/onPostCreate';
-import { dimensions } from './meta/components';
+import { schema } from './schema.js';
+import { getComponents } from './utils/getComponents.js';
+import { getColors } from './utils/getColors.js';
+import { onPreCreate } from './hooks/onPreCreate.js';
+import { onPostCreate } from './hooks/onPostCreate.js';
+import { dimensions } from './meta/components.js';
 
 export const style: Style<Options> = {
   meta: {

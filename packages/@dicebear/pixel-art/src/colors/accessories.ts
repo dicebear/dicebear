@@ -1,4 +1,4 @@
-import type { ColorGroup } from '../static-types';
+import type { ColorGroup } from '../types.js';
 
 export const accessories: ColorGroup = {
   gold01: 'rgba(218, 165, 32, 1)',

@@ -1,1 +1,1 @@
-export { base } from './base';
+export { base } from './base.js';

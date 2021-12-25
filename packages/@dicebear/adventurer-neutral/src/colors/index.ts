@@ -1,1 +1,1 @@
-export { skin } from './skin';
+export { skin } from './skin.js';
