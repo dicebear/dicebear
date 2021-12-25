@@ -53,3 +53,7 @@ https://www.figma.com/file/d1Arpco5FTMsJILGaoEvM4/gridy?node-id=5%3A140
 # shapes
 
 https://www.figma.com/file/gIuwt9OU5MHUXsUaBzK6XU/shapes?node-id=9%3A68
+
+# icons
+
+https://www.figma.com/file/BRj9eonsORJ7GIUdm8gnu5/icons?node-id=1%3A7506
