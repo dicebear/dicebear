@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/initials",
-  "version": "5.0.0-alpha.10",
+  "version": "5.0.0-alpha.11",
   "description": "Initials avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -31,7 +31,7 @@
     "initials": "^3.0.1"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.10",
+    "@dicebear/core": "^5.0.0-alpha.11",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "del-cli": "^4.0.1",

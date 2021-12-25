@@ -1,8 +1,10 @@
 {
   "name": "@dicebear/collection",
-  "version": "5.0.0-alpha.10",
+  "version": "5.0.0-alpha.11",
   "description": "Avatar style collection for DiceBear",
-  "keywords": ["dicebear"],
+  "keywords": [
+    "dicebear"
+  ],
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
@@ -14,36 +16,40 @@
   "type": "module",
   "exports": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "files": ["LICENSE", "lib", "README.md"],
+  "files": [
+    "LICENSE",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "prebuild": "del-cli lib",
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@dicebear/adventurer": "^5.0.0-alpha.10",
-    "@dicebear/adventurer-neutral": "^5.0.0-alpha.10",
-    "@dicebear/avataaars": "^5.0.0-alpha.10",
-    "@dicebear/avataaars-neutral": "^5.0.0-alpha.10",
-    "@dicebear/big-ears": "^5.0.0-alpha.10",
-    "@dicebear/big-ears-neutral": "^5.0.0-alpha.10",
-    "@dicebear/big-smile": "^5.0.0-alpha.10",
-    "@dicebear/bottts": "^5.0.0-alpha.10",
-    "@dicebear/bottts-neutral": "^5.0.0-alpha.10",
-    "@dicebear/croodles": "^5.0.0-alpha.10",
-    "@dicebear/croodles-neutral": "^5.0.0-alpha.10",
-    "@dicebear/icons": "^5.0.0-alpha.10",
-    "@dicebear/identicon": "^5.0.0-alpha.10",
-    "@dicebear/initials": "^5.0.0-alpha.10",
-    "@dicebear/micah": "^5.0.0-alpha.10",
-    "@dicebear/miniavs": "^5.0.0-alpha.10",
-    "@dicebear/open-peeps": "^5.0.0-alpha.10",
-    "@dicebear/personas": "^5.0.0-alpha.10",
-    "@dicebear/pixel-art": "^5.0.0-alpha.10",
-    "@dicebear/pixel-art-neutral": "^5.0.0-alpha.10"
+    "@dicebear/adventurer": "^5.0.0-alpha.11",
+    "@dicebear/adventurer-neutral": "^5.0.0-alpha.11",
+    "@dicebear/avataaars": "^5.0.0-alpha.11",
+    "@dicebear/avataaars-neutral": "^5.0.0-alpha.11",
+    "@dicebear/big-ears": "^5.0.0-alpha.11",
+    "@dicebear/big-ears-neutral": "^5.0.0-alpha.11",
+    "@dicebear/big-smile": "^5.0.0-alpha.11",
+    "@dicebear/bottts": "^5.0.0-alpha.11",
+    "@dicebear/bottts-neutral": "^5.0.0-alpha.11",
+    "@dicebear/croodles": "^5.0.0-alpha.11",
+    "@dicebear/croodles-neutral": "^5.0.0-alpha.11",
+    "@dicebear/icons": "^5.0.0-alpha.11",
+    "@dicebear/identicon": "^5.0.0-alpha.11",
+    "@dicebear/initials": "^5.0.0-alpha.11",
+    "@dicebear/micah": "^5.0.0-alpha.11",
+    "@dicebear/miniavs": "^5.0.0-alpha.11",
+    "@dicebear/open-peeps": "^5.0.0-alpha.11",
+    "@dicebear/personas": "^5.0.0-alpha.11",
+    "@dicebear/pixel-art": "^5.0.0-alpha.11",
+    "@dicebear/pixel-art-neutral": "^5.0.0-alpha.11"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.10",
+    "@dicebear/core": "^5.0.0-alpha.11",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "del-cli": "^4.0.1",
