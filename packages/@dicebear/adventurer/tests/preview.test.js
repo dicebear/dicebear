@@ -1,7 +1,11 @@
 import { createPreview } from '@dicebear/core';
-import * as style from '../dist';
+import * as style from '../lib/index.js';
 import * as fs from 'fs';
 import * as path from 'path';
+import { test } from 'uvu';
+import { equal } from 'uvu/assert';
+
+const __dirname = new URL('.', import.meta.url).pathname;
 
 const data = [
   [style, { seed: 'test' }, 'base'],
@@ -13,7 +17,7 @@ const data = [
   [style, { seed: 'test' }, 'skinColor'],
   [style, { seed: 'test' }, 'hairColor'],
   [style, { seed: 'test', backgroundColor: ['#ff0000'] }, 'backgroundColor'],
-] as Array<Parameters<typeof createPreview>>;
+];
 
 data.forEach((params, key) => {
   test(`Create avatar #${key}`, async () => {
@@ -31,6 +35,8 @@ data.forEach((params, key) => {
 
     const svg = fs.readFileSync(svgComponent, { encoding: 'utf-8' });
 
-    expect(createPreview(...params)).toEqual(svg);
+    equal(createPreview(...params), svg);
   });
 });
+
+test.run();

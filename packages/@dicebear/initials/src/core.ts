@@ -1,6 +1,6 @@
-import { Style, StyleSchema } from '@dicebear/core';
-import { Options } from './options';
-import schema from './schema.json';
+import type { Style, StyleSchema } from '@dicebear/core';
+import type { Options } from './types.js';
+import { schema } from './schema.js';
 import initials from 'initials';
 
 const colors: Record<string, string> = {
@@ -41,9 +41,7 @@ export const style: Style<Options> = {
 
     let fontFamily = 'Arial,sans-serif';
     let fontSize = (options.fontSize ?? 50) / 100;
-    let seedInitials = (initials(prng.seed.trim()) as string)
-      .toLocaleUpperCase()
-      .slice(0, options.chars ?? 2);
+    let seedInitials = (initials(prng.seed.trim()) as string).toLocaleUpperCase().slice(0, options.chars ?? 2);
 
     // prettier-ignore
     let svg = [

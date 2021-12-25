@@ -1,7 +1,11 @@
 import { createAvatar } from '@dicebear/core';
-import * as style from '../dist';
+import * as style from '../lib/index.js';
 import * as fs from 'fs';
 import * as path from 'path';
+import { test } from 'uvu';
+import { equal } from 'uvu/assert';
+
+const __dirname = new URL('.', import.meta.url).pathname;
 
 const data = [
   [style, { seed: 'John Doe' }],
@@ -9,7 +13,7 @@ const data = [
   [style, { seed: 'Florian' }],
   [style, { seed: 'Aneka' }],
   [style, { seed: 'Felix' }],
-] as Array<Parameters<typeof createAvatar>>;
+];
 
 data.forEach((params, key) => {
   test(`Create avatar #${key}`, async () => {
@@ -27,6 +31,8 @@ data.forEach((params, key) => {
 
     const svg = fs.readFileSync(svgComponent, { encoding: 'utf-8' });
 
-    expect(createAvatar(...params)).toEqual(svg);
+    equal(createAvatar(...params), svg);
   });
 });
+
+test.run();

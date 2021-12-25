@@ -1,2 +1,2 @@
-export { skin } from './skin';
-export { hair } from './hair';
+export { skin } from './skin.js';
+export { hair } from './hair.js';

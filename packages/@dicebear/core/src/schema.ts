@@ -42,16 +42,8 @@ export const schema: JSONSchema7 = {
       type: 'array',
       uniqueItems: true,
       items: {
-        anyOf: [
-          {
-            type: 'string',
-            pattern: '^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$',
-          },
-          {
-            type: 'string',
-            pattern: '^[0-9a-zA-Z]+$',
-          },
-        ],
+        type: 'string',
+        pattern: '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
       },
     },
     translateX: {

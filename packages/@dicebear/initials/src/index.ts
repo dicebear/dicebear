@@ -5,9 +5,9 @@
  * Copyright (c) 2021 Florian Körner
  */
 
-import { style } from './core';
+import { style } from './core.js';
 
 let { create, meta, schema } = style;
 
 export { create, meta, schema };
-export type { Options } from './options';
+export * from './types.js';

@@ -2,7 +2,7 @@ import type {
   ComponentGroup,
   ComponentPickCollection,
   ColorPickCollection,
-} from '../static-types';
+} from '../types.js';
 
 export const hair: ComponentGroup = {
   short16: (components: ComponentPickCollection, colors: ColorPickCollection) =>
