@@ -1,8 +1,8 @@
 import { Command } from 'commander';
 import updateNotifier from 'update-notifier';
 
-import { getPackageJson } from './utils/getPackageJson';
-import { makeCreateCommand } from './utils/command/makeCreateCommand';
+import { getPackageJson } from './utils/getPackageJson.js';
+import { makeCreateCommand } from './utils/command/makeCreateCommand.js';
 
 (async () => {
   const pkg = await getPackageJson();

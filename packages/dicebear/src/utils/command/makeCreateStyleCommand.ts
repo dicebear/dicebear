@@ -4,10 +4,11 @@ import { Command } from 'commander';
 import * as path from 'path';
 import fs from 'fs-extra';
 import sharp from 'sharp';
+import { renderAsync } from '@resvg/resvg-js';
 import cliProgress from 'cli-progress';
-import { validateInputBySchema } from '../validateInputBySchema';
-import { outputStyleLicenseBanner } from '../outputStyleLicenseBanner';
-import { getOptionsBySchema } from '../getOptionsBySchema';
+import { validateInputBySchema } from '../validateInputBySchema.js';
+import { outputStyleLicenseBanner } from '../outputStyleLicenseBanner.js';
+import { getOptionsBySchema } from '../getOptionsBySchema.js';
 import mergeAllOf from 'json-schema-merge-allof';
 
 export async function makeCreateStyleCommand(name: string, style: Style<any>) {
@@ -72,16 +73,27 @@ export async function makeCreateStyleCommand(name: string, style: Style<any>) {
 
           const fileName = path.resolve(process.cwd(), outputPath, `${name}-${i}.${validated.format}`);
 
-          let avatar = createAvatar(style, validated);
+          const avatar = createAvatar(style, validated);
+          const png = await renderAsync(avatar, {
+            font: {
+              loadSystemFonts: false,
+              defaultFontFamily: 'Inter',
+              fontFiles: [
+                new URL('../../../fonts/inter/inter-regular.otf', import.meta.url).pathname,
+                new URL('../../../fonts/inter/inter-bold.otf', import.meta.url).pathname,
+              ],
+            },
+          });
 
           switch (validated.format) {
             case 'png':
-              await sharp(Buffer.from(avatar)).png().toFile(fileName);
+              await fs.writeFile(fileName, png);
+
               break;
 
             case 'jpg':
             case 'jpeg':
-              await sharp(Buffer.from(avatar)).jpeg().toFile(fileName);
+              await sharp(png).jpeg().toFile(fileName);
               break;
 
             default:

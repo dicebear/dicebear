@@ -1,20 +1,19 @@
 import { Command } from 'commander';
-import { makeCreateStyleCommand } from './makeCreateStyleCommand';
+import { makeCreateStyleCommand } from './makeCreateStyleCommand.js';
 import * as collection from '@dicebear/collection';
 
 export async function makeCreateCommand() {
   const cmd = new Command('create');
 
-  try {
-    for (let name of Object.keys(collection)) {
-      const style = collection[name as keyof typeof collection];
+  for (let name of Object.keys(collection)) {
+    const style = collection[name as keyof typeof collection];
 
-      cmd.addCommand(await makeCreateStyleCommand(name, style));
-    }
-  } catch {
-    cmd.action(() => {
-      throw new Error('Could not load `@dicebear/collection`.');
+    console.log({
+      name,
+      style,
     });
+
+    cmd.addCommand(await makeCreateStyleCommand(name, style));
   }
 
   return cmd;

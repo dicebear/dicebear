@@ -1,9 +1,9 @@
 {
   "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
-    "module": "ES2020",
+		"module": "ES2020",
     "target": "ES2019",
-    "moduleResolution": "node",
+		"moduleResolution": "node",
     "declaration": true,
     "outDir": "./lib"
   },
