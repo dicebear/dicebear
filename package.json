@@ -4,9 +4,7 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "packages/@dicebear/*",
-      "plugins/figma/*",
-      "website"
+      "packages/@dicebear/*"
     ]
   },
   "scripts": {

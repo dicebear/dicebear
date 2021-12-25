@@ -2,6 +2,7 @@
   "name": "@dicebear/core",
   "version": "5.0.0-alpha.10",
   "description": "An avatar library for designers and developers.",
+  "type": "module",
   "keywords": [
     "avatar",
     "identicon"
@@ -17,39 +18,31 @@
   },
   "license": "MIT",
   "author": "Florian Körner <contact@florian-koerner.com>",
-  "browserslist": ">.25%, not IE > 0, not dead",
-  "source": "src/index.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "exports": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
   "files": [
     "LICENSE",
     "dist",
     "README.md"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "uvu tests",
     "prepublishOnly": "npm run build",
-    "prebuild": "shx rm -rf dist",
-    "build": "npm-run-all build:*",
-    "build:schema": "json2ts src/schema.json src/options.ts",
-    "build:parcel": "parcel build"
+    "prebuild": "del-cli lib",
+    "build": "tsc"
   },
   "dependencies": {
     "@types/json-schema": "^7.0.7"
   },
   "devDependencies": {
-    "@parcel/packager-ts": "^2.0.1",
-    "@parcel/transformer-typescript-types": "^2.0.1",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
-    "jest": "^26.6.3",
-    "json-schema-to-typescript": "^10.1.5",
-    "npm-run-all": "^4.1.5",
-    "parcel": "^2.0.1",
-    "shx": "^0.3.3",
-    "ts-jest": "^26.5.4",
-    "typescript": "^4.5.2"
+    "del-cli": "^4.0.1",
+    "typescript": "^4.5.2",
+    "uvu": "^0.5.2"
   },
   "publishConfig": {
     "access": "public"

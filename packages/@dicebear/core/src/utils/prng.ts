@@ -1,4 +1,4 @@
-import type { Prng } from '../types';
+import type { Prng } from '../types.js';
 
 const MIN = -2147483648;
 const MAX = 2147483647;

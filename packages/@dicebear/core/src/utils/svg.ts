@@ -1,6 +1,5 @@
-import type { Options } from '../options';
-import type { Style, StyleCreateResult, StyleCreateResultAttributes } from '../types';
-import * as escape from './escape';
+import type { Options, Style, StyleCreateResult, StyleCreateResultAttributes } from '../types.js';
+import * as escape from './escape.js';
 
 type CreateGroupProps = {
   children: string;

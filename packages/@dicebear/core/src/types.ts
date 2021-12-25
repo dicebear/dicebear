@@ -1,7 +1,18 @@
-// parcel bug workaround
-import type * as JSONSchema from 'json-schema';
-// import type { JSONSchema7 } from 'json-schema';
-import type { Options } from './options';
+import { JSONSchema7 } from 'json-schema';
+
+export interface Options {
+  seed?: string;
+  dataUri?: boolean;
+  flip?: boolean;
+  rotate?: number;
+  scale?: number;
+  radius?: number;
+  size?: number;
+  backgroundColor?: string[];
+  translateX?: number;
+  translateY?: number;
+  clip?: boolean;
+}
 
 export interface Prng {
   seed: string;
@@ -10,7 +21,7 @@ export interface Prng {
   pick<T>(arr: T[]): T;
 }
 
-export type StyleSchema = JSONSchema.JSONSchema7;
+export type StyleSchema = JSONSchema7;
 
 export type StyleOptions<O extends {}> = Partial<O & Options>;
 

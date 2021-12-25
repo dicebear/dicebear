@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
-    "resolveJsonModule": true,
+    "module": "ES2020",
     "declaration": true,
     "outDir": "./lib"
   },

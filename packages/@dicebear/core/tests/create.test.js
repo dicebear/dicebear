@@ -1,9 +1,13 @@
-import { createAvatar, StyleOptions, Style } from '../src';
+import { createAvatar } from '../lib/index.js';
 import * as fs from 'fs';
 import * as path from 'path';
+import { test } from 'uvu';
+import { equal } from 'uvu/assert';
+
+const __dirname = new URL('.', import.meta.url).pathname;
 
 const seed = 'test';
-const data: Array<StyleOptions<{}>> = [
+const data = [
   { seed, backgroundColor: ['#FF0000'] },
   { seed, backgroundColor: ['#FF0000'], scale: 20, radius: 25 },
   { seed, backgroundColor: ['#FF0000'], rotate: 90 },
@@ -25,7 +29,7 @@ const data: Array<StyleOptions<{}>> = [
   },
 ];
 
-const style: Style<{}> = {
+const style = {
   meta: {},
   schema: {},
   create: () => ({
@@ -58,6 +62,8 @@ data.forEach((options, key) => {
 
     const svg = fs.readFileSync(svgPath, { encoding: 'utf-8' });
 
-    expect(createAvatar(style, options)).toEqual(svg);
+    equal(createAvatar(style, options), svg);
   });
 });
+
+test.run();

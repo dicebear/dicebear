@@ -1,8 +1,8 @@
-import type { Style, StyleOptions } from './types';
-import * as svgUtils from './utils/svg';
-import { merge as mergeOptions } from './utils/options';
-import { create as createPrng } from './utils/prng';
-import { convertToDataUri } from './utils/svg';
+import type { Style, StyleOptions } from './types.js';
+import * as svgUtils from './utils/svg.js';
+import { merge as mergeOptions } from './utils/options.js';
+import { create as createPrng } from './utils/prng.js';
+import { convertToDataUri } from './utils/svg.js';
 
 export function createAvatar<O extends {}>(style: Style<O>, options: StyleOptions<O> = {}): string {
   options = mergeOptions(style, options);

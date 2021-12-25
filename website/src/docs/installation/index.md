@@ -1,7 +1,0 @@
-# Installation
-
-## ESM
-
-## CJS
-
-## CDN

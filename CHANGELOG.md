@@ -26,8 +26,34 @@
 - `@dicebear/avatars-identicon-sprites` Use `@dicebear/identicon` instead.
 - `@dicebear/avatars-avataaars-sprites` Use `@dicebear/avataaars` instead.
 - `@dicebear/avatars-bottts-sprites` Use `@dicebear/bottts` instead.
-- `@dicebear/avatars-gridy-sprites` Use `@dicebear/gridy` instead.
-- `@dicebear/avatars-jdenticon-sprites` Use `@dicebear/shapes` instead.
+- `@dicebear/avatars-gridy-sprites` Use `gridy-avatars` instead.
+- `@dicebear/avatars-jdenticon-sprites` Use `jdenticon` instead.
+
+## [4.10.2] - 2021-12-22
+
+## Fixed
+
+- `@dicebear/avatars` For the defaults, a copy is now returned instead of a reference.
+
+## [4.10.1] - 2021-11-13
+
+## Fixed
+
+- `@dicebear/adventurer` Mouth position
+- `@dicebear/adventurer-neutral` Mouth position
+
+## [4.10.0] - 2021-10-17
+
+### Added
+
+- `@dicebear/adventurer` New Avatar style by Lisa Wischofsky
+- `@dicebear/adventurer-neutral` New Avatar style by Lisa Wischofsky
+
+## [4.9.1] - 2021-09-09
+
+### Fixed
+
+- License Files
 
 ## [4.9.0] - 21-09-05
 
@@ -84,32 +110,26 @@
 ### Added
 
 - `@dicebear/open-peeps` New Avatar style by Pablo Stanley.
-- `@dicebear/pixel-art` New Avatar style as replacement for `male`, `female` and
-  `human`
+- `@dicebear/pixel-art` New Avatar style as replacement for `male`, `female` and `human`
 - `@dicebear/pixel-art-neutral` New Avatar style
 - `@dicebear/croodles` New Avatar style by vijay verma.
 - `@dicebear/croodles-neutral` New Avatar style by vijay verma.
 - `@dicebear/avatars` New `rotate` option.
 - `@dicebear/avatars` New `flip` option.
-- `@dicebear/avatars` New `size` option as replacement for `width` and `height`
-  options.
+- `@dicebear/avatars` New `size` option as replacement for `width` and `height` options.
 - `@dicebear/avatars` New `translateX` option.
 - `@dicebear/avatars` New `translateY` option.
 
 ### Changed
 
-- `@dicebear/avatars` Option `backgroundColor` can now also handle an array. A
-  random value is then selected via PRNG.
+- `@dicebear/avatars` Option `backgroundColor` can now also handle an array. A random value is then selected via PRNG.
 
 ### Deprecated
 
-- `@dicebear/avatars` `width` and `height` options are deprecated. Use `size`
-  instead.
+- `@dicebear/avatars` `width` and `height` options are deprecated. Use `size` instead.
 - `@dicebear/avatars` `margin` option is deprecated. Use `scale` instead.
-- `@dicebear/avatars` SVG Util `addMargin` is deprecated. Use `addScale`
-  instead.
-- `@dicebear/avatars` SVG Util `addRadius` is deprecated. Use `addViewboxMask`
-  instead.
+- `@dicebear/avatars` SVG Util `addMargin` is deprecated. Use `addScale` instead.
+- `@dicebear/avatars` SVG Util `addRadius` is deprecated. Use `addViewboxMask` instead.
 - `@dicebear/avatars-male-style` Use `@dicebear/pixel-art` instead.
 - `@dicebear/avatars-female-style` Use `@dicebear/pixel-art` instead.
 - `@dicebear/avatars-human-style` Use `@dicebear/pixel-art` instead.
@@ -133,8 +153,7 @@
 
 ### Deprecated
 
-- `dicebear` project commands are deprecated. Use new `dicebear-project` cli
-  instead.
+- `dicebear` project commands are deprecated. Use new `dicebear-project` cli instead.
 
 ## [4.7.2] - 2021-08-05
 
@@ -153,8 +172,7 @@
 ### Added
 
 - `esm`, `cjs` and `umd` bundles for all packages.
-- New package `@dicebear/collection` to install all official avatar styles at
-  once.
+- New package `@dicebear/collection` to install all official avatar styles at once.
 - New CLI `dicebear` to create avatars and build avatar styles.
 
 ### Changed
@@ -167,22 +185,19 @@
 
 - Error `ReferenceError: Can't find variable: exports` in svelte. See
   [#123](https://github.com/dicebear/dicebear/issues/123)
-- File sizes reduced by automatically removing unnecessary whitespaces from
-  template strings.
+- File sizes reduced by automatically removing unnecessary whitespaces from template strings.
 
 ## [4.6.10] - 2021-07-31
 
 ### Fixed
 
-- `@dicebear/avatars-avataaars-sprites` Avataaars clotheGraphics doesn't work
-  #135
+- `@dicebear/avatars-avataaars-sprites` Avataaars clotheGraphics doesn't work #135
 
 ## [4.6.10] - 2021-07-31
 
 ### Fixed
 
-- `@dicebear/avatars-avataaars-sprites` Avataaars clotheGraphics doesn't work
-  #135
+- `@dicebear/avatars-avataaars-sprites` Avataaars clotheGraphics doesn't work #135
 
 ## [4.6.9] - 2021-06-23
 
@@ -220,8 +235,7 @@
 
 ### Fixed
 
-- `@dicebear/micah` A filter is no longer applied to a color palette with only
-  one color.
+- `@dicebear/micah` A filter is no longer applied to a color palette with only one color.
 
 ## [4.6.4] - 2021-05-16
 
@@ -275,8 +289,7 @@ No notable changes.
   });
   ```
 
-- JSON Schema added to each avatar style. Used for API, Types and upcoming
-  features.
+- JSON Schema added to each avatar style. Used for API, Types and upcoming features.
 
 - Metadata in generated avatars with author and license information.
 
@@ -397,8 +410,7 @@ No notable changes.
 
 ### Deprecated
 
-- Default exports are deprecated. Use new function based API instead. (See
-  "Added")
+- Default exports are deprecated. Use new function based API instead. (See "Added")
 
 #### @dicebear/avatars
 
@@ -412,15 +424,13 @@ No notable changes.
 
   - `blue` => use `blue01`, `blue02` and `blue03` instead
   - `gray` => use `gray01` and `gray02` instead
-  - `pastel` => use `pastelBlue`, `pastelGreen`, `pastelOrange`, `pastelRed` and
-    `pastelYellow` instead
+  - `pastel` => use `pastelBlue`, `pastelGreen`, `pastelOrange`, `pastelRed` and `pastelYellow` instead
 
 - Some `clothes` values are deprecated:
 
   - `blazer` => use `blazerAndShirt` and `blazerAndSweater` instead
   - `sweater` => use `collarAndSweater` instead
-  - `shirt` => use `graphicShirt`, `shirtCrewNeck`, `shirtScoopNeck` and
-    `shirtVNeck` instead
+  - `shirt` => use `graphicShirt`, `shirtCrewNeck`, `shirtScoopNeck` and `shirtVNeck` instead
 
 - Some `eyebrow` values are deprecated:
 
@@ -458,9 +468,8 @@ No notable changes.
 
 - Some `top` values are deprecated:
 
-  - `longHair` => use `bigHair`, `bob`, `bun`, `curly`, `curvy`, `dreads`,
-    `frida`, `fro`, `froAndBand`, `miaWallace`, `longButNotTooLong`,
-    `shavedSides`, `straight01`, `straight02` and `straightAndStrand` instead
+  - `longHair` => use `bigHair`, `bob`, `bun`, `curly`, `curvy`, `dreads`, `frida`, `fro`, `froAndBand`, `miaWallace`,
+    `longButNotTooLong`, `shavedSides`, `straight01`, `straight02` and `straightAndStrand` instead
   - `shortHair` => use
     `dreads01`,`dreads02`,`frizzle`,`shaggy`,`shaggyMullet`,`shortCurly`,`shortFlat`,`shortRound`,`shortWaved`,`sides`,`theCaesar`
     and `theCaesarAndSidePart` instead
@@ -473,8 +482,8 @@ No notable changes.
 
 #### @dicebear/avatars
 
-- Removed unused webpack build. We will completely switch to microbundle with
-  version 5 and also support CDNs like unpkg.
+- Removed unused webpack build. We will completely switch to microbundle with version 5 and also support CDNs like
+  unpkg.
 
 ## [4.5.4] - 2021-02-24
 
@@ -508,8 +517,7 @@ No notable changes.
 
 ### Changed
 
-- `@dicebear/avatars` Package `seedrandom` replaced with own PRNG
-  implementation.
+- `@dicebear/avatars` Package `seedrandom` replaced with own PRNG implementation.
 
 ### Deprecated
 
@@ -525,29 +533,25 @@ No notable changes.
 
 ### Added
 
-- `@dicebear/avatars-avataaars-sprites` New option values for `facialHair`:
-  `pastel` and `gray`
+- `@dicebear/avatars-avataaars-sprites` New option values for `facialHair`: `pastel` and `gray`
 - `@dicebear/avatars-avataaars-sprites` New option value for `eyebrow`: `frown`
 - `@dicebear/avatars-avataaars-sprites` New option `accessoriesColor`
 
 ### Changed
 
-- `@dicebear/avatars-avataaars-sprites` Completely rewritten to remove the
-  `react`, `react-dom` and `avataaars` dependencies. Solves
-  [#48](https://github.com/DiceBear/avatars/issues/48).
+- `@dicebear/avatars-avataaars-sprites` Completely rewritten to remove the `react`, `react-dom` and `avataaars`
+  dependencies. Solves [#48](https://github.com/DiceBear/avatars/issues/48).
 
 ## [4.3.0] - 2020-11-06
 
 ### Fixed
 
-- Text position was wrong in `@dicebear/initials` when a font size was
-  specified.
+- Text position was wrong in `@dicebear/initials` when a font size was specified.
 
 ### Removed
 
-- Code sprites are no longer supported. Too CPU intensive for the HTTP API and
-  does not fit into the future vision of the next major release. Use
-  [qr-image](https://www.npmjs.com/package/qr-image) directly instead.
+- Code sprites are no longer supported. Too CPU intensive for the HTTP API and does not fit into the future vision of
+  the next major release. Use [qr-image](https://www.npmjs.com/package/qr-image) directly instead.
 
 ## [4.2.4] - 2020-07-22
 
@@ -590,27 +594,23 @@ No notable changes.
 
 ### Added
 
-- [#55][1] Aliases for `width`, `height`, `radius`, `background` and `margin`,
-  to keep the URLs of the HTTP API shorter
+- [#55][1] Aliases for `width`, `height`, `radius`, `background` and `margin`, to keep the URLs of the HTTP API shorter
 - [#66][5] `deterministic` for `gridy` avatars. (thanks to @elierotenberg)
 - This changelog
 
 ### Changed
 
-- [#55][1] Parameter key for the HTTP API flattened. It is now no longer
-  necessary to nest the values in an `options` object.
-- [#61][6] Update `topChange` to `topChance`, clarify some documentation (thanks
-  to @pennstatephil)
+- [#55][1] Parameter key for the HTTP API flattened. It is now no longer necessary to nest the values in an `options`
+  object.
+- [#61][6] Update `topChange` to `topChance`, clarify some documentation (thanks to @pennstatephil)
 - [Configurator][2] now always generates the smallest possible HTTP-API URL.
 - Reorganized dependencies in the repository.
-- Stackpath CDN configured for HTTP API. Saves 90% traffic to Cloudflare Workers
-  and therefore also unnecessary costs. Unfortunately makes the initial call a
-  bit slower.
+- Stackpath CDN configured for HTTP API. Saves 90% traffic to Cloudflare Workers and therefore also unnecessary costs.
+  Unfortunately makes the initial call a bit slower.
 
 ### Fixed
 
-- [#69][3] Initial avatars were displayed incorrectly in Firefox. Same solution
-  implemented for all browsers.
+- [#69][3] Initial avatars were displayed incorrectly in Firefox. Same solution implemented for all browsers.
 - [#58][4] Value `0` did not work for chance options in `bottts`.
 
 ### Removed
