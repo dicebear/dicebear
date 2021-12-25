@@ -78,12 +78,6 @@ export default [
     options: croodlesNeutralOptions,
   },
   {
-    id: 'gridy',
-    name: '@dicebear/avatars-gridy-sprites',
-    style: collection.gridy,
-    options: gridyOptions,
-  },
-  {
     id: 'identicon',
     name: '@dicebear/avatars-identicon-sprites',
     style: collection.identicon,
@@ -94,12 +88,6 @@ export default [
     name: '@dicebear/avatars-initials-sprites',
     style: collection.initials,
     options: initialsOptions,
-  },
-  {
-    id: 'jdenticon',
-    name: '@dicebear/avatars-jdenticon-sprites',
-    style: collection.jdenticon,
-    options: jdenticonOptions,
   },
   {
     id: 'micah',
