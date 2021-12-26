@@ -62,6 +62,7 @@ export const schema: StyleSchema = {
       minimum: 1,
       maximum: 100,
       default: 50,
+      examples: [25, 50, 75, 100],
     },
     chars: {
       title: 'Chars',
@@ -69,10 +70,13 @@ export const schema: StyleSchema = {
       minimum: 0,
       maximum: 2,
       default: 2,
+      examples: [1, 2],
     },
     bold: {
       title: 'Bold',
       type: 'boolean',
+      default: false,
+      examples: [true, false],
     },
   },
   additionalProperties: false,
