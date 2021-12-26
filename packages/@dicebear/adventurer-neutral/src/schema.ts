@@ -167,18 +167,6 @@ export const schema: StyleSchema = {
         ['variant01'],
       ],
     },
-    features: {
-      type: 'array',
-      items: { type: 'string', enum: ['blush', 'birthmark', 'freckles'] },
-      default: ['blush', 'birthmark', 'freckles'],
-      examples: [['blush'], ['birthmark'], ['freckles']],
-    },
-    featuresProbability: {
-      type: 'integer',
-      minimum: 0,
-      maximum: 100,
-      default: 5,
-    },
     glasses: {
       type: 'array',
       items: {

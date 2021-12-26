@@ -11,10 +11,6 @@ export const dimensions: Record<string, { width: number; height: number }> = {
     width: 1024,
     height: 1024,
   },
-  features: {
-    width: 1024,
-    height: 1024,
-  },
   glasses: {
     width: 1024,
     height: 1024,

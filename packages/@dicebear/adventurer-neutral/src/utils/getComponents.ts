@@ -26,11 +26,6 @@ export function getComponents({
     group: 'mouth',
     values: options.mouth,
   });
-  const featuresComponent = pickComponent({
-    prng,
-    group: 'features',
-    values: options.features,
-  });
   const glassesComponent = pickComponent({
     prng,
     group: 'glasses',
@@ -41,9 +36,6 @@ export function getComponents({
     eyes: eyesComponent,
     eyebrows: eyebrowsComponent,
     mouth: mouthComponent,
-    features: prng.bool(options.featuresProbability)
-      ? featuresComponent
-      : undefined,
     glasses: prng.bool(options.glassesProbability)
       ? glassesComponent
       : undefined,
