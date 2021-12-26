@@ -26,18 +26,26 @@ export function getComponents({
     group: 'mouth',
     values: options.mouth,
   });
-  const accessoiresComponent = pickComponent({
+  const featuresComponent = pickComponent({
     prng,
-    group: 'accessoires',
-    values: options.accessoires,
+    group: 'features',
+    values: options.features,
+  });
+  const glassesComponent = pickComponent({
+    prng,
+    group: 'glasses',
+    values: options.glasses,
   });
 
   return {
     eyes: eyesComponent,
     eyebrows: eyebrowsComponent,
     mouth: mouthComponent,
-    accessoires: prng.bool(options.accessoiresProbability)
-      ? accessoiresComponent
+    features: prng.bool(options.featuresProbability)
+      ? featuresComponent
+      : undefined,
+    glasses: prng.bool(options.glassesProbability)
+      ? glassesComponent
       : undefined,
   };
 }

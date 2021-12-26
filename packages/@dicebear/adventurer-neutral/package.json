@@ -1,10 +1,8 @@
 {
   "name": "@dicebear/adventurer-neutral",
-  "version": "5.0.0-alpha.11",
+  "version": "5.0.0",
   "description": "Avatar style for DiceBear",
-  "keywords": [
-    "dicebear"
-  ],
+  "keywords": ["dicebear"],
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
@@ -16,11 +14,7 @@
   "type": "module",
   "exports": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "files": [
-    "LICENSE",
-    "lib",
-    "README.md"
-  ],
+  "files": ["LICENSE", "lib", "README.md"],
   "scripts": {
     "prebuild": "del-cli lib",
     "build": "tsc",
@@ -28,7 +22,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.11",
+    "@dicebear/core": "^5.0.0-alpha.10",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "del-cli": "^4.0.1",

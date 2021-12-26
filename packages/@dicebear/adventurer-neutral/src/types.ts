@@ -38,6 +38,11 @@ export interface Options {
     | 'variant03'
     | 'variant02'
     | 'variant01'
+    | 'variant15'
+    | 'variant14'
+    | 'variant13'
+    | 'variant12'
+    | 'variant11'
   )[];
   mouth?: (
     | 'variant30'
@@ -71,15 +76,16 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  accessoires?: (
-    | 'sunglasses'
-    | 'glasses'
-    | 'smallGlasses'
-    | 'mustache'
-    | 'blush'
-    | 'birthmark'
+  features?: ('blush' | 'birthmark' | 'freckles')[];
+  featuresProbability?: number;
+  glasses?: (
+    | 'variant01'
+    | 'variant02'
+    | 'variant03'
+    | 'variant04'
+    | 'variant05'
   )[];
-  accessoiresProbability?: number;
+  glassesProbability?: number;
   backgroundColor?: string[];
 }
 

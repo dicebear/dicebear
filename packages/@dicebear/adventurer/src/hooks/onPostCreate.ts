@@ -21,5 +21,20 @@ export function onPostCreate({
   colors,
   preview,
 }: Props) {
-  // Write your modifications here
+  const invisibleEarringsHair = [
+    'hair01',
+    'hair04',
+    'hair05',
+    'hair20',
+    'hair22',
+    'hair24',
+  ];
+
+  if (
+    false === preview &&
+    components.hair?.name &&
+    invisibleEarringsHair.includes(components.hair.name)
+  ) {
+    components.earrings = undefined;
+  }
 }

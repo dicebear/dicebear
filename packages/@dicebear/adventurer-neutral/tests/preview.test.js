@@ -11,7 +11,8 @@ const data = [
   [style, { seed: 'test' }, 'eyes'],
   [style, { seed: 'test' }, 'eyebrows'],
   [style, { seed: 'test' }, 'mouth'],
-  [style, { seed: 'test' }, 'accessoires'],
+  [style, { seed: 'test' }, 'features'],
+  [style, { seed: 'test' }, 'glasses'],
   [style, { seed: 'test', backgroundColor: ['#ff0000'] }, 'backgroundColor'],
 ];
 

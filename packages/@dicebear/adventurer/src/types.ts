@@ -39,6 +39,11 @@ export interface Options {
     | 'variant03'
     | 'variant02'
     | 'variant01'
+    | 'variant15'
+    | 'variant14'
+    | 'variant13'
+    | 'variant12'
+    | 'variant11'
   )[];
   mouth?: (
     | 'variant30'
@@ -72,15 +77,8 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  accessoires?: (
-    | 'sunglasses'
-    | 'glasses'
-    | 'smallGlasses'
-    | 'mustache'
-    | 'blush'
-    | 'birthmark'
-  )[];
-  accessoiresProbability?: number;
+  features?: ('blush' | 'birthmark' | 'freckles')[];
+  featuresProbability?: number;
   hair?: (
     | 'short16'
     | 'short15'
@@ -118,10 +116,37 @@ export interface Options {
     | 'long03'
     | 'long02'
     | 'long01'
+    | 'short19'
+    | 'long26'
+    | 'long25'
+    | 'short18'
+    | 'long24'
+    | 'long23'
+    | 'long22'
+    | 'short17'
+    | 'long21'
   )[];
   hairProbability?: number;
+  earrings?: (
+    | 'variant06'
+    | 'variant01'
+    | 'variant02'
+    | 'variant03'
+    | 'variant04'
+    | 'variant05'
+  )[];
+  earringsProbability?: number;
+  glasses?: (
+    | 'variant01'
+    | 'variant02'
+    | 'variant03'
+    | 'variant04'
+    | 'variant05'
+  )[];
+  glassesProbability?: number;
   skinColor?: string[];
   hairColor?: string[];
+  earringsColor?: string[];
 }
 
 export type ColorGroup = Record<string, ColorGroupItem>;

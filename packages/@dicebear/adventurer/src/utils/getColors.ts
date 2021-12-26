@@ -19,5 +19,10 @@ export function getColors({ prng, options }: Props): ColorPickCollection {
       group: 'hair',
       values: options.hairColor,
     }),
+    earrings: pickColor({
+      prng,
+      group: 'earrings',
+      values: options.earringsColor,
+    }),
   };
 }

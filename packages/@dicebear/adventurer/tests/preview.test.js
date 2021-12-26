@@ -12,10 +12,13 @@ const data = [
   [style, { seed: 'test' }, 'eyes'],
   [style, { seed: 'test' }, 'eyebrows'],
   [style, { seed: 'test' }, 'mouth'],
-  [style, { seed: 'test' }, 'accessoires'],
+  [style, { seed: 'test' }, 'features'],
   [style, { seed: 'test' }, 'hair'],
+  [style, { seed: 'test' }, 'earrings'],
+  [style, { seed: 'test' }, 'glasses'],
   [style, { seed: 'test' }, 'skinColor'],
   [style, { seed: 'test' }, 'hairColor'],
+  [style, { seed: 'test' }, 'earringsColor'],
   [style, { seed: 'test', backgroundColor: ['#ff0000'] }, 'backgroundColor'],
 ];
 

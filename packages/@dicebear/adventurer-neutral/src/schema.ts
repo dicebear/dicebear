@@ -4,41 +4,6 @@ export const schema: StyleSchema = {
   title: 'Options',
   $schema: 'http://json-schema.org/draft-07/schema#',
   properties: {
-    accessoires: {
-      type: 'array',
-      items: {
-        type: 'string',
-        enum: [
-          'sunglasses',
-          'glasses',
-          'smallGlasses',
-          'mustache',
-          'blush',
-          'birthmark',
-        ],
-      },
-      default: [
-        'sunglasses',
-        'glasses',
-        'smallGlasses',
-        'mustache',
-        'birthmark',
-      ],
-      examples: [
-        ['sunglasses'],
-        ['glasses'],
-        ['smallGlasses'],
-        ['mustache'],
-        ['blush'],
-        ['birthmark'],
-      ],
-    },
-    accessoiresProbability: {
-      type: 'integer',
-      minimum: 0,
-      maximum: 100,
-      default: 10,
-    },
     backgroundColor: {
       type: 'array',
       items: {
@@ -70,6 +35,11 @@ export const schema: StyleSchema = {
           'variant03',
           'variant02',
           'variant01',
+          'variant15',
+          'variant14',
+          'variant13',
+          'variant12',
+          'variant11',
         ],
       },
       default: [
@@ -83,6 +53,11 @@ export const schema: StyleSchema = {
         'variant03',
         'variant02',
         'variant01',
+        'variant15',
+        'variant14',
+        'variant13',
+        'variant12',
+        'variant11',
       ],
       examples: [
         ['variant10'],
@@ -95,6 +70,11 @@ export const schema: StyleSchema = {
         ['variant03'],
         ['variant02'],
         ['variant01'],
+        ['variant15'],
+        ['variant14'],
+        ['variant13'],
+        ['variant12'],
+        ['variant11'],
       ],
     },
     eyes: {
@@ -186,6 +166,45 @@ export const schema: StyleSchema = {
         ['variant02'],
         ['variant01'],
       ],
+    },
+    features: {
+      type: 'array',
+      items: { type: 'string', enum: ['blush', 'birthmark', 'freckles'] },
+      default: ['blush', 'birthmark', 'freckles'],
+      examples: [['blush'], ['birthmark'], ['freckles']],
+    },
+    featuresProbability: {
+      type: 'integer',
+      minimum: 0,
+      maximum: 100,
+      default: 5,
+    },
+    glasses: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['variant01', 'variant02', 'variant03', 'variant04', 'variant05'],
+      },
+      default: [
+        'variant01',
+        'variant02',
+        'variant03',
+        'variant04',
+        'variant05',
+      ],
+      examples: [
+        ['variant01'],
+        ['variant02'],
+        ['variant03'],
+        ['variant04'],
+        ['variant05'],
+      ],
+    },
+    glassesProbability: {
+      type: 'integer',
+      minimum: 0,
+      maximum: 100,
+      default: 10,
     },
     mouth: {
       type: 'array',

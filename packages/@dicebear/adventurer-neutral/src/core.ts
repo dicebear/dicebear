@@ -42,7 +42,9 @@ export const style: Style<Options> = {
       }</g><g transform="translate(-279 -322)">${
         components.mouth?.value(components, colors) ?? ''
       }</g><g transform="translate(-279 -322)">${
-        components.accessoires?.value(components, colors) ?? ''
+        components.features?.value(components, colors) ?? ''
+      }</g><g transform="translate(-279 -322)">${
+        components.glasses?.value(components, colors) ?? ''
       }</g>`,
     };
   },
