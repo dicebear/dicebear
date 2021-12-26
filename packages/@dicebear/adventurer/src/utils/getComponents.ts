@@ -36,6 +36,11 @@ export function getComponents({
     group: 'features',
     values: options.features,
   });
+  const glassesComponent = pickComponent({
+    prng,
+    group: 'glasses',
+    values: options.glasses,
+  });
   const hairComponent = pickComponent({
     prng,
     group: 'hair',
@@ -46,11 +51,6 @@ export function getComponents({
     group: 'earrings',
     values: options.earrings,
   });
-  const glassesComponent = pickComponent({
-    prng,
-    group: 'glasses',
-    values: options.glasses,
-  });
 
   return {
     base: baseComponent,
@@ -60,12 +60,12 @@ export function getComponents({
     features: prng.bool(options.featuresProbability)
       ? featuresComponent
       : undefined,
+    glasses: prng.bool(options.glassesProbability)
+      ? glassesComponent
+      : undefined,
     hair: prng.bool(options.hairProbability) ? hairComponent : undefined,
     earrings: prng.bool(options.earringsProbability)
       ? earringsComponent
-      : undefined,
-    glasses: prng.bool(options.glassesProbability)
-      ? glassesComponent
       : undefined,
   };
 }

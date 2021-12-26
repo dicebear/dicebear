@@ -79,6 +79,14 @@ export interface Options {
   )[];
   features?: ('blush' | 'birthmark' | 'freckles')[];
   featuresProbability?: number;
+  glasses?: (
+    | 'variant01'
+    | 'variant02'
+    | 'variant03'
+    | 'variant04'
+    | 'variant05'
+  )[];
+  glassesProbability?: number;
   hair?: (
     | 'short16'
     | 'short15'
@@ -136,14 +144,6 @@ export interface Options {
     | 'variant05'
   )[];
   earringsProbability?: number;
-  glasses?: (
-    | 'variant01'
-    | 'variant02'
-    | 'variant03'
-    | 'variant04'
-    | 'variant05'
-  )[];
-  glassesProbability?: number;
   skinColor?: string[];
   hairColor?: string[];
   earringsColor?: string[];
