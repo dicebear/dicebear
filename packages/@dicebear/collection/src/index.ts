@@ -18,3 +18,4 @@ export * as miniavs from '@dicebear/miniavs';
 export * as bigSmile from '@dicebear/big-smile';
 export * as bigEars from '@dicebear/big-ears';
 export * as bigEarsNeutral from '@dicebear/big-ears-neutral';
+export * as funEmoji from '@dicebear/fun-emoji';
