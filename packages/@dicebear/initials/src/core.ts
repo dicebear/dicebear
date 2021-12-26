@@ -41,20 +41,21 @@ export const style: Style<Options> = {
       (val) => colors[val] ?? val
     );
 
-    let fontFamily = 'Arial,sans-serif';
-    let fontSize = (options.fontSize ?? 50) / 100;
-    let seedInitials = (initials(prng.seed.trim()) as string)
+    const fontFamily = options.fontFamily?.join(', ') ?? 'Arial, sans-serif';
+    const fontSize = options.fontSize ?? 50;
+    const fontWeight = options.fontWeight ?? 400;
+    const seedInitials = (initials(prng.seed.trim()) as string)
       .toLocaleUpperCase()
       .slice(0, options.chars ?? 2);
 
     // prettier-ignore
-    let svg = [
-      `<text x="50%" y="50%" style="${options.bold ? 'font-weight: bold;' : ''} font-family: ${fontFamily}; font-size: ${fontSize}px" fill="#FFF" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
+    const svg = [
+      `<text x="50%" y="50%" font-family="${fontFamily}" font-size="${fontSize}" fontWeight="${fontWeight}" fill="#FFF" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
     ].join('');
 
     return {
       attributes: {
-        viewBox: '0 0 1 1',
+        viewBox: '0 0 100 100',
       },
       body: svg,
     };

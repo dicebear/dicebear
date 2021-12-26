@@ -5,9 +5,7 @@ export const schema: StyleSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   properties: {
     backgroundColor: {
-      title: 'Background Color',
       type: 'array',
-      uniqueItems: true,
       items: {
         type: 'string',
         pattern:
@@ -56,8 +54,31 @@ export const schema: StyleSchema = {
         ['yellow'],
       ],
     },
+    fontFamily: {
+      type: 'array',
+      uniqueItems: true,
+      minItems: 1,
+      items: {
+        type: 'string',
+        pattern: '^[a-zA-Z0-9\\-\\s]+$',
+      },
+      default: ['Arial', 'sans-serif'],
+      examples: [
+        ['Arial'],
+        ['Verdana'],
+        ['Helvetica'],
+        ['Tahoma'],
+        ['Trebuchet MS'],
+        ['Times New Roman'],
+        ['Georgia'],
+        ['Garamond'],
+        ['Courier New'],
+        ['Brush Script MT'],
+        ['sans-serif'],
+        ['serif'],
+      ],
+    },
     fontSize: {
-      title: 'Font Size',
       type: 'integer',
       minimum: 1,
       maximum: 100,
@@ -65,18 +86,17 @@ export const schema: StyleSchema = {
       examples: [25, 50, 75, 100],
     },
     chars: {
-      title: 'Chars',
       type: 'number',
       minimum: 0,
       maximum: 2,
       default: 2,
       examples: [1, 2],
     },
-    bold: {
-      title: 'Bold',
-      type: 'boolean',
-      default: false,
-      examples: [true, false],
+    fontWeight: {
+      type: 'number',
+      default: 400,
+      enum: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      examples: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     },
   },
   additionalProperties: false,
