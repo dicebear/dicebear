@@ -40,34 +40,6 @@ export const schema: StyleSchema = {
         ['variant05'],
       ],
     },
-    earringsColor: {
-      type: 'array',
-      items: {
-        type: 'string',
-        pattern:
-          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
-      },
-      default: [
-        'silver',
-        'gold',
-        'bronze',
-        'black',
-        'white',
-        'red',
-        'green',
-        'blue',
-      ],
-      examples: [
-        ['silver'],
-        ['gold'],
-        ['bronze'],
-        ['black'],
-        ['white'],
-        ['red'],
-        ['green'],
-        ['blue'],
-      ],
-    },
     earringsProbability: {
       type: 'integer',
       minimum: 0,

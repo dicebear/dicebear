@@ -146,7 +146,6 @@ export interface Options {
   earringsProbability?: number;
   skinColor?: string[];
   hairColor?: string[];
-  earringsColor?: string[];
 }
 
 export type ColorGroup = Record<string, ColorGroupItem>;

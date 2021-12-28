@@ -2,9 +2,7 @@
   "name": "@dicebear/adventurer",
   "version": "5.0.0-alpha.13",
   "description": "Avatar style for DiceBear",
-  "keywords": [
-    "dicebear"
-  ],
+  "keywords": ["dicebear"],
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
@@ -16,11 +14,7 @@
   "type": "module",
   "exports": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "files": [
-    "LICENSE",
-    "lib",
-    "README.md"
-  ],
+  "files": ["LICENSE", "lib", "README.md"],
   "scripts": {
     "prebuild": "del-cli lib",
     "build": "tsc",

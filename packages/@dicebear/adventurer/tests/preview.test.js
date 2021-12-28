@@ -18,7 +18,6 @@ const data = [
   [style, { seed: 'test' }, 'earrings'],
   [style, { seed: 'test' }, 'skinColor'],
   [style, { seed: 'test' }, 'hairColor'],
-  [style, { seed: 'test' }, 'earringsColor'],
   [style, { seed: 'test', backgroundColor: ['#ff0000'] }, 'backgroundColor'],
 ];
 
