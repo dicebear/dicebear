@@ -2,7 +2,7 @@
  * Adventurer (@dicebear/adventurer)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2021 Florian Körner
+ * Copyright (c) 2022 Florian Körner
  *
  * Design "Adventurer" by Lisa Wischofsky licensed under CC BY 4.0.
  * Source: https://www.instagram.com/lischis_adventures/

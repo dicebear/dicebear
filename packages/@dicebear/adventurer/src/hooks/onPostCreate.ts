@@ -22,12 +22,14 @@ export function onPostCreate({
   preview,
 }: Props) {
   const invisibleEarringsHair = [
-    'hair01',
-    'hair04',
-    'hair05',
-    'hair20',
-    'hair22',
-    'hair24',
+    'long01',
+    'long04',
+    'long05',
+    'long06',
+    'long20',
+    'long22',
+    'long24',
+    'long26',
   ];
 
   if (
