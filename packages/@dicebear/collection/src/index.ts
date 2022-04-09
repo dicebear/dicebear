@@ -10,6 +10,8 @@ export * as initials from '@dicebear/initials';
 export * as micah from '@dicebear/micah';
 export * as croodles from '@dicebear/croodles';
 export * as croodlesNeutral from '@dicebear/croodles-neutral';
+export * as drawatars from '@dicebear/drawatars';
+export * as drawatarsNeutral from '@dicebear/drawatars-neutral';
 export * as pixelArt from '@dicebear/pixel-art';
 export * as pixelArtNeutral from '@dicebear/pixel-art-neutral';
 export * as openPeeps from '@dicebear/open-peeps';

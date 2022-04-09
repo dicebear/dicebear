@@ -1,0 +1,9 @@
+# Cache and log files
+.DS_Store
+yarn-error.log
+
+# Dependencies
+node_modules
+
+# Build files
+lib

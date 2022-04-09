@@ -38,6 +38,8 @@
     "@dicebear/bottts-neutral": "^5.0.0-alpha.15",
     "@dicebear/croodles": "^5.0.0-alpha.15",
     "@dicebear/croodles-neutral": "^5.0.0-alpha.15",
+    "@dicebear/drawatars": "^5.0.0-alpha.15",
+    "@dicebear/drawatars-neutral": "^5.0.0-alpha.15",
     "@dicebear/fun-emoji": "^5.0.0-alpha.15",
     "@dicebear/icons": "^5.0.0-alpha.15",
     "@dicebear/identicon": "^5.0.0-alpha.15",
