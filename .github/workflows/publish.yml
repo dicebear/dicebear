@@ -22,15 +22,9 @@ jobs:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Cache parcel
-        uses: actions/cache@v2
-        with:
-          path: ~/.parcel-cache
-          key: ${{ runner.os }}-parcel
-
-      - run: yarn install
-      - run: yarn build
-      - run: yarn test
+      - run: npm install
+      - run: npm build
+      - run: npm test
 
       - run: ./node_modules/.bin/lerna publish from-package --no-verify-access --ignore-scripts --yes
         env:
