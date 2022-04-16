@@ -11,16 +11,9 @@ type Props = {
   options: StyleOptions<Options>;
   components: ComponentPickCollection;
   colors: ColorPickCollection;
-  preview: boolean;
 };
 
-export function onPostCreate({
-  prng,
-  options,
-  components,
-  colors,
-  preview,
-}: Props) {
+export function onPostCreate({ prng, options, components, colors }: Props) {
   // Ensure that the mouth remains visible. #132
   if (components.facialHair && colors.facialHair.value === colors.mouth.value) {
     colors.mouth.value = 'rgba(255, 255, 255, .2)';

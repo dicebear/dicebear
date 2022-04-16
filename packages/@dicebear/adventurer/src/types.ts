@@ -77,7 +77,7 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  features?: ('blush' | 'birthmark' | 'freckles')[];
+  features?: ('mustache' | 'blush' | 'birthmark' | 'freckles')[];
   featuresProbability?: number;
   glasses?: (
     | 'variant01'

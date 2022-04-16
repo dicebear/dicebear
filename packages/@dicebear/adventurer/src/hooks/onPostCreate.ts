@@ -11,16 +11,9 @@ type Props = {
   options: StyleOptions<Options>;
   components: ComponentPickCollection;
   colors: ColorPickCollection;
-  preview: boolean;
 };
 
-export function onPostCreate({
-  prng,
-  options,
-  components,
-  colors,
-  preview,
-}: Props) {
+export function onPostCreate({ prng, options, components, colors }: Props) {
   const invisibleEarringsHair = [
     'long01',
     'long04',
@@ -33,7 +26,6 @@ export function onPostCreate({
   ];
 
   if (
-    false === preview &&
     components.hair?.name &&
     invisibleEarringsHair.includes(components.hair.name)
   ) {

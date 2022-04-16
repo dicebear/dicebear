@@ -1,7 +1,7 @@
 export { base } from './base.js';
 export { earring } from './earring.js';
 export { eyeShadow } from './eyeShadow.js';
-export { eyebrow } from './eyebrow.js';
+export { eyebrows } from './eyebrows.js';
 export { facialHair } from './facialHair.js';
 export { glasses } from './glasses.js';
 export { hair } from './hair.js';

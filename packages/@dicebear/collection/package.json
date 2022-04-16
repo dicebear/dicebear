@@ -38,12 +38,12 @@
     "@dicebear/bottts-neutral": "^5.0.0-alpha.16",
     "@dicebear/croodles": "^5.0.0-alpha.16",
     "@dicebear/croodles-neutral": "^5.0.0-alpha.16",
-    "@dicebear/drawatars": "^5.0.0-alpha.16",
-    "@dicebear/drawatars-neutral": "^5.0.0-alpha.16",
     "@dicebear/fun-emoji": "^5.0.0-alpha.16",
     "@dicebear/icons": "^5.0.0-alpha.16",
     "@dicebear/identicon": "^5.0.0-alpha.16",
     "@dicebear/initials": "^5.0.0-alpha.16",
+    "@dicebear/lorelei": "^5.0.0-alpha.16",
+    "@dicebear/lorelei-neutral": "^5.0.0-alpha.16",
     "@dicebear/micah": "^5.0.0-alpha.16",
     "@dicebear/miniavs": "^5.0.0-alpha.16",
     "@dicebear/open-peeps": "^5.0.0-alpha.16",
@@ -53,11 +53,10 @@
   },
   "devDependencies": {
     "@dicebear/core": "^5.0.0-alpha.16",
-    "@tsconfig/recommended": "^1.0.0",
-    "@types/jest": "^26.0.22",
+    "@tsconfig/recommended": "^1.0.1",
     "del-cli": "^4.0.1",
-    "typescript": "^4.5.2",
-    "uvu": "^0.5.2"
+    "typescript": "^4.6.3",
+    "uvu": "^0.5.3"
   },
   "peerDependencies": {
     "@dicebear/core": "^5.0.0-alpha.10"

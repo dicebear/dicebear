@@ -18,12 +18,12 @@ export const style: Style<Options> = {
   },
   schema: schema as StyleSchema,
   create: ({ prng, options }) => {
-    onPreCreate({ prng, options, preview: false });
+    onPreCreate({ prng, options });
 
     const components = getComponents({ prng, options });
     const colors = getColors({ prng, options });
 
-    onPostCreate({ prng, options, components, colors, preview: false });
+    onPostCreate({ prng, options, components, colors });
 
     return {
       attributes: {

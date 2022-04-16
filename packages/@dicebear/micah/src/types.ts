@@ -35,7 +35,7 @@ export interface Options {
   baseColor?: string[];
   earringColor?: string[];
   eyeShadowColor?: string[];
-  eyebrowColor?: string[];
+  eyebrowsColor?: string[];
   facialHairColor?: string[];
   glassesColor?: string[];
   hairColor?: string[];

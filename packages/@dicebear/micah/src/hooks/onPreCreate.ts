@@ -2,9 +2,9 @@ import { Prng, StyleOptions } from '@dicebear/core';
 
 import { Options } from '../types.js';
 
-type Props = { prng: Prng; options: StyleOptions<Options>; preview: boolean };
+type Props = { prng: Prng; options: StyleOptions<Options> };
 
-export function onPreCreate({ prng, options, preview }: Props) {
+export function onPreCreate({ prng, options }: Props) {
   // Prevent baseColor from being used a second time if possible.
   options.baseColor =
     options.baseColor && options.baseColor.length > 0

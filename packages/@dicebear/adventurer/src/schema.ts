@@ -195,9 +195,12 @@ export const schema: StyleSchema = {
     },
     features: {
       type: 'array',
-      items: { type: 'string', enum: ['blush', 'birthmark', 'freckles'] },
-      default: ['blush', 'birthmark', 'freckles'],
-      examples: [['blush'], ['birthmark'], ['freckles']],
+      items: {
+        type: 'string',
+        enum: ['mustache', 'blush', 'birthmark', 'freckles'],
+      },
+      default: ['mustache', 'blush', 'birthmark', 'freckles'],
+      examples: [['mustache'], ['blush'], ['birthmark'], ['freckles']],
     },
     featuresProbability: {
       type: 'integer',

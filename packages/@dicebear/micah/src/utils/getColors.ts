@@ -24,10 +24,10 @@ export function getColors({ prng, options }: Props): ColorPickCollection {
       group: 'eyeShadow',
       values: options.eyeShadowColor,
     }),
-    eyebrow: pickColor({
+    eyebrows: pickColor({
       prng,
-      group: 'eyebrow',
-      values: options.eyebrowColor,
+      group: 'eyebrows',
+      values: options.eyebrowsColor,
     }),
     facialHair: pickColor({
       prng,

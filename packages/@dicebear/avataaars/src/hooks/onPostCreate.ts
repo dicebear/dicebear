@@ -11,16 +11,9 @@ type Props = {
   options: StyleOptions<Options>;
   components: ComponentPickCollection;
   colors: ColorPickCollection;
-  preview: boolean;
 };
 
-export function onPostCreate({
-  prng,
-  options,
-  components,
-  colors,
-  preview,
-}: Props) {
+export function onPostCreate({ prng, options, components, colors }: Props) {
   if (components.style?.name === 'circle') {
     options.backgroundColor = [];
   }

@@ -1,7 +1,7 @@
 <h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />Adventurer</h1>
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
-    <a href="https://www.instagram.com/lischis_adventures/">Adventurer</a>
+    <a href="https://www.instagram.com/lischi_art/">Adventurer</a>
     by Lisa Wischofsky
 </p>
 

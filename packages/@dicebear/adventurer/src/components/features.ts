@@ -5,6 +5,11 @@ import type {
 } from '../types.js';
 
 export const features: ComponentGroup = {
+  mustache: (
+    components: ComponentPickCollection,
+    colors: ColorPickCollection
+  ) =>
+    `<path d="M489.1 525.9c6.3 4.7 7.6 15 14 20s14.5 7.3 22.2 3.6c1 1.3 2.3 2.3 1.3 4.1-4 7-11.2 10.4-18.7 12.5a40.6 40.6 0 0 1-29.4-2.6c-6.3-3.5-9.9-9.1-14.4-14.5a59.5 59.5 0 0 1-20.4 18.8c-5.8 3-13.3 5-19.8 3.3-6.3-1.8-12-6.1-12.2-13.1-.2-2.4 1.2-2.7 3.1-3.1 1.3 1.3 2.3 2.7 4.2 3 3.5.7 7-1.2 9.1-3.8 5.4-6.4 4.5-17 10.4-22.6 6.2-5.9 16.9-8.1 24.5-4 7.7-5.2 18-6.9 26.1-1.6Z" fill="#000"/>`,
   blush: (components: ComponentPickCollection, colors: ColorPickCollection) =>
     `<path d="M630.4 552.4a40.8 40.8 0 0 1 39.5 66.6 40.8 40.8 0 1 1-39.6-66.6ZM373.1 564.9a37.7 37.7 0 0 1 3 61.5 213 213 0 0 1-35-43.6c-3.3-5.9-6.7-11.2-8.8-17.6a38 38 0 0 1 40.8-.3Z" fill="#CA8D87"/>`,
   birthmark: (

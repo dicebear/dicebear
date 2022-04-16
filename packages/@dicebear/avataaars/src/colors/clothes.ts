@@ -5,7 +5,7 @@ export const clothes: ColorGroup = {
   blue01: 'rgba(101, 201, 255, 1)',
   blue02: 'rgba(81, 153, 228, 1)',
   blue03: 'rgba(37, 85, 124, 1)',
-  gray01: 'rgba(229, 229, 229, 1)',
+  gray01: 'rgba(230, 230, 230, 1)',
   gray02: 'rgba(146, 149, 152, 1)',
   heather: 'rgba(60, 79, 92, 1)',
   pastelBlue: 'rgba(177, 226, 255, 1)',

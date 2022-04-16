@@ -114,14 +114,37 @@ export const schema: StyleSchema = {
         ['white'],
       ],
     },
-    eyebrowColor: {
+    eyebrows: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['up', 'down', 'eyelashesUp', 'eyelashesDown'],
+      },
+      default: ['up', 'down', 'eyelashesUp', 'eyelashesDown'],
+      examples: [['up'], ['down'], ['eyelashesUp'], ['eyelashesDown']],
+    },
+    eyebrowsColor: {
       type: 'array',
       items: {
         type: 'string',
         pattern:
           '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
       },
-      default: ['black'],
+      default: [
+        'apricot',
+        'azure',
+        'black',
+        'calm',
+        'canary',
+        'coast',
+        'lavender',
+        'mellow',
+        'salmon',
+        'seashell',
+        'sky',
+        'topaz',
+        'white',
+      ],
       examples: [
         ['apricot'],
         ['azure'],
@@ -137,15 +160,6 @@ export const schema: StyleSchema = {
         ['topaz'],
         ['white'],
       ],
-    },
-    eyebrows: {
-      type: 'array',
-      items: {
-        type: 'string',
-        enum: ['up', 'down', 'eyelashesUp', 'eyelashesDown'],
-      },
-      default: ['up', 'down', 'eyelashesUp', 'eyelashesDown'],
-      examples: [['up'], ['down'], ['eyelashesUp'], ['eyelashesDown']],
     },
     eyes: {
       type: 'array',
