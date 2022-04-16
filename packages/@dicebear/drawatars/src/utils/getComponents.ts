@@ -46,11 +46,6 @@ export function getComponents({
     group: 'freckles',
     values: options.freckles,
   });
-  const mouthComponent = pickComponent({
-    prng,
-    group: 'mouth',
-    values: options.mouth,
-  });
   const noseComponent = pickComponent({
     prng,
     group: 'nose',
@@ -60,6 +55,11 @@ export function getComponents({
     prng,
     group: 'beard',
     values: options.beard,
+  });
+  const mouthComponent = pickComponent({
+    prng,
+    group: 'mouth',
+    values: options.mouth,
   });
   const glassesComponent = pickComponent({
     prng,
@@ -75,13 +75,15 @@ export function getComponents({
     head: headComponent,
     eyes: eyesComponent,
     eyebrows: eyebrowsComponent,
-    earrings: earringsComponent,
+    earrings: prng.bool(options.earringsProbability)
+      ? earringsComponent
+      : undefined,
     freckles: prng.bool(options.frecklesProbability)
       ? frecklesComponent
       : undefined,
-    mouth: mouthComponent,
     nose: noseComponent,
     beard: prng.bool(options.beardProbability) ? beardComponent : undefined,
+    mouth: mouthComponent,
     glasses: prng.bool(options.glassesProbability)
       ? glassesComponent
       : undefined,

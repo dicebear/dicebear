@@ -21,5 +21,8 @@ export function onPostCreate({
   colors,
   preview,
 }: Props) {
-  // Write your modifications here
+  // Ensure that the mouth remains visible. #132
+  if (colors.beard && colors.hair.value === colors.mouth.value) {
+    colors.mouth.value = '#fff';
+  }
 }

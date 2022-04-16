@@ -16,9 +16,9 @@ export const head: ComponentGroup = {
     }${components.eyebrows?.value(components, colors) ?? ''}${
       components.earrings?.value(components, colors) ?? ''
     }${components.freckles?.value(components, colors) ?? ''}${
+      components.nose?.value(components, colors) ?? ''
+    }${components.beard?.value(components, colors) ?? ''}${
       components.mouth?.value(components, colors) ?? ''
-    }${components.nose?.value(components, colors) ?? ''}${
-      components.beard?.value(components, colors) ?? ''
     }${components.glasses?.value(components, colors) ?? ''}`,
   variant03: (
     components: ComponentPickCollection,
@@ -31,9 +31,9 @@ export const head: ComponentGroup = {
     }${components.eyebrows?.value(components, colors) ?? ''}${
       components.earrings?.value(components, colors) ?? ''
     }${components.freckles?.value(components, colors) ?? ''}${
+      components.nose?.value(components, colors) ?? ''
+    }${components.beard?.value(components, colors) ?? ''}${
       components.mouth?.value(components, colors) ?? ''
-    }${components.nose?.value(components, colors) ?? ''}${
-      components.beard?.value(components, colors) ?? ''
     }${components.glasses?.value(components, colors) ?? ''}`,
   variant02: (
     components: ComponentPickCollection,
@@ -46,9 +46,9 @@ export const head: ComponentGroup = {
     }${components.eyebrows?.value(components, colors) ?? ''}${
       components.earrings?.value(components, colors) ?? ''
     }${components.freckles?.value(components, colors) ?? ''}${
+      components.nose?.value(components, colors) ?? ''
+    }${components.beard?.value(components, colors) ?? ''}${
       components.mouth?.value(components, colors) ?? ''
-    }${components.nose?.value(components, colors) ?? ''}${
-      components.beard?.value(components, colors) ?? ''
     }${components.glasses?.value(components, colors) ?? ''}`,
   variant01: (
     components: ComponentPickCollection,
@@ -61,8 +61,8 @@ export const head: ComponentGroup = {
     }${components.eyebrows?.value(components, colors) ?? ''}${
       components.earrings?.value(components, colors) ?? ''
     }${components.freckles?.value(components, colors) ?? ''}${
+      components.nose?.value(components, colors) ?? ''
+    }${components.beard?.value(components, colors) ?? ''}${
       components.mouth?.value(components, colors) ?? ''
-    }${components.nose?.value(components, colors) ?? ''}${
-      components.beard?.value(components, colors) ?? ''
     }${components.glasses?.value(components, colors) ?? ''}`,
 };

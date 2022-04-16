@@ -27,15 +27,15 @@ export const dimensions: Record<string, { width: number; height: number }> = {
     width: 981,
     height: 1068,
   },
-  mouth: {
-    width: 981,
-    height: 1068,
-  },
   nose: {
     width: 981,
     height: 1068,
   },
   beard: {
+    width: 981,
+    height: 1068,
+  },
+  mouth: {
     width: 981,
     height: 1068,
   },

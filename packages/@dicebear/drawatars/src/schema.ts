@@ -17,6 +17,22 @@ export const schema: StyleSchema = {
       default: ['variant01', 'variant02', 'variant03'],
       examples: [['variant01'], ['variant02'], ['variant03']],
     },
+    earringsColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern:
+          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
+      },
+      default: ['black'],
+      examples: [['black']],
+    },
+    earringsProbability: {
+      type: 'integer',
+      minimum: 0,
+      maximum: 100,
+      default: 10,
+    },
     eyebrows: {
       type: 'array',
       items: {
@@ -67,6 +83,16 @@ export const schema: StyleSchema = {
         ['variant02'],
         ['variant01'],
       ],
+    },
+    eyebrowsColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern:
+          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
+      },
+      default: ['black'],
+      examples: [['black']],
     },
     eyes: {
       type: 'array',
@@ -152,11 +178,31 @@ export const schema: StyleSchema = {
         ['variant01'],
       ],
     },
+    eyesColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern:
+          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
+      },
+      default: ['black'],
+      examples: [['black']],
+    },
     freckles: {
       type: 'array',
       items: { type: 'string', enum: ['variant01'] },
       default: ['variant01'],
       examples: [['variant01']],
+    },
+    frecklesColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern:
+          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
+      },
+      default: ['black'],
+      examples: [['black']],
     },
     frecklesProbability: {
       type: 'integer',
@@ -184,6 +230,16 @@ export const schema: StyleSchema = {
         ['variant04'],
         ['variant05'],
       ],
+    },
+    glassesColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern:
+          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
+      },
+      default: ['black'],
+      examples: [['black']],
     },
     glassesProbability: {
       type: 'integer',
@@ -353,6 +409,16 @@ export const schema: StyleSchema = {
       default: ['flowers'],
       examples: [['flowers']],
     },
+    hairAccessoriesColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern:
+          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
+      },
+      default: ['black'],
+      examples: [['black']],
+    },
     hairAccessoriesProbability: {
       type: 'integer',
       minimum: 0,
@@ -471,6 +537,16 @@ export const schema: StyleSchema = {
         ['sad09'],
       ],
     },
+    mouthColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern:
+          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
+      },
+      default: ['black'],
+      examples: [['black']],
+    },
     nose: {
       type: 'array',
       items: {
@@ -500,6 +576,16 @@ export const schema: StyleSchema = {
         ['variant05'],
         ['variant06'],
       ],
+    },
+    noseColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern:
+          '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
+      },
+      default: ['black'],
+      examples: [['black']],
     },
     skinColor: {
       type: 'array',

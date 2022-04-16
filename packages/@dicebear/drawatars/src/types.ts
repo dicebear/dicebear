@@ -94,8 +94,19 @@ export interface Options {
     | 'variant01'
   )[];
   earrings?: ('variant01' | 'variant02' | 'variant03')[];
+  earringsProbability?: number;
   freckles?: ('variant01')[];
   frecklesProbability?: number;
+  nose?: (
+    | 'variant01'
+    | 'variant02'
+    | 'variant03'
+    | 'variant04'
+    | 'variant05'
+    | 'variant06'
+  )[];
+  beard?: ('variant01' | 'variant02')[];
+  beardProbability?: number;
   mouth?: (
     | 'happy01'
     | 'happy02'
@@ -125,16 +136,6 @@ export interface Options {
     | 'sad08'
     | 'sad09'
   )[];
-  nose?: (
-    | 'variant01'
-    | 'variant02'
-    | 'variant03'
-    | 'variant04'
-    | 'variant05'
-    | 'variant06'
-  )[];
-  beard?: ('variant01' | 'variant02')[];
-  beardProbability?: number;
   glasses?: (
     | 'variant01'
     | 'variant02'
@@ -145,6 +146,14 @@ export interface Options {
   glassesProbability?: number;
   hairColor?: string[];
   skinColor?: string[];
+  earringsColor?: string[];
+  eyebrowsColor?: string[];
+  eyesColor?: string[];
+  frecklesColor?: string[];
+  glassesColor?: string[];
+  mouthColor?: string[];
+  noseColor?: string[];
+  hairAccessoriesColor?: string[];
 }
 
 export type ColorGroup = Record<string, ColorGroupItem>;

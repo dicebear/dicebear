@@ -19,5 +19,45 @@ export function getColors({ prng, options }: Props): ColorPickCollection {
       group: 'skin',
       values: options.skinColor,
     }),
+    earrings: pickColor({
+      prng,
+      group: 'earrings',
+      values: options.earringsColor,
+    }),
+    eyebrows: pickColor({
+      prng,
+      group: 'eyebrows',
+      values: options.eyebrowsColor,
+    }),
+    eyes: pickColor({
+      prng,
+      group: 'eyes',
+      values: options.eyesColor,
+    }),
+    freckles: pickColor({
+      prng,
+      group: 'freckles',
+      values: options.frecklesColor,
+    }),
+    glasses: pickColor({
+      prng,
+      group: 'glasses',
+      values: options.glassesColor,
+    }),
+    mouth: pickColor({
+      prng,
+      group: 'mouth',
+      values: options.mouthColor,
+    }),
+    nose: pickColor({
+      prng,
+      group: 'nose',
+      values: options.noseColor,
+    }),
+    hairAccessories: pickColor({
+      prng,
+      group: 'hairAccessories',
+      values: options.hairAccessoriesColor,
+    }),
   };
 }
