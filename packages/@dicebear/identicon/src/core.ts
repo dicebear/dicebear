@@ -6,7 +6,6 @@ import { getComponents } from './utils/getComponents.js';
 import { getColors } from './utils/getColors.js';
 import { onPreCreate } from './hooks/onPreCreate.js';
 import { onPostCreate } from './hooks/onPostCreate.js';
-import { dimensions } from './meta/components.js';
 
 export const style: Style<Options> = {
   meta: {
@@ -38,42 +37,5 @@ export const style: Style<Options> = {
         components.row4?.value(components, colors) ?? ''
       }${components.row5?.value(components, colors) ?? ''}`,
     };
-  },
-  preview: ({ prng, options, property }) => {
-    const componentGroup = property.toString();
-    const colorGroup = property.toString().replace(/Color$/, '');
-
-    onPreCreate({ prng, options, preview: true });
-
-    const components = getComponents({ prng, options });
-    const colors = getColors({ prng, options });
-
-    onPostCreate({ prng, options, components, colors, preview: true });
-
-    if (componentGroup in components) {
-      const { width, height } = dimensions[componentGroup]!;
-
-      return {
-        attributes: {
-          viewBox: `0 0 ${width} ${height}`,
-          fill: 'none',
-          'shape-rendering': 'crispEdges',
-        },
-        body: components[componentGroup]?.value(components, colors) ?? '',
-      };
-    }
-
-    if (colorGroup in colors) {
-      return {
-        attributes: {
-          viewBox: `0 0 1 1`,
-          fill: 'none',
-          'shape-rendering': 'crispEdges',
-        },
-        body: `<rect width="1" height="1" fill="${colors[colorGroup].value}" />`,
-      };
-    }
-
-    return undefined;
   },
 };

@@ -42,27 +42,6 @@ export interface StyleCreateResult {
   body: string;
 }
 
-export interface StylePreviewProps<O> {
-  prng: Prng;
-  options: StyleOptions<O>;
-  property: keyof StyleOptions<O>;
-}
-
-export type StylePreview<O extends {}> = (props: StylePreviewProps<O>) => StylePreviewResult;
-
-export interface StylePreviewResultAttributes {
-  viewBox: string;
-  [key: string]: string;
-}
-
-export type StylePreviewResult =
-  | undefined
-  | {
-      attributes: StyleCreateResultAttributes;
-      head?: string;
-      body: string;
-    };
-
 export interface StyleMeta {
   title?: string;
   creator?: string | string[];
@@ -78,5 +57,4 @@ export interface Style<O extends {}> {
   meta: StyleMeta;
   schema: StyleSchema;
   create: StyleCreate<O>;
-  preview?: StylePreview<O>;
 }
