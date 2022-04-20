@@ -19,13 +19,15 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm install
       - run: npm build
       - run: npm test
 
-      - run: ./node_modules/.bin/lerna publish from-package --no-verify-access --dist-tag next --ignore-scripts --yes
+      - run:
+          ./node_modules/.bin/lerna publish from-package --no-verify-access
+          --dist-tag next --ignore-scripts --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
