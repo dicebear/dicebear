@@ -30,7 +30,8 @@
   "scripts": {
     "prebuild": "del-cli lib",
     "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "uvu tests"
   },
   "dependencies": {
     "@types/json-schema": "^7.0.7",
@@ -43,7 +44,8 @@
     "del-cli": "^4.0.1",
     "exiftool-vendored": "^16.3.0",
     "sharp": "^0.30.4",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "uvu": "^0.5.3"
   },
   "engines": {
     "node": "^14.13.1 || >=16.0.0"
