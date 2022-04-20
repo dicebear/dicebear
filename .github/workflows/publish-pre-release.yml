@@ -23,8 +23,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm install
-      - run: npm build
-      - run: npm test
+      - run: npm run build
+      - run: npm run test
 
       - run:
           ./node_modules/.bin/lerna publish from-package --no-verify-access
