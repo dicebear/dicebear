@@ -89,7 +89,7 @@ export async function makeStyleCommand(name: string, style: Style<any>) {
 
         switch (validated.format) {
           case 'svg':
-            await avatar.svg().toFile(fileName);
+            await avatar.toFile(fileName);
             break;
 
           case 'png':

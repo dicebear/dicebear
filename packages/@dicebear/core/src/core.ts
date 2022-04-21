@@ -8,7 +8,7 @@ import * as svgUtils from './utils/svg.js';
 import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
 import * as license from './utils/license.js';
-import * as convert from '@dicebear/converter';
+import { toFormat } from '@dicebear/converter';
 
 export function createAvatar<O extends {}>(
   style: Style<O>,
@@ -60,13 +60,14 @@ export function createAvatar<O extends {}>(
 
   const avatar = `<svg ${attributes}>${description}${metadata}${result.body}</svg>`;
 
-  return Object.assign(avatar, {
-    svg: () => convert.toFormat(avatar, 'svg'),
+  return {
+    toString: () => avatar,
+    ...toFormat(avatar, 'svg'),
     png: ({ includeExif = false }: ResultConvertOptions) => {
-      return convert.toFormat(avatar, 'png', includeExif ? exif : undefined);
+      return toFormat(avatar, 'png', includeExif ? exif : undefined);
     },
     jpeg: ({ includeExif = false }: ResultConvertOptions) => {
-      return convert.toFormat(avatar, 'jpeg', includeExif ? exif : undefined);
+      return toFormat(avatar, 'jpeg', includeExif ? exif : undefined);
     },
-  });
+  };
 }

@@ -24,9 +24,7 @@ data.forEach((params, key) => {
         fs.mkdirSync(path.dirname(svgPath), { recursive: true });
       }
 
-      await createAvatar(...params)
-        .svg()
-        .toFile(svgPath);
+      await createAvatar(...params).toFile(svgPath);
     }
 
     const svg = fs.readFileSync(svgPath, { encoding: 'utf-8' });

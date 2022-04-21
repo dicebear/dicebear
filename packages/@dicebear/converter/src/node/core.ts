@@ -1,4 +1,4 @@
-import type { BinaryResult, Exif, Format, ToFormat } from '../types';
+import type { Result, Exif, Format, ToFormat } from '../types';
 import { promises as fs } from 'node:fs';
 import { Blob } from 'node:buffer';
 import { getMimeType } from '../utils/mime-type.js';
@@ -10,13 +10,17 @@ export const toFormat: ToFormat = function (
   svg: string,
   format: Format,
   exif?: Exif
-): BinaryResult {
-  const blob = toBlob(svg, format, exif);
-
+): Result {
   return {
-    toDataUri: async () => toDataUri(await blob),
-    toFile: async (name: string) => toFile(await blob, name),
-    toArrayBuffer: async () => (await blob).arrayBuffer(),
+    toDataUri: async () => {
+      return toDataUri(await toBlob(svg, format, exif));
+    },
+    toFile: async (name: string) => {
+      return toFile(await toBlob(svg, format, exif), name);
+    },
+    toArrayBuffer: async () => {
+      return (await toBlob(svg, format, exif)).arrayBuffer();
+    },
   };
 };
 

@@ -1,15 +1,15 @@
 import type { JSONSchema7 } from 'json-schema';
-import type { BinaryResult } from '@dicebear/converter';
+import type { Result as ConverterResult } from '@dicebear/converter';
 
 export interface ResultConvertOptions {
   includeExif?: boolean;
 }
 
-export type Result = string & {
-  svg(): BinaryResult;
-  png(options?: ResultConvertOptions): BinaryResult;
-  jpeg(options?: ResultConvertOptions): BinaryResult;
-};
+export interface Result extends ConverterResult {
+  png(options?: ResultConvertOptions): ConverterResult;
+  jpeg(options?: ResultConvertOptions): ConverterResult;
+  toString(): string;
+}
 
 export interface Options {
   seed?: string;

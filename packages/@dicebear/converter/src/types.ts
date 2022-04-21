@@ -1,10 +1,6 @@
-export type ToFormat = (
-  svg: string,
-  format: Format,
-  exif?: Exif
-) => BinaryResult;
+export type ToFormat = (svg: string, format: Format, exif?: Exif) => Result;
 
-export interface BinaryResult {
+export interface Result {
   toDataUri(): Promise<string>;
   toFile(name: string): Promise<void>;
   toArrayBuffer(): Promise<ArrayBuffer>;
