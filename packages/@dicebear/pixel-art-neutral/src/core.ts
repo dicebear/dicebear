@@ -9,11 +9,12 @@ import { onPostCreate } from './hooks/onPostCreate.js';
 
 export const style: Style<Options> = {
   meta: {
-    title: 'Pixel Art - Neutral',
-    creator: 'Plastic Jam',
+    title: 'Pixel Art neutral',
+    creator: 'Florian Körner',
+    source: 'https://dicebear.com',
     license: {
-      name: 'MIT',
-      url: 'https://github.com/dicebear/dicebear/blob/main/packages/%40dicebear/pixel-art-neutral/LICENSE',
+      name: 'CC0 1.0',
+      url: 'https://creativecommons.org/licenses/zero/1.0/',
     },
   },
   schema: schema as StyleSchema,
@@ -31,16 +32,14 @@ export const style: Style<Options> = {
       attributes: {
         viewBox: '0 0 14 14',
         fill: 'none',
-        'shape-rendering': 'auto',
+        'shape-rendering': 'crispEdges',
       },
-      body: `<g transform="translate(-3 -3)">${
+      body: `<g transform="translate(-1 -2)">${
         components.eyes?.value(components, colors) ?? ''
-      }</g><g transform="translate(-3 -3)">${
-        components.eyebrows?.value(components, colors) ?? ''
-      }</g><g transform="translate(-3 -2)">${
-        components.mouth?.value(components, colors) ?? ''
-      }</g><g transform="translate(-3 -3)">${
+      }</g><g transform="translate(-1 -2)">${
         components.glasses?.value(components, colors) ?? ''
+      }</g><g transform="translate(-1)">${
+        components.mouth?.value(components, colors) ?? ''
       }</g>`,
     };
   },

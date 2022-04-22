@@ -9,20 +9,20 @@ type Props = {
 
 export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
-    hair: pickColor({
+    eyes: pickColor({
       prng,
-      group: 'hair',
-      values: options.hairColor,
-    }),
-    mouth: pickColor({
-      prng,
-      group: 'mouth',
-      values: options.mouthColor,
+      group: 'eyes',
+      values: options.eyesColor,
     }),
     glasses: pickColor({
       prng,
       group: 'glasses',
       values: options.glassesColor,
+    }),
+    mouth: pickColor({
+      prng,
+      group: 'mouth',
+      values: options.mouthColor,
     }),
     background: pickColor({
       prng,

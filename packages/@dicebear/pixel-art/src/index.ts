@@ -3,10 +3,10 @@
  *
  * Code licensed under MIT License.
  * Copyright (c) 2022 Florian Körner
- * Copyright (c) 2022 Plastic Jam
  *
- * Design "Pixel Art" by Plastic Jam licensed under MIT.
- * License: https://github.com/dicebear/dicebear/blob/main/packages/%40dicebear/pixel-art/LICENSE
+ * Design "Pixel Art" by Florian Körner licensed under CC0 1.0.
+ * Source: https://dicebear.com
+ * License: https://creativecommons.org/licenses/zero/1.0/
  */
 
 import { style } from './core.js';

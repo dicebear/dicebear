@@ -2,9 +2,7 @@
   "name": "@dicebear/pixel-art",
   "version": "5.0.0-alpha.21",
   "description": "Avatar style for DiceBear",
-  "keywords": [
-    "dicebear"
-  ],
+  "keywords": ["dicebear"],
   "bugs": {
     "url": "https://github.com/dicebear/dicebear/issues"
   },
@@ -16,11 +14,7 @@
   "type": "module",
   "exports": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "files": [
-    "LICENSE",
-    "lib",
-    "README.md"
-  ],
+  "files": ["LICENSE", "lib", "README.md"],
   "scripts": {
     "prebuild": "del-cli lib",
     "build": "tsc",
@@ -35,7 +29,7 @@
     "uvu": "^0.5.3"
   },
   "peerDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.16"
+    "@dicebear/core": "^5.0.0-alpha.21"
   },
   "engines": {
     "node": "^14.13.1 || >=16.0.0"

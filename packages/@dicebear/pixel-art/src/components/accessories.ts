@@ -9,20 +9,20 @@ export const accessories: ComponentGroup = {
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) =>
-    `<path fill-rule="evenodd" clip-rule="evenodd" d="M3 10v1h1v-1H3Zm13 0v1h1v-1h-1Z" fill="${colors.accessories.value}"/>`,
+    `<path d="M2 7h1v1H2zM13 7h1v1h-1z" fill="${colors.accessories.value}"/>`,
   variant03: (
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) =>
-    `<path fill-rule="evenodd" clip-rule="evenodd" d="M3 10v2h1v-2H3Zm13 0h1v2h-1v-2Z" fill="${colors.accessories.value}"/>`,
+    `<path d="M13 7h1v2h-1zM2 7h1v2H2z" fill="${colors.accessories.value}"/>`,
   variant02: (
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) =>
-    `<g fill-rule="evenodd" clip-rule="evenodd"><path d="M3 10v2h1v-2H3Zm13 0h1v2h-1v-2Z" fill="${colors.accessories.value}"/><path d="M3 10v1h1v-1H3Zm13 0h1v1h-1v-1Z" fill="#fff" fill-opacity=".4"/></g>`,
+    `<path fill="${colors.accessories.value}" d="M13 7h1v2h-1zM2 7h1v2H2z"/><path fill="none" d="M2 7h1v1H2zM13 7h1v1h-1z"/>`,
   variant01: (
     components: ComponentPickCollection,
     colors: ColorPickCollection
   ) =>
-    `<path d="M4 11H2v2h2v-2ZM18 11h-2v2h2v-2Z" fill="${colors.accessories.value}"/>`,
+    `<path d="M13 7h2v2h-2zM1 7h2v2H1z" fill="${colors.accessories.value}"/>`,
 };

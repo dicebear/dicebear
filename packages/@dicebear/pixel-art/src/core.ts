@@ -10,10 +10,11 @@ import { onPostCreate } from './hooks/onPostCreate.js';
 export const style: Style<Options> = {
   meta: {
     title: 'Pixel Art',
-    creator: 'Plastic Jam',
+    creator: 'Florian Körner',
+    source: 'https://dicebear.com',
     license: {
-      name: 'MIT',
-      url: 'https://github.com/dicebear/dicebear/blob/main/packages/%40dicebear/pixel-art/LICENSE',
+      name: 'CC0 1.0',
+      url: 'https://creativecommons.org/licenses/zero/1.0/',
     },
   },
   schema: schema as StyleSchema,
@@ -27,22 +28,20 @@ export const style: Style<Options> = {
 
     return {
       attributes: {
-        viewBox: '0 0 20 20',
+        viewBox: '0 0 16 16',
         fill: 'none',
-        'shape-rendering': 'auto',
+        'shape-rendering': 'crispEdges',
       },
-      body: `<path d="M6 4V3h8v1h1v1h1v3h1v3h-1v2h-1v1h-1v1h-2v1h4v1h1v3H3v-3h1v-1h4v-1H6v-1H5v-1H4v-2H3V8h1V5h1V4h1Z" fill="${
+      body: `<path d="M4 2h8v1h1v3h1v2h-1v3h-1v1H9v1h4v1h1v2H2v-2h1v-1h4v-1H4v-1H3V8H2V6h1V3h1V2Z" fill="${
         colors.skin.value
-      }"/><path d="M6 3v1H5v1H4v3H3v3h1v2h1v1h1v1h8v-1h1v-1h1v-2h1V8h-1V5h-1V4h-1V3H6Z" fill="#fff" fill-opacity=".1"/>${
+      }"/><path d="M4 2h8v1h1v3h1v2h-1v3h-1v1H4v-1H3V8H2V6h1V3h1V2Z" fill="none"/>${
+        components.accessories?.value(components, colors) ?? ''
+      }${components.clothing?.value(components, colors) ?? ''}${
+        components.eyes?.value(components, colors) ?? ''
+      }${components.glasses?.value(components, colors) ?? ''}${
         components.beard?.value(components, colors) ?? ''
-      }${components.eyes?.value(components, colors) ?? ''}${
-        components.eyebrows?.value(components, colors) ?? ''
       }${components.mouth?.value(components, colors) ?? ''}${
         components.hair?.value(components, colors) ?? ''
-      }${components.accessories?.value(components, colors) ?? ''}${
-        components.glasses?.value(components, colors) ?? ''
-      }${components.hat?.value(components, colors) ?? ''}${
-        components.clothing?.value(components, colors) ?? ''
       }`,
     };
   },

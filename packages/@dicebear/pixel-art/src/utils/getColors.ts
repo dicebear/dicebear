@@ -9,40 +9,40 @@ type Props = {
 
 export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
-    skin: pickColor({
+    accessories: pickColor({
       prng,
-      group: 'skin',
-      values: options.skinColor,
+      group: 'accessories',
+      values: options.accessoriesColor,
+    }),
+    clothing: pickColor({
+      prng,
+      group: 'clothing',
+      values: options.clothingColor,
+    }),
+    eyes: pickColor({
+      prng,
+      group: 'eyes',
+      values: options.eyesColor,
+    }),
+    glasses: pickColor({
+      prng,
+      group: 'glasses',
+      values: options.glassesColor,
     }),
     hair: pickColor({
       prng,
       group: 'hair',
       values: options.hairColor,
     }),
-    accessories: pickColor({
-      prng,
-      group: 'accessories',
-      values: options.accessoriesColor,
-    }),
     mouth: pickColor({
       prng,
       group: 'mouth',
       values: options.mouthColor,
     }),
-    clothes: pickColor({
+    skin: pickColor({
       prng,
-      group: 'clothes',
-      values: options.clothesColor,
-    }),
-    hat: pickColor({
-      prng,
-      group: 'hat',
-      values: options.hatColor,
-    }),
-    glasses: pickColor({
-      prng,
-      group: 'glasses',
-      values: options.glassesColor,
+      group: 'skin',
+      values: options.skinColor,
     }),
   };
 }
