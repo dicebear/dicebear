@@ -63,10 +63,10 @@ export function createAvatar<O extends {}>(
   return {
     toString: () => avatar,
     ...toFormat(avatar, 'svg'),
-    png: ({ includeExif = false }: ResultConvertOptions) => {
+    png: ({ includeExif = false }: ResultConvertOptions = {}) => {
       return toFormat(avatar, 'png', includeExif ? exif : undefined);
     },
-    jpeg: ({ includeExif = false }: ResultConvertOptions) => {
+    jpeg: ({ includeExif = false }: ResultConvertOptions = {}) => {
       return toFormat(avatar, 'jpeg', includeExif ? exif : undefined);
     },
   };
