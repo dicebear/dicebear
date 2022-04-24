@@ -1,10 +1,12 @@
 import type { Result, Exif, Format, ToFormat } from '../types';
 import { promises as fs } from 'node:fs';
-import { Blob } from 'node:buffer';
 import { getMimeType } from '../utils/mime-type.js';
 import { ensureSize } from '../utils/svg.js';
 import * as tmp from 'tmp-promise';
 import { ensurePackage } from '../utils/package-helper.js';
+
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 export const toFormat: ToFormat = function (
   svg: string,
@@ -13,42 +15,47 @@ export const toFormat: ToFormat = function (
 ): Result {
   return {
     toDataUri: async () => {
-      return toDataUri(await toBlob(svg, format, exif));
+      return toDataUri(await toArrayBuffer(svg, format, exif), format);
     },
     toFile: async (name: string) => {
-      return toFile(await toBlob(svg, format, exif), name);
+      return toFile(await toArrayBuffer(svg, format, exif), name);
     },
     toArrayBuffer: async () => {
-      return (await toBlob(svg, format, exif)).arrayBuffer();
+      return toArrayBuffer(svg, format, exif);
     },
   };
 };
 
-async function toDataUri(blob: Blob): Promise<string> {
-  if (blob.type === getMimeType('svg')) {
-    return `data:${blob.type};utf8,${encodeURIComponent(await blob.text())}`;
+async function toDataUri(
+  arrayBuffer: ArrayBuffer,
+  format: Format
+): Promise<string> {
+  if (format === 'svg') {
+    return `data:${getMimeType(format)};utf8,${encodeURIComponent(
+      decoder.decode(arrayBuffer)
+    )}`;
   } else {
-    const buffer = Buffer.from(await blob.arrayBuffer());
+    const buffer = Buffer.from(arrayBuffer);
 
-    return `data:image/${blob.type};base64,${buffer.toString('base64')}`;
+    return `data:${getMimeType(format)};base64,${buffer.toString('base64')}`;
   }
 }
 
-async function toFile(blob: Blob, name: string): Promise<void> {
-  return fs.writeFile(name, Buffer.from(await blob.arrayBuffer()));
+async function toFile(arrayBuffer: ArrayBuffer, name: string): Promise<void> {
+  return fs.writeFile(name, Buffer.from(arrayBuffer));
 }
 
-async function toBlob(
+async function toArrayBuffer(
   rawSvg: string,
   format: Format,
   exif?: Exif
-): Promise<Blob> {
+): Promise<ArrayBuffer> {
   if (format === 'svg') {
     if (exif) {
       console.warn('Exif is ignored when converting to svg.');
     }
 
-    return new Blob([rawSvg], { type: getMimeType('svg') });
+    return encoder.encode(rawSvg);
   }
 
   await ensurePackage('@resvg/resvg-js', '1.4.0');
@@ -95,5 +102,5 @@ async function toBlob(
     });
   }
 
-  return new Blob([buffer], { type: getMimeType(format) });
+  return buffer.buffer;
 }
