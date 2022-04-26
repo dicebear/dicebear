@@ -37,6 +37,11 @@
     "@types/json-schema": "^7.0.7",
     "tmp-promise": "^3.0.3"
   },
+  "peerDependencies": {
+    "@resvg/resvg-js": "^1.4.0",
+    "exiftool-vendored": "^16.4.0",
+    "sharp": "^0.30.0"
+  },
   "devDependencies": {
     "@resvg/resvg-js": "^1.4.0",
     "@tsconfig/recommended": "^1.0.1",
@@ -46,6 +51,17 @@
     "sharp": "^0.30.4",
     "typescript": "^4.6.3",
     "uvu": "^0.5.3"
+  },
+  "peerDependenciesMeta": {
+    "@resvg/resvg-js": {
+      "optional": true
+    },
+    "exiftool-vendored": {
+      "optional": true
+    },
+    "sharp": {
+      "optional": true
+    }
   },
   "engines": {
     "node": "^14.13.1 || >=16.0.0"
