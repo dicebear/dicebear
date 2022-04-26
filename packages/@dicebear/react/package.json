@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/react",
-  "version": "5.0.0-alpha.25",
+  "version": "5.0.0-alpha.26",
   "description": "React Components for DiceBear",
   "keywords": [
     "avatar",
@@ -35,8 +35,8 @@
     "react": ">=16.8.0"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-alpha.25",
-    "@dicebear/pixel-art": "^5.0.0-alpha.25",
+    "@dicebear/core": "^5.0.0-alpha.26",
+    "@dicebear/pixel-art": "^5.0.0-alpha.26",
     "@testing-library/react": "^13.1.1",
     "@tsconfig/recommended": "^1.0.1",
     "@types/react": "^16.8.0",
