@@ -10,7 +10,7 @@ import { Avatar } from '../lib/index.js';
 test.before(setup);
 test.before.each(reset);
 
-test('shows default window size correctly', async () => {
+test('svg rendering', async () => {
   const { container } = render(
     React.createElement(Avatar, { style, alt: 'Avatar' })
   );
