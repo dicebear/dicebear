@@ -1,8 +1,8 @@
-import { Option } from 'commander';
 import { JSONSchema7 } from 'json-schema';
+import { options } from 'yargs';
 
-export async function getOptionsBySchema(schema: JSONSchema7) {
-  const result: InstanceType<typeof Option>[] = [];
+export function getOptionsBySchema(schema: JSONSchema7) {
+  const result: Record<string, any> = {};
 
   for (var key in schema.properties) {
     if (false === schema.properties.hasOwnProperty(key)) {
@@ -12,30 +12,46 @@ export async function getOptionsBySchema(schema: JSONSchema7) {
     const property = schema.properties[key];
 
     if (typeof property === 'object') {
-      const option = new Option(`--${key} <value>`);
+      const option: Record<string, any> = {
+        type: property.type,
+      };
 
-      let description = [property.title, property.description].filter((v) => v).join(' - ');
-      let choices: string[] = [];
+      if (option.type === 'integer') {
+        option.type = 'number';
+      }
+
+      option.choices = [];
 
       if (property.enum) {
-        choices.push(...(property.enum.filter((v) => typeof v === 'string') as string[]));
+        option.choices.push(
+          ...property.enum.filter((v) => typeof v === 'string')
+        );
       }
 
-      if (typeof property.items === 'object' && 'enum' in property.items && property.items.enum) {
-        choices.push(...(property.items.enum.filter((v) => typeof v === 'string') as string[]));
+      if (
+        typeof property.items === 'object' &&
+        'enum' in property.items &&
+        property.items.enum
+      ) {
+        option.choices.push(
+          ...property.items.enum.filter((v) => typeof v === 'string')
+        );
       }
 
-      if (choices.length > 0) {
-        description += ` (choices: "${choices.join('", "')})`;
+      if (option.choices.length === 0) {
+        delete option.choices;
       }
 
       if (property.default !== undefined && property.default !== null) {
-        option.default(typeof property.default === 'boolean' ? property.default : property.default.toString());
+        option.default =
+          typeof property.default === 'boolean'
+            ? property.default
+            : property.default;
       }
 
-      option.description = description;
+      //option.description = description;
 
-      result.push(option);
+      result[key] = option;
     }
   }
 

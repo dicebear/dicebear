@@ -32,13 +32,13 @@
     "chalk": "^5.0.1",
     "chalk-template": "^0.4.0",
     "cli-progress": "^3.10.0",
-    "commander": "^9.2.0",
     "exiftool-vendored": "^16.3.0",
     "fs-extra": "^10.1.0",
     "json-schema-merge-allof": "^0.8.1",
     "p-queue": "^7.2.0",
     "sharp": "^0.30.4",
-    "update-notifier": "^5.1.0"
+    "update-notifier": "^5.1.0",
+    "yargs": "^17.4.1"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
@@ -47,6 +47,7 @@
     "@types/json-schema": "^7.0.11",
     "@types/json-schema-merge-allof": "^0.6.1",
     "@types/update-notifier": "^5.1.0",
+    "@types/yargs": "^17.0.10",
     "del-cli": "^4.0.1",
     "typescript": "^4.6.3"
   },

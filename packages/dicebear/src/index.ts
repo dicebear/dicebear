@@ -1,23 +1,22 @@
-import { Command } from 'commander';
 import updateNotifier from 'update-notifier';
 import * as collection from '@dicebear/collection';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 import { getPackageJson } from './utils/getPackageJson.js';
-import { makeStyleCommand } from './command/makeStyleCommand.js';
+import { addStyleCommand } from './utils/addStyleCommand.js';
 
 (async () => {
   const pkg = await getPackageJson();
-  const program = new Command('dicebear');
-
   updateNotifier({ pkg }).notify();
 
-  program.version(pkg.version, '-v, --version');
+  const cli = yargs(hideBin(process.argv));
 
   for (let name of Object.keys(collection)) {
     const style = collection[name as keyof typeof collection];
 
-    program.addCommand(await makeStyleCommand(name, style));
+    addStyleCommand(cli, name, style);
   }
 
-  await program.parseAsync(process.argv);
+  cli.demandCommand().help().parse();
 })();

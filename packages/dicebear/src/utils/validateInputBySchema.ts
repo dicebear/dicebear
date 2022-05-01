@@ -1,8 +1,9 @@
 import Ajv from 'ajv';
 import { JSONSchema7 } from 'json-schema';
+import { ArgumentsCamelCase } from 'yargs';
 
 export function validateInputBySchema(
-  input: Record<string, string | number>,
+  input: ArgumentsCamelCase<unknown>,
   schema: JSONSchema7
 ) {
   const validator = new Ajv({
@@ -13,28 +14,7 @@ export function validateInputBySchema(
   });
 
   const validate = validator.compile(schema);
-  const data: Record<
-    string,
-    string | number | string[] | number[] | boolean | boolean[]
-  > = {};
-
-  for (var key in input) {
-    if (false === input.hasOwnProperty(key)) {
-      continue;
-    }
-
-    if (schema.properties && key in schema.properties) {
-      const property = schema.properties[key];
-
-      if (typeof property === 'object' && property.type === 'array') {
-        data[key] = input[key].toString().split(',');
-
-        continue;
-      }
-    }
-
-    data[key] = input[key];
-  }
+  const data = JSON.parse(JSON.stringify(input));
 
   if (false === validate(data)) {
     if (validate.errors) {
