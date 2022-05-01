@@ -18,5 +18,5 @@ import { addStyleCommand } from './utils/addStyleCommand.js';
     addStyleCommand(cli, name, style);
   }
 
-  cli.demandCommand().help().parse();
+  cli.demandCommand().help().locale('en').parse();
 })();
