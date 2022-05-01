@@ -35,6 +35,7 @@ export interface Prng {
   bool(likelihood?: number): boolean;
   integer(min: number, max: number): number;
   pick<T>(arr: T[]): T;
+  string(length: number, characters?: string): string;
 }
 
 export type StyleSchema = JSONSchema7;

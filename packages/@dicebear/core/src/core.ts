@@ -53,7 +53,10 @@ export function createAvatar<O extends {}>(
     result.body = svgUtils.addViewboxMask(result, options.radius ?? 0);
   }
 
-  const attributes = svgUtils.createAttrString(result.attributes);
+  // Reduces the occurrence of ID collisions when rendering multiple avatars on one HTML page.
+  result.body = svgUtils.randomizeIds(result, prng.seed);
+
+  const attributes = svgUtils.createAttrString(result);
   const description = '<desc>Created with dicebear.com</desc>';
   const metadata = license.xml(style);
   const exif = license.exif(style);

@@ -1,18 +1,7 @@
-import type {
-  StyleCreateResult,
-  StyleCreateResultAttributes,
-} from '../types.js';
+import type { Prng, StyleCreateResult } from '../types.js';
+
 import * as escape from './escape.js';
-
-type CreateGroupProps = {
-  children: string;
-  x: number;
-  y: number;
-};
-
-export function createGroup({ children, x, y }: CreateGroupProps) {
-  return `<g transform="translate(${x}, ${y})">${children}</g>`;
-}
+import { create as createPrng } from './prng.js';
 
 export function getViewBox(result: StyleCreateResult) {
   let viewBox = result.attributes['viewBox'].split(' ');
@@ -94,12 +83,33 @@ export function addViewboxMask(result: StyleCreateResult, radius: number) {
   );
 }
 
-export function createAttrString(
-  attributes: StyleCreateResultAttributes
-): string {
-  attributes = { xmlns: 'http://www.w3.org/2000/svg', ...attributes };
+export function createAttrString(result: StyleCreateResult): string {
+  const attributes: Record<string, string> = {
+    xmlns: 'http://www.w3.org/2000/svg',
+    ...result.attributes,
+  };
 
   return Object.keys(attributes)
     .map((attr) => `${escape.xml(attr)}="${escape.xml(attributes[attr])}"`)
     .join(' ');
+}
+
+export function randomizeIds(result: StyleCreateResult, seed: string): string {
+  const prng = createPrng(
+    JSON.stringify({
+      attributes: result.attributes,
+      seed,
+    })
+  );
+
+  const ids: Record<string, string> = {};
+
+  return result.body.replace(
+    /(id="|url\(#)([a-z0-9-_]+)([")])/gi,
+    (match, m1, m2, m3) => {
+      ids[m2] = ids[m2] || prng.string(8);
+
+      return `${m1}${ids[m2]}${m3}`;
+    }
+  );
 }

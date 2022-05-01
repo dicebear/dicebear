@@ -48,5 +48,17 @@ export function create(seed?: string): Prng {
     pick<T>(arr: T[]): T {
       return arr[integer(0, arr.length - 1)];
     },
+    string(
+      length: number,
+      characters: string = 'abcdefghijklmnopqrstuvwxyz1234567890'
+    ): string {
+      let str = '';
+
+      for (let i = 0; i < length; i++) {
+        str += characters[integer(0, characters.length - 1)];
+      }
+
+      return str;
+    },
   };
 }
