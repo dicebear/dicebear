@@ -11,19 +11,17 @@ export function getStyleCommandSchema(style: Style<any>): JSONSchema7 {
         {
           properties: {
             count: {
-              title: 'Count',
               description: 'Defines how many avatars to create.',
               type: 'number',
               default: 1,
             },
             format: {
-              title: 'Format',
               type: 'string',
               enum: ['svg', 'png', 'jpg', 'jpeg'],
               default: 'svg',
             },
             exif: {
-              title: 'Include Exif Metadata',
+              description: 'Include Exif Metadata',
               type: 'boolean',
               default: false,
             },

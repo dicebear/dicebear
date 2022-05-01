@@ -1,5 +1,4 @@
 import { JSONSchema7 } from 'json-schema';
-import { options } from 'yargs';
 
 export function getOptionsBySchema(schema: JSONSchema7) {
   const result: Record<string, any> = {};
@@ -49,7 +48,9 @@ export function getOptionsBySchema(schema: JSONSchema7) {
             : property.default;
       }
 
-      //option.description = description;
+      if (property.description) {
+        option.description = property.description;
+      }
 
       result[key] = option;
     }
