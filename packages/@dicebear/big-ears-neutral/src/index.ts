@@ -6,6 +6,7 @@
  *
  * Design "Face Generator" by The Visual Team licensed under CC BY 4.0.
  * Source: https://www.figma.com/community/file/986078800058673824
+ * Homepage: https://thevisual.team/
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 

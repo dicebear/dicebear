@@ -9,13 +9,4 @@ test('XML must be escaped.', () => {
   );
 });
 
-test('Markdown must be escaped.', () => {
-  equal(
-    escape.md(
-      `*This is evil code* <script type="text/javascript">alert('Bad code')></script>`
-    ),
-    `\\*This is evil code\\* &lt;script type=&quot;text/javascript&quot;&gt;alert\\(&apos;Bad code&apos;\\)&gt;&lt;/script&gt;`
-  );
-});
-
 test.run();

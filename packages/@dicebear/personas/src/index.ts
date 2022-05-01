@@ -6,6 +6,7 @@
  *
  * Design "Personas by Draftbit" by Draftbit - draftbit.com licensed under CC BY 4.0.
  * Source: https://personas.draftbit.com/
+ * Homepage: https://draftbit.com/
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 

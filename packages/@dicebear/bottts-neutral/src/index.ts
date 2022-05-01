@@ -6,6 +6,7 @@
  *
  * Design "Bottts" by Pablo Stanley licensed under Free for personal and commercial use.
  * Source: https://bottts.com/
+ * Homepage: https://twitter.com/pablostanley
  * License: https://bottts.com/
  */
 

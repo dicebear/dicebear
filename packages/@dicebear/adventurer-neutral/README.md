@@ -1,8 +1,8 @@
 <h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />Adventurer Neutral</h1>
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
-    <a href="https://www.instagram.com/lischi_art/">Adventurer Neutral</a>
-    by Lisa Wischofsky
+    <a href="https://www.figma.com/community/file/1035815353921481031">Adventurer Neutral</a>
+      by <a href="https://www.instagram.com/lischi_art/">Lisa Wischofsky</a>
 </p>
 
 <p align="center">

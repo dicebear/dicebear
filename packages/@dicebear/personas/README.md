@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://personas.draftbit.com/">Personas by Draftbit</a>
-    by Draftbit - draftbit.com
+      by <a href="https://draftbit.com/">Draftbit - draftbit.com</a>
 </p>
 
 <p align="center">

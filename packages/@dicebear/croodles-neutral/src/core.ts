@@ -1,6 +1,7 @@
 import type { Style, StyleSchema } from '@dicebear/core';
-import type { Options } from './types.js';
+import { escape } from '@dicebear/core';
 
+import type { Options } from './types.js';
 import { schema } from './schema.js';
 import { getComponents } from './utils/getComponents.js';
 import { getColors } from './utils/getColors.js';
@@ -12,6 +13,7 @@ export const style: Style<Options> = {
     title: 'Croodles - Doodle your face',
     creator: 'vijay verma',
     source: 'https://www.figma.com/community/file/966199982810283152',
+    homepage: 'https://vijayverma.co/',
     license: {
       name: 'CC BY 4.0',
       url: 'https://creativecommons.org/licenses/by/4.0/',

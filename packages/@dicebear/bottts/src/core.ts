@@ -1,6 +1,7 @@
 import type { Style, StyleSchema } from '@dicebear/core';
-import type { Options } from './types.js';
+import { escape } from '@dicebear/core';
 
+import type { Options } from './types.js';
 import { schema } from './schema.js';
 import { getComponents } from './utils/getComponents.js';
 import { getColors } from './utils/getColors.js';
@@ -12,6 +13,7 @@ export const style: Style<Options> = {
     title: 'Bottts',
     creator: 'Pablo Stanley',
     source: 'https://bottts.com/',
+    homepage: 'https://twitter.com/pablostanley',
     license: {
       name: 'Free for personal and commercial use',
       url: 'https://bottts.com/',

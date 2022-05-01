@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://www.figma.com/community/file/881358461963645496">Custom Avatar</a>
-    by Ashley Seo
+      by <a href="http://www.ashleyseo.com/">Ashley Seo</a>
 </p>
 
 <p align="center">

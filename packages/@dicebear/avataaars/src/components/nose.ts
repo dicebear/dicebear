@@ -1,3 +1,4 @@
+import { escape } from '@dicebear/core';
 import type {
   ComponentGroup,
   ComponentPickCollection,

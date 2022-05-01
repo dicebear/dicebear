@@ -6,6 +6,7 @@
  *
  * Design "Miniavs - Free Avatar Creator" by Webpixels licensed under CC BY 4.0.
  * Source: https://www.figma.com/community/file/923211396597067458
+ * Homepage: https://webpixels.io/
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 

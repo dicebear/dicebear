@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://www.figma.com/community/file/829741575478342595">Avatar Illustration System</a>
-    by Micah Lanier
+      by <a href="https://dribbble.com/micahlanier">Micah Lanier</a>
 </p>
 
 <p align="center">

@@ -6,6 +6,7 @@
  *
  * Design "Avataaars" by Pablo Stanley licensed under Free for personal and commercial use..
  * Source: https://avataaars.com/
+ * Homepage: https://twitter.com/pablostanley
  * License: https://avataaars.com/
  */
 

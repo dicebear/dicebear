@@ -5,7 +5,8 @@
  * Copyright (c) 2022 Florian Körner
  *
  * Design "Adventurer" by Lisa Wischofsky licensed under CC BY 4.0.
- * Source: https://www.instagram.com/lischi_art/
+ * Source: https://www.figma.com/community/file/1035815353921481031
+ * Homepage: https://www.instagram.com/lischi_art/
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 

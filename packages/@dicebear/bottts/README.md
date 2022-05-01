@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://bottts.com/">Bottts</a>
-    by Pablo Stanley
+      by <a href="https://twitter.com/pablostanley">Pablo Stanley</a>
 </p>
 
 <p align="center">

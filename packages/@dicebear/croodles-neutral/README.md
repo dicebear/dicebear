@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://www.figma.com/community/file/966199982810283152">Croodles - Doodle your face</a>
-    by vijay verma
+      by <a href="https://vijayverma.co/">vijay verma</a>
 </p>
 
 <p align="center">

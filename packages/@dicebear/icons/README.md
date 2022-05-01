@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://github.com/twbs/icons">Bootstrap Icons</a>
-    by The Bootstrap Authors
+      by <a href="https://getbootstrap.com/">The Bootstrap Authors</a>
 </p>
 
 <p align="center">

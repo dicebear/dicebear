@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://www.figma.com/community/file/923211396597067458">Miniavs - Free Avatar Creator</a>
-    by Webpixels
+      by <a href="https://webpixels.io/">Webpixels</a>
 </p>
 
 <p align="center">

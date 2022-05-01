@@ -6,6 +6,7 @@
  *
  * Design "Avatar Illustration System" by Micah Lanier licensed under CC BY 4.0.
  * Source: https://www.figma.com/community/file/829741575478342595
+ * Homepage: https://dribbble.com/micahlanier
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 

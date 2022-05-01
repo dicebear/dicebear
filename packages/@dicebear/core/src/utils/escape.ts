@@ -6,9 +6,3 @@ export function xml(content: string) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 }
-
-export function md(content: string) {
-  const result = content.replace(/([\\`*_{}[\]()#+-.!])/g, '\\$1');
-
-  return xml(result);
-}

@@ -6,6 +6,7 @@
  *
  * Design "Open Peeps" by Pablo Stanley licensed under CC0 1.0.
  * Source: https://www.openpeeps.com/
+ * Homepage: https://twitter.com/pablostanley
  * License: https://creativecommons.org/publicdomain/zero/1.0/
  */
 

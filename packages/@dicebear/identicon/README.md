@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     Identicon
-    by Florian Körner
+      by Florian Körner
 </p>
 
 <p align="center">

@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://www.figma.com/community/file/968125295144990435">Fun Emoji Set</a>
-    by Davis Uche
+      by <a href="https://www.instagram.com/davedirect3/">Davis Uche</a>
 </p>
 
 <p align="center">

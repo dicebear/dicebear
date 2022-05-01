@@ -1,6 +1,7 @@
 import type { Style, StyleSchema } from '@dicebear/core';
-import type { Options } from './types.js';
+import { escape } from '@dicebear/core';
 
+import type { Options } from './types.js';
 import { schema } from './schema.js';
 import { getComponents } from './utils/getComponents.js';
 import { getColors } from './utils/getColors.js';
@@ -11,7 +12,8 @@ export const style: Style<Options> = {
   meta: {
     title: 'Lorelei Neutral',
     creator: 'Lisa Wischofsky',
-    source: 'https://www.instagram.com/lischi_art/',
+    source: 'https://dicebear.com/',
+    homepage: 'https://www.instagram.com/lischi_art/',
     license: {
       name: 'CC0 1.0',
       url: 'https://creativecommons.org/licenses/zero/1.0/',

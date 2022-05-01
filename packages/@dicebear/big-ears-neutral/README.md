@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://www.figma.com/community/file/986078800058673824">Face Generator</a>
-    by The Visual Team
+      by <a href="https://thevisual.team/">The Visual Team</a>
 </p>
 
 <p align="center">

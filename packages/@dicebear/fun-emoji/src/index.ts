@@ -6,6 +6,7 @@
  *
  * Design "Fun Emoji Set" by Davis Uche licensed under CC BY 4.0.
  * Source: https://www.figma.com/community/file/968125295144990435
+ * Homepage: https://www.instagram.com/davedirect3/
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 

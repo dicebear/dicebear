@@ -7,6 +7,7 @@
  *
  * Design "Bootstrap Icons" by The Bootstrap Authors licensed under MIT.
  * Source: https://github.com/twbs/icons
+ * Homepage: https://getbootstrap.com/
  * License: https://github.com/twbs/icons/blob/main/LICENSE.md
  */
 
