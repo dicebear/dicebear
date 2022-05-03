@@ -58,7 +58,7 @@ async function toArrayBuffer(
     return encoder.encode(rawSvg);
   }
 
-  await ensurePackage('@resvg/resvg-js', '1.4.0');
+  await ensurePackage('@resvg/resvg-js', '2.0.0');
   const { renderAsync } = await import('@resvg/resvg-js');
 
   const interRegular = new URL(
@@ -73,13 +73,15 @@ async function toArrayBuffer(
 
   let { svg } = ensureSize(rawSvg);
 
-  let buffer = await renderAsync(svg, {
-    font: {
-      loadSystemFonts: false,
-      defaultFontFamily: 'Inter',
-      fontFiles: [interRegular.pathname, interBold.pathname],
-    },
-  });
+  let buffer = (
+    await renderAsync(svg, {
+      font: {
+        loadSystemFonts: false,
+        defaultFontFamily: 'Inter',
+        fontFiles: [interRegular.pathname, interBold.pathname],
+      },
+    })
+  ).asPng();
 
   if (format === 'jpeg') {
     await ensurePackage('sharp', '0.30.0');
