@@ -57,11 +57,10 @@ export function createAvatar<O extends {}>(
   result.body = svgUtils.randomizeIds(result, prng.seed);
 
   const attributes = svgUtils.createAttrString(result);
-  const description = '<desc>Created with dicebear.com</desc>';
   const metadata = license.xml(style);
   const exif = license.exif(style);
 
-  const avatar = `<svg ${attributes}>${description}${metadata}${result.body}</svg>`;
+  const avatar = `<svg ${attributes}>${metadata}${result.body}</svg>`;
 
   return {
     toString: () => avatar,

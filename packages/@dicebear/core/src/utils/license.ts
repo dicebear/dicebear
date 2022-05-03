@@ -2,14 +2,23 @@ import { Exif, Style } from '../types';
 import * as _ from './escape.js';
 
 export function xml(style: Style<any>): string {
-  const xmlTitle = `<dc:title>${_.xml(
-    style.meta.title ?? 'Unnamed'
-  )}</dc:title>`;
+  const title = style.meta.title ?? 'Unnamed';
+  const creator = style.meta.creator ?? 'Unknown';
+
+  let description = `"${title}" by "${creator}"`;
+
+  if (style.meta.license?.name) {
+    description += `, licensed under "${style.meta.license.name}".`;
+  }
+
+  description += ' / Remix of the original. - Created with dicebear.com';
+
+  const xmlTitle = `<dc:title>${_.xml(title)}</dc:title>`;
 
   const xmlCreator =
     '<dc:creator>' +
     `<cc:Agent rdf:about="${_.xml(style.meta.homepage ?? '')}">` +
-    `<dc:title>${_.xml(style.meta.creator ?? 'Unknown')}</dc:title>` +
+    `<dc:title>${_.xml(creator)}</dc:title>` +
     '</cc:Agent>' +
     '</dc:creator>';
 
@@ -22,6 +31,7 @@ export function xml(style: Style<any>): string {
     : '';
 
   return (
+    `<desc>${description}</desc>` +
     '<metadata' +
     ' xmlns:dc="http://purl.org/dc/elements/1.1/"' +
     ' xmlns:cc="http://creativecommons.org/ns#"' +
@@ -45,10 +55,13 @@ export function exif(style: Style<any>): Exif {
   let copyright = `"${title}" by "${creator}"`;
 
   if (style.meta.license?.name) {
-    copyright += ` is licensed under "${style.meta.license.name}".`;
+    copyright += `, licensed under "${style.meta.license.name}".`;
   }
 
+  copyright += ' / Remix of the original.';
+
   const exif: Exif = {
+    ImageDescription: `${copyright} - Created with dicebear.com`,
     Copyright: copyright,
     'XMP-dc:Title': title,
     'XMP-dc:Creator': creator,
