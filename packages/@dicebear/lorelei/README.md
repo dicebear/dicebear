@@ -7,7 +7,7 @@
 
 <p align="center">
   While our code is MIT licensed, the design is licensed under
-    <a href="https://creativecommons.org/licenses/zero/1.0/">CC0</a>.
+    <a href="https://creativecommons.org/licenses/zero/1.0/">CC0 1.0</a>.
   See <a href="https://dicebear.com/licenses">license overview</a> for more information.
 </p>
 

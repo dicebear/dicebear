@@ -15,7 +15,7 @@ export const style: Style<Options> = {
     source: 'https://dicebear.com/',
     homepage: 'https://www.instagram.com/lischi_art/',
     license: {
-      name: 'CC0',
+      name: 'CC0 1.0',
       url: 'https://creativecommons.org/licenses/zero/1.0/',
     },
   },

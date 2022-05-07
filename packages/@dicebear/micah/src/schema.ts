@@ -130,21 +130,7 @@ export const schema: StyleSchema = {
         pattern:
           '^([0-9a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{4}|#[a-fA-F0-9]{6}|#[a-fA-F0-9]{8})$',
       },
-      default: [
-        'apricot',
-        'azure',
-        'black',
-        'calm',
-        'canary',
-        'coast',
-        'lavender',
-        'mellow',
-        'salmon',
-        'seashell',
-        'sky',
-        'topaz',
-        'white',
-      ],
+      default: ['black'],
       examples: [
         ['apricot'],
         ['azure'],
