@@ -40,5 +40,7 @@ export function merge<O extends {}>(
     ...options,
   };
 
-  return result;
+  // Return a complete copy because the styles could partially customize the
+  // options and thus modify nested objects and arrays.
+  return JSON.parse(JSON.stringify(result));
 }
