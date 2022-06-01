@@ -39,7 +39,7 @@
     "json-schema-merge-allof": "^0.8.1",
     "ora": "^5.4.0",
     "replace-in-file": "^6.2.0",
-    "sharp": "^0.28.1",
+    "sharp": "^0.30.5",
     "terminal-link": "^2.1.1",
     "update-notifier": "^5.1.0"
   },
