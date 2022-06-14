@@ -8,11 +8,7 @@
  * Source: https://dicebear.com/
  * Homepage: https://www.instagram.com/lischi_art/
  * License: https://creativecommons.org/licenses/zero/1.0/
- */
-
-import { style } from './core.js';
-
-const { create, meta, schema } = style;
-
-export { create, meta, schema };
-export type { Options } from './types.js';
+ */ import { style } from './core.js';
+	const { create, meta, schema } = style;
+	export { create, meta, schema };
+	export type { Options } from './types.js';

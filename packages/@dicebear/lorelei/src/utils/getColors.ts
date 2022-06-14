@@ -1,63 +1,18 @@
 import type { Prng } from '@dicebear/core';
-import type { Options, ColorPickCollection } from '../types.js';
-import { pickColor } from './pickColor.js';
-
-type Props = {
-  prng: Prng;
-  options: Options;
-};
-
-export function getColors({ prng, options }: Props): ColorPickCollection {
-  return {
-    hair: pickColor({
-      prng,
-      group: 'hair',
-      values: options.hairColor,
-    }),
-    skin: pickColor({
-      prng,
-      group: 'skin',
-      values: options.skinColor,
-    }),
-    earrings: pickColor({
-      prng,
-      group: 'earrings',
-      values: options.earringsColor,
-    }),
-    eyebrows: pickColor({
-      prng,
-      group: 'eyebrows',
-      values: options.eyebrowsColor,
-    }),
-    eyes: pickColor({
-      prng,
-      group: 'eyes',
-      values: options.eyesColor,
-    }),
-    freckles: pickColor({
-      prng,
-      group: 'freckles',
-      values: options.frecklesColor,
-    }),
-    glasses: pickColor({
-      prng,
-      group: 'glasses',
-      values: options.glassesColor,
-    }),
-    mouth: pickColor({
-      prng,
-      group: 'mouth',
-      values: options.mouthColor,
-    }),
-    nose: pickColor({
-      prng,
-      group: 'nose',
-      values: options.noseColor,
-    }),
-    hairAccessories: pickColor({
-      prng,
-      group: 'hairAccessories',
-      values: options.hairAccessoriesColor,
-    }),
-  };
-}
+	import type { Options, ColorPickCollection } from '../types.js';
+	type Props = { prng: Prng; options: Options };
+	export function getColors({ prng, options }: Props): ColorPickCollection {
+	  return {
+	    hair: prng.pick(options.hairColor ?? []) ?? 'transparent',
+	    skin: prng.pick(options.skinColor ?? []) ?? 'transparent',
+	    earrings: prng.pick(options.earringsColor ?? []) ?? 'transparent',
+	    eyebrows: prng.pick(options.eyebrowsColor ?? []) ?? 'transparent',
+	    eyes: prng.pick(options.eyesColor ?? []) ?? 'transparent',
+	    freckles: prng.pick(options.frecklesColor ?? []) ?? 'transparent',
+	    glasses: prng.pick(options.glassesColor ?? []) ?? 'transparent',
+	    mouth: prng.pick(options.mouthColor ?? []) ?? 'transparent',
+	    nose: prng.pick(options.noseColor ?? []) ?? 'transparent',
+	    hairAccessories:
+	      prng.pick(options.hairAccessoriesColor ?? []) ?? 'transparent',
+	  };
+	}

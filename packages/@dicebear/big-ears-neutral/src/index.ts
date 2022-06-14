@@ -8,11 +8,7 @@
  * Source: https://www.figma.com/community/file/986078800058673824
  * Homepage: https://thevisual.team/
  * License: https://creativecommons.org/licenses/by/4.0/
- */
-
-import { style } from './core.js';
-
-const { create, meta, schema } = style;
-
-export { create, meta, schema };
-export type { Options } from './types.js';
+ */ import { style } from './core.js';
+	const { create, meta, schema } = style;
+	export { create, meta, schema };
+	export type { Options } from './types.js';

@@ -34,7 +34,7 @@ export interface Prng {
   seed: string;
   bool(likelihood?: number): boolean;
   integer(min: number, max: number): number;
-  pick<T>(arr: T[]): T;
+  pick<T>(arr: T[]): T | undefined;
   string(length: number, characters?: string): string;
 }
 

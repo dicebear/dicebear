@@ -8,11 +8,7 @@
  * Source: https://www.openpeeps.com/
  * Homepage: https://twitter.com/pablostanley
  * License: https://creativecommons.org/publicdomain/zero/1.0/
- */
-
-import { style } from './core.js';
-
-const { create, meta, schema } = style;
-
-export { create, meta, schema };
-export type { Options } from './types.js';
+ */ import { style } from './core.js';
+	const { create, meta, schema } = style;
+	export { create, meta, schema };
+	export type { Options } from './types.js';

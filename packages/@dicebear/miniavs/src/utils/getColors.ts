@@ -1,28 +1,10 @@
 import type { Prng } from '@dicebear/core';
-import type { Options, ColorPickCollection } from '../types.js';
-import { pickColor } from './pickColor.js';
-
-type Props = {
-  prng: Prng;
-  options: Options;
-};
-
-export function getColors({ prng, options }: Props): ColorPickCollection {
-  return {
-    skin: pickColor({
-      prng,
-      group: 'skin',
-      values: options.skinColor,
-    }),
-    hair: pickColor({
-      prng,
-      group: 'hair',
-      values: options.hairColor,
-    }),
-    body: pickColor({
-      prng,
-      group: 'body',
-      values: options.bodyColor,
-    }),
-  };
-}
+	import type { Options, ColorPickCollection } from '../types.js';
+	type Props = { prng: Prng; options: Options };
+	export function getColors({ prng, options }: Props): ColorPickCollection {
+	  return {
+	    skin: prng.pick(options.skinColor ?? []) ?? 'transparent',
+	    hair: prng.pick(options.hairColor ?? []) ?? 'transparent',
+	    body: prng.pick(options.bodyColor ?? []) ?? 'transparent',
+	  };
+	}

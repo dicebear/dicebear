@@ -2,7 +2,7 @@
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
     <a href="https://dicebear.com">Pixel Art</a>
-      by Florian Körner
+      by <a href="https://dicebear.com">Florian Körner</a>
 </p>
 
 <p align="center">

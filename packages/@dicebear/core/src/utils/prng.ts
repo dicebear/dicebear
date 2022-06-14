@@ -45,8 +45,8 @@ export function create(seed?: string): Prng {
     integer(min: number, max: number) {
       return integer(min, max);
     },
-    pick<T>(arr: T[]): T {
-      return arr[integer(0, arr.length - 1)];
+    pick<T>(arr: T[]): T | undefined {
+      return arr.length > 0 ? arr[integer(0, arr.length - 1)] : undefined;
     },
     string(
       length: number,

@@ -8,11 +8,7 @@
  * Source: https://www.figma.com/community/file/923211396597067458
  * Homepage: https://webpixels.io/
  * License: https://creativecommons.org/licenses/by/4.0/
- */
-
-import { style } from './core.js';
-
-const { create, meta, schema } = style;
-
-export { create, meta, schema };
-export type { Options } from './types.js';
+ */ import { style } from './core.js';
+	const { create, meta, schema } = style;
+	export { create, meta, schema };
+	export type { Options } from './types.js';
