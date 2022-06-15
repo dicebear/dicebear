@@ -26,9 +26,7 @@ function randomSeed() {
   return MIN + Math.floor((MAX - MIN) * Math.random()).toString();
 }
 
-export function create(seed?: string): Prng {
-  seed = seed ?? randomSeed();
-
+export function create(seed: string = ''): Prng {
   let value = hashSeed(seed) || 1;
 
   const next = () => (value = xorshift(value));
