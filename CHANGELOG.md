@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.10.3] - 2022-06-16
+
+## Fixed
+
+- `@dicebear/avatars-bottts-sprites` Fixed unexpected output of `undefined` in generated SVG.
+
 ## [4.10.2] - 2021-12-22
 
 ## Fixed
