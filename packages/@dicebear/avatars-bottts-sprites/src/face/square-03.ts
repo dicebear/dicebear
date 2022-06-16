@@ -6,7 +6,7 @@ export default (color: string, texture?: string) => {
         </mask>
         <g mask="url(#faceSquare03Mask0)">
             <rect x="-2" y="-2" width="134" height="124" fill="${color}"/>
-            ${texture}
+            ${texture ?? ''}
         </g>
     `;
 };
