@@ -5,5 +5,5 @@
     "packages/@dicebear/*"
   ],
   "concurrency": 1,
-  "version": "5.0.0-alpha.32"
+  "version": "5.0.0-alpha.33"
 }
