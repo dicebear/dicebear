@@ -24,10 +24,7 @@ export function addBackgroundColor(
 ) {
   let { width, height, x, y } = getViewBox(result);
 
-  backgroundColor =
-    backgroundColor[0] === '#' ? backgroundColor : `#${backgroundColor}`;
-
-  return `<rect fill="${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />${result.body}`;
+  return `<rect fill="#${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />${result.body}`;
 }
 
 export function addScale(result: StyleCreateResult, scale: number) {

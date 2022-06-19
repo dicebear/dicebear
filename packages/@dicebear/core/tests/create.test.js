@@ -8,17 +8,17 @@ const __dirname = new URL('.', import.meta.url).pathname;
 
 const seed = 'test';
 const data = [
-  { seed, backgroundColor: ['#FF0000'] },
-  { seed, backgroundColor: ['#FF0000'], scale: 20, radius: 25 },
-  { seed, backgroundColor: ['#FF0000'], rotate: 90 },
-  { seed, backgroundColor: ['#FF0000'], scale: 50 },
-  { seed, backgroundColor: ['#FF0000'], flip: true },
-  { seed, backgroundColor: ['#FF0000'], size: 100 },
-  { seed, backgroundColor: ['#FF0000'], translateX: -50 },
-  { seed, backgroundColor: ['#FF0000'], translateY: 50 },
+  { seed, backgroundColor: ['ff0000'] },
+  { seed, backgroundColor: ['ff0000'], scale: 20, radius: 25 },
+  { seed, backgroundColor: ['ff0000'], rotate: 90 },
+  { seed, backgroundColor: ['ff0000'], scale: 50 },
+  { seed, backgroundColor: ['ff0000'], flip: true },
+  { seed, backgroundColor: ['ff0000'], size: 100 },
+  { seed, backgroundColor: ['ff0000'], translateX: -50 },
+  { seed, backgroundColor: ['ff0000'], translateY: 50 },
   {
     seed,
-    backgroundColor: ['#FF0000'],
+    backgroundColor: ['ff0000'],
     size: 100,
     rotate: 120,
     scale: 50,
