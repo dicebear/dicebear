@@ -1,6 +1,6 @@
 {
   "name": "dicebear",
-  "version": "5.0.0-alpha.33",
+  "version": "5.0.0-alpha.34",
   "private": false,
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "homepage": "https://github.com/dicebear/dicebear",
@@ -25,8 +25,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@dicebear/collection": "^5.0.0-alpha.33",
-    "@dicebear/core": "^5.0.0-alpha.33",
+    "@dicebear/collection": "^5.0.0-alpha.34",
+    "@dicebear/core": "^5.0.0-alpha.34",
     "@resvg/resvg-js": "^2.0.0",
     "ajv": "^8.11.0",
     "chalk": "^5.0.1",
@@ -34,7 +34,6 @@
     "cli-progress": "^3.10.0",
     "exiftool-vendored": "^16.3.0",
     "fs-extra": "^10.1.0",
-    "json-schema-merge-allof": "^0.8.1",
     "p-queue": "^7.2.0",
     "sharp": "^0.30.4",
     "update-notifier": "^5.1.0",
@@ -44,8 +43,6 @@
     "@tsconfig/recommended": "^1.0.1",
     "@types/cli-progress": "^3.9.2",
     "@types/fs-extra": "^9.0.13",
-    "@types/json-schema": "^7.0.11",
-    "@types/json-schema-merge-allof": "^0.6.1",
     "@types/update-notifier": "^5.1.0",
     "@types/yargs": "^17.0.10",
     "del-cli": "^4.0.1",
