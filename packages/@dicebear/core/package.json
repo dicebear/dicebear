@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/core",
-  "version": "5.0.0-alpha.34",
+  "version": "5.0.0-alpha.35",
   "description": "An avatar library for designers and developers.",
   "keywords": [
     "avatar",
@@ -31,7 +31,7 @@
     "test": "uvu tests"
   },
   "dependencies": {
-    "@dicebear/converter": "^5.0.0-alpha.34"
+    "@dicebear/converter": "^5.0.0-alpha.35"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
