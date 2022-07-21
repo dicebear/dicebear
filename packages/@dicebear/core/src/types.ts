@@ -1,4 +1,3 @@
-import type { JSONSchema7 } from 'json-schema';
 import type { Result as ConverterResult } from '@dicebear/converter';
 
 export interface ResultConvertOptions {
@@ -38,7 +37,21 @@ export interface Prng {
   string(length: number, characters?: string): string;
 }
 
-export type StyleSchema = JSONSchema7;
+export type StyleSchema = {
+  $schema?: string;
+  title?: string;
+  description?: string;
+  type?: 'array' | 'string' | 'object' | 'boolean' | 'integer' | 'number';
+  items?: StyleSchema;
+  enum?: (string | number | boolean)[];
+  maximum?: number;
+  minimum?: number;
+  pattern?: string;
+  minItems?: number;
+  maxItems?: number;
+  default?: unknown;
+  properties?: Record<string, StyleSchema>;
+};
 
 export type StyleOptions<O extends {}> = Partial<O & Options>;
 

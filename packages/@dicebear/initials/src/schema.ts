@@ -57,13 +57,13 @@ export const schema: StyleSchema = {
       default: 50,
     },
     chars: {
-      type: 'number',
+      type: 'integer',
       minimum: 0,
       maximum: 2,
       default: 2,
     },
     fontWeight: {
-      type: 'number',
+      type: 'integer',
       default: 400,
       enum: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     },
