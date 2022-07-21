@@ -34,7 +34,6 @@
     "test": "uvu tests"
   },
   "dependencies": {
-    "@types/json-schema": "^7.0.7",
     "tmp-promise": "^3.0.3"
   },
   "peerDependencies": {
