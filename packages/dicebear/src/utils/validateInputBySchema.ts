@@ -1,10 +1,10 @@
 import Ajv from 'ajv';
-import { StyleSchema } from '@dicebear/core';
+import { JSONSchema7 } from 'json-schema';
 import { ArgumentsCamelCase } from 'yargs';
 
 export function validateInputBySchema(
   input: ArgumentsCamelCase<unknown>,
-  schema: StyleSchema
+  schema: JSONSchema7
 ) {
   const validator = new Ajv({
     strict: false,
