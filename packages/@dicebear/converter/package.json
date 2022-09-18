@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/converter",
-  "version": "5.0.0-alpha.36",
+  "version": "5.0.0-beta.0",
   "description": "SVG Converter for DiceBear",
   "keywords": [
     "dicebear"
