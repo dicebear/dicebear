@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars",
-  "version": "4.10.4",
+  "version": "4.10.5",
   "description": "An avatar library for designers and developers.",
   "keywords": [
     "avatar",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
-    "dicebear-project": "^4.10.4",
+    "dicebear-project": "^4.10.5",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
