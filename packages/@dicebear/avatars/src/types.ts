@@ -49,7 +49,7 @@ export type StyleSchema = JSONSchema7;
 
 export type StyleOptions<O extends {}> = Partial<O & Options>;
 
-export interface StyleCreateProps<O> {
+export interface StyleCreateProps<O extends {}> {
   prng: Prng;
   options: StyleOptions<O>;
 }

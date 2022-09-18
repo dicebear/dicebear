@@ -6,6 +6,7 @@ import { merge as mergeOptions } from './options';
 
 export function createLegacyWrapper<O extends {}>(style: Style<O>): SpriteCollection<O> {
   return (random, options) => {
+    // @ts-ignore
     options = Object.assign(options, mergeOptions(style, options as StyleOptions<O>));
 
     let result = style.create({
