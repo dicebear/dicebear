@@ -16,10 +16,10 @@ First [register](https://dash.cloudflare.com/sign-up) on Cloudflare and
 
 ### Step 2
 
-Checkout our repository [avatars-serverless](https://github.com/DiceBear/avatars-serverless):
+Clone our repository [avatars-serverless](https://github.com/DiceBear/avatars-serverless):
 
 ```
-git checkout https://github.com/DiceBear/avatars-serverless.git
+git clone https://github.com/DiceBear/avatars-serverless.git
 ```
 
 ### Step 3
