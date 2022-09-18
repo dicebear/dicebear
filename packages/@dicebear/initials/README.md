@@ -1,4 +1,4 @@
-<h1 align="center"><img src="https://dicebear.com/api/initials/1.svg" width="124" /> <br />initials</h1>
+<h1 align="center"><img src="https://api.dicebear.com/5.x/initials/svg?seed=initials" width="124" /> <br />initials</h1>
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a>.</strong>
 </p>
