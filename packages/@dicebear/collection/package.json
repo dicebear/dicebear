@@ -14,8 +14,16 @@
   },
   "license": "MIT",
   "type": "module",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./async": "./lib/async.js"
+  },
   "types": "./lib/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "async": ["lib/async.d.ts"]
+    }
+  },
   "files": [
     "LICENSE",
     "lib",
