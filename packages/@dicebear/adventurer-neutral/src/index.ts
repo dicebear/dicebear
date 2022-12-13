@@ -5,7 +5,7 @@
  * Copyright (c) 2021 Florian Körner
  *
  * Design "Adventurer Neutral" by Lisa Wischofsky licensed under CC BY 4.0.
- * Source: https://www.instagram.com/lischis_adventures/
+ * Source: https://www.instagram.com/lischi_art/
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 

@@ -32,4 +32,4 @@ https://www.figma.com/file/KhTfMFWWniVgZmGVFL0KK6/big-ears?node-id=202%3A1017
 
 # adventurer / adventurer-neutral
 
-https://www.figma.com/file/Iebd5sD90Hvs14Gwhdov0R/adventurer?node-id=29%3A34
+https://www.figma.com/community/file/1184595184137881796/adventurer

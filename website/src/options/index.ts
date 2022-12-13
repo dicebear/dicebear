@@ -97,7 +97,7 @@ export default [
   },
   {
     id: 'miniavs',
-    name: '@dicebear/micah',
+    name: '@dicebear/miniavs',
     style: collection.miniavs,
     options: miniavsOptions,
   },

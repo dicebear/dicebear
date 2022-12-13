@@ -12,7 +12,7 @@ export const style: Style<Options> = {
   meta: {
     title: 'Adventurer Neutral',
     creator: 'Lisa Wischofsky',
-    source: 'https://www.instagram.com/lischis_adventures/',
+    source: 'https://www.instagram.com/lischi_art/',
     license: {
       name: 'CC BY 4.0',
       url: 'https://creativecommons.org/licenses/by/4.0/',
@@ -28,16 +28,16 @@ export const style: Style<Options> = {
     const accessoiresComponent = pickComponent(prng, 'accessoires', options.accessoires);
 
     const components: ComponentPickCollection = {
-      'eyes': eyesComponent,
-      'eyebrows': eyebrowsComponent,
-      'mouth': mouthComponent,
-      'accessoires': prng.bool(options.accessoiresProbability) ? accessoiresComponent : undefined,
-    }
+      eyes: eyesComponent,
+      eyebrows: eyebrowsComponent,
+      mouth: mouthComponent,
+      accessoires: prng.bool(options.accessoiresProbability) ? accessoiresComponent : undefined,
+    };
 
-    const colors: ColorPickCollection = {
-    }
+    const colors: ColorPickCollection = {};
 
-    const backgroundColor = typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
+    const backgroundColor =
+      typeof options.backgroundColor === 'string' ? [options.backgroundColor] : options.backgroundColor;
     options.backgroundColor = pickColor(prng, 'skin', backgroundColor ?? []).value;
 
     onPostCreate({ prng, options, components, colors });
