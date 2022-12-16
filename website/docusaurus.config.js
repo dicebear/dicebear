@@ -62,10 +62,6 @@ module.exports = {
               label: 'Status',
               href: 'https://dicebear.betteruptime.com/',
             },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/dicebearcom',
-            },
           ],
         },
         {
