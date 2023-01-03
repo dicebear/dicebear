@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/avatars-female-sprites",
-  "version": "4.10.7",
+  "version": "4.10.8",
   "description": "Pixel art female avatar style for DiceBear Avatars",
   "keywords": [
     "dicebear",
@@ -38,11 +38,11 @@
     "build": "dicebear-project build DiceBear.Female"
   },
   "devDependencies": {
-    "@dicebear/avatars": "^4.10.7",
+    "@dicebear/avatars": "^4.10.8",
     "@tsconfig/recommended": "^1.0.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^10.11.6",
-    "dicebear-project": "^4.10.7",
+    "dicebear-project": "^4.10.8",
     "jest": "^26.6.3",
     "shx": "^0.3.3",
     "ts-jest": "^26.5.4",
