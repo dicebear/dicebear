@@ -47,6 +47,13 @@ const data: Array<StyleOptions<style.Options>> = [
     facialHairColor: ['black'],
     facialHairProbability: 100,
   },
+  {
+    seed,
+    hair: ['mrT'],
+    facialHair: ['scruff'],
+    facialHairColor: ['black'],
+    facialHairProbability: 100,
+  },
 ];
 
 data.forEach((options, key) => {
