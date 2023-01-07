@@ -32,9 +32,6 @@ export function merge<O extends {}>(
   options: StyleOptions<O>
 ): StyleOptions<O> {
   let result: StyleOptions<O> = {
-    ...{
-      seed: Math.random().toString(),
-    },
     ...(defaults(schema) as StyleOptions<O>),
     ...(defaults(style.schema) as StyleOptions<O>),
     ...options,

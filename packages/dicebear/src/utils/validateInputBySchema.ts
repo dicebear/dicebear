@@ -9,8 +9,8 @@ export function validateInputBySchema(
   const validator = new Ajv({
     strict: false,
     coerceTypes: true,
-    useDefaults: false,
-    removeAdditional: true,
+    useDefaults: true,
+    removeAdditional: 'all',
   });
 
   const validate = validator.compile(schema);

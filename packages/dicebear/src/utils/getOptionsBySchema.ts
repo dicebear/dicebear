@@ -41,13 +41,6 @@ export function getOptionsBySchema(schema: JSONSchema7) {
         delete option.choices;
       }
 
-      if (property.default !== undefined && property.default !== null) {
-        option.default =
-          typeof property.default === 'boolean'
-            ? property.default
-            : property.default;
-      }
-
       if (property.description) {
         option.description = property.description;
       }

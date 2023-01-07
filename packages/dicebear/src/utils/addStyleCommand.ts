@@ -12,6 +12,7 @@ import { getStyleCommandSchema } from './getStyleCommandSchema.js';
 import { getOptionsBySchema } from './getOptionsBySchema.js';
 import { validateInputBySchema } from './validateInputBySchema.js';
 import { outputStyleLicenseBanner } from './outputStyleLicenseBanner.js';
+import { createRandomSeed } from './createRandomSeed.js';
 
 export function addStyleCommand(
   cli: yargs.Argv<{}>,
@@ -33,7 +34,10 @@ export function addStyleCommand(
         {},
         cliProgress.Presets.shades_classic
       );
+
       const validated = validateInputBySchema(argv, schema);
+
+      const format = validated.format as string;
       const count = validated.count as number;
       const includeExif = validated.exif as boolean;
 
@@ -56,12 +60,20 @@ export function addStyleCommand(
           const fileName = path.resolve(
             process.cwd(),
             outputPath,
-            `${name}-${i}.${validated.format}`
+            `${name}-${i}.${format}`
           );
 
-          const avatar = createAvatar(style, validated);
+          const avatar = createAvatar(
+            style,
+            count <= 1
+              ? validated
+              : {
+                  ...validated,
+                  seed: createRandomSeed(),
+                }
+          );
 
-          switch (validated.format) {
+          switch (format) {
             case 'svg':
               await avatar.toFile(fileName);
               break;
