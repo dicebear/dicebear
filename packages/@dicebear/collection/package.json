@@ -31,6 +31,7 @@
     "lib",
     "README.md"
   ],
+  "sideEffects": false,
   "scripts": {
     "prebuild": "del-cli lib",
     "build": "tsc",
