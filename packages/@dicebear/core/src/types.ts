@@ -32,6 +32,7 @@ export type SchemaDefaults = Record<string, unknown>;
 
 export interface Prng {
   seed: string;
+  next(): void;
   bool(likelihood?: number): boolean;
   integer(min: number, max: number): number;
   pick<T>(arr: T[]): T | undefined;

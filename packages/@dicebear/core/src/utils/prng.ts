@@ -33,6 +33,7 @@ export function create(seed: string = ''): Prng {
 
   return {
     seed,
+    next,
     bool(likelihood: number = 50) {
       return integer(0, 100) <= likelihood;
     },
@@ -40,7 +41,13 @@ export function create(seed: string = ''): Prng {
       return integer(min, max);
     },
     pick<T>(arr: T[]): T | undefined {
-      return arr.length > 0 ? arr[integer(0, arr.length - 1)] : undefined;
+      if (arr.length === 0) {
+        next();
+
+        return undefined;
+      }
+
+      return arr[integer(0, arr.length - 1)];
     },
     string(
       length: number,
