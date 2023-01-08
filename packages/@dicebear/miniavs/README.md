@@ -1,13 +1,25 @@
-<h1 align="center"><img src="./tests/svg/0.svg" width="124" /> <br />Miniavs</h1>
+<h1 align="center"><img src="https://dicebear.com/logo-readme.svg" width="96" /> <br />DiceBear Miniavs</h1>
 <p align="center">
   <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
-  <a href="https://www.figma.com/community/file/923211396597067458">Miniavs - Free Avatar Creator</a>
-  by <a href="https://webpixels.io/">Webpixels</a>
+  <a href="https://www.figma.com/community/file/923211396597067458">Miniavs - Free Avatar Creator</a> by <a href="https://webpixels.io/">Webpixels</a>
 </p>
 
 <p align="center">
-  While our code is MIT licensed, the design is licensed under
-  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+  <img src="https://api.dicebear.com/5.x/miniavs/svg?seed=Mimi" width="64" />
+  <img src="https://api.dicebear.com/5.x/miniavs/svg?seed=Sasha" width="64" />
+  <img src="https://api.dicebear.com/5.x/miniavs/svg?seed=Lilly" width="64" />
+  <img src="https://api.dicebear.com/5.x/miniavs/svg?seed=Tigger" width="64" />
+  <img src="https://api.dicebear.com/5.x/miniavs/svg?seed=Bella" width="64" />
+  <img src="https://api.dicebear.com/5.x/miniavs/svg?seed=Zoe" width="64" />
+  <img src="https://api.dicebear.com/5.x/miniavs/svg?seed=Kitty" width="64" />
+</p>
+
+<p align="center">
+  The avatar style is based on <a href="https://www.figma.com/community/file/923211396597067458">Miniavs - Free Avatar Creator</a> by
+  <a href="https://webpixels.io/">Webpixels</a>, licensed under
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. / Remix of the original.
+</p>
+<p align="center">
   See <a href="https://dicebear.com/licenses">license overview</a> for more information.
 </p>
 

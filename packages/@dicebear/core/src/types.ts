@@ -74,7 +74,7 @@ export interface StyleMeta {
 }
 
 export interface Style<O extends {}> {
-  meta: StyleMeta;
-  schema: StyleSchema;
+  meta?: StyleMeta;
+  schema?: StyleSchema;
   create: StyleCreate<O>;
 }

@@ -28,7 +28,7 @@ export function getStyleCommandSchema(style: Style<any>): JSONSchema7 {
           },
         },
         coreSchema,
-        style.schema,
+        style.schema ?? {},
       ],
       additionalItems: true,
     },

@@ -1,6 +1,19 @@
+Licenses
+--------
+
+# Design
+Applies to all design files in this package.
+
+Source: Avataaars (https://avataaars.com/)
+Designer: Pablo Stanley (https://twitter.com/pablostanley)
+License: Free for personal and commercial use (https://avataaars.com/)
+
+# Code
+Applies to all non-design files in this package.
+
 MIT License
 
-Copyright (c) 2022 Florian Körner
+Copyright (c) 2023 Florian Körner
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

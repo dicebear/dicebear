@@ -2,12 +2,12 @@ import { Exif, Style } from '../types';
 import * as _ from './escape.js';
 
 export function xml(style: Style<any>): string {
-  const title = style.meta.title ?? 'Unnamed';
-  const creator = style.meta.creator ?? 'Unknown';
+  const title = style.meta?.title ?? 'Unnamed';
+  const creator = style.meta?.creator ?? 'Unknown';
 
   let description = `"${title}" by "${creator}"`;
 
-  if (style.meta.license?.name) {
+  if (style.meta?.license?.name) {
     description += `, licensed under "${style.meta.license.name}".`;
   }
 
@@ -17,16 +17,16 @@ export function xml(style: Style<any>): string {
 
   const xmlCreator =
     '<dc:creator>' +
-    `<cc:Agent rdf:about="${_.xml(style.meta.homepage ?? '')}">` +
+    `<cc:Agent rdf:about="${_.xml(style.meta?.homepage ?? '')}">` +
     `<dc:title>${_.xml(creator)}</dc:title>` +
     '</cc:Agent>' +
     '</dc:creator>';
 
-  const xmlSource = style.meta.source
+  const xmlSource = style.meta?.source
     ? `<dc:source>${_.xml(style.meta.source)}</dc:source>`
     : '';
 
-  const xmlLicense = style.meta.license?.url
+  const xmlLicense = style.meta?.license?.url
     ? `<cc:license rdf:resource="${_.xml(style.meta.license.url)}" />`
     : '';
 
@@ -49,12 +49,12 @@ export function xml(style: Style<any>): string {
 }
 
 export function exif(style: Style<any>): Exif {
-  const title = style.meta.title ?? 'Unnamed';
-  const creator = style.meta.creator ?? 'Unknown';
+  const title = style.meta?.title ?? 'Unnamed';
+  const creator = style.meta?.creator ?? 'Unknown';
 
   let copyright = `"${title}" by "${creator}"`;
 
-  if (style.meta.license?.name) {
+  if (style.meta?.license?.name) {
     copyright += `, licensed under "${style.meta.license.name}".`;
   }
 
@@ -67,11 +67,11 @@ export function exif(style: Style<any>): Exif {
     'XMP-dc:Creator': creator,
   };
 
-  if (style.meta.source) {
+  if (style.meta?.source) {
     exif['XMP-dc:Source'] = style.meta.source;
   }
 
-  if (style.meta.license?.url) {
+  if (style.meta?.license?.url) {
     exif['XMP-cc:License'] = style.meta.license.url;
   }
 

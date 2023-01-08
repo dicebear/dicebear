@@ -33,7 +33,7 @@ export function merge<O extends {}>(
 ): StyleOptions<O> {
   let result: StyleOptions<O> = {
     ...(defaults(schema) as StyleOptions<O>),
-    ...(defaults(style.schema) as StyleOptions<O>),
+    ...(defaults(style.schema ?? {}) as StyleOptions<O>),
     ...options,
   };
 

@@ -1,6 +1,19 @@
+Licenses
+--------
+
+# Design
+Applies to all design files in this package.
+
+Source: Fun Emoji Set (https://www.figma.com/community/file/968125295144990435)
+Designer: Davis Uche (https://www.instagram.com/davedirect3/)
+License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+
+# Code
+Applies to all non-design files in this package.
+
 MIT License
 
-Copyright (c) 2022 Florian Körner
+Copyright (c) 2023 Florian Körner
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
