@@ -56,7 +56,6 @@ export interface Options {
     | 'variant01'
   )[];
   top?: (
-    | 'variant30'
     | 'variant29'
     | 'variant28'
     | 'variant27'

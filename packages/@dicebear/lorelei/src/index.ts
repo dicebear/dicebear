@@ -51,7 +51,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
       fill: 'none',
       'shape-rendering': 'auto'
     },
-    body: `<g transform="translate(10 -60)">${components.hair?.value(components, colors) ?? ''}</g>`,
+    body: `<g transform="translate(10 -60)">${components.hair?.value(components, colors) ?? ''}</g><g transform="translate(10 -60)">${components.hairAccessories?.value(components, colors) ?? ''}</g>`,
   };
 };
 

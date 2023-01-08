@@ -17,6 +17,6 @@ export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
     'skin': prng.pick(options.skinColor ?? []) ?? 'transparent',
     'clothing': prng.pick(options.clothingColor ?? []) ?? 'transparent',
-    'hair': prng.pick(options.hairColor ?? []) ?? 'transparent',
+    'headContrast': prng.pick(options.headContrastColor ?? []) ?? 'transparent',
   }
 };

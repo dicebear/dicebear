@@ -176,25 +176,6 @@ export const schema: StyleSchema = {
       "maximum": 100,
       "default": 10
     },
-    "hairColor": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
-      },
-      "default": [
-        "2c1b18",
-        "e8e1e1",
-        "ecdcbf",
-        "d6b370",
-        "f59797",
-        "b58143",
-        "a55728",
-        "724133",
-        "4a312c",
-        "c93305"
-      ]
-    },
     "head": {
       "type": "array",
       "items": {
@@ -299,6 +280,25 @@ export const schema: StyleSchema = {
         "turban",
         "twists",
         "twists2"
+      ]
+    },
+    "headContrastColor": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-fA-F0-9]{6}$"
+      },
+      "default": [
+        "2c1b18",
+        "e8e1e1",
+        "ecdcbf",
+        "d6b370",
+        "f59797",
+        "b58143",
+        "a55728",
+        "724133",
+        "4a312c",
+        "c93305"
       ]
     },
     "mask": {

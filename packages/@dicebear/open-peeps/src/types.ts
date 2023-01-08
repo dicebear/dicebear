@@ -125,7 +125,7 @@ export interface Options {
   accessoriesProbability?: number;
   skinColor?: string[];
   clothingColor?: string[];
-  hairColor?: string[];
+  headContrastColor?: string[];
 }
 
 export type ColorPickCollection = Record<string, string>;

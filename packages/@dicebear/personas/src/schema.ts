@@ -213,8 +213,7 @@ export const schema: StyleSchema = {
         "d78774",
         "b16a5b",
         "92594b",
-        "623d36",
-        "c9e6dc"
+        "623d36"
       ]
     }
   }
