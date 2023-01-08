@@ -13,6 +13,6 @@
     "prepare-publish": "lerna version --force-publish"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^6.4.0"
   }
 }
