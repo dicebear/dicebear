@@ -7,7 +7,7 @@
 
 import type { StyleCreate, StyleMeta } from '@dicebear/core';
 import type { Options } from './types.js';
-import initials from 'initials';
+import { getInitials } from './utils/initials.js';
 
 export const meta: StyleMeta = {
   title: 'Initials',
@@ -23,9 +23,10 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
   const fontFamily = options.fontFamily?.join(', ') ?? 'Arial, sans-serif';
   const fontSize = options.fontSize ?? 50;
   const fontWeight = options.fontWeight ?? 400;
-  const seedInitials = (initials(prng.seed.trim()) as string)
-    .toLocaleUpperCase()
-    .slice(0, options.chars ?? 2);
+  const seedInitials = (getInitials(prng.seed.trim()) as string).slice(
+    0,
+    options.chars ?? 2
+  );
 
   // prettier-ignore
   const svg = [

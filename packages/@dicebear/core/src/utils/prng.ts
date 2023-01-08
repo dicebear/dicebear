@@ -23,6 +23,9 @@ function hashSeed(seed: string) {
 }
 
 export function create(seed: string = ''): Prng {
+  // Ensure that seed is a string
+  seed = seed.toString();
+
   let value = hashSeed(seed) || 1;
 
   const next = () => (value = xorshift(value));
