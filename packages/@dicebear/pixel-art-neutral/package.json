@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/pixel-art-neutral",
-  "version": "5.0.0-beta.6",
+  "version": "5.0.0-beta.7",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.0.0-beta.6",
+    "@dicebear/core": "^5.0.0-beta.7",
     "@tsconfig/recommended": "^1.0.1",
     "del-cli": "^4.0.1",
     "typescript": "^4.6.3",
