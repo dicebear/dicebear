@@ -9,7 +9,7 @@ import commonjs from '@rollup/plugin-commonjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-test(`Tree shake with rollup`, async () => {
+test(`Tree shaking with rollup`, async () => {
   const bundle = await rollup({
     input: `${__dirname}/fixtures/tree-shaking/index.js`,
     plugins: [nodeResolve(), commonjs()],
