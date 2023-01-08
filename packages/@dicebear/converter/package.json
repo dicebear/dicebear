@@ -16,6 +16,8 @@
   "license": "MIT",
   "author": "Florian Körner <contact@florian-koerner.com>",
   "type": "module",
+  "main": "./lib/node/index.js",
+  "browser": "./lib/index.js",
   "exports": {
     "node": "./lib/node/index.js",
     "default": "./lib/index.js"
