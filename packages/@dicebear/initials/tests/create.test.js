@@ -16,7 +16,6 @@ const data = [
   [style, { seed: 'Felix', fontSize: 90 }],
   [style, { seed: 'Felix', fontSize: 50 }],
   [style, { seed: 'Felix', fontFamily: ['Times New Roman', 'serif'] }],
-  [style, { seed: 'Felix', backgroundColor: ['ffffff'], textColor: ['000000'] }],
 ];
 
 data.forEach((params, key) => {

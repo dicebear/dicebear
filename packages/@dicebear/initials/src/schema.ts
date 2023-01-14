@@ -28,16 +28,6 @@ export const schema: StyleSchema = {
         'f4511e',
       ],
     },
-    textColor: {
-      type: 'array',
-      items: {
-        type: 'string',
-        pattern: '^(transparent|[a-fA-F0-9]{6})$',
-      },
-      default: [
-        'ffffff'
-      ],
-    },
     fontFamily: {
       type: 'array',
       minItems: 1,
