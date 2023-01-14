@@ -26,7 +26,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "f9c9b6",
@@ -38,7 +38,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "f9c9b6",
@@ -94,7 +94,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "d2eff3",
@@ -126,7 +126,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "000000"
@@ -154,7 +154,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "000000"
@@ -178,7 +178,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "77311d"
@@ -208,7 +208,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "f9c9b6",
@@ -262,7 +262,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "f9c9b6",
@@ -316,7 +316,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "000000"
@@ -358,7 +358,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "f9c9b6",

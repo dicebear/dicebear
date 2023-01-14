@@ -14,7 +14,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "ffffff"
@@ -284,7 +284,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "ffc700",

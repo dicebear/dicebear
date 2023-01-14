@@ -32,7 +32,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "daa520",
@@ -140,7 +140,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "5bc0de",
@@ -195,7 +195,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "76778b",
@@ -248,7 +248,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "4b4b4b",
@@ -369,7 +369,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "cab188",
@@ -445,7 +445,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "d29985",
@@ -458,7 +458,7 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-fA-F0-9]{6}$"
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
         "ffdbac",
