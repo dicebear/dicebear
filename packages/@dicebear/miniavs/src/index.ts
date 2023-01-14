@@ -23,8 +23,6 @@ import { escape } from '@dicebear/core';
 import type { Options } from './types.js';
 import { getComponents } from './utils/getComponents.js';
 import { getColors } from './utils/getColors.js';
-import { onPreCreate } from './hooks/onPreCreate.js';
-import { onPostCreate } from './hooks/onPostCreate.js';
 
 export const meta: StyleMeta = {
   title: 'Miniavs - Free Avatar Creator',
@@ -38,12 +36,8 @@ export const meta: StyleMeta = {
 };
 
 export const create: StyleCreate<Options> = ({ prng, options }) => {
-  onPreCreate({ prng, options });
-
   const components = getComponents({ prng, options });
   const colors = getColors({ prng, options });
-
-  onPostCreate({ prng, options, components, colors });
 
   return {
     attributes: {

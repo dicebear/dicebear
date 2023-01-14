@@ -7,6 +7,7 @@
 
 import type { Prng } from '@dicebear/core';
 import type { Options, ColorPickCollection } from '../types.js';
+import { convertColor } from './convertColor.js';
 
 type Props = {
   prng: Prng,
@@ -15,8 +16,8 @@ type Props = {
 
 export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
-    'skin': prng.pick(options.skinColor ?? []) ?? 'transparent',
-    'clothing': prng.pick(options.clothingColor ?? []) ?? 'transparent',
-    'headContrast': prng.pick(options.headContrastColor ?? []) ?? 'transparent',
+    'skin': convertColor(prng.pick(options.skinColor ?? []) ?? 'transparent'),
+    'clothing': convertColor(prng.pick(options.clothingColor ?? []) ?? 'transparent'),
+    'headContrast': convertColor(prng.pick(options.headContrastColor ?? []) ?? 'transparent'),
   }
 };

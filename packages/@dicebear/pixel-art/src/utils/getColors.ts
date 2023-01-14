@@ -7,6 +7,7 @@
 
 import type { Prng } from '@dicebear/core';
 import type { Options, ColorPickCollection } from '../types.js';
+import { convertColor } from './convertColor.js';
 
 type Props = {
   prng: Prng,
@@ -15,12 +16,12 @@ type Props = {
 
 export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
-    'accessories': prng.pick(options.accessoriesColor ?? []) ?? 'transparent',
-    'clothing': prng.pick(options.clothingColor ?? []) ?? 'transparent',
-    'eyes': prng.pick(options.eyesColor ?? []) ?? 'transparent',
-    'glasses': prng.pick(options.glassesColor ?? []) ?? 'transparent',
-    'hair': prng.pick(options.hairColor ?? []) ?? 'transparent',
-    'mouth': prng.pick(options.mouthColor ?? []) ?? 'transparent',
-    'skin': prng.pick(options.skinColor ?? []) ?? 'transparent',
+    'accessories': convertColor(prng.pick(options.accessoriesColor ?? []) ?? 'transparent'),
+    'clothing': convertColor(prng.pick(options.clothingColor ?? []) ?? 'transparent'),
+    'eyes': convertColor(prng.pick(options.eyesColor ?? []) ?? 'transparent'),
+    'glasses': convertColor(prng.pick(options.glassesColor ?? []) ?? 'transparent'),
+    'hair': convertColor(prng.pick(options.hairColor ?? []) ?? 'transparent'),
+    'mouth': convertColor(prng.pick(options.mouthColor ?? []) ?? 'transparent'),
+    'skin': convertColor(prng.pick(options.skinColor ?? []) ?? 'transparent'),
   }
 };
