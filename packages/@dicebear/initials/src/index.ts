@@ -32,7 +32,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
 
   // prettier-ignore
   const svg = [
-    `<text x="50%" y="50%" font-family="${fontFamily}" font-size="${fontSize}" fontWeight="${fontWeight}" fill="#${textColor}" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
+    `<text x="50%" y="50%" font-family="${fontFamily}" font-size="${fontSize}" fontWeight="${fontWeight}" fill="${textColor}" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
   ].join('');
 
   return {
