@@ -8,6 +8,7 @@
 import type { StyleCreate, StyleMeta } from '@dicebear/core';
 import type { Options } from './types.js';
 import { getInitials } from './utils/initials.js';
+import { convertColor } from './utils/convertColor.js';
 
 export const meta: StyleMeta = {
   title: 'Initials',
@@ -23,6 +24,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
   const fontFamily = options.fontFamily?.join(', ') ?? 'Arial, sans-serif';
   const fontSize = options.fontSize ?? 50;
   const fontWeight = options.fontWeight ?? 400;
+  const textColor = convertColor(prng.pick(options.textColor ?? []) ?? 'ffffff');
   const seedInitials = (getInitials(prng.seed.trim()) as string).slice(
     0,
     options.chars ?? 2
@@ -30,7 +32,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
 
   // prettier-ignore
   const svg = [
-    `<text x="50%" y="50%" font-family="${fontFamily}" font-size="${fontSize}" fontWeight="${fontWeight}" fill="#FFF" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
+    `<text x="50%" y="50%" font-family="${fontFamily}" font-size="${fontSize}" fontWeight="${fontWeight}" fill="#${textColor}" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
   ].join('');
 
   return {
