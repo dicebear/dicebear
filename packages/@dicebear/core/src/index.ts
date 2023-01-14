@@ -2,7 +2,7 @@
  * DiceBear (@dicebear/core)
  *
  * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/main/LICENSE)
- * Copyright (c) 2022 Florian Körner
+ * Copyright (c) 2023 Florian Körner
  */
 
 import * as license from './utils/license.js';
