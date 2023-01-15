@@ -47,7 +47,7 @@ export function create(seed: string = ''): Prng {
       if (arr.length === 0) {
         next();
 
-        return undefined;
+        return fallback;
       }
 
       return arr[integer(0, arr.length - 1)] ?? fallback;

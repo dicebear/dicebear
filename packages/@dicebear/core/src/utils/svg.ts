@@ -27,7 +27,7 @@ export function addBackground(
 ) {
   let { width, height, x, y } = getViewBox(result);
 
-  const solidBackground = `<rect fill="#${primaryColor}" width="${width}" height="${height}" x="${x}" y="${y}" />`;
+  const solidBackground = `<rect fill="${primaryColor}" width="${width}" height="${height}" x="${x}" y="${y}" />`;
 
   switch (type) {
     case 'solid':
