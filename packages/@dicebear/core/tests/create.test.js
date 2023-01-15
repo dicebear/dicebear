@@ -48,19 +48,33 @@ const style = {
 
 data.forEach((options, key) => {
   test(`Create avatar #${key}`, async () => {
-    const svgPath = path.resolve(__dirname, 'svg', `${key}.svg`);
+    const svgPath = path.resolve(__dirname, 'static/create', `${key}.svg`);
+    const jsonPath = path.resolve(__dirname, 'static/create', `${key}.json`);
 
     if (false === fs.existsSync(svgPath)) {
       if (false === fs.existsSync(path.dirname(svgPath))) {
-        fs.mkdirSync(path.dirname(svgPath));
+        fs.mkdirSync(path.dirname(svgPath), { recursive: true });
       }
 
       await createAvatar(style, options).toFile(svgPath);
     }
 
+    if (false === fs.existsSync(jsonPath)) {
+      if (false === fs.existsSync(path.dirname(jsonPath))) {
+        fs.mkdirSync(path.dirname(jsonPath), { recursive: true });
+      }
+
+      fs.writeFileSync(
+        jsonPath,
+        JSON.stringify(createAvatar(style, options).toJson(), null, 2)
+      );
+    }
+
     const svg = fs.readFileSync(svgPath, { encoding: 'utf-8' });
+    const json = JSON.parse(fs.readFileSync(jsonPath, { encoding: 'utf-8' }));
 
     equal(createAvatar(style, options).toString(), svg);
+    equal(JSON.parse(JSON.stringify(createAvatar(style, options).toJson())), json);
   });
 });
 

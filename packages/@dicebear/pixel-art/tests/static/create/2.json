@@ -1,0 +1,13 @@
+{
+  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\" fill=\"none\" shape-rendering=\"crispEdges\"><desc>\"Pixel Art\" by \"Florian Körner\", licensed under \"CC0 1.0\". / Remix of the original. - Created with dicebear.com</desc><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:RDF><cc:Work><dc:title>Pixel Art</dc:title><dc:creator><cc:Agent rdf:about=\"https://dicebear.com\"><dc:title>Florian Körner</dc:title></cc:Agent></dc:creator><dc:source>https://dicebear.com</dc:source><cc:license rdf:resource=\"https://creativecommons.org/licenses/zero/1.0/\" /></cc:Work></rdf:RDF></metadata><mask id=\"65lkwscs\"><rect width=\"16\" height=\"16\" rx=\"0\" ry=\"0\" x=\"0\" y=\"0\" fill=\"#fff\" /></mask><g mask=\"url(#65lkwscs)\"><path d=\"M4 2h8v1h1v3h1v2h-1v3h-1v1H9v1h4v1h1v2H2v-2h1v-1h4v-1H4v-1H3V8H2V6h1V3h1V2Z\" fill=\"#ffdbac\"/><path d=\"M4 2h8v1h1v3h1v2h-1v3h-1v1H4v-1H3V8H2V6h1V3h1V2Z\" fill=\"#fff\" fill-opacity=\".1\"/><path fill=\"#5bc0de\" d=\"M4 14h8v2H4z\"/><path fill=\"#fff\" fill-opacity=\".3\" d=\"M4 14h1v2H4zM11 14h1v2h-1z\"/><g fill-rule=\"evenodd\" clip-rule=\"evenodd\"><path d=\"M11 5h-1v2h2V6h-1V5ZM6 5H5v2h2V6H6V5Z\" fill=\"#fff\"/><path d=\"M10 5v1h1v1H9V5h1ZM5 5v1h1v1H4V5h1Z\" fill=\"#588387\"/><path d=\"M10 5v1H9V5h1Zm1 1v1h-1V6h1ZM5 5v1H4V5h1Zm1 1v1H5V6h1Z\" fill=\"#fff\" fill-opacity=\".5\"/></g><path d=\"M8 10v1h1v-1H8Z\" fill=\"#d29985\"/><path d=\"M12 1H5v1H4v1H3v1H2v2h2V5h1V4h1V3h5v1h1v1h1v1h1V3h-1V2h-1V1ZM13 8h1v4h-2v-1h1V8ZM2 8h1v3h1v1H2V8Z\" fill=\"#28150a\"/></g></svg>",
+  "extra": {
+    "backgroundColor": "#undefined",
+    "accessories": "#fafad2",
+    "clothing": "#5bc0de",
+    "eyes": "#588387",
+    "glasses": "#5f705c",
+    "mouth": "#d29985",
+    "hair": "#28150a",
+    "skin": "#ffdbac"
+  }
+}

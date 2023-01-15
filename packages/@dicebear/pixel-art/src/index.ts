@@ -46,6 +46,16 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
       'shape-rendering': 'crispEdges'
     },
     body: `<path d="M4 2h8v1h1v3h1v2h-1v3h-1v1H9v1h4v1h1v2H2v-2h1v-1h4v-1H4v-1H3V8H2V6h1V3h1V2Z" fill="${escape.xml(`${colors.skin}`)}"/><path d="M4 2h8v1h1v3h1v2h-1v3h-1v1H4v-1H3V8H2V6h1V3h1V2Z" fill="#fff" fill-opacity=".1"/>${components.accessories?.value(components, colors) ?? ''}${components.clothing?.value(components, colors) ?? ''}${components.eyes?.value(components, colors) ?? ''}${components.glasses?.value(components, colors) ?? ''}${components.beard?.value(components, colors) ?? ''}${components.mouth?.value(components, colors) ?? ''}${components.hair?.value(components, colors) ?? ''}`,
+    extra: () => ({
+      ...Object.entries(components).reduce<Record<string, string | undefined>>(
+        (acc, [key, value]) => {
+          acc[key] = value?.name;
+          return acc;
+        },
+        {}
+      ),
+      ...colors,
+    }),
   };
 };
 

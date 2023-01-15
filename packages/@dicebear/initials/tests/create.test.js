@@ -50,7 +50,7 @@ data.forEach((params, key) => {
     const json = JSON.parse(fs.readFileSync(jsonPath, { encoding: 'utf-8' }));
 
     equal(createAvatar(...params).toString(), svg);
-    equal(createAvatar(...params).toJson(), json);
+    equal(JSON.parse(JSON.stringify(createAvatar(...params).toJson())), json);
   });
 });
 

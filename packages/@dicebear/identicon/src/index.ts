@@ -46,6 +46,16 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
       'shape-rendering': 'crispEdges'
     },
     body: `${components.row1?.value(components, colors) ?? ''}${components.row2?.value(components, colors) ?? ''}${components.row3?.value(components, colors) ?? ''}${components.row4?.value(components, colors) ?? ''}${components.row5?.value(components, colors) ?? ''}`,
+    extra: () => ({
+      ...Object.entries(components).reduce<Record<string, string | undefined>>(
+        (acc, [key, value]) => {
+          acc[key] = value?.name;
+          return acc;
+        },
+        {}
+      ),
+      ...colors,
+    }),
   };
 };
 

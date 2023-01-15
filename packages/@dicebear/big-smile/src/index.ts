@@ -46,6 +46,16 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
       'shape-rendering': 'auto'
     },
     body: `<g transform="matrix(.85775 0 0 .85427 52 47)">${components.face?.value(components, colors) ?? ''}</g><g transform="matrix(.85472 0 0 .855 19 -17)">${components.mouth?.value(components, colors) ?? ''}</g><g transform="matrix(.85472 0 0 .855 19 -17)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="matrix(.85472 0 0 .85667 18 -15)">${components.hair?.value(components, colors) ?? ''}</g><g transform="matrix(.85472 0 0 .85667 14 -12)">${components.accessories?.value(components, colors) ?? ''}</g>`,
+    extra: () => ({
+      ...Object.entries(components).reduce<Record<string, string | undefined>>(
+        (acc, [key, value]) => {
+          acc[key] = value?.name;
+          return acc;
+        },
+        {}
+      ),
+      ...colors,
+    }),
   };
 };
 

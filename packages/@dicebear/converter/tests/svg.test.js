@@ -5,7 +5,7 @@ import { test } from 'uvu';
 import { not } from 'uvu/assert';
 
 const __dirname = new URL('.', import.meta.url).pathname;
-const avatar = fs.readFileSync(path.resolve(__dirname, 'avatar.svg'), {
+const avatar = fs.readFileSync(path.resolve(__dirname, 'fixtures/avatar.svg'), {
   encoding: 'utf8',
 });
 
