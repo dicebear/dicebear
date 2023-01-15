@@ -9,6 +9,10 @@ export interface Result extends ConverterResult {
   png(options?: ResultConvertOptions): ConverterResult;
   jpeg(options?: ResultConvertOptions): ConverterResult;
   toString(): string;
+  toJson(): {
+    svg: string;
+    extra: Record<string, unknown>;
+  };
 }
 
 export interface Options {
@@ -60,6 +64,7 @@ export interface StyleCreateResultAttributes {
 export interface StyleCreateResult {
   attributes: StyleCreateResultAttributes;
   body: string;
+  extra?: () => Record<string, unknown>;
 }
 
 export interface StyleMeta {

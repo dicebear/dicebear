@@ -60,16 +60,26 @@ export function createAvatar<O extends {}>(
   const metadata = license.xml(style);
   const exif = license.exif(style);
 
-  const avatar = `<svg ${attributes}>${metadata}${result.body}</svg>`;
+  const svg = `<svg ${attributes}>${metadata}${result.body}</svg>`;
 
   return {
-    toString: () => avatar,
-    ...toFormat(avatar, 'svg'),
+    toString: () => svg,
+    toJson: () => ({
+      svg: svg,
+      extra: {
+        backgroundColor:
+          'transparent' === backgroundColor
+            ? 'transparent'
+            : `#${backgroundColor}`,
+        ...result.extra?.(),
+      },
+    }),
+    ...toFormat(svg, 'svg'),
     png: ({ includeExif = false }: ResultConvertOptions = {}) => {
-      return toFormat(avatar, 'png', includeExif ? exif : undefined);
+      return toFormat(svg, 'png', includeExif ? exif : undefined);
     },
     jpeg: ({ includeExif = false }: ResultConvertOptions = {}) => {
-      return toFormat(avatar, 'jpeg', includeExif ? exif : undefined);
+      return toFormat(svg, 'jpeg', includeExif ? exif : undefined);
     },
   };
 }

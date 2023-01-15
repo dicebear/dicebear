@@ -25,14 +25,14 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
   const fontSize = options.fontSize ?? 50;
   const fontWeight = options.fontWeight ?? 400;
   const textColor = convertColor(prng.pick(options.textColor ?? []) ?? 'ffffff');
-  const seedInitials = (getInitials(prng.seed.trim()) as string).slice(
+  const initials = (getInitials(prng.seed.trim()) as string).slice(
     0,
     options.chars ?? 2
   );
 
   // prettier-ignore
   const svg = [
-    `<text x="50%" y="50%" font-family="${fontFamily}" font-size="${fontSize}" font-weight="${fontWeight}" fill="${textColor}" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${seedInitials}</text>`,
+    `<text x="50%" y="50%" font-family="${fontFamily}" font-size="${fontSize}" font-weight="${fontWeight}" fill="${textColor}" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${initials}</text>`,
   ].join('');
 
   return {
@@ -40,6 +40,13 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
       viewBox: '0 0 100 100',
     },
     body: svg,
+    extra: () => ({
+      fontFamily,
+      fontSize,
+      fontWeight,
+      textColor,
+      initials
+    })
   };
 };
 
