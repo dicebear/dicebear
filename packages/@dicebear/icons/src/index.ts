@@ -18,7 +18,7 @@
  * License: https://github.com/twbs/icons/blob/main/LICENSE.md
  */
 
-import type { StyleCreate, StyleMeta, StyleSchema } from '@dicebear/core';
+import type { StyleCreate, StyleMeta } from '@dicebear/core';
 import { escape } from '@dicebear/core';
 
 import type { Options } from './types.js';

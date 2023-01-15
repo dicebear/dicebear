@@ -17,7 +17,7 @@
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 
-import type { StyleCreate, StyleMeta, StyleSchema } from '@dicebear/core';
+import type { StyleCreate, StyleMeta } from '@dicebear/core';
 import { escape } from '@dicebear/core';
 
 import type { Options } from './types.js';
