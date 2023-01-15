@@ -1,4 +1,4 @@
-import type { Prng, StyleCreateResult } from '../types.js';
+import type { BackgroundType, Prng, StyleCreateResult } from '../types.js';
 
 import * as escape from './escape.js';
 import { create as createPrng } from './prng.js';
@@ -18,13 +18,33 @@ export function getViewBox(result: StyleCreateResult) {
   };
 }
 
-export function addBackgroundColor(
+export function addBackground(
   result: StyleCreateResult,
-  backgroundColor: string
+  primaryColor: string,
+  secondaryColor: string,
+  type: BackgroundType,
+  rotation: number
 ) {
   let { width, height, x, y } = getViewBox(result);
 
-  return `<rect fill="#${backgroundColor}" width="${width}" height="${height}" x="${x}" y="${y}" />${result.body}`;
+  const solidBackground = `<rect fill="#${primaryColor}" width="${width}" height="${height}" x="${x}" y="${y}" />`;
+
+  switch (type) {
+    case 'solid':
+      return solidBackground + result.body;
+
+    case 'linear':
+      return (
+        `<rect fill="url(#backgroundLinear)" width="${width}" height="${height}" x="${x}" y="${y}" />` +
+        `<defs>` +
+        `<linearGradient id="backgroundLinear" gradientTransform="rotate(${rotation} 0.5 0.5)">` +
+        `<stop stop-color="${primaryColor}"/>` +
+        `<stop offset="1" stop-color="${secondaryColor}"/>` +
+        `</linearGradient>` +
+        `</defs>` +
+        result.body
+      );
+  }
 }
 
 export function addScale(result: StyleCreateResult, scale: number) {

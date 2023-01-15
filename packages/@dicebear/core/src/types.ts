@@ -15,6 +15,8 @@ export interface Result extends ConverterResult {
   };
 }
 
+export type BackgroundType = 'solid' | 'linear';
+
 export interface Options {
   seed?: string;
   flip?: boolean;
@@ -23,6 +25,8 @@ export interface Options {
   radius?: number;
   size?: number;
   backgroundColor?: string[];
+  backgroundType?: BackgroundType[];
+  backgroundRotation?: number[];
   translateX?: number;
   translateY?: number;
   clip?: boolean;
@@ -39,7 +43,9 @@ export interface Prng {
   next(): void;
   bool(likelihood?: number): boolean;
   integer(min: number, max: number): number;
+  pick<T>(arr: T[], fallback: T): T;
   pick<T>(arr: T[]): T | undefined;
+  shuffle<T>(arr: T[]): T[];
   string(length: number, characters?: string): string;
 }
 

@@ -9,6 +9,7 @@ import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
 import * as license from './utils/license.js';
 import { toFormat } from '@dicebear/converter';
+import { getBackgroundColors } from './utils/color.js';
 
 export function createAvatar<O extends {}>(
   style: Style<O>,
@@ -18,7 +19,14 @@ export function createAvatar<O extends {}>(
 
   const prng = createPrng(options.seed);
   const result = style.create({ prng: prng, options });
-  const backgroundColor = prng.pick(options.backgroundColor ?? []);
+
+  const {
+    primary: primaryBackgroundColor,
+    secondary: secondaryBackgroundColor,
+  } = getBackgroundColors(prng, options.backgroundColor ?? []);
+
+  const backgroundType = prng.pick(options.backgroundType ?? [], 'solid');
+  const backgroundRotation = prng.pick(options.backgroundRotation ?? [], 0);
 
   if (options.size) {
     result.attributes.width = options.size.toString();
@@ -45,8 +53,17 @@ export function createAvatar<O extends {}>(
     );
   }
 
-  if (backgroundColor && backgroundColor !== 'transparent') {
-    result.body = svgUtils.addBackgroundColor(result, backgroundColor);
+  if (
+    primaryBackgroundColor !== 'transparent' &&
+    secondaryBackgroundColor !== 'transparent'
+  ) {
+    result.body = svgUtils.addBackground(
+      result,
+      primaryBackgroundColor,
+      secondaryBackgroundColor,
+      backgroundType,
+      backgroundRotation
+    );
   }
 
   if (options.radius || options.clip) {
@@ -67,10 +84,10 @@ export function createAvatar<O extends {}>(
     toJson: () => ({
       svg: svg,
       extra: {
-        backgroundColor:
-          'transparent' === backgroundColor
-            ? 'transparent'
-            : `#${backgroundColor}`,
+        primaryBackgroundColor,
+        secondaryBackgroundColor,
+        backgroundType,
+        backgroundRotation,
         ...result.extra?.(),
       },
     }),

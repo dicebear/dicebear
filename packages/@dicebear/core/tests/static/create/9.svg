@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -25 100 100" version="1.1"><desc>"Unnamed" by "Unknown" / Remix of the original. - Created with dicebear.com</desc><metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:RDF><cc:Work><dc:title>Unnamed</dc:title><dc:creator><cc:Agent rdf:about=""><dc:title>Unknown</dc:title></cc:Agent></dc:creator></cc:Work></rdf:RDF></metadata><mask id="2l2mhvtg"><rect width="100" height="100" rx="0" ry="0" x="-25" y="-25" fill="#fff" /></mask><g mask="url(#2l2mhvtg)"><rect fill="url(#xqg72w4h)" width="100" height="100" x="-25" y="-25" /><defs><linearGradient id="xqg72w4h" gradientTransform="rotate(180 0.5 0.5)"><stop stop-color="#ff0000"/><stop offset="1" stop-color="#00ff00"/></linearGradient></defs>
+      <rect width="25" height="25" fill="#00FFFF"/>
+      <rect x="25" width="25" height="25" fill="#FFFF00"/>
+      <rect y="25" width="25" height="25" fill="#FF00FF"/>
+      <rect x="25" y="25" width="25" height="25" fill="black"/>
+    </g></svg>

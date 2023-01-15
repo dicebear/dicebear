@@ -27,6 +27,11 @@ const data = [
     translateX: -50,
     translateY: 50,
   },
+  {
+    seed,
+    backgroundColor: ['ff0000', '00ff00', '0000ff'],
+    backgroundType: ['linear']
+  }
 ];
 
 const style = {
