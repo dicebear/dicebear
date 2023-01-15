@@ -40,6 +40,7 @@ export function addStyleCommand(
       const format = validated.format as string;
       const count = validated.count as number;
       const includeExif = validated.exif as boolean;
+      const json = validated.json as boolean;
 
       outputStyleLicenseBanner(name, style);
 
@@ -86,6 +87,20 @@ export function addStyleCommand(
             case 'jpeg':
               await avatar.jpeg({ includeExif }).toFile(fileName);
               break;
+
+            case 'json':
+              await fs.writeJSON(fileName, avatar.toJson(), { spaces: 2 });
+              break;
+          }
+
+          if (json && 'json' !== format) {
+            const jsonFileName = path.resolve(
+              process.cwd(),
+              outputPath,
+              `${name}-${i}.json`
+            );
+
+            await fs.writeJSON(jsonFileName, avatar.toJson(), { spaces: 2 });
           }
 
           bar.increment();
