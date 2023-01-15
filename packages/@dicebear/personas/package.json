@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/personas",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "^5.1.1",
+    "@dicebear/core": "^5.1.2",
     "@tsconfig/recommended": "^1.0.1",
     "del-cli": "^4.0.1",
     "typescript": "^4.6.3",
