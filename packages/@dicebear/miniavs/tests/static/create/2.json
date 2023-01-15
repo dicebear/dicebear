@@ -3,10 +3,12 @@
   "extra": {
     "backgroundColor": "#undefined",
     "head": "thin",
-    "body": "#ff4dd8",
-    "hair": "#ad3a20",
+    "body": "tShirt",
+    "hair": "classic02",
     "mouth": "default",
     "eyes": "confident",
-    "skin": "#ffcb7e"
+    "skinColor": "#ffcb7e",
+    "hairColor": "#ad3a20",
+    "bodyColor": "#ff4dd8"
   }
 }

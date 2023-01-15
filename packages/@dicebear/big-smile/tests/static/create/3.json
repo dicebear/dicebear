@@ -5,7 +5,8 @@
     "face": "base",
     "mouth": "braces",
     "eyes": "normal",
-    "hair": "#220f00",
-    "skin": "#f5d7b1"
+    "hair": "straightHair",
+    "skinColor": "#f5d7b1",
+    "hairColor": "#220f00"
   }
 }

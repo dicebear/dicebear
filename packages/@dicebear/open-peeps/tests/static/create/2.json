@@ -4,8 +4,8 @@
     "backgroundColor": "#undefined",
     "head": "shaved3",
     "face": "cheeky",
-    "skin": "#694d3d",
-    "clothing": "#9ddadb",
-    "headContrast": "#b58143"
+    "skinColor": "#694d3d",
+    "clothingColor": "#9ddadb",
+    "headContrastColor": "#b58143"
   }
 }

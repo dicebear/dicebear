@@ -5,9 +5,10 @@
     "face": "variant06",
     "nose": "variant03",
     "mouth": "variant12",
-    "top": "#f24e1e",
+    "top": "variant21",
     "mustache": "variant01",
     "eyes": "variant04",
-    "base": "#ffffff"
+    "topColor": "#f24e1e",
+    "baseColor": "#ffffff"
   }
 }

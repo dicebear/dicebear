@@ -5,8 +5,9 @@
     "face": "variant02",
     "nose": "variant08",
     "mouth": "variant14",
-    "top": "#699bf7",
+    "top": "variant15",
     "eyes": "variant02",
-    "base": "#ffffff"
+    "topColor": "#699bf7",
+    "baseColor": "#ffffff"
   }
 }

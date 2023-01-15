@@ -8,6 +8,6 @@
     "mouth": "square02",
     "eyes": "dizzy",
     "texture": "dirty02",
-    "base": "#fdd835"
+    "baseColor": "#fdd835"
   }
 }

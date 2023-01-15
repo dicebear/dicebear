@@ -8,6 +8,6 @@
     "mouth": "diagram",
     "eyes": "glow",
     "texture": "circuits",
-    "base": "#546e7a"
+    "baseColor": "#546e7a"
   }
 }

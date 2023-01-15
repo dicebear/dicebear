@@ -3,11 +3,12 @@
   "extra": {
     "backgroundColor": "#undefined",
     "eyes": "wink",
-    "hair": "#f29c65",
+    "hair": "bobCut",
     "body": "rounded",
     "mouth": "frown",
     "nose": "smallRound",
-    "clothing": "#f3b63a",
-    "skin": "#e7a391"
+    "hairColor": "#f29c65",
+    "clothingColor": "#f3b63a",
+    "skinColor": "#e7a391"
   }
 }

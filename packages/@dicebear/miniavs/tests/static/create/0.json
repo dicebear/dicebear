@@ -3,10 +3,12 @@
   "extra": {
     "backgroundColor": "#undefined",
     "head": "normal",
-    "body": "#3633e0",
-    "hair": "#47280b",
+    "body": "golf",
+    "hair": "ponyTail",
     "mouth": "missingTooth",
     "eyes": "normal",
-    "skin": "#f5d0c5"
+    "skinColor": "#f5d0c5",
+    "hairColor": "#47280b",
+    "bodyColor": "#3633e0"
   }
 }

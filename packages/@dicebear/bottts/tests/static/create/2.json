@@ -7,6 +7,6 @@
     "face": "square04",
     "mouth": "grill01",
     "eyes": "happy",
-    "base": "#7cb342"
+    "baseColor": "#7cb342"
   }
 }

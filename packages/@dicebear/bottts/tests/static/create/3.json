@@ -8,6 +8,6 @@
     "mouth": "grill02",
     "eyes": "roundFrame02",
     "texture": "grunge01",
-    "base": "#3949ab"
+    "baseColor": "#3949ab"
   }
 }

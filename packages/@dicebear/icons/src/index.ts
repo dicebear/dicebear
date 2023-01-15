@@ -55,7 +55,13 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
         },
         {}
       ),
-      ...colors,
+      ...Object.entries(colors).reduce<Record<string, string>>(
+        (acc, [key, value]) => {
+          acc[`${key}Color`] = value;
+          return acc;
+        },
+        {}
+      ),
     }),
   };
 };

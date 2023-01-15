@@ -7,6 +7,6 @@
     "row3": "xoxox",
     "row4": "xxoxx",
     "row5": "xoxox",
-    "row": "#00acc1"
+    "rowColor": "#00acc1"
   }
 }

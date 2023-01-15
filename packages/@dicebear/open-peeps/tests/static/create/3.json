@@ -5,8 +5,8 @@
     "head": "mediumBangs3",
     "face": "smile",
     "accessories": "sunglasses",
-    "skin": "#d08b5b",
-    "clothing": "#e78276",
-    "headContrast": "#b58143"
+    "skinColor": "#d08b5b",
+    "clothingColor": "#e78276",
+    "headContrastColor": "#b58143"
   }
 }

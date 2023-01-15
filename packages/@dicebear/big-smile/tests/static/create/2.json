@@ -5,7 +5,8 @@
     "face": "base",
     "mouth": "unimpressed",
     "eyes": "sad",
-    "hair": "#71472d",
-    "skin": "#643d19"
+    "hair": "bowlCutHair",
+    "skinColor": "#643d19",
+    "hairColor": "#71472d"
   }
 }

@@ -5,8 +5,9 @@
     "face": "base",
     "mouth": "unimpressed",
     "eyes": "confused",
-    "hair": "#d56c0c",
+    "hair": "wavyBob",
     "accessories": "sailormoonCrown",
-    "skin": "#c99c62"
+    "skinColor": "#c99c62",
+    "hairColor": "#d56c0c"
   }
 }

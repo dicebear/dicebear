@@ -5,7 +5,8 @@
     "face": "base",
     "mouth": "awkwardSmile",
     "eyes": "confused",
-    "hair": "#d56c0c",
-    "skin": "#e2ba87"
+    "hair": "curlyShortHair",
+    "skinColor": "#e2ba87",
+    "hairColor": "#d56c0c"
   }
 }

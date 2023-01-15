@@ -4,8 +4,8 @@
     "backgroundColor": "#undefined",
     "head": "afro",
     "face": "serious",
-    "skin": "#694d3d",
-    "clothing": "#fdea6b",
-    "headContrast": "#c93305"
+    "skinColor": "#694d3d",
+    "clothingColor": "#fdea6b",
+    "headContrastColor": "#c93305"
   }
 }

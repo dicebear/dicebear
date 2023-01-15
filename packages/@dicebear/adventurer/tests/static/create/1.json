@@ -6,7 +6,8 @@
     "eyes": "variant20",
     "eyebrows": "variant05",
     "mouth": "variant25",
-    "hair": "#cb6820",
-    "skin": "#ecad80"
+    "hair": "long09",
+    "skinColor": "#ecad80",
+    "hairColor": "#cb6820"
   }
 }

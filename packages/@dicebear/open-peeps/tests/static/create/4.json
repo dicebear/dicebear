@@ -4,8 +4,8 @@
     "backgroundColor": "#undefined",
     "head": "grayMedium",
     "face": "serious",
-    "skin": "#ffdbb4",
-    "clothing": "#78e185",
-    "headContrast": "#b58143"
+    "skinColor": "#ffdbb4",
+    "clothingColor": "#78e185",
+    "headContrastColor": "#b58143"
   }
 }
