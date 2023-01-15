@@ -33,7 +33,7 @@ export function addBackground(
     case 'solid':
       return solidBackground + result.body;
 
-    case 'linear':
+    case 'gradientLinear':
       return (
         `<rect fill="url(#backgroundLinear)" width="${width}" height="${height}" x="${x}" y="${y}" />` +
         `<defs>` +

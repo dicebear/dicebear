@@ -15,7 +15,7 @@ export interface Result extends ConverterResult {
   };
 }
 
-export type BackgroundType = 'solid' | 'linear';
+export type BackgroundType = 'solid' | 'gradientLinear';
 
 export interface Options {
   seed?: string;

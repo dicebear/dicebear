@@ -44,7 +44,7 @@ export const schema: JSONSchema7 = {
       type: 'array',
       items: {
         type: 'string',
-        enum: ['solid', 'linear'],
+        enum: ['solid', 'gradientLinear'],
       },
       default: ['solid'],
     },

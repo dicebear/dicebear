@@ -3,7 +3,7 @@
   "extra": {
     "primaryBackgroundColor": "#ff0000",
     "secondaryBackgroundColor": "#00ff00",
-    "backgroundType": "linear",
+    "backgroundType": "gradientLinear",
     "backgroundRotation": 180
   }
 }

@@ -30,7 +30,7 @@ const data = [
   {
     seed,
     backgroundColor: ['ff0000', '00ff00', '0000ff'],
-    backgroundType: ['linear']
+    backgroundType: ['gradientLinear']
   }
 ];
 
