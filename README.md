@@ -9,7 +9,7 @@
   <img src="https://api.dicebear.com/5.x/initials/svg?seed=..&backgroundColor=ade8f4&radius=10" width="64" />
 </p>
 
-With DiceBear you can create awesome avatars for your project in no time.
+With DiceBear you can create awesome avatars for your project in no time at all.
 Whether you are looking for abstract shapes or lovingly designed characters, you
 will find something suitable among our avatar styles. And no matter how and for
 what you want to use the avatars, DiceBear offers the right solution!
