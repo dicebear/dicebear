@@ -18,7 +18,7 @@ type Props = {
 
 export function onPostCreate({ prng, options, components, colors }: Props) {
   if (components.beard && colors.hair === colors.mouth) {
-    colors.mouth = 'ffffff';
+    colors.mouth = '#ffffff';
   }
   
 }
