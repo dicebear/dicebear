@@ -94,6 +94,9 @@ export function createAvatar<O extends {}>(
         ...result.extra?.(),
       },
     }),
+    toDataUriSync: () => {
+      return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+    },
     ...toFormat(svg, 'svg'),
     png: ({ includeExif = false }: ResultConvertOptions = {}) => {
       return toFormat(svg, 'png', includeExif ? exif : undefined);
