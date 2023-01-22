@@ -21,3 +21,4 @@ export const openPeeps = () => import('@dicebear/open-peeps');
 export const personas = () => import('@dicebear/personas');
 export const pixelArt = () => import('@dicebear/pixel-art');
 export const pixelArtNeutral = () => import('@dicebear/pixel-art-neutral');
+export const shapes = () => import('@dicebear/shapes');

@@ -1,0 +1,15 @@
+{
+  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\"><desc>\"Shapes\" by \"Florian Körner\", licensed under \"CC0 1.0\". / Remix of the original. - Created with dicebear.com</desc><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:RDF><cc:Work><dc:title>Shapes</dc:title><dc:creator><cc:Agent rdf:about=\"https://dicebear.com\"><dc:title>Florian Körner</dc:title></cc:Agent></dc:creator><dc:source>https://dicebear.com</dc:source><cc:license rdf:resource=\"https://creativecommons.org/publicdomain/zero/1.0/\" /></cc:Work></rdf:RDF></metadata><mask id=\"6vlua13i\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\" x=\"0\" y=\"0\" fill=\"#fff\" /></mask><g mask=\"url(#6vlua13i)\"><rect fill=\"#1c799f\" width=\"100\" height=\"100\" x=\"0\" y=\"0\" /><g transform=\"matrix(1.2 0 0 1.2 -10 -10)\"><g transform=\"translate(31, 31) rotate(0 50 50)\"><path d=\"M0 0h100v100H0V0Z\" fill=\"#f88c49\"/></g></g><g transform=\"matrix(.8 0 0 .8 10 10)\"><g transform=\"translate(7, 5) rotate(147 50 50)\"><path d=\"M100 50A50 50 0 1 1 0 50a50 50 0 0 1 100 0Z\" fill=\"#0a5b83\"/></g></g><g transform=\"matrix(.4 0 0 .4 30 30)\"><g transform=\"translate(13, 11) rotate(98 50 50)\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M90 10H10v80h80V10ZM0 0v100h100V0H0Z\" fill=\"#f1f4dc\"/></g></g></g></svg>",
+  "extra": {
+    "primaryBackgroundColor": "#1c799f",
+    "secondaryBackgroundColor": "#69d2e7",
+    "backgroundType": "solid",
+    "backgroundRotation": 321,
+    "shape1": "rectangleFilled",
+    "shape2": "ellipseFilled",
+    "shape3": "rectangle",
+    "shape1Color": "#f88c49",
+    "shape2Color": "#0a5b83",
+    "shape3Color": "#f1f4dc"
+  }
+}

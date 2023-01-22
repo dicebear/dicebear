@@ -21,6 +21,7 @@ import * as openPeeps from '@dicebear/open-peeps';
 import * as personas from '@dicebear/personas';
 import * as pixelArt from '@dicebear/pixel-art';
 import * as pixelArtNeutral from '@dicebear/pixel-art-neutral';
+import * as shapes from '@dicebear/shapes';
 
 export {
   adventurer,
@@ -46,4 +47,5 @@ export {
   personas,
   pixelArt,
   pixelArtNeutral,
+  shapes,
 };
