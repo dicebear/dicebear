@@ -26,7 +26,10 @@ export function createAvatar<O extends {}>(
   } = getBackgroundColors(prng, options.backgroundColor ?? []);
 
   const backgroundType = prng.pick(options.backgroundType ?? [], 'solid');
-  const backgroundRotation = prng.pick(options.backgroundRotation ?? [], 0);
+  const backgroundRotation = prng.integer(
+    Math.min(...(options.backgroundRotation || [0])),
+    Math.max(...(options.backgroundRotation || [0]))
+  );
 
   if (options.size) {
     result.attributes.width = options.size.toString();
