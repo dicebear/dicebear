@@ -55,7 +55,6 @@ export const schema: JSONSchema7 = {
         minimum: -360,
         maximum: 360,
       },
-      maxItems: 2,
       default: [
         0, 360,
       ],
