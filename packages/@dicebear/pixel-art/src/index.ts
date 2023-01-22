@@ -12,7 +12,7 @@
  * Copyright (c) 2023 Florian Körner
  *
  * Design "Pixel Art" by Florian Körner licensed under CC0 1.0. / Remix of the original.
- * Source: https://dicebear.com
+ * Source: https://www.figma.com/community/file/1198754108850888330
  * Homepage: https://dicebear.com
  * License: https://creativecommons.org/licenses/zero/1.0/
  */
@@ -27,7 +27,7 @@ import { getColors } from './utils/getColors.js';
 export const meta: StyleMeta = {
   title: 'Pixel Art',
   creator: 'Florian Körner',
-  source: 'https://dicebear.com',
+  source: 'https://www.figma.com/community/file/1198754108850888330',
   homepage: 'https://dicebear.com',
   license: {
     name: 'CC0 1.0',

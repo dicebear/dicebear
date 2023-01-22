@@ -11,8 +11,8 @@
  * Code licensed under MIT License.
  * Copyright (c) 2023 Florian Körner
  *
- * Design "Pixel Art neutral" by Florian Körner licensed under CC0 1.0. / Remix of the original.
- * Source: https://dicebear.com
+ * Design "Pixel Art Neutral" by Florian Körner licensed under CC0 1.0. / Remix of the original.
+ * Source: https://www.figma.com/community/file/1198754108850888330
  * Homepage: https://dicebear.com
  * License: https://creativecommons.org/licenses/zero/1.0/
  */
@@ -25,9 +25,9 @@ import { getComponents } from './utils/getComponents.js';
 import { getColors } from './utils/getColors.js';
 
 export const meta: StyleMeta = {
-  title: 'Pixel Art neutral',
+  title: 'Pixel Art Neutral',
   creator: 'Florian Körner',
-  source: 'https://dicebear.com',
+  source: 'https://www.figma.com/community/file/1198754108850888330',
   homepage: 'https://dicebear.com',
   license: {
     name: 'CC0 1.0',

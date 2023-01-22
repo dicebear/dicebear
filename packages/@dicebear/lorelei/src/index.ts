@@ -12,7 +12,7 @@
  * Copyright (c) 2023 Florian Körner
  *
  * Design "Lorelei" by Lisa Wischofsky licensed under CC0 1.0. / Remix of the original.
- * Source: https://dicebear.com/
+ * Source: https://www.figma.com/community/file/1198749693280469639
  * Homepage: https://www.instagram.com/lischi_art/
  * License: https://creativecommons.org/licenses/zero/1.0/
  */
@@ -28,7 +28,7 @@ import { onPostCreate } from './hooks/onPostCreate.js';
 export const meta: StyleMeta = {
   title: 'Lorelei',
   creator: 'Lisa Wischofsky',
-  source: 'https://dicebear.com/',
+  source: 'https://www.figma.com/community/file/1198749693280469639',
   homepage: 'https://www.instagram.com/lischi_art/',
   license: {
     name: 'CC0 1.0',
