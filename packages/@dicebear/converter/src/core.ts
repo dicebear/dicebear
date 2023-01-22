@@ -1,9 +1,7 @@
 import type { Result, Exif, Format, ToFormat } from './types';
 import { getMimeType } from './utils/mime-type.js';
 import { ensureSize } from './utils/svg.js';
-
-const encoder = new TextEncoder();
-const decoder = new TextDecoder();
+import { getDecoder, getEncoder } from './utils/text.js';
 
 export const toFormat: ToFormat = function (
   svg: string,
@@ -29,7 +27,7 @@ async function toDataUri(
 ): Promise<string> {
   if (format === 'svg') {
     return `data:${getMimeType('svg')};utf8,${encodeURIComponent(
-      decoder.decode(arrayBuffer)
+      getDecoder().decode(arrayBuffer)
     )}`;
   } else {
     let binary = '';
@@ -72,12 +70,12 @@ async function toArrayBuffer(
   }
 
   if (format === 'svg') {
-    return encoder.encode(rawSvg);
+    return getEncoder().encode(rawSvg);
   }
 
   let { svg, size } = ensureSize(rawSvg);
 
-  const svgArrayBuffer = encoder.encode(svg);
+  const svgArrayBuffer = getEncoder().encode(svg);
 
   const canvas = document.createElement('canvas');
   canvas.width = size;
