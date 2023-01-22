@@ -39,11 +39,11 @@ async function toFile(
   exif?: Exif
 ): Promise<void> {
   if (format === 'svg') {
-    fs.writeFile(name, svg);
+    await fs.writeFile(name, svg);
     return;
   }
 
-  fs.writeFile(name, await toBuffer(svg, format, exif));
+  await fs.writeFile(name, await toBuffer(svg, format, exif));
 }
 
 async function toArrayBuffer(
