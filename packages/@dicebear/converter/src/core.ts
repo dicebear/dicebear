@@ -1,7 +1,7 @@
 import type { Result, Exif, Format, ToFormat } from './types';
 import { getMimeType } from './utils/mime-type.js';
 import { ensureSize } from './utils/svg.js';
-import { getDecoder, getEncoder } from './utils/text.js';
+import { getEncoder } from './utils/text.js';
 
 export const toFormat: ToFormat = function (
   svg: string,
@@ -9,73 +9,72 @@ export const toFormat: ToFormat = function (
   exif?: Exif
 ): Result {
   return {
-    toDataUri: async () => {
-      return toDataUri(await toArrayBuffer(svg, format, exif), format);
-    },
-    toFile: async (name: string) => {
-      return toFile(await toArrayBuffer(svg, format, exif), format, name);
-    },
-    toArrayBuffer: async () => {
-      return toArrayBuffer(svg, format, exif);
-    },
+    toDataUri: () => toDataUri(svg, format, exif),
+    toFile: (name: string) => toFile(name, svg, format, exif),
+    toArrayBuffer: () => toArrayBuffer(svg, format, exif),
   };
 };
 
 async function toDataUri(
-  arrayBuffer: ArrayBuffer,
-  format: Format
-): Promise<string> {
-  if (format === 'svg') {
-    return `data:${getMimeType('svg')};utf8,${encodeURIComponent(
-      getDecoder().decode(arrayBuffer)
-    )}`;
-  } else {
-    let binary = '';
-
-    const bytes = new Uint8Array(arrayBuffer);
-    const len = bytes.byteLength;
-
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-
-    return `data:${getMimeType(format)};base64,${window.btoa(binary)}`;
-  }
-}
-
-async function toFile(
-  arrayBuffer: ArrayBuffer,
+  svg: string,
   format: Format,
-  name: string
-): Promise<void> {
-  const link = document.createElement('a');
-  link.href = await toDataUri(arrayBuffer, format);
-  link.download = name;
-  link.click();
-  link.remove();
+  exif?: Exif
+): Promise<string> {
+  if ('svg' === format) {
+    return `data:${getMimeType(format)};utf8,${encodeURIComponent(svg)}`;
+  }
+
+  const canvas = await toCanvas(svg, format, exif);
+
+  return canvas.toDataURL(getMimeType(format));
 }
 
 async function toArrayBuffer(
   rawSvg: string,
   format: Format,
   exif?: Exif
-): Promise<ArrayBuffer> {
-  if (exif) {
-    console.warn(
-      'The `exif` option is not supported in the browser version of `@dicebear/converter`.'
-    );
-    console.warn(
-      'Please use the node version of `@dicebear/converter` to generate images with exif data.'
-    );
-  }
-
-  if (format === 'svg') {
+): Promise<ArrayBufferLike> {
+  if ('svg' === format) {
     return getEncoder().encode(rawSvg);
   }
 
-  let { svg, size } = ensureSize(rawSvg);
+  const canvas = await toCanvas(rawSvg, format, exif);
 
-  const svgArrayBuffer = getEncoder().encode(svg);
+  return await new Promise<ArrayBufferLike>((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      blob
+        ? resolve(blob.arrayBuffer())
+        : reject(new Error('Could not create blob'));
+    }, getMimeType(format));
+  });
+}
+
+async function toFile(
+  name: string,
+  svg: string,
+  format: Format,
+  exif?: Exif
+): Promise<void> {
+  const link = document.createElement('a');
+  link.href = await toDataUri(svg, format, exif);
+  link.download = name;
+  link.click();
+  link.remove();
+}
+
+async function toCanvas(
+  rawSvg: string,
+  format: Exclude<Format, 'svg'>,
+  exif?: Exif
+): Promise<HTMLCanvasElement> {
+  if (exif) {
+    console.warn(
+      'The `exif` option is not supported in the browser version of `@dicebear/converter`. \n' +
+        'Please use the node version of `@dicebear/converter` to generate images with exif data.'
+    );
+  }
+
+  let { svg, size } = ensureSize(rawSvg);
 
   const canvas = document.createElement('canvas');
   canvas.width = size;
@@ -96,17 +95,13 @@ async function toArrayBuffer(
   img.width = size;
   img.height = size;
 
-  img.setAttribute('src', await toDataUri(svgArrayBuffer, 'svg'));
+  img.setAttribute('src', await toDataUri(svg, 'svg'));
 
   return new Promise((resolve, reject) => {
     img.onload = () => {
       context.drawImage(img, 0, 0, size, size);
 
-      canvas.toBlob((blob) => {
-        blob
-          ? resolve(blob.arrayBuffer())
-          : reject(new Error('Could not create blob'));
-      }, `image/${format}`);
+      resolve(canvas);
     };
 
     img.onerror = (e) => reject(e);

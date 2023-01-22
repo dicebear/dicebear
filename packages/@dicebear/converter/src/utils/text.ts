@@ -1,5 +1,4 @@
 let encoder: TextEncoder;
-let decoder: TextDecoder;
 
 export function getEncoder() {
   if (!encoder) {
@@ -7,12 +6,4 @@ export function getEncoder() {
   }
 
   return encoder;
-}
-
-export function getDecoder() {
-  if (!decoder) {
-    decoder = new TextDecoder();
-  }
-
-  return decoder;
 }
