@@ -13,7 +13,6 @@ export interface Result extends ConverterResult {
     svg: string;
     extra: Record<string, unknown>;
   };
-  toDataUriSync(): string;
 }
 
 export type BackgroundType = 'solid' | 'gradientLinear';
