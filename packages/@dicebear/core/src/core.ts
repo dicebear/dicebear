@@ -27,8 +27,8 @@ export function createAvatar<O extends {}>(
 
   const backgroundType = prng.pick(options.backgroundType ?? [], 'solid');
   const backgroundRotation = prng.integer(
-    Math.min(...(options.backgroundRotation || [0])),
-    Math.max(...(options.backgroundRotation || [0]))
+    options.backgroundRotation?.length ? Math.min(...options.backgroundRotation) : 0,
+    options.backgroundRotation?.length ? Math.max(...options.backgroundRotation) : 0,
   );
 
   if (options.size) {
