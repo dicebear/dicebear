@@ -62,24 +62,26 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "integer",
-        "minimum": -35,
-        "maximum": 35
+        "minimum": -65,
+        "maximum": 65
       },
+      "maxItems": 2,
       "default": [
-        -35,
-        35
+        -65,
+        65
       ]
     },
     "shape1OffsetY": {
       "type": "array",
       "items": {
         "type": "integer",
-        "minimum": -35,
-        "maximum": 35
+        "minimum": -45,
+        "maximum": 45
       },
+      "maxItems": 2,
       "default": [
-        -35,
-        35
+        -45,
+        45
       ]
     },
     "shape1Rotation": {
@@ -89,6 +91,7 @@ export const schema: StyleSchema = {
         "minimum": -160,
         "maximum": 160
       },
+      "maxItems": 2,
       "default": [
         -160,
         160
@@ -109,12 +112,9 @@ export const schema: StyleSchema = {
         ]
       },
       "default": [
-        "rectangle",
         "rectangleFilled",
         "ellipseFilled",
-        "ellipse",
         "polygonFilled",
-        "polygon",
         "line"
       ]
     },
@@ -136,24 +136,26 @@ export const schema: StyleSchema = {
       "type": "array",
       "items": {
         "type": "integer",
-        "minimum": -25,
-        "maximum": 25
+        "minimum": -40,
+        "maximum": 40
       },
+      "maxItems": 2,
       "default": [
-        -25,
-        25
+        -40,
+        40
       ]
     },
     "shape2OffsetY": {
       "type": "array",
       "items": {
         "type": "integer",
-        "minimum": -25,
-        "maximum": 25
+        "minimum": -40,
+        "maximum": 40
       },
+      "maxItems": 2,
       "default": [
-        -25,
-        25
+        -40,
+        40
       ]
     },
     "shape2Rotation": {
@@ -163,6 +165,7 @@ export const schema: StyleSchema = {
         "minimum": -180,
         "maximum": 180
       },
+      "maxItems": 2,
       "default": [
         -180,
         180
@@ -213,6 +216,7 @@ export const schema: StyleSchema = {
         "minimum": -25,
         "maximum": 25
       },
+      "maxItems": 2,
       "default": [
         -25,
         25
@@ -225,6 +229,7 @@ export const schema: StyleSchema = {
         "minimum": -25,
         "maximum": 25
       },
+      "maxItems": 2,
       "default": [
         -25,
         25
@@ -237,6 +242,7 @@ export const schema: StyleSchema = {
         "minimum": -180,
         "maximum": 180
       },
+      "maxItems": 2,
       "default": [
         -180,
         180
