@@ -10,6 +10,7 @@ export const botttsNeutral = () => import('@dicebear/bottts-neutral');
 export const croodles = () => import('@dicebear/croodles');
 export const croodlesNeutral = () => import('@dicebear/croodles-neutral');
 export const funEmoji = () => import('@dicebear/fun-emoji');
+export const thumbs = () => import('@dicebear/thumbs');
 export const icons = () => import('@dicebear/icons');
 export const identicon = () => import('@dicebear/identicon');
 export const initials = () => import('@dicebear/initials');
