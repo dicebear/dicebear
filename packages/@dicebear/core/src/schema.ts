@@ -75,5 +75,10 @@ export const schema: JSONSchema7 = {
       type: 'boolean',
       default: true,
     },
+    randomizeIds: {
+      type: 'boolean',
+      default: false,
+      examples: [true, false],
+    },
   },
 };

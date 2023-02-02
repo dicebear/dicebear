@@ -73,8 +73,10 @@ export function createAvatar<O extends {}>(
     result.body = svgUtils.addViewboxMask(result, options.radius ?? 0);
   }
 
-  // Reduces the occurrence of ID collisions when rendering multiple avatars on one HTML page.
-  result.body = svgUtils.randomizeIds(result, prng.seed);
+  if (options.randomizeIds) {
+    // Reduces the occurrence of ID collisions when rendering multiple avatars on one HTML page.
+    result.body = svgUtils.randomizeIds(result);
+  }
 
   const attributes = svgUtils.createAttrString(result);
   const metadata = license.xml(style);

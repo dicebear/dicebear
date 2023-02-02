@@ -114,14 +114,8 @@ export function createAttrString(result: StyleCreateResult): string {
     .join(' ');
 }
 
-export function randomizeIds(result: StyleCreateResult, seed: string): string {
-  const prng = createPrng(
-    JSON.stringify({
-      attributes: result.attributes,
-      seed,
-    })
-  );
-
+export function randomizeIds(result: StyleCreateResult): string {
+  const prng = createPrng();
   const ids: Record<string, string> = {};
 
   return result.body.replace(
