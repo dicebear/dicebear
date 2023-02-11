@@ -63,7 +63,7 @@ async function toBuffer(
   format: Exclude<Format, 'svg'>,
   exif?: Exif
 ): Promise<Buffer> {
-  await ensurePackage('@resvg/resvg-js', '2.0.0');
+  await ensurePackage('@resvg/resvg-js', '~2.0 || ~2.1 || ~2.2 || ~2.3');
   const { renderAsync } = await import('@resvg/resvg-js');
 
   const interRegular = new URL(
