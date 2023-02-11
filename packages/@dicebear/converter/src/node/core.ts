@@ -99,7 +99,10 @@ async function toBuffer(
   }
 
   if (exif) {
-    await ensurePackage('exiftool-vendored', '16.3.0');
+    await ensurePackage(
+      'exiftool-vendored',
+      '^16 || ^17 || ^18 || ^19 || ^20 || ^21'
+    );
     const exiftool = (await import('exiftool-vendored')).exiftool;
 
     await tmp.withFile(async ({ path }) => {

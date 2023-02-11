@@ -41,7 +41,7 @@
   },
   "peerDependencies": {
     "@resvg/resvg-js": "^2.0.0",
-    "exiftool-vendored": "^16.4.0",
+    "exiftool-vendored": "^16 || ^17 || ^18 || ^19 || ^20 || ^21",
     "sharp": "^0.30.0"
   },
   "devDependencies": {
