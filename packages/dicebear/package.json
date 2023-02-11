@@ -36,7 +36,7 @@
     "fs-extra": "^10.1.0",
     "json-schema-merge-allof": "^0.8.1",
     "p-queue": "^7.2.0",
-    "sharp": "^0.30.4",
+    "sharp": "^0.31.3",
     "update-notifier": "^6.0.2",
     "yargs": "^17.4.1"
   },
