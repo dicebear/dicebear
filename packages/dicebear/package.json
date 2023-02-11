@@ -45,7 +45,7 @@
     "@types/cli-progress": "^3.9.2",
     "@types/fs-extra": "^9.0.13",
     "@types/json-schema-merge-allof": "^0.6.1",
-    "@types/update-notifier": "^5.1.0",
+    "@types/update-notifier": "^6.0.2",
     "@types/yargs": "^17.0.10",
     "del-cli": "^5.0.0",
     "typescript": "^4.6.3"
