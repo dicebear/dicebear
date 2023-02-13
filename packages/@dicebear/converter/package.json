@@ -45,7 +45,7 @@
     "sharp": "^0.30.0"
   },
   "devDependencies": {
-    "@resvg/resvg-js": "~2.3.0",
+    "@resvg/resvg-js": "~2.4.0",
     "@tsconfig/recommended": "^1.0.1",
     "@types/sharp": "^0.30.2",
     "del-cli": "^5.0.0",
