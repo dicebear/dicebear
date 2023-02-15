@@ -40,12 +40,12 @@
     "tmp-promise": "^3.0.3"
   },
   "peerDependencies": {
-    "@resvg/resvg-js": "~2.0 || ~2.1 || ~2.2 || ~2.3",
+    "@resvg/resvg-js": "^2.0.0",
     "exiftool-vendored": "^16 || ^17 || ^18 || ^19 || ^20 || ^21",
     "sharp": "^0.30.0"
   },
   "devDependencies": {
-    "@resvg/resvg-js": "~2.3.0",
+    "@resvg/resvg-js": "^2.4.0",
     "@tsconfig/recommended": "^1.0.1",
     "@types/sharp": "^0.31.1",
     "del-cli": "^5.0.0",
