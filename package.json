@@ -10,7 +10,7 @@
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
-    "prepare-publish": "lerna version --force-publish"
+    "prepare-publish": "lerna version --force-publish --exact"
   },
   "devDependencies": {
     "lerna": "^6.4.0"
