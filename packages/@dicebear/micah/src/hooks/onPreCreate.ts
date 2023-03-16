@@ -13,7 +13,7 @@ type Props = { prng: Prng, options: StyleOptions<Options> }
 
 export function onPreCreate({ prng, options }: Props) {
   // Prevent baseColor from being used a second time if possible.
-  options.baseColor = options.baseColor && options.baseColor.length > 0 ? [prng.pick(options.baseColor) ?? 'transparent'] : [];
+  options.baseColor = options.baseColor && options.baseColor.length > 0 ? [prng.pick(options.baseColor, 'transparent')] : [];
   
   for (const colorName of ['eyebrows', 'hair', 'eyes', 'nose', 'ears', 'shirt', 'earrings', 'glasses', 'facialHair']) {
     // @ts-ignore

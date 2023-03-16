@@ -19,6 +19,6 @@ type Props = {
 export function onPostCreate({ prng, options, components, colors }: Props) {
   // Ensure that the mouth remains visible. #132
   if (components.facialHair?.name === 'beard' && colors.facialHair === colors.mouth) {
-    colors.mouth = 'ffffff33';
+    colors.mouth = '#ffffff33';
   }
 }

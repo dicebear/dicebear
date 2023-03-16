@@ -183,7 +183,7 @@ export const schema: StyleSchema = {
         "pattern": "^(transparent|[a-fA-F0-9]{6})$"
       },
       "default": [
-        "77311d"
+        "000000"
       ]
     },
     "facialHairProbability": {
