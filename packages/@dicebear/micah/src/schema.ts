@@ -140,14 +140,16 @@ export const schema: StyleSchema = {
           "eyes",
           "round",
           "eyesShadow",
-          "smiling"
+          "smiling",
+          "smilingShadow"
         ]
       },
       "default": [
         "eyes",
         "round",
         "eyesShadow",
-        "smiling"
+        "smiling",
+        "smilingShadow"
       ]
     },
     "eyesColor": {

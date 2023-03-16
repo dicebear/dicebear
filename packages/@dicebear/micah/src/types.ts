@@ -41,6 +41,7 @@ export interface Options {
     | 'round'
     | 'eyesShadow'
     | 'smiling'
+    | 'smilingShadow'
   )[];
   nose?: (
     | 'curve'
