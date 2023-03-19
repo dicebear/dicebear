@@ -18,37 +18,42 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
   const accessoriesComponent = pickComponent({
     prng,
     group: 'accessories',
-    values: options.accessories
+    values: options.accessories,
   });
   const clothingComponent = pickComponent({
     prng,
     group: 'clothing',
-    values: options.clothing
+    values: options.clothing,
   });
   const eyesComponent = pickComponent({
     prng,
     group: 'eyes',
-    values: options.eyes
+    values: options.eyes,
   });
   const glassesComponent = pickComponent({
     prng,
     group: 'glasses',
-    values: options.glasses
+    values: options.glasses,
   });
   const beardComponent = pickComponent({
     prng,
     group: 'beard',
-    values: options.beard
+    values: options.beard,
   });
   const mouthComponent = pickComponent({
     prng,
     group: 'mouth',
-    values: options.mouth
+    values: options.mouth,
   });
   const hairComponent = pickComponent({
     prng,
     group: 'hair',
-    values: options.hair
+    values: options.hair,
+  });
+  const hatComponent = pickComponent({
+    prng,
+    group: 'hat',
+    values: options.hat,
   });
 
   return {
@@ -59,5 +64,6 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
     'beard': prng.bool(options.beardProbability) ? beardComponent : undefined,
     'mouth': mouthComponent,
     'hair': hairComponent,
+    'hat': prng.bool(options.hatProbability) ? hatComponent : undefined,
   }
 };

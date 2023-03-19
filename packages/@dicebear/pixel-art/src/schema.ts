@@ -385,6 +385,58 @@ export const schema: StyleSchema = {
         "91cb15"
       ]
     },
+    "hat": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "variant10",
+          "variant09",
+          "variant08",
+          "variant07",
+          "variant06",
+          "variant05",
+          "variant04",
+          "variant03",
+          "variant02",
+          "variant01"
+        ]
+      },
+      "default": [
+        "variant10",
+        "variant09",
+        "variant08",
+        "variant07",
+        "variant06",
+        "variant05",
+        "variant04",
+        "variant03",
+        "variant02",
+        "variant01"
+      ]
+    },
+    "hatColor": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+      },
+      "default": [
+        "2e1e05",
+        "2663a3",
+        "989789",
+        "3d8a6b",
+        "cc6192",
+        "614f8a",
+        "a62116"
+      ]
+    },
+    "hatProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 5
+    },
     "mouth": {
       "type": "array",
       "items": {

@@ -152,11 +152,25 @@ export interface Options {
     | 'long02'
     | 'long01'
   )[];
+  hat?: (
+    | 'variant10'
+    | 'variant09'
+    | 'variant08'
+    | 'variant07'
+    | 'variant06'
+    | 'variant05'
+    | 'variant04'
+    | 'variant03'
+    | 'variant02'
+    | 'variant01'
+  )[];
+  hatProbability?: number;
   accessoriesColor?: string[];
   clothingColor?: string[];
   eyesColor?: string[];
   glassesColor?: string[];
   hairColor?: string[];
+  hatColor?: string[];
   mouthColor?: string[];
   skinColor?: string[];
 }

@@ -12,3 +12,4 @@ export { glasses } from './glasses.js';
 export { beard } from './beard.js';
 export { mouth } from './mouth.js';
 export { hair } from './hair.js';
+export { hat } from './hat.js';
