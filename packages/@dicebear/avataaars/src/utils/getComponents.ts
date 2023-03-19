@@ -20,6 +20,11 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
     group: 'style',
     values: options.style,
   });
+  const baseComponent = pickComponent({
+    prng,
+    group: 'base',
+    values: options.base,
+  });
   const clothingComponent = pickComponent({
     prng,
     group: 'clothing',
@@ -68,6 +73,7 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
 
   return {
     'style': styleComponent,
+    'base': baseComponent,
     'clothing': clothingComponent,
     'mouth': mouthComponent,
     'nose': noseComponent,

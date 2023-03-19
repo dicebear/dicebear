@@ -72,6 +72,18 @@ export const schema: StyleSchema = {
         "65c9ff"
       ]
     },
+    "base": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "default"
+        ]
+      },
+      "default": [
+        "default"
+      ]
+    },
     "clothesColor": {
       "type": "array",
       "items": {
@@ -229,7 +241,7 @@ export const schema: StyleSchema = {
         "type": "string",
         "enum": [
           "beardLight",
-          "beardMagestic",
+          "beardMajestic",
           "beardMedium",
           "moustacheFancy",
           "moustacheMagnum"
@@ -237,7 +249,7 @@ export const schema: StyleSchema = {
       },
       "default": [
         "beardLight",
-        "beardMagestic",
+        "beardMajestic",
         "beardMedium",
         "moustacheFancy",
         "moustacheMagnum"
@@ -391,7 +403,6 @@ export const schema: StyleSchema = {
       "items": {
         "type": "string",
         "enum": [
-          "eyepatch",
           "hat",
           "hijab",
           "turban",
@@ -429,7 +440,6 @@ export const schema: StyleSchema = {
         ]
       },
       "default": [
-        "eyepatch",
         "hat",
         "hijab",
         "turban",

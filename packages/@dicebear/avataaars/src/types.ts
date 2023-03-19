@@ -10,6 +10,9 @@ export interface Options {
     | 'circle'
     | 'default'
   )[];
+  base?: (
+    | 'default'
+  )[];
   clothing?: (
     | 'blazerAndShirt'
     | 'blazerAndSweater'
@@ -68,7 +71,6 @@ export interface Options {
     | 'upDown'
   )[];
   top?: (
-    | 'eyepatch'
     | 'hat'
     | 'hijab'
     | 'turban'
@@ -107,7 +109,7 @@ export interface Options {
   topProbability?: number;
   facialHair?: (
     | 'beardLight'
-    | 'beardMagestic'
+    | 'beardMajestic'
     | 'beardMedium'
     | 'moustacheFancy'
     | 'moustacheMagnum'

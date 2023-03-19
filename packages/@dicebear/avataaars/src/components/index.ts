@@ -6,6 +6,7 @@
  */
 
 export { style } from './style.js';
+export { base } from './base.js';
 export { clothing } from './clothing.js';
 export { mouth } from './mouth.js';
 export { nose } from './nose.js';

@@ -28,4 +28,11 @@ export function onPostCreate({ prng, options, components, colors }: Props) {
   ) {
     options.backgroundColor = [];   
   }
+  
+  // Hijab and facial hair is an unusual combination. Therefore, remove facial hair if not forced.
+  if (options.facialHairProbability !== 100
+      && components.top?.name === 'hijab'
+  ) {
+      options.facialHair = undefined;
+  }
 }
