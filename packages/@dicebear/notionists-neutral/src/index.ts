@@ -45,7 +45,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
       fill: 'none',
       'shape-rendering': 'auto'
     },
-    body: `<path fill="#fff" d="M0 0h560v560H0z"/><g transform="translate(136 328)">${components.lips?.value(components, colors) ?? ''}</g><g transform="translate(246 125)">${components.nose?.value(components, colors) ?? ''}</g><g transform="translate(-45 137)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="translate(-45 137)">${components.glasses?.value(components, colors) ?? ''}</g><g transform="translate(119 114)">${components.brows?.value(components, colors) ?? ''}</g>`,
+    body: `<g transform="translate(136 328)">${components.lips?.value(components, colors) ?? ''}</g><g transform="translate(246 125)">${components.nose?.value(components, colors) ?? ''}</g><g transform="translate(-45 137)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="translate(-45 137)">${components.glasses?.value(components, colors) ?? ''}</g><g transform="translate(119 114)">${components.brows?.value(components, colors) ?? ''}</g>`,
     extra: () => ({
       ...Object.entries(components).reduce<Record<string, string | undefined>>(
         (acc, [key, value]) => {
