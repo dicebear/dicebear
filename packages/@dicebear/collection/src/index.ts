@@ -18,6 +18,8 @@ import * as lorelei from '@dicebear/lorelei';
 import * as loreleiNeutral from '@dicebear/lorelei-neutral';
 import * as micah from '@dicebear/micah';
 import * as miniavs from '@dicebear/miniavs';
+import * as notionists from '@dicebear/notionists';
+import * as notionistsNeutral from '@dicebear/notionists-neutral';
 import * as openPeeps from '@dicebear/open-peeps';
 import * as personas from '@dicebear/personas';
 import * as pixelArt from '@dicebear/pixel-art';
@@ -45,6 +47,8 @@ export {
   loreleiNeutral,
   micah,
   miniavs,
+  notionists,
+  notionistsNeutral,
   openPeeps,
   personas,
   pixelArt,

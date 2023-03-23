@@ -18,6 +18,8 @@ export const lorelei = () => import('@dicebear/lorelei');
 export const loreleiNeutral = () => import('@dicebear/lorelei-neutral');
 export const micah = () => import('@dicebear/micah');
 export const miniavs = () => import('@dicebear/miniavs');
+export const notionists = () => import('@dicebear/notionists');
+export const notionistsNeutral = () => import('@dicebear/notionists-neutral');
 export const openPeeps = () => import('@dicebear/open-peeps');
 export const personas = () => import('@dicebear/personas');
 export const pixelArt = () => import('@dicebear/pixel-art');
