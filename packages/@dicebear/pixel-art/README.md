@@ -5,13 +5,13 @@
 </p>
 
 <p align="center">
-  <img src="https://api.dicebear.com/5.x/pixel-art/svg?seed=Mimi" width="64" />
-  <img src="https://api.dicebear.com/5.x/pixel-art/svg?seed=Sasha" width="64" />
-  <img src="https://api.dicebear.com/5.x/pixel-art/svg?seed=Lilly" width="64" />
-  <img src="https://api.dicebear.com/5.x/pixel-art/svg?seed=Tigger" width="64" />
-  <img src="https://api.dicebear.com/5.x/pixel-art/svg?seed=Bella" width="64" />
-  <img src="https://api.dicebear.com/5.x/pixel-art/svg?seed=Zoe" width="64" />
-  <img src="https://api.dicebear.com/5.x/pixel-art/svg?seed=Kitty" width="64" />
+  <img src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Mimi" width="64" />
+  <img src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Sasha" width="64" />
+  <img src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Lilly" width="64" />
+  <img src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Tigger" width="64" />
+  <img src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Bella" width="64" />
+  <img src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Zoe" width="64" />
+  <img src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Kitty" width="64" />
 </p>
 
 <p align="center">

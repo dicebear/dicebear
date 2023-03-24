@@ -27,31 +27,30 @@
   "dependencies": {
     "@dicebear/collection": "5.3.4",
     "@dicebear/core": "5.3.4",
-    "@resvg/resvg-js": "^2.4.0",
-    "ajv": "^8.11.0",
-    "chalk": "^5.0.1",
-    "chalk-template": "^0.5.0",
-    "cli-progress": "^3.10.0",
-    "exiftool-vendored": "^21.0.0",
-    "fs-extra": "^11.1.0",
+    "@resvg/resvg-js": "^2.4.1",
+    "ajv": "^8.12.0",
+    "chalk": "^5.2.0",
+    "chalk-template": "^1.0.0",
+    "cli-progress": "^3.12.0",
+    "exiftool-vendored": "^21.2.0",
+    "fs-extra": "^11.1.1",
     "json-schema-merge-allof": "^0.8.1",
-    "p-queue": "^7.2.0",
+    "p-queue": "^7.3.4",
     "sharp": "^0.31.3",
     "update-notifier": "^6.0.2",
-    "yargs": "^17.4.1"
+    "yargs": "^17.7.1"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.1",
-    "@types/cli-progress": "^3.9.2",
+    "@tsconfig/recommended": "^1.0.2",
+    "@types/cli-progress": "^3.11.0",
     "@types/fs-extra": "^11.0.1",
     "@types/json-schema-merge-allof": "^0.6.1",
     "@types/update-notifier": "^6.0.2",
-    "@types/yargs": "^17.0.10",
+    "@types/yargs": "^17.0.23",
     "del-cli": "^5.0.0",
-    "typescript": "^4.6.3"
+    "typescript": "^5.0.2"
   },
   "engines": {
-    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
-  },
-  "gitHead": "a081e38b1593d87f1d32abf632e3792c16f702fd"
+    "node": ">=16.0.0"
+  }
 }

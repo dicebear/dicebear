@@ -5,13 +5,13 @@
 </p>
 
 <p align="center">
-  <img src="https://api.dicebear.com/5.x/croodles/svg?seed=Mimi" width="64" />
-  <img src="https://api.dicebear.com/5.x/croodles/svg?seed=Sasha" width="64" />
-  <img src="https://api.dicebear.com/5.x/croodles/svg?seed=Lilly" width="64" />
-  <img src="https://api.dicebear.com/5.x/croodles/svg?seed=Tigger" width="64" />
-  <img src="https://api.dicebear.com/5.x/croodles/svg?seed=Bella" width="64" />
-  <img src="https://api.dicebear.com/5.x/croodles/svg?seed=Zoe" width="64" />
-  <img src="https://api.dicebear.com/5.x/croodles/svg?seed=Kitty" width="64" />
+  <img src="https://api.dicebear.com/6.x/croodles/svg?seed=Mimi" width="64" />
+  <img src="https://api.dicebear.com/6.x/croodles/svg?seed=Sasha" width="64" />
+  <img src="https://api.dicebear.com/6.x/croodles/svg?seed=Lilly" width="64" />
+  <img src="https://api.dicebear.com/6.x/croodles/svg?seed=Tigger" width="64" />
+  <img src="https://api.dicebear.com/6.x/croodles/svg?seed=Bella" width="64" />
+  <img src="https://api.dicebear.com/6.x/croodles/svg?seed=Zoe" width="64" />
+  <img src="https://api.dicebear.com/6.x/croodles/svg?seed=Kitty" width="64" />
 </p>
 
 <p align="center">

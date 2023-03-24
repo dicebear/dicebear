@@ -63,7 +63,7 @@ async function toBuffer(
   format: Exclude<Format, 'svg'>,
   exif?: Exif
 ): Promise<Buffer> {
-  await ensurePackage('@resvg/resvg-js', '^2.0.0');
+  await ensurePackage('@resvg/resvg-js', '^2.4.1');
   const { renderAsync } = await import('@resvg/resvg-js');
 
   const interRegular = new URL(
@@ -89,7 +89,7 @@ async function toBuffer(
   ).asPng();
 
   if ('jpeg' === format) {
-    await ensurePackage('sharp', '^0.30.0');
+    await ensurePackage('sharp', '^0.31.3');
     const sharp = (await import('sharp')).default;
 
     buffer = await sharp(buffer)
@@ -101,7 +101,7 @@ async function toBuffer(
   if (exif) {
     await ensurePackage(
       'exiftool-vendored',
-      '^16 || ^17 || ^18 || ^19 || ^20 || ^21'
+      '^21.2.0'
     );
     const exiftool = (await import('exiftool-vendored')).exiftool;
 

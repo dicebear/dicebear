@@ -1,4 +1,4 @@
-import type { BackgroundType, Prng, StyleCreateResult } from '../types.js';
+import type { BackgroundType, StyleCreateResult } from '../types.js';
 
 import * as escape from './escape.js';
 import { create as createPrng } from './prng.js';

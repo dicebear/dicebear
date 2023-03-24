@@ -5,13 +5,13 @@
 </p>
 
 <p align="center">
-  <img src="https://api.dicebear.com/5.x/fun-emoji/svg?seed=Mimi" width="64" />
-  <img src="https://api.dicebear.com/5.x/fun-emoji/svg?seed=Sasha" width="64" />
-  <img src="https://api.dicebear.com/5.x/fun-emoji/svg?seed=Lilly" width="64" />
-  <img src="https://api.dicebear.com/5.x/fun-emoji/svg?seed=Tigger" width="64" />
-  <img src="https://api.dicebear.com/5.x/fun-emoji/svg?seed=Bella" width="64" />
-  <img src="https://api.dicebear.com/5.x/fun-emoji/svg?seed=Zoe" width="64" />
-  <img src="https://api.dicebear.com/5.x/fun-emoji/svg?seed=Kitty" width="64" />
+  <img src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Mimi" width="64" />
+  <img src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Sasha" width="64" />
+  <img src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Lilly" width="64" />
+  <img src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Tigger" width="64" />
+  <img src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Bella" width="64" />
+  <img src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Zoe" width="64" />
+  <img src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Kitty" width="64" />
 </p>
 
 <p align="center">
