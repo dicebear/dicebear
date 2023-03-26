@@ -2,5 +2,5 @@
   "npmClient": "npm",
   "useWorkspaces": true,
   "concurrency": 3,
-  "version": "6.0.1"
+  "version": "6.0.2"
 }
