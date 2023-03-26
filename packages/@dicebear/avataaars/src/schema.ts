@@ -20,7 +20,8 @@ export const schema: StyleSchema = {
           "prescription02",
           "round",
           "sunglasses",
-          "wayfarers"
+          "wayfarers",
+          "eyepatch"
         ]
       },
       "default": [
@@ -29,7 +30,8 @@ export const schema: StyleSchema = {
         "prescription02",
         "round",
         "sunglasses",
-        "wayfarers"
+        "wayfarers",
+        "eyepatch"
       ]
     },
     "accessoriesColor": {

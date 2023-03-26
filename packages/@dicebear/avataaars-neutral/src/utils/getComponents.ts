@@ -18,22 +18,22 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
   const mouthComponent = pickComponent({
     prng,
     group: 'mouth',
-    values: options.mouth
+    values: options.mouth,
   });
   const noseComponent = pickComponent({
     prng,
     group: 'nose',
-    values: options.nose
+    values: options.nose,
   });
   const eyesComponent = pickComponent({
     prng,
     group: 'eyes',
-    values: options.eyes
+    values: options.eyes,
   });
   const eyebrowsComponent = pickComponent({
     prng,
     group: 'eyebrows',
-    values: options.eyebrows
+    values: options.eyebrows,
   });
 
   return {

@@ -122,6 +122,7 @@ export interface Options {
     | 'round'
     | 'sunglasses'
     | 'wayfarers'
+    | 'eyepatch'
   )[];
   accessoriesProbability?: number;
   clothingGraphic?: (
