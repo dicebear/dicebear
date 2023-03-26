@@ -10,6 +10,16 @@ import type { StyleSchema } from '@dicebear/core';
 export const schema: StyleSchema = {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "properties": {
+    "backgroundColor": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+      },
+      "default": [
+        "ffffff"
+      ]
+    },
     "brows": {
       "type": "array",
       "items": {

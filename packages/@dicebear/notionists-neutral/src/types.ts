@@ -96,6 +96,7 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
+  backgroundColor?: string[];
 }
 
 export type ColorPickCollection = Record<string, string>;
