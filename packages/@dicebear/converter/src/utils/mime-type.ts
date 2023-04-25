@@ -1,4 +1,4 @@
-import { Format } from '../types';
+import { Format } from '../types.js';
 
 export function getMimeType(format: Format): string {
   switch (format) {

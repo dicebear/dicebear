@@ -1,4 +1,4 @@
-import { Prng } from '../types';
+import { Prng } from '../types.js';
 
 export function convertColor(color: string): string {
   return 'transparent' === color ? color : `#${color}`;

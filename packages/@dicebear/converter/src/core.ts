@@ -1,4 +1,4 @@
-import type { Result, Exif, Format, ToFormat } from './types';
+import type { Result, Exif, Format, ToFormat } from './types.js';
 import { getMimeType } from './utils/mime-type.js';
 import { ensureSize } from './utils/svg.js';
 import { getEncoder } from './utils/text.js';

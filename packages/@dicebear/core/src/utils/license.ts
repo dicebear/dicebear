@@ -1,4 +1,4 @@
-import { Exif, Style } from '../types';
+import { Exif, Style } from '../types.js';
 import * as _ from './escape.js';
 
 export function xml(style: Style<any>): string {

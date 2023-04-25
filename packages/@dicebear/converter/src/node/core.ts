@@ -1,4 +1,4 @@
-import type { Result, Exif, Format, ToFormat } from '../types';
+import type { Result, Exif, Format, ToFormat } from '../types.js';
 import { promises as fs } from 'node:fs';
 import { getMimeType } from '../utils/mime-type.js';
 import { ensureSize } from '../utils/svg.js';
