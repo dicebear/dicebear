@@ -5,9 +5,10 @@ import { equal } from 'uvu/assert';
 test('Predictable empty PNGR', () => {
   const pngr = createPrng();
 
+  equal(pngr.bool(50), false);
+  equal(pngr.bool(50), false);
+  equal(pngr.bool(50), false);
   equal(pngr.bool(50), true);
-  equal(pngr.bool(50), false);
-  equal(pngr.bool(50), false);
 });
 
 test('Predictable PNGR integers', () => {
