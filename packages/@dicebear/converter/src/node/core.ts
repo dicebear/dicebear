@@ -3,7 +3,6 @@ import { promises as fs } from 'node:fs';
 import { getMimeType } from '../utils/mime-type.js';
 import { ensureSize } from '../utils/svg.js';
 import * as tmp from 'tmp-promise';
-import { ensurePackage } from '../utils/package-helper.js';
 import { getEncoder } from '../utils/text.js';
 
 export const toFormat: ToFormat = function (
@@ -63,7 +62,6 @@ async function toBuffer(
   format: Exclude<Format, 'svg'>,
   exif?: Exif
 ): Promise<Buffer> {
-  await ensurePackage('@resvg/resvg-js', '^2.4.1');
   const { renderAsync } = await import('@resvg/resvg-js');
 
   const interRegular = new URL(
@@ -89,7 +87,6 @@ async function toBuffer(
   ).asPng();
 
   if ('jpeg' === format) {
-    await ensurePackage('sharp', '^0.31.3');
     const sharp = (await import('sharp')).default;
 
     buffer = await sharp(buffer)
@@ -99,10 +96,6 @@ async function toBuffer(
   }
 
   if (exif) {
-    await ensurePackage(
-      'exiftool-vendored',
-      '^21.2.0'
-    );
     const exiftool = (await import('exiftool-vendored')).exiftool;
 
     await tmp.withFile(async ({ path }) => {
