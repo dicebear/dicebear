@@ -70,7 +70,7 @@
   },
   "devDependencies": {
     "@dicebear/core": "6.0.3",
-    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-commonjs": "^25.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@tsconfig/recommended": "^1.0.2",
     "del-cli": "^5.0.0",
