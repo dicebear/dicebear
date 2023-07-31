@@ -47,7 +47,7 @@
   "devDependencies": {
     "@resvg/resvg-js": "^2.4.1",
     "@tsconfig/recommended": "^1.0.2",
-    "@types/sharp": "^0.31.1",
+    "@types/sharp": "^0.32.0",
     "del-cli": "^5.0.0",
     "exiftool-vendored": "^21.2.0",
     "sharp": "^0.32.1",
