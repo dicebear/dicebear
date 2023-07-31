@@ -51,7 +51,7 @@
     "del-cli": "^5.0.0",
     "exiftool-vendored": "^22.0.0",
     "sharp": "^0.32.1",
-    "typescript": "^4.9.5",
+    "typescript": "^5.1.6",
     "uvu": "^0.5.6"
   },
   "peerDependenciesMeta": {
