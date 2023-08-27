@@ -27,7 +27,7 @@ jobs:
       - run: npm run test
 
       - run:
-          ./node_modules/.bin/lerna publish from-package --no-verify-access
+          ./node_modules/.bin/lerna publish from-package
           --ignore-scripts --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
