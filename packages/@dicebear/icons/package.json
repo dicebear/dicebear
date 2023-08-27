@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/icons",
-  "version": "7.0.0-rc.1",
+  "version": "7.0.0-rc.2",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "7.0.0-rc.1",
+    "@dicebear/core": "7.0.0-rc.2",
     "@tsconfig/recommended": "^1.0.2",
     "del-cli": "^5.0.0",
     "typescript": "^5.1.6",

@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/core",
-  "version": "7.0.0-rc.1",
+  "version": "7.0.0-rc.2",
   "description": "An avatar library for designers and developers.",
   "keywords": [
     "avatar",
@@ -32,7 +32,7 @@
     "test": "uvu tests"
   },
   "dependencies": {
-    "@dicebear/converter": "7.0.0-rc.1",
+    "@dicebear/converter": "7.0.0-rc.2",
     "@types/json-schema": "^7.0.11"
   },
   "devDependencies": {
