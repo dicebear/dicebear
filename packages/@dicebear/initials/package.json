@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/initials",
-  "version": "6.0.3",
+  "version": "7.0.0-rc.0",
   "description": "Initials avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "6.0.3",
+    "@dicebear/core": "7.0.0-rc.0",
     "@tsconfig/recommended": "^1.0.2",
     "del-cli": "^5.0.0",
     "typescript": "^5.1.6",
