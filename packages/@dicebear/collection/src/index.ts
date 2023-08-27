@@ -10,7 +10,6 @@ import * as botttsNeutral from '@dicebear/bottts-neutral';
 import * as croodles from '@dicebear/croodles';
 import * as croodlesNeutral from '@dicebear/croodles-neutral';
 import * as funEmoji from '@dicebear/fun-emoji';
-import * as thumbs from '@dicebear/thumbs';
 import * as icons from '@dicebear/icons';
 import * as identicon from '@dicebear/identicon';
 import * as initials from '@dicebear/initials';
@@ -24,7 +23,9 @@ import * as openPeeps from '@dicebear/open-peeps';
 import * as personas from '@dicebear/personas';
 import * as pixelArt from '@dicebear/pixel-art';
 import * as pixelArtNeutral from '@dicebear/pixel-art-neutral';
+import * as rings from '@dicebear/rings';
 import * as shapes from '@dicebear/shapes';
+import * as thumbs from '@dicebear/thumbs';
 
 export {
   adventurer,
@@ -39,7 +40,6 @@ export {
   croodles,
   croodlesNeutral,
   funEmoji,
-  thumbs,
   icons,
   identicon,
   initials,
@@ -53,5 +53,7 @@ export {
   personas,
   pixelArt,
   pixelArtNeutral,
+  rings,
   shapes,
+  thumbs,
 };

@@ -1,0 +1,47 @@
+{
+  "name": "@dicebear/rings",
+  "version": "6.0.3",
+  "description": "Avatar style for DiceBear",
+  "keywords": [
+    "dicebear"
+  ],
+  "bugs": {
+    "url": "https://github.com/dicebear/dicebear/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dicebear/dicebear.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "LICENSE",
+    "lib",
+    "README.md"
+  ],
+  "scripts": {
+    "prebuild": "del-cli lib",
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "uvu tests"
+  },
+  "devDependencies": {
+    "@dicebear/core": "6.0.3",
+    "@tsconfig/recommended": "^1.0.2",
+    "del-cli": "^5.0.0",
+    "typescript": "^5.1.6",
+    "uvu": "^0.5.6"
+  },
+  "peerDependencies": {
+    "@dicebear/core": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\"><desc>\"Rings\" by \"Florian Körner\", licensed under \"CC0 1.0\". / Remix of the original. - Created with dicebear.com</desc><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:RDF><cc:Work><dc:title>Rings</dc:title><dc:creator><cc:Agent rdf:about=\"https://www.dicebear.com\"><dc:title>Florian Körner</dc:title></cc:Agent></dc:creator><dc:source>https://www.dicebear.com</dc:source><cc:license rdf:resource=\"https://creativecommons.org/publicdomain/zero/1.0/\" /></cc:Work></rdf:RDF></metadata><mask id=\"viewboxMask\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\" x=\"0\" y=\"0\" fill=\"#fff\" /></mask><g mask=\"url(#viewboxMask)\"><g transform=\"translate(0, 0) rotate(-132 50 50)\"><g transform=\"translate(0, 0) rotate(159 50 50)\"><path d=\"M50 10c22.091 0 40 17.909 40 40h10c0-27.614-22.386-50-50-50S0 22.386 0 50h10c0-22.091 17.909-40 40-40Z\" fill=\"#4dd0e1\"/></g><g transform=\"translate(0, 0) rotate(46 50 50)\"><path d=\"M90 50c0-22.091-17.909-40-40-40S10 27.909 10 50h10c0-16.569 13.431-30 30-30 16.569 0 30 13.431 30 30h10Z\" fill=\"#4dd0e1\"/></g><g transform=\"translate(0, 0) rotate(95 50 50)\"><path d=\"M80 50c0-16.569-13.431-30-30-30-16.569 0-30 13.431-30 30h10c0-11.046 8.954-20 20-20s20 8.954 20 20h10Z\" fill=\"#4dd0e1\"/></g><g transform=\"translate(0, 0) rotate(-136 50 50)\"><path d=\"M50 30c-11.046 0-20 8.954-20 20h10c0-5.523 4.477-10 10-10V30Z\" fill=\"#4dd0e1\"/></g><g transform=\"translate(0, 0) rotate(-107 50 50)\"><circle cx=\"50\" cy=\"50\" r=\"10\" fill=\"#4dd0e1\"/></g><g transform=\"matrix(1 0 0 -1 0 100)\"><g transform=\"translate(0, 0) rotate(159 50 50)\"><path d=\"M50 10c22.091 0 40 17.909 40 40h10c0-27.614-22.386-50-50-50S0 22.386 0 50h10c0-22.091 17.909-40 40-40Z\" fill=\"#4dd0e1\"/></g></g><g transform=\"matrix(1 0 0 -1 0 100)\"><g transform=\"translate(0, 0) rotate(46 50 50)\"><path d=\"M90 50c0-22.091-17.909-40-40-40S10 27.909 10 50h10c0-16.569 13.431-30 30-30 16.569 0 30 13.431 30 30h10Z\" fill=\"#4dd0e1\"/></g></g><g transform=\"matrix(1 0 0 -1 0 100)\"><g transform=\"translate(0, 0) rotate(95 50 50)\"><path d=\"M80 50c0-16.569-13.431-30-30-30-16.569 0-30 13.431-30 30h10c0-11.046 8.954-20 20-20s20 8.954 20 20h10Z\" fill=\"#4dd0e1\"/></g></g><g transform=\"matrix(1 0 0 -1 0 100)\"><g transform=\"translate(0, 0) rotate(-136 50 50)\"><path d=\"M50 30c-11.046 0-20 8.954-20 20h10c0-5.523 4.477-10 10-10V30Z\" fill=\"#4dd0e1\"/></g></g><g transform=\"matrix(1 0 0 -1 0 100)\"><g transform=\"translate(0, 0) rotate(-107 50 50)\"><circle cx=\"50\" cy=\"50\" r=\"10\" fill=\"#4dd0e1\"/></g></g></g></g></svg>",
+  "extra": {
+    "primaryBackgroundColor": "transparent",
+    "secondaryBackgroundColor": "transparent",
+    "backgroundType": "solid",
+    "backgroundRotation": 69,
+    "ring": "container",
+    "ringOne": "half",
+    "ringTwo": "half",
+    "ringThree": "half",
+    "ringFour": "quarter",
+    "ringFive": "full",
+    "ringColor": "#4dd0e1"
+  }
+}
