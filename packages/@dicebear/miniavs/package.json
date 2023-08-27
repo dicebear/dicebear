@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/miniavs",
-  "version": "7.0.0-rc.2",
+  "version": "7.0.0-rc.3",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "7.0.0-rc.2",
+    "@dicebear/core": "7.0.0-rc.3",
     "@tsconfig/recommended": "^1.0.2",
     "del-cli": "^5.0.0",
     "typescript": "^5.1.6",
