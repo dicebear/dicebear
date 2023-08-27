@@ -36,7 +36,7 @@
     "uvu": "^0.5.6"
   },
   "peerDependencies": {
-    "@dicebear/core": "^7.0.0.rc-2"
+    "@dicebear/core": "^7.0.0-rc.3"
   },
   "engines": {
     "node": ">=16.0.0"
