@@ -43,7 +43,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 100 100',
       fill: 'none',
-      'shape-rendering': 'auto'
+      'shape-rendering': 'crispEdges'
     },
     body: `${components.ring?.value(components, colors) ?? ''}`,
     extra: () => ({
