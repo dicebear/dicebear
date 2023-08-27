@@ -1,6 +1,6 @@
 {
   "name": "dicebear",
-  "version": "7.0.0-rc.1",
+  "version": "6.0.3",
   "private": false,
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "homepage": "https://github.com/dicebear/dicebear",
