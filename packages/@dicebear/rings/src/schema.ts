@@ -58,9 +58,7 @@ export const schema: StyleSchema = {
           "full"
         ]
       },
-      "default": [
-        "full"
-      ]
+      "default": []
     },
     "ringFiveRotation": {
       "type": "array",
