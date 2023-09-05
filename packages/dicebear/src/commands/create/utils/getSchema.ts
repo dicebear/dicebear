@@ -4,7 +4,7 @@ import type { JSONSchema7 } from 'json-schema';
 import { schema as coreSchema } from '@dicebear/core';
 import mergeAllOf from 'json-schema-merge-allof';
 
-export function getStyleCommandSchema(style: Style<any>): JSONSchema7 {
+export function getSchema(style: Style<any>): JSONSchema7 {
   return mergeAllOf(
     {
       allOf: [
