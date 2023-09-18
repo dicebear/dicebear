@@ -41,7 +41,7 @@
   },
   "peerDependencies": {
     "@resvg/resvg-js": "^2.4.1",
-    "exiftool-vendored": "^22.0.0",
+    "exiftool-vendored": "^23.0.0",
     "sharp": "^0.32.1"
   },
   "devDependencies": {
@@ -49,7 +49,7 @@
     "@tsconfig/recommended": "^1.0.2",
     "@types/sharp": "^0.32.0",
     "del-cli": "^5.0.0",
-    "exiftool-vendored": "^22.0.0",
+    "exiftool-vendored": "^23.0.0",
     "sharp": "^0.32.1",
     "typescript": "^5.1.6",
     "uvu": "^0.5.6"

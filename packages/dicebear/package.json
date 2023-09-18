@@ -32,7 +32,7 @@
     "chalk": "^5.2.0",
     "chalk-template": "^1.0.0",
     "cli-progress": "^3.12.0",
-    "exiftool-vendored": "^22.0.0",
+    "exiftool-vendored": "^23.0.0",
     "fs-extra": "^11.1.1",
     "json-schema-merge-allof": "^0.8.1",
     "p-queue": "^7.3.4",
