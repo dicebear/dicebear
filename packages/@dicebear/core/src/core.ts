@@ -20,12 +20,12 @@ export function createAvatar<O extends {}>(
   const prng = createPrng(options.seed);
   const result = style.create({ prng: prng, options });
 
+  const backgroundType = prng.pick(options.backgroundType ?? [], 'solid');
   const {
     primary: primaryBackgroundColor,
     secondary: secondaryBackgroundColor,
-  } = getBackgroundColors(prng, options.backgroundColor ?? []);
+  } = getBackgroundColors(prng, options.backgroundColor ?? [], backgroundType);
 
-  const backgroundType = prng.pick(options.backgroundType ?? [], 'solid');
   const backgroundRotation = prng.integer(
     options.backgroundRotation?.length ? Math.min(...options.backgroundRotation) : 0,
     options.backgroundRotation?.length ? Math.max(...options.backgroundRotation) : 0,

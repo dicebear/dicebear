@@ -6,6 +6,12 @@
 
 - #394: Different background colours for the same options between browsers.
 
+## Added
+
+### @dicebear/core
+
+- Color util tests
+
 ## Breaking Changes
 
 ### dicebear (CLI)
