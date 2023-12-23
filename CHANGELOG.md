@@ -1,6 +1,14 @@
 # DiceBear 8.0 - Release Notes
 
-## CLI
+## Fixes
+
+### @dicebear/core
+
+- #394: Different background colours for the same options between browsers.
+
+## Breaking Changes
+
+### dicebear (CLI)
 
 - To create an avatar, the new `create` command must be used.
 
