@@ -1,10 +1,10 @@
 {
-  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://github.com/dicebear/dicebear</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>„Initials” (https://github.com/dicebear/dicebear) by „DiceBear”, licensed under „CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><mask id=\"viewboxMask\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\" x=\"0\" y=\"0\" fill=\"#fff\" /></mask><g mask=\"url(#viewboxMask)\"><rect fill=\"#d81b60\" width=\"100\" height=\"100\" x=\"0\" y=\"0\" /><text x=\"50%\" y=\"50%\" font-family=\"Arial, sans-serif\" font-size=\"90\" font-weight=\"400\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"32.040\">FE</text></g></svg>",
+  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://github.com/dicebear/dicebear</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>„Initials” (https://github.com/dicebear/dicebear) by „DiceBear”, licensed under „CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><mask id=\"viewboxMask\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\" x=\"0\" y=\"0\" fill=\"#fff\" /></mask><g mask=\"url(#viewboxMask)\"><rect fill=\"#7cb342\" width=\"100\" height=\"100\" x=\"0\" y=\"0\" /><text x=\"50%\" y=\"50%\" font-family=\"Arial, sans-serif\" font-size=\"90\" font-weight=\"400\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"32.040\">FE</text></g></svg>",
   "extra": {
-    "primaryBackgroundColor": "#d81b60",
-    "secondaryBackgroundColor": "#fdd835",
+    "primaryBackgroundColor": "#7cb342",
+    "secondaryBackgroundColor": "#00acc1",
     "backgroundType": "solid",
-    "backgroundRotation": 124,
+    "backgroundRotation": 105,
     "fontFamily": "Arial, sans-serif",
     "fontSize": 90,
     "fontWeight": 400,

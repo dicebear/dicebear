@@ -4,7 +4,7 @@
     "primaryBackgroundColor": "transparent",
     "secondaryBackgroundColor": "transparent",
     "backgroundType": "solid",
-    "backgroundRotation": 216,
+    "backgroundRotation": 0,
     "face": "base",
     "mouth": "unimpressed",
     "eyes": "sad",

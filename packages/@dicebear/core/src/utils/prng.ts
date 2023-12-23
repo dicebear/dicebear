@@ -57,7 +57,18 @@ export function create(seed: string = ''): Prng {
       // Therefore, we use a separate instance of the PRNG here.
       const internalPrng = create(next().toString());
 
-      return arr.sort(() => internalPrng.integer(-1, 1));
+      // Fisher-Yates shuffle algorithm - We do not use the Array.sort method
+      // because it is not stable and produces different results when used in
+      // different browsers. See: https://github.com/dicebear/dicebear/issues/394
+      const workingArray = [...arr];
+
+      for (let i = workingArray.length - 1; i > 0; i--) {
+          const j = internalPrng.integer(0, i);
+
+          [workingArray[i], workingArray[j]] = [workingArray[j], workingArray[i]];
+      }
+
+      return workingArray;
     },
     string(
       length: number,
