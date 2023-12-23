@@ -5,6 +5,7 @@
 ### @dicebear/core
 
 - #394: Different background colours for the same options between browsers.
+- No random background colour if background type "solid" and only two colours are specified.
 
 ## Added
 
