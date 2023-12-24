@@ -1,0 +1,92 @@
+@import 'vars';
+
+.vp-code-light {
+  display: none !important;
+}
+
+.vp-code-dark {
+  display: block !important;
+}
+
+.VPButton {
+  font-weight: 500 !important;
+}
+
+.v-field__prepend-inner,
+.v-field__append-inner {
+  padding: 0 6px 0 0;
+  display: flex;
+  align-items: center;
+}
+
+.v-field--variant-filled {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.VPButton,
+.VPFeature,
+.custom-block {
+  border-radius: 6px !important;
+}
+
+.VPLink:not(.no-icon) {
+  $styles: (
+    'big-ears-neutral',
+    'adventurer',
+    'adventurer-neutral',
+    'avataaars',
+    'avataaars-neutral',
+    'big-ears',
+    'big-smile',
+    'bottts',
+    'bottts-neutral',
+    'croodles',
+    'croodles-neutral',
+    'fun-emoji',
+    'icons',
+    'identicon',
+    'initials',
+    'lorelei',
+    'lorelei-neutral',
+    'micah',
+    'miniavs',
+    'notionists',
+    'notionists-neutral',
+    'open-peeps',
+    'personas',
+    'pixel-art',
+    'pixel-art-neutral',
+    'rings',
+    'shapes',
+    'thumbs'
+  );
+
+  @each $style in $styles {
+    &[href='/styles/#{$style}/'] {
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        width: 1.5em;
+        height: 1.5em;
+        background-color: var(--vp-c-bg-soft);
+        border-radius: 4px;
+        margin-right: 0.5em;
+        background-image: url('https://api.dicebear.com/7.x/#{$style}/svg?seed=JD');
+      }
+    }
+  }
+}
+
+img[src^="https://api.dicebear.com/"]
+{
+  background: repeating-conic-gradient(
+      var(--avatar-background-color-1) 0% 25%,
+      var(--avatar-background-color-2) 0% 50%
+    )
+    50% / 12px 12px;
+}
