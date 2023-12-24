@@ -1,7 +1,6 @@
-Licenses
---------
+# Licenses
 
-# Design
+## Design
 Applies to all design files in this repository.
 
 The designs in this repository have been created by different designers and are
@@ -12,7 +11,7 @@ in the respective package folders.
 You can also find an overview of all avatar styles and their designers and
 licences on our website: https://www.dicebear.com/licenses/
 
-# Code
+## Code
 Applies to all non-design files in this repository.
 
 MIT License
