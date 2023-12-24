@@ -34,7 +34,7 @@ jobs:
       - name: Deploy to Bunny.net
         uses: ayeressian/bunnycdn-storage-deploy@96e259ff251df6d45f74e913c05ba870f8e061a7
         with:
-          source: "docs/.vitepress/dist"
+          source: "website/.vitepress/dist"
           storageZoneName: "${{ secrets.STORAGE_NAME }}"
           storagePassword: "${{ secrets.STORAGE_PASSWORD }}"
           accessKey: "${{ secrets.CDN_ACCESS_KEY }}"
