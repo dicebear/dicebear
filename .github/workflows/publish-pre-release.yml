@@ -8,23 +8,24 @@ on:
       - v*-rc.*
 
 jobs:
+  test:
+    uses: dicebear/dicebear/.github/workflows/test.yml@7.x
   publish:
-    name: Publish Packages
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
-      - run: npm run build
-      - run: npm run test
+      - run: npm run build -- --ignore @dicebear/website
 
       - run:
           ./node_modules/.bin/lerna publish from-package

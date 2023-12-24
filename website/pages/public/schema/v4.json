@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "color": {
+      "type": "string",
+      "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+    },
+    "colorCollection": {
+      "type": "string",
+      "enum": [
+        "amber",
+        "blue",
+        "blueGrey",
+        "brown",
+        "cyan",
+        "deepOrange",
+        "deepPurple",
+        "green",
+        "grey",
+        "indigo",
+        "lightBlue",
+        "lightGreen",
+        "lime",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "yellow"
+      ]
+    },
+    "colorCollectionLevel": {
+      "type": "integer",
+      "enum": [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+    },
+    "probability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    }
+  }
+}

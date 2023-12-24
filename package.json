@@ -3,8 +3,9 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/*",
-      "packages/@dicebear/*"
+      "packages/dicebear",
+      "packages/@dicebear/*",
+      "website"
     ]
   },
   "scripts": {

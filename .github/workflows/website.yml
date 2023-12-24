@@ -1,0 +1,44 @@
+name: Deploy Website
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    uses: dicebear/dicebear/.github/workflows/test.yml@7.x
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download legal pages
+        env:
+          PAT: ${{ secrets.PAT }}
+        run: ./website/scripts/download-legal-pages.sh
+
+      - name: Build with VitePress
+        run: |
+          npm run build
+
+      - name: Deploy to Bunny.net
+        uses: ayeressian/bunnycdn-storage-deploy@96e259ff251df6d45f74e913c05ba870f8e061a7
+        with:
+          source: "docs/.vitepress/dist"
+          storageZoneName: "${{ secrets.STORAGE_NAME }}"
+          storagePassword: "${{ secrets.STORAGE_PASSWORD }}"
+          accessKey: "${{ secrets.CDN_ACCESS_KEY }}"
+          pullZoneId: "${{ secrets.PULL_ZONE_ID }}"
+          upload: "true"
+          remove: "true"
+          purgePullZone: "true"

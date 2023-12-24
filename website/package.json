@@ -1,0 +1,43 @@
+{
+  "name": "@dicebear/website",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev .",
+    "build": "vitepress build .",
+    "preview": "vitepress preview ."
+  },
+  "dependencies": {
+    "@dicebear/collection": "*",
+    "@dicebear/core": "*",
+    "@mdi/js": "^7.2.96",
+    "@types/canvas-confetti": "^1.6.0",
+    "@types/json-schema": "^7.0.12",
+    "@types/json-schema-merge-allof": "^0.6.1",
+    "@types/lodash": "^4.14.195",
+    "@types/markdown-it": "^12.2.3",
+    "@types/node": "^20.4.4",
+    "@vueuse/core": "^10.2.1",
+    "canvas-confetti": "^1.6.0",
+    "cat-names": "^3.1.0",
+    "change-case": "^4.1.2",
+    "copy-to-clipboard": "^3.3.3",
+    "highlight.js": "^11.8.0",
+    "json-schema-merge-allof": "^0.8.1",
+    "lodash": "^4.17.21",
+    "pinia": "^2.1.4",
+    "prando": "^6.0.1",
+    "random-int": "^3.0.0",
+    "random-item": "^4.0.1",
+    "sass": "^1.64.1",
+    "typescript": "^5.1.6",
+    "vite-plugin-vuetify": "^2.0.1",
+    "vitepress": "1.0.0-rc.32",
+    "vue": "^3.3.4",
+    "vue-confetti": "^2.3.0",
+    "vuetify": "^3.4.8"
+  },
+  "private": true
+}
