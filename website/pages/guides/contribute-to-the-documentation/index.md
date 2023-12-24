@@ -37,13 +37,13 @@ respective page in the documentation below each page.
 
    ```
    cd dicebear
-   npm install --workspace @dicebear/website
+   npm install
    ```
 
 4. Create a build:
 
    ```
-   npm run build --workspace @dicebear/website
+   npm run build
    ```
 
 ## Verifying your changes
