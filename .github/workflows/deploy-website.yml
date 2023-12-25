@@ -28,17 +28,17 @@ jobs:
         run: ./website/scripts/download-legal-pages.sh
 
       - name: Build with VitePress
-        run: |
-          npm run build
+        run: npm run build -- --ignore "@dicebear/@(cli|editor)"
 
       - name: Deploy to Bunny.net
-        uses: ayeressian/bunnycdn-storage-deploy@96e259ff251df6d45f74e913c05ba870f8e061a7
+        uses: ayeressian/bunnycdn-storage-deploy@v2.2.0
         with:
           source: "website/.vitepress/dist"
-          storageZoneName: "${{ secrets.STORAGE_NAME }}"
-          storagePassword: "${{ secrets.STORAGE_PASSWORD }}"
+          destination: ""
+          storageZoneName: "${{ secrets.WEBSITE_STORAGE_NAME }}"
+          storagePassword: "${{ secrets.WEBSITE_STORAGE_PASSWORD }}"
           accessKey: "${{ secrets.CDN_ACCESS_KEY }}"
-          pullZoneId: "${{ secrets.PULL_ZONE_ID }}"
+          pullZoneId: "${{ secrets.WEBSITE_PULL_ZONE_ID }}"
           upload: "true"
           remove: "true"
           purgePullZone: "true"

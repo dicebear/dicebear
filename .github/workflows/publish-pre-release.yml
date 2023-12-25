@@ -25,7 +25,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
-      - run: npm run build -- --ignore @dicebear/website
+      - run: npm run build -- --ignore "@dicebear/@(website|editor)"
 
       - run:
           ./node_modules/.bin/lerna publish from-package

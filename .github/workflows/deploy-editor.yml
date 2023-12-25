@@ -1,0 +1,39 @@
+name: Deploy Editor
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    uses: dicebear/dicebear/.github/workflows/test.yml@7.x
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with VitePress
+        run: npm run build -- --ignore "@dicebear/@(cli|website)"
+
+      - name: Deploy to Bunny.net
+        uses: ayeressian/bunnycdn-storage-deploy@v2.2.0
+        with:
+          source: "editor/dist"
+          destination: ""
+          storageZoneName: "${{ secrets.EDITOR_STORAGE_NAME }}"
+          storagePassword: "${{ secrets.EDITOR_STORAGE_PASSWORD }}"
+          accessKey: "${{ secrets.CDN_ACCESS_KEY }}"
+          pullZoneId: "${{ secrets.EDITOR_PULL_ZONE_ID }}"
+          upload: "true"
+          remove: "true"
+          purgePullZone: "true"
