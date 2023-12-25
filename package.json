@@ -5,6 +5,7 @@
     "packages": [
       "packages/dicebear",
       "packages/@dicebear/*",
+      "editor",
       "website"
     ]
   },

@@ -25,5 +25,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run build -- --ignore @dicebear/website
+      - run: npm run build -- --ignore "@dicebear/@(website|editor)"
       - run: npm run test
