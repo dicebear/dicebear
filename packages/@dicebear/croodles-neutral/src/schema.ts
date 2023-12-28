@@ -10,6 +10,16 @@ import type { StyleSchema } from '@dicebear/core';
 export const schema: StyleSchema = {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "properties": {
+    "eyepatchColor": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+      },
+      "default": [
+        "000000"
+      ]
+    },
     "eyes": {
       "type": "array",
       "items": {
@@ -50,6 +60,16 @@ export const schema: StyleSchema = {
         "variant03",
         "variant02",
         "variant01"
+      ]
+    },
+    "glassesColor": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+      },
+      "default": [
+        "000000"
       ]
     },
     "mouth": {

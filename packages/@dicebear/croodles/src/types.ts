@@ -113,6 +113,8 @@ export interface Options {
   )[];
   topColor?: string[];
   baseColor?: string[];
+  glassesColor?: string[];
+  eyepatchColor?: string[];
 }
 
 export type ColorPickCollection = Record<string, string>;

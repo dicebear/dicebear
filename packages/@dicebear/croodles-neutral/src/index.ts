@@ -13,7 +13,7 @@
  *
  * Design "Croodles - Doodle your face" by vijay verma licensed under CC BY 4.0. / Remix of the original.
  * Source: https://www.figma.com/community/file/966199982810283152
- * Homepage: https://vijayverma.co/
+ * Homepage: https://vjy.me/
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 
@@ -28,7 +28,7 @@ export const meta: StyleMeta = {
   title: 'Croodles - Doodle your face',
   creator: 'vijay verma',
   source: 'https://www.figma.com/community/file/966199982810283152',
-  homepage: 'https://vijayverma.co/',
+  homepage: 'https://vjy.me/',
   license: {
     name: 'CC BY 4.0',
     url: 'https://creativecommons.org/licenses/by/4.0/',

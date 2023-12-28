@@ -16,5 +16,7 @@ type Props = {
 
 export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
+    'glasses': convertColor(prng.pick(options.glassesColor ?? [], 'transparent')),
+    'eyepatch': convertColor(prng.pick(options.eyepatchColor ?? [], 'transparent')),
   }
 };

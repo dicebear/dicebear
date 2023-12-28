@@ -46,6 +46,16 @@ export const schema: StyleSchema = {
       "maximum": 100,
       "default": 10
     },
+    "eyepatchColor": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+      },
+      "default": [
+        "000000"
+      ]
+    },
     "eyes": {
       "type": "array",
       "items": {
@@ -112,6 +122,16 @@ export const schema: StyleSchema = {
         "variant03",
         "variant02",
         "variant01"
+      ]
+    },
+    "glassesColor": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+      },
+      "default": [
+        "000000"
       ]
     },
     "mouth": {

@@ -55,6 +55,8 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
+  glassesColor?: string[];
+  eyepatchColor?: string[];
 }
 
 export type ColorPickCollection = Record<string, string>;
