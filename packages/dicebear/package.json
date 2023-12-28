@@ -1,6 +1,6 @@
 {
   "name": "dicebear",
-  "version": "8.0.0-rc.0",
+  "version": "8.0.0-rc.1",
   "private": false,
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "homepage": "https://github.com/dicebear/dicebear",
@@ -25,8 +25,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@dicebear/collection": "8.0.0-rc.0",
-    "@dicebear/core": "8.0.0-rc.0",
+    "@dicebear/collection": "8.0.0-rc.1",
+    "@dicebear/core": "8.0.0-rc.1",
     "@resvg/resvg-js": "^2.4.1",
     "ajv": "^8.12.0",
     "chalk": "^5.2.0",
