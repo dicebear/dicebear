@@ -1,79 +1,108 @@
 import { Exif, Style } from '../types.js';
 import * as _ from './escape.js';
 
-export function xml(style: Style<any>): string {
-  const title = style.meta?.title ?? 'Unnamed';
-  const creator = style.meta?.creator ?? 'Unknown';
+export function xml(style: Style<any>): string | undefined {
+    if (!requiresAttribution(style)) {
+        return undefined;
+    }
 
-  let description = `"${title}" by "${creator}"`;
+    if (!isCreativeCommonsLicense(style)) {
+        return `<desc>${text(style)}</desc>`;
+    }
 
-  if (style.meta?.license?.name) {
-    description += `, licensed under "${style.meta.license.name}".`;
-  }
+    const title = style.meta?.title ?? 'Unnamed';
+    const creator = style.meta?.creator ?? 'Unknown';
 
-  description += ' / Remix of the original. - Created with dicebear.com';
+    const xmlTitle = `<dc:title>${_.xml(title)}</dc:title>`;
 
-  const xmlTitle = `<dc:title>${_.xml(title)}</dc:title>`;
+    const xmlCreator =
+        '<dc:creator>' +
+        `<cc:Agent rdf:about="${_.xml(style.meta?.homepage ?? '')}">` +
+        `<dc:title>${_.xml(creator)}</dc:title>` +
+        '</cc:Agent>' +
+        '</dc:creator>';
 
-  const xmlCreator =
-    '<dc:creator>' +
-    `<cc:Agent rdf:about="${_.xml(style.meta?.homepage ?? '')}">` +
-    `<dc:title>${_.xml(creator)}</dc:title>` +
-    '</cc:Agent>' +
-    '</dc:creator>';
+    const xmlSource = style.meta?.source
+        ? `<dc:source>${_.xml(style.meta.source)}</dc:source>`
+        : '';
 
-  const xmlSource = style.meta?.source
-    ? `<dc:source>${_.xml(style.meta.source)}</dc:source>`
-    : '';
+    const xmlLicense = style.meta?.license?.url
+        ? `<cc:license rdf:resource="${_.xml(style.meta.license.url)}" />`
+        : '';
 
-  const xmlLicense = style.meta?.license?.url
-    ? `<cc:license rdf:resource="${_.xml(style.meta.license.url)}" />`
-    : '';
-
-  return (
-    `<desc>${description}</desc>` +
-    '<metadata' +
-    ' xmlns:dc="http://purl.org/dc/elements/1.1/"' +
-    ' xmlns:cc="http://creativecommons.org/ns#"' +
-    ' xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">' +
-    '<rdf:RDF>' +
-    '<cc:Work>' +
-    xmlTitle +
-    xmlCreator +
-    xmlSource +
-    xmlLicense +
-    '</cc:Work>' +
-    '</rdf:RDF>' +
-    '</metadata>'
-  );
+    return (
+        `<desc>${text(style)}</desc>` +
+        '<metadata' +
+        ' xmlns:dc="http://purl.org/dc/elements/1.1/"' +
+        ' xmlns:cc="http://creativecommons.org/ns#"' +
+        ' xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">' +
+        '<rdf:RDF>' +
+        '<cc:Work>' +
+        xmlTitle +
+        xmlCreator +
+        xmlSource +
+        xmlLicense +
+        '</cc:Work>' +
+        '</rdf:RDF>' +
+        '</metadata>'
+    );
 }
 
-export function exif(style: Style<any>): Exif {
-  const title = style.meta?.title ?? 'Unnamed';
-  const creator = style.meta?.creator ?? 'Unknown';
+export function exif(style: Style<any>): Exif | undefined {
+    if (!requiresAttribution(style)) {
+        return undefined;
+    }
 
-  let copyright = `"${title}" by "${creator}"`;
+    const exif: Exif = {
+        ImageDescription: text(style) ?? '',
+        Copyright: text(style) ?? ''
+    };
 
-  if (style.meta?.license?.name) {
-    copyright += `, licensed under "${style.meta.license.name}".`;
-  }
+    return exif;
+}
 
-  copyright += ' / Remix of the original.';
+export function text(style: Style<any>): string | undefined {
+    if (!requiresAttribution(style)) {
+        return undefined;
+    }
 
-  const exif: Exif = {
-    ImageDescription: `${copyright} - Created with dicebear.com`,
-    Copyright: copyright,
-    'XMP-dc:Title': title,
-    'XMP-dc:Creator': creator,
-  };
+    let title = style.meta?.title ?? 'Unnamed';
+    let creator = style.meta?.creator ?? 'Unknown';
+    let license = style.meta?.license?.name ?? 'Unknown';
 
-  if (style.meta?.source) {
-    exif['XMP-dc:Source'] = style.meta.source;
-  }
+    if (style.meta?.source) {
+        title += ` (${style.meta.source})`;
+    }
 
-  if (style.meta?.license?.url) {
-    exif['XMP-cc:License'] = style.meta.license.url;
-  }
+    if (style.meta?.homepage) {
+        creator += ` (${style.meta.homepage})`;
+    }
 
-  return exif;
+    if (style.meta?.license?.url) {
+        license += ` (${style.meta.license.url})`;
+    }
+
+    if (style.meta?.license?.name === 'MIT') {
+        return `${title} by ${creator}, used under MIT License.`;
+    } else {
+        return `${title} by ${creator}, used under ${license} / Remix of the original.`;
+    }
+}
+
+export function isCreativeCommonsLicense(style: Style<any>): boolean {
+    return (
+        style.meta?.license?.name === 'CC0 1.0' ||
+        style.meta?.license?.name === 'CC BY 4.0' ||
+        style.meta?.license?.name === 'CC BY-SA 4.0' ||
+        style.meta?.license?.name === 'CC BY-NC 4.0' ||
+        style.meta?.license?.name === 'CC BY-NC-SA 4.0'
+    );
+}
+
+export function requiresAttribution(style: Style<any>): boolean {
+    // Attribution can be omitted if the designer is Florian Körner and the licence is CC0 1.0.
+    return false === (
+        style.meta?.creator === 'Florian Körner' &&
+        style.meta?.license?.name === 'CC0 1.0'
+    );
 }

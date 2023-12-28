@@ -5,10 +5,9 @@
  * Copyright (c) 2023 Florian Körner
  */
 
-import * as license from './utils/license.js';
 import * as escape from './utils/escape.js';
 
 export * from './core.js';
 export * from './schema.js';
 export * from './types.js';
-export { license, escape };
+export { escape };

@@ -43,6 +43,14 @@
 - New option `glassesColor`
 - New option `eyepatchColor`
 
+## Improved
+
+### @dicebear/core
+
+- Simplified integration of copyright information in the metadata of the generated avatars.
+    - Copyright information is omitted if designer "Florian Körner" (maintainer of the project)
+    - Removed reference to DiceBear in meta information.
+
 ## Breaking Changes
 
 ### dicebear (CLI)

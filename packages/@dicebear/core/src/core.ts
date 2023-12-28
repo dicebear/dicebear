@@ -79,8 +79,7 @@ export function createAvatar<O extends {}>(
   }
 
   const attributes = svgUtils.createAttrString(result);
-  const metadata = license.xml(style);
-  const exif = license.exif(style);
+  const metadata = license.xml(style) ?? '';
 
   const svg = `<svg ${attributes}>${metadata}${result.body}</svg>`;
 
@@ -101,10 +100,10 @@ export function createAvatar<O extends {}>(
     },
     ...toFormat(svg, 'svg'),
     png: ({ includeExif = false }: ResultConvertOptions = {}) => {
-      return toFormat(svg, 'png', includeExif ? exif : undefined);
+      return toFormat(svg, 'png', includeExif ? license.exif(style) : undefined);
     },
     jpeg: ({ includeExif = false }: ResultConvertOptions = {}) => {
-      return toFormat(svg, 'jpeg', includeExif ? exif : undefined);
+      return toFormat(svg, 'jpeg', includeExif ? license.exif(style) : undefined);
     },
   };
 }
