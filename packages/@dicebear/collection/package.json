@@ -82,7 +82,7 @@
     "webpack": "^5.76.3"
   },
   "peerDependencies": {
-    "@dicebear/core": "^7.0.0"
+    "@dicebear/core": "^8.0.0"
   },
   "engines": {
     "node": ">=16.0.0"
