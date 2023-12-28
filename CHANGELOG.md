@@ -23,6 +23,10 @@
 
 - Fix URL to License and Figma file.
 
+### @dicebear/avataaars
+
+- Fix hardcoded color for `eyepatch`.
+
 ## Added
 
 ### @dicebear/core
