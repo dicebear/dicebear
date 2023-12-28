@@ -15,6 +15,14 @@
 
 - URL to the homepage of vijay verma updated.
 
+### @dicebear/lorelei
+
+- Fix URL to License and Figma file.
+
+### @dicebear/lorelei-neutral
+
+- Fix URL to License and Figma file.
+
 ## Added
 
 ### @dicebear/core
