@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/croodles-neutral",
-  "version": "5.3.4",
+  "version": "5.3.5",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "5.3.4",
+    "@dicebear/core": "5.3.5",
     "@tsconfig/recommended": "^1.0.1",
     "del-cli": "^5.0.0",
     "typescript": "^4.6.3",
