@@ -1,4 +1,5 @@
 {
-  "singleQuote": true,
-  "proseWrap": "always"
+    "singleQuote": true,
+    "proseWrap": "always",
+    "printWidth": 120
 }

@@ -1,6 +1,5 @@
 import type {
   Result,
-  ResultConvertOptions,
   Style,
   StyleOptions,
 } from './types.js';
@@ -8,7 +7,6 @@ import * as svgUtils from './utils/svg.js';
 import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
 import * as license from './utils/license.js';
-import { toFormat } from '@dicebear/converter';
 import { getBackgroundColors } from './utils/color.js';
 
 export function createAvatar<O extends {}>(
@@ -95,15 +93,8 @@ export function createAvatar<O extends {}>(
         ...result.extra?.(),
       },
     }),
-    toDataUriSync: () => {
+    toDataUri: () => {
       return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-    },
-    ...toFormat(svg, 'svg'),
-    png: ({ includeExif = false }: ResultConvertOptions = {}) => {
-      return toFormat(svg, 'png', includeExif ? license.exif(style) : undefined);
-    },
-    jpeg: ({ includeExif = false }: ResultConvertOptions = {}) => {
-      return toFormat(svg, 'jpeg', includeExif ? license.exif(style) : undefined);
-    },
+    }
   };
 }

@@ -1,5 +1,5 @@
 {
-  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><mask id=\"viewboxMask\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\" x=\"0\" y=\"0\" fill=\"#fff\" /></mask><g mask=\"url(#viewboxMask)\"><rect fill=\"#7cb342\" width=\"100\" height=\"100\" x=\"0\" y=\"0\" /><text x=\"50%\" y=\"50%\" font-family=\"Arial, sans-serif\" font-size=\"90\" font-weight=\"400\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"32.040\">FE</text></g></svg>",
+  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><mask id=\"viewboxMask\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\" x=\"0\" y=\"0\" fill=\"#fff\" /></mask><g mask=\"url(#viewboxMask)\"><rect fill=\"#7cb342\" width=\"100\" height=\"100\" x=\"0\" y=\"0\" /><text x=\"50%\" y=\"50%\" font-family=\"Arial, sans-serif\" font-size=\"90\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"32.040\">FE</text></g></svg>",
   "extra": {
     "primaryBackgroundColor": "#7cb342",
     "secondaryBackgroundColor": "#00acc1",
@@ -7,7 +7,6 @@
     "backgroundRotation": 105,
     "fontFamily": "Arial, sans-serif",
     "fontSize": 90,
-    "fontWeight": 400,
     "textColor": "#ffffff",
     "initials": "FE"
   }

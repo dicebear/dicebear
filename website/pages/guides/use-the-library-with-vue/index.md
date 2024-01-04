@@ -12,7 +12,7 @@ import { lorelei } from '@dicebear/collection';
 const avatar = createAvatar(lorelei, {
   size: 128,
   // ... other options
-}).toDataUriSync();
+}).toDataUri();
 </script>
 
 <template>

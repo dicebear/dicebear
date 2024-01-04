@@ -32,7 +32,7 @@ data.forEach((params, key) => {
         fs.mkdirSync(path.dirname(svgPath), { recursive: true });
       }
 
-      await createAvatar(...params).toFile(svgPath);
+      fs.writeFileSync(svgPath, createAvatar(...params).toString());
     }
 
     if (false === fs.existsSync(jsonPath)) {

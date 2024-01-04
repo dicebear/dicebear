@@ -1,8 +1,7 @@
-export type ToFormat = (svg: string, format: Format, exif?: Exif) => Result;
+export type Avatar = { toString(): string } | string;
 
 export interface Result {
   toDataUri(): Promise<string>;
-  toFile(name: string): Promise<void>;
   toArrayBuffer(): Promise<ArrayBufferLike>;
 }
 
@@ -10,4 +9,7 @@ export interface Exif {
   [key: string]: string;
 }
 
-export type Format = 'svg' | 'png' | 'jpeg';
+export interface Options {
+    fonts?: string[],
+    exif?: boolean;
+}

@@ -36,34 +36,19 @@
     "test": "uvu tests"
   },
   "dependencies": {
+    "@fontsource/noto-sans": "^5.0.18",
+    "@resvg/resvg-js": "^2.6.0",
     "@types/json-schema": "^7.0.11",
+    "exiftool-vendored": "^24.3.0",
+    "sharp": "^0.33.1",
     "tmp-promise": "^3.0.3"
   },
-  "peerDependencies": {
-    "@resvg/resvg-js": "^2.4.1",
-    "exiftool-vendored": "^22.0.0",
-    "sharp": "^0.32.6"
-  },
   "devDependencies": {
-    "@resvg/resvg-js": "^2.4.1",
     "@tsconfig/recommended": "^1.0.2",
     "@types/sharp": "^0.32.0",
     "del-cli": "^5.0.0",
-    "exiftool-vendored": "^22.0.0",
-    "sharp": "^0.32.6",
     "typescript": "^5.1.6",
     "uvu": "^0.5.6"
-  },
-  "peerDependenciesMeta": {
-    "@resvg/resvg-js": {
-      "optional": true
-    },
-    "exiftool-vendored": {
-      "optional": true
-    },
-    "sharp": {
-      "optional": true
-    }
   },
   "engines": {
     "node": ">=16.0.0"

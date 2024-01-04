@@ -1,6 +1,4 @@
-import { Format } from '../types.js';
-
-export function getMimeType(format: Format): string {
+export function getMimeType(format: 'svg' | 'png' | 'jpeg'): string {
   switch (format) {
     case 'svg':
       return 'image/svg+xml';

@@ -1,4 +1,4 @@
-import { Exif, Style } from '../types.js';
+import { Style } from '../types.js';
 import * as _ from './escape.js';
 
 export function xml(style: Style<any>): string | undefined {
@@ -46,19 +46,6 @@ export function xml(style: Style<any>): string | undefined {
         '</rdf:RDF>' +
         '</metadata>'
     );
-}
-
-export function exif(style: Style<any>): Exif | undefined {
-    if (!requiresAttribution(style)) {
-        return undefined;
-    }
-
-    const exif: Exif = {
-        ImageDescription: text(style) ?? '',
-        Copyright: text(style) ?? ''
-    };
-
-    return exif;
 }
 
 export function text(style: Style<any>): string | undefined {

@@ -1,109 +1,101 @@
-import type { Result, Exif, Format, ToFormat } from '../types.js';
+import type { Result, Exif, Avatar, Options } from '../types.js';
 import { promises as fs } from 'node:fs';
 import { getMimeType } from '../utils/mime-type.js';
 import { ensureSize } from '../utils/svg.js';
 import * as tmp from 'tmp-promise';
-import { getEncoder } from '../utils/text.js';
+import { renderAsync } from '@resvg/resvg-js';
+import sharp from 'sharp';
+import { exiftool } from 'exiftool-vendored';
 
-export const toFormat: ToFormat = function (
-  svg: string,
-  format: Format,
-  exif?: Exif
-): Result {
-  return {
-    toDataUri: () => toDataUri(svg, format, exif),
-    toFile: (name: string) => toFile(name, svg, format, exif),
-    toArrayBuffer: () => toArrayBuffer(svg, format, exif),
-  };
-};
-
-async function toDataUri(
-  svg: string,
-  format: Format,
-  exif?: Exif
-): Promise<string> {
-  if (format === 'svg') {
-    return `data:${getMimeType(format)};utf8,${encodeURIComponent(svg)}`;
-  }
-
-  const buffer = await toBuffer(svg, format, exif);
-
-  return `data:${getMimeType(format)};base64,${buffer.toString('base64')}`;
+export function toPng(avatar: Avatar, options: Options = {}): Result {
+    return toFormat(avatar, 'png', options);
 }
 
-async function toFile(
-  name: string,
-  svg: string,
-  format: Format,
-  exif?: Exif
-): Promise<void> {
-  if (format === 'svg') {
-    await fs.writeFile(name, svg);
-    return;
-  }
+export function toJpeg(avatar: Avatar, options: Options = {}): Result {
+    return toFormat(avatar, 'jpeg', options);
+}
 
-  await fs.writeFile(name, await toBuffer(svg, format, exif));
+function toFormat(avatar: Avatar, format: 'png' | 'jpeg', options: Options): Result {
+    const svg = typeof avatar === 'string' ? avatar : avatar.toString();
+    const exif = {};
+
+    return {
+        toDataUri: () => toDataUri(svg, format, exif, options),
+        toArrayBuffer: () => toArrayBuffer(svg, format, exif, options),
+    };
+}
+
+async function toDataUri(
+    svg: string,
+    format: 'svg' | 'png' | 'jpeg',
+    exif: Exif,
+    options: Options
+): Promise<string> {
+    if (format === 'svg') {
+        return `data:${getMimeType(format)};utf8,${encodeURIComponent(svg)}`;
+    }
+
+    const buffer = await toBuffer(svg, format, exif, options);
+
+    return `data:${getMimeType(format)};base64,${buffer.toString('base64')}`;
 }
 
 async function toArrayBuffer(
-  rawSvg: string,
-  format: Format,
-  exif?: Exif
+    rawSvg: string,
+    format: 'png' | 'jpeg',
+    exif: Exif,
+    options: Options
 ): Promise<ArrayBufferLike> {
-  if (format === 'svg') {
-    return getEncoder().encode(rawSvg);
-  }
-
-  return (await toBuffer(rawSvg, format, exif)).buffer;
+    return (await toBuffer(rawSvg, format, exif, options)).buffer;
 }
 
 async function toBuffer(
-  rawSvg: string,
-  format: Exclude<Format, 'svg'>,
-  exif?: Exif
+    rawSvg: string,
+    format: 'png' | 'jpeg',
+    exif: Exif,
+    options: Options
 ): Promise<Buffer> {
-  const { renderAsync } = await import('@resvg/resvg-js');
+    const fonts = options.fonts;
 
-  const interRegular = new URL(
-    '../../fonts/inter/inter-regular.otf',
-    import.meta.url
-  );
+    let { svg } = ensureSize(rawSvg);
 
-  const interBold = new URL(
-    '../../fonts/inter/inter-bold.otf',
-    import.meta.url
-  );
+    let buffer = (
+        await renderAsync(svg, {
+            font: {
+                loadSystemFonts: undefined === fonts || fonts.length === 0,
+                fontFiles: fonts,
+            },
+        })
+    ).asPng();
 
-  let { svg } = ensureSize(rawSvg);
+    if ('jpeg' === format) {
+        buffer = await sharp(buffer).flatten({ background: '#ffffff' }).toFormat(format).toBuffer();
+    }
 
-  let buffer = (
-    await renderAsync(svg, {
-      font: {
-        loadSystemFonts: false,
-        defaultFontFamily: 'Inter',
-        fontFiles: [interRegular.pathname, interBold.pathname],
-      },
-    })
-  ).asPng();
+    if (Object.keys(exif).length > 0) {
+        await tmp.withFile(async ({ path }) => {
+            await fs.writeFile(path, buffer);
+            await exiftool.write(path, exif);
+            buffer = await fs.readFile(path);
+        });
+    }
 
-  if ('jpeg' === format) {
-    const sharp = (await import('sharp')).default;
+    return buffer;
+}
 
-    buffer = await sharp(buffer)
-      .flatten({ background: '#ffffff' })
-      .toFormat(format)
-      .toBuffer();
-  }
+function getExif(svg: string): Exif {
+    const exif: Exif = {};
 
-  if (exif) {
-    const exiftool = (await import('exiftool-vendored')).exiftool;
+    const match = svg.match(/<desc>(.*?)<\/desc>/s);
 
-    await tmp.withFile(async ({ path }) => {
-      await fs.writeFile(path, buffer);
-      await exiftool.write(path, exif);
-      buffer = await fs.readFile(path);
-    });
-  }
+    if (match) {
+        const description = match[1];
 
-  return buffer;
+        return {
+            ImageDescription: description,
+            Copyright: description,
+        };
+    }
+
+    return exif;
 }

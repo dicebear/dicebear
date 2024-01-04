@@ -13,7 +13,7 @@ function App() {
     return createAvatar(lorelei, {
       size: 128,
       // ... other options
-    }).toDataUriSync();
+    }).toDataUri();
   }, []);
 
   return <img src={avatar} alt="Avatar" />;

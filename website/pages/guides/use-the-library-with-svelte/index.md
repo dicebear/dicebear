@@ -11,7 +11,7 @@ convert the SVG to a data URI and use it as the `src`.
   let avatar = createAvatar(lorelei, {
     size: 128,
     // ... other options
-  }).toDataUriSync();
+  }).toDataUri();
 </script>
 
 <img src={avatar} alt="Avatar" />

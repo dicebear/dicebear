@@ -32,7 +32,6 @@
     "test": "uvu tests"
   },
   "dependencies": {
-    "@dicebear/converter": "8.0.0-rc.2",
     "@types/json-schema": "^7.0.11"
   },
   "devDependencies": {

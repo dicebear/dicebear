@@ -4,5 +4,4 @@ export interface Options {
   fontFamily?: string[];
   fontSize?: number;
   chars?: number;
-  fontWeight?: number;
 }

@@ -5,5 +5,5 @@
  * Copyright (c) 2023 Florian Körner
  */
 
-export { toFormat } from './core.js';
+export { toPng, toJpeg } from './core.js';
 export * from '../types.js';
