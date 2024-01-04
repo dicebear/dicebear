@@ -27,16 +27,14 @@
   "dependencies": {
     "@dicebear/collection": "8.0.0-rc.2",
     "@dicebear/core": "8.0.0-rc.2",
-    "@resvg/resvg-js": "^2.4.1",
+    "@dicebear/converter": "8.0.0-rc.2",
     "ajv": "^8.12.0",
     "chalk": "^5.2.0",
     "chalk-template": "^1.0.0",
     "cli-progress": "^3.12.0",
-    "exiftool-vendored": "^22.0.0",
     "fs-extra": "^11.1.1",
     "json-schema-merge-allof": "^0.8.1",
     "p-queue": "^7.3.4",
-    "sharp": "^0.32.6",
     "update-notifier": "^6.0.2",
     "yargs": "^17.7.1"
   },
@@ -51,6 +49,6 @@
     "typescript": "^5.1.6"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   }
 }
