@@ -10,12 +10,12 @@ import type { Options, ColorPickCollection } from '../types.js';
 import { convertColor } from './convertColor.js';
 
 type Props = {
-  prng: Prng,
-  options: Options
-}
+  prng: Prng;
+  options: Options;
+};
 
 export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
-    'ring': convertColor(prng.pick(options.ringColor ?? [], 'transparent')),
-  }
-};
+    ring: convertColor(prng.pick(options.ringColor ?? [], 'transparent')),
+  };
+}

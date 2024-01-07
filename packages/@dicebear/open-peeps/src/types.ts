@@ -107,10 +107,7 @@ export interface Options {
     | 'moustache9'
   )[];
   facialHairProbability?: number;
-  mask?: (
-    | 'medicalMask'
-    | 'respirator'
-  )[];
+  mask?: ('medicalMask' | 'respirator')[];
   maskProbability?: number;
   accessories?: (
     | 'eyepatch'

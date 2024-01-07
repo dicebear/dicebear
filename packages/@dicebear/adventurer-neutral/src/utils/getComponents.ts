@@ -10,36 +10,41 @@ import type { Options, ComponentPickCollection } from '../types.js';
 import { pickComponent } from './pickComponent.js';
 
 type Props = {
-  prng: Prng,
-  options: Options
-}
+  prng: Prng;
+  options: Options;
+};
 
-export function getComponents({ prng, options }: Props): ComponentPickCollection {
+export function getComponents({
+  prng,
+  options,
+}: Props): ComponentPickCollection {
   const eyesComponent = pickComponent({
     prng,
     group: 'eyes',
-    values: options.eyes
+    values: options.eyes,
   });
   const eyebrowsComponent = pickComponent({
     prng,
     group: 'eyebrows',
-    values: options.eyebrows
+    values: options.eyebrows,
   });
   const mouthComponent = pickComponent({
     prng,
     group: 'mouth',
-    values: options.mouth
+    values: options.mouth,
   });
   const glassesComponent = pickComponent({
     prng,
     group: 'glasses',
-    values: options.glasses
+    values: options.glasses,
   });
 
   return {
-    'eyes': eyesComponent,
-    'eyebrows': eyebrowsComponent,
-    'mouth': mouthComponent,
-    'glasses': prng.bool(options.glassesProbability) ? glassesComponent : undefined,
-  }
-};
+    eyes: eyesComponent,
+    eyebrows: eyebrowsComponent,
+    mouth: mouthComponent,
+    glasses: prng.bool(options.glassesProbability)
+      ? glassesComponent
+      : undefined,
+  };
+}

@@ -6,19 +6,11 @@
  */
 
 export interface Options {
-  shape?: (
-    | 'default'
-  )[];
+  shape?: ('default')[];
   shapeRotation?: number[];
   shapeOffsetX?: number[];
   shapeOffsetY?: number[];
-  face?: (
-    | 'variant1'
-    | 'variant2'
-    | 'variant3'
-    | 'variant5'
-    | 'variant4'
-  )[];
+  face?: ('variant1' | 'variant2' | 'variant3' | 'variant5' | 'variant4')[];
   faceRotation?: number[];
   faceOffsetX?: number[];
   faceOffsetY?: number[];
@@ -60,13 +52,7 @@ export interface Options {
     | 'variant9W14'
     | 'variant9W16'
   )[];
-  mouth?: (
-    | 'variant2'
-    | 'variant1'
-    | 'variant3'
-    | 'variant4'
-    | 'variant5'
-  )[];
+  mouth?: ('variant2' | 'variant1' | 'variant3' | 'variant4' | 'variant5')[];
   backgroundColor?: string[];
   shapeColor?: string[];
   mouthColor?: string[];
@@ -86,8 +72,8 @@ export type ComponentPick =
   | {
       name: string;
       value: ComponentGroupItem;
-      rotation: number | undefined,
-      offsetX: number | undefined,
-      offsetY: number | undefined,
+      rotation: number | undefined;
+      offsetX: number | undefined;
+      offsetY: number | undefined;
     }
   | undefined;

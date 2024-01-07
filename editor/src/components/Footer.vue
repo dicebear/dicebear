@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import useMainStore from "@/stores/main";
-import type { Style, StyleMeta } from "@dicebear/core";
-import { computed } from "@vue/reactivity";
-import availableStyles from "@/config/styles";
-import { useI18n } from "vue-i18n";
+import useMainStore from '@/stores/main';
+import type { Style, StyleMeta } from '@dicebear/core';
+import { computed } from '@vue/reactivity';
+import availableStyles from '@/config/styles';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   tab: string;
@@ -15,7 +15,7 @@ const { t } = useI18n();
 const version = __dicebearEditorVersion;
 
 const visibleStyles = computed<Style<any>[]>(() => {
-  if (props.tab === "style") {
+  if (props.tab === 'style') {
     return Object.values(availableStyles).map((v) => v.style);
   }
 
@@ -27,7 +27,7 @@ const metaList = computed(() => {
   const knownWork: string[] = [];
 
   for (const val of visibleStyles.value) {
-    if (!val.meta || val.meta.creator === "Florian Körner") continue;
+    if (!val.meta || val.meta.creator === 'Florian Körner') continue;
 
     if (val.meta.source) {
       if (knownWork.includes(val.meta.source)) {
@@ -50,17 +50,17 @@ const metaList = computed(() => {
     <ul class="footer-links">
       <li>
         <a :href="t('documentationLink')" target="_blank">
-          {{ t("documentation") }}
+          {{ t('documentation') }}
         </a>
       </li>
       <li>
         <a :href="t('privacyPolicyLink')" target="_blank">
-          {{ t("privacyPolicy") }}
+          {{ t('privacyPolicy') }}
         </a>
       </li>
       <li>
         <a :href="t('siteNoticeLink')" target="_blank">
-          {{ t("siteNotice") }}
+          {{ t('siteNotice') }}
         </a>
       </li>
       <li>
@@ -68,7 +68,7 @@ const metaList = computed(() => {
       </li>
     </ul>
     <div class="footer-header" v-if="metaList.length > 0">
-      {{ t("licenses") }}
+      {{ t('licenses') }}
     </div>
     <p class="footer-licenses" v-if="metaList.length > 0">
       <template v-for="meta in metaList">
@@ -84,9 +84,9 @@ const metaList = computed(() => {
           :href="meta.license?.url"
           target="_blank"
           rel="noopener noreferrer"
-          >{{ meta.license?.name.replace(/\.$/, "") }}</a
+          >{{ meta.license?.name.replace(/\.$/, '') }}</a
         >.
-        {{ " " }}
+        {{ ' ' }}
       </template>
       <template v-if="metaList.length === 1"> Remix of the original. </template>
       <template v-else>

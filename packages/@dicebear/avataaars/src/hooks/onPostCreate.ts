@@ -5,34 +5,40 @@
  * File: https://www.figma.com/file/HBLdITkkTnLs4M09BmCe4h
  */
 
-import { Prng, StyleOptions } from "@dicebear/core";
+import { Prng, StyleOptions } from '@dicebear/core';
 
-import { Options, ColorPickCollection, ComponentPickCollection } from "../types.js";
+import {
+  Options,
+  ColorPickCollection,
+  ComponentPickCollection,
+} from '../types.js';
 
 type Props = {
-  prng: Prng,
-  options: StyleOptions<Options>,
-  components: ComponentPickCollection,
-  colors: ColorPickCollection
-} 
+  prng: Prng;
+  options: StyleOptions<Options>;
+  components: ComponentPickCollection;
+  colors: ColorPickCollection;
+};
 
 export function onPostCreate({ prng, options, components, colors }: Props) {
   if (components.style?.name === 'circle') {
     options.backgroundColor = [];
   }
-  
-  if (components.style?.name !== 'circle'
-      && options.backgroundColor
-      && options.backgroundColor.length === 1
-      && options.backgroundColor[0] === '65c9ff'
+
+  if (
+    components.style?.name !== 'circle' &&
+    options.backgroundColor &&
+    options.backgroundColor.length === 1 &&
+    options.backgroundColor[0] === '65c9ff'
   ) {
-    options.backgroundColor = [];   
+    options.backgroundColor = [];
   }
-  
+
   // Hijab and facial hair is an unusual combination. Therefore, remove facial hair if not forced.
-  if (options.facialHairProbability !== 100
-      && components.top?.name === 'hijab'
+  if (
+    options.facialHairProbability !== 100 &&
+    components.top?.name === 'hijab'
   ) {
-      options.facialHair = undefined;
+    options.facialHair = undefined;
   }
 }

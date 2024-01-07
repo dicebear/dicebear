@@ -6,13 +6,8 @@
  */
 
 export interface Options {
-  style?: (
-    | 'circle'
-    | 'default'
-  )[];
-  base?: (
-    | 'default'
-  )[];
+  style?: ('circle' | 'default')[];
+  base?: ('default')[];
   clothing?: (
     | 'blazerAndShirt'
     | 'blazerAndSweater'
@@ -38,9 +33,7 @@ export interface Options {
     | 'twinkle'
     | 'vomit'
   )[];
-  nose?: (
-    | 'default'
-  )[];
+  nose?: ('default')[];
   eyes?: (
     | 'closed'
     | 'cry'

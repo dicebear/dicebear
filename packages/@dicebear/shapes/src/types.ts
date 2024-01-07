@@ -61,8 +61,8 @@ export type ComponentPick =
   | {
       name: string;
       value: ComponentGroupItem;
-      rotation: number | undefined,
-      offsetX: number | undefined,
-      offsetY: number | undefined,
+      rotation: number | undefined;
+      offsetX: number | undefined;
+      offsetY: number | undefined;
     }
   | undefined;

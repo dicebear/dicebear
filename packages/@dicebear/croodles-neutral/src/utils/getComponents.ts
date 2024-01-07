@@ -10,11 +10,14 @@ import type { Options, ComponentPickCollection } from '../types.js';
 import { pickComponent } from './pickComponent.js';
 
 type Props = {
-  prng: Prng,
-  options: Options
-}
+  prng: Prng;
+  options: Options;
+};
 
-export function getComponents({ prng, options }: Props): ComponentPickCollection {
+export function getComponents({
+  prng,
+  options,
+}: Props): ComponentPickCollection {
   const eyesComponent = pickComponent({
     prng,
     group: 'eyes',
@@ -32,8 +35,8 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
   });
 
   return {
-    'eyes': eyesComponent,
-    'nose': noseComponent,
-    'mouth': mouthComponent,
-  }
-};
+    eyes: eyesComponent,
+    nose: noseComponent,
+    mouth: mouthComponent,
+  };
+}

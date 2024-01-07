@@ -81,7 +81,8 @@ export default defineConfigWithTheme<ThemeOptions>({
       { icon: 'github', link: 'https://github.com/dicebear/dicebear' },
     ],
     editLink: {
-      pattern: 'https://github.com/dicebear/dicebear/edit/7.x/website/pages/:path',
+      pattern:
+        'https://github.com/dicebear/dicebear/edit/7.x/website/pages/:path',
     },
     sidebar: {
       '/introduction/': sidebarDocs,

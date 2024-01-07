@@ -5,16 +5,20 @@
  * File: https://www.figma.com/file/sNI8OuD41VSfu5Gfl3eprv/%40dicebear%2Fthumbs
  */
 
-import { Prng, StyleOptions } from "@dicebear/core";
+import { Prng, StyleOptions } from '@dicebear/core';
 
-import { Options, ColorPickCollection, ComponentPickCollection } from "../types.js";
+import {
+  Options,
+  ColorPickCollection,
+  ComponentPickCollection,
+} from '../types.js';
 
 type Props = {
-  prng: Prng,
-  options: StyleOptions<Options>,
-  components: ComponentPickCollection,
-  colors: ColorPickCollection
-} 
+  prng: Prng;
+  options: StyleOptions<Options>;
+  components: ComponentPickCollection;
+  colors: ColorPickCollection;
+};
 
 export function onPostCreate({ prng, options, components, colors }: Props) {
   function getContrastYiq(hexcolor: string) {
@@ -22,21 +26,21 @@ export function onPostCreate({ prng, options, components, colors }: Props) {
     const g = parseInt(hexcolor.slice(3, 5), 16);
     const b = parseInt(hexcolor.slice(5, 7), 16);
     const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  
+
     return yiq >= 200 ? '#000000' : '#ffffff';
   }
-  
+
   const possibleBackgroundColors = options.backgroundColor?.filter(
     (v) => v !== colors.shape.replace('#', '')
   );
-  
+
   if (possibleBackgroundColors?.length) {
     options.backgroundColor = possibleBackgroundColors;
   }
-  
+
   const shapeContrast =
     colors.shape[0] === '#' ? getContrastYiq(colors.shape) : undefined;
-  
+
   if (shapeContrast) {
     if (
       options.eyesColor?.length === 2 &&
@@ -45,7 +49,7 @@ export function onPostCreate({ prng, options, components, colors }: Props) {
     ) {
       colors.eyes = shapeContrast;
     }
-  
+
     if (
       options.mouthColor?.length === 2 &&
       options.mouthColor.includes('000000') &&

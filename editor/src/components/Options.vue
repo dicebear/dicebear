@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import useMainStore from "@/stores/main";
-import type { SelectedStyleOptions } from "@/types";
-import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import Avatar from "./Avatar.vue";
-import Footer from "./Footer.vue";
+import useMainStore from '@/stores/main';
+import type { SelectedStyleOptions } from '@/types';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import Avatar from './Avatar.vue';
+import Footer from './Footer.vue';
 
 const props = defineProps<{
   navOffetTop: number;
@@ -25,7 +25,7 @@ const tabs = computed(() => {
     }>
   > = {};
 
-  result["style"] = Object.keys(store.availableStyles).map((styleName) => ({
+  result['style'] = Object.keys(store.availableStyles).map((styleName) => ({
     avatar: store.availableStyles[styleName][0].avatar.toString(),
     active: store.selectedStyleName === styleName,
     onClick: () => changeStyleName(styleName),
@@ -135,7 +135,7 @@ function changeOptions(options: SelectedStyleOptions) {
       }
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: -6px;
         right: -6px;

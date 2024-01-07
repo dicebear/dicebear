@@ -6,14 +6,7 @@
  */
 
 export interface Options {
-  eyes?: (
-    | 'open'
-    | 'sleep'
-    | 'wink'
-    | 'glasses'
-    | 'happy'
-    | 'sunglasses'
-  )[];
+  eyes?: ('open' | 'sleep' | 'wink' | 'glasses' | 'happy' | 'sunglasses')[];
   hair?: (
     | 'long'
     | 'sideShave'
@@ -36,12 +29,7 @@ export interface Options {
     | 'shortComboverChops'
     | 'mohawk'
   )[];
-  body?: (
-    | 'squared'
-    | 'rounded'
-    | 'small'
-    | 'checkered'
-  )[];
+  body?: ('squared' | 'rounded' | 'small' | 'checkered')[];
   mouth?: (
     | 'smile'
     | 'frown'
@@ -51,11 +39,7 @@ export interface Options {
     | 'smirk'
     | 'lips'
   )[];
-  nose?: (
-    | 'mediumRound'
-    | 'smallRound'
-    | 'wrinkles'
-  )[];
+  nose?: ('mediumRound' | 'smallRound' | 'wrinkles')[];
   facialHair?: (
     | 'beardMustache'
     | 'pyramid'

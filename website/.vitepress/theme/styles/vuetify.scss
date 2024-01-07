@@ -5,13 +5,13 @@
   $card-border-color: rgb(var(--v-theme-secondary)),
   $border-radius-root: 6px,
   $card-text-font-size: 1em,
-//  $field-border-width: 0,
-//  $field-focused-border-width: 0,
+  //  $field-border-width: 0,
+  //  $field-focused-border-width: 0,
   $field-control-solo-elevation: 0,
   $field-overlay-filled-opacity: 0.08,
-  $form-grid-gutter: .75rem,
+  $form-grid-gutter: 0.75rem,
   $states: (
     'hover': 0.04,
-    'focus': 0.04
+    'focus': 0.04,
   )
 );

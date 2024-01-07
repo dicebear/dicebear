@@ -1,6 +1,6 @@
-import type { SelectedStyleOptions } from "@/types";
-import type { StyleOptions } from "@dicebear/core";
-import styleCollection from "@/config/styles";
+import type { SelectedStyleOptions } from '@/types';
+import type { StyleOptions } from '@dicebear/core';
+import styleCollection from '@/config/styles';
 
 export default function getAvatarOptions(
   styleName: string,

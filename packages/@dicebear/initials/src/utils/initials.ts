@@ -4,11 +4,11 @@
  * Source: https://stackoverflow.com/a/63763497
  */
 export function getInitials(seed: string): string {
-  return seed
-    .match(/(^\S\S?|\s\S)?/g)!
-    .map((v) => v.trim())
-    .join('')
-    .match(/(^\S|\S$)?/g)!
-    .join('')
-    .toLocaleUpperCase();
+    return seed
+        .match(/(^\S\S?|\s\S)?/g)!
+        .map((v) => v.trim())
+        .join('')
+        .match(/(^\S|\S$)?/g)!
+        .join('')
+        .toLocaleUpperCase();
 }

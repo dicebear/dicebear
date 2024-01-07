@@ -1,6 +1,6 @@
-import type { ConfigStyleCollection } from "@/types";
-import getSchemaOptions from "@/utils/getSchemaOptions";
-import * as collection from "@dicebear/collection";
+import type { ConfigStyleCollection } from '@/types';
+import getSchemaOptions from '@/utils/getSchemaOptions';
+import * as collection from '@dicebear/collection';
 
 const availableStyles: ConfigStyleCollection = {
   adventurer: {

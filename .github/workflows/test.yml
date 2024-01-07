@@ -3,10 +3,10 @@ name: Test
 on:
   push:
     branches:
-      - "*.x"
+      - '*.x'
   pull_request:
     branches:
-      - "*.x"
+      - '*.x'
   workflow_call: {}
 
 jobs:

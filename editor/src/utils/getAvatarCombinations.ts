@@ -1,9 +1,6 @@
-import availableStyles from "@/config/styles";
-import type {
-  SelectedStyleCombinations,
-  SelectedStyleOptions,
-} from "@/types";
-import { createAvatar } from "./createAvatar";
+import availableStyles from '@/config/styles';
+import type { SelectedStyleCombinations, SelectedStyleOptions } from '@/types';
+import { createAvatar } from './createAvatar';
 
 export default function getAvatarCombinations(
   styleName: string,

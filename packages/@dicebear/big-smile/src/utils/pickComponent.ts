@@ -10,12 +10,16 @@ import type { ComponentGroupCollection, ComponentPick } from '../types.js';
 import * as components from '../components/index.js';
 
 type Props = {
-  prng: Prng,
-  group: string,
-  values?: string[],
-}
+  prng: Prng;
+  group: string;
+  values?: string[];
+};
 
-export function pickComponent({ prng, group, values = []}: Props): ComponentPick {
+export function pickComponent({
+  prng,
+  group,
+  values = [],
+}: Props): ComponentPick {
   const componentCollection: ComponentGroupCollection = components;
 
   const key = prng.pick(values);

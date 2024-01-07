@@ -28,12 +28,12 @@ jobs:
       - name: Deploy to Bunny.net
         uses: ayeressian/bunnycdn-storage-deploy@v2.2.0
         with:
-          source: "editor/dist"
-          destination: ""
-          storageZoneName: "${{ secrets.EDITOR_STORAGE_NAME }}"
-          storagePassword: "${{ secrets.EDITOR_STORAGE_PASSWORD }}"
-          accessKey: "${{ secrets.CDN_ACCESS_KEY }}"
-          pullZoneId: "${{ secrets.EDITOR_PULL_ZONE_ID }}"
-          upload: "true"
-          remove: "true"
-          purgePullZone: "true"
+          source: 'editor/dist'
+          destination: ''
+          storageZoneName: '${{ secrets.EDITOR_STORAGE_NAME }}'
+          storagePassword: '${{ secrets.EDITOR_STORAGE_PASSWORD }}'
+          accessKey: '${{ secrets.CDN_ACCESS_KEY }}'
+          pullZoneId: '${{ secrets.EDITOR_PULL_ZONE_ID }}'
+          upload: 'true'
+          remove: 'true'
+          purgePullZone: 'true'

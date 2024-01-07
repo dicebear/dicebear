@@ -20,9 +20,7 @@ export interface Options {
     | 'twinkle'
     | 'vomit'
   )[];
-  nose?: (
-    | 'default'
-  )[];
+  nose?: ('default')[];
   eyes?: (
     | 'closed'
     | 'cry'

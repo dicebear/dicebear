@@ -1,8 +1,4 @@
-import type {
-  Result,
-  Style,
-  StyleOptions,
-} from './types.js';
+import type { Result, Style, StyleOptions } from './types.js';
 import * as svgUtils from './utils/svg.js';
 import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
@@ -25,8 +21,12 @@ export function createAvatar<O extends {}>(
   } = getBackgroundColors(prng, options.backgroundColor ?? [], backgroundType);
 
   const backgroundRotation = prng.integer(
-    options.backgroundRotation?.length ? Math.min(...options.backgroundRotation) : 0,
-    options.backgroundRotation?.length ? Math.max(...options.backgroundRotation) : 0,
+    options.backgroundRotation?.length
+      ? Math.min(...options.backgroundRotation)
+      : 0,
+    options.backgroundRotation?.length
+      ? Math.max(...options.backgroundRotation)
+      : 0
   );
 
   if (options.size) {
@@ -95,6 +95,6 @@ export function createAvatar<O extends {}>(
     }),
     toDataUri: () => {
       return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-    }
+    },
   };
 }

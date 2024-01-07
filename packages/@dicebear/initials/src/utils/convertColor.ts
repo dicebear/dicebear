@@ -6,5 +6,5 @@
  */
 
 export function convertColor(color: string): string {
-  return 'transparent' === color ? color : `#${color}`;
+    return 'transparent' === color ? color : `#${color}`;
 }

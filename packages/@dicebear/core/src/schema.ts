@@ -55,9 +55,7 @@ export const schema: JSONSchema7 = {
         minimum: -360,
         maximum: 360,
       },
-      default: [
-        0, 360,
-      ],
+      default: [0, 360],
     },
     translateX: {
       type: 'integer',

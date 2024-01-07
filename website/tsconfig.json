@@ -10,9 +10,7 @@
     "strict": true,
     "jsx": "preserve",
     "baseUrl": ".",
-    "types": [
-      "vuetify"
-    ],
+    "types": ["vuetify"],
     "paths": {
       "@theme/*": [".vitepress/theme/*"],
       "@playground/*": [".vitepress/playground/*"],

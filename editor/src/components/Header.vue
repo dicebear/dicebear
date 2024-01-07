@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import useMainStore from "@/stores/main";
-import { SparklesIcon } from "@heroicons/vue/24/outline";
-import getRandomOptions from "@/utils/getRandomOptions";
-import availableStyles from "@/config/styles";
-import getApiUrl from "@/utils/getApiUrl";
-import { computed, ref } from "vue";
+import { useI18n } from 'vue-i18n';
+import useMainStore from '@/stores/main';
+import { SparklesIcon } from '@heroicons/vue/24/outline';
+import getRandomOptions from '@/utils/getRandomOptions';
+import availableStyles from '@/config/styles';
+import getApiUrl from '@/utils/getApiUrl';
+import { computed, ref } from 'vue';
 
 const { t } = useI18n();
 const store = useMainStore();
@@ -27,7 +27,7 @@ async function onDownload() {
   const apiUrl = getApiUrl(
     store.selectedStyleName,
     store.selectedStyleOptions,
-    "png"
+    'png'
   );
 
   const response = await fetch(apiUrl);
@@ -35,10 +35,10 @@ async function onDownload() {
   const file = URL.createObjectURL(blob);
   const timestamp = new Date().getTime();
 
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = file;
   link.download = `${store.selectedStyleName}-${timestamp}.png`;
-  link.target = "_blank";
+  link.target = '_blank';
   link.click();
   link.remove();
 
@@ -52,7 +52,7 @@ async function onDownload() {
     :title="t('downloadStarted')"
     :confirm-button-text="t('close')"
   >
-    <p class="header-dialog-text">{{ t("downloadStartedDescription") }}</p>
+    <p class="header-dialog-text">{{ t('downloadStartedDescription') }}</p>
     <p
       v-if="styleMeta?.license?.name !== 'CC0 1.0'"
       class="header-dialog-text"
@@ -73,7 +73,7 @@ async function onDownload() {
     <button class="header-shuffle" @click="onShuffle" :title="t('shuffle')">
       <SparklesIcon></SparklesIcon>
     </button>
-    <button class="header-save" @click="onDownload">{{ t("save") }}</button>
+    <button class="header-save" @click="onDownload">{{ t('save') }}</button>
   </div>
 </template>
 

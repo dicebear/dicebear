@@ -6,9 +6,7 @@
  */
 
 export interface Options {
-  face?: (
-    | 'base'
-  )[];
+  face?: ('base')[];
   mouth?: (
     | 'openedSmile'
     | 'unimpressed'

@@ -10,11 +10,14 @@ import type { Options, ComponentPickCollection } from '../types.js';
 import { pickComponent } from './pickComponent.js';
 
 type Props = {
-  prng: Prng,
-  options: Options
-}
+  prng: Prng;
+  options: Options;
+};
 
-export function getComponents({ prng, options }: Props): ComponentPickCollection {
+export function getComponents({
+  prng,
+  options,
+}: Props): ComponentPickCollection {
   const ringComponent = pickComponent({
     prng,
     group: 'ring',
@@ -51,7 +54,9 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
     values: options.ringThree,
     width: 100,
     height: 100,
-    rotation: options.ringThreeRotation?.length ? options.ringThreeRotation : [0],
+    rotation: options.ringThreeRotation?.length
+      ? options.ringThreeRotation
+      : [0],
     offsetX: [0],
     offsetY: [0],
   });
@@ -77,11 +82,11 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
   });
 
   return {
-    'ring': ringComponent,
-    'ringOne': ringOneComponent,
-    'ringTwo': ringTwoComponent,
-    'ringThree': ringThreeComponent,
-    'ringFour': ringFourComponent,
-    'ringFive': ringFiveComponent,
-  }
-};
+    ring: ringComponent,
+    ringOne: ringOneComponent,
+    ringTwo: ringTwoComponent,
+    ringThree: ringThreeComponent,
+    ringFour: ringFourComponent,
+    ringFive: ringFiveComponent,
+  };
+}

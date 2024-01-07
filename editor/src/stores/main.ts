@@ -1,18 +1,18 @@
-import getRandomOptions from "@/utils/getRandomOptions";
-import { defineStore } from "pinia";
-import { computed } from "vue";
+import getRandomOptions from '@/utils/getRandomOptions';
+import { defineStore } from 'pinia';
+import { computed } from 'vue';
 import type {
   SelectedStyleCombinations,
   SelectedStyleOptionsCollection,
-} from "@/types";
-import { createAvatar } from "@/utils/createAvatar";
-import getAvatarCombinations from "@/utils/getAvatarCombinations";
-import styleCollection from "@/config/styles";
-import { useLocalStorage, useStorage } from "@vueuse/core";
+} from '@/types';
+import { createAvatar } from '@/utils/createAvatar';
+import getAvatarCombinations from '@/utils/getAvatarCombinations';
+import styleCollection from '@/config/styles';
+import { useLocalStorage, useStorage } from '@vueuse/core';
 
-const useMainStore = defineStore("main", () => {
+const useMainStore = defineStore('main', () => {
   const selectedStyleName = useLocalStorage(
-    "editor_style",
+    'editor_style',
     Object.keys(styleCollection)[0]
   );
 

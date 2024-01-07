@@ -1,1 +1,1 @@
-import "@vant/touch-emulator";
+import '@vant/touch-emulator';

@@ -10,19 +10,23 @@ import type { Options, ColorPickCollection } from '../types.js';
 import { convertColor } from './convertColor.js';
 
 type Props = {
-  prng: Prng,
-  options: Options
-}
+  prng: Prng;
+  options: Options;
+};
 
 export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
-    'accessories': convertColor(prng.pick(options.accessoriesColor ?? [], 'transparent')),
-    'clothing': convertColor(prng.pick(options.clothingColor ?? [], 'transparent')),
-    'eyes': convertColor(prng.pick(options.eyesColor ?? [], 'transparent')),
-    'glasses': convertColor(prng.pick(options.glassesColor ?? [], 'transparent')),
-    'hair': convertColor(prng.pick(options.hairColor ?? [], 'transparent')),
-    'hat': convertColor(prng.pick(options.hatColor ?? [], 'transparent')),
-    'mouth': convertColor(prng.pick(options.mouthColor ?? [], 'transparent')),
-    'skin': convertColor(prng.pick(options.skinColor ?? [], 'transparent')),
-  }
-};
+    accessories: convertColor(
+      prng.pick(options.accessoriesColor ?? [], 'transparent')
+    ),
+    clothing: convertColor(
+      prng.pick(options.clothingColor ?? [], 'transparent')
+    ),
+    eyes: convertColor(prng.pick(options.eyesColor ?? [], 'transparent')),
+    glasses: convertColor(prng.pick(options.glassesColor ?? [], 'transparent')),
+    hair: convertColor(prng.pick(options.hairColor ?? [], 'transparent')),
+    hat: convertColor(prng.pick(options.hatColor ?? [], 'transparent')),
+    mouth: convertColor(prng.pick(options.mouthColor ?? [], 'transparent')),
+    skin: convertColor(prng.pick(options.skinColor ?? [], 'transparent')),
+  };
+}

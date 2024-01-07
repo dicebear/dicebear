@@ -1,6 +1,6 @@
-import type { ConfigStyleOptions, SelectedStyleOptions } from "@/types";
-import getRandomBoolean from "@/utils/getRandomBoolean";
-import getRandomNumber from "@/utils/getRandomNumber";
+import type { ConfigStyleOptions, SelectedStyleOptions } from '@/types';
+import getRandomBoolean from '@/utils/getRandomBoolean';
+import getRandomNumber from '@/utils/getRandomNumber';
 
 export default function getRandomOptions(
   configStyleOptions: ConfigStyleOptions

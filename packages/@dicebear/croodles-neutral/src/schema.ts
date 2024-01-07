@@ -8,143 +8,139 @@
 import type { StyleSchema } from '@dicebear/core';
 
 export const schema: StyleSchema = {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "properties": {
-    "eyepatchColor": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  properties: {
+    eyepatchColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern: '^(transparent|[a-fA-F0-9]{6})$',
       },
-      "default": [
-        "000000"
-      ]
+      default: ['000000'],
     },
-    "eyes": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "variant16",
-          "variant15",
-          "variant14",
-          "variant13",
-          "variant12",
-          "variant11",
-          "variant10",
-          "variant09",
-          "variant08",
-          "variant07",
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+    eyes: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: [
+          'variant16',
+          'variant15',
+          'variant14',
+          'variant13',
+          'variant12',
+          'variant11',
+          'variant10',
+          'variant09',
+          'variant08',
+          'variant07',
+          'variant06',
+          'variant05',
+          'variant04',
+          'variant03',
+          'variant02',
+          'variant01',
+        ],
       },
-      "default": [
-        "variant16",
-        "variant15",
-        "variant14",
-        "variant13",
-        "variant12",
-        "variant11",
-        "variant10",
-        "variant09",
-        "variant08",
-        "variant07",
-        "variant06",
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      default: [
+        'variant16',
+        'variant15',
+        'variant14',
+        'variant13',
+        'variant12',
+        'variant11',
+        'variant10',
+        'variant09',
+        'variant08',
+        'variant07',
+        'variant06',
+        'variant05',
+        'variant04',
+        'variant03',
+        'variant02',
+        'variant01',
+      ],
     },
-    "glassesColor": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+    glassesColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern: '^(transparent|[a-fA-F0-9]{6})$',
       },
-      "default": [
-        "000000"
-      ]
+      default: ['000000'],
     },
-    "mouth": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "variant18",
-          "variant17",
-          "variant16",
-          "variant15",
-          "variant14",
-          "variant13",
-          "variant12",
-          "variant11",
-          "variant10",
-          "variant09",
-          "variant08",
-          "variant07",
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+    mouth: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: [
+          'variant18',
+          'variant17',
+          'variant16',
+          'variant15',
+          'variant14',
+          'variant13',
+          'variant12',
+          'variant11',
+          'variant10',
+          'variant09',
+          'variant08',
+          'variant07',
+          'variant06',
+          'variant05',
+          'variant04',
+          'variant03',
+          'variant02',
+          'variant01',
+        ],
       },
-      "default": [
-        "variant18",
-        "variant17",
-        "variant16",
-        "variant15",
-        "variant14",
-        "variant13",
-        "variant12",
-        "variant11",
-        "variant10",
-        "variant09",
-        "variant08",
-        "variant07",
-        "variant06",
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
+      default: [
+        'variant18',
+        'variant17',
+        'variant16',
+        'variant15',
+        'variant14',
+        'variant13',
+        'variant12',
+        'variant11',
+        'variant10',
+        'variant09',
+        'variant08',
+        'variant07',
+        'variant06',
+        'variant05',
+        'variant04',
+        'variant03',
+        'variant02',
+        'variant01',
+      ],
     },
-    "nose": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "variant09",
-          "variant08",
-          "variant07",
-          "variant06",
-          "variant05",
-          "variant04",
-          "variant03",
-          "variant02",
-          "variant01"
-        ]
+    nose: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: [
+          'variant09',
+          'variant08',
+          'variant07',
+          'variant06',
+          'variant05',
+          'variant04',
+          'variant03',
+          'variant02',
+          'variant01',
+        ],
       },
-      "default": [
-        "variant09",
-        "variant08",
-        "variant07",
-        "variant06",
-        "variant05",
-        "variant04",
-        "variant03",
-        "variant02",
-        "variant01"
-      ]
-    }
-  }
+      default: [
+        'variant09',
+        'variant08',
+        'variant07',
+        'variant06',
+        'variant05',
+        'variant04',
+        'variant03',
+        'variant02',
+        'variant01',
+      ],
+    },
+  },
 };

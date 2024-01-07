@@ -12,7 +12,8 @@
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
-    "prepare-publish": "lerna version --force-publish --exact"
+    "prepare-publish": "lerna version --force-publish --exact",
+    "prettier": "prettier --write ."
   },
   "devDependencies": {
     "lerna": "^7.1.4"

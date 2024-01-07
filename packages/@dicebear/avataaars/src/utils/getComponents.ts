@@ -10,11 +10,14 @@ import type { Options, ComponentPickCollection } from '../types.js';
 import { pickComponent } from './pickComponent.js';
 
 type Props = {
-  prng: Prng,
-  options: Options
-}
+  prng: Prng;
+  options: Options;
+};
 
-export function getComponents({ prng, options }: Props): ComponentPickCollection {
+export function getComponents({
+  prng,
+  options,
+}: Props): ComponentPickCollection {
   const styleComponent = pickComponent({
     prng,
     group: 'style',
@@ -72,16 +75,20 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
   });
 
   return {
-    'style': styleComponent,
-    'base': baseComponent,
-    'clothing': clothingComponent,
-    'mouth': mouthComponent,
-    'nose': noseComponent,
-    'eyes': eyesComponent,
-    'eyebrows': eyebrowsComponent,
-    'top': prng.bool(options.topProbability) ? topComponent : undefined,
-    'facialHair': prng.bool(options.facialHairProbability) ? facialHairComponent : undefined,
-    'accessories': prng.bool(options.accessoriesProbability) ? accessoriesComponent : undefined,
-    'clothingGraphic': clothingGraphicComponent,
-  }
-};
+    style: styleComponent,
+    base: baseComponent,
+    clothing: clothingComponent,
+    mouth: mouthComponent,
+    nose: noseComponent,
+    eyes: eyesComponent,
+    eyebrows: eyebrowsComponent,
+    top: prng.bool(options.topProbability) ? topComponent : undefined,
+    facialHair: prng.bool(options.facialHairProbability)
+      ? facialHairComponent
+      : undefined,
+    accessories: prng.bool(options.accessoriesProbability)
+      ? accessoriesComponent
+      : undefined,
+    clothingGraphic: clothingGraphicComponent,
+  };
+}

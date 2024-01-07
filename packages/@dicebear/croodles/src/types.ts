@@ -86,12 +86,7 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  mustache?: (
-    | 'variant04'
-    | 'variant03'
-    | 'variant02'
-    | 'variant01'
-  )[];
+  mustache?: ('variant04' | 'variant03' | 'variant02' | 'variant01')[];
   mustacheProbability?: number;
   eyes?: (
     | 'variant16'

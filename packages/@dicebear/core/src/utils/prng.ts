@@ -63,9 +63,9 @@ export function create(seed: string = ''): Prng {
       const workingArray = [...arr];
 
       for (let i = workingArray.length - 1; i > 0; i--) {
-          const j = internalPrng.integer(0, i);
+        const j = internalPrng.integer(0, i);
 
-          [workingArray[i], workingArray[j]] = [workingArray[j], workingArray[i]];
+        [workingArray[i], workingArray[j]] = [workingArray[j], workingArray[i]];
       }
 
       return workingArray;

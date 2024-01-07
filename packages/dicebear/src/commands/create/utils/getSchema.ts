@@ -29,7 +29,7 @@ export function getSchema(style: Style<any>): JSONSchema7 {
               description: 'Save JSON file in addition to image file',
               type: 'boolean',
               default: false,
-            }
+            },
           },
         },
         coreSchema,

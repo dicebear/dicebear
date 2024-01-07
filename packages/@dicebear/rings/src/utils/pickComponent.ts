@@ -6,28 +6,51 @@
  */
 
 import type { Prng } from '@dicebear/core';
-import type { ComponentGroupCollection, ComponentPickCollection, ColorPickCollection, ComponentPick } from '../types.js';
+import type {
+  ComponentGroupCollection,
+  ComponentPickCollection,
+  ColorPickCollection,
+  ComponentPick,
+} from '../types.js';
 import * as components from '../components/index.js';
 
 type Props = {
-  prng: Prng,
-  group: string,
-  values?: string[],
-  width: number,
-  height: number,
-  rotation: number[],
-  offsetX: number[],
-  offsetY: number[],
-}
+  prng: Prng;
+  group: string;
+  values?: string[];
+  width: number;
+  height: number;
+  rotation: number[];
+  offsetX: number[];
+  offsetY: number[];
+};
 
-export function pickComponent({ prng, group, width, height, values = [], rotation, offsetX, offsetY}: Props): ComponentPick {
+export function pickComponent({
+  prng,
+  group,
+  width,
+  height,
+  values = [],
+  rotation,
+  offsetX,
+  offsetY,
+}: Props): ComponentPick {
   const componentCollection: ComponentGroupCollection = components;
 
   const key = prng.pick(values);
 
-  const pickedRotation = prng.integer(Math.min(...rotation), Math.max(...rotation));
-  const pickedOffsetX = prng.integer(Math.min(...offsetX), Math.max(...offsetX));
-  const pickedOffsetY = prng.integer(Math.min(...offsetY), Math.max(...offsetY));
+  const pickedRotation = prng.integer(
+    Math.min(...rotation),
+    Math.max(...rotation)
+  );
+  const pickedOffsetX = prng.integer(
+    Math.min(...offsetX),
+    Math.max(...offsetX)
+  );
+  const pickedOffsetY = prng.integer(
+    Math.min(...offsetY),
+    Math.max(...offsetY)
+  );
 
   if (key && componentCollection[group][key]) {
     return {
@@ -40,7 +63,11 @@ export function pickComponent({ prng, group, width, height, values = [], rotatio
         let result = componentCollection[group][key](components, colors);
 
         if (this.rotation || this.offsetX || this.offsetY) {
-          result = `<g transform="translate(${(this.offsetX ?? 0)}, ${this.offsetY ?? 0}) rotate(${this.rotation ?? 0} ${width / 2} ${height / 2})">${result}</g>`;
+          result = `<g transform="translate(${this.offsetX ?? 0}, ${
+            this.offsetY ?? 0
+          }) rotate(${this.rotation ?? 0} ${width / 2} ${
+            height / 2
+          })">${result}</g>`;
         }
 
         return result;

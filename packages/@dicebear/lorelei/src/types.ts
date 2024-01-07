@@ -56,16 +56,9 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  hairAccessories?: (
-    | 'flowers'
-  )[];
+  hairAccessories?: ('flowers')[];
   hairAccessoriesProbability?: number;
-  head?: (
-    | 'variant04'
-    | 'variant03'
-    | 'variant02'
-    | 'variant01'
-  )[];
+  head?: ('variant04' | 'variant03' | 'variant02' | 'variant01')[];
   eyes?: (
     | 'variant24'
     | 'variant23'
@@ -107,15 +100,9 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  earrings?: (
-    | 'variant01'
-    | 'variant02'
-    | 'variant03'
-  )[];
+  earrings?: ('variant01' | 'variant02' | 'variant03')[];
   earringsProbability?: number;
-  freckles?: (
-    | 'variant01'
-  )[];
+  freckles?: ('variant01')[];
   frecklesProbability?: number;
   nose?: (
     | 'variant01'
@@ -125,10 +112,7 @@ export interface Options {
     | 'variant05'
     | 'variant06'
   )[];
-  beard?: (
-    | 'variant01'
-    | 'variant02'
-  )[];
+  beard?: ('variant01' | 'variant02')[];
   beardProbability?: number;
   mouth?: (
     | 'happy01'

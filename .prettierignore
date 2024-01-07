@@ -1,2 +1,2 @@
-package.json
-LICENSE
+dist
+**/tests/static

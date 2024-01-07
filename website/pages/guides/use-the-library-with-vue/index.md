@@ -1,7 +1,7 @@
 # How to use the library with Vue?
 
-To use the [JS-Library](/how-to-use/js-library/) with Vue, we need to convert the
-SVG to a data URI and use it as the `src`.
+To use the [JS-Library](/how-to-use/js-library/) with Vue, we need to convert
+the SVG to a data URI and use it as the `src`.
 
 ```vue
 <script setup>

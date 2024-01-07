@@ -10,8 +10,8 @@ test('Balanced PRNG', () => {
     1: 0,
     2: 0,
     3: 0,
-    4: 0
-  }
+    4: 0,
+  };
 
   for (let i = 0; i < 10000; i++) {
     results[prng.integer(0, 4)]++;

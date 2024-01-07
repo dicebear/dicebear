@@ -33,8 +33,8 @@ You are a designer and need avatars for your design? Then check out our
 [Figma Plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter)
 and [Editor](https://editor.dicebear.com). As a developer, you could take a look
 at the [HTTP API](/how-to-use/http-api/), the [CLI](/how-to-use/cli/), the
-[JS library](/how-to-use/js-library/) or the [Playground](/playground/). Which is
-more appropriate for you, depends on the programming language and environment
+[JS library](/how-to-use/js-library/) or the [Playground](/playground/). Which
+is more appropriate for you, depends on the programming language and environment
 you are using.
 
 In a JavaScript environment, you could use the JS library or the HTTP API if the

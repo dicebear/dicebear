@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import useMainStore from "@/stores/main";
-import Avatar from "./Avatar.vue";
+import useMainStore from '@/stores/main';
+import Avatar from './Avatar.vue';
 
 const store = useMainStore();
 </script>
@@ -34,7 +34,7 @@ const store = useMainStore();
 
     &::before {
       position: absolute;
-      content: "";
+      content: '';
       width: 200vw;
       height: 200vw;
     }

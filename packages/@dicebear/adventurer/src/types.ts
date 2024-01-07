@@ -6,9 +6,7 @@
  */
 
 export interface Options {
-  base?: (
-    | 'default'
-  )[];
+  base?: ('default')[];
   eyes?: (
     | 'variant26'
     | 'variant25'
@@ -86,12 +84,7 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  features?: (
-    | 'mustache'
-    | 'blush'
-    | 'birthmark'
-    | 'freckles'
-  )[];
+  features?: ('mustache' | 'blush' | 'birthmark' | 'freckles')[];
   featuresProbability?: number;
   glasses?: (
     | 'variant01'

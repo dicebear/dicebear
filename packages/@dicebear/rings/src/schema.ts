@@ -8,201 +8,140 @@
 import type { StyleSchema } from '@dicebear/core';
 
 export const schema: StyleSchema = {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "properties": {
-    "ring": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "container"
-        ]
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  properties: {
+    ring: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['container'],
       },
-      "default": [
-        "container"
-      ]
+      default: ['container'],
     },
-    "ringColor": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+    ringColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern: '^(transparent|[a-fA-F0-9]{6})$',
       },
-      "default": [
-        "ffd54f",
-        "64b5f6",
-        "4dd0e1",
-        "ff8a65",
-        "9575cd",
-        "81c784",
-        "7986cb",
-        "4fc3f7",
-        "aed581",
-        "dce775",
-        "ffb74d",
-        "f06292",
-        "ba68c8",
-        "e57373",
-        "4db6ac",
-        "fff176"
-      ]
+      default: [
+        'ffd54f',
+        '64b5f6',
+        '4dd0e1',
+        'ff8a65',
+        '9575cd',
+        '81c784',
+        '7986cb',
+        '4fc3f7',
+        'aed581',
+        'dce775',
+        'ffb74d',
+        'f06292',
+        'ba68c8',
+        'e57373',
+        '4db6ac',
+        'fff176',
+      ],
     },
-    "ringFive": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "eighth",
-          "quarter",
-          "half",
-          "full"
-        ]
+    ringFive: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['eighth', 'quarter', 'half', 'full'],
       },
-      "default": [
-        "full"
-      ]
+      default: ['full'],
     },
-    "ringFiveRotation": {
-      "type": "array",
-      "items": {
-        "type": "integer",
-        "minimum": -180,
-        "maximum": 180
+    ringFiveRotation: {
+      type: 'array',
+      items: {
+        type: 'integer',
+        minimum: -180,
+        maximum: 180,
       },
-      "maxItems": 2,
-      "default": [
-        -180,
-        180
-      ]
+      maxItems: 2,
+      default: [-180, 180],
     },
-    "ringFour": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "eighth",
-          "quarter",
-          "half",
-          "full"
-        ]
+    ringFour: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['eighth', 'quarter', 'half', 'full'],
       },
-      "default": [
-        "quarter",
-        "half"
-      ]
+      default: ['quarter', 'half'],
     },
-    "ringFourRotation": {
-      "type": "array",
-      "items": {
-        "type": "integer",
-        "minimum": -180,
-        "maximum": 180
+    ringFourRotation: {
+      type: 'array',
+      items: {
+        type: 'integer',
+        minimum: -180,
+        maximum: 180,
       },
-      "maxItems": 2,
-      "default": [
-        -180,
-        180
-      ]
+      maxItems: 2,
+      default: [-180, 180],
     },
-    "ringOne": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "half",
-          "quarter",
-          "eighth",
-          "full"
-        ]
+    ringOne: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['half', 'quarter', 'eighth', 'full'],
       },
-      "default": [
-        "half",
-        "quarter"
-      ]
+      default: ['half', 'quarter'],
     },
-    "ringOneRotation": {
-      "type": "array",
-      "items": {
-        "type": "integer",
-        "minimum": -180,
-        "maximum": 180
+    ringOneRotation: {
+      type: 'array',
+      items: {
+        type: 'integer',
+        minimum: -180,
+        maximum: 180,
       },
-      "maxItems": 2,
-      "default": [
-        -180,
-        180
-      ]
+      maxItems: 2,
+      default: [-180, 180],
     },
-    "ringRotation": {
-      "type": "array",
-      "items": {
-        "type": "integer",
-        "minimum": -180,
-        "maximum": 180
+    ringRotation: {
+      type: 'array',
+      items: {
+        type: 'integer',
+        minimum: -180,
+        maximum: 180,
       },
-      "maxItems": 2,
-      "default": [
-        -180,
-        180
-      ]
+      maxItems: 2,
+      default: [-180, 180],
     },
-    "ringThree": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "eighth",
-          "quarter",
-          "half",
-          "full"
-        ]
+    ringThree: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['eighth', 'quarter', 'half', 'full'],
       },
-      "default": [
-        "quarter",
-        "half"
-      ]
+      default: ['quarter', 'half'],
     },
-    "ringThreeRotation": {
-      "type": "array",
-      "items": {
-        "type": "integer",
-        "minimum": -180,
-        "maximum": 180
+    ringThreeRotation: {
+      type: 'array',
+      items: {
+        type: 'integer',
+        minimum: -180,
+        maximum: 180,
       },
-      "maxItems": 2,
-      "default": [
-        -180,
-        180
-      ]
+      maxItems: 2,
+      default: [-180, 180],
     },
-    "ringTwo": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "eighth",
-          "quarter",
-          "half",
-          "full"
-        ]
+    ringTwo: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['eighth', 'quarter', 'half', 'full'],
       },
-      "default": [
-        "quarter",
-        "half"
-      ]
+      default: ['quarter', 'half'],
     },
-    "ringTwoRotation": {
-      "type": "array",
-      "items": {
-        "type": "integer",
-        "minimum": -180,
-        "maximum": 180
+    ringTwoRotation: {
+      type: 'array',
+      items: {
+        type: 'integer',
+        minimum: -180,
+        maximum: 180,
       },
-      "maxItems": 2,
-      "default": [
-        -180,
-        180
-      ]
-    }
-  }
+      maxItems: 2,
+      default: [-180, 180],
+    },
+  },
 };

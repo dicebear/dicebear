@@ -49,9 +49,25 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 360 360',
       fill: 'none',
-      'shape-rendering': 'auto'
+      'shape-rendering': 'auto',
     },
-    body: `<g transform="translate(80 23)">${components.base?.value(components, colors) ?? ''}</g><g transform="translate(170 183)">${components.mouth?.value(components, colors) ?? ''}</g><g transform="translate(110 102)">${components.eyebrows?.value(components, colors) ?? ''}</g><g transform="translate(49 11)">${components.hair?.value(components, colors) ?? ''}</g><g transform="translate(142 119)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="rotate(-8 1149.44 -1186.92)">${components.nose?.value(components, colors) ?? ''}</g><g transform="translate(84 154)">${components.ears?.value(components, colors) ?? ''}</g><g transform="translate(53 272)">${components.shirt?.value(components, colors) ?? ''}</g>`,
+    body: `<g transform="translate(80 23)">${
+      components.base?.value(components, colors) ?? ''
+    }</g><g transform="translate(170 183)">${
+      components.mouth?.value(components, colors) ?? ''
+    }</g><g transform="translate(110 102)">${
+      components.eyebrows?.value(components, colors) ?? ''
+    }</g><g transform="translate(49 11)">${
+      components.hair?.value(components, colors) ?? ''
+    }</g><g transform="translate(142 119)">${
+      components.eyes?.value(components, colors) ?? ''
+    }</g><g transform="rotate(-8 1149.44 -1186.92)">${
+      components.nose?.value(components, colors) ?? ''
+    }</g><g transform="translate(84 154)">${
+      components.ears?.value(components, colors) ?? ''
+    }</g><g transform="translate(53 272)">${
+      components.shirt?.value(components, colors) ?? ''
+    }</g>`,
     extra: () => ({
       ...Object.entries(components).reduce<Record<string, string | undefined>>(
         (acc, [key, value]) => {

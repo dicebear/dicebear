@@ -43,9 +43,21 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 600 600',
       fill: 'none',
-      'shape-rendering': 'auto'
+      'shape-rendering': 'auto',
     },
-    body: `<g transform="translate(-246 -234)">${components.eyebrows?.value(components, colors) ?? ''}</g><g transform="translate(-246 -234)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="translate(-246 -234)">${components.freckles?.value(components, colors) ?? ''}</g><g transform="translate(-246 -234)">${components.mouth?.value(components, colors) ?? ''}</g><g transform="translate(-246 -234)">${components.nose?.value(components, colors) ?? ''}</g><g transform="translate(-246 -234)">${components.glasses?.value(components, colors) ?? ''}</g>`,
+    body: `<g transform="translate(-246 -234)">${
+      components.eyebrows?.value(components, colors) ?? ''
+    }</g><g transform="translate(-246 -234)">${
+      components.eyes?.value(components, colors) ?? ''
+    }</g><g transform="translate(-246 -234)">${
+      components.freckles?.value(components, colors) ?? ''
+    }</g><g transform="translate(-246 -234)">${
+      components.mouth?.value(components, colors) ?? ''
+    }</g><g transform="translate(-246 -234)">${
+      components.nose?.value(components, colors) ?? ''
+    }</g><g transform="translate(-246 -234)">${
+      components.glasses?.value(components, colors) ?? ''
+    }</g>`,
     extra: () => ({
       ...Object.entries(components).reduce<Record<string, string | undefined>>(
         (acc, [key, value]) => {

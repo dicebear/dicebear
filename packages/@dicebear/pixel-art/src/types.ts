@@ -6,12 +6,7 @@
  */
 
 export interface Options {
-  accessories?: (
-    | 'variant04'
-    | 'variant03'
-    | 'variant02'
-    | 'variant01'
-  )[];
+  accessories?: ('variant04' | 'variant03' | 'variant02' | 'variant01')[];
   accessoriesProbability?: number;
   clothing?: (
     | 'variant23'

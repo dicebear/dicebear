@@ -6,9 +6,7 @@
  */
 
 export interface Options {
-  base?: (
-    | 'variant01'
-  )[];
+  base?: ('variant01')[];
   body?: (
     | 'variant25'
     | 'variant24'
@@ -220,11 +218,7 @@ export interface Options {
     | 'handPhone'
   )[];
   gestureProbability?: number;
-  bodyIcon?: (
-    | 'electric'
-    | 'saturn'
-    | 'galaxy'
-  )[];
+  bodyIcon?: ('electric' | 'saturn' | 'galaxy')[];
   bodyIconProbability?: number;
 }
 

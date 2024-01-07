@@ -10,14 +10,14 @@ import type { Options, ColorPickCollection } from '../types.js';
 import { convertColor } from './convertColor.js';
 
 type Props = {
-  prng: Prng,
-  options: Options
-}
+  prng: Prng;
+  options: Options;
+};
 
 export function getColors({ prng, options }: Props): ColorPickCollection {
   return {
-    'shape1': convertColor(prng.pick(options.shape1Color ?? [], 'transparent')),
-    'shape2': convertColor(prng.pick(options.shape2Color ?? [], 'transparent')),
-    'shape3': convertColor(prng.pick(options.shape3Color ?? [], 'transparent')),
-  }
-};
+    shape1: convertColor(prng.pick(options.shape1Color ?? [], 'transparent')),
+    shape2: convertColor(prng.pick(options.shape2Color ?? [], 'transparent')),
+    shape3: convertColor(prng.pick(options.shape3Color ?? [], 'transparent')),
+  };
+}

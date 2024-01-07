@@ -10,7 +10,7 @@
  *
  * Code licensed under MIT License.
  * Copyright (c) 2023 Florian Körner
-* Copyright (c) 2023 The Bootstrap Authors
+ * Copyright (c) 2023 The Bootstrap Authors
  *
  * Design "Bootstrap Icons" by The Bootstrap Authors licensed under MIT. / Remix of the original.
  * Source: https://github.com/twbs/icons
@@ -44,9 +44,11 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 24 24',
       fill: 'none',
-      'shape-rendering': 'auto'
+      'shape-rendering': 'auto',
     },
-    body: `<g transform="translate(4 4)">${components.icon?.value(components, colors) ?? ''}</g>`,
+    body: `<g transform="translate(4 4)">${
+      components.icon?.value(components, colors) ?? ''
+    }</g>`,
     extra: () => ({
       ...Object.entries(components).reduce<Record<string, string | undefined>>(
         (acc, [key, value]) => {

@@ -4,8 +4,8 @@ For the documentation and website we use
 [VitePress](https://vitepress.vuejs.org/). A static website generator powered by
 [Vue](https://vuejs.org/). You can find the source files in the
 [dicebear/dicebear](https://github.com/dicebear/dicebear) repository in the
-`website` folder. You will also find a link to the source file of the
-respective page in the documentation below each page.
+`website` folder. You will also find a link to the source file of the respective
+page in the documentation below each page.
 
 ## Requirements
 

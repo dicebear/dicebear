@@ -47,9 +47,7 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  freckles?: (
-    | 'variant01'
-  )[];
+  freckles?: ('variant01')[];
   frecklesProbability?: number;
   mouth?: (
     | 'happy01'
