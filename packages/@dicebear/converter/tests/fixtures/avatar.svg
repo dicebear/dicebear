@@ -1,22 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -25 100 100" version="1.1">
-  <desc>Created with dicebear.com</desc>
-  <metadata id="license" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <desc>Unnamed by Unknown, used under Unknown / Remix of the original.</desc>
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdf:RDF>
-      <cc:Work>
+      <rdf:Description>
         <dc:title>Unnamed</dc:title>
-        <dc:creator>
-          <cc:Agent rdf:about="">
-            <dc:title>Unknown</dc:title>
-          </cc:Agent>
-        </dc:creator>
-      </cc:Work>
+        <dc:creator>Unknown</dc:creator>
+        <dc:source></dc:source>
+        <dc:rights>Unknown</dc:rights>
+        <dc:description>Remix of the original</dc:description>
+      </rdf:Description>
     </rdf:RDF>
   </metadata>
   <mask id="viewboxMask">
     <rect width="100" height="100" rx="0" ry="0" x="-25" y="-25" fill="#fff" />
   </mask>
   <g mask="url(#viewboxMask)">
-    <rect fill="#FF0000" width="100" height="100" x="-25" y="-25" />
+    <rect fill="#ff0000" width="100" height="100" x="-25" y="-25" />
     <rect width="25" height="25" fill="#00FFFF" />
     <rect x="25" width="25" height="25" fill="#FFFF00" />
     <rect y="25" width="25" height="25" fill="#FF00FF" />

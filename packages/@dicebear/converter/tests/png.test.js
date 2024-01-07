@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { test } from 'uvu';
 import { not } from 'uvu/assert';
+import { exiftool } from 'exiftool-vendored';
 
 const __dirname = new URL('.', import.meta.url).pathname;
 const avatar = fs.readFileSync(path.resolve(__dirname, 'fixtures/avatar.svg'), {

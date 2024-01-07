@@ -22,7 +22,7 @@ function toFormat(
 ): Result {
   const svg = typeof avatar === 'string' ? avatar : avatar.toString();
 
-  const exifOption = options.exif ?? true;
+  const exifOption = options.exif ?? false;
   const exif = exifOption ? getExif(svg) : {};
 
   return {
@@ -84,7 +84,7 @@ async function toBuffer(
   if (Object.keys(exif).length > 0) {
     await tmp.withFile(async ({ path }) => {
       await fs.writeFile(path, buffer);
-      await exiftool.write(path, exif);
+      await exiftool.write(path, exif, undefined, { useMWG: true });
       buffer = await fs.readFile(path);
     });
   }
@@ -95,15 +95,31 @@ async function toBuffer(
 function getExif(svg: string): Exif {
   const exif: Exif = {};
 
-  const match = svg.match(/<desc>(.*?)<\/desc>/s);
+  const description = svg.match(/<desc>(.*?)<\/desc>/s);
 
-  if (match) {
-    const description = match[1];
+  const title = svg.match(/<dc:title>(.*?)<\/dc:title>/s);
+  const creator = svg.match(/<dc:creator>(.*?)<\/dc:creator>/s);
+  const source = svg.match(/<dc:source>(.*?)<\/dc:source>/s);
+  const rights = svg.match(/<dc:rights>(.*?)<\/dc:rights>/s);
 
-    return {
-      ImageDescription: description,
-      Copyright: description,
-    };
+  if (description) {
+    exif['Description'] = description[1];
+  }
+
+  if (title) {
+    exif['Title'] = title[1];
+  }
+
+  if (creator) {
+    exif['Creator'] = creator[1];
+  }
+
+  if (source) {
+    exif['Source'] = source[1];
+  }
+
+  if (rights) {
+    exif['Rights'] = rights[1];
   }
 
   return exif;
