@@ -1,13 +1,13 @@
 import updateNotifier from 'update-notifier';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { readJson } from 'fs-extra';
+import fs from 'fs-extra';
 
 import { createCommand } from './commands/create/index.js';
 
 (async () => {
-  const pkg = await readJson(
-    new URL('../../package.json', import.meta.url).pathname
+  const pkg = await fs.readJson(
+    new URL('../package.json', import.meta.url).pathname
   );
 
   updateNotifier({ pkg }).notify();

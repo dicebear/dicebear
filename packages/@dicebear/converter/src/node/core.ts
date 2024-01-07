@@ -21,7 +21,9 @@ function toFormat(
   options: Options
 ): Result {
   const svg = typeof avatar === 'string' ? avatar : avatar.toString();
-  const exif = {};
+
+  const exifOption = options.exif ?? true;
+  const exif = exifOption ? getExif(svg) : {};
 
   return {
     toDataUri: () => toDataUri(svg, format, exif, options),

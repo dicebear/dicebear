@@ -23,7 +23,7 @@ export function getSchema(style: Style<any>): JSONSchema7 {
             exif: {
               description: 'Include Exif Metadata',
               type: 'boolean',
-              default: false,
+              default: true,
             },
             json: {
               description: 'Save JSON file in addition to image file',
