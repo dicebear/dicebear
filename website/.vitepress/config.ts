@@ -96,5 +96,9 @@ export default defineConfigWithTheme<ThemeOptions>({
   sitemap: {
     hostname: 'https://www.dicebear.com',
   },
-  markdown: {},
+  markdown: {
+    image: {
+      lazyLoading: true,
+    },
+  },
 });

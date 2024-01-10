@@ -11,5 +11,5 @@ export interface Exif {
 
 export interface Options {
   fonts?: string[];
-  exif?: boolean;
+  includeExif?: boolean;
 }

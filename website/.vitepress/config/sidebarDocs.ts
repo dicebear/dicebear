@@ -8,7 +8,18 @@ const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'How to use',
     items: [
-      { text: 'JS-Library', link: '/how-to-use/js-library/' },
+      {
+        text: 'JS-Library',
+        link: '/how-to-use/js-library/',
+        collapsed: true,
+        items: [
+          { text: 'Core', link: '/how-to-use/js-library/' },
+          {
+            text: 'Converter',
+            link: '/how-to-use/js-library/converter/',
+          },
+        ],
+      },
       { text: 'HTTP-API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
     ],

@@ -34,7 +34,7 @@
     "sass": "^1.64.1",
     "typescript": "^5.1.6",
     "vite-plugin-vuetify": "^2.0.1",
-    "vitepress": "1.0.0-rc.32",
+    "vitepress": "1.0.0-rc.36",
     "vue": "^3.3.4",
     "vue-confetti": "^2.3.0",
     "vuetify": "^3.4.8"

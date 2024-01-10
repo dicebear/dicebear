@@ -110,7 +110,7 @@
  * - `bg-elv`: The elevated bg color. This is used at parts where it "floats",
  *   such as "dialog".
  *
- * - `bg-soft`: The bg color to slightly ditinguish some components from
+ * - `bg-soft`: The bg color to slightly distinguish some components from
  *   the page. Used for things like "carbon ads" or "table".
  * -------------------------------------------------------------------------- */
 
@@ -179,7 +179,7 @@
  * Colors: Function
  *
  * - `default`: The color used purely for subtle indication without any
- *   special meanings attched to it such as bg color for menu hover state.
+ *   special meanings attached to it such as bg color for menu hover state.
  *
  * - `brand`: Used for primary brand colors, such as link text, button with
  *   brand theme, etc.
@@ -262,6 +262,12 @@
   --vp-z-index-layout-top: 40;
   --vp-z-index-backdrop: 50;
   --vp-z-index-sidebar: 60;
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-z-index-sidebar: 25;
+  }
 }
 
 /**

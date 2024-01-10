@@ -22,7 +22,7 @@ function toFormat(
 ): Result {
   const svg = typeof avatar === 'string' ? avatar : avatar.toString();
 
-  const exifOption = options.exif ?? false;
+  const exifOption = options.includeExif ?? false;
   const exif = exifOption ? getExif(svg) : {};
 
   return {
@@ -61,15 +61,15 @@ async function toBuffer(
   exif: Exif,
   options: Options
 ): Promise<Buffer> {
-  const fonts = options.fonts;
+  const fonts = options.fonts ?? [];
 
   let { svg } = ensureSize(rawSvg);
 
   let buffer = (
     await renderAsync(svg, {
       font: {
-        loadSystemFonts: undefined === fonts || fonts.length === 0,
-        fontFiles: fonts,
+        loadSystemFonts: fonts.length === 0,
+        fontFiles: fonts.length > 0 ? fonts : undefined,
       },
     })
   ).asPng();
