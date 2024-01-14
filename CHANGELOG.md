@@ -52,11 +52,15 @@
 
 ### @dicebear/converter
 
-- Exif data is automatically determined from the SVG and no longer needs to be
-  transferred.
+- Exif data is automatically detected from the SVG and no longer needs to be set
+  in options.
 - Peer dependencies are now hard dependencies, which makes setup much easier.
   This is made possible by the fact that this package is no longer a hard
   dependency of "@dicebear/core".
+
+## @dicebear/cli
+
+- Exif data is now enabled by default. Disable with `--includeExif false`.
 
 ### @dicebear/core
 
