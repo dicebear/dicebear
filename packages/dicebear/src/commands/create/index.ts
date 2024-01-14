@@ -90,7 +90,7 @@ export const createCommand: CommandModule = {
                   await fs.writeFile(
                     fileName,
                     Buffer.from(
-                      await toPng(avatar, { exif: includeExif }).toArrayBuffer()
+                      await toPng(avatar, { includeExif }).toArrayBuffer()
                     )
                   );
                   break;
@@ -101,7 +101,7 @@ export const createCommand: CommandModule = {
                     fileName,
                     Buffer.from(
                       await toJpeg(avatar, {
-                        exif: includeExif,
+                        includeExif,
                       }).toArrayBuffer()
                     )
                   );

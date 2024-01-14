@@ -20,7 +20,7 @@ export function getSchema(style: Style<any>): JSONSchema7 {
               enum: ['svg', 'png', 'jpg', 'jpeg', 'json'],
               default: 'svg',
             },
-            exif: {
+            includeExif: {
               description: 'Include Exif Metadata',
               type: 'boolean',
               default: true,
