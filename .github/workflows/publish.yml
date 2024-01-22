@@ -26,10 +26,8 @@ jobs:
       - run: npm run build
       - run: npm run test
 
-      - run: echo "DIST_TAG=$(cat .dist-tag)" >> $GITHUB_OUTPUT
-
       - run:
           ./node_modules/.bin/lerna publish from-package --no-verify-access
-          --dist-tag $DIST_TAG --ignore-scripts --yes
+          --dist-tag $(cat .dist-tag) --ignore-scripts --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
