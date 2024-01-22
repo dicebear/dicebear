@@ -27,10 +27,8 @@ jobs:
       - run: npm ci
       - run: npm run build -- --ignore "@dicebear/@(website|editor)"
 
-      - run: echo "DIST_TAG=$(cat .dist-tag)" >> $GITHUB_OUTPUT
-
       - run:
           ./node_modules/.bin/lerna publish from-package
-          --dist-tag $DIST_TAG --ignore-scripts --yes
+          --dist-tag $(cat .dist-tag) --ignore-scripts --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
