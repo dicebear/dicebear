@@ -1,14 +1,29 @@
-import type { Result, Style, StyleOptions } from './types.js';
+import type {
+  CreateAvatarResult,
+  Style,
+  StyleDefinition,
+  StyleDefinitionOptions,
+  StyleOptions,
+} from './types.js';
 import * as svgUtils from './utils/svg.js';
 import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
 import * as license from './utils/license.js';
 import { getBackgroundColors } from './utils/color.js';
 
-export function createAvatar<O extends {}>(
+export function createAvatar<T extends {}>(
+  style: Style<T>,
+  options: T extends StyleDefinition
+    ? StyleDefinitionOptions<T>
+    : StyleOptions<T>
+): CreateAvatarResult {
+  return createAvatarFromCallable(style, options);
+}
+
+export function createAvatarFromCallable<O extends {}>(
   style: Style<O>,
   options: StyleOptions<O> = {}
-): Result {
+): CreateAvatarResult {
   options = mergeOptions(style, options);
 
   const prng = createPrng(options.seed);
@@ -98,3 +113,5 @@ export function createAvatar<O extends {}>(
     },
   };
 }
+
+export function createAvatarFromDefinition(definition: any, options: any) {}

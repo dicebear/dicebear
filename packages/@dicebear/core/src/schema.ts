@@ -1,6 +1,6 @@
-import { JSONSchema7 } from 'json-schema';
+import type { Schema } from './types';
 
-export const schema: JSONSchema7 = {
+export const schema: Schema = {
   type: 'object',
   $schema: 'http://json-schema.org/draft-07/schema#',
   properties: {

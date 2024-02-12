@@ -1,19 +1,18 @@
 import type {
-  SchemaDefaults,
   Style,
-  StyleOptions,
-  StyleSchema,
+  Options,
+  Schema,
 } from '../types.js';
 import { schema } from '../schema.js';
 
-export function defaults(schema: StyleSchema): SchemaDefaults {
-  let result: SchemaDefaults = {};
+export function defaults(schema: Schema): Record<string, unknown> {
+  let result: Record<string, unknown> = {};
   let props = schema.properties ?? {};
 
   Object.keys(props).forEach((key) => {
     let val = props[key];
 
-    if (typeof val === 'object' && undefined !== val.default) {
+    if (undefined !== val.default) {
       if (Array.isArray(val.default)) {
         result[key] = [...val.default];
       } else if (typeof val.default === 'object') {
@@ -29,11 +28,11 @@ export function defaults(schema: StyleSchema): SchemaDefaults {
 
 export function merge<O extends {}>(
   style: Style<O>,
-  options: StyleOptions<O>
-): StyleOptions<O> {
-  let result: StyleOptions<O> = {
-    ...(defaults(schema) as StyleOptions<O>),
-    ...(defaults(style.schema ?? {}) as StyleOptions<O>),
+  options: Options<O>
+): Options<O> {
+  let result: Options<O> = {
+    ...(defaults(schema) as Options<O>),
+    ...(style.schema ? defaults(style.schema) as Options<O> : {}),
     ...options,
   };
 
