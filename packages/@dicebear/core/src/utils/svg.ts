@@ -1,4 +1,4 @@
-import type { BackgroundType, StyleCreateResult } from '../types.js';
+import type { StyleCreateResult } from '../types.js';
 
 import * as escape from './escape.js';
 import { create as createPrng } from './prng.js';
@@ -22,7 +22,7 @@ export function addBackground(
   result: StyleCreateResult,
   primaryColor: string,
   secondaryColor: string,
-  type: BackgroundType,
+  type: 'solid' | 'gradientLinear',
   rotation: number
 ) {
   let { width, height, x, y } = getViewBox(result);

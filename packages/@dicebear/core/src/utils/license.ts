@@ -6,12 +6,12 @@ export function xml(style: Style<any>): string | undefined {
     return undefined;
   }
 
-  const title = style.meta?.title ?? 'Unnamed';
+  const title = style.meta?.source?.name ?? 'Unnamed';
 
-  let creator = style.meta?.creator ?? 'Unknown';
+  let creator = style.meta?.creator?.name ?? 'Unknown';
 
-  if (style.meta?.homepage) {
-    creator += ` - ${style.meta.homepage}`;
+  if (style.meta?.creator?.url) {
+    creator += ` - ${style.meta.creator.url}`;
   }
 
   let license = style.meta?.license?.name ?? 'Unknown';
@@ -29,7 +29,7 @@ export function xml(style: Style<any>): string | undefined {
     '<rdf:Description>' +
     `<dc:title>${_.xml(title)}</dc:title>` +
     `<dc:creator>${_.xml(creator)}</dc:creator>` +
-    `<dc:source>${_.xml(style.meta?.source ?? '')}</dc:source>` +
+    `<dc:source>${_.xml(style.meta?.source?.url ?? '')}</dc:source>` +
     `<dc:rights>${license}</dc:rights>` +
     `<dc:description>Remix of the original</dc:description>` +
     '</rdf:Description>' +
@@ -43,7 +43,7 @@ export function text(style: Style<any>): string | undefined {
     return undefined;
   }
 
-  let title = style.meta?.title ?? 'Unnamed';
+  let title = style.meta?.source?.name ?? 'Unnamed';
   let creator = style.meta?.creator ?? 'Unknown';
   let license = style.meta?.license?.name ?? 'Unknown';
 
@@ -51,8 +51,8 @@ export function text(style: Style<any>): string | undefined {
     title += ` (${style.meta.source})`;
   }
 
-  if (style.meta?.homepage) {
-    creator += ` (${style.meta.homepage})`;
+  if (style.meta?.creator?.url) {
+    creator += ` (${style.meta.creator.url})`;
   }
 
   if (style.meta?.license?.url) {
@@ -70,7 +70,7 @@ function requiresAttribution(style: Style<any>): boolean {
   // Attribution can be omitted if the designer is Florian Körner and the licence is CC0 1.0.
   return (
     false ===
-    (style.meta?.creator === 'Florian Körner' &&
+    (style.meta?.creator?.name === 'Florian Körner' &&
       style.meta?.license?.name === 'CC0 1.0')
   );
 }

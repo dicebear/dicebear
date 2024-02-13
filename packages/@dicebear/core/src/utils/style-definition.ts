@@ -1,11 +1,11 @@
-import { Schema, StyleDefinition, StyleFactory } from "../types";
+import { Schema, Definition, Style } from "../types";
 
-export function createStyleDefinition<T extends StyleDefinition>(styleDefinition: T): T {
+export function createDefinition<T extends Definition>(styleDefinition: T): T {
   return styleDefinition;
 }
 
-export function createStyleFactoryFromDefinition<T extends StyleDefinition>(styleDefinition: T): StyleFactory<T> {
-  const factory: StyleFactory<T> = {
+export function createStyleFromDefinition<T extends Definition>(styleDefinition: T): Style<T> {
+  const factory: Style<T> = {
     meta: styleDefinition.meta,
     schema: createSchemaFromDefinition(styleDefinition) as T extends Schema ? T : Schema,
     create: () => {
@@ -19,14 +19,14 @@ export function createStyleFactoryFromDefinition<T extends StyleDefinition>(styl
   return factory;
 }
 
-export function createSchemaFromDefinition(styleDefinition: StyleDefinition): Schema {
+export function createSchemaFromDefinition(styleDefinition: Definition): Schema {
   const schema: Schema = {
     type: "object",
     properties: {},
   };
 
   for (const [name, component] of Object.entries(styleDefinition.components)) {
-    schema.properties![name] = {
+    schema.properties[name] = {
       type: "array",
       items: {
         type: "string",
@@ -36,7 +36,7 @@ export function createSchemaFromDefinition(styleDefinition: StyleDefinition): Sc
     };
 
     if (component.probability !== undefined) {
-      schema.properties![name + "Probability"] = {
+      schema.properties[name + "Probability"] = {
         type: "integer",
         minimum: 0,
         maximum: 100,
@@ -45,7 +45,7 @@ export function createSchemaFromDefinition(styleDefinition: StyleDefinition): Sc
     }
 
     if (component.rotation !== undefined) {
-      schema.properties![name + "Rotation"] = {
+      schema.properties[name + "Rotation"] = {
         type: "integer",
         minimum: 0,
         maximum: 360,
@@ -54,14 +54,14 @@ export function createSchemaFromDefinition(styleDefinition: StyleDefinition): Sc
     }
 
     if (component.offset?.x !== undefined) {
-      schema.properties![name + "OffsetX"] = {
+      schema.properties[name + "OffsetX"] = {
         type: "integer",
         default: component.offset.x,
       };
     }
 
     if (component.offset?.y !== undefined) {
-      schema.properties![name + "OffsetY"] = {
+      schema.properties[name + "OffsetY"] = {
         type: "integer",
         default: component.offset.y,
       };
@@ -69,7 +69,7 @@ export function createSchemaFromDefinition(styleDefinition: StyleDefinition): Sc
   }
 
   for (const [name, color] of Object.entries(styleDefinition.colors ?? {})) {
-    schema.properties![name] = {
+    schema.properties[name] = {
       type: "array",
       items: {
         type: "string",

@@ -51,9 +51,9 @@ export type OptionsFromSchema<T extends SchemaTypes> = T extends SchemaObject
   : T extends SchemaString
   ? OptionsFromSchemaString<T>
   : T extends SchemaNumber
-  ? OptionsFromSchemaNumber<T>
+  ? number
   : T extends SchemaBoolean
-  ? OptionsFromSchemaBoolean<T>
+  ? boolean
   : never;
 
 type OptionsFromSchemaObject<T extends SchemaObject> = {
@@ -64,9 +64,8 @@ type OptionsFromSchemaArray<T extends SchemaArray> = Array<
   OptionsFromSchema<T['items']>
 >;
 
-type OptionsFromSchemaString<T extends SchemaString> =
-  T['enum'] extends string[] ? T['enum'][number][] : string;
-
-type OptionsFromSchemaNumber<T extends SchemaNumber> = number;
-
-type OptionsFromSchemaBoolean<T extends SchemaBoolean> = boolean;
+type OptionsFromSchemaString<T extends SchemaString> = T['enum'] extends Array<
+  infer E
+>
+  ? E
+  : string;

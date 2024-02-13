@@ -1,6 +1,6 @@
-import type { Schema } from './types';
+import { createSchema } from './utils/schema';
 
-export const schema: Schema = {
+export const schema = createSchema({
   type: 'object',
   $schema: 'http://json-schema.org/draft-07/schema#',
   properties: {
@@ -44,7 +44,7 @@ export const schema: Schema = {
       type: 'array',
       items: {
         type: 'string',
-        enum: ['solid', 'gradientLinear'],
+        enum: ['solid', 'gradientLinear'] as const,
       },
       default: ['solid'],
     },
@@ -78,4 +78,4 @@ export const schema: Schema = {
       default: false,
     },
   },
-};
+});

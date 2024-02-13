@@ -6,12 +6,3 @@ export function xml(content: string) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 }
-
-export function html(content: string) {
-  return content
-    .replace(/&/g, '&amp;')
-    .replace(/'/g, '&apos;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
