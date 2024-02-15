@@ -92,7 +92,7 @@ Supported versions: `5.x`, `6.x`, `7.x`
 ::: warning
 
 We reserve the right to discontinue any version at any time without notice. You
-can create your own own instance of the API to be able to access discontinued
+can create your own instance of the API to be able to access discontinued
 versions even afterwards.
 
 :::
