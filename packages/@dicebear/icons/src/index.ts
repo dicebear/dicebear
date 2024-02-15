@@ -9,7 +9,7 @@
  * Icons (@dicebear/icons)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  * Copyright (c) 2023 The Bootstrap Authors
  *
  * Design "Bootstrap Icons" by The Bootstrap Authors licensed under MIT. / Remix of the original.

@@ -2,7 +2,7 @@
  * DiceBear Initials (@dicebear/initials)
  *
  * Code licensed under MIT (https://github.com/dicebear/dicebear/blob/v4/packages/initials/LICENSE)
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  */
 
 import type { StyleCreate, StyleMeta } from '@dicebear/core';

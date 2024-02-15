@@ -9,7 +9,7 @@
  * Lorelei (@dicebear/lorelei)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Lorelei" by Lisa Wischofsky licensed under CC0 1.0. / Remix of the original.
  * Source: https://www.figma.com/community/file/1198749693280469639

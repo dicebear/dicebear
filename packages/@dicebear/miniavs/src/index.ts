@@ -9,7 +9,7 @@
  * Miniavs (@dicebear/miniavs)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Miniavs - Free Avatar Creator" by Webpixels licensed under CC BY 4.0. / Remix of the original.
  * Source: https://www.figma.com/community/file/923211396597067458

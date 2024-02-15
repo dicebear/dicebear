@@ -9,7 +9,7 @@
  * Open Peeps (@dicebear/open-peeps)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Open Peeps" by Pablo Stanley licensed under CC0 1.0. / Remix of the original.
  * Source: https://www.openpeeps.com/
