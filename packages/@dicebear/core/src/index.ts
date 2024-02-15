@@ -5,7 +5,6 @@
  * Copyright (c) 2023 Florian Körner
  */
 
-export * as escape from './utils/escape.js';
 export * from './core.js';
 export * from './schema.js';
 export * from './types.js';

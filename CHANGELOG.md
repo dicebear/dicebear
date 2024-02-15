@@ -76,6 +76,10 @@
   other fonts are specified via the options. This also allows characters that
   are outside the character set of the Inter Font.
 
+## Added
+
+- `createStyle` method to create a style from a style definition.
+
 ## Breaking Changes
 
 ### dicebear (CLI)
@@ -98,6 +102,7 @@
 - The methods `png`, `jpg`, `toArrayBuffer`, `toFile` have been removed. For a
   conversion to `png` and `jpg` the `@dicebear/converter` package must be
   installed separately.
+- The object `escape` has been removed from exports.
 
 ### @dicebear/initials
 
