@@ -1,4 +1,5 @@
-import type { StyleAttributes, StyleMeta } from "./style";
+import type { OptionsFromSchema, Schema } from './schema';
+import type { StyleAttributes, StyleMeta } from './style';
 
 // Style definition types
 export interface Definition {
@@ -27,6 +28,7 @@ export interface Definition {
       unique?: boolean;
     };
   };
+  additionalOptionsSchema?: Schema;
 }
 
 // Options from definition
@@ -36,7 +38,8 @@ export type OptionsFromDefinition<T extends Definition> =
     OptionsFromDefinitionComponentProbability<T> &
     OptionsFromDefinitionComponentOffsetX<T> &
     OptionsFromDefinitionComponentOffsetY<T> &
-    OptionsFromDefinitionColor<T>;
+    OptionsFromDefinitionColor<T> &
+    OptionsFromDefinitionAdditonalOptionsSchema<T>;
 
 type OptionsFromDefinitionComponent<T extends Definition> = {
   [C in keyof T['components']]: Array<keyof T['components'][C]['values']>;
@@ -73,3 +76,8 @@ type OptionsFromDefinitionComponentOffsetY<T extends Definition> = {
 type OptionsFromDefinitionColor<T extends Definition> = {
   [C in keyof T['colors'] as `${string & C}Color`]: string[];
 };
+
+type OptionsFromDefinitionAdditonalOptionsSchema<T extends Definition> =
+  T extends { additionalOptionsSchema: Schema }
+    ? OptionsFromSchema<T['additionalOptionsSchema']>
+    : {};

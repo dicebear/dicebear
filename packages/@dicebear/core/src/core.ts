@@ -1,4 +1,4 @@
-import type { Result, Style, Options, Definition } from './types.js';
+import type { Result, Style, Options, Definition, StyleCreate } from './types.js';
 import * as svgUtils from './utils/svg.js';
 import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
@@ -6,12 +6,10 @@ import * as license from './utils/license.js';
 import { getBackgroundColors, getBackgroundRotation, getBackgroundType } from './utils/color.js';
 import { createStyleFromDefinition } from './utils/style';
 
-export function createStyle<T extends {}>(
-  style: T extends Definition ? T : Style<T>
-): Style<T> {
-  return 'create' in style
-    ? (style as Style<T>)
-    : createStyleFromDefinition(style);
+export function createStyle<T extends Style<any>>(style: T): T;
+export function createStyle<T extends Definition>(style: T): Style<T>;
+export function createStyle<T extends (Style<any> | Definition)>(style: T): unknown {
+  return 'create' in style ? style : createStyleFromDefinition(style);
 }
 
 export function createAvatar<O extends {}>(
