@@ -45,3 +45,21 @@ export function getBackgroundColors(
     secondary: convertColor(secondary),
   };
 }
+
+export function getBackgroundRotation(
+  prng: Prng,
+  backgroundRotation: number[]
+): number {
+  return prng.integer(
+    backgroundRotation.length ? Math.min(...backgroundRotation) : 0,
+    backgroundRotation.length ? Math.max(...backgroundRotation) : 0
+  );
+}
+
+
+export function getBackgroundType(
+  prng: Prng,
+  backgroundType: Array<'solid' | 'gradientLinear'>
+): 'solid' | 'gradientLinear' {
+  return prng.pick(backgroundType, 'solid');
+}

@@ -1,13 +1,18 @@
-import type {
-  Result,
-  Style,
-  Options,
-} from './types.js';
+import type { Result, Style, Options, Definition } from './types.js';
 import * as svgUtils from './utils/svg.js';
 import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
 import * as license from './utils/license.js';
-import { getBackgroundColors } from './utils/color.js';
+import { getBackgroundColors, getBackgroundRotation, getBackgroundType } from './utils/color.js';
+import { createStyleFromDefinition } from './utils/style';
+
+export function createStyle<T extends {}>(
+  style: T extends Definition ? T : Style<T>
+): Style<T> {
+  return 'create' in style
+    ? (style as Style<T>)
+    : createStyleFromDefinition(style);
+}
 
 export function createAvatar<O extends {}>(
   style: Style<O>,
@@ -15,24 +20,12 @@ export function createAvatar<O extends {}>(
 ): Result {
   options = mergeOptions(style, options);
 
-
   const prng = createPrng(options.seed);
   const result = style.create({ prng: prng, options });
 
-  const backgroundType = prng.pick(options.backgroundType ?? [], 'solid');
-  const {
-    primary: primaryBackgroundColor,
-    secondary: secondaryBackgroundColor,
-  } = getBackgroundColors(prng, options.backgroundColor ?? [], backgroundType);
-
-  const backgroundRotation = prng.integer(
-    options.backgroundRotation?.length
-      ? Math.min(...options.backgroundRotation)
-      : 0,
-    options.backgroundRotation?.length
-      ? Math.max(...options.backgroundRotation)
-      : 0
-  );
+  const backgroundType = getBackgroundType(prng, options.backgroundType ?? []);
+  const backgroundColor = getBackgroundColors(prng, options.backgroundColor ?? [], backgroundType);
+  const backgroundRotation = getBackgroundRotation(prng, options.backgroundRotation ?? []);
 
   if (options.size) {
     result.attributes.width = options.size.toString();
@@ -60,13 +53,13 @@ export function createAvatar<O extends {}>(
   }
 
   if (
-    primaryBackgroundColor !== 'transparent' &&
-    secondaryBackgroundColor !== 'transparent'
+    backgroundColor.primary !== 'transparent' &&
+    backgroundColor.secondary !== 'transparent'
   ) {
     result.body = svgUtils.addBackground(
       result,
-      primaryBackgroundColor,
-      secondaryBackgroundColor,
+      backgroundColor.primary,
+      backgroundColor.secondary,
       backgroundType,
       backgroundRotation
     );
@@ -91,8 +84,8 @@ export function createAvatar<O extends {}>(
     toJson: () => ({
       svg: svg,
       extra: {
-        primaryBackgroundColor,
-        secondaryBackgroundColor,
+        backgroundColorPrimary: backgroundColor.primary,
+        backgroundColorSecondary: backgroundColor.secondary,
         backgroundType,
         backgroundRotation,
         ...result.extra?.(),
@@ -103,5 +96,3 @@ export function createAvatar<O extends {}>(
     },
   };
 }
-
-export function createAvatarFromDefinition(definition: any, options: any) {}
