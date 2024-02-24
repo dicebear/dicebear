@@ -18,27 +18,27 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
   const row1Component = pickComponent({
     prng,
     group: 'row1',
-    values: options.row1
+    values: options.row1,
   });
   const row2Component = pickComponent({
     prng,
     group: 'row2',
-    values: options.row2
+    values: options.row2,
   });
   const row3Component = pickComponent({
     prng,
     group: 'row3',
-    values: options.row3
+    values: options.row3,
   });
   const row4Component = pickComponent({
     prng,
     group: 'row4',
-    values: options.row4
+    values: options.row4,
   });
   const row5Component = pickComponent({
     prng,
     group: 'row5',
-    values: options.row5
+    values: options.row5,
   });
 
   return {

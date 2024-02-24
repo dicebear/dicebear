@@ -2,7 +2,7 @@
  * Do not change this file manually! This file was generated with the "Dicebear Exporter"-Plugin for Figma.
  *
  * Plugin: https://www.figma.com/community/plugin/1005765655729342787
- * File: https://www.figma.com/file/bX8ZT8jK2fo5Uy8G6j2Qic/%40dicebear%2Fshapes
+ * File: https://www.figma.com/file/bX8ZT8jK2fo5Uy8G6j2Qic
  */
 
 import type { Prng } from '@dicebear/core';
@@ -13,12 +13,14 @@ type Props = {
   prng: Prng,
   group: string,
   values?: string[],
+  width: number,
+  height: number,
   rotation: number[],
   offsetX: number[],
   offsetY: number[],
 }
 
-export function pickComponent({ prng, group, values = [], rotation, offsetX, offsetY}: Props): ComponentPick {
+export function pickComponent({ prng, group, width, height, values = [], rotation, offsetX, offsetY}: Props): ComponentPick {
   const componentCollection: ComponentGroupCollection = components;
 
   const key = prng.pick(values);
@@ -38,7 +40,7 @@ export function pickComponent({ prng, group, values = [], rotation, offsetX, off
         let result = componentCollection[group][key](components, colors);
 
         if (this.rotation || this.offsetX || this.offsetY) {
-          result = `<g transform="translate(${(this.offsetX ?? 0)}, ${this.offsetY ?? 0}) rotate(${this.rotation ?? 0} 50 50)">${result}</g>`;
+          result = `<g transform="translate(${(this.offsetX ?? 0)}, ${this.offsetY ?? 0}) rotate(${this.rotation ?? 0} ${width / 2} ${height / 2})">${result}</g>`;
         }
 
         return result;

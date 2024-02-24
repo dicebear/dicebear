@@ -12,7 +12,7 @@ import * as components from '../components/index.js';
 type Props = {
   prng: Prng,
   group: string,
-  values?: string[]
+  values?: string[],
 }
 
 export function pickComponent({ prng, group, values = []}: Props): ComponentPick {

@@ -17,7 +17,7 @@
 <p align="center">
   The avatar style is based on <a href="https://github.com/twbs/icons">Bootstrap Icons</a> by
   <a href="https://getbootstrap.com/">The Bootstrap Authors</a>, licensed under
-  <a href="https://github.com/twbs/icons/blob/main/LICENSE.md">MIT</a>. / Remix of the original.
+  <a href="https://github.com/twbs/icons/blob/main/LICENSE">MIT</a>. / Remix of the original.
 </p>
 <p align="center">
   See <a href="https://dicebear.com/licenses">license overview</a> for more information.

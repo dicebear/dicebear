@@ -9,7 +9,7 @@
  * Personas (@dicebear/personas)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Personas by Draftbit" by Draftbit - draftbit.com licensed under CC BY 4.0. / Remix of the original.
  * Source: https://personas.draftbit.com/

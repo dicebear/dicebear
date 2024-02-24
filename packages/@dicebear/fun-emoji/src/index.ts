@@ -9,7 +9,7 @@
  * Fun Emoji (@dicebear/fun-emoji)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Fun Emoji Set" by Davis Uche licensed under CC BY 4.0. / Remix of the original.
  * Source: https://www.figma.com/community/file/968125295144990435

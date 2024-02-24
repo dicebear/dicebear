@@ -9,7 +9,7 @@
  * Adventurer Neutral (@dicebear/adventurer-neutral)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Adventurer Neutral" by Lisa Wischofsky licensed under CC BY 4.0. / Remix of the original.
  * Source: https://www.figma.com/community/file/1184595184137881796

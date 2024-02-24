@@ -2,7 +2,7 @@
  * Do not change this file manually! This file was generated with the "Dicebear Exporter"-Plugin for Figma.
  *
  * Plugin: https://www.figma.com/community/plugin/1005765655729342787
- * File: https://www.figma.com/file/FCwwMBxsRND9Mbtpg5PUic
+ * File: https://www.figma.com/community/file/1198749693280469639
  */
 
 import type { Prng } from '@dicebear/core';
@@ -12,7 +12,7 @@ import * as components from '../components/index.js';
 type Props = {
   prng: Prng,
   group: string,
-  values?: string[]
+  values?: string[],
 }
 
 export function pickComponent({ prng, group, values = []}: Props): ComponentPick {

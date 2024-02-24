@@ -2,14 +2,14 @@
  * Do not change this file manually! This file was generated with the "Dicebear Exporter"-Plugin for Figma.
  *
  * Plugin: https://www.figma.com/community/plugin/1005765655729342787
- * File: https://www.figma.com/file/sK2mrFhCZwQu1qw4WqOBEF/%40dicebear%2Frings
+ * File: https://www.figma.com/file/sK2mrFhCZwQu1qw4WqOBEF
  */
 
 /*!
  * Rings (@dicebear/rings)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Rings" by Florian Körner licensed under CC0 1.0. / Remix of the original.
  * Source: https://www.dicebear.com

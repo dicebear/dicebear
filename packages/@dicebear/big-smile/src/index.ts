@@ -9,7 +9,7 @@
  * Big Smile (@dicebear/big-smile)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Custom Avatar" by Ashley Seo licensed under CC BY 4.0. / Remix of the original.
  * Source: https://www.figma.com/community/file/881358461963645496

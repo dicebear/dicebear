@@ -18,7 +18,7 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
   const iconComponent = pickComponent({
     prng,
     group: 'icon',
-    values: options.icon
+    values: options.icon,
   });
 
   return {

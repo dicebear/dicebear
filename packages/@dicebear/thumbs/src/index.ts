@@ -2,18 +2,18 @@
  * Do not change this file manually! This file was generated with the "Dicebear Exporter"-Plugin for Figma.
  *
  * Plugin: https://www.figma.com/community/plugin/1005765655729342787
- * File: https://www.figma.com/file/sNI8OuD41VSfu5Gfl3eprv/%40dicebear%2Fthumbs
+ * File: https://www.figma.com/file/sNI8OuD41VSfu5Gfl3eprv
  */
 
 /*!
  * Thumbs (@dicebear/thumbs)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Thumbs" by Florian Körner licensed under CC0 1.0. / Remix of the original.
- * Source: https://dicebear.com
- * Homepage: https://dicebear.com
+ * Source: https://www.dicebear.com
+ * Homepage: https://www.dicebear.com
  * License: https://creativecommons.org/publicdomain/zero/1.0/
  */
 
@@ -28,8 +28,8 @@ import { onPostCreate } from './hooks/onPostCreate.js';
 export const meta: StyleMeta = {
   title: 'Thumbs',
   creator: 'Florian Körner',
-  source: 'https://dicebear.com',
-  homepage: 'https://dicebear.com',
+  source: 'https://www.dicebear.com',
+  homepage: 'https://www.dicebear.com',
   license: {
     name: 'CC0 1.0',
     url: 'https://creativecommons.org/publicdomain/zero/1.0/',

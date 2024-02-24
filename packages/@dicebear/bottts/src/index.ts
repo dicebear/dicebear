@@ -9,7 +9,7 @@
  * Bottts (@dicebear/bottts)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Bottts" by Pablo Stanley licensed under Free for personal and commercial use. / Remix of the original.
  * Source: https://bottts.com/

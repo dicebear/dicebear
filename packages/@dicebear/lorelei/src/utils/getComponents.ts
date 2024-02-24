@@ -2,7 +2,7 @@
  * Do not change this file manually! This file was generated with the "Dicebear Exporter"-Plugin for Figma.
  *
  * Plugin: https://www.figma.com/community/plugin/1005765655729342787
- * File: https://www.figma.com/file/FCwwMBxsRND9Mbtpg5PUic
+ * File: https://www.figma.com/community/file/1198749693280469639
  */
 
 import type { Prng } from '@dicebear/core';
@@ -18,57 +18,57 @@ export function getComponents({ prng, options }: Props): ComponentPickCollection
   const hairComponent = pickComponent({
     prng,
     group: 'hair',
-    values: options.hair
+    values: options.hair,
   });
   const hairAccessoriesComponent = pickComponent({
     prng,
     group: 'hairAccessories',
-    values: options.hairAccessories
+    values: options.hairAccessories,
   });
   const headComponent = pickComponent({
     prng,
     group: 'head',
-    values: options.head
+    values: options.head,
   });
   const eyesComponent = pickComponent({
     prng,
     group: 'eyes',
-    values: options.eyes
+    values: options.eyes,
   });
   const eyebrowsComponent = pickComponent({
     prng,
     group: 'eyebrows',
-    values: options.eyebrows
+    values: options.eyebrows,
   });
   const earringsComponent = pickComponent({
     prng,
     group: 'earrings',
-    values: options.earrings
+    values: options.earrings,
   });
   const frecklesComponent = pickComponent({
     prng,
     group: 'freckles',
-    values: options.freckles
+    values: options.freckles,
   });
   const noseComponent = pickComponent({
     prng,
     group: 'nose',
-    values: options.nose
+    values: options.nose,
   });
   const beardComponent = pickComponent({
     prng,
     group: 'beard',
-    values: options.beard
+    values: options.beard,
   });
   const mouthComponent = pickComponent({
     prng,
     group: 'mouth',
-    values: options.mouth
+    values: options.mouth,
   });
   const glassesComponent = pickComponent({
     prng,
     group: 'glasses',
-    values: options.glasses
+    values: options.glasses,
   });
 
   return {

@@ -9,7 +9,7 @@
  * Notionists (@dicebear/notionists)
  *
  * Code licensed under MIT License.
- * Copyright (c) 2023 Florian Körner
+ * Copyright (c) 2024 Florian Körner
  *
  * Design "Notionists" by Zoish licensed under CC0 1.0. / Remix of the original.
  * Source: https://heyzoish.gumroad.com/l/notionists

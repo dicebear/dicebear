@@ -17,7 +17,7 @@
 <p align="center">
   The avatar style is based on <a href="https://www.figma.com/community/file/1198749693280469639">Lorelei</a> by
   <a href="https://www.instagram.com/lischi_art/">Lisa Wischofsky</a>, licensed under
-  <a href="https://creativecommons.org/licenses/zero/1.0/">CC0 1.0</a>. / Remix of the original.
+  <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a>. / Remix of the original.
 </p>
 <p align="center">
   See <a href="https://dicebear.com/licenses">license overview</a> for more information.
