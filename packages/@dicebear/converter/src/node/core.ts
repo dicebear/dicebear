@@ -105,10 +105,11 @@ async function toBuffer(
     );
     const exiftool = (await import('exiftool-vendored')).exiftool;
 
-    await tmp.withFile(async ({ path }) => {
+    buffer = await tmp.withFile(async ({ path }) => {
       await fs.writeFile(path, buffer);
-      await exiftool.write(path, exif);
-      buffer = await fs.readFile(path);
+      await exiftool.write(path, exif, ['-overwrite_original']);
+      
+      return fs.readFile(path);
     });
   }
 
