@@ -10,12 +10,12 @@
  *
  * Code licensed under MIT License.
  * Copyright (c) 2023 Florian Körner
-* Copyright (c) 2023 The Bootstrap Authors
+ * Copyright (c) 2023 The Bootstrap Authors
  *
- * Design "Bootstrap Icons" by The Bootstrap Authors licensed under MIT. / Remix of the original.
+ * Design "Bootstrap Icons" by The Bootstrap Authors licensed under MIT.
  * Source: https://github.com/twbs/icons
  * Homepage: https://getbootstrap.com/
- * License: https://github.com/twbs/icons/blob/main/LICENSE.md
+ * License: https://github.com/twbs/icons/blob/main/LICENSE
  */
 
 import type { StyleCreate, StyleMeta } from '@dicebear/core';
@@ -32,7 +32,7 @@ export const meta: StyleMeta = {
   homepage: 'https://getbootstrap.com/',
   license: {
     name: 'MIT',
-    url: 'https://github.com/twbs/icons/blob/main/LICENSE.md',
+    url: 'https://github.com/twbs/icons/blob/main/LICENSE',
   },
 };
 

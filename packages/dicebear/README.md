@@ -1,10 +1,13 @@
-<h1 align="center"><img src="https://dicebear.com/api/male/seed.svg?mood=happy" width="124" /> <br />DiceBear CLI</h1>
-<p align="center">
-  <strong>CLI for DiceBear - An avatar library for designers and developers.</strong>
+<h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear CLI</h1>
+
+<p>
+  <img src="https://api.dicebear.com/5.x/adventurer/svg?seed=Mimi&backgroundColor=0077b6&radius=10" width="64" />
+  <img src="https://api.dicebear.com/5.x/open-peeps/svg?seed=Kitty&backgroundColor=0096c7&radius=10" width="64" />
+  <img src="https://api.dicebear.com/5.x/pixel-art/svg?seed=Lilly&backgroundColor=00b4d8&radius=10" width="64" />
+  <img src="https://api.dicebear.com/5.x/lorelei/svg?seed=Tigger&backgroundColor=48cae4&radius=10" width="64" />
+  <img src="https://api.dicebear.com/5.x/bottts/svg?seed=Zoe&backgroundColor=90e0ef&radius=10" width="64" />
+  <img src="https://api.dicebear.com/5.x/initials/svg?seed=..&backgroundColor=ade8f4&radius=10" width="64" />
 </p>
 
-<p align="center">
-  <a href="https://dicebear.com/integrations/cli">
-    Read Documentation
-  </a>
-</p>
+[Playground](https://www.dicebear.com/playground) |
+[Documentation](https://www.dicebear.com/how-to-use/cli/)

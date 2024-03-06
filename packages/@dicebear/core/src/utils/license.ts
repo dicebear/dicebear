@@ -42,7 +42,7 @@ export function text(style: Style<any>): string {
 
   let result = '';
   
-  if (style.meta?.license?.name !== 'MIT' && style.meta?.title) {
+  if (style.meta?.license?.name !== 'MIT' && style.meta?.creator !== 'DiceBear' && style.meta?.title) {
     result += 'Remix of ';
   }
 
@@ -55,7 +55,7 @@ export function text(style: Style<any>): string {
       result += ` (${style.meta.license.url})`;
     }
   }
-  
+
   return result;
 }
 
@@ -72,11 +72,11 @@ export function exif(style: Style<any>): Exif {
     // Copyright
     'IPTC:CopyrightNotice': copyright,
     'XMP-dc:Rights': copyright,
-    
+
     // Creator
     'IPTC:By-line': style.meta?.creator,
     'XMP-dc:Creator': style.meta?.creator,
-    
+
     // Credit
     'IPTC:Credit': style.meta?.creator,
     'XMP-photoshop:Credit': style.meta?.creator,

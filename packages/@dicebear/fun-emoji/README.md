@@ -1,6 +1,6 @@
-<h1 align="center"><img src="https://dicebear.com/logo-readme.svg" width="96" /> <br />DiceBear Fun Emoji</h1>
+<h1 align="center"><img src="https://www.dicebear.com/logo-readme.svg" width="96" /> <br />DiceBear Fun Emoji</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
+  <strong>Avatar Style for <a href="https://www.dicebear.com/">DiceBear</a></strong><br />
   <a href="https://www.figma.com/community/file/968125295144990435">Fun Emoji Set</a> by <a href="https://www.instagram.com/davedirect3/">Davis Uche</a>
 </p>
 
@@ -20,11 +20,11 @@
   <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. / Remix of the original.
 </p>
 <p align="center">
-  See <a href="https://dicebear.com/licenses">license overview</a> for more information.
+  See <a href="https://www.dicebear.com/licenses">license overview</a> for more information.
 </p>
 
 <p align="center">
-  <a href="https://dicebear.com/styles/fun-emoji">
+  <a href="https://www.dicebear.com/styles/fun-emoji">
     Read Documentation
   </a>
 </p>

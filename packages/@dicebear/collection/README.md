@@ -1,4 +1,4 @@
-<h1><img src="https://dicebear.com/logo-readme.svg" width="28" /> DiceBear Collection</h1>
+<h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Collection</h1>
 
 <p>
   <img src="https://api.dicebear.com/5.x/adventurer/svg?seed=Mimi&backgroundColor=0077b6&radius=10" width="64" />
@@ -9,5 +9,5 @@
   <img src="https://api.dicebear.com/5.x/initials/svg?seed=..&backgroundColor=ade8f4&radius=10" width="64" />
 </p>
 
-[Playground](https://dicebear.com/playground) |
-[Documentation](https://dicebear.com/introduction)
+[Playground](https://www.dicebear.com/playground) |
+[Documentation](https://www.dicebear.com/introduction)
