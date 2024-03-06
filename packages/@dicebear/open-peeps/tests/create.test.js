@@ -9,10 +9,11 @@ import { createAvatar } from '@dicebear/core';
 import * as style from '../lib/index.js';
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { test } from 'uvu';
 import { equal } from 'uvu/assert';
 
-const __dirname = new URL('.', import.meta.url).pathname;
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 const data = [
   [style, { seed: 'John Doe' }],
