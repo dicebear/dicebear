@@ -2,5 +2,5 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "npmClient": "npm",
   "concurrency": 3,
-  "version": "6.1.0"
+  "version": "6.1.1"
 }
