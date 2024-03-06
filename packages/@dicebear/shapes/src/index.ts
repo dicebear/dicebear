@@ -11,7 +11,7 @@
  * Code licensed under MIT License.
  * Copyright (c) 2024 Florian Körner
  *
- * Design "Shapes" by Florian Körner licensed under CC0 1.0. / Remix of the original.
+ * Design "Shapes" by DiceBear licensed under CC0 1.0.
  * Source: https://www.dicebear.com
  * Homepage: https://www.dicebear.com
  * License: https://creativecommons.org/publicdomain/zero/1.0/
@@ -27,7 +27,7 @@ import { onPreCreate } from './hooks/onPreCreate.js';
 
 export const meta: StyleMeta = {
   title: 'Shapes',
-  creator: 'Florian Körner',
+  creator: 'DiceBear',
   source: 'https://www.dicebear.com',
   homepage: 'https://www.dicebear.com',
   license: {

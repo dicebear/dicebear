@@ -1,7 +1,7 @@
-<h1 align="center"><img src="https://dicebear.com/logo-readme.svg" width="96" /> <br />DiceBear Rings</h1>
+<h1 align="center"><img src="https://www.dicebear.com/logo-readme.svg" width="96" /> <br />DiceBear Rings</h1>
 <p align="center">
-  <strong>Avatar Style for <a href="https://dicebear.com/">DiceBear</a></strong><br />
-  <a href="https://www.dicebear.com">Rings</a> by <a href="https://www.dicebear.com">Florian Körner</a>
+  <strong>Avatar Style for <a href="https://www.dicebear.com/">DiceBear</a></strong><br />
+  <a href="https://www.dicebear.com">Rings</a> by <a href="https://www.dicebear.com">DiceBear</a>
 </p>
 
 <p align="center">
@@ -15,16 +15,16 @@
 </p>
 
 <p align="center">
-  The avatar style is based on <a href="https://www.dicebear.com">Rings</a> by
-  <a href="https://www.dicebear.com">Florian Körner</a>, licensed under
-  <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a>. / Remix of the original.
+  <a href="https://www.dicebear.com">Rings</a> by
+  <a href="https://www.dicebear.com">DiceBear</a>, licensed under
+  <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a>.
 </p>
 <p align="center">
-  See <a href="https://dicebear.com/licenses">license overview</a> for more information.
+  See <a href="https://www.dicebear.com/licenses">license overview</a> for more information.
 </p>
 
 <p align="center">
-  <a href="https://dicebear.com/styles/rings">
+  <a href="https://www.dicebear.com/styles/rings">
     Read Documentation
   </a>
 </p>

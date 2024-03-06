@@ -12,7 +12,7 @@ import { convertColor } from './utils/convertColor.js';
 
 export const meta: StyleMeta = {
   title: 'Initials',
-  creator: 'Florian Körner',
+  creator: 'DiceBear',
   source: 'https://github.com/dicebear/dicebear',
   license: {
     name: 'CC0 1.0',

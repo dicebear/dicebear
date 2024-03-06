@@ -12,7 +12,7 @@
  * Copyright (c) 2024 Florian Körner
  * Copyright (c) 2019-2024 The Bootstrap Authors
  *
- * Design "Bootstrap Icons" by The Bootstrap Authors licensed under MIT. / Remix of the original.
+ * Design "Bootstrap Icons" by The Bootstrap Authors licensed under MIT.
  * Source: https://github.com/twbs/icons
  * Homepage: https://getbootstrap.com/
  * License: https://github.com/twbs/icons/blob/main/LICENSE

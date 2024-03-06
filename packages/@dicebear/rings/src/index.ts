@@ -11,7 +11,7 @@
  * Code licensed under MIT License.
  * Copyright (c) 2024 Florian Körner
  *
- * Design "Rings" by Florian Körner licensed under CC0 1.0. / Remix of the original.
+ * Design "Rings" by DiceBear licensed under CC0 1.0.
  * Source: https://www.dicebear.com
  * Homepage: https://www.dicebear.com
  * License: https://creativecommons.org/publicdomain/zero/1.0/
@@ -26,7 +26,7 @@ import { getColors } from './utils/getColors.js';
 
 export const meta: StyleMeta = {
   title: 'Rings',
-  creator: 'Florian Körner',
+  creator: 'DiceBear',
   source: 'https://www.dicebear.com',
   homepage: 'https://www.dicebear.com',
   license: {
