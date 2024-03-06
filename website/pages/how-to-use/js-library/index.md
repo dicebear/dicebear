@@ -62,8 +62,7 @@ page of each [avatar style](/styles/).
 
 We provide a large number of avatar styles from different designers. The designs
 are licensed under different licenses that the designers can choose themselves.
-Some licenses require attribution. For a quick overview we have created an
-[license overview](/licenses/) for you.
+For a quick overview we have created an [license overview](/licenses/) for you.
 
 :::
 

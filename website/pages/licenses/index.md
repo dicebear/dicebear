@@ -12,8 +12,6 @@ import Licenses from '@theme/components/Licenses.vue';
 # Licenses
 
 While our code is MIT licensed, the designs are licensed under different
-licenses that the designers can choose themselves. **Some licenses require
-attribution.** You must respect both licenses if you want to use avatars from
-DiceBear.
+licenses that the designers can choose themselves.
 
 <Licenses />
