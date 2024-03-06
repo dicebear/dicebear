@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/bottts-neutral",
-  "version": "7.1.0",
+  "version": "7.1.1",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "7.1.0",
+    "@dicebear/core": "7.1.1",
     "@tsconfig/recommended": "^1.0.2",
     "del-cli": "^5.0.0",
     "typescript": "^5.1.6",
