@@ -13,7 +13,7 @@ The easiest way to host the HTTP API yourself is to use the docker image. You
 can find the image on [Docker Hub](https://hub.docker.com/r/dicebear/api).
 
 ```
-docker run -ti -p 3000:3000 dicebear/api:2.0
+docker run --read-only --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:2.1
 ```
 
 ## Without docker
