@@ -11,9 +11,9 @@
  * Code licensed under MIT License.
  * Copyright (c) 2023 Florian Körner
  *
- * Design "Thumbs" by Florian Körner licensed under CC0 1.0. / Remix of the original.
- * Source: https://dicebear.com
- * Homepage: https://dicebear.com
+ * Design "Thumbs" by DiceBear licensed under CC0 1.0.
+ * Source: https://www.dicebear.com
+ * Homepage: https://www.dicebear.com
  * License: https://creativecommons.org/publicdomain/zero/1.0/
  */
 
@@ -27,9 +27,9 @@ import { onPostCreate } from './hooks/onPostCreate.js';
 
 export const meta: StyleMeta = {
   title: 'Thumbs',
-  creator: 'Florian Körner',
-  source: 'https://dicebear.com',
-  homepage: 'https://dicebear.com',
+  creator: 'DiceBear',
+  source: 'https://www.dicebear.com',
+  homepage: 'https://www.dicebear.com',
   license: {
     name: 'CC0 1.0',
     url: 'https://creativecommons.org/publicdomain/zero/1.0/',
