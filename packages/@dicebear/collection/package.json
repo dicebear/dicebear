@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/collection",
-  "version": "7.1.1",
+  "version": "8.0.0",
   "description": "Avatar style collection for DiceBear",
   "keywords": [
     "dicebear"
@@ -40,37 +40,37 @@
     "test": "uvu tests -i fixtures"
   },
   "dependencies": {
-    "@dicebear/adventurer": "7.1.1",
-    "@dicebear/adventurer-neutral": "7.1.1",
-    "@dicebear/avataaars": "7.1.1",
-    "@dicebear/avataaars-neutral": "7.1.1",
-    "@dicebear/big-ears": "7.1.1",
-    "@dicebear/big-ears-neutral": "7.1.1",
-    "@dicebear/big-smile": "7.1.1",
-    "@dicebear/bottts": "7.1.1",
-    "@dicebear/bottts-neutral": "7.1.1",
-    "@dicebear/croodles": "7.1.1",
-    "@dicebear/croodles-neutral": "7.1.1",
-    "@dicebear/fun-emoji": "7.1.1",
-    "@dicebear/icons": "7.1.1",
-    "@dicebear/identicon": "7.1.1",
-    "@dicebear/initials": "7.1.1",
-    "@dicebear/lorelei": "7.1.1",
-    "@dicebear/lorelei-neutral": "7.1.1",
-    "@dicebear/micah": "7.1.1",
-    "@dicebear/miniavs": "7.1.1",
-    "@dicebear/notionists": "7.1.1",
-    "@dicebear/notionists-neutral": "7.1.1",
-    "@dicebear/open-peeps": "7.1.1",
-    "@dicebear/personas": "7.1.1",
-    "@dicebear/pixel-art": "7.1.1",
-    "@dicebear/pixel-art-neutral": "7.1.1",
-    "@dicebear/rings": "7.1.1",
-    "@dicebear/shapes": "7.1.1",
-    "@dicebear/thumbs": "7.1.1"
+    "@dicebear/adventurer": "8.0.0",
+    "@dicebear/adventurer-neutral": "8.0.0",
+    "@dicebear/avataaars": "8.0.0",
+    "@dicebear/avataaars-neutral": "8.0.0",
+    "@dicebear/big-ears": "8.0.0",
+    "@dicebear/big-ears-neutral": "8.0.0",
+    "@dicebear/big-smile": "8.0.0",
+    "@dicebear/bottts": "8.0.0",
+    "@dicebear/bottts-neutral": "8.0.0",
+    "@dicebear/croodles": "8.0.0",
+    "@dicebear/croodles-neutral": "8.0.0",
+    "@dicebear/fun-emoji": "8.0.0",
+    "@dicebear/icons": "8.0.0",
+    "@dicebear/identicon": "8.0.0",
+    "@dicebear/initials": "8.0.0",
+    "@dicebear/lorelei": "8.0.0",
+    "@dicebear/lorelei-neutral": "8.0.0",
+    "@dicebear/micah": "8.0.0",
+    "@dicebear/miniavs": "8.0.0",
+    "@dicebear/notionists": "8.0.0",
+    "@dicebear/notionists-neutral": "8.0.0",
+    "@dicebear/open-peeps": "8.0.0",
+    "@dicebear/personas": "8.0.0",
+    "@dicebear/pixel-art": "8.0.0",
+    "@dicebear/pixel-art-neutral": "8.0.0",
+    "@dicebear/rings": "8.0.0",
+    "@dicebear/shapes": "8.0.0",
+    "@dicebear/thumbs": "8.0.0"
   },
   "devDependencies": {
-    "@dicebear/core": "7.1.1",
+    "@dicebear/core": "8.0.0",
     "@rollup/plugin-commonjs": "^25.0.3",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@tsconfig/recommended": "^1.0.2",
@@ -82,7 +82,7 @@
     "webpack": "^5.76.3"
   },
   "peerDependencies": {
-    "@dicebear/core": "^7.0.0"
+    "@dicebear/core": "^8.0.0"
   },
   "engines": {
     "node": ">=16.0.0"
