@@ -13,7 +13,7 @@ The easiest way to host the HTTP API yourself is to use the docker image. You
 can find the image on [Docker Hub](https://hub.docker.com/r/dicebear/api).
 
 ```
-docker run --read-only --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:2.1
+docker run --read-only --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:2
 ```
 
 ## Without docker
@@ -103,7 +103,7 @@ Enable EXIF data for the JPEG endpoint. Defaults to `1` (true).
 ### VERSIONS
 
 Comma separated specification of desired DiceBear Major versions. Default to
-`5,6,7`.
+`5,6,7,8`.
 
 ### CACHE_CONTROL_AVATARS
 
