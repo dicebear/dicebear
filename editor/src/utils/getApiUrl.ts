@@ -29,7 +29,7 @@ export default function getApiUrl(
     })
     .join("&");
 
-  return `https://api.dicebear.com/6.x/${paramCase(styleName)}/${format}${
+  return `https://api.dicebear.com/8.x/${paramCase(styleName)}/${format}${
     qs ? `?${qs}` : ""
   }`;
 }
