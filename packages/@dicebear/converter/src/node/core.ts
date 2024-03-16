@@ -82,10 +82,11 @@ async function toBuffer(
   }
 
   if (Object.keys(exif).length > 0) {
-    await tmp.withFile(async ({ path }) => {
+    buffer = await tmp.withFile(async ({ path }) => {
       await fs.writeFile(path, buffer);
-      await exiftool.write(path, exif, undefined, { useMWG: true });
-      buffer = await fs.readFile(path);
+      await exiftool.write(path, exif, ['-overwrite_original']);
+
+      return fs.readFile(path);
     });
   }
 
