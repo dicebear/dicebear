@@ -28,11 +28,16 @@ export type Style<T extends {}> = {
   meta?: StyleMeta;
   schema?: T extends Schema ? T : Schema;
   create: StyleCreate<T>;
-}
+};
 
-export type StyleCreate<T extends {}> = (props: StyleCreateProps<T>) => StyleCreateResult;
+export type StyleCreate<T extends {}> = (
+  props: StyleCreateProps<T>
+) => StyleCreateResult;
 
-export type StyleCreateProps<T extends {}> = { prng: Prng, options: Options<T> };
+export type StyleCreateProps<T extends {}> = {
+  prng: Prng;
+  options: Options<T>;
+};
 
 export interface StyleCreateResult {
   attributes: StyleAttributes;

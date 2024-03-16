@@ -1,14 +1,25 @@
-import type { Result, Style, Options, Definition, StyleCreate } from './types.js';
+import type {
+  Result,
+  Style,
+  Options,
+  Definition,
+} from './types.js';
 import * as svgUtils from './utils/svg.js';
 import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
 import * as license from './utils/license.js';
-import { getBackgroundColors, getBackgroundRotation, getBackgroundType } from './utils/color.js';
+import {
+  getBackgroundColors,
+  getBackgroundRotation,
+  getBackgroundType,
+} from './utils/color.js';
 import { createStyleFromDefinition } from './utils/style';
 
 export function createStyle<T extends Style<any>>(style: T): T;
 export function createStyle<T extends Definition>(style: T): Style<T>;
-export function createStyle<T extends (Style<any> | Definition)>(style: T): unknown {
+export function createStyle<T extends Style<any> | Definition>(
+  style: T
+): unknown {
   return 'create' in style ? style : createStyleFromDefinition(style);
 }
 
@@ -22,8 +33,15 @@ export function createAvatar<O extends {}>(
   const result = style.create({ prng: prng, options });
 
   const backgroundType = getBackgroundType(prng, options.backgroundType ?? []);
-  const backgroundColor = getBackgroundColors(prng, options.backgroundColor ?? [], backgroundType);
-  const backgroundRotation = getBackgroundRotation(prng, options.backgroundRotation ?? []);
+  const backgroundColor = getBackgroundColors(
+    prng,
+    options.backgroundColor ?? [],
+    backgroundType
+  );
+  const backgroundRotation = getBackgroundRotation(
+    prng,
+    options.backgroundRotation ?? []
+  );
 
   if (options.size) {
     result.attributes.width = options.size.toString();

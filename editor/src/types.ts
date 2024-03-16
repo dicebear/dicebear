@@ -28,7 +28,7 @@ export type SelectedStyleCombination = {
   options: SelectedStyleOptions;
   avatar: {
     toString: () => string;
-    toDataUri: () => string;
+    toDataUriSync: () => string;
   };
 };
 

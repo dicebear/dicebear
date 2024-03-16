@@ -56,7 +56,6 @@ export function getBackgroundRotation(
   );
 }
 
-
 export function getBackgroundType(
   prng: Prng,
   backgroundType: Array<'solid' | 'gradientLinear'>

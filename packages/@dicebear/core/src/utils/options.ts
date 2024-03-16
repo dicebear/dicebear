@@ -1,8 +1,4 @@
-import type {
-  Style,
-  Options,
-  Schema,
-} from '../types.js';
+import type { Style, Options, Schema } from '../types.js';
 import { schema } from '../schema.js';
 
 export function defaults(schema: Schema): Record<string, unknown> {
@@ -32,7 +28,7 @@ export function merge<O extends {}>(
 ): Options<O> {
   let result: Options<O> = {
     ...(defaults(schema) as Options<O>),
-    ...(style.schema ? defaults(style.schema) as Options<O> : {}),
+    ...(style.schema ? (defaults(style.schema) as Options<O>) : {}),
     ...options,
   };
 

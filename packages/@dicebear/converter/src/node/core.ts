@@ -101,7 +101,9 @@ function getExif(svg: string): Exif {
   const sourceName = svg.match(/<dc:title[^>]*>(.*?)<\/dc:title>/s);
   const sourceUrl = svg.match(/<dc:source[^>]*>(.*?)<\/dc:source>/s);
   const creatorName = svg.match(/<dc:creator[^>]*>(.*?)<\/dc:creator>/s);
-  const licenseUrl = svg.match(/<dcterms:license[^>]*>(.*?)<\/dcterms:license>/s);
+  const licenseUrl = svg.match(
+    /<dcterms:license[^>]*>(.*?)<\/dcterms:license>/s
+  );
   const copyright = svg.match(/<dc:rights[^>]*>(.*?)<\/dc:rights>/s);
 
   if (sourceName) {
@@ -115,7 +117,7 @@ function getExif(svg: string): Exif {
 
   if (creatorName) {
     exif['IPTC:By-line'] = creatorName[1];
-    exif['XMP-dc:Creator'] = creatorName[1];;
+    exif['XMP-dc:Creator'] = creatorName[1];
 
     exif['IPTC:Credit'] = creatorName[1];
     exif['XMP-photoshop:Credit'] = creatorName[1];

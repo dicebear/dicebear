@@ -23,8 +23,14 @@ export function xml(style: Style<any>): string {
     '<rdf:Description>' +
     (sourceName ? `<dc:title>${_.xml(sourceName)}</dc:title>` : '') +
     (creatorName ? `<dc:creator>${_.xml(creatorName)}</dc:creator>` : '') +
-    (sourceUrl ? `<dc:source xsi:type="dcterms:URI">${_.xml(sourceUrl)}</dc:source>` : '') +
-    (licenseUrl ? `<dcterms:license xsi:type="dcterms:URI">${_.xml(licenseUrl)}</dcterms:license>` : '') +
+    (sourceUrl
+      ? `<dc:source xsi:type="dcterms:URI">${_.xml(sourceUrl)}</dc:source>`
+      : '') +
+    (licenseUrl
+      ? `<dcterms:license xsi:type="dcterms:URI">${_.xml(
+          licenseUrl
+        )}</dcterms:license>`
+      : '') +
     (copyright ? `<dc:rights>${_.xml(copyright)}</dc:rights>` : '') +
     '</rdf:Description>' +
     '</rdf:RDF>' +
@@ -33,7 +39,9 @@ export function xml(style: Style<any>): string {
 }
 
 export function text(style: Style<any>): string {
-  let title = style.meta?.source?.name ? `„${style.meta?.source?.name}”` : 'Design';
+  let title = style.meta?.source?.name
+    ? `„${style.meta?.source?.name}”`
+    : 'Design';
   let creator = `„${style.meta?.creator?.name ?? 'Unknown'}”`;
 
   if (style.meta?.source) {
@@ -42,7 +50,11 @@ export function text(style: Style<any>): string {
 
   let result = '';
 
-  if (style.meta?.license?.name !== 'MIT' && style.meta?.creator?.name !== 'DiceBear' && style.meta?.source?.name) {
+  if (
+    style.meta?.license?.name !== 'MIT' &&
+    style.meta?.creator?.name !== 'DiceBear' &&
+    style.meta?.source?.name
+  ) {
     result += 'Remix of ';
   }
 

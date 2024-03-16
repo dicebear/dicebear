@@ -1,4 +1,10 @@
-import type { OptionsFromSchema, SchemaArray, SchemaString, SchemaNumber, SchemaBoolean } from './schema';
+import type {
+  OptionsFromSchema,
+  SchemaArray,
+  SchemaString,
+  SchemaNumber,
+  SchemaBoolean,
+} from './schema';
 import type { StyleAttributes, StyleMeta } from './style';
 
 // Style definition types
@@ -19,19 +25,23 @@ interface DefinitionCompontent {
     y?: number;
   };
   values: Record<string, DefinitionComponentValue>;
-};
+}
 
 interface DefinitionComponentValue {
   default?: boolean;
   content: string;
-};
+}
 
 interface DefinitionColor {
   values: string[];
   unique?: boolean;
-};
+}
 
-type DefinitionAdditionalOption = SchemaArray | SchemaString | SchemaNumber | SchemaBoolean;
+type DefinitionAdditionalOption =
+  | SchemaArray
+  | SchemaString
+  | SchemaNumber
+  | SchemaBoolean;
 
 // Options from definition
 export type OptionsFromDefinition<T extends Definition> =
