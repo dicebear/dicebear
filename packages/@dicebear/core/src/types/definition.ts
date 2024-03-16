@@ -1,4 +1,4 @@
-import type { OptionsFromSchema, Schema } from './schema';
+import type { OptionsFromSchema, SchemaArray, SchemaString, SchemaNumber, SchemaBoolean } from './schema';
 import type { StyleAttributes, StyleMeta } from './style';
 
 // Style definition types
@@ -6,30 +6,32 @@ export interface Definition {
   meta?: StyleMeta;
   body: string;
   attributes: StyleAttributes;
-  components: {
-    [name: string]: {
-      probability?: number;
-      rotation?: number;
-      offset?: {
-        x?: number;
-        y?: number;
-      };
-      values: {
-        [name: string]: {
-          default?: boolean;
-          content: string;
-        };
-      };
-    };
-  };
-  colors?: {
-    [name: string]: {
-      values: string[];
-      unique?: boolean;
-    };
-  };
-  additionalOptionsSchema?: Schema;
+  components?: Record<string, DefinitionCompontent>;
+  colors?: Record<string, DefinitionColor>;
+  additionalOptions?: Record<string, DefinitionAdditionalOption>;
 }
+
+interface DefinitionCompontent {
+  probability?: number;
+  rotation?: number;
+  offset?: {
+    x?: number;
+    y?: number;
+  };
+  values: Record<string, DefinitionComponentValue>;
+};
+
+interface DefinitionComponentValue {
+  default?: boolean;
+  content: string;
+};
+
+interface DefinitionColor {
+  values: string[];
+  unique?: boolean;
+};
+
+type DefinitionAdditionalOption = SchemaArray | SchemaString | SchemaNumber | SchemaBoolean;
 
 // Options from definition
 export type OptionsFromDefinition<T extends Definition> =
@@ -42,7 +44,9 @@ export type OptionsFromDefinition<T extends Definition> =
     OptionsFromDefinitionAdditonalOptionsSchema<T>;
 
 type OptionsFromDefinitionComponent<T extends Definition> = {
-  [C in keyof T['components']]: Array<keyof T['components'][C]['values']>;
+  [C in keyof T['components']]: T['components'][C] extends DefinitionCompontent
+    ? Array<keyof T['components'][C]['values']>
+    : never;
 };
 
 type OptionsFromDefinitionComponentRotation<T extends Definition> = {
@@ -77,7 +81,8 @@ type OptionsFromDefinitionColor<T extends Definition> = {
   [C in keyof T['colors'] as `${string & C}Color`]: string[];
 };
 
-type OptionsFromDefinitionAdditonalOptionsSchema<T extends Definition> =
-  T extends { additionalOptionsSchema: Schema }
-    ? OptionsFromSchema<T['additionalOptionsSchema']>
-    : {};
+type OptionsFromDefinitionAdditonalOptionsSchema<T extends Definition> = {
+  [K in keyof T['additionalOptions']]: T['additionalOptions'][K] extends DefinitionAdditionalOption
+    ? OptionsFromSchema<T['additionalOptions'][K]>
+    : never;
+};

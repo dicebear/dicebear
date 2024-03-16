@@ -1,50 +1,42 @@
 // Schema types
-export type Schema = {
+export interface Schema extends SchemaObject {
   $schema?: string;
-} & SchemaObject;
+};
 
-type SchemaTypes =
-  | SchemaObject
-  | SchemaArray
-  | SchemaString
-  | SchemaNumber
-  | SchemaBoolean;
-
-type SchemaObject = {
+export interface SchemaObject {
   type: 'object';
   properties: {
-    [key: string]: SchemaTypes;
+    [key: string]: SchemaArray | SchemaString | SchemaNumber | SchemaBoolean;
   };
-  default?: Record<string, unknown>;
 };
 
-type SchemaArray = {
+export interface SchemaArray {
   type: 'array';
-  default?: Array<string | number | boolean>;
-  items: SchemaTypes;
+  items: SchemaString | SchemaNumber | SchemaBoolean;
+  default?: string[] | number[] | boolean[];
 };
 
-type SchemaString = {
+export interface SchemaString {
   type: 'string';
-  default?: string;
   enum?: string[];
   pattern?: string;
+  default?: string;
 };
 
-type SchemaNumber = {
+export interface SchemaNumber {
   type: 'integer';
-  default?: number;
   minimum?: number;
   maximum?: number;
+  default?: number;
 };
 
-type SchemaBoolean = {
+export interface SchemaBoolean {
   type: 'boolean';
   default?: boolean;
 };
 
 // Options from schema
-export type OptionsFromSchema<T extends SchemaTypes> = T extends SchemaObject
+export type OptionsFromSchema<T extends {}> = T extends SchemaObject
   ? OptionsFromSchemaObject<T>
   : T extends SchemaArray
   ? OptionsFromSchemaArray<T>

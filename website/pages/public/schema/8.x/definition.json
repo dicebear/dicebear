@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "DiceBear Avatar Style Schema",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "license": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          }
+        },
+        "creator": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "body": {
+      "type": "string"
+    },
+    "attributes": {
+      "type": "object",
+      "properties": {
+        "viewBox": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      },
+      "required": ["viewBox"]
+    },
+    "components": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "probability": {
+            "type": "number"
+          },
+          "rotation": {
+            "type": "number"
+          },
+          "offset": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          },
+          "values": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "default": {
+                  "type": "boolean"
+                },
+                "content": {
+                  "type": "string"
+                }
+              },
+              "required": ["content"]
+            }
+          }
+        },
+        "required": ["values"]
+      }
+    },
+    "colors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unique": {
+            "type": "boolean"
+          }
+        },
+        "required": ["values"]
+      }
+    },
+    "additionalOptions": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "https://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  "required": ["body", "attributes", "components"]
+}

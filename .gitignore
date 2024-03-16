@@ -5,3 +5,6 @@ yarn-error.log
 
 # Dependencies
 node_modules
+
+# Linked repositories
+packages/@dicebear/definitions
