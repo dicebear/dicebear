@@ -16,6 +16,6 @@
     "prettier": "prettier --write ."
   },
   "devDependencies": {
-    "lerna": "^7.1.4"
+    "lerna": "^8.1.2"
   }
 }
