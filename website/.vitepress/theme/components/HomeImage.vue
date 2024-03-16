@@ -41,7 +41,7 @@ function createAvatar() {
   const seed = encodeURIComponent(prng.nextArrayItem(nameList as string[]));
 
   return {
-    src: `https://api.dicebear.com/7.x/${avatarStyle}/svg?seed=${seed}`,
+    src: `https://api.dicebear.com/8.x/${avatarStyle}/svg?seed=${seed}`,
     gradient: randomItem(GRADIENTS),
   };
 }

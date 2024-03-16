@@ -21,13 +21,13 @@ Use the following address and replace `<styleName>` with your preferred avatar
 style (camelCase). Every official [avatar style](/styles/) is supported.
 
 ```
-https://api.dicebear.com/7.x/<styleName>/svg
+https://api.dicebear.com/8.x/<styleName>/svg
 ```
 
 ### A few examples
 
-<BrowserPreview url="https://api.dicebear.com/7.x/pixel-art/svg" />
-<BrowserPreview url="https://api.dicebear.com/7.x/lorelei/svg" />
+<BrowserPreview url="https://api.dicebear.com/8.x/pixel-art/svg" />
+<BrowserPreview url="https://api.dicebear.com/8.x/lorelei/svg" />
 
 :::info
 
@@ -43,8 +43,8 @@ Options can be passed via the
 [query string](https://en.wikipedia.org/wiki/Query_string). For example, you can
 set a seed like this:
 
-<BrowserPreview url="https://api.dicebear.com/7.x/pixel-art/svg?seed=John" />
-<BrowserPreview url="https://api.dicebear.com/7.x/pixel-art/svg?seed=Jane" />
+<BrowserPreview url="https://api.dicebear.com/8.x/pixel-art/svg?seed=John" />
+<BrowserPreview url="https://api.dicebear.com/8.x/pixel-art/svg?seed=Jane" />
 
 :::tip
 
@@ -60,15 +60,15 @@ if you want to provide the PRNG with several hair styles in addition to the
 seed. Note that the avatar styles provide different options. In this example, we
 use the [Pixel Art](/styles/pixel-art/) avatar style.
 
-<BrowserPreview url="https://api.dicebear.com/7.x/pixel-art/svg?seed=John&hair=short01,short02,short03,short04,short05" />
-<BrowserPreview url="https://api.dicebear.com/7.x/pixel-art/svg?seed=Jane&hair=long01,long02,long03,long04,long05" />
+<BrowserPreview url="https://api.dicebear.com/8.x/pixel-art/svg?seed=John&hair=short01,short02,short03,short04,short05" />
+<BrowserPreview url="https://api.dicebear.com/8.x/pixel-art/svg?seed=Jane&hair=long01,long02,long03,long04,long05" />
 
 ### Boolean options
 
 Boolean values can be set as strings (`true` and `false`).
 
-<BrowserPreview url="https://api.dicebear.com/7.x/lorelei/svg?flip=true" />
-<BrowserPreview url="https://api.dicebear.com/7.x/lorelei/svg?flip=false" />
+<BrowserPreview url="https://api.dicebear.com/8.x/lorelei/svg?flip=true" />
+<BrowserPreview url="https://api.dicebear.com/8.x/lorelei/svg?flip=false" />
 
 ## File format
 
@@ -77,16 +77,16 @@ SVG is the more modern format, scales indefinitely, and requires less traffic.
 Because the PNG and JPG formats put more load on the API, the size is limited to
 256x256. PNG and JPG also have a lower [rate limit](#rate-limits).
 
-<BrowserPreview url="https://api.dicebear.com/7.x/bottts/svg" />
-<BrowserPreview url="https://api.dicebear.com/7.x/bottts/png" />
-<BrowserPreview url="https://api.dicebear.com/7.x/bottts/jpg" />
+<BrowserPreview url="https://api.dicebear.com/8.x/bottts/svg" />
+<BrowserPreview url="https://api.dicebear.com/8.x/bottts/png" />
+<BrowserPreview url="https://api.dicebear.com/8.x/bottts/jpg" />
 
 ## Versioning
 
-You can set the version in the URL. Just replace the `7.x` from the previous
+You can set the version in the URL. Just replace the `8.x` from the previous
 examples with the one you want.
 
-Supported versions: `5.x`, `6.x`, `7.x`
+Supported versions: `5.x`, `6.x`, `8.x`
 
 ::: warning
 

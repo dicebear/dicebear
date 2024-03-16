@@ -11,12 +11,12 @@ const props = defineProps<{
 const tab = ref<'http-api' | 'js-library' | 'cli'>();
 
 const exampleHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/7.x/${paramCase(props.styleName)}/svg`;
+  return `https://api.dicebear.com/8.x/${paramCase(props.styleName)}/svg`;
 });
 
 const exampleHttpApiImgTag = computed(() => {
   return `<img
-  src="https://api.dicebear.com/7.x/${paramCase(props.styleName)}/svg"
+  src="https://api.dicebear.com/8.x/${paramCase(props.styleName)}/svg"
   alt="avatar"
 />`;
 });

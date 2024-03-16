@@ -16,11 +16,11 @@ const style = computed(() => {
 });
 
 const exampleHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/7.x/${paramCase(props.styleName)}/svg`;
+  return `https://api.dicebear.com/8.x/${paramCase(props.styleName)}/svg`;
 });
 
 const schemaJsonHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/7.x/${paramCase(
+  return `https://api.dicebear.com/8.x/${paramCase(
     props.styleName
   )}/schema.json`;
 });

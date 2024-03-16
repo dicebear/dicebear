@@ -9,7 +9,7 @@ const styles = theme.value.avatarStyles;
 
 const members = Object.entries(styles).map(([styleName, style]) => ({
   name: capitalCase(styleName),
-  avatar: `https://api.dicebear.com/7.x/${paramCase(styleName)}/svg?seed=JD`,
+  avatar: `https://api.dicebear.com/8.x/${paramCase(styleName)}/svg?seed=JD`,
   title: `by ${style.meta.creator}`,
   org: 'Documentation',
   orgLink: `/styles/${paramCase(styleName)}/`,

@@ -21,20 +21,20 @@ Since Gravatar does not support SVG, we have to use the PNG endpoint.
 ```js [JavaScript]
 const emailHash = encodeURIComponent('00000000000000000000000000000000');
 const defaultImage = encodeURIComponent(
-  'https://api.dicebear.com/7.x/lorelei/svg' // [!code --]
-  'https://api.dicebear.com/7.x/lorelei/png' // [!code ++]
+  'https://api.dicebear.com/8.x/lorelei/svg' // [!code --]
+  'https://api.dicebear.com/8.x/lorelei/png' // [!code ++]
 );
 
 const gravatarImage = `https://www.gravatar.com/avatar/${emailHash}?d=${defaultImage}`;
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F7.x%2Florelei%2Fpng
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F8.x%2Florelei%2Fpng
 ```
 
 <!-- prettier-ignore -->
 ```php [PHP]
 $emailHash = urlencode('00000000000000000000000000000000');
 $defaultImage = urlencode(
-  'https://api.dicebear.com/7.x/lorelei/svg' // [!code --]
-  'https://api.dicebear.com/7.x/lorelei/png' // [!code ++]
+  'https://api.dicebear.com/8.x/lorelei/svg' // [!code --]
+  'https://api.dicebear.com/8.x/lorelei/png' // [!code ++]
 );
 
 $gravatarImage = sprintf(
@@ -42,7 +42,7 @@ $gravatarImage = sprintf(
   $emailHash,
   $defaultImage
 );
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F7.x%2Florelei%2Fpng
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F8.x%2Florelei%2Fpng
 ```
 
 :::
@@ -58,12 +58,12 @@ slash and encode the options.
 const emailHash = encodeURIComponent('00000000000000000000000000000000');
 const options = `seed=${emailHash}`;
 const defaultImage = encodeURIComponent(
-  `https://api.dicebear.com/7.x/lorelei/png?${options}` // [!code --]
-  `https://api.dicebear.com/7.x/lorelei/png/${encodeURIComponent(options)}` // [!code ++]
+  `https://api.dicebear.com/8.x/lorelei/png?${options}` // [!code --]
+  `https://api.dicebear.com/8.x/lorelei/png/${encodeURIComponent(options)}` // [!code ++]
 );
 
 const gravatarImage = `https://www.gravatar.com/avatar/${emailHash}?d=${defaultImage}`;
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F7.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F8.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 <!-- prettier-ignore -->
@@ -71,8 +71,8 @@ const gravatarImage = `https://www.gravatar.com/avatar/${emailHash}?d=${defaultI
 $emailHash = urlencode('00000000000000000000000000000000');
 $options = sprintf('seed=%s', $emailHash);
 $defaultImage = urlencode(
-  'https://api.dicebear.com/7.x/lorelei/png?' . $options // [!code --]
-  'https://api.dicebear.com/7.x/lorelei/png/' . urlencode($options) // [!code ++]
+  'https://api.dicebear.com/8.x/lorelei/png?' . $options // [!code --]
+  'https://api.dicebear.com/8.x/lorelei/png/' . urlencode($options) // [!code ++]
 );
 
 $gravatarImage = sprintf(
@@ -80,7 +80,7 @@ $gravatarImage = sprintf(
   $emailHash,
   $defaultImage
 );
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F7.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F8.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 :::

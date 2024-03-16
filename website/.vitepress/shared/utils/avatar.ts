@@ -39,7 +39,7 @@ export function getAvatarApiUrl(
     })
     .join('&');
 
-  return `https://api.dicebear.com/7.x/${paramCase(avatarStyle)}/${format}${
+  return `https://api.dicebear.com/8.x/${paramCase(avatarStyle)}/${format}${
     qs ? `?${qs}` : ''
   }`;
 }
