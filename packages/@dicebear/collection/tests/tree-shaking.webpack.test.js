@@ -1,12 +1,10 @@
-import path from 'path';
 import { fileURLToPath } from 'url';
 import { test } from 'uvu';
 import { match } from 'uvu/assert';
 import webpack from 'webpack';
 import { dirSync } from 'tmp';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 test(`Tree shaking with webpack`, async () => {
   const tmpDir = dirSync();
