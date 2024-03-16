@@ -1,4 +1,4 @@
-<h1><img src="https://dicebear.com/logo-readme.svg" width="28" /> DiceBear</h1>
+<h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear</h1>
 
 <p>
   <img src="https://api.dicebear.com/6.x/adventurer/svg?seed=Mimi&backgroundColor=0077b6&radius=10" width="64" />
@@ -22,5 +22,5 @@ the countless options that each avatar style provides.
 And thanks to the JavaScript library, HTTP API, CLI, Figma plugin and
 Playground, your next avatar is always just a stone's throw away!
 
-[Playground](https://dicebear.com/playground) |
-[Documentation](https://dicebear.com/introduction)
+[Playground](https://www.dicebear.com/playground) |
+[Documentation](https://www.dicebear.com/introduction)
