@@ -13,3 +13,6 @@ trim_trailing_whitespace = false
 [*.yml]
 indent_size = 2
 tab_width = 2
+
+[*.dist-tag]
+insert_final_newline = false
