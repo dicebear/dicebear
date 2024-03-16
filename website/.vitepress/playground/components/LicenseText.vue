@@ -10,22 +10,35 @@ const avatarStyleKey = computed(() => store.avatarStyleName);
 const avatarStyleMeta = useAvatarStyleMeta(avatarStyleKey);
 const avatarStyleName = computed(() => capitalCase(store.avatarStyleName));
 const avatarStyleLink = computed(
-  () => `/styles/${paramCase(store.avatarStyleName)}`
+  () => `/styles/${paramCase(store.avatarStyleName)}/`
 );
 </script>
 
 <template>
   <p>
-    The avatar style
+    <template v-if="avatarStyleMeta?.creator !== 'DiceBear'">
+      The avatar style
+    </template>
     <a :href="avatarStyleLink">{{ avatarStyleName }}</a>
-    is based on:
-    <a
-      :href="avatarStyleMeta?.source"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {{ avatarStyleMeta?.title }}
-    </a>
+    <template v-if="avatarStyleMeta?.creator !== 'DiceBear'">
+      <template
+        v-if="
+          avatarStyleMeta?.license?.name !== 'MIT' &&
+          avatarStyleMeta?.creator !== 'DiceBear' &&
+          avatarStyleMeta?.title
+        "
+      >
+        is a remix of:
+      </template>
+      <template v-else> is based on: </template>
+      <a
+        :href="avatarStyleMeta?.source"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ avatarStyleMeta?.title ?? 'Design' }}
+      </a>
+    </template>
     by
     <a
       :href="avatarStyleMeta?.homepage"
@@ -41,7 +54,7 @@ const avatarStyleLink = computed(
     >
       {{ avatarStyleMeta?.license?.name.replace(/\.$/, '') }}
     </a>
-    . / Remix of the original.
+    .
   </p>
 </template>
 

@@ -33,8 +33,7 @@ https://api.dicebear.com/7.x/<styleName>/svg
 
 We provide a large number of avatar styles from different designers. The designs
 are licensed under different licenses that the designers can choose themselves.
-Some licenses require attribution. For a quick overview we have created an
-[license overview](/licenses/) for you.
+For a quick overview we have created an [license overview](/licenses/) for you.
 
 :::
 
@@ -92,7 +91,7 @@ Supported versions: `5.x`, `6.x`, `7.x`
 ::: warning
 
 We reserve the right to discontinue any version at any time without notice. You
-can create your own own instance of the API to be able to access discontinued
+can create your own instance of the API to be able to access discontinued
 versions even afterwards.
 
 :::

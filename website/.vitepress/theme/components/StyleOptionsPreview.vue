@@ -32,6 +32,7 @@ const options = computed(() =>
     />
     <code>{{ value }}</code>
   </div>
+  <div class="invisible-char">,</div>
 </template>
 
 <style scoped lang="scss">
@@ -44,6 +45,10 @@ const options = computed(() =>
 
   &-avatar {
     margin-bottom: 12px;
+    user-select: none;
   }
+}
+.invisible-char {
+  opacity: 0;
 }
 </style>
