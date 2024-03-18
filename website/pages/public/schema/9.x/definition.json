@@ -111,8 +111,11 @@
               "type": "string"
             }
           },
-          "unique": {
-            "type": "boolean"
+          "notEqualWith": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": ["values"]

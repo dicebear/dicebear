@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    uses: dicebear/dicebear/.github/workflows/test.yml@8.x
+    uses: dicebear/dicebear/.github/workflows/test.yml@9.x
   deploy:
     needs: test
     runs-on: ubuntu-latest
