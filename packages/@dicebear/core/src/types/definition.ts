@@ -10,7 +10,13 @@ import type { StyleAttributes, StyleMeta } from './style';
 // Style definition types
 export interface Definition {
   meta?: StyleMeta;
-  body: string;
+  body: {
+    content: string;
+    dependencies?: {
+      components?: string[];
+      colors?: string[];
+    };
+  };
   attributes: StyleAttributes;
   components?: Record<string, DefinitionCompontent>;
   colors?: Record<string, DefinitionColor>;
@@ -30,6 +36,10 @@ interface DefinitionCompontent {
 interface DefinitionComponentValue {
   default?: boolean;
   content: string;
+  dependencies?: {
+    components?: string[];
+    colors?: string[];
+  }
 }
 
 interface DefinitionColor {

@@ -45,7 +45,30 @@
       }
     },
     "body": {
-      "type": "string"
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "dependencies": {
+          "type": "object",
+          "properties": {
+            "components": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "colors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "required": ["content"]
     },
     "attributes": {
       "type": "object",
@@ -101,6 +124,23 @@
                 },
                 "content": {
                   "type": "string"
+                },
+                "dependencies": {
+                  "type": "object",
+                  "properties": {
+                    "components": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "colors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               },
               "required": ["content"]
