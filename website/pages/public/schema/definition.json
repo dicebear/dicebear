@@ -49,6 +49,7 @@
     },
     "attributes": {
       "type": "object",
+      "description": "Specifies the attributes of the SVG element.",
       "properties": {
         "viewBox": {
           "type": "string"
@@ -61,17 +62,25 @@
     },
     "components": {
       "type": "object",
+      "description": "Specifies the components of the avatar. The PRNG randomly selects a component from each component group.",
       "additionalProperties": {
         "type": "object",
         "properties": {
           "probability": {
-            "type": "number"
+            "type": "number",
+            "description": "The probability of this component group to be displayed in the avatar. If not set, the component group is always displayed.",
+            "minimum": 0,
+            "maximum": 100
           },
           "rotation": {
-            "type": "number"
+            "type": "number",
+            "description": "The rotation of the component in degrees. If not set, the component is always displayed without rotation.",
+            "minimum": 0,
+            "maximum": 360
           },
           "offset": {
             "type": "object",
+            "description": "The offset of the component in the avatar. If not set, the component is always displayed without offset.",
             "properties": {
               "x": {
                 "type": "number"
@@ -83,6 +92,7 @@
           },
           "values": {
             "type": "object",
+            "description": "Specifies the component options for this component group.",
             "additionalProperties": {
               "type": "object",
               "properties": {
@@ -102,20 +112,24 @@
     },
     "colors": {
       "type": "object",
+      "description": "Specifies color options for the avatar. The PRNG randomly selects a color from each color option.",
       "additionalProperties": {
         "type": "object",
         "properties": {
           "values": {
             "type": "array",
+            "description": "An array of default 6-digit hexadecimal color values for this color option.",
             "items": {
               "type": "string"
             }
           },
-          "notEqualWith": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "notEqualTo": {
+            "type": "string",
+            "description": "If set, the color randomly selected by the PRNG should be different from this color option."
+          },
+          "contrastTo": {
+            "type": "string",
+            "description": "If set, a color is selected from the values that have the highest contrast to this color option. If the value is not set, the color is selected randomly by the PRNG."
           }
         },
         "required": ["values"]
@@ -123,6 +137,7 @@
     },
     "additionalOptions": {
       "type": "object",
+      "description": "Specifies additional options for the avatar style. It can also be used to override the default options.",
       "additionalProperties": {
         "$ref": "https://json-schema.org/draft-07/schema#"
       }
