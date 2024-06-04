@@ -11,34 +11,23 @@ import {
 } from 'superstruct';
 import { Types } from '../structs/Types.js';
 import { BaseOptionsStruct } from '../structs/BaseOptionsStruct.js';
-import { Style } from '../Style.js';
+import { StyleModel } from '../models/StyleModel.js';
 
 export class StructHelper {
-  static memoizedCreateOptionsStructFromStyle = new Map<
-    Style,
-    Struct<{ [x: string]: unknown }, ObjectSchema>
-  >();
-
   static createOptionsStruct(
-    style: Style,
+    style: StyleModel,
   ): Struct<{ [x: string]: unknown }, ObjectSchema> {
-    if (this.memoizedCreateOptionsStructFromStyle.has(style)) {
-      return this.memoizedCreateOptionsStructFromStyle.get(style)!;
-    }
-
     const struct = assign(
       BaseOptionsStruct,
       this.createColorsOptionsStruct(style),
       this.createComponentsOptionsStruct(style),
     );
 
-    this.memoizedCreateOptionsStructFromStyle.set(style, struct);
-
     return struct;
   }
 
   static createColorsOptionsStruct(
-    style: Style,
+    style: StyleModel,
   ): Struct<{ [x: string]: unknown }, ObjectSchema> {
     return object(
       style.getColors().reduce((acc, color) => {
@@ -56,7 +45,7 @@ export class StructHelper {
   }
 
   static createComponentsOptionsStruct(
-    style: Style,
+    style: StyleModel,
   ): Struct<{ [x: string]: unknown }, ObjectSchema> {
     return object(
       style.getComponents().reduce((acc, component) => {
