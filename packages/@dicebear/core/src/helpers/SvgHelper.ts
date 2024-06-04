@@ -93,7 +93,7 @@ export class SvgHelper {
   }
 
   static randomizeIds(body: string): string {
-    const prng = Prng.create();
+    const prng = new Prng();
     const ids: Record<string, string> = {};
 
     return body.replace(
@@ -104,5 +104,20 @@ export class SvgHelper {
         return `${m1}${ids[m2]}${m3}`;
       },
     );
+  }
+
+  static replacePlaceholders(
+    body: string,
+    placeholders: Array<[string, unknown]>,
+  ): string {
+    return body.replace(/\{\{([^}]+)\}\}/gi, (match, m1) => {
+      const value = placeholders.find(([key]) => key === m1)?.[1];
+
+      if (typeof value === 'string') {
+        return SvgHelper.escape(value);
+      }
+
+      return '';
+    });
   }
 }

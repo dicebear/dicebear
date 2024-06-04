@@ -5,16 +5,20 @@ export class Prng {
   private MIN = -2147483648;
   private MAX = 2147483647;
 
-  constructor(seed: string) {
+  /**
+   * Namespace can be useful to create multiple instances for a seed and still
+   * not repeat results. Multiple instances can in turn be useful if an area of
+   * the avatar style is changed (e.g. colors) but the untouched areas should
+   * still give the same result (e.g. components and core).
+   */
+  constructor(seed?: string, namespace?: string) {
+    seed ??= this.generateRandomSeed();
+
     this.seed = seed;
-    this.value = this.hashSeed(seed) || 1;
+    this.value = this.hashSeed(namespace ? `${namespace}/${seed}` : seed) || 1;
   }
 
-  static create(seed: string = Prng.generateRandomSeed()): Prng {
-    return new Prng(seed);
-  }
-
-  static generateRandomSeed(): string {
+  generateRandomSeed(): string {
     return Math.random().toString(36).substring(2, 7);
   }
 

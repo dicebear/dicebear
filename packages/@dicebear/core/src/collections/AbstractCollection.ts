@@ -9,6 +9,12 @@ export abstract class AbstractCollection {
     return this.collection.has(name);
   }
 
+  merge(properties: AbstractCollection): void {
+    for (const [name, value] of properties.collection) {
+      this.collection.set(name, value);
+    }
+  }
+
   all(): [string, unknown][] {
     return Array.from(this.collection.entries());
   }
