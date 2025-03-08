@@ -55,6 +55,13 @@ const avatar = createAvatar(lorelei, {
 const svg = avatar.toString();
 ```
 
+See usage guides for different frameworks:
+
+- [How to use the library with React?](/guides/use-the-library-with-react/)
+- [How to use the library with React Native?](/guides/use-the-library-with-react-native/)
+- [How to use the library with Svelte?](/guides/use-the-library-with-svelte/)
+- [How to use the library with Vue?](/guides/use-the-library-with-vue/)
+
 Each avatar style comes with several options. You can find them on the details
 page of each [avatar style](/styles/).
 
