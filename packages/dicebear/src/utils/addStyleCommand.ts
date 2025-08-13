@@ -48,7 +48,7 @@ export function addStyleCommand(
 
       bar.start(count, 0);
 
-      const queue = new PQueue({ concurrency: os.cpus().length });
+      const queue = new PQueue({ concurrency: os.cpus().length || 1 });
 
       queue.on('next', () => {
         bar.update(count - queue.size - queue.pending);
