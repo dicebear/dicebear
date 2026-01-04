@@ -1,0 +1,16 @@
+/**
+ * Do not change this file manually! This file was generated with the "Dicebear Exporter"-Plugin for Figma.
+ *
+ * Plugin: https://www.figma.com/community/plugin/1005765655729342787
+ */
+
+import { escape } from '@dicebear/core';
+import type { ComponentGroup, ComponentPickCollection, ColorPickCollection } from '../types.js';
+
+export const eyes: ComponentGroup = {
+  'happy': (components: ComponentPickCollection, colors: ColorPickCollection) => `<path d="M318.5 380.677c29 10 25.5 40 25.5 40s-8 21-52.5 11c-27.153-6.101-26.5-41-26.5-41s24.5-20 53.5-10" fill="#F6F1E4"/><circle cx="314" cy="407.677" r="27" fill="#4B2422"/><path d="m266.5 375.177 13.5 3s20.5-16 50 3.5c16.641 11 14 32.5 14 32.5s-5.25-29-43.5-29-30.5 28-30.5 28-3.176-5.551-4.25-9.75l-2.75-10.75-10-7.5h18.5z" fill="#4B2422"/><path d="M448.653 380.677c-29 10-25.5 40-25.5 40s8 21 52.5 11c27.153-6.101 26.5-41 26.5-41s-24.5-20-53.5-10" fill="#F6F1E4"/><circle cx="27" cy="27" r="27" transform="matrix(-1 0 0 1 480.153 380.677)" fill="#4B2422"/><path d="m500.653 375.177-13.5 3s-20.5-16-50 3.5c-16.641 11-14 32.5-14 32.5s5.25-29 43.5-29 30.5 28 30.5 28 3.176-5.551 4.25-9.75l2.75-10.75 10-7.5h-18.5z" fill="#4B2422"/>`,
+  'wide': (components: ComponentPickCollection, colors: ColorPickCollection) => `<path d="M321.5 373.473c29 10 22.5 53 22.5 53s-8 21-52.5 11c-27.153-6.102-26.5-41-26.5-41s27.5-33 56.5-23" fill="#F6F1E4"/><circle cx="314" cy="413.473" r="27" fill="#4B2422"/><path d="M266.5 380.973h7s22.057-25.118 53-8c23.5 13 18 43 18 43s1.25-43-37-43-37.5 46-37.5 46-3.176-5.552-4.25-9.75l-2.75-10.75-10-7.5h18.5z" fill="#4B2422"/><path d="M445.559 373.473c-29 10-22.5 53-22.5 53s8 21 52.5 11c27.153-6.102 26.5-41 26.5-41s-27.5-33-56.5-23" fill="#F6F1E4"/><circle cx="27" cy="27" r="27" transform="matrix(-1 0 0 1 480.059 386.473)" fill="#4B2422"/><path d="M500.559 380.973h-7s-22.057-25.118-53-8c-23.5 13-18 43-18 43s-1.25-43 37-43 37.5 46 37.5 46 3.176-5.552 4.25-9.75l2.75-10.75 10-7.5h-18.5z" fill="#4B2422"/>`,
+  'bow': (components: ComponentPickCollection, colors: ColorPickCollection) => `<path d="m274.5 407.907-4.25-11c27.75 0 40.74-15.541 64.25 0 16.641 11 14.5 21.75 14.5 21.75s-2.75-16.927-41-16.927c-22.712 0-28 19-47 10zm218.59 0 4.25-11c-27.75 0-40.74-15.541-64.25 0-16.641 11-14.5 21.75-14.5 21.75s2.75-16.927 41-16.927c22.712 0 28 19 47 10z" fill="#4B2422"/>`,
+  'humble': (components: ComponentPickCollection, colors: ColorPickCollection) => `<path d="m274.5 400.75-4.25 11c27.75 0 40.74 15.541 64.25 0C351.141 400.75 349 390 349 390s-2.75 16.927-41 16.927c-22.712 0-28-19-47-10zm218.59 0 4.25 11c-27.75 0-40.74 15.541-64.25 0-16.641-11-14.5-21.75-14.5-21.75s2.75 16.927 41 16.927c22.712 0 28-19 47-10z" fill="#4B2422"/>`,
+  'wink': (components: ComponentPickCollection, colors: ColorPickCollection) => `<path d="m274.5 407.907-4.25-11c27.75 0 40.74-15.541 64.25 0 16.641 11 14.5 21.75 14.5 21.75s-2.75-16.927-41-16.927c-22.712 0-28 19-47 10z" fill="#4B2422"/><path d="M448.653 380.677c-29 10-25.5 40-25.5 40s8 21 52.5 11c27.153-6.101 26.5-41 26.5-41s-24.5-20-53.5-10" fill="#F6F1E4"/><circle cx="27" cy="27" r="27" transform="matrix(-1 0 0 1 480.153 380.677)" fill="#4B2422"/><path d="m500.653 375.177-13.5 3s-20.5-16-50 3.5c-16.641 11-14 32.5-14 32.5s5.25-29 43.5-29 30.5 28 30.5 28 3.176-5.551 4.25-9.75l2.75-10.75 10-7.5h-18.5z" fill="#4B2422"/>`,
+}
