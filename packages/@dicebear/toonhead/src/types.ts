@@ -23,6 +23,7 @@ export interface Options {
     | 'openJacket'
     | 'dress'
     | 'shirt'
+    | 'tShirt'
   )[];
   mouth?: (
     | 'laugh'
@@ -32,7 +33,7 @@ export interface Options {
     | 'sad'
   )[];
   beards?: (
-    | 'moustache'
+    | 'moustacheTwirl'
     | 'fullbeard'
     | 'chin'
     | 'chinMoustache'

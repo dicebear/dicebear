@@ -38,7 +38,7 @@ export const schema: StyleSchema = {
       "items": {
         "type": "string",
         "enum": [
-          "moustache",
+          "moustacheTwirl",
           "fullbeard",
           "chin",
           "chinMoustache",
@@ -46,7 +46,7 @@ export const schema: StyleSchema = {
         ]
       },
       "default": [
-        "moustache",
+        "moustacheTwirl",
         "fullbeard",
         "chin",
         "chinMoustache",
@@ -79,14 +79,16 @@ export const schema: StyleSchema = {
           "turtleNeck",
           "openJacket",
           "dress",
-          "shirt"
+          "shirt",
+          "tShirt"
         ]
       },
       "default": [
         "turtleNeck",
         "openJacket",
         "dress",
-        "shirt"
+        "shirt",
+        "tShirt"
       ]
     },
     "clothesColor": {

@@ -5,12 +5,13 @@
  */
 
 /*!
- * My Avatar Style (@dicebear/my-avatar-style)
+ * ToonHead (@dicebear/toonhead)
  *
  * Code licensed under MIT License.
  * Copyright (c) 2026 Florian Körner
  *
- * Design "My Avatar Style" licensed under CC BY 4.0. / Remix of the original.
+ * Design "ToonHead" by Johan Melin licensed under CC BY 4.0. / Remix of the original.
+ * Homepage: www.johanmelin.com
  * License: https://creativecommons.org/licenses/by/4.0/
  */
 
@@ -22,7 +23,9 @@ import { getComponents } from './utils/getComponents.js';
 import { getColors } from './utils/getColors.js';
 
 export const meta: StyleMeta = {
-  title: 'My Avatar Style',
+  title: 'ToonHead',
+  creator: 'Johan Melin',
+  homepage: 'www.johanmelin.com',
   license: {
     name: 'CC BY 4.0',
     url: 'https://creativecommons.org/licenses/by/4.0/',
