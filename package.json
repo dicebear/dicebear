@@ -15,7 +15,7 @@
     "prettier": "prettier --write \"{packages,apps}/**/*.{js,ts,json,md}\""
   },
   "devDependencies": {
-    "lerna": "^8.2.2",
+    "lerna": "^9.0.3",
     "prettier": "^3.5.3"
   }
 }
