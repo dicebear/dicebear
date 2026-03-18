@@ -45,5 +45,3 @@ jobs:
           fi
 
       - run: node scripts/publish.mjs "$DIST_TAG"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
