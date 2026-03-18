@@ -27,7 +27,7 @@ export function addBackground(
 ) {
   let { width, height, x, y } = getViewBox(result);
 
-  const solidBackground = `<rect fill="${primaryColor}" width="${width}" height="${height}" x="${x}" y="${y}" />`;
+  const solidBackground = `<rect fill="${escape.xml(primaryColor)}" width="${width}" height="${height}" x="${x}" y="${y}" />`;
 
   switch (type) {
     case 'solid':
@@ -38,8 +38,8 @@ export function addBackground(
         `<rect fill="url(#backgroundLinear)" width="${width}" height="${height}" x="${x}" y="${y}" />` +
         `<defs>` +
         `<linearGradient id="backgroundLinear" gradientTransform="rotate(${rotation} 0.5 0.5)">` +
-        `<stop stop-color="${primaryColor}"/>` +
-        `<stop offset="1" stop-color="${secondaryColor}"/>` +
+        `<stop stop-color="${escape.xml(primaryColor)}"/>` +
+        `<stop offset="1" stop-color="${escape.xml(secondaryColor)}"/>` +
         `</linearGradient>` +
         `</defs>` +
         result.body
