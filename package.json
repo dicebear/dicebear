@@ -10,7 +10,7 @@
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
-    "prepare-publish": "lerna version --force-publish --exact"
+    "prepare-publish": "node scripts/version.mjs"
   },
   "devDependencies": {
     "lerna": "^8.1.2"
