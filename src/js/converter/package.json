@@ -38,7 +38,7 @@
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "exiftool-vendored": "^35.5.0",
-    "fast-xml-parser": "^5.3.4",
+    "fast-xml-parser": "^5.5.6",
     "sharp": "^0.34.5",
     "tmp-promise": "^3.0.3"
   },
