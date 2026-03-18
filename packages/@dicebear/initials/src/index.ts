@@ -35,7 +35,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
 
   // prettier-ignore
   const svg = [
-    `<text x="50%" y="50%" font-family="${fontFamily}" font-size="${fontSize}" font-weight="${fontWeight}" fill="${textColor}" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${escapeXml(initials)}</text>`,
+    `<text x="50%" y="50%" font-family="${escapeXml(fontFamily)}" font-size="${fontSize}" font-weight="${fontWeight}" fill="${escapeXml(textColor)}" text-anchor="middle" dy="${(fontSize * .356).toFixed(3)}">${escapeXml(initials)}</text>`,
   ].join('');
 
   return {
