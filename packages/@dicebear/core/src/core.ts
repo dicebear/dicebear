@@ -1,4 +1,5 @@
 import type {
+  ConverterResult,
   Result,
   ResultConvertOptions,
   Style,
@@ -8,8 +9,30 @@ import * as svgUtils from './utils/svg.js';
 import { merge as mergeOptions } from './utils/options.js';
 import { create as createPrng } from './utils/prng.js';
 import * as license from './utils/license.js';
-import { toFormat } from '@dicebear/converter';
+import { toPng, toJpeg } from '@dicebear/converter';
 import { getBackgroundColors } from './utils/color.js';
+
+const encoder = new TextEncoder();
+
+function wrapWithToFile(result: { toDataUri(): Promise<string>; toArrayBuffer(): Promise<ArrayBufferLike> }): ConverterResult {
+  return {
+    toDataUri: () => result.toDataUri(),
+    toArrayBuffer: () => result.toArrayBuffer(),
+    toFile: async (name: string) => {
+      if (typeof document !== 'undefined') {
+        const link = document.createElement('a');
+        link.href = await result.toDataUri();
+        link.download = name;
+        link.click();
+        link.remove();
+      } else {
+        const { writeFile } = await import('node:fs/promises');
+        const buffer = await result.toArrayBuffer();
+        await writeFile(name, Buffer.from(buffer));
+      }
+    },
+  };
+}
 
 export function createAvatar<O extends {}>(
   style: Style<O>,
@@ -80,7 +103,6 @@ export function createAvatar<O extends {}>(
 
   const attributes = svgUtils.createAttrString(result);
   const metadata = license.xml(style);
-  const exif = license.exif(style);
 
   const svg = `<svg ${attributes}>${metadata}${result.body}</svg>`;
 
@@ -99,12 +121,15 @@ export function createAvatar<O extends {}>(
     toDataUriSync: () => {
       return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
     },
-    ...toFormat(svg, 'svg'),
+    ...wrapWithToFile({
+      toDataUri: async () => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`,
+      toArrayBuffer: async () => encoder.encode(svg).buffer,
+    }),
     png: ({ includeExif = false }: ResultConvertOptions = {}) => {
-      return toFormat(svg, 'png', includeExif ? exif : undefined);
+      return wrapWithToFile(toPng(svg, { includeExif }));
     },
     jpeg: ({ includeExif = false }: ResultConvertOptions = {}) => {
-      return toFormat(svg, 'jpeg', includeExif ? exif : undefined);
+      return wrapWithToFile(toJpeg(svg, { includeExif }));
     },
   };
 }
