@@ -35,7 +35,7 @@ async function toArrayBuffer(
   exif?: Exif
 ): Promise<ArrayBufferLike> {
   if ('svg' === format) {
-    return getEncoder().encode(rawSvg);
+    return getEncoder().encode(rawSvg).buffer;
   }
 
   const canvas = await toCanvas(rawSvg, format, exif);
