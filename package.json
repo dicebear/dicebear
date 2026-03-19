@@ -4,8 +4,7 @@
   "workspaces": {
     "packages": [
       "packages/dicebear",
-      "packages/@dicebear/*",
-      "apps/*"
+      "packages/@dicebear/*"
     ]
   },
   "scripts": {
