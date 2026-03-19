@@ -2,32 +2,47 @@ name: Publish
 
 on:
   push:
-    tags-ignore:
-      - v*-alpha.*
-      - v*-beta.*
-      - v*-rc.*
+    tags:
+      - 'v*'
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
 
 jobs:
+  test:
+    uses: dicebear/dicebear/.github/workflows/test.yml@6.x
+
   publish:
-    name: Publish Packages
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 24
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
-      - run: npm run build
-      - run: npm run test
+      - run: npm run build -- --ignore "@dicebear/@(docs|editor)"
 
-      - run:
-          ./node_modules/.bin/lerna publish from-package --no-verify-access
-          --dist-tag $(cat .dist-tag) --ignore-scripts --yes
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Determine dist tag
+        shell: bash
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ "$TAG" =~ -(alpha|beta|rc)\. ]]; then
+            echo "DIST_TAG=next" >> $GITHUB_ENV
+          else
+            if [ -f .dist-tag ]; then
+              echo "DIST_TAG=$(cat .dist-tag)" >> $GITHUB_ENV
+            else
+              echo "DIST_TAG=latest" >> $GITHUB_ENV
+            fi
+          fi
+
+      - run: |
+          ./node_modules/.bin/lerna publish from-package --dist-tag "$DIST_TAG" --ignore-scripts --yes

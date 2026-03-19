@@ -3,12 +3,11 @@ name: Test
 on:
   push:
     branches:
-      - main
-      - version/*
+      - '*.x'
   pull_request:
     branches:
-      - main
-      - version/*
+      - '*.x'
+  workflow_call: {}
 
 jobs:
   test:
@@ -16,17 +15,16 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 19.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [20, 22, 24]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/previous-releases
+        # See also https://github.com/orgs/dicebear/discussions/491
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: latest npm
-        run: npm i -g npm@latest
       - run: npm ci
-      - run: npm run build
+      - run: npm run build -- --ignore "@dicebear/@(docs|editor)"
       - run: npm run test
