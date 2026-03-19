@@ -1,8 +1,13 @@
 import type { JSONSchema7 } from 'json-schema';
-import type { Result as ConverterResult } from '@dicebear/converter';
 
 export interface ResultConvertOptions {
   includeExif?: boolean;
+}
+
+export interface ConverterResult {
+  toDataUri(): Promise<string>;
+  toFile(name: string): Promise<void>;
+  toArrayBuffer(): Promise<ArrayBufferLike>;
 }
 
 export interface Result extends ConverterResult {

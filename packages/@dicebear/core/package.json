@@ -32,7 +32,7 @@
     "test": "uvu tests"
   },
   "dependencies": {
-    "@dicebear/converter": "5.5.0"
+    "@dicebear/converter": "^9.4.2"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",

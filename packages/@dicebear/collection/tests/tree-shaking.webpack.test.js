@@ -19,6 +19,9 @@ test(`Tree shaking with webpack`, async () => {
         output: {
           path: tmpDir.name,
         },
+        externals: {
+          '@dicebear/converter': 'commonjs @dicebear/converter',
+        },
       },
       (err, stats) => {
         err
