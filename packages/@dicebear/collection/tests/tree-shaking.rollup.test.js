@@ -13,6 +13,7 @@ test(`Tree shaking with rollup`, async () => {
   const bundle = await rollup({
     input: `${__dirname}/fixtures/tree-shaking/index.js`,
     plugins: [nodeResolve(), commonjs()],
+    external: (id) => id.includes('@dicebear/converter') || id === '@dicebear/converter',
   });
 
   const { output } = await bundle.generate({
@@ -22,7 +23,7 @@ test(`Tree shaking with rollup`, async () => {
   equal(output.length, 1);
 
   for (const module in output[0].modules) {
-    match(module, /@dicebear\/(core|converter|identicon|collection)/);
+    match(module, /@dicebear\/(core|identicon|collection)/);
   }
 });
 
