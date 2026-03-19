@@ -15,9 +15,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20, 22, 24]
+        node-version: [20, 22, 24, 25]
         # See supported Node.js release schedule at https://nodejs.org/en/about/previous-releases
-        # See also https://github.com/orgs/dicebear/discussions/491
 
     steps:
       - uses: actions/checkout@v4
