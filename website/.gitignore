@@ -1,9 +1,0 @@
-# Cache and log files
-.DS_STORE
-
-# Dependencies
-node_modules
-
-# Vitepress
-.vitepress/cache
-.vitepress/dist

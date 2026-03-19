@@ -28,7 +28,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
-      - run: npm run build -- --ignore "@dicebear/@(docs|editor)"
+      - run: npm run build
 
       - name: Determine dist tag
         shell: bash
