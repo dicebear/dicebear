@@ -2,6 +2,7 @@ import type { Prng } from '../types.js';
 
 const MIN = -2147483648;
 const MAX = 2147483647;
+const MAX_SEED_LENGTH = 1024;
 
 function xorshift(value: number) {
   value ^= value << 13;
@@ -23,8 +24,8 @@ function hashSeed(seed: string) {
 }
 
 export function create(seed: string = ''): Prng {
-  // Ensure that seed is a string
-  seed = seed.toString();
+  // Ensure that seed is a string and limit length to prevent CPU exhaustion
+  seed = seed.toString().slice(0, MAX_SEED_LENGTH);
 
   let value = hashSeed(seed) || 1;
 
