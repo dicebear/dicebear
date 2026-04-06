@@ -11,7 +11,7 @@ jobs:
     uses: dicebear/dicebear/.github/workflows/test.yml@9.x
   deploy:
     needs: test
-    environment: website
+    environment: ${{ github.ref_name == '9.x' && 'website-v9' || 'website-latest' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
