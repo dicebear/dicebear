@@ -7,6 +7,16 @@ import { computedAsync } from '@vueuse/core';
 import useStore from '@theme/stores/playground';
 import { formatLicenseName } from '@theme/utils/format';
 
+function safeHttpUrl(url: string | undefined | null): string | undefined {
+  if (!url) return undefined;
+  try {
+    const u = new URL(url);
+    return u.protocol === 'http:' || u.protocol === 'https:' ? url : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 const store = useStore();
 
 const avatarStyleMeta = useAvatarStyleMeta(toRef(store, 'avatarStyleName'));
@@ -39,6 +49,9 @@ const hasCustomMeta = computed(() => {
   return meta && (meta.creator || meta.license?.name);
 });
 
+const customSourceUrl = computed(() => safeHttpUrl(customStyleMeta.value?.source));
+const customLicenseUrl = computed(() => safeHttpUrl(customStyleMeta.value?.license?.url));
+
 const avatarStyleName = computed(() => {
   if (store.isCustomStyle) {
     return store.customStyles[store.avatarStyleName]?.name ?? 'Custom Style';
@@ -59,12 +72,12 @@ const avatarStyleLink = computed(
       <template v-if="customStyleMeta?.title">
         is based on:
         <a
-          v-if="customStyleMeta?.source"
-          :href="customStyleMeta.source"
+          v-if="customSourceUrl"
+          :href="customSourceUrl"
           target="_blank"
           rel="noopener noreferrer"
-        >{{ customStyleMeta.title }}</a>
-        <template v-else>{{ customStyleMeta.title }}</template>
+        >{{ customStyleMeta?.title }}</a>
+        <template v-else>{{ customStyleMeta?.title }}</template>
       </template>
       <template v-if="customStyleMeta?.creator">
         by {{ customStyleMeta.creator }}
@@ -72,12 +85,12 @@ const avatarStyleLink = computed(
       <template v-if="customStyleMeta?.license?.name">
         , licensed under
         <a
-          v-if="customStyleMeta?.license?.url"
-          :href="customStyleMeta.license.url"
+          v-if="customLicenseUrl"
+          :href="customLicenseUrl"
           target="_blank"
           rel="noopener noreferrer"
-        >{{ customStyleMeta.license.name }}</a>
-        <template v-else>{{ customStyleMeta.license.name }}</template>
+        >{{ customStyleMeta?.license?.name }}</a>
+        <template v-else>{{ customStyleMeta?.license?.name }}</template>
       </template>
       (as stated by the creator — not verified by DiceBear).
     </template>
