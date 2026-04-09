@@ -266,6 +266,27 @@ export const unsupportedHttpApiOptions = new Set([
   'title',
 ]);
 
+type ApiOptionValue =
+  | { kind: 'array'; values: unknown[] }
+  | { kind: 'primitive'; value: string | number | boolean }
+  | { kind: 'object'; entries: [string, unknown][] }
+  | { kind: 'string'; value: string };
+
+function classifyOptionValue(value: unknown): ApiOptionValue {
+  if (Array.isArray(value)) return { kind: 'array', values: value };
+  if (
+    typeof value === 'string' ||
+    typeof value === 'number' ||
+    typeof value === 'boolean'
+  ) {
+    return { kind: 'primitive', value };
+  }
+  if (typeof value === 'object' && value !== null) {
+    return { kind: 'object', entries: Object.entries(value) };
+  }
+  return { kind: 'string', value: String(value) };
+}
+
 export function getAvatarApiUrl(
   avatarStyle: string,
   options: Record<string, unknown> = {},
@@ -274,31 +295,28 @@ export function getAvatarApiUrl(
   const qs = Object.entries(options)
     .filter(([k, v]) => v !== undefined && !unsupportedHttpApiOptions.has(k))
     .map(([k, v]) => {
-      if (Array.isArray(v)) {
-        return v.length === 0
-          ? `${encodeURIComponent(k)}[]`
-          : `${encodeURIComponent(k)}=${v
-              .map((c) => encodeURIComponent(c))
-              .join(',')}`;
+      const classified = classifyOptionValue(v);
+      switch (classified.kind) {
+        case 'array':
+          return classified.values.length === 0
+            ? `${encodeURIComponent(k)}[]`
+            : `${encodeURIComponent(k)}=${classified.values
+                .map((c) => encodeURIComponent(String(c)))
+                .join(',')}`;
+        case 'primitive':
+          return `${encodeURIComponent(k)}=${encodeURIComponent(classified.value)}`;
+        case 'object': {
+          const pairs = classified.entries
+            .map(
+              ([vk, vv]) =>
+                `${encodeURIComponent(vk)}:${encodeURIComponent(String(vv))}`,
+            )
+            .join(',');
+          return `${encodeURIComponent(k)}=${pairs}`;
+        }
+        case 'string':
+          return `${encodeURIComponent(k)}=${encodeURIComponent(classified.value)}`;
       }
-
-      if (
-        typeof v == 'string' ||
-        typeof v == 'number' ||
-        typeof v == 'boolean'
-      ) {
-        return `${encodeURIComponent(k)}=${encodeURIComponent(v)}`;
-      }
-
-      if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
-        const pairs = Object.entries(v)
-          .map(([vk, vv]) => `${encodeURIComponent(vk)}:${encodeURIComponent(vv)}`)
-          .join(',');
-
-        return `${encodeURIComponent(k)}=${pairs}`;
-      }
-
-      return `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`;
     })
     .join('&');
 
@@ -317,29 +335,26 @@ export function getAvatarApiCommand(
 ): string {
   const args = Object.entries(options)
     .map(([k, v]) => {
-      if (Array.isArray(v)) {
-        return `  --${k} ${v
-          .map((c) => shellQuote(String(c)))
-          .join(' ')}`.trimEnd();
+      const classified = classifyOptionValue(v);
+      switch (classified.kind) {
+        case 'array':
+          return `  --${k} ${classified.values
+            .map((c) => shellQuote(String(c)))
+            .join(' ')}`.trimEnd();
+        case 'primitive':
+          if (typeof classified.value === 'string') {
+            return `  --${k} ${shellQuote(classified.value)}`;
+          }
+          return `  --${k} ${classified.value}`;
+        case 'object': {
+          const pairs = classified.entries
+            .map(([vk, vv]) => shellQuote(`${vk}:${vv}`))
+            .join(' ');
+          return `  --${k} ${pairs}`;
+        }
+        case 'string':
+          return `  --${k} ${shellQuote(classified.value)}`;
       }
-
-      if (typeof v == 'number' || typeof v == 'boolean') {
-        return `  --${k} ${v}`;
-      }
-
-      if (typeof v == 'string') {
-        return `  --${k} ${shellQuote(v)}`;
-      }
-
-      if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
-        const pairs = Object.entries(v)
-          .map(([vk, vv]) => shellQuote(`${vk}:${vv}`))
-          .join(' ');
-
-        return `  --${k} ${pairs}`;
-      }
-
-      return `  --${k} ${shellQuote(String(v))}`;
     })
     .join(' \\\n');
 
