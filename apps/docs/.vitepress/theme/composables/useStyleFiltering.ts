@@ -1,38 +1,18 @@
 import { ref, computed, Ref } from 'vue';
 import { kebabCase, capitalCase } from 'change-case';
 import type { CustomStyleEntry } from '@theme/types';
+import {
+  categoryOrder,
+  previewSeeds,
+  getStyleCategory,
+  normalizeLicense,
+} from '@theme/config/styleCategories';
 
 interface StyleMeta {
   meta: {
     license?: { name?: string };
     creator?: string;
   };
-}
-
-const minimalistStyles = new Set([
-  'glass',
-  'identicon',
-  'rings',
-  'shapes',
-  'initials',
-  'icons',
-  'thumbs',
-]);
-
-function getCategory(name: string): string {
-  return minimalistStyles.has(name) ? 'Minimalist' : 'Characters';
-}
-
-const categoryOrder = ['Custom', 'Minimalist', 'Characters', 'Other'];
-
-const seeds = ['Felix', 'Aneka', 'Milo', 'Luna'];
-
-function normalizeLicense(license: string): string {
-  if (license.includes('CC BY 4.0')) return 'CC BY 4.0';
-  if (license.includes('CC0 1.0')) return 'CC0 1.0';
-  if (license.includes('MIT')) return 'MIT';
-
-  return 'Other';
 }
 
 export function useStyleFiltering(
@@ -55,9 +35,9 @@ export function useStyleFiltering(
           creator: style.meta.creator || 'Unknown',
           license: rawLicense,
           licenseNormalized: normalizeLicense(rawLicense),
-          category: getCategory(kebabCase(styleName)),
+          category: getStyleCategory(kebabCase(styleName)),
           isCustom: false,
-          avatars: seeds.map((seed) => ({
+          avatars: previewSeeds.map((seed) => ({
             seed,
           })),
         };
@@ -75,7 +55,7 @@ export function useStyleFiltering(
       licenseNormalized: 'Unknown',
       category: 'Custom',
       isCustom: true,
-      avatars: seeds.map((seed) => ({
+      avatars: previewSeeds.map((seed) => ({
         seed,
       })),
     }));
