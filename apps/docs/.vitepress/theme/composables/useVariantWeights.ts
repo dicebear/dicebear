@@ -1,10 +1,23 @@
 import { computed, ref, watch, type Ref } from 'vue';
 import type { PlaygroundStoreOptions } from '@theme/types';
 
-// Manages the 3-state variant weight system:
-// - undefined = excluded (not in object, never considered)
-// - 0 = active with weight 0 (fallback when all others also 0)
-// - > 0 = active with that weight
+/**
+ * Manages variant weights for a component option in the playground.
+ *
+ * Variant weight states:
+ * - undefined → variant is excluded (not in the options object at all)
+ * - 0         → variant is active but with weight 0 (rare, used as fallback)
+ * - > 0       → variant is active with that weight
+ *
+ * Storage formats in `avatarStyleOptions[<componentName>Variant]`:
+ * - undefined → use the style's default weights
+ * - string    → a single variant name (legacy single-pick form)
+ * - string[]  → list of active variants, each implicitly weight 1
+ * - object    → { variant: weight } map (when showWeights is on)
+ *
+ * The composable transparently converts between these formats based on
+ * `showWeights` and the user's interactions.
+ */
 export function useVariantWeights(
   avatarStyleOptions: PlaygroundStoreOptions,
   componentName: Ref<string> | (() => string),
@@ -23,14 +36,14 @@ export function useVariantWeights(
 
   // Re-initialize showWeights when component/style changes
   watch(
-    () => `${getName()}-${getVariants().length}-${getNonDefault()}`,
+    [() => getName(), () => getVariants(), () => getNonDefault()],
     () => {
       const storeVal = avatarStyleOptions[variantKey.value];
 
       showWeights.value =
         (typeof storeVal === 'object' && !Array.isArray(storeVal)) || getNonDefault();
     },
-    { immediate: true },
+    { deep: true, immediate: true },
   );
 
   const variantWeights = computed<Record<string, number | undefined>>({
