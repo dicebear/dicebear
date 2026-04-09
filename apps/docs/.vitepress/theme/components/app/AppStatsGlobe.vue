@@ -34,14 +34,6 @@ let eventId = 0;
 const elementMap = new Map<number, HTMLElement>();
 const pendingTimeouts: ReturnType<typeof setTimeout>[] = [];
 
-const LAND_POINT_FALLBACK: [number, number][] = [
-  [48.86, 2.35], [40.71, -74.01], [35.68, 139.65], [51.51, -0.13],
-  [-33.87, 151.21], [-23.55, -46.63], [37.76, -122.44], [1.35, 103.82],
-  [52.52, 13.41], [28.61, 77.21], [39.90, 116.41], [-1.29, 36.82],
-  [19.43, -99.13], [25.20, 55.27], [41.01, 28.98], [22.32, 114.17],
-  [34.05, -118.24], [55.76, 37.62], [-34.60, -58.38], [59.33, 18.07],
-];
-
 let landPoints: [number, number][] = [];
 let preloadBuffer: PreloadBuffer | null = null;
 
@@ -203,7 +195,7 @@ async function initGlobe() {
   }
 
   if (landPoints.length === 0) {
-    landPoints = buildLandPoints(countriesGeoJson, LAND_POINT_FALLBACK);
+    landPoints = buildLandPoints(countriesGeoJson);
   }
 
   if (countriesGeoJson) {
@@ -282,6 +274,10 @@ function applyTheme() {
 
 function startEvents() {
   if (eventInterval) return;
+  if (landPoints.length === 0) {
+    console.warn('[AppStatsGlobe] No land points available — skipping avatar events.');
+    return;
+  }
   for (let i = 0; i < 8; i++) {
     pendingTimeouts.push(setTimeout(addEvent, i * 250));
   }

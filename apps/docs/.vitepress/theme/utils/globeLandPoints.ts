@@ -10,9 +10,9 @@ export function pointInPolygon(x: number, y: number, ring: number[][]): boolean 
   return inside;
 }
 
-export function buildLandPoints(geoJson: any, fallback: [number, number][]): [number, number][] {
+export function buildLandPoints(geoJson: any): [number, number][] {
   const points: [number, number][] = [];
-  if (!geoJson) return [...fallback];
+  if (!geoJson) return points;
 
   for (const feature of geoJson.features) {
     const polygons = feature.geometry.type === 'MultiPolygon'
@@ -40,11 +40,6 @@ export function buildLandPoints(geoJson: any, fallback: [number, number][]): [nu
         }
       }
     }
-  }
-
-  // Fallback if sampling yielded too few points
-  if (points.length < 20) {
-    return [...fallback];
   }
 
   return points;
