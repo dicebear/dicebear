@@ -205,27 +205,7 @@ export function styleUsesVariable(avatarStyle: string, variableName: string): bo
 }
 
 async function readAllBytes(readable: ReadableStream<Uint8Array>): Promise<Uint8Array> {
-  const chunks: Uint8Array[] = [];
-  const reader = readable.getReader();
-
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    chunks.push(value);
-  }
-
-  const result = new Uint8Array(
-    chunks.reduce((sum, c) => sum + c.length, 0),
-  );
-
-  let offset = 0;
-
-  for (const chunk of chunks) {
-    result.set(chunk, offset);
-    offset += chunk.length;
-  }
-
-  return result;
+  return new Uint8Array(await new Response(readable).arrayBuffer());
 }
 
 export async function compressFragment(data: object): Promise<string> {
