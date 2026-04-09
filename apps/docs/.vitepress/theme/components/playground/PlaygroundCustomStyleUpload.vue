@@ -50,6 +50,12 @@ function extractName(definition: Record<string, unknown>): string {
 
 async function submit() {
   error.value = '';
+
+  if (new TextEncoder().encode(jsonInput.value).length > MAX_UPLOAD_SIZE) {
+    error.value = 'Style definition is too large (max 1 MB).';
+    return;
+  }
+
   loading.value = true;
 
   try {
