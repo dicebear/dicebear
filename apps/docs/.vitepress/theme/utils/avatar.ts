@@ -329,6 +329,14 @@ function shellQuote(value: string): string {
   return `'${escapeShellArg(value)}'`;
 }
 
+// Numbers and booleans contain no shell-special characters, so they
+// stay unquoted both as single values and inside arrays. Strings get
+// quoted defensively in case they contain spaces, semicolons, etc.
+function formatCliArg(value: unknown): string {
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  return shellQuote(String(value));
+}
+
 export function getAvatarApiCommand(
   avatarStyle: string,
   options: Record<string, unknown> = {},
@@ -339,13 +347,10 @@ export function getAvatarApiCommand(
       switch (classified.kind) {
         case 'array':
           return `  --${k} ${classified.values
-            .map((c) => shellQuote(String(c)))
+            .map(formatCliArg)
             .join(' ')}`.trimEnd();
         case 'primitive':
-          if (typeof classified.value === 'string') {
-            return `  --${k} ${shellQuote(classified.value)}`;
-          }
-          return `  --${k} ${classified.value}`;
+          return `  --${k} ${formatCliArg(classified.value)}`;
         case 'object': {
           const pairs = classified.entries
             .map(([vk, vv]) => shellQuote(`${vk}:${vv}`))
@@ -353,7 +358,7 @@ export function getAvatarApiCommand(
           return `  --${k} ${pairs}`;
         }
         case 'string':
-          return `  --${k} ${shellQuote(classified.value)}`;
+          return `  --${k} ${formatCliArg(classified.value)}`;
       }
     })
     .join(' \\\n');
