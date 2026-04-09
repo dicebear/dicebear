@@ -1,3 +1,5 @@
+import { safeHttpUrl } from '@theme/utils/url';
+
 export interface FooterLink {
   label: string;
   href: string;
@@ -19,18 +21,23 @@ export const resourceLinks: FooterLink[] = [
   { label: 'Statistics', href: '/stats/' },
 ];
 
-const legalLinks: FooterLink[] = [{ label: 'Licenses', href: '/licenses/' }];
+function buildLegalLink(label: string, rawHref: string | undefined): FooterLink | null {
+  if (!rawHref) {
+    return null;
+  }
 
-if (import.meta.env.VITE_PRIVACY_POLICY_URL) {
-  legalLinks.push({ label: 'Privacy Policy', href: import.meta.env.VITE_PRIVACY_POLICY_URL, external: !import.meta.env.VITE_PRIVACY_POLICY_URL.startsWith('/') });
+  const isExternal = /^https?:\/\//.test(rawHref);
+
+  if (isExternal && !safeHttpUrl(rawHref)) {
+    return null;
+  }
+
+  return { label, href: rawHref, external: isExternal || undefined };
 }
 
-if (import.meta.env.VITE_COOKIE_POLICY_URL) {
-  legalLinks.push({ label: 'Cookie Policy', href: import.meta.env.VITE_COOKIE_POLICY_URL, external: !import.meta.env.VITE_COOKIE_POLICY_URL.startsWith('/') });
-}
-
-if (import.meta.env.VITE_SITE_NOTICE_URL) {
-  legalLinks.push({ label: 'Site Notice', href: import.meta.env.VITE_SITE_NOTICE_URL, external: !import.meta.env.VITE_SITE_NOTICE_URL.startsWith('/') });
-}
-
-export { legalLinks };
+export const legalLinks: FooterLink[] = [
+  { label: 'Licenses', href: '/licenses/' },
+  buildLegalLink('Privacy Policy', import.meta.env.VITE_PRIVACY_POLICY_URL),
+  buildLegalLink('Cookie Policy', import.meta.env.VITE_COOKIE_POLICY_URL),
+  buildLegalLink('Site Notice', import.meta.env.VITE_SITE_NOTICE_URL),
+].filter((link): link is FooterLink => link !== null);
