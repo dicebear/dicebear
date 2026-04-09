@@ -8,6 +8,11 @@ export type ComponentDependency = {
   parentColors: { colorKey: string; defaultCount: number }[];
 };
 
+type VariantRefs = {
+  childComponents: string[];
+  colorRefs: Set<string>;
+};
+
 export function useDependencyMap(loadedStyle: Ref<Style | null>) {
   const componentDeps = computed<Record<string, ComponentDependency>>(() => {
     if (!loadedStyle.value) {
@@ -15,29 +20,30 @@ export function useDependencyMap(loadedStyle: Ref<Style | null>) {
     }
 
     const deps: Record<string, ComponentDependency> = {};
-    const variantColorRefs = new Map<string, Set<string>>();
 
     for (const [compName, component] of loadedStyle.value.components()) {
       for (const [variantName, variant] of component.variants()) {
-        const colorRefs = new Set<string>();
+        const refs: VariantRefs = { childComponents: [], colorRefs: new Set() };
 
-        collectComponentRefs(variant.elements(), compName, variantName, deps, colorRefs);
+        collectVariantRefs(variant.elements(), refs);
 
-        if (colorRefs.size > 0) {
-          variantColorRefs.set(`${compName}/${variantName}`, colorRefs);
+        if (refs.childComponents.length === 0) {
+          continue;
+        }
+
+        const parentColors = [...refs.colorRefs].map((c) => ({
+          colorKey: `${c}Color`,
+          defaultCount: loadedStyle.value!.colors().get(c)?.values().length ?? 0,
+        }));
+
+        for (const child of refs.childComponents) {
+          deps[child] = {
+            parentName: compName,
+            parentVariant: variantName,
+            parentColors,
+          };
         }
       }
-    }
-
-    for (const dep of Object.values(deps)) {
-      const colorRefs = variantColorRefs.get(`${dep.parentName}/${dep.parentVariant}`);
-
-      dep.parentColors = colorRefs
-        ? [...colorRefs].map((c) => ({
-            colorKey: `${c}Color`,
-            defaultCount: loadedStyle.value!.colors().get(c)?.values().length ?? 0,
-          }))
-        : [];
     }
 
     return deps;
@@ -46,16 +52,13 @@ export function useDependencyMap(loadedStyle: Ref<Style | null>) {
   return { componentDeps };
 }
 
-function collectComponentRefs(
+function collectVariantRefs(
   elements: readonly DefinitionElement[],
-  parentName: string,
-  parentVariant: string,
-  deps: Record<string, ComponentDependency>,
-  colorRefs: Set<string>,
+  refs: VariantRefs,
 ) {
   for (const el of elements) {
     if (el.type() === 'component' && typeof el.value() === 'string') {
-      deps[el.value() as string] = { parentName, parentVariant, parentColors: [] };
+      refs.childComponents.push(el.value() as string);
     }
 
     const attrs = el.attributes();
@@ -63,11 +66,11 @@ function collectComponentRefs(
     if (attrs) {
       for (const val of Object.values(attrs)) {
         if (isColorAttr(val)) {
-          colorRefs.add(val.value);
+          refs.colorRefs.add(val.value);
         }
       }
     }
 
-    collectComponentRefs(el.children(), parentName, parentVariant, deps, colorRefs);
+    collectVariantRefs(el.children(), refs);
   }
 }
