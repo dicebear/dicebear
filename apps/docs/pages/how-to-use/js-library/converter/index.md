@@ -198,7 +198,7 @@ const png = toPng(svg, {
 const buffer = await png.toArrayBuffer(); // [!code focus]
 ```
 
-## Options 
+## Options
 
 | Option        | Type       | Default | Environment       | Description                               |
 | ------------- | ---------- | ------- | ----------------- | ----------------------------------------- |

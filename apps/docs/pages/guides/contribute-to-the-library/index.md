@@ -147,6 +147,8 @@ calling the CLI script directly as follows:
 node src/js/cli/bin/index.js <COMMAND>
 ```
 
+<!-- The Branching and committing / Creating a Pull Request steps below intentionally parallel the style-contributor sections above. The branch and commit placeholders differ (generic <YOUR_BRANCH> / "Change:" prefix vs. style-specific), so both variants are kept for clarity. Update both if changing. -->
+
 ### Branching and committing
 
 Once you are happy with the changes, create a branch so you can commit the
@@ -166,9 +168,8 @@ git push origin <YOUR_BRANCH>
 
 ### Creating a Pull Request
 
-Follow
-[these instructions](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
-to create a Pull Request.
+See
+[Creating a Pull Request](#creating-a-pull-request) above for instructions.
 
 ## Releasing new versions (maintainers only)
 
