@@ -18,6 +18,7 @@ import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
 import { padColors, unsupportedHttpApiOptions } from '@theme/utils/avatar';
+import { getOptionDescription, getOptionExamples } from '@theme/utils/styleOptionMeta';
 import { styleColorsKey, styleColorsDefault, styleDefaultsKey, styleDefaultsDefault } from './styleOptionsKeys';
 
 export interface OptionValue {
@@ -123,30 +124,9 @@ const possibleValues = computed(() => {
 
 const examples = computed<(string | number | boolean)[] | undefined>(() => {
   if (skipPreview.value) return undefined;
+  if (isWeighted.value && fieldValues.value.length > 0) return undefined;
 
-  if (isWeighted.value && fieldValues.value.length > 0) {
-    return undefined;
-  }
-
-  if (props.name === 'backgroundColor') return colorExamples('background', 5);
-  if (props.name.match(/Color$/)) {
-    const colorName = props.name.slice(0, -'Color'.length);
-    return colorExamples(colorName);
-  }
-  if (props.name.match(/ColorFill$/)) return ['solid', 'linear', 'radial'];
-  if (props.name.match(/ColorFillStops$/)) return [2, 3, 4, 5];
-  if (props.name.match(/ColorAngle$/)) return [0, 90, 180, 270];
-  if (props.name === 'seed') return ['Felix', 'Aneka', 'Mia', 'James'];
-  if (props.name === 'flip') return ['none', 'horizontal', 'vertical', 'both'];
-  if (props.name === 'rotate') return [0, 90, 180, 270];
-  if (props.name === 'scale') return [0.5, 0.75, 1, 1.5];
-  if (props.name === 'borderRadius') return [0, 10, 25, 50];
-  if (props.name === 'size') return [32, 64, 96, 128];
-  if (props.name === 'translateX') return [-50, -25, 0, 25, 50];
-  if (props.name === 'translateY') return [-50, -25, 0, 25, 50];
-  if (props.name === 'fontWeight') return [100, 400, 700, 900];
-
-  return undefined;
+  return getOptionExamples(props.name, colorExamples);
 });
 
 // Prefer curated examples, fall back to possible values
@@ -184,29 +164,7 @@ const headerId = computed(() => {
   return `options-${props.name.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
 });
 
-const description = computed(() => {
-  const n = props.name;
-
-  if (n === 'seed') return 'The seed determines the initial value for the PRNG. With the same seed, the same avatar is generated every time.';
-  if (n === 'size') return 'Output size in pixels. If omitted, the avatar scales to 100% of its container.';
-  if (n === 'idRandomization') return 'Randomizes all SVG element IDs to avoid conflicts when embedding multiple avatars in the same page.';
-  if (n === 'title') return 'Accessible title for the SVG element. Useful for screen readers.';
-  if (n.match(/Probability$/)) return 'Probability that this component appears in the avatar.';
-  if (n.match(/Variant$/)) return 'The visual variant for this component. If multiple values are given, the PRNG picks one.';
-  if (n.match(/Color$/) && !n.match(/ColorFill/)) return 'Hex color value(s). If multiple values are given, the PRNG picks one.';
-  if (n.match(/ColorFill$/)) return 'Fill mode for the color gradient. Only visible when multiple color stops are used.';
-  if (n.match(/ColorFillStops$/)) return 'Number of color stops for gradient fills.';
-  if (n.match(/ColorAngle$/)) return 'Rotation angle for gradient fills in degrees.';
-  if (n === 'flip') return 'Mirror direction for the avatar.';
-  if (n === 'scale') return 'Scale factor. A value of 1 corresponds to the original size. As a range [min, max], the PRNG picks a value in between.';
-  if (n === 'borderRadius') return 'Corner radius as a percentage. 0 = sharp corners, 50 = full circle.';
-  if (n === 'rotate' || n.match(/Rotate$/)) return 'Rotation in degrees. As a range [min, max], the PRNG picks a value in between.';
-  if (n === 'translateX' || n === 'translateY' || n.match(/TranslateX$/) || n.match(/TranslateY$/)) return 'Translation as a percentage of the canvas size. As a range [min, max], the PRNG picks a value in between.';
-  if (n === 'fontFamily') return 'Font family for text elements within the avatar SVG.';
-  if (n === 'fontWeight') return 'Font weight for text elements within the avatar SVG.';
-
-  return undefined;
-});
+const description = computed(() => getOptionDescription(props.name));
 
 interface MetaItem { label: string; value: string }
 
