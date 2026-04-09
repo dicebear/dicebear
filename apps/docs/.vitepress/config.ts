@@ -21,17 +21,24 @@ async function fetchGitHubStars(
   repos: string[],
 ): Promise<Record<string, string>> {
   const result: Record<string, string> = {};
+  const TIMEOUT_MS = 5000;
 
   await Promise.all(
     repos.map(async (repo) => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
       try {
-        const res = await fetch(`https://api.github.com/repos/${repo}`);
+        const res = await fetch(`https://api.github.com/repos/${repo}`, {
+          signal: controller.signal,
+        });
         if (res.ok) {
           const data = await res.json();
           result[repo] = formatStars(data.stargazers_count);
         }
       } catch {
-        // Ignore fetch errors, fallback handled in components
+        // Ignore fetch/timeout errors, fallback handled in components
+      } finally {
+        clearTimeout(timer);
       }
     }),
   );
