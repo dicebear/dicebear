@@ -2,8 +2,9 @@
 import Slider from 'primevue/slider';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
-import { ArrowLeftRight, Weight } from '@lucide/vue';
+import { Weight } from '@lucide/vue';
 import { UiAvatar } from '../ui';
+import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import { useVariantWeights } from '@theme/composables/useVariantWeights';
@@ -55,7 +56,7 @@ function variantPreviewOptions(variant: string) {
   );
 }
 
-const { rangeMode, isRangeMode, toggleRangeMode, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);
+const { singleComputed } = useRangeField(store.avatarStyleOptions);
 
 const probability = singleComputed(`${props.componentName}Probability`, props.defaultProbability);
 
@@ -67,17 +68,9 @@ const defaultRotateFallback = props.defaultRotate.length === 1 ? props.defaultRo
 const defaultTranslateXFallback = props.defaultTranslateX.length === 1 ? props.defaultTranslateX[0] : 0;
 const defaultTranslateYFallback = props.defaultTranslateY.length === 1 ? props.defaultTranslateY[0] : 0;
 
-// Initialize range mode from defaults if they define a range
-if (props.defaultRotate.length === 2) rangeMode[rotateKey] = true;
-if (props.defaultTranslateX.length === 2) rangeMode[translateXKey] = true;
-if (props.defaultTranslateY.length === 2) rangeMode[translateYKey] = true;
-
-const rotateSingle = singleComputed(rotateKey, defaultRotateFallback);
-const rotateRange = rangeComputed(rotateKey, props.defaultRotate.length === 2 ? props.defaultRotate : defaultRotateFallback);
-const translateXSingle = singleComputed(translateXKey, defaultTranslateXFallback);
-const translateXRange = rangeComputed(translateXKey, props.defaultTranslateX.length === 2 ? props.defaultTranslateX : defaultTranslateXFallback);
-const translateYSingle = singleComputed(translateYKey, defaultTranslateYFallback);
-const translateYRange = rangeComputed(translateYKey, props.defaultTranslateY.length === 2 ? props.defaultTranslateY : defaultTranslateYFallback);
+const defaultRotateRange = props.defaultRotate.length === 2 ? props.defaultRotate : undefined;
+const defaultTranslateXRange = props.defaultTranslateX.length === 2 ? props.defaultTranslateX : undefined;
+const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defaultTranslateY : undefined;
 </script>
 
 <template>
@@ -141,62 +134,41 @@ const translateYRange = rangeComputed(translateYKey, props.defaultTranslateY.len
       <Slider v-model="probability" :min="0" :max="100" :step="1" />
     </div>
 
-    <div class="pg-field" v-if="hasRotate">
-      <div class="pg-field-label">
-        <span>Rotate</span>
-        <Button
-          size="small"
-          :severity="isRangeMode(rotateKey) ? 'primary' : 'secondary'"
-          v-tooltip="isRangeMode(rotateKey) ? 'Switch to fixed value' : 'Switch to range'"
-          @click="toggleRangeMode(rotateKey, 0)"
-          class="pg-field-toggle"
-        >
-          <ArrowLeftRight :size="14" />
-        </Button>
-        <span class="pg-field-value" v-if="isRangeMode(rotateKey)">{{ rotateRange[0] }}° — {{ rotateRange[1] }}°</span>
-        <span class="pg-field-value" v-else>{{ rotateSingle }}°</span>
-      </div>
-      <Slider v-if="isRangeMode(rotateKey)" v-model="rotateRange" :range="true" :min="-360" :max="360" :step="1" />
-      <Slider v-else v-model="rotateSingle" :min="-360" :max="360" :step="1" />
-    </div>
+    <PlaygroundRangeField
+      v-if="hasRotate"
+      label="Rotate"
+      :option-key="rotateKey"
+      :min="-360"
+      :max="360"
+      :step="1"
+      unit="°"
+      :default-single="defaultRotateFallback"
+      :default-range="defaultRotateRange"
+    />
 
-    <div class="pg-field" v-if="hasTranslateX">
-      <div class="pg-field-label">
-        <span>Translate X</span>
-        <Button
-          size="small"
-          :severity="isRangeMode(translateXKey) ? 'primary' : 'secondary'"
-          v-tooltip="isRangeMode(translateXKey) ? 'Switch to fixed value' : 'Switch to range'"
-          @click="toggleRangeMode(translateXKey, 0)"
-          class="pg-field-toggle"
-        >
-          <ArrowLeftRight :size="14" />
-        </Button>
-        <span class="pg-field-value" v-if="isRangeMode(translateXKey)">{{ translateXRange[0] }}% — {{ translateXRange[1] }}%</span>
-        <span class="pg-field-value" v-else>{{ translateXSingle }}%</span>
-      </div>
-      <Slider v-if="isRangeMode(translateXKey)" v-model="translateXRange" :range="true" :min="-100" :max="100" :step="1" />
-      <Slider v-else v-model="translateXSingle" :min="-100" :max="100" :step="1" />
-    </div>
+    <PlaygroundRangeField
+      v-if="hasTranslateX"
+      label="Translate X"
+      :option-key="translateXKey"
+      :min="-100"
+      :max="100"
+      :step="1"
+      unit="%"
+      :default-single="defaultTranslateXFallback"
+      :default-range="defaultTranslateXRange"
+    />
 
-    <div class="pg-field" v-if="hasTranslateY">
-      <div class="pg-field-label">
-        <span>Translate Y</span>
-        <Button
-          size="small"
-          :severity="isRangeMode(translateYKey) ? 'primary' : 'secondary'"
-          v-tooltip="isRangeMode(translateYKey) ? 'Switch to fixed value' : 'Switch to range'"
-          @click="toggleRangeMode(translateYKey, 0)"
-          class="pg-field-toggle"
-        >
-          <ArrowLeftRight :size="14" />
-        </Button>
-        <span class="pg-field-value" v-if="isRangeMode(translateYKey)">{{ translateYRange[0] }}% — {{ translateYRange[1] }}%</span>
-        <span class="pg-field-value" v-else>{{ translateYSingle }}%</span>
-      </div>
-      <Slider v-if="isRangeMode(translateYKey)" v-model="translateYRange" :range="true" :min="-100" :max="100" :step="1" />
-      <Slider v-else v-model="translateYSingle" :min="-100" :max="100" :step="1" />
-    </div>
+    <PlaygroundRangeField
+      v-if="hasTranslateY"
+      label="Translate Y"
+      :option-key="translateYKey"
+      :min="-100"
+      :max="100"
+      :step="1"
+      unit="%"
+      :default-single="defaultTranslateYFallback"
+      :default-range="defaultTranslateYRange"
+    />
   </div>
 </template>
 
