@@ -6,6 +6,7 @@ import { UiAvatar, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, U
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList, useAvatarStyleMeta } from '../../composables/avatar';
 import { formatLicenseName } from '../../utils/format';
+import { safeHttpUrl } from '../../utils/url';
 import AppSeedDemoCode from './AppSeedDemoCode.vue';
 import AppSeedDemoStylePicker from './AppSeedDemoStylePicker.vue';
 
@@ -49,6 +50,10 @@ function onSeedInput(event: Event) {
 const mainAvatarLink = computed(() =>
   `https://api.dicebear.com/10.x/${currentStyle.value}/svg?seed=${encodeURIComponent(seed.value)}`
 );
+
+const sourceUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.source));
+const homepageUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.homepage));
+const licenseUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.license?.url));
 
 const allStyleAvatars = computed(() =>
   avatarStyleList.value.map((style, index) => ({
@@ -150,11 +155,14 @@ function selectStyle(index: number) {
               is a remix of
             </template>
             <template v-else> is based on </template>
-            <a :href="avatarStyleMeta?.source" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.title ?? 'Design' }}</a>
+            <a v-if="sourceUrl" :href="sourceUrl" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.title ?? 'Design' }}</a>
+            <template v-else>{{ avatarStyleMeta?.title ?? 'Design' }}</template>
           </template>
           by
-          <a :href="avatarStyleMeta?.homepage" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.creator }}</a>, licensed under
-          <a :href="avatarStyleMeta?.license?.url" target="_blank" rel="noopener noreferrer">{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</a>.
+          <a v-if="homepageUrl" :href="homepageUrl" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.creator }}</a>
+          <template v-else>{{ avatarStyleMeta?.creator }}</template>, licensed under
+          <a v-if="licenseUrl" :href="licenseUrl" target="_blank" rel="noopener noreferrer">{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</a>
+          <template v-else>{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</template>.
         </p>
       </div>
 

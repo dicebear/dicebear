@@ -2,6 +2,7 @@
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
 import { kebabCase } from 'change-case';
+import { safeHttpUrl } from '@theme/utils/url';
 
 const { theme } = useData<ThemeOptions>();
 const styles = theme.value.avatarStyles;
@@ -34,13 +35,15 @@ const styles = theme.value.avatarStyles;
       <tr v-if="style.meta.source">
         <td>Source</td>
         <td>
-          <a :href="style.meta.source" target="_blank" rel="noopener noreferrer">{{ style.meta.source }}</a>
+          <a v-if="safeHttpUrl(style.meta.source)" :href="safeHttpUrl(style.meta.source)" target="_blank" rel="noopener noreferrer">{{ style.meta.source }}</a>
+          <template v-else>{{ style.meta.source }}</template>
         </td>
       </tr>
       <tr v-if="style.meta.homepage">
         <td>Homepage</td>
         <td>
-          <a :href="style.meta.homepage" target="_blank" rel="noopener noreferrer">{{ style.meta.homepage }}</a>
+          <a v-if="safeHttpUrl(style.meta.homepage)" :href="safeHttpUrl(style.meta.homepage)" target="_blank" rel="noopener noreferrer">{{ style.meta.homepage }}</a>
+          <template v-else>{{ style.meta.homepage }}</template>
         </td>
       </tr>
       <tr v-if="style.meta.license?.name">
@@ -50,9 +53,10 @@ const styles = theme.value.avatarStyles;
       <tr v-if="style.meta.license?.url">
         <td>License URL</td>
         <td>
-          <a :href="style.meta.license?.url" target="_blank" rel="noopener noreferrer">{{
+          <a v-if="safeHttpUrl(style.meta.license?.url)" :href="safeHttpUrl(style.meta.license?.url)" target="_blank" rel="noopener noreferrer">{{
             style.meta.license?.url
           }}</a>
+          <template v-else>{{ style.meta.license?.url }}</template>
         </td>
       </tr>
     </tbody>

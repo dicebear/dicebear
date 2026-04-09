@@ -6,6 +6,7 @@ import { siGithub, siFigma } from 'simple-icons';
 import { UiIcon } from '../ui';
 import type { AvatarStyleMeta, ThemeOptions } from '@theme/types';
 import { productLinks as exploreLinks, resourceLinks, legalLinks } from '../../config/footer-links';
+import { safeHttpUrl } from '@theme/utils/url';
 
 const { theme } = useData<ThemeOptions>();
 const { hasSidebar } = useLayout();
@@ -169,13 +170,15 @@ const styles = computed(() => {
         <div class="layout-footer-bottom-inner">
           <p class="layout-footer-attributions">
             <template v-for="(style, index) in styles" :key="style.source">
-              <a class="layout-footer-attribution-link" :href="style.source" target="_blank" rel="noopener">{{
+              <a v-if="safeHttpUrl(style.source)" class="layout-footer-attribution-link" :href="safeHttpUrl(style.source)" target="_blank" rel="noopener">{{
                 style.title
               }}</a>
+              <template v-else>{{ style.title }}</template>
               by {{ style.creator }} /
-              <a class="layout-footer-attribution-link" :href="style.license?.url" target="_blank" rel="noopener">{{
+              <a v-if="safeHttpUrl(style.license?.url)" class="layout-footer-attribution-link" :href="safeHttpUrl(style.license?.url)" target="_blank" rel="noopener">{{
                 style.license?.name
-              }}</a><template v-if="index < styles.length - 1">. </template>
+              }}</a>
+              <template v-else>{{ style.license?.name }}</template><template v-if="index < styles.length - 1">. </template>
             </template>
             — All avatars are remixes of the original works.
           </p>

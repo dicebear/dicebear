@@ -4,6 +4,7 @@ import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
 import { kebabCase } from 'change-case';
 import { formatLicenseName } from '@theme/utils/format';
+import { safeHttpUrl } from '@theme/utils/url';
 
 const { theme } = useData<ThemeOptions>();
 const props = defineProps<{
@@ -17,6 +18,10 @@ const style = computed(() => {
 const playgroundUrl = computed(() => {
   return `/playground?style=${kebabCase(props.styleName)}`;
 });
+
+const sourceUrl = computed(() => safeHttpUrl(style.value.meta?.source));
+const homepageUrl = computed(() => safeHttpUrl(style.value.meta?.homepage));
+const licenseUrl = computed(() => safeHttpUrl(style.value.meta?.license?.url));
 </script>
 
 <template>
@@ -27,20 +32,22 @@ const playgroundUrl = computed(() => {
       </template>
       <template v-else> This avatar style is based on: </template>
     </template>
-    <a :href="style.meta?.source" target="_blank" rel="noopener noreferrer">
+    <a v-if="sourceUrl" :href="sourceUrl" target="_blank" rel="noopener noreferrer">
       {{ style.meta?.title ?? 'Design' }}
     </a>
+    <template v-else>{{ style.meta?.title ?? 'Design' }}</template>
     by
-    <a :href="style.meta?.homepage" target="_blank" rel="noopener noreferrer">
-      {{ style.meta?.creator }} </a
-    >, licensed under
+    <a v-if="homepageUrl" :href="homepageUrl" target="_blank" rel="noopener noreferrer">{{ style.meta?.creator }}</a>
+    <template v-else>{{ style.meta?.creator }}</template>, licensed under
     <a
-      :href="style.meta?.license?.url"
+      v-if="licenseUrl"
+      :href="licenseUrl"
       target="_blank"
       rel="noopener noreferrer"
     >
       {{ formatLicenseName(style.meta?.license?.name) }}
     </a>
+    <template v-else>{{ formatLicenseName(style.meta?.license?.name) }}</template>
     .
   </p>
 
@@ -50,11 +57,13 @@ const playgroundUrl = computed(() => {
       While our code is MIT licensed, the design of this avatar style is
       licensed under
       <a
-        :href="style.meta.license?.url"
+        v-if="licenseUrl"
+        :href="licenseUrl"
         target="_blank"
         rel="noopener noreferrer"
         >{{ formatLicenseName(style.meta.license?.name) }}</a
-      >. See <a href="#details">details</a> for more information.
+      >
+      <template v-else>{{ formatLicenseName(style.meta.license?.name) }}</template>. See <a href="#details">details</a> for more information.
     </p>
   </div>
 
