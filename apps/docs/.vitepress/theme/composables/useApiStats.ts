@@ -55,29 +55,25 @@ async function doFetch() {
       monthlyTraffic: traffic.total,
       monthLabel: requests.label,
     };
-  } catch {
-    // silently fail
+  } catch (err) {
+    console.warn('[useApiStats] Failed to fetch stats:', err);
   } finally {
     fetching = null;
   }
 }
 
-function ensureFetched() {
-  onMounted(() => {
-    if (!cached.value && !fetching) {
-      fetching = doFetch();
-    }
-  });
-}
-
 export function useApiStats() {
-  ensureFetched();
+  onMounted(() => {
+    if (!cached.value && !fetching) fetching = doFetch();
+  });
 
   return cached;
 }
 
 export function useApiStatsRaw() {
-  ensureFetched();
+  onMounted(() => {
+    if (!cached.value && !fetching) fetching = doFetch();
+  });
 
   return rawData;
 }

@@ -1,18 +1,12 @@
-import { ref, watch } from 'vue';
+import { computed } from 'vue';
 import { useData } from 'vitepress';
-
-const chartKey = ref(0);
-let watcherSet = false;
 
 export function useChartTheme() {
   const { isDark } = useData();
 
-  if (!watcherSet) {
-    watcherSet = true;
-    watch(isDark, () => {
-      chartKey.value++;
-    });
-  }
+  // Flips when the theme toggles; chart components bind it as `:key` to force a
+  // Chart.js remount so new theme colors take effect.
+  const chartKey = computed(() => (isDark.value ? 1 : 0));
 
   function tooltipConfig() {
     return {
