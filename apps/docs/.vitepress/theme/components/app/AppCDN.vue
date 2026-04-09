@@ -29,9 +29,10 @@ const stats = computed(() => [
       <UiSectionHeader
         class="app-cdn-header"
         badge="Content Delivery Network"
-        headline="Lightning fast, <strong>globally delivered</strong>"
         description="Our HTTP-API is powered by a global CDN — delivering avatars with low latency, high reliability, and completely free of charge."
-      />
+      >
+        <template #headline>Lightning fast, <strong>globally delivered</strong></template>
+      </UiSectionHeader>
 
       <div class="app-cdn-content">
         <UiCard padding="xl" radius="lg" class="app-cdn-card">

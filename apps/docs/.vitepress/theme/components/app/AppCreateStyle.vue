@@ -34,9 +34,10 @@ const steps = [
       <UiSectionHeader
         badge="For Artists"
         badge-variant="green"
-        headline="Create Your Own Style<br /><strong>with Figma</strong>"
         description="Design your avatar style visually in Figma. Our plugin handles the technical export – no coding required."
-      />
+      >
+        <template #headline>Create Your Own Style<br /><strong>with Figma</strong></template>
+      </UiSectionHeader>
 
       <div class="app-create-style-grid">
         <div class="app-create-style-content">

@@ -152,9 +152,10 @@ onUnmounted(() => {
     <UiContainer class="app-style-showcase-header">
       <UiSectionHeader
         badge="Explore the Collection"
-        headline="<strong>30+</strong> Unique Avatar Styles"
         description="From cute characters to abstract patterns, pixel art to professional illustrations. Our avatar library features styles crafted by talented artists and designers."
-      />
+      >
+        <template #headline><strong>30+</strong> Unique Avatar Styles</template>
+      </UiSectionHeader>
     </UiContainer>
 
     <div class="app-style-showcase-outer">

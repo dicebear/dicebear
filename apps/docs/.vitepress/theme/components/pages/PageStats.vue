@@ -113,11 +113,9 @@ const monthlyStats = computed(() => {
 </script>
 
 <template>
-  <AppSmallHero
-    badge="Statistics"
-    headline="Billions of Avatars.<br><strong>One API.</strong>"
-    description="Every avatar generated through our HTTP-API is tracked anonymously. This page gives you a transparent look at real usage data &mdash; updated daily, broken down by requests, traffic, styles, and more."
-  >
+  <AppSmallHero badge="Statistics">
+    <template #headline>Billions of Avatars.<br><strong>One API.</strong></template>
+    <template #description>Every avatar generated through our HTTP-API is tracked anonymously. This page gives you a transparent look at real usage data — updated daily, broken down by requests, traffic, styles, and more.</template>
     <template #actions><!-- no actions --></template>
     <template #below-actions>
       <div v-if="monthlyStats" class="page-stats-hero-kpis">
@@ -162,9 +160,10 @@ const monthlyStats = computed(() => {
     <UiContainer>
       <UiSectionHeader
         badge="Daily Trends"
-        headline="Usage Over <strong>Time</strong>"
         description="Daily request and download volumes — toggle between the HTTP API and npm packages."
-      />
+      >
+        <template #headline>Usage Over <strong>Time</strong></template>
+      </UiSectionHeader>
 
       <div class="page-stats-tabs">
         <button
@@ -215,9 +214,10 @@ const monthlyStats = computed(() => {
     <UiContainer>
       <UiSectionHeader
         badge="Breakdown"
-        headline="Usage <strong>Details</strong>"
         description="Based on API request data — which styles, versions, and output formats are used most."
-      />
+      >
+        <template #headline>Usage <strong>Details</strong></template>
+      </UiSectionHeader>
 
       <ClientOnly>
         <UiCard v-if="stylesData" class="page-stats-styles-card">

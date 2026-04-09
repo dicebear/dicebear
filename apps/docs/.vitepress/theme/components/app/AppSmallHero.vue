@@ -4,14 +4,14 @@ import { Play, ArrowRight } from '@lucide/vue';
 import { UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   badge?: string;
   headline?: string;
   description?: string;
 }>(), {
   badge: 'Why DiceBear?',
-  headline: 'Avatars That <strong>Stand Out</strong>',
-  description: 'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art &mdash; our privacy-focused SVG avatar library with 30+ styles brings your projects to life.',
+  headline: 'Avatars That Stand Out',
+  description: 'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art — our privacy-focused SVG avatar library with 30+ styles brings your projects to life.',
 });
 
 const sectionRef = ref();
@@ -31,8 +31,12 @@ const hasActions = computed(() => !!slots.actions);
       <div :class="{ 'app-small-hero-layout': hasAside }">
         <div>
           <UiBadge>{{ badge }}</UiBadge>
-          <UiHeadline tag="h1"><span v-html="headline" /></UiHeadline>
-          <UiDescription class="app-small-hero-description" v-html="description" />
+          <UiHeadline tag="h1">
+            <slot name="headline">{{ headline }}</slot>
+          </UiHeadline>
+          <UiDescription class="app-small-hero-description">
+            <slot name="description">{{ description }}</slot>
+          </UiDescription>
 
           <div v-if="hasActions" class="app-small-hero-actions">
             <slot name="actions" />

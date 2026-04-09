@@ -16,7 +16,9 @@ import AppCTA from '../app/AppCTA.vue';
       <AppHeroAsideUserList />
     </template>
   </AppSmallHero>
-  <AppHighlights badge="Features" headline="Everything You <strong>Need</strong>" />
+  <AppHighlights badge="Features">
+    <template #headline>Everything You <strong>Need</strong></template>
+  </AppHighlights>
   <AppIntegration />
   <AppFrameworks />
   <AppCDN />

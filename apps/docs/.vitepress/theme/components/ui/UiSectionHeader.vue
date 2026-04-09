@@ -6,7 +6,7 @@ import UiDescription from './UiDescription.vue';
 defineProps<{
   badge?: string;
   badgeVariant?: 'brand' | 'green' | 'orange';
-  headline: string;
+  headline?: string;
   description?: string;
   tag?: 'h1' | 'h2' | 'h3';
 }>();
@@ -19,9 +19,11 @@ defineProps<{
       {{ badge }}
     </UiBadge>
     <UiHeadline :tag="tag">
-      <span v-html="headline" />
+      <slot name="headline">{{ headline }}</slot>
     </UiHeadline>
-    <UiDescription v-if="description">{{ description }}</UiDescription>
+    <UiDescription v-if="$slots.description || description">
+      <slot name="description">{{ description }}</slot>
+    </UiDescription>
     <slot name="after-description" />
   </div>
 </template>

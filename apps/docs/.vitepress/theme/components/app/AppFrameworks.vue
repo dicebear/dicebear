@@ -24,9 +24,10 @@ const frameworks = [
     <UiContainer class="app-frameworks-container">
       <UiSectionHeader
         badge="Framework Support"
-        headline="Works with Your <strong>Favorite</strong> Framework"
         description="Use DiceBear with React, Vue, Svelte, Angular and more. Simply use our HTTP-API as image source or install the JS-library."
-      />
+      >
+        <template #headline>Works with Your <strong>Favorite</strong> Framework</template>
+      </UiSectionHeader>
 
       <div class="app-frameworks-grid">
         <a

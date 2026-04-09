@@ -30,9 +30,10 @@ const svg = new Avatar(style, {
       <UiSectionHeader
         class="app-integration-header"
         badge="Easy to Use"
-        headline="Integrate in <strong>Minutes</strong>"
         description="Choose the integration that works best for your project."
-      />
+      >
+        <template #headline>Integrate in <strong>Minutes</strong></template>
+      </UiSectionHeader>
 
       <!-- JS Library - Featured / Full Width -->
       <div class="app-integration-featured app-integration-item" :style="{ animationDelay: '0s' }">

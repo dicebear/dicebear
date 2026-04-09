@@ -138,9 +138,10 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
       <UiSectionHeader
         class="app-comparison-header"
         badge="Comparison"
-        headline="How DiceBear <strong>Compares</strong>"
         description="Every tool has its strengths. Choose what works best for your project."
-      />
+      >
+        <template #headline>How DiceBear <strong>Compares</strong></template>
+      </UiSectionHeader>
 
       <UiCard padding="md" radius="lg" class="app-comparison-table-card">
         <div class="app-comparison-table-wrapper">

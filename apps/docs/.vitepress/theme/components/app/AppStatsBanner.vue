@@ -47,9 +47,10 @@ const metrics = computed(() => [
       <UiSectionHeader
         class="app-stats-banner-header"
         badge="Trusted at Scale"
-        headline="Billions of avatars. <strong>One API.</strong>"
         description="Real usage data from our HTTP-API and npm packages — updated daily."
-      />
+      >
+        <template #headline>Billions of avatars. <strong>One API.</strong></template>
+      </UiSectionHeader>
 
       <div class="app-stats-banner-grid">
         <UiCard

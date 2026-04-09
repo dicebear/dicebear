@@ -11,7 +11,7 @@ withDefaults(defineProps<{
   description?: string;
 }>(), {
   badge: 'Why DiceBear?',
-  headline: 'Built for <strong>Developers</strong>, Loved by Users',
+  headline: 'Built for Developers, Loved by Users',
   description: 'Everything you need to create beautiful, unique avatars for your applications.',
 });
 
@@ -67,9 +67,12 @@ const highlights = [
       <UiSectionHeader
         class="app-highlights-header"
         :badge="badge"
-        :headline="headline"
         :description="description"
-      />
+      >
+        <template #headline>
+          <slot name="headline">{{ headline }}</slot>
+        </template>
+      </UiSectionHeader>
 
       <div class="app-highlights-grid">
         <UiCard

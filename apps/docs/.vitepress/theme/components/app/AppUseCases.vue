@@ -69,9 +69,10 @@ const useCases = [
       <UiSectionHeader
         class="app-use-cases-header"
         badge="Use Cases"
-        headline="Built for <strong>Every</strong> Application"
         description="From startups to enterprises, DiceBear powers random user avatars across all kinds of products."
-      />
+      >
+        <template #headline>Built for <strong>Every</strong> Application</template>
+      </UiSectionHeader>
 
       <div class="app-use-cases-grid">
         <UiCard
