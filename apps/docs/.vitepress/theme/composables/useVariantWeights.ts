@@ -11,7 +11,6 @@ import type { PlaygroundStoreOptions } from '@theme/types';
  *
  * Storage formats in `avatarStyleOptions[<componentName>Variant]`:
  * - undefined → use the style's default weights
- * - string    → a single variant name (legacy single-pick form)
  * - string[]  → list of active variants, each implicitly weight 1
  * - object    → { variant: weight } map (when showWeights is on)
  *
@@ -67,10 +66,6 @@ export function useVariantWeights(
         return Object.fromEntries(
           currentVariants.map((v) => [v, v in obj ? obj[v] : undefined]),
         );
-      }
-
-      if (typeof val === 'string') {
-        return Object.fromEntries(currentVariants.map((v) => [v, v === val ? 1 : undefined]));
       }
 
       return Object.fromEntries(currentVariants.map((v) => [v, 1]));
