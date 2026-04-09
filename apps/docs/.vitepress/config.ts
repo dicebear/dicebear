@@ -5,17 +5,7 @@ import { ThemeOptions } from '@theme/types';
 import sidebarDocs from './config/sidebarDocs';
 import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
-
-
-function formatStars(count: number): string {
-  if (count >= 1000) {
-    const k = Math.floor((count / 1000) * 10) / 10;
-
-    return `${k}k+`;
-  }
-
-  return `${count}+`;
-}
+import { formatStars } from './theme/utils/format';
 
 async function fetchGitHubStars(
   repos: string[],
@@ -35,8 +25,11 @@ async function fetchGitHubStars(
           const data = await res.json();
           result[repo] = formatStars(data.stargazers_count);
         }
-      } catch {
-        // Ignore fetch/timeout errors, fallback handled in components
+      } catch (err) {
+        console.warn(
+          `[github-stars] failed for ${repo}:`,
+          err instanceof Error ? err.message : err,
+        );
       } finally {
         clearTimeout(timer);
       }

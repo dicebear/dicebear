@@ -18,3 +18,13 @@ export function formatBytes(bytes: number): string {
 
   return `${bytes}`;
 }
+
+export function formatStars(count: number): string {
+  if (count >= 1000) {
+    const k = Math.floor((count / 1000) * 10) / 10;
+
+    return `${k}k+`;
+  }
+
+  return `${count}+`;
+}
