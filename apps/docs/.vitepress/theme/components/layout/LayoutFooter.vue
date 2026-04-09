@@ -11,6 +11,12 @@ import { safeHttpUrl } from '@theme/utils/url';
 const { theme } = useData<ThemeOptions>();
 const { hasSidebar } = useLayout();
 
+const linkColumns = [
+  { title: 'Explore', links: exploreLinks },
+  { title: 'Resources', links: resourceLinks },
+  { title: 'Legal', links: legalLinks },
+] as const;
+
 const styles = computed(() => {
   const result: AvatarStyleMeta[] = [];
   const knownWork: string[] = [];
@@ -87,42 +93,10 @@ const styles = computed(() => {
 
         <!-- Link columns -->
         <div class="layout-footer-links">
-          <div class="layout-footer-column">
-            <h3 class="layout-footer-column-title">Explore</h3>
+          <div v-for="column in linkColumns" :key="column.title" class="layout-footer-column">
+            <h3 class="layout-footer-column-title">{{ column.title }}</h3>
             <ul class="layout-footer-column-list">
-              <li v-for="link in exploreLinks" :key="link.label">
-                <a
-                  :href="link.href"
-                  :target="link.external ? '_blank' : undefined"
-                  :rel="link.external ? 'noopener noreferrer' : undefined"
-                  class="layout-footer-link"
-                >
-                  {{ link.label }}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="layout-footer-column">
-            <h3 class="layout-footer-column-title">Resources</h3>
-            <ul class="layout-footer-column-list">
-              <li v-for="link in resourceLinks" :key="link.label">
-                <a
-                  :href="link.href"
-                  :target="link.external ? '_blank' : undefined"
-                  :rel="link.external ? 'noopener noreferrer' : undefined"
-                  class="layout-footer-link"
-                >
-                  {{ link.label }}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="layout-footer-column">
-            <h3 class="layout-footer-column-title">Legal</h3>
-            <ul class="layout-footer-column-list">
-              <li v-for="link in legalLinks" :key="link.label">
+              <li v-for="link in column.links" :key="link.label">
                 <a
                   :href="link.href"
                   :target="link.external ? '_blank' : undefined"
