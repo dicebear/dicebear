@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useData } from 'vitepress';
 import { useVisibility } from '@theme/composables/useVisibility';
+import { buildLandPoints, createPreloadBuffer, type PreloadBuffer } from '@theme/utils/globeLandPoints';
 
 const props = defineProps<{
   rate: number;
@@ -33,93 +34,21 @@ let eventId = 0;
 const elementMap = new Map<number, HTMLElement>();
 const pendingTimeouts: ReturnType<typeof setTimeout>[] = [];
 
-const preloadedUrls: string[] = [];
-const PRELOAD_BUFFER = 6;
+const LAND_POINT_FALLBACK: [number, number][] = [
+  [48.86, 2.35], [40.71, -74.01], [35.68, 139.65], [51.51, -0.13],
+  [-33.87, 151.21], [-23.55, -46.63], [37.76, -122.44], [1.35, 103.82],
+  [52.52, 13.41], [28.61, 77.21], [39.90, 116.41], [-1.29, 36.82],
+  [19.43, -99.13], [25.20, 55.27], [41.01, 28.98], [22.32, 114.17],
+  [34.05, -118.24], [55.76, 37.62], [-34.60, -58.38], [59.33, 18.07],
+];
+
+let landPoints: [number, number][] = [];
+let preloadBuffer: PreloadBuffer | null = null;
 
 function generateAvatarUrl() {
   const style = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
   const seed = Math.random().toString(36).slice(2, 8);
   return `${apiBase}/${style}/svg?seed=${seed}&size=64`;
-}
-
-function preloadAvatar(url: string) {
-  const img = new Image();
-  img.src = url;
-}
-
-function fillPreloadBuffer() {
-  while (preloadedUrls.length < PRELOAD_BUFFER) {
-    const url = generateAvatarUrl();
-    preloadedUrls.push(url);
-    preloadAvatar(url);
-  }
-}
-
-function getPreloadedUrl(): string {
-  if (preloadedUrls.length > 0) {
-    const url = preloadedUrls.shift()!;
-    const newUrl = generateAvatarUrl();
-    preloadedUrls.push(newUrl);
-    preloadAvatar(newUrl);
-    return url;
-  }
-  return generateAvatarUrl();
-}
-
-// Pre-computed land points sampled from GeoJSON on first load
-let landPoints: [number, number][] = [];
-
-function buildLandPoints() {
-  if (landPoints.length > 0 || !countriesGeoJson) return;
-  for (const feature of countriesGeoJson.features) {
-    const polygons = feature.geometry.type === 'MultiPolygon'
-      ? feature.geometry.coordinates
-      : [feature.geometry.coordinates];
-    for (const poly of polygons) {
-      const ring = poly[0]; // outer ring
-      if (!ring || ring.length < 3) continue;
-      // Compute bounding box
-      let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity;
-      for (const [lng, lat] of ring) {
-        if (lng < minLng) minLng = lng;
-        if (lng > maxLng) maxLng = lng;
-        if (lat < minLat) minLat = lat;
-        if (lat > maxLat) maxLat = lat;
-      }
-      // Sample points within the bounding box
-      const area = (maxLng - minLng) * (maxLat - minLat);
-      const samples = Math.max(2, Math.floor(area / 50));
-      for (let i = 0; i < samples; i++) {
-        const lng = minLng + Math.random() * (maxLng - minLng);
-        const lat = minLat + Math.random() * (maxLat - minLat);
-        if (pointInPolygon(lng, lat, ring)) {
-          landPoints.push([lat, lng]);
-        }
-      }
-    }
-  }
-  // Fallback if sampling yielded too few points
-  if (landPoints.length < 20) {
-    landPoints = [
-      [48.86, 2.35], [40.71, -74.01], [35.68, 139.65], [51.51, -0.13],
-      [-33.87, 151.21], [-23.55, -46.63], [37.76, -122.44], [1.35, 103.82],
-      [52.52, 13.41], [28.61, 77.21], [39.90, 116.41], [-1.29, 36.82],
-      [19.43, -99.13], [25.20, 55.27], [41.01, 28.98], [22.32, 114.17],
-      [34.05, -118.24], [55.76, 37.62], [-34.60, -58.38], [59.33, 18.07],
-    ];
-  }
-}
-
-function pointInPolygon(x: number, y: number, ring: number[][]): boolean {
-  let inside = false;
-  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const xi = ring[i][0], yi = ring[i][1];
-    const xj = ring[j][0], yj = ring[j][1];
-    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
-      inside = !inside;
-    }
-  }
-  return inside;
 }
 
 const MIN_DISTANCE_DEG = 12;
@@ -151,7 +80,7 @@ function syncGlobe() {
 
 function addEvent() {
   const city = pickLandPoint();
-  const url = getPreloadedUrl();
+  const url = preloadBuffer ? preloadBuffer.getPreloadedUrl() : generateAvatarUrl();
 
   const ev: GlobeEvent = {
     id: eventId++,
@@ -184,12 +113,21 @@ function createAvatarElement(d: any) {
 
   const inner = document.createElement('div');
   inner.className = 'app-stats-globe-bubble';
-  inner.innerHTML = `
-    <span class="app-stats-globe-bubble-ring"></span>
-    <span class="app-stats-globe-bubble-disc">
-      <img src="${d.url}" alt="" class="app-stats-globe-bubble-img" />
-    </span>
-  `;
+
+  const ring = document.createElement('span');
+  ring.className = 'app-stats-globe-bubble-ring';
+
+  const disc = document.createElement('span');
+  disc.className = 'app-stats-globe-bubble-disc';
+
+  const img = document.createElement('img');
+  img.src = d.url;
+  img.alt = '';
+  img.className = 'app-stats-globe-bubble-img';
+  disc.appendChild(img);
+
+  inner.appendChild(ring);
+  inner.appendChild(disc);
   outer.appendChild(inner);
   elementMap.set(d.id, inner);
 
@@ -264,7 +202,9 @@ async function initGlobe() {
     } catch { /* ignore */ }
   }
 
-  buildLandPoints();
+  if (landPoints.length === 0) {
+    landPoints = buildLandPoints(countriesGeoJson, LAND_POINT_FALLBACK);
+  }
 
   if (countriesGeoJson) {
     globe
@@ -377,7 +317,7 @@ function stopRotation() {
 }
 
 onMounted(async () => {
-  fillPreloadBuffer();
+  preloadBuffer = createPreloadBuffer(generateAvatarUrl);
   await initGlobe();
 
   if (isVisible.value) {
@@ -404,7 +344,7 @@ onUnmounted(() => {
   events = [];
   eventId = 0;
   elementMap.clear();
-  preloadedUrls.length = 0;
+  preloadBuffer = null;
   if (globe) { globe._destructor(); globe = null; }
   if (resizeObserver) { resizeObserver.disconnect(); resizeObserver = null; }
 });
