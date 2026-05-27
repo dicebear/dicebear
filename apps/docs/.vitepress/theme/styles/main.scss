@@ -81,6 +81,26 @@ h6,
   display: none !important;
 }
 
+/* Version banner — push fixed VitePress layout elements down */
+:root {
+  --vp-layout-top-height: 40px;
+}
+
+.VPNav {
+  top: var(--vp-layout-top-height);
+}
+
+.VPLocalNav,
+.VPSidebar {
+  top: calc(var(--vp-nav-height) + var(--vp-layout-top-height)) !important;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --vp-layout-top-height: 56px;
+  }
+}
+
 .VPLink:not(.no-icon),
 .VPButton:not(.no-icon) {
   $styles: (

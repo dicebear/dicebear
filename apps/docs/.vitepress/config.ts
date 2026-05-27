@@ -190,6 +190,10 @@ export default defineConfig<ThemeOptions>({
       { text: 'Playground', link: '/playground/', activeMatch: '^/playground' },
       { text: 'Stats', link: '/stats/', activeMatch: '^/stats' },
       { text: 'Editor', link: 'https://editor.dicebear.com' },
+      {
+        text: '9.x',
+        items: [{ text: '10.x', link: 'https://www.dicebear.com' }],
+      },
     ],
     outline: [2, 2],
     socialLinks: [],

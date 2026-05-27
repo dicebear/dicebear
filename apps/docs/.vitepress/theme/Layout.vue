@@ -5,6 +5,7 @@ import { withBase } from 'vitepress';
 import LayoutFooter from './components/layout/LayoutFooter.vue';
 import LayoutNavActions from './components/layout/LayoutNavActions.vue';
 import LayoutSidebarBefore from './components/layout/LayoutSidebarBefore.vue';
+import LayoutVersionBanner from './components/layout/LayoutVersionBanner.vue';
 import './styles/main.scss';
 
 const { Layout } = DefaultTheme;
@@ -26,6 +27,9 @@ const sponsors = [
 
 <template>
   <Layout>
+    <template #layout-top>
+      <LayoutVersionBanner />
+    </template>
     <template #nav-bar-content-after>
       <LayoutNavActions />
     </template>
