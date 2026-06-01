@@ -16,6 +16,7 @@ import { Avatar } from '../lib/index.js';
 import { Prng } from '../lib/Prng.js';
 import { Fnv1a } from '../lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../lib/Prng/Mulberry32.js';
+import { Number } from '../lib/Utils/Number.js';
 
 const fixturesDir = join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity');
 
@@ -104,6 +105,16 @@ describe('Parity / Prng', () => {
       });
     }
   });
+});
+
+describe('Parity / Numbers', () => {
+  // The renderer formats every numeric attribute via Number.format (rounded to
+  // 5 decimals); this pins that contract so the PHP/Python ports stay identical.
+  for (const entry of loadFixture('numbers.json')) {
+    it(`formats ${entry.output}`, () => {
+      assert.equal(Number.format(entry.input), entry.output);
+    });
+  }
 });
 
 describe('Parity / Avatar', () => {

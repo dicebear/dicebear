@@ -13,6 +13,7 @@ import { Avatar } from '../../../src/js/core/lib/index.js';
 import { Prng } from '../../../src/js/core/lib/Prng.js';
 import { Fnv1a } from '../../../src/js/core/lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../../../src/js/core/lib/Prng/Mulberry32.js';
+import { Number } from '../../../src/js/core/lib/Utils/Number.js';
 
 const definitionsDir = join(
   import.meta.dirname,
@@ -246,6 +247,34 @@ for (const c of shuffleCases) {
 }
 
 writeJson('prng.json', prngFixtures);
+
+// ---------------------------------------------------------------------------
+// Number formatting fixtures
+// ---------------------------------------------------------------------------
+//
+// The renderer stringifies every numeric SVG attribute via `Number.format`,
+// which rounds to at most 5 decimal places. PHP's native float cast and
+// Python's `repr` would diverge from JS for small/large magnitudes, so each
+// port reimplements it (`DiceBear\Utils\Number::format`,
+// `dicebear._numbers.num`) and must reproduce it byte-for-byte. These cases pin
+// that contract — covering integers, plain decimals, values that round at the
+// 5th decimal, and tiny values that round down to 0.
+
+console.log('Generating numbers.json…');
+
+const numberInputs = [
+  0, 1, -1, 100, -50, 4096, 1000000,
+  0.5, 1.5, -1.5, 2.5, 0.1, 0.3, 12.34, 123.456, -148.722, 9999.9999,
+  0.00001, 0.00005, 0.0001, 0.000005, 0.0000005, 0.0000123456,
+  4.567872, 0.123456, 1.999995, 1.999994, 0.123455, 0.123445,
+  5e-7, 1e-7, 1.5e-6, 0.0009999999999999998, 4.9999999999999996e-6,
+  -4.567872, -0.000005, -0.0001,
+];
+
+writeJson(
+  'numbers.json',
+  numberInputs.map((input) => ({ input, output: Number.format(input) })),
+);
 
 // ---------------------------------------------------------------------------
 // Avatar fixtures

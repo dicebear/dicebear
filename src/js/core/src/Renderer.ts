@@ -13,6 +13,7 @@ import type { StyleOptionsColorFillValue } from './StyleOptions.js';
 import { Fnv1a } from './Prng/Fnv1a.js';
 import { Initials } from './Utils/Initials.js';
 import { License } from './Utils/License.js';
+import { Number } from './Utils/Number.js';
 import { Xml } from './Utils/Xml.js';
 
 /**
@@ -61,7 +62,7 @@ export class Renderer {
 
     const attrs = [
       'xmlns="http://www.w3.org/2000/svg"',
-      `viewBox="0 0 ${canvas.width()} ${canvas.height()}"`,
+      `viewBox="0 0 ${Number.format(canvas.width())} ${Number.format(canvas.height())}"`,
     ];
 
     const rootAttributes = this.#renderAttributes(this.#style.attributes());
@@ -77,7 +78,8 @@ export class Renderer {
     }
 
     if (size !== undefined) {
-      attrs.push(`width="${size}"`, `height="${size}"`);
+      const sizeValue = Number.format(size);
+      attrs.push(`width="${sizeValue}"`, `height="${sizeValue}"`);
     }
 
     const titleElement =
@@ -103,8 +105,8 @@ export class Renderer {
       return body;
     }
 
-    const w = canvas.width();
-    const h = canvas.height();
+    const w = Number.format(canvas.width());
+    const h = Number.format(canvas.height());
     let transform: string;
 
     switch (flip) {
@@ -136,7 +138,7 @@ export class Renderer {
     const cx = canvas.width() / 2;
     const cy = canvas.height() / 2;
 
-    return `<g transform="translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})">${body}</g>`;
+    return `<g transform="translate(${Number.format(cx)}, ${Number.format(cy)}) scale(${Number.format(scale)}) translate(${Number.format(-cx)}, ${Number.format(-cy)})">${body}</g>`;
   }
 
   /**
@@ -149,12 +151,12 @@ export class Renderer {
     const radius = this.#resolver.borderRadius();
     const id = `clip-${this.#hashSeed()}`;
 
-    const rx = (radius / 100) * canvas.width();
-    const ry = (radius / 100) * canvas.height();
+    const rx = Number.format((radius / 100) * canvas.width());
+    const ry = Number.format((radius / 100) * canvas.height());
 
     this.#defs.set(
       id,
-      `<clipPath id="${id}"><rect width="${canvas.width()}" height="${canvas.height()}" rx="${rx}" ry="${ry}"/></clipPath>`,
+      `<clipPath id="${id}"><rect width="${Number.format(canvas.width())}" height="${Number.format(canvas.height())}" rx="${rx}" ry="${ry}"/></clipPath>`,
     );
 
     return `<g clip-path="url(#${id})">${body}</g>`;
@@ -174,7 +176,7 @@ export class Renderer {
     const cx = canvas.width() / 2;
     const cy = canvas.height() / 2;
 
-    return `<g transform="rotate(${rotate}, ${cx}, ${cy})">${body}</g>`;
+    return `<g transform="rotate(${Number.format(rotate)}, ${Number.format(cx)}, ${Number.format(cy)})">${body}</g>`;
   }
 
   /**
@@ -190,8 +192,8 @@ export class Renderer {
       return body;
     }
 
-    const x = (tx / 100) * canvas.width();
-    const y = (ty / 100) * canvas.height();
+    const x = Number.format((tx / 100) * canvas.width());
+    const y = Number.format((ty / 100) * canvas.height());
 
     return `<g transform="translate(${x}, ${y})">${body}</g>`;
   }
@@ -207,7 +209,7 @@ export class Renderer {
       return '';
     }
 
-    return `<rect width="${canvas.width()}" height="${canvas.height()}" fill="${Xml.escape(this.#resolveColorReference('background'))}"/>`;
+    return `<rect width="${Number.format(canvas.width())}" height="${Number.format(canvas.height())}" fill="${Xml.escape(this.#resolveColorReference('background'))}"/>`;
   }
 
   /**
@@ -400,23 +402,25 @@ export class Renderer {
     const transforms: string[] = [];
     const cx = component.width() / 2;
     const cy = component.height() / 2;
+    const cxValue = Number.format(cx);
+    const cyValue = Number.format(cy);
 
     if (translateX !== 0 || translateY !== 0) {
-      const x =
-        Math.round((translateX / 100) * component.width() * 10000) / 10000;
-      const y =
-        Math.round((translateY / 100) * component.height() * 10000) / 10000;
+      const x = Number.format((translateX / 100) * component.width());
+      const y = Number.format((translateY / 100) * component.height());
 
       transforms.push(`translate(${x}, ${y})`);
     }
 
     if (rotate !== 0) {
-      transforms.push(`rotate(${rotate}, ${cx}, ${cy})`);
+      transforms.push(
+        `rotate(${Number.format(rotate)}, ${cxValue}, ${cyValue})`,
+      );
     }
 
     if (scale !== 1) {
       transforms.push(
-        `translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})`,
+        `translate(${cxValue}, ${cyValue}) scale(${Number.format(scale)}) translate(${Number.format(-cx)}, ${Number.format(-cy)})`,
       );
     }
 
@@ -501,10 +505,10 @@ export class Renderer {
     const tag = fill === 'linear' ? 'linearGradient' : 'radialGradient';
     const rotateAttr =
       rotation !== 0
-        ? ` gradientTransform="rotate(${rotation}, 0.5, 0.5)"`
+        ? ` gradientTransform="rotate(${Number.format(rotation)}, 0.5, 0.5)"`
         : '';
     const stops = colors.map((color, i) => {
-      const offset = Math.round((i / (colors.length - 1)) * 100);
+      const offset = Number.format((i / (colors.length - 1)) * 100);
 
       return `<stop offset="${offset}%" stop-color="${Xml.escape(color)}"/>`;
     });
@@ -543,7 +547,7 @@ export class Renderer {
       case 'initials':
         return this.#initials();
       case 'fontWeight':
-        return String(this.#resolver.fontWeight());
+        return Number.format(this.#resolver.fontWeight());
       case 'fontFamily':
         return this.#resolver.fontFamily();
     }

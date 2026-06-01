@@ -9,6 +9,7 @@ use DiceBear\Style\Canvas;
 use DiceBear\Style\Element;
 use DiceBear\Utils\Initials;
 use DiceBear\Utils\License;
+use DiceBear\Utils\Number;
 use DiceBear\Utils\Xml;
 
 /**
@@ -58,9 +59,11 @@ class Renderer
         $title = $this->resolver->title();
         $escapedTitle = $title !== null ? Xml::escape($title) : null;
 
+        $width = Number::format($canvas->width());
+        $height = Number::format($canvas->height());
         $attrs = [
             'xmlns="http://www.w3.org/2000/svg"',
-            "viewBox=\"0 0 {$canvas->width()} {$canvas->height()}\"",
+            "viewBox=\"0 0 {$width} {$height}\"",
         ];
 
         $rootAttributes = $this->renderAttributes($this->style->attributes());
@@ -77,8 +80,9 @@ class Renderer
         }
 
         if ($size !== null) {
-            $attrs[] = "width=\"{$size}\"";
-            $attrs[] = "height=\"{$size}\"";
+            $sizeValue = Number::format($size);
+            $attrs[] = "width=\"{$sizeValue}\"";
+            $attrs[] = "height=\"{$sizeValue}\"";
         }
 
         $titleElement = $escapedTitle !== null ? "<title>{$escapedTitle}</title>" : '';
@@ -104,8 +108,8 @@ class Renderer
             return $body;
         }
 
-        $w = $canvas->width();
-        $h = $canvas->height();
+        $w = Number::format($canvas->width());
+        $h = Number::format($canvas->height());
 
         // @phpstan-ignore match.unhandled
         $transform = match ($flip) {
@@ -131,8 +135,13 @@ class Renderer
 
         $cx = $canvas->width() / 2;
         $cy = $canvas->height() / 2;
+        $cxValue = Number::format($cx);
+        $cyValue = Number::format($cy);
+        $scaleValue = Number::format($scale);
+        $negCx = Number::format(-$cx);
+        $negCy = Number::format(-$cy);
 
-        return "<g transform=\"translate({$cx}, {$cy}) scale({$scale}) translate(" . -$cx . ', ' . -$cy . ")\">{$body}</g>";
+        return "<g transform=\"translate({$cxValue}, {$cyValue}) scale({$scaleValue}) translate({$negCx}, {$negCy})\">{$body}</g>";
     }
 
     /**
@@ -146,10 +155,12 @@ class Renderer
         $radius = $this->resolver->borderRadius();
         $id = 'clip-' . $this->hashSeed();
 
-        $rx = ($radius / 100) * $canvas->width();
-        $ry = ($radius / 100) * $canvas->height();
+        $rx = Number::format(($radius / 100) * $canvas->width());
+        $ry = Number::format(($radius / 100) * $canvas->height());
+        $width = Number::format($canvas->width());
+        $height = Number::format($canvas->height());
 
-        $this->defs[$id] = "<clipPath id=\"{$id}\"><rect width=\"{$canvas->width()}\" height=\"{$canvas->height()}\" rx=\"{$rx}\" ry=\"{$ry}\"/></clipPath>";
+        $this->defs[$id] = "<clipPath id=\"{$id}\"><rect width=\"{$width}\" height=\"{$height}\" rx=\"{$rx}\" ry=\"{$ry}\"/></clipPath>";
 
         return "<g clip-path=\"url(#{$id})\">{$body}</g>";
     }
@@ -166,10 +177,11 @@ class Renderer
             return $body;
         }
 
-        $cx = $canvas->width() / 2;
-        $cy = $canvas->height() / 2;
+        $cx = Number::format($canvas->width() / 2);
+        $cy = Number::format($canvas->height() / 2);
+        $rotateValue = Number::format($rotate);
 
-        return "<g transform=\"rotate({$rotate}, {$cx}, {$cy})\">{$body}</g>";
+        return "<g transform=\"rotate({$rotateValue}, {$cx}, {$cy})\">{$body}</g>";
     }
 
     /**
@@ -186,8 +198,8 @@ class Renderer
             return $body;
         }
 
-        $x = ($translateX / 100) * $canvas->width();
-        $y = ($translateY / 100) * $canvas->height();
+        $x = Number::format(($translateX / 100) * $canvas->width());
+        $y = Number::format(($translateY / 100) * $canvas->height());
 
         return "<g transform=\"translate({$x}, {$y})\">{$body}</g>";
     }
@@ -205,8 +217,10 @@ class Renderer
         }
 
         $fill = Xml::escape($this->resolveColorReference('background'));
+        $width = Number::format($canvas->width());
+        $height = Number::format($canvas->height());
 
-        return "<rect width=\"{$canvas->width()}\" height=\"{$canvas->height()}\" fill=\"{$fill}\"/>";
+        return "<rect width=\"{$width}\" height=\"{$height}\" fill=\"{$fill}\"/>";
     }
 
     /**
@@ -401,23 +415,25 @@ class Renderer
         $transforms = [];
         $cx = $component->width() / 2;
         $cy = $component->height() / 2;
+        $cxValue = Number::format($cx);
+        $cyValue = Number::format($cy);
 
         if ($translateX !== 0.0 || $translateY !== 0.0) {
-            // PHP's round() applies an internal pre-rounding step that nudges
-            // values like 355099.4999... up to 355100, diverging from JS's
-            // Math.round. Emulating Math.round via floor($v + 0.5) avoids the
-            // pre-rounding and keeps PHP 8.2–8.4 in parity with JS.
-            $x = floor((($translateX / 100) * $component->width() * 10000) + 0.5) / 10000;
-            $y = floor((($translateY / 100) * $component->height() * 10000) + 0.5) / 10000;
+            $x = Number::format(($translateX / 100) * $component->width());
+            $y = Number::format(($translateY / 100) * $component->height());
             $transforms[] = "translate({$x}, {$y})";
         }
 
         if ($rotate !== 0.0) {
-            $transforms[] = "rotate({$rotate}, {$cx}, {$cy})";
+            $rotateValue = Number::format($rotate);
+            $transforms[] = "rotate({$rotateValue}, {$cxValue}, {$cyValue})";
         }
 
         if ($scale !== 1.0) {
-            $transforms[] = "translate({$cx}, {$cy}) scale({$scale}) translate(" . -$cx . ', ' . -$cy . ')';
+            $scaleValue = Number::format($scale);
+            $negCx = Number::format(-$cx);
+            $negCy = Number::format(-$cy);
+            $transforms[] = "translate({$cxValue}, {$cyValue}) scale({$scaleValue}) translate({$negCx}, {$negCy})";
         }
 
         return $transforms;
@@ -501,15 +517,16 @@ class Renderer
         $rotation = $this->resolver->colorAngle($name);
         $id = "{$name}-color-{$this->hashSeed()}";
         $tag = $fill === 'linear' ? 'linearGradient' : 'radialGradient';
+        $rotationValue = Number::format($rotation);
         $rotateAttr = $rotation !== 0.0
-            ? " gradientTransform=\"rotate({$rotation}, 0.5, 0.5)\""
+            ? " gradientTransform=\"rotate({$rotationValue}, 0.5, 0.5)\""
             : '';
 
         $stops = [];
         $count = count($colors);
 
         foreach ($colors as $i => $color) {
-            $offset = (int) round($i / ($count - 1) * 100);
+            $offset = Number::format($i / ($count - 1) * 100);
             $stops[] = "<stop offset=\"{$offset}%\" stop-color=\"" . Xml::escape($color) . '"/>';
         }
 
@@ -546,7 +563,7 @@ class Renderer
         return match ($name) {
             'initial' => mb_substr($this->initials(), 0, 1),
             'initials' => $this->initials(),
-            'fontWeight' => (string) $this->resolver->fontWeight(),
+            'fontWeight' => Number::format($this->resolver->fontWeight()),
             'fontFamily' => $this->resolver->fontFamily(),
         };
     }

@@ -346,9 +346,10 @@ part of the user-facing `StyleOptions<D>` type and feeding them back into a new
 | scale      | `eyesScale`      | `float` from `component.scale`, default `1`       |
 
 The translate values are percentages of the **component's own** `width` and
-`height` (not the avatar canvas). Multiply by the component dimension, then
-round to four decimal places (`round(x * 10000) / 10000`). The transform center
-`(cx, cy)` for rotate and scale is the component's own center —
+`height` (not the avatar canvas); multiply by the component dimension to get the
+offset. Like every emitted number it is then run through
+[`formatNumber`](#number-formatting) (which caps it at 5 decimal places). The
+transform center `(cx, cy)` for rotate and scale is the component's own center —
 `(width / 2, height / 2)`.
 
 In the emitted SVG, the non-identity values are concatenated (space-separated)
@@ -441,6 +442,36 @@ The cutoff is `0.04045`, the exponent is `2.4`, and the coefficients are
 The renderer walks the element tree and generates an SVG string. The
 transformations are applied in a specific order — getting this wrong will
 produce different output.
+
+### Number formatting
+
+Every number emitted into the SVG — `viewBox` dimensions, `width`/`height`, the
+translate/rotate/scale offsets and their centers, `rx`/`ry`, gradient stop
+offsets, the `fontWeight` variable, and so on — is stringified through a single
+helper so that all implementations produce byte-identical output:
+
+```
+function formatNumber(value):
+    scaled = round(value * 100000)   # round halves toward +Infinity
+    sign = "-" if scaled < 0 else ""
+    scaled = abs(scaled)
+
+    integer  = floor(scaled / 100000)
+    fraction = (scaled mod 100000), padded to 5 digits, then trailing zeros removed
+
+    if fraction is empty:
+        return sign + integer
+    return sign + integer + "." + fraction
+```
+
+This rounds to at most **5 decimal places** and always uses plain decimal
+notation — never scientific/exponential — with no trailing zeros and no trailing
+`.0` (e.g. `1`, `-50`, `2.5`, `0.00001`). Build the string from the integer
+`scaled` rather than the language's native float-to-string: PHP's precision-based
+cast and Python's `repr` both diverge from JavaScript for small, large, or
+fractional values. The `round` step rounds halves toward +Infinity (JavaScript's
+`Math.round`); emulate it precisely — `floor(x + 0.5)` is **not** equivalent (it
+is wrong for the largest double below `0.5`, where it yields `1` instead of `0`).
 
 ### 1. Background
 
@@ -609,7 +640,9 @@ When a gradient is needed:
 
 1. Create a `<linearGradient>` (for `linear`) or `<radialGradient>` (for
    `radial`) in `<defs>`.
-2. Calculate per-stop offsets: `round(i / (colors.length - 1) * 100)%`.
+2. Calculate per-stop offsets: `formatNumber(i / (colors.length - 1) * 100)`
+   followed by `%` (offsets are formatted like every other number — see
+   [Number formatting](#number-formatting)).
 3. Emit each color as `<stop offset="{offset}%" stop-color="{hex}"/>`.
 4. Add `gradientTransform="rotate(angle, 0.5, 0.5)"` only when the resolved
    `${name}ColorAngle` is non-zero; omit the attribute entirely otherwise.

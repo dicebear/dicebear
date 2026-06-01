@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Core:** Numeric values in rendered SVGs are now consistently rounded to at
+  most 5 decimal places, so the JavaScript and PHP libraries produce
+  byte-identical output for every input. Previously, fractional or very
+  small/large values — e.g. a fractional `borderRadius` or `translateX`,
+  component transforms, or gradient stop offsets — could be stringified
+  differently between languages (scientific notation, differing precision).
+  Avatars built from whole-number options are unaffected.
+
 ## [10.0.1] - 2026-05-29
 
 ### Fixed
