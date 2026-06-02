@@ -1,0 +1,65 @@
+[build-system]
+# hatchling >= 1.27 is required for the PEP 639 `license = "MIT"` SPDX string.
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dicebear-core"
+version = "10.0.1"
+description = "Unique avatars from dozens of styles — deterministic, customizable, vector-based."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Florian Körner", email = "contact@florian-koerner.com" }]
+keywords = ["dicebear", "avatar", "svg"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Multimedia :: Graphics",
+]
+dependencies = ["jsonschema>=4.0", "dicebear-schema>=1.0.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "mypy>=1.8", "ruff>=0.6"]
+
+[project.urls]
+Homepage = "https://www.dicebear.com"
+Repository = "https://github.com/dicebear/dicebear"
+Issues = "https://github.com/dicebear/dicebear/issues"
+
+# The package lives under src/dicebear. The JSON Schemas are not vendored: they
+# come from the `dicebear-schema` dependency and are read at runtime via
+# importlib.resources (files("dicebear_schema")), mirroring how the JS/PHP ports
+# pin @dicebear/schema / dicebear/schema.
+[tool.hatch.build.targets.wheel]
+packages = ["src/dicebear"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/dicebear", "tests", "README.md", "LICENSE", "pyproject.toml"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src"]
+
+# jsonschema ships no type stubs; the validator wraps it behind a typed boundary.
+[[tool.mypy.overrides]]
+module = ["jsonschema", "jsonschema.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

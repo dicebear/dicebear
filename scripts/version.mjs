@@ -37,6 +37,20 @@ for (const pkgPath of packageJsonPaths) {
   }
 }
 
+// The Python core is not an npm workspace (like the PHP core), so bump its
+// pyproject.toml here to keep all ports on the same version. Only the version
+// string is replaced so the rest of the manifest stays byte-for-byte untouched.
+const pyprojectPath = join(ROOT, "src/python/core/pyproject.toml");
+if (existsSync(pyprojectPath)) {
+  const raw = readFileSync(pyprojectPath, "utf-8");
+  const updated = raw.replace(/^version = "[^"]*"$/m, `version = "${version}"`);
+
+  if (updated !== raw) {
+    writeFileSync(pyprojectPath, updated);
+    console.log(`  dicebear-core (python): → ${version}`);
+  }
+}
+
 // Promote the changelog's Unreleased section to the new version
 const changelogPath = join(ROOT, "CHANGELOG.md");
 if (existsSync(changelogPath)) {
