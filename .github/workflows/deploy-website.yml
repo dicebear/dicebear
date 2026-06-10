@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
@@ -39,7 +39,7 @@ jobs:
         run: npx turbo run build --filter='@dicebear/docs...'
 
       - name: Deploy to Bunny.net
-        uses: ayeressian/bunnycdn-storage-deploy@d4f074248f3d52f0b019bf79a8537030cbd54864 # v2.4.3
+        uses: ayeressian/bunnycdn-storage-deploy@251c77f4b9e7e683ad00086de2bef5770c3386b2 # v2.4.5
         with:
           source: 'apps/docs/.vitepress/dist'
           destination: ''
