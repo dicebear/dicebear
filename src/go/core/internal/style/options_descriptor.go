@@ -30,6 +30,8 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 		"translateY":      translateRangeField(),
 	}
 
+	tagSet := map[string]struct{}{}
+
 	for name, comp := range d.style.components {
 		if comp.IsAlias() {
 			continue
@@ -43,6 +45,12 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 
 		result[name+"Variant"] = map[string]any{"type": "enum", "values": variants, "list": true, "weighted": true}
 		result[name+"Probability"] = map[string]any{"type": "number", "min": 0, "max": 100}
+
+		for _, variant := range comp.Variants() {
+			for _, tag := range variant.Tags {
+				tagSet[tag] = struct{}{}
+			}
+		}
 	}
 
 	colorNames := make([]string, 0, len(d.style.colors)+1)
@@ -62,6 +70,19 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 		result[name+"ColorFill"] = map[string]any{"type": "enum", "values": []string{"solid", "linear", "radial"}, "list": true}
 		result[name+"ColorFillStops"] = map[string]any{"type": "range", "min": 2}
 		result[name+"ColorAngle"] = rotateRangeField()
+	}
+
+	// Only advertise the tags filter when the style actually carries tags. The
+	// values are the sorted union of every tag across the style's variants, but
+	// open marks them as suggestions: the filter also accepts ! exclusions and
+	// bare categories and silently ignores unknown tokens.
+	if len(tagSet) > 0 {
+		tags := make([]string, 0, len(tagSet))
+		for tag := range tagSet {
+			tags = append(tags, tag)
+		}
+		sort.Strings(tags)
+		result["tags"] = map[string]any{"type": "enum", "values": tags, "list": true, "open": true}
 	}
 
 	return result

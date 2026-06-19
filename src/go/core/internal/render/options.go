@@ -1,6 +1,21 @@
 package render
 
-import "github.com/dicebear/dicebear-go/v10/internal/prng"
+import (
+	"strings"
+
+	"github.com/dicebear/dicebear-go/v10/internal/prng"
+)
+
+// tagFilterToken is a parsed `tags` filter token. options.tags decodes each raw
+// `category` / `category:value` / `!…` string into this shape so the resolver
+// composes the filter without parsing the grammar itself. hasValue distinguishes
+// a bare category (`cat`) from an empty value (`cat:`).
+type tagFilterToken struct {
+	category string
+	value    string
+	hasValue bool
+	negated  bool
+}
 
 // options reads and normalizes the raw user-supplied options. Each accessor
 // returns the user's input in a normalized form (always a slice for options
@@ -8,7 +23,9 @@ import "github.com/dicebear/dicebear-go/v10/internal/prng"
 // resolver never has to normalize. The data map is the options object after a
 // JSON round-trip, so every number is a float64 and every array a []any.
 type options struct {
-	data map[string]any
+	data       map[string]any
+	tagsParsed bool
+	tagTokens  []tagFilterToken
 }
 
 func newOptions(data map[string]any) *options {
@@ -71,6 +88,43 @@ func (o *options) borderRadius() *prng.Range { v, _ := o.get("borderRadius"); re
 func (o *options) rotate() *prng.Range       { v, _ := o.get("rotate"); return toRange(v) }
 func (o *options) translateX() *prng.Range   { v, _ := o.get("translateX"); return toRange(v) }
 func (o *options) translateY() *prng.Range   { v, _ := o.get("translateY"); return toRange(v) }
+
+// tags returns the global `tags` filter as parsed tokens, or an empty slice when
+// unset. Each raw token (`category` / `category:value`, optionally `!`-prefixed
+// to exclude) is decoded into a tagFilterToken so the resolver composes the
+// filter without parsing the grammar itself. Memoized, since the resolver reads
+// it once per component.
+func (o *options) tags() []tagFilterToken {
+	if o.tagsParsed {
+		return o.tagTokens
+	}
+	o.tagsParsed = true
+
+	v, _ := o.get("tags")
+	raw := asStringArray(v)
+	tokens := make([]tagFilterToken, 0, len(raw))
+	for _, token := range raw {
+		negated := strings.HasPrefix(token, "!")
+		body := token
+		if negated {
+			body = token[1:]
+		}
+
+		if sep := strings.IndexByte(body, ':'); sep == -1 {
+			tokens = append(tokens, tagFilterToken{category: body, negated: negated})
+		} else {
+			tokens = append(tokens, tagFilterToken{
+				category: body[:sep],
+				value:    body[sep+1:],
+				hasValue: true,
+				negated:  negated,
+			})
+		}
+	}
+
+	o.tagTokens = tokens
+	return tokens
+}
 
 // componentVariant returns the ${name}Variant constraint as a weighted map, or
 // (nil, false) when unset. A bare string or string list is normalized to weight
