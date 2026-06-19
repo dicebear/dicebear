@@ -6,6 +6,21 @@ import 'range.dart';
 import 'utils/deep_copy.dart';
 import 'validator/options_validator.dart';
 
+/// A parsed `tags` filter token. [Options.tags] decodes each raw
+/// `category` / `category:value` / `!…` string into this shape so the resolver
+/// composes the filter without parsing the grammar itself.
+class TagFilterToken {
+  final String category;
+  final String? value;
+  final bool negated;
+
+  const TagFilterToken({
+    required this.category,
+    required this.negated,
+    this.value,
+  });
+}
+
 /// Validates the raw user-supplied options and exposes them through typed
 /// accessors. Each accessor returns the user's input in a normalized form
 /// (always a list for options that accept either a scalar or a list, or
@@ -18,6 +33,7 @@ import 'validator/options_validator.dart';
 /// readers.
 class Options {
   final Map<String, Object?> _data;
+  List<TagFilterToken>? _tags;
 
   /// Validates [data] (throws [OptionsValidationError]) and keeps a deep
   /// copy, so later mutations of the caller's map cannot leak into the
@@ -64,6 +80,19 @@ class Options {
   Range? translateX() => _toRange(_get('translateX'));
 
   Range? translateY() => _toRange(_get('translateY'));
+
+  /// Returns the global `tags` filter as parsed tokens, or an empty list when
+  /// unset. Each raw token (`category` / `category:value`, optionally
+  /// `!`-prefixed to exclude) is decoded into a [TagFilterToken] so the
+  /// resolver composes the filter without parsing the grammar itself. An empty
+  /// list means no tag filtering (classic behavior). Memoized, since the
+  /// resolver reads it once per component.
+  List<TagFilterToken> tags() {
+    return _tags ??= [
+      for (final token in _asStringArray(_get('tags')))
+        _parseTagToken(token),
+    ];
+  }
 
   /// Returns the user-set variant constraint for [name] as a weighted map, or
   /// `null` when `${name}Variant` is unset. A bare string or string list is
@@ -138,6 +167,26 @@ class Options {
     validateOptions(data);
 
     return deepCopyJsonMap(data);
+  }
+
+  /// Decodes a single raw `tags` token into a [TagFilterToken]. A leading `!`
+  /// marks an exclude. The remainder splits on the first `:` into a category
+  /// and an optional value (a bare category leaves [TagFilterToken.value]
+  /// null). Mirrors the JS reader's `Options.tags` parse.
+  static TagFilterToken _parseTagToken(String token) {
+    final negated = token.startsWith('!');
+    final body = negated ? token.substring(1) : token;
+    final sep = body.indexOf(':');
+
+    if (sep == -1) {
+      return TagFilterToken(category: body, negated: negated);
+    }
+
+    return TagFilterToken(
+      category: body.substring(0, sep),
+      value: body.substring(sep + 1),
+      negated: negated,
+    );
   }
 
   /// Normalizes a scalar/list/absent string value into a fresh list.

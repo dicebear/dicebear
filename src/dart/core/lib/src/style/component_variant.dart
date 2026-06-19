@@ -24,4 +24,35 @@ class ComponentVariant {
 
     return weight == null ? 1 : (weight as num).toDouble();
   }
+
+  /// Returns the variant's descriptive tags (e.g. `hairLength:long`), or an
+  /// empty list when none are authored. Consumed by the `tags` render option
+  /// to filter the variant pool.
+  List<String> tags() {
+    final tags = _data['tags'];
+
+    if (tags is! List) {
+      return const [];
+    }
+
+    return [
+      for (final tag in tags)
+        if (tag is String) tag,
+    ];
+  }
+
+  /// Tests this variant against a single tag-filter token's grammar. With no
+  /// [value], it matches a whole category: the bare `category` tag or any
+  /// `category:value` tag. With a [value], it matches only the exact
+  /// `category:value` tag. The resolver composes these checks into the
+  /// include/exclude filter structure.
+  bool hasTag(String category, [String? value]) {
+    if (value == null) {
+      final prefix = '$category:';
+
+      return tags().any((tag) => tag == category || tag.startsWith(prefix));
+    }
+
+    return tags().contains('$category:$value');
+  }
 }
