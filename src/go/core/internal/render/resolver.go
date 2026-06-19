@@ -138,21 +138,125 @@ func (r *resolver) resolveVariant(name string) (string, bool) {
 		return "", false
 	}
 
+	return r.rng.WeightedPick(name+"Variant", r.variantWeights(comp))
+}
+
+// variantWeights builds the name → weight map the PRNG draws a variant from. The
+// per-component ${name}Variant option is more specific than the global tags
+// filter, so it takes precedence: when set, it fully governs the component's pool
+// (its named variants, weighted by the option) and the tags filter is ignored for
+// that component. The tags filter applies only where the user gave no explicit
+// ${name}Variant, and falls back to every variant when neither is set. Names the
+// style does not define are dropped, and an empty ${name}Variant (or an empty tag
+// result) yields no variant.
+func (r *resolver) variantWeights(comp *style.Component) map[string]float64 {
+	variants := comp.Variants()
+	named, hasNamed := r.options.componentVariant(comp.SourceName())
 	weights := map[string]float64{}
 
-	if raw, ok := r.options.componentVariant(comp.SourceName()); ok {
-		for v, w := range raw {
-			if _, exists := comp.Variants()[v]; exists {
+	if hasNamed {
+		for v, w := range named {
+			if _, exists := variants[v]; exists {
 				weights[v] = w
 			}
 		}
-	} else {
-		for v, variant := range comp.Variants() {
-			weights[v] = variant.WeightOr1()
+		return weights
+	}
+
+	if len(r.options.tags()) > 0 {
+		for _, v := range r.tagFilteredNames(variants) {
+			weights[v] = variants[v].WeightOr1()
+		}
+		return weights
+	}
+
+	for v, variant := range variants {
+		weights[v] = variant.WeightOr1()
+	}
+	return weights
+}
+
+// tagFilteredNames narrows a component's variants to the names satisfying the
+// global tags filter, applying the parsed options.tags tokens in one pass over
+// the pool:
+//
+//   - A positive cat:value token is an axis-scoped include. Within each category
+//     some include mentions, a variant is kept only if it carries no tag in that
+//     category (untouched) or matches one of the included values (OR within the
+//     category). Distinct included categories combine with AND, and a category no
+//     include mentions is left unconstrained. A bare positive cat token carries no
+//     value, so it imposes no constraint (a no-op).
+//   - A negative !cat / !cat:value token excludes, dropping every variant
+//     carrying any tag in cat (bare) or the exact cat:value tag. Excludes are
+//     checked alongside includes but always win.
+//
+// The result order is irrelevant: WeightedPick sorts the names internally.
+func (r *resolver) tagFilteredNames(variants map[string]style.ComponentVariant) []string {
+	type include struct {
+		category string
+		values   []string
+	}
+	type exclude struct {
+		category string
+		value    string
+		hasValue bool
+	}
+
+	var includeGroups []*include
+	includeIndex := map[string]*include{}
+	var excludes []exclude
+
+	for _, tok := range r.options.tags() {
+		if tok.negated {
+			excludes = append(excludes, exclude{category: tok.category, value: tok.value, hasValue: tok.hasValue})
+		} else if tok.hasValue {
+			grp, ok := includeIndex[tok.category]
+			if !ok {
+				grp = &include{category: tok.category}
+				includeIndex[tok.category] = grp
+				includeGroups = append(includeGroups, grp)
+			}
+			grp.values = append(grp.values, tok.value)
 		}
 	}
 
-	return r.rng.WeightedPick(name+"Variant", weights)
+	var names []string
+	for name, variant := range variants {
+		included := true
+		for _, grp := range includeGroups {
+			if !variant.HasTag(grp.category, "", false) {
+				continue
+			}
+			matched := false
+			for _, value := range grp.values {
+				if variant.HasTag(grp.category, value, true) {
+					matched = true
+					break
+				}
+			}
+			if !matched {
+				included = false
+				break
+			}
+		}
+		if !included {
+			continue
+		}
+
+		excluded := false
+		for _, ex := range excludes {
+			if variant.HasTag(ex.category, ex.value, ex.hasValue) {
+				excluded = true
+				break
+			}
+		}
+
+		if !excluded {
+			names = append(names, name)
+		}
+	}
+
+	return names
 }
 
 func (r *resolver) color(name string) ([]string, error) {

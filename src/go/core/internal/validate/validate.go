@@ -17,7 +17,7 @@ import (
 // would be resolved against the process working directory, leaking the
 // consumer's filesystem paths into validation error messages. Keep the
 // version in sync with the github.com/dicebear/schema dependency in go.mod.
-const schemaBaseURL = "https://cdn.hopjs.net/npm/@dicebear/schema@1.2.0/dist/"
+const schemaBaseURL = "https://cdn.hopjs.net/npm/@dicebear/schema@1.3.0-rc.1/dist/"
 
 var definitionValidator = sync.OnceValue(func() *jsonschema.Schema {
 	return compileSchema(schemaBaseURL+"definition.min.json", schema.Definition)
