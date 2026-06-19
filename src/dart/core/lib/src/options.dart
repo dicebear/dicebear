@@ -89,8 +89,7 @@ class Options {
   /// resolver reads it once per component.
   List<TagFilterToken> tags() {
     return _tags ??= [
-      for (final token in _asStringArray(_get('tags')))
-        _parseTagToken(token),
+      for (final token in _asStringArray(_get('tags'))) _parseTagToken(token),
     ];
   }
 
