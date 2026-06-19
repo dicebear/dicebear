@@ -39,6 +39,11 @@ class OptionsDescriptor {
       'translateY': _translateRange,
     };
 
+    // The sorted union of every tag across the style's variants, collected
+    // while walking the components below and advertised as an open enum at the
+    // end (only when the style actually carries tags).
+    final tags = <String>{};
+
     // Aliases are skipped: they accept no options of their own — the source
     // component's `${name}Variant` / `${name}Probability` covers them.
     for (final entry in _style.components.entries) {
@@ -48,11 +53,12 @@ class OptionsDescriptor {
         continue;
       }
 
-      final variants = component.variants().keys.toList()..sort();
+      final variants = component.variants();
+      final variantNames = variants.keys.toList()..sort();
 
       result['${entry.key}Variant'] = {
         'type': 'enum',
-        'values': variants,
+        'values': variantNames,
         'list': true,
         'weighted': true,
       };
@@ -61,6 +67,10 @@ class OptionsDescriptor {
         'min': 0,
         'max': 100,
       };
+
+      for (final variant in variants.values) {
+        tags.addAll(variant.tags());
+      }
     }
 
     // `background` is always appended: it is resolvable even when the style
@@ -84,6 +94,19 @@ class OptionsDescriptor {
       };
       result['${name}ColorFillStops'] = {'type': 'range', 'min': 2};
       result['${name}ColorAngle'] = _rotateRange;
+    }
+
+    // Only advertise the `tags` filter when the style actually carries tags.
+    // The values are the sorted union of every tag across the style's variants,
+    // but `open` marks them as suggestions: the filter also accepts `!`
+    // exclusions and bare categories and silently ignores unknown tokens.
+    if (tags.isNotEmpty) {
+      result['tags'] = {
+        'type': 'enum',
+        'values': tags.toList()..sort(),
+        'list': true,
+        'open': true,
+      };
     }
 
     return result;

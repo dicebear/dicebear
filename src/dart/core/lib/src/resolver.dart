@@ -9,6 +9,7 @@ import 'range.dart';
 import 'style.dart';
 import 'style/color.dart';
 import 'style/component.dart';
+import 'style/component_variant.dart';
 import 'utils/color.dart';
 
 /// Bundles the three inputs needed to derive any deterministic value for an
@@ -70,16 +71,12 @@ class Resolver {
   double translateY() => _memoFloat('translateY', _options.translateY(), 0);
 
   /// Selects a variant for the given component, or `null` when the component
-  /// is unknown or rolled invisible. Depending on what was passed as
-  /// `${name}Variant` in the input data:
+  /// is unknown or rolled invisible. The pool the PRNG draws from is built
+  /// from the per-component `${name}Variant` option and the global `tags`
+  /// filter (see [_variantWeights]). Only variants that exist in the style
+  /// definition are considered.
   ///
-  /// - unset: the PRNG picks from all style variants using their weights.
-  /// - otherwise: the PRNG picks using the user-supplied weighted map (a bare
-  ///   string or string list is normalized to weight `1` each in
-  ///   [Options.componentVariant]).
-  ///
-  /// Only variants that exist in the style definition are considered. User
-  /// option lookup uses the component's source name (so a single option
+  /// User option lookup uses the component's source name (so a single option
   /// propagates to every alias), while the PRNG keys use the element's own
   /// name — each alias rolls its own visibility and variant.
   String? variant(String name) {
@@ -90,24 +87,99 @@ class Resolver {
         return null;
       }
 
-      final raw = _options.componentVariant(component.sourceName);
-      final variants = component.variants();
-      final weights = <String, double>{};
-
-      if (raw == null) {
-        for (final entry in variants.entries) {
-          weights[entry.key] = entry.value.weight();
-        }
-      } else {
-        for (final entry in raw.entries) {
-          if (variants.containsKey(entry.key)) {
-            weights[entry.key] = entry.value;
-          }
-        }
-      }
-
-      return _prng.weightedPick('${name}Variant', weights);
+      return _prng.weightedPick(
+        '${name}Variant',
+        _variantWeights(component),
+      );
     });
+  }
+
+  /// Builds the name → weight map the PRNG draws a variant from. The
+  /// per-component `${name}Variant` option is more specific than the global
+  /// `tags` filter, so it takes precedence: when set, it fully governs the
+  /// component's pool (its named variants, weighted by the option) and the
+  /// tags filter is ignored for that component. The tags filter applies only
+  /// where the user gave no explicit `${name}Variant` (see
+  /// [_tagFilteredNames]), and falls back to every variant when neither is
+  /// set.
+  ///
+  /// Names the style does not define are dropped, and an empty `${name}Variant`
+  /// (or an empty tag result) yields no variant.
+  Map<String, double> _variantWeights(Component component) {
+    final variants = component.variants();
+    final named = _options.componentVariant(component.sourceName);
+    final weights = <String, double>{};
+
+    final Iterable<String> names;
+
+    if (named != null) {
+      names = named.keys;
+    } else if (_options.tags().isNotEmpty) {
+      names = _tagFilteredNames(variants);
+    } else {
+      names = variants.keys;
+    }
+
+    for (final name in names) {
+      final variant = variants[name];
+
+      if (variant != null) {
+        weights[name] = named != null ? named[name]! : variant.weight();
+      }
+    }
+
+    return weights;
+  }
+
+  /// Narrows a component's variants to the names satisfying the global `tags`
+  /// filter, applying the parsed [Options.tags] tokens in one pass over the
+  /// pool:
+  ///
+  /// - A positive `cat:value` token is an axis-scoped include. Within each
+  ///   category some include mentions, a variant is kept only if it carries no
+  ///   tag in that category (untouched) or matches one of the included values
+  ///   (OR within the category). Distinct included categories combine with
+  ///   AND, and a category no include mentions is left unconstrained. A bare
+  ///   positive `cat` token carries no value, so it imposes no constraint (a
+  ///   no-op).
+  /// - A negative `!cat`/`!cat:value` token excludes, dropping every variant
+  ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Excludes
+  ///   are checked alongside includes but always win.
+  ///
+  /// Returns the surviving variant names in definition order.
+  List<String> _tagFilteredNames(Map<String, ComponentVariant> variants) {
+    final includes = <String, List<String>>{};
+    final excludes = <({String category, String? value})>[];
+
+    for (final token in _options.tags()) {
+      if (token.negated) {
+        excludes.add((category: token.category, value: token.value));
+      } else if (token.value != null) {
+        includes.putIfAbsent(token.category, () => []).add(token.value!);
+      }
+    }
+
+    final includeGroups = includes.entries.toList();
+    final names = <String>[];
+
+    for (final entry in variants.entries) {
+      final variant = entry.value;
+
+      final included = includeGroups.every(
+        (group) =>
+            !variant.hasTag(group.key) ||
+            group.value.any((value) => variant.hasTag(group.key, value)),
+      );
+      final excluded = excludes.any(
+        (token) => variant.hasTag(token.category, token.value),
+      );
+
+      if (included && !excluded) {
+        names.add(entry.key);
+      }
+    }
+
+    return names;
   }
 
   /// Resolves a named color to its final stop list.

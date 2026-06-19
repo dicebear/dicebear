@@ -30,6 +30,7 @@ void main() {
     'initials',
     'notionists',
     'shape-grid',
+    'tagged',
     'thumbs',
   ]) {
     group(name, () {
