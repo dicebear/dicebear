@@ -3,6 +3,8 @@
 //! Tooling such as the editor uses the result to render form controls and
 //! validation hints without having to introspect the style itself.
 
+use std::collections::BTreeSet;
+
 use serde_json::{json, Map, Value};
 
 use crate::style::Style;
@@ -51,6 +53,8 @@ impl<'a> OptionsDescriptor<'a> {
         result.insert("translateX".into(), translate_range());
         result.insert("translateY".into(), translate_range());
 
+        let mut tags: BTreeSet<String> = BTreeSet::new();
+
         for (name, component) in self.style.components() {
             if component.is_alias() {
                 continue;
@@ -67,6 +71,12 @@ impl<'a> OptionsDescriptor<'a> {
                 format!("{name}Probability"),
                 json!({ "type": "number", "min": 0, "max": 100 }),
             );
+
+            for variant in component.variants().values() {
+                for tag in variant.tags() {
+                    tags.insert(tag.clone());
+                }
+            }
         }
 
         let colors = self.style.colors();
@@ -94,6 +104,19 @@ impl<'a> OptionsDescriptor<'a> {
                 json!({ "type": "range", "min": 2 }),
             );
             result.insert(format!("{name}ColorAngle"), rotate_range());
+        }
+
+        // Only advertise the `tags` filter when the style actually carries tags.
+        // The values are the sorted union of every tag across the style's
+        // variants, but `open` marks them as suggestions: the filter also
+        // accepts `!` exclusions and bare categories and silently ignores
+        // unknown tokens.
+        if !tags.is_empty() {
+            let values: Vec<String> = tags.into_iter().collect();
+            result.insert(
+                "tags".into(),
+                json!({ "type": "enum", "values": values, "list": true, "open": true }),
+            );
         }
 
         Value::Object(result)
