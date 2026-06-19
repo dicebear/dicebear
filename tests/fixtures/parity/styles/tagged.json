@@ -1,0 +1,173 @@
+{
+  "canvas": {
+    "width": 100,
+    "height": 100,
+    "elements": [
+      {
+        "type": "component",
+        "name": "hair"
+      },
+      {
+        "type": "component",
+        "name": "facialHair"
+      },
+      {
+        "type": "component",
+        "name": "nose"
+      }
+    ]
+  },
+  "components": {
+    "hair": {
+      "width": 100,
+      "height": 100,
+      "variants": {
+        "longStraight": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "width": "100",
+                "height": "100",
+                "fill": "#111111"
+              }
+            }
+          ],
+          "tags": [
+            "hairLength:long",
+            "hairTexture:straight",
+            "gender:female"
+          ]
+        },
+        "longCurly": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "width": "100",
+                "height": "100",
+                "fill": "#222222"
+              }
+            }
+          ],
+          "tags": [
+            "hairLength:long",
+            "hairTexture:curly",
+            "gender:female"
+          ]
+        },
+        "shortStraight": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "width": "100",
+                "height": "100",
+                "fill": "#333333"
+              }
+            }
+          ],
+          "tags": [
+            "hairLength:short",
+            "hairTexture:straight",
+            "gender:male"
+          ]
+        },
+        "shortCurly": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "width": "100",
+                "height": "100",
+                "fill": "#444444"
+              }
+            }
+          ],
+          "tags": [
+            "hairLength:short",
+            "hairTexture:curly",
+            "gender:male"
+          ]
+        }
+      }
+    },
+    "facialHair": {
+      "width": 100,
+      "height": 100,
+      "probability": 50,
+      "variants": {
+        "beard": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "width": "100",
+                "height": "100",
+                "fill": "#555555"
+              }
+            }
+          ],
+          "tags": [
+            "facialHair:beard",
+            "gender:male"
+          ]
+        },
+        "mustache": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "width": "100",
+                "height": "100",
+                "fill": "#666666"
+              }
+            }
+          ],
+          "tags": [
+            "facialHair:mustache",
+            "gender:male"
+          ]
+        }
+      }
+    },
+    "nose": {
+      "width": 100,
+      "height": 100,
+      "variants": {
+        "small": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "width": "100",
+                "height": "100",
+                "fill": "#777777"
+              }
+            }
+          ]
+        },
+        "big": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "width": "100",
+                "height": "100",
+                "fill": "#888888"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

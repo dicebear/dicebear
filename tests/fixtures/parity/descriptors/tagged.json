@@ -1,0 +1,142 @@
+{
+  "seed": {
+    "type": "string"
+  },
+  "size": {
+    "type": "number",
+    "min": 1,
+    "max": 4096
+  },
+  "idRandomization": {
+    "type": "boolean"
+  },
+  "title": {
+    "type": "string"
+  },
+  "flip": {
+    "type": "enum",
+    "values": [
+      "none",
+      "horizontal",
+      "vertical",
+      "both"
+    ],
+    "list": true
+  },
+  "fontFamily": {
+    "type": "string",
+    "list": true
+  },
+  "fontWeight": {
+    "type": "number",
+    "min": 1,
+    "max": 1000,
+    "list": true
+  },
+  "scale": {
+    "type": "range",
+    "min": 0,
+    "max": 10
+  },
+  "borderRadius": {
+    "type": "range",
+    "min": 0,
+    "max": 50
+  },
+  "rotate": {
+    "type": "range",
+    "min": -360,
+    "max": 360
+  },
+  "translateX": {
+    "type": "range",
+    "min": -1000,
+    "max": 1000
+  },
+  "translateY": {
+    "type": "range",
+    "min": -1000,
+    "max": 1000
+  },
+  "hairVariant": {
+    "type": "enum",
+    "values": [
+      "longCurly",
+      "longStraight",
+      "shortCurly",
+      "shortStraight"
+    ],
+    "list": true,
+    "weighted": true
+  },
+  "hairProbability": {
+    "type": "number",
+    "min": 0,
+    "max": 100
+  },
+  "facialHairVariant": {
+    "type": "enum",
+    "values": [
+      "beard",
+      "mustache"
+    ],
+    "list": true,
+    "weighted": true
+  },
+  "facialHairProbability": {
+    "type": "number",
+    "min": 0,
+    "max": 100
+  },
+  "noseVariant": {
+    "type": "enum",
+    "values": [
+      "big",
+      "small"
+    ],
+    "list": true,
+    "weighted": true
+  },
+  "noseProbability": {
+    "type": "number",
+    "min": 0,
+    "max": 100
+  },
+  "backgroundColor": {
+    "type": "color",
+    "list": true
+  },
+  "backgroundColorFill": {
+    "type": "enum",
+    "values": [
+      "solid",
+      "linear",
+      "radial"
+    ],
+    "list": true
+  },
+  "backgroundColorFillStops": {
+    "type": "range",
+    "min": 2
+  },
+  "backgroundColorAngle": {
+    "type": "range",
+    "min": -360,
+    "max": 360
+  },
+  "tags": {
+    "type": "enum",
+    "values": [
+      "facialHair:beard",
+      "facialHair:mustache",
+      "gender:female",
+      "gender:male",
+      "hairLength:long",
+      "hairLength:short",
+      "hairTexture:curly",
+      "hairTexture:straight"
+    ],
+    "list": true,
+    "open": true
+  }
+}

@@ -98,6 +98,57 @@
         "unexpected": true
       },
       "valid": false
+    },
+    {
+      "id": "tagged-variant",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        },
+        "components": {
+          "hair": {
+            "width": 100,
+            "height": 100,
+            "variants": {
+              "long": {
+                "elements": [],
+                "tags": [
+                  "hairLength:long",
+                  "gender:female"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "invalid-tag-uppercase",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        },
+        "components": {
+          "hair": {
+            "width": 100,
+            "height": 100,
+            "variants": {
+              "long": {
+                "elements": [],
+                "tags": [
+                  "HairLength:Long"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "valid": false
     }
   ],
   "options": [
@@ -233,6 +284,59 @@
       "id": "unknown-option",
       "options": {
         "unknownOption": 1
+      },
+      "valid": false
+    },
+    {
+      "id": "tags-string",
+      "options": {
+        "tags": "gender:male"
+      },
+      "valid": true
+    },
+    {
+      "id": "tags-array",
+      "options": {
+        "tags": [
+          "hairLength:long",
+          "!facialHair:beard"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "id": "tags-bare-exclude",
+      "options": {
+        "tags": [
+          "!facialHair"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "id": "tags-invalid-uppercase",
+      "options": {
+        "tags": [
+          "Bad:X"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "tags-invalid-three-segment",
+      "options": {
+        "tags": [
+          "a:b:c"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "tags-invalid-double-negation",
+      "options": {
+        "tags": [
+          "!!a"
+        ]
       },
       "valid": false
     }
