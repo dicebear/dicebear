@@ -4,6 +4,7 @@ import type {
   StyleOptions,
   StyleOptionsFlipValue,
   StyleOptionsColorFillValue,
+  TagFilterToken,
 } from './StyleOptions.js';
 
 /**
@@ -18,6 +19,7 @@ import type {
  */
 export class Options<D = unknown> {
   #data: StyleOptions<D>;
+  #tags?: readonly TagFilterToken[];
 
   constructor(data: StyleOptions<D> = {} as StyleOptions<D>) {
     OptionsValidator.validate(data);
@@ -71,6 +73,26 @@ export class Options<D = unknown> {
 
   translateY(): Range | undefined {
     return this.#toRange(this.#data.translateY);
+  }
+
+  /**
+   * Returns the global `tags` filter as parsed tokens, or an empty array when
+   * unset. Each raw token (`category` / `category:value`, optionally
+   * `!`-prefixed to exclude) is decoded into `{ category, value?, negated }` so
+   * the resolver composes the filter without parsing the grammar itself. An
+   * empty list means no tag filtering (classic behavior). Memoized, since the
+   * resolver reads it once per component.
+   */
+  tags(): readonly TagFilterToken[] {
+    return (this.#tags ??= this.#asArray(this.#data.tags).map((token) => {
+      const negated = token.startsWith('!');
+      const body = negated ? token.slice(1) : token;
+      const sep = body.indexOf(':');
+
+      return sep === -1
+        ? { category: body, negated }
+        : { category: body.slice(0, sep), value: body.slice(sep + 1), negated };
+    }));
   }
 
   /**

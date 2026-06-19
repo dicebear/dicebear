@@ -94,6 +94,7 @@ export interface StyleDefinitionComponentTranslate {
 export interface StyleDefinitionComponentVariant {
   readonly elements: readonly StyleDefinitionElement[];
   readonly weight?: number;
+  readonly tags?: readonly string[];
 }
 
 export interface StyleDefinitionComponentBase {

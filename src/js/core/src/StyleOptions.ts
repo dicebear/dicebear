@@ -1,6 +1,17 @@
 export type StyleOptionsFlipValue = 'none' | 'horizontal' | 'vertical' | 'both';
 export type StyleOptionsColorFillValue = 'solid' | 'linear' | 'radial';
 
+/**
+ * A parsed `tags` filter token. {@link Options.tags} decodes each raw
+ * `category` / `category:value` / `!…` string into this shape so the resolver
+ * composes the filter without parsing the grammar itself.
+ */
+export interface TagFilterToken {
+  readonly category: string;
+  readonly value?: string;
+  readonly negated: boolean;
+}
+
 // ---------------------------------------------------------------------------
 // StyleOptions
 //
@@ -79,6 +90,7 @@ export interface StyleOptionsBase {
   readonly rotate?: number | readonly [number, number];
   readonly translateX?: number | readonly [number, number];
   readonly translateY?: number | readonly [number, number];
+  readonly tags?: string | readonly string[];
 }
 
 // Variant option accepts a single name, an array, or a name-to-weight record

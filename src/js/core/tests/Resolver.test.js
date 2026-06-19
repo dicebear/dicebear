@@ -785,4 +785,344 @@ describe('Resolver', () => {
       assert.ok(value >= -90 && value <= 90);
     });
   });
+
+  describe('variant tags', () => {
+    // hair is mandatory (prob 100). Every variant is tagged on three axes
+    // (hairLength, hairTexture, gender). facialHair is optional (prob 50) and
+    // tagged. nose carries no tags at all, so no tag filter should touch it.
+    const styleWithTags = new Style({
+      canvas: { width: 100, height: 100, elements: [] },
+      components: {
+        hair: {
+          width: 50,
+          height: 50,
+          variants: {
+            longStraight: {
+              elements: [],
+              tags: ['hairLength:long', 'hairTexture:straight', 'gender:female'],
+            },
+            longCurly: {
+              elements: [],
+              tags: ['hairLength:long', 'hairTexture:curly', 'gender:female'],
+            },
+            shortStraight: {
+              elements: [],
+              tags: ['hairLength:short', 'hairTexture:straight', 'gender:male'],
+            },
+            shortCurly: {
+              elements: [],
+              tags: ['hairLength:short', 'hairTexture:curly', 'gender:male'],
+            },
+          },
+        },
+        facialHair: {
+          width: 50,
+          height: 50,
+          probability: 50,
+          variants: {
+            beard: { elements: [], tags: ['facialHair:beard', 'gender:male'] },
+            mustache: {
+              elements: [],
+              tags: ['facialHair:mustache', 'gender:male'],
+            },
+          },
+        },
+        nose: {
+          width: 50,
+          height: 50,
+          variants: {
+            small: { elements: [] },
+            big: { elements: [] },
+          },
+        },
+      },
+    });
+
+    // The pool a component can resolve to: collect every variant picked across
+    // many seeds. With small, evenly-weighted pools this surfaces every member.
+    const variantPool = (style, options, name, runs = 240) => {
+      const pool = new Set();
+
+      for (let i = 0; i < runs; i++) {
+        pool.add(
+          new Resolver(
+            style,
+            new Options({ ...options, seed: `pool-${i}` }),
+          ).variant(name),
+        );
+      }
+
+      return pool;
+    };
+
+    const assertPool = (set, expected) => {
+      assert.deepEqual([...set].sort(), [...expected].sort());
+    };
+
+    it('should restrict to variants matching an include token', () => {
+      assertPool(variantPool(styleWithTags, { tags: 'hairLength:long' }, 'hair'), [
+        'longStraight',
+        'longCurly',
+      ]);
+    });
+
+    it('should filter a cross-cutting axis like gender', () => {
+      assertPool(variantPool(styleWithTags, { tags: 'gender:male' }, 'hair'), [
+        'shortStraight',
+        'shortCurly',
+      ]);
+    });
+
+    it('should OR multiple includes within one axis', () => {
+      assertPool(
+        variantPool(
+          styleWithTags,
+          { tags: ['hairLength:long', 'hairLength:short'] },
+          'hair',
+        ),
+        ['longStraight', 'longCurly', 'shortStraight', 'shortCurly'],
+      );
+    });
+
+    it('should AND includes across distinct axes', () => {
+      assertPool(
+        variantPool(
+          styleWithTags,
+          { tags: ['hairLength:long', 'hairTexture:curly'] },
+          'hair',
+        ),
+        ['longCurly'],
+      );
+    });
+
+    it('should treat a bare-category include as a no-op', () => {
+      assertPool(variantPool(styleWithTags, { tags: 'hairLength' }, 'hair'), [
+        'longStraight',
+        'longCurly',
+        'shortStraight',
+        'shortCurly',
+      ]);
+    });
+
+    it('should let a value include constrain a category despite a bare include', () => {
+      // The bare `hairLength` adds nothing, so the value include still applies.
+      assertPool(
+        variantPool(
+          styleWithTags,
+          { tags: ['hairLength', 'hairLength:long'] },
+          'hair',
+        ),
+        ['longStraight', 'longCurly'],
+      );
+    });
+
+    it('should remove variants matching an exclude token', () => {
+      assertPool(
+        variantPool(styleWithTags, { tags: '!hairTexture:curly' }, 'hair'),
+        ['longStraight', 'shortStraight'],
+      );
+    });
+
+    it('should apply excludes after includes (exclude wins)', () => {
+      assertPool(
+        variantPool(
+          styleWithTags,
+          { tags: ['hairLength:long', '!hairTexture:curly'] },
+          'hair',
+        ),
+        ['longStraight'],
+      );
+    });
+
+    it('should keep variants with no tag on the included axis (axis-scoped)', () => {
+      const style = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+        components: {
+          hat: {
+            width: 50,
+            height: 50,
+            variants: {
+              fedora: { elements: [], tags: ['headwear:hat'] },
+              cap: { elements: [], tags: ['headwear:cap'] },
+              plain: { elements: [] },
+            },
+          },
+        },
+      });
+
+      assertPool(variantPool(style, { tags: 'headwear:hat' }, 'hat'), [
+        'fedora',
+        'plain',
+      ]);
+    });
+
+    it('should leave a component whose variants carry no matching tag untouched', () => {
+      assertPool(variantPool(styleWithTags, { tags: 'gender:male' }, 'nose'), [
+        'small',
+        'big',
+      ]);
+    });
+
+    it('should let ${name}Variant override the tag filter', () => {
+      // ${name}Variant is more specific, so it ignores the tags filter: both
+      // named variants are kept even though shortStraight is outside the pool.
+      assertPool(
+        variantPool(
+          styleWithTags,
+          {
+            tags: 'hairLength:long',
+            hairVariant: ['longCurly', 'shortStraight'],
+          },
+          'hair',
+        ),
+        ['longCurly', 'shortStraight'],
+      );
+    });
+
+    it('should keep a ${name}Variant name despite a tag exclude', () => {
+      // The explicit option wins over the descriptive filter: longStraight is
+      // kept even though !gender:female would otherwise drop it.
+      assertPool(
+        variantPool(
+          styleWithTags,
+          {
+            tags: '!gender:female',
+            hairVariant: ['longStraight', 'shortCurly'],
+          },
+          'hair',
+        ),
+        ['longStraight', 'shortCurly'],
+      );
+    });
+
+    it('should let ${name}Variant weights override authored weights in the pool', () => {
+      // `long` carries a heavy authored weight, but the option's weight 0 must
+      // win, so it is never picked and `short` (authored weight 1) always is.
+      const style = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+        components: {
+          hair: {
+            width: 50,
+            height: 50,
+            variants: {
+              long: { elements: [], weight: 100, tags: ['hairLength:long'] },
+              short: { elements: [], weight: 1, tags: ['hairLength:short'] },
+            },
+          },
+        },
+      });
+
+      let long = 0;
+      let short = 0;
+
+      for (let i = 0; i < 200; i++) {
+        const result = new Resolver(
+          style,
+          new Options({
+            seed: `weight-${i}`,
+            tags: ['hairLength:long', 'hairLength:short'],
+            hairVariant: { long: 0, short: 1 },
+          }),
+        ).variant('hair');
+
+        if (result === 'long') {
+          long++;
+        } else if (result === 'short') {
+          short++;
+        }
+      }
+
+      // long (authored 100) is overridden to 0 and never picked, so short wins.
+      assert.equal(long, 0, `expected weight 0 to override authored 100, got ${long}/200`);
+      assert.equal(short, 200, `expected short to always win, got ${short}/200`);
+    });
+
+    it('should treat an empty tags array as no filter (classic restriction)', () => {
+      assertPool(
+        variantPool(
+          styleWithTags,
+          { tags: [], hairVariant: 'longStraight' },
+          'hair',
+        ),
+        ['longStraight'],
+      );
+    });
+
+    it('should resolve to no variant when the filter empties a mandatory component', () => {
+      // !hairTexture drops every hair variant. Like an empty `${name}Variant`,
+      // an empty pool yields nothing rather than forcing variants back in.
+      assertPool(variantPool(styleWithTags, { tags: '!hairTexture' }, 'hair'), [
+        undefined,
+      ]);
+    });
+
+    it('should hide an optional component when the filter empties its pool', () => {
+      // !facialHair drops every facialHair variant. The component is optional
+      // (prob 50), so it stays hidden and never resolves to a variant.
+      assertPool(variantPool(styleWithTags, { tags: '!facialHair' }, 'facialHair'), [
+        undefined,
+      ]);
+    });
+
+    it('should be deterministic for the same seed and tags', () => {
+      const options = { seed: 'deterministic', tags: 'hairLength:long' };
+      const a = new Resolver(styleWithTags, new Options(options)).variant('hair');
+      const b = new Resolver(styleWithTags, new Options(options)).variant('hair');
+
+      assert.equal(a, b);
+      // and the result is constrained by the filter, not just stable
+      assert.ok(['longStraight', 'longCurly'].includes(a));
+    });
+
+    it('should yield no variant for an empty ${name}Variant even with tags', () => {
+      // An explicit empty allowlist means "none". Since ${name}Variant governs
+      // the component, the tags filter is ignored and cannot resurrect the pool.
+      assertPool(
+        variantPool(styleWithTags, { tags: 'gender:male', noseVariant: [] }, 'nose'),
+        [undefined],
+      );
+    });
+
+    it('should handle a variant named like an Object.prototype member', () => {
+      // `toString` is a valid variant name. It must work as a Map/Set key and
+      // as an own weight key without colliding with Object.prototype.toString,
+      // so both variants stay reachable.
+      const style = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+        components: {
+          hair: {
+            width: 50,
+            height: 50,
+            variants: {
+              toString: { elements: [], tags: ['hairLength:long'] },
+              long: { elements: [], tags: ['hairLength:long'] },
+            },
+          },
+        },
+      });
+      const seen = new Set();
+
+      for (let i = 0; i < 200; i++) {
+        seen.add(
+          new Resolver(
+            style,
+            new Options({
+              seed: `proto-${i}`,
+              tags: 'hairLength:long',
+              hairVariant: { toString: 1, long: 1 },
+            }),
+          ).variant('hair'),
+        );
+      }
+
+      assert.ok(
+        seen.has('toString') && seen.has('long'),
+        `both variants should be reachable, got ${[...seen]}`,
+      );
+    });
+
+    it('should reject an invalid tag token at validation', () => {
+      assert.throws(() => new Options({ tags: ['Bad:X'] }));
+    });
+  });
 });

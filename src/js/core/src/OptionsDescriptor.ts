@@ -21,6 +21,10 @@ interface EnumField {
   readonly values: readonly string[];
   readonly list?: true;
   readonly weighted?: true;
+  // When set, `values` are suggestions, not the only allowed values. Tooling
+  // should accept input outside the list (e.g. the `tags` filter, whose grammar
+  // also takes `!`-exclusions and bare categories and ignores unknown tokens).
+  readonly open?: true;
 }
 
 interface ColorField {
@@ -93,20 +97,28 @@ export class OptionsDescriptor {
       translateY: OptionsDescriptor.#translateRange,
     };
 
+    const tags = new Set<string>();
+
     for (const [name, component] of this.#style.components()) {
       if (component.extendsName() !== undefined) {
         continue;
       }
 
-      const variants = Array.from(component.variants().keys()).sort();
+      const variants = component.variants();
 
       result[`${name}Variant`] = {
         type: 'enum',
-        values: variants,
+        values: Array.from(variants.keys()).sort(),
         list: true,
         weighted: true,
       };
       result[`${name}Probability`] = { type: 'number', min: 0, max: 100 };
+
+      for (const variant of variants.values()) {
+        for (const tag of variant.tags()) {
+          tags.add(tag);
+        }
+      }
     }
 
     for (const name of [...this.#style.colors().keys(), 'background']) {
@@ -124,6 +136,19 @@ export class OptionsDescriptor {
       };
       result[`${name}ColorFillStops`] = { type: 'range', min: 2 };
       result[`${name}ColorAngle`] = OptionsDescriptor.#rotateRange;
+    }
+
+    // Only advertise the `tags` filter when the style actually carries tags.
+    // The values are the sorted union of every tag across the style's variants,
+    // but `open` marks them as suggestions: the filter also accepts `!`
+    // exclusions and bare categories and silently ignores unknown tokens.
+    if (tags.size > 0) {
+      result.tags = {
+        type: 'enum',
+        values: Array.from(tags).sort(),
+        list: true,
+        open: true,
+      };
     }
 
     return result;
