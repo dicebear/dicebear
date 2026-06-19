@@ -106,15 +106,10 @@ class Resolver
     }
 
     /**
-     * Selects a variant for the given component. Depending on what was passed
-     * as `${name}Variant` in the input data:
-     *
-     * - `null`: PRNG picks from all style variants using their weights.
-     * - otherwise: PRNG picks using the user-supplied weighted map (a bare
-     *   string or string list is normalized to weight `1` each in
-     *   {@see Options::componentVariant()}).
-     *
-     * Only variants that exist in the style definition are considered.
+     * Selects a variant for the given component. The pool the PRNG draws from
+     * is built from the per-component `${name}Variant` option and the global
+     * `tags` filter (see {@see variantWeights()}). Only variants that exist in
+     * the style definition are considered.
      */
     public function variant(string $name): ?string
     {
@@ -126,23 +121,10 @@ class Resolver
                 return null;
             }
 
-            $raw = $this->options->componentVariant($component->sourceName());
-            $variants = $component->variants();
-            $weights = [];
-
-            if ($raw === null) {
-                foreach ($variants as $v => $variant) {
-                    $weights[$v] = $variant->weight();
-                }
-            } else {
-                foreach ($raw as $v => $weight) {
-                    if (isset($variants[$v])) {
-                        $weights[$v] = $weight;
-                    }
-                }
-            }
-
-            return $this->prng->weightedPick("{$name}Variant", $weights);
+            return $this->prng->weightedPick(
+                "{$name}Variant",
+                $this->variantWeights($component),
+            );
         });
     }
 
@@ -231,6 +213,123 @@ class Resolver
     private function isVisible(string $name, Style\Component $component): bool
     {
         return $this->prng->bool("{$name}Probability", $this->probability($component));
+    }
+
+    /**
+     * Builds the name → weight map the PRNG draws a variant from. The
+     * per-component `${name}Variant` option is more specific than the global
+     * `tags` filter, so it takes precedence: when set, it fully governs the
+     * component's pool (its named variants, weighted by the option) and the
+     * tags filter is ignored for that component. The tags filter applies only
+     * where the user gave no explicit `${name}Variant` (see
+     * {@see tagFilteredNames()}), and falls back to every variant when neither
+     * is set.
+     *
+     * Names the style does not define are dropped, and an empty `${name}Variant`
+     * (or an empty tag result) yields no variant.
+     *
+     * @return array<string, int|float>
+     */
+    private function variantWeights(Style\Component $component): array
+    {
+        $variants = $component->variants();
+        $named = $this->options->componentVariant($component->sourceName());
+        $weights = [];
+
+        if ($named !== null) {
+            $names = array_keys($named);
+        } elseif (count($this->options->tags()) > 0) {
+            $names = $this->tagFilteredNames($variants);
+        } else {
+            $names = array_keys($variants);
+        }
+
+        foreach ($names as $name) {
+            if (isset($variants[$name])) {
+                $weights[$name] = $named !== null ? $named[$name] : $variants[$name]->weight();
+            }
+        }
+
+        return $weights;
+    }
+
+    /**
+     * Narrows a component's variants to the names satisfying the global `tags`
+     * filter, applying the parsed {@see Options::tags()} tokens in one pass over
+     * the pool:
+     *
+     * - A positive `cat:value` token is an axis-scoped include. Within each
+     *   category some include mentions, a variant is kept only if it carries no
+     *   tag in that category (untouched) or matches one of the included values
+     *   (OR within the category). Distinct included categories combine with AND,
+     *   and a category no include mentions is left unconstrained. A bare
+     *   positive `cat` token carries no value, so it imposes no constraint (a
+     *   no-op).
+     * - A negative `!cat`/`!cat:value` token excludes, dropping every variant
+     *   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Excludes
+     *   are checked alongside includes but always win.
+     *
+     * Returns the surviving variant names in definition order.
+     *
+     * @param array<string, Style\ComponentVariant> $variants
+     *
+     * @return list<string>
+     */
+    private function tagFilteredNames(array $variants): array
+    {
+        /** @var array<string, list<string>> $includes */
+        $includes = [];
+        /** @var list<array{category: string, value?: string}> $excludes */
+        $excludes = [];
+
+        foreach ($this->options->tags() as $token) {
+            if ($token['negated']) {
+                $excludes[] = ['category' => $token['category'], 'value' => $token['value'] ?? null];
+            } elseif (isset($token['value'])) {
+                $includes[$token['category']][] = $token['value'];
+            }
+        }
+
+        $names = [];
+
+        foreach ($variants as $name => $variant) {
+            $included = true;
+
+            foreach ($includes as $category => $values) {
+                if (!$variant->hasTag($category)) {
+                    continue;
+                }
+
+                $matches = false;
+
+                foreach ($values as $value) {
+                    if ($variant->hasTag($category, $value)) {
+                        $matches = true;
+                        break;
+                    }
+                }
+
+                if (!$matches) {
+                    $included = false;
+                    break;
+                }
+            }
+
+            $excluded = false;
+
+            foreach ($excludes as $exclude) {
+                if ($variant->hasTag($exclude['category'], $exclude['value'])) {
+                    $excluded = true;
+                    break;
+                }
+            }
+
+            if ($included && !$excluded) {
+                $names[] = (string) $name;
+            }
+        }
+
+        return $names;
     }
 
     /**

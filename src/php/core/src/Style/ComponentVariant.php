@@ -38,4 +38,38 @@ class ComponentVariant
     {
         return $this->data['weight'] ?? 1;
     }
+
+    /**
+     * Returns the variant's descriptive tags (e.g. `hairLength:long`), or an
+     * empty list when none are authored. Consumed by the `tags` render option
+     * to filter the variant pool.
+     *
+     * @return list<string>
+     */
+    public function tags(): array
+    {
+        return $this->data['tags'] ?? [];
+    }
+
+    /**
+     * Tests this variant against a single tag-filter token's grammar. With no
+     * `$value`, it matches a whole category: the bare `category` tag or any
+     * `category:value` tag. With a `$value`, it matches only the exact
+     * `category:value` tag. The resolver composes these checks into the
+     * include/exclude filter structure.
+     */
+    public function hasTag(string $category, ?string $value = null): bool
+    {
+        if ($value === null) {
+            foreach ($this->tags() as $tag) {
+                if ($tag === $category || str_starts_with($tag, "{$category}:")) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return in_array("{$category}:{$value}", $this->tags(), true);
+    }
 }
