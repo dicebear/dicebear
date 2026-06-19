@@ -19,7 +19,14 @@ fn read(path: PathBuf) -> String {
 
 #[test]
 fn avatar_parity() {
-    let styles = ["initials", "thumbs", "glass", "shape-grid", "notionists", "tagged"];
+    let styles = [
+        "initials",
+        "thumbs",
+        "glass",
+        "shape-grid",
+        "notionists",
+        "tagged",
+    ];
 
     for name in styles {
         let style_json = read(parity_dir().join("styles").join(format!("{name}.json")));
@@ -67,7 +74,14 @@ fn avatar_parity() {
 /// `Value` comparison also pins whole numbers as JSON integers.
 #[test]
 fn descriptor_parity() {
-    let styles = ["initials", "thumbs", "glass", "shape-grid", "notionists", "tagged"];
+    let styles = [
+        "initials",
+        "thumbs",
+        "glass",
+        "shape-grid",
+        "notionists",
+        "tagged",
+    ];
 
     for name in styles {
         let style_json = read(parity_dir().join("styles").join(format!("{name}.json")));

@@ -136,9 +136,7 @@ class Resolver:
 
         return weights
 
-    def _tag_filtered_names(
-        self, variants: dict[str, ComponentVariant]
-    ) -> list[str]:
+    def _tag_filtered_names(self, variants: dict[str, ComponentVariant]) -> list[str]:
         """Narrow a component's variants to the names satisfying the global
         ``tags`` filter, applying the parsed :meth:`Options.tags` tokens in one
         pass over the pool:
