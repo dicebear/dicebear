@@ -58,7 +58,7 @@ export function getStyleCommandOptions(style: Style): Record<string, Options> {
         if (field.list) {
           option.array = true;
         }
-        if (!field.weighted) {
+        if (!field.weighted && !field.open) {
           option.choices = field.values as string[];
         }
 
