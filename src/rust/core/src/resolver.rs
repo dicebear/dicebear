@@ -131,24 +131,105 @@ impl<'a> Resolver<'a> {
             return None;
         }
 
+        let weights = self.variant_weights(component);
+
+        self.prng.weighted_pick(&format!("{name}Variant"), &weights)
+    }
+
+    /// Builds the name -> weight map the PRNG draws a variant from. The
+    /// per-component `${name}Variant` option is more specific than the global
+    /// `tags` filter, so it takes precedence: when set, it fully governs the
+    /// component's pool (its named variants, weighted by the option) and the
+    /// tags filter is ignored for that component. The tags filter applies only
+    /// where the user gave no explicit `${name}Variant` (see
+    /// [`Self::tag_filtered_names`]), and falls back to every variant when
+    /// neither is set. Names the style does not define are dropped, and an empty
+    /// `${name}Variant` (or an empty tag result) yields no variant.
+    fn variant_weights(&self, component: &Component) -> HashMap<String, f64> {
+        let variants = component.variants();
+        let named = self.options.component_variant(component.source_name());
         let mut weights: HashMap<String, f64> = HashMap::new();
 
-        match self.options.component_variant(component.source_name()) {
-            None => {
-                for (v, variant) in component.variants() {
-                    weights.insert(v.clone(), variant.weight());
-                }
-            }
-            Some(raw) => {
-                for (v, w) in raw {
-                    if component.variants().contains_key(&v) {
+        match named {
+            Some(named) => {
+                for (v, w) in named {
+                    if variants.contains_key(&v) {
                         weights.insert(v, w);
                     }
                 }
             }
+            None if !self.options.tags().is_empty() => {
+                for name in self.tag_filtered_names(component) {
+                    if let Some(variant) = variants.get(&name) {
+                        weights.insert(name, variant.weight());
+                    }
+                }
+            }
+            None => {
+                for (v, variant) in variants {
+                    weights.insert(v.clone(), variant.weight());
+                }
+            }
         }
 
-        self.prng.weighted_pick(&format!("{name}Variant"), &weights)
+        weights
+    }
+
+    /// Narrows a component's variants to the names satisfying the global `tags`
+    /// filter, applying the parsed [`Options::tags`] tokens in one pass over the
+    /// pool:
+    ///
+    /// - A positive `cat:value` token is an axis-scoped include. Within each
+    ///   category some include mentions, a variant is kept only if it carries no
+    ///   tag in that category (untouched) or matches one of the included values
+    ///   (OR within the category). Distinct included categories combine with
+    ///   AND, and a category no include mentions is left unconstrained. A bare
+    ///   positive `cat` token carries no value, so it imposes no constraint.
+    /// - A negative `!cat`/`!cat:value` token excludes, dropping every variant
+    ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Excludes
+    ///   are checked alongside includes but always win.
+    ///
+    /// Returns the surviving variant names in definition order.
+    fn tag_filtered_names(&self, component: &Component) -> Vec<String> {
+        // Insertion-ordered include groups: category -> included values.
+        let mut include_categories: Vec<String> = Vec::new();
+        let mut includes: HashMap<String, Vec<String>> = HashMap::new();
+        let mut excludes: Vec<(String, Option<String>)> = Vec::new();
+
+        for token in self.options.tags() {
+            if token.negated {
+                excludes.push((token.category, token.value));
+            } else if let Some(value) = token.value {
+                includes
+                    .entry(token.category.clone())
+                    .or_insert_with(|| {
+                        include_categories.push(token.category.clone());
+                        Vec::new()
+                    })
+                    .push(value);
+            }
+        }
+
+        let mut names: Vec<String> = Vec::new();
+
+        for (name, variant) in component.variants() {
+            let included = include_categories.iter().all(|category| {
+                let values = &includes[category];
+                !variant.has_tag(category, None)
+                    || values
+                        .iter()
+                        .any(|value| variant.has_tag(category, Some(value)))
+            });
+            let excluded = excludes
+                .iter()
+                .any(|(category, value)| variant.has_tag(category, value.as_deref()));
+
+            if included && !excluded {
+                names.push(name.clone());
+            }
+        }
+
+        names
     }
 
     pub fn color(&self, name: &str) -> Result<Vec<String>, Error> {

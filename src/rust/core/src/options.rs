@@ -11,6 +11,15 @@ use serde_json::Value;
 
 use crate::prng::Range;
 
+/// A parsed `tags` filter token. [`Options::tags`] decodes each raw
+/// `category` / `category:value` / `!…` string into this shape so the resolver
+/// composes the filter without parsing the grammar itself.
+pub(crate) struct TagFilterToken {
+    pub category: String,
+    pub value: Option<String>,
+    pub negated: bool,
+}
+
 pub struct Options {
     data: Value,
 }
@@ -76,6 +85,34 @@ impl Options {
 
     pub fn translate_y(&self) -> Option<Range> {
         to_range(self.get("translateY"))
+    }
+
+    /// Returns the global `tags` filter as parsed tokens, or an empty list when
+    /// unset. Each raw token (`category` / `category:value`, optionally
+    /// `!`-prefixed to exclude) is decoded into `{ category, value?, negated }`
+    /// so the resolver composes the filter without parsing the grammar itself.
+    /// An empty list means no tag filtering (classic behavior).
+    pub(crate) fn tags(&self) -> Vec<TagFilterToken> {
+        as_string_array(self.get("tags"))
+            .into_iter()
+            .map(|token| {
+                let negated = token.starts_with('!');
+                let body = if negated { &token[1..] } else { &token[..] };
+
+                match body.find(':') {
+                    None => TagFilterToken {
+                        category: body.to_string(),
+                        value: None,
+                        negated,
+                    },
+                    Some(sep) => TagFilterToken {
+                        category: body[..sep].to_string(),
+                        value: Some(body[sep + 1..].to_string()),
+                        negated,
+                    },
+                }
+            })
+            .collect()
     }
 
     /// Returns the `${name}Variant` constraint as a weighted map, or `None` when
