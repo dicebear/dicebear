@@ -63,21 +63,30 @@ class OptionsDescriptor
             'translateY' => self::$translateRange,
         ];
 
+        $tags = [];
+
         foreach ($this->style->components() as $name => $component) {
             if ($component->extendsName() !== null) {
                 continue;
             }
 
-            $variants = array_keys($component->variants());
-            sort($variants);
+            $variants = $component->variants();
+            $variantNames = array_keys($variants);
+            sort($variantNames);
 
             $result["{$name}Variant"] = [
                 'type' => 'enum',
-                'values' => $variants,
+                'values' => $variantNames,
                 'list' => true,
                 'weighted' => true,
             ];
             $result["{$name}Probability"] = ['type' => 'number', 'min' => 0, 'max' => 100];
+
+            foreach ($variants as $variant) {
+                foreach ($variant->tags() as $tag) {
+                    $tags[$tag] = true;
+                }
+            }
         }
 
         $colorNames = array_merge(array_keys($this->style->colors()), ['background']);
@@ -99,6 +108,23 @@ class OptionsDescriptor
             ];
             $result["{$name}ColorFillStops"] = ['type' => 'range', 'min' => 2];
             $result["{$name}ColorAngle"] = self::$rotateRange;
+        }
+
+        // Only advertise the `tags` filter when the style actually carries tags.
+        // The values are the sorted union of every tag across the style's
+        // variants, but `open` marks them as suggestions: the filter also
+        // accepts `!` exclusions and bare categories and silently ignores
+        // unknown tokens.
+        if (count($tags) > 0) {
+            $tagValues = array_keys($tags);
+            sort($tagValues);
+
+            $result['tags'] = [
+                'type' => 'enum',
+                'values' => $tagValues,
+                'list' => true,
+                'open' => true,
+            ];
         }
 
         return $result;

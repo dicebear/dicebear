@@ -23,6 +23,9 @@ class Options
     /** @var array<string, mixed> */
     private array $data;
 
+    /** @var list<array{category: string, value?: string, negated: bool}>|null */
+    private ?array $tags = null;
+
     /**
      * @param array<string, mixed> $data
      */
@@ -99,6 +102,35 @@ class Options
     public function translateY(): ?array
     {
         return $this->toRange($this->data['translateY'] ?? null);
+    }
+
+    /**
+     * Returns the global `tags` filter as parsed tokens, or an empty list when
+     * unset. Each raw token (`category` / `category:value`, optionally
+     * `!`-prefixed to exclude) is decoded into `['category' => …, 'value' => …,
+     * 'negated' => …]` so the resolver composes the filter without parsing the
+     * grammar itself. An empty list means no tag filtering (classic behavior).
+     * Memoized, since the resolver reads it once per component.
+     *
+     * @return list<array{category: string, value?: string, negated: bool}>
+     */
+    public function tags(): array
+    {
+        return $this->tags ??= array_map(static function (string $token): array {
+            $negated = str_starts_with($token, '!');
+            $body = $negated ? substr($token, 1) : $token;
+            $sep = strpos($body, ':');
+
+            if ($sep === false) {
+                return ['category' => $body, 'negated' => $negated];
+            }
+
+            return [
+                'category' => substr($body, 0, $sep),
+                'value' => substr($body, $sep + 1),
+                'negated' => $negated,
+            ];
+        }, $this->asArray($this->data['tags'] ?? null));
     }
 
     /**
