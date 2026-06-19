@@ -10,6 +10,7 @@ from .options import Options, Range
 from .prng import Prng
 from .style import Style
 from .style.component import Component
+from .style.component_variant import ComponentVariant
 from .utils.color import Color as ColorUtil
 
 T = TypeVar("T")
@@ -85,9 +86,10 @@ class Resolver:
     def variant(self, name: str) -> str | None:
         """Select a variant for the given component.
 
-        With ``{name}Variant`` unset the PRNG picks from all style variants by
-        weight; otherwise it picks using the user-supplied weighted map. Only
-        variants that exist in the style definition are considered.
+        The pool the PRNG draws from is built from the per-component
+        ``{name}Variant`` option and the global ``tags`` filter (see
+        :meth:`_variant_weights`). Only variants that exist in the style
+        definition are considered.
         """
         return self._memo(f"{name}Variant", lambda: self._resolve_variant(name))
 
@@ -97,19 +99,91 @@ class Resolver:
         if component is None or not self._is_visible(name, component):
             return None
 
-        raw = self._options.component_variant(component.source_name())
+        return self._prng.weighted_pick(
+            f"{name}Variant", self._variant_weights(component)
+        )
+
+    def _variant_weights(self, component: Component) -> dict[str, int | float]:
+        """Build the name → weight map the PRNG draws a variant from.
+
+        The per-component ``{name}Variant`` option is more specific than the
+        global ``tags`` filter, so it takes precedence: when set, it fully
+        governs the component's pool (its named variants, weighted by the option)
+        and the tags filter is ignored for that component. The tags filter
+        applies only where the user gave no explicit ``{name}Variant`` (see
+        :meth:`_tag_filtered_names`), and falls back to every variant when
+        neither is set.
+
+        Names the style does not define are dropped, and an empty
+        ``{name}Variant`` (or an empty tag result) yields no variant.
+        """
         variants = component.variants()
+        named = self._options.component_variant(component.source_name())
         weights: dict[str, int | float] = {}
 
-        if raw is None:
-            for v, variant in variants.items():
-                weights[v] = variant.weight()
+        if named is not None:
+            names: list[str] = list(named.keys())
+        elif len(self._options.tags()) > 0:
+            names = self._tag_filtered_names(variants)
         else:
-            for v, weight in raw.items():
-                if v in variants:
-                    weights[v] = weight
+            names = list(variants.keys())
 
-        return self._prng.weighted_pick(f"{name}Variant", weights)
+        for v in names:
+            variant = variants.get(v)
+
+            if variant is not None:
+                weights[v] = named[v] if named is not None else variant.weight()
+
+        return weights
+
+    def _tag_filtered_names(
+        self, variants: dict[str, ComponentVariant]
+    ) -> list[str]:
+        """Narrow a component's variants to the names satisfying the global
+        ``tags`` filter, applying the parsed :meth:`Options.tags` tokens in one
+        pass over the pool:
+
+        - A positive ``cat:value`` token is an axis-scoped include. Within each
+          category some include mentions, a variant is kept only if it carries no
+          tag in that category (untouched) or matches one of the included values
+          (OR within the category). Distinct included categories combine with
+          AND, and a category no include mentions is left unconstrained. A bare
+          positive ``cat`` token carries no value, so it imposes no constraint (a
+          no-op).
+        - A negative ``!cat``/``!cat:value`` token excludes, dropping every
+          variant carrying any tag in ``cat`` (bare) or the exact ``cat:value``
+          tag. Excludes are checked alongside includes but always win.
+
+        Returns the surviving variant names in definition order.
+        """
+        includes: dict[str, list[str]] = {}
+        excludes: list[tuple[str, str | None]] = []
+
+        for token in self._options.tags():
+            if token.negated:
+                excludes.append((token.category, token.value))
+            elif token.value is not None:
+                includes.setdefault(token.category, []).append(token.value)
+
+        # Materialize the include groups once, not on every variant.
+        include_groups = list(includes.items())
+
+        names: list[str] = []
+
+        for name, variant in variants.items():
+            included = all(
+                not variant.has_tag(category)
+                or any(variant.has_tag(category, value) for value in values)
+                for category, values in include_groups
+            )
+            excluded = any(
+                variant.has_tag(category, value) for category, value in excludes
+            )
+
+            if included and not excluded:
+                names.append(name)
+
+        return names
 
     def color(self, name: str) -> list[str]:
         return self._memo(f"{name}Color", lambda: self._resolve_color(name))

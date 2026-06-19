@@ -3,12 +3,27 @@
 from __future__ import annotations
 
 import copy
+from dataclasses import dataclass
 from typing import Any, cast
 
 from .validator import OptionsValidator
 
 Numeric = int | float
 Range = dict[str, Numeric]
+
+
+@dataclass(frozen=True)
+class TagFilterToken:
+    """A parsed ``tags`` filter token.
+
+    :meth:`Options.tags` decodes each raw ``category`` / ``category:value`` /
+    ``!…`` string into this shape so the resolver composes the filter without
+    parsing the grammar itself.
+    """
+
+    category: str
+    value: str | None
+    negated: bool
 
 
 class Options:
@@ -30,6 +45,7 @@ class Options:
         # Deep-copy so later caller mutations cannot leak into resolution,
         # mirroring the JS core's structuredClone and Style's deep copy.
         self._data = copy.deepcopy(data)
+        self._tags: list[TagFilterToken] | None = None
 
     def seed(self) -> str | None:
         return cast("str | None", self._data.get("seed"))
@@ -66,6 +82,35 @@ class Options:
 
     def translate_y(self) -> Range | None:
         return self._to_range(self._data.get("translateY"))
+
+    def tags(self) -> list[TagFilterToken]:
+        """Return the global ``tags`` filter as parsed tokens, or an empty list
+        when unset.
+
+        Each raw token (``category`` / ``category:value``, optionally
+        ``!``-prefixed to exclude) is decoded into a :class:`TagFilterToken` so
+        the resolver composes the filter without parsing the grammar itself. An
+        empty list means no tag filtering (classic behavior). Memoized, since the
+        resolver reads it once per component.
+        """
+        if self._tags is None:
+            raw = self._as_array(self._data.get("tags"))
+            self._tags = [self._parse_tag(token) for token in raw]
+
+        return self._tags
+
+    @staticmethod
+    def _parse_tag(token: str) -> TagFilterToken:
+        negated = token.startswith("!")
+        body = token[1:] if negated else token
+        sep = body.find(":")
+
+        if sep == -1:
+            return TagFilterToken(category=body, value=None, negated=negated)
+
+        return TagFilterToken(
+            category=body[:sep], value=body[sep + 1 :], negated=negated
+        )
 
     def component_variant(self, name: str) -> dict[str, Numeric] | None:
         """Return the variant constraint for ``name`` as a weighted map, or

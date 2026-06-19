@@ -54,19 +54,24 @@ class OptionsDescriptor:
             "translateY": dict(_TRANSLATE_RANGE),
         }
 
+        tags: set[str] = set()
+
         for name, component in self._style.components().items():
             if component.extends_name() is not None:
                 continue
 
-            variants = sorted(component.variants().keys())
+            variants = component.variants()
 
             result[f"{name}Variant"] = {
                 "type": "enum",
-                "values": variants,
+                "values": sorted(variants.keys()),
                 "list": True,
                 "weighted": True,
             }
             result[f"{name}Probability"] = {"type": "number", "min": 0, "max": 100}
+
+            for variant in variants.values():
+                tags.update(variant.tags())
 
         colors = self._style.colors()
         color_names = [*colors.keys(), "background"]
@@ -86,5 +91,18 @@ class OptionsDescriptor:
             }
             result[f"{name}ColorFillStops"] = {"type": "range", "min": 2}
             result[f"{name}ColorAngle"] = dict(_ROTATE_RANGE)
+
+        # Only advertise the ``tags`` filter when the style actually carries
+        # tags. The values are the sorted union of every tag across the style's
+        # variants, but ``open`` marks them as suggestions: the filter also
+        # accepts ``!`` exclusions and bare categories and silently ignores
+        # unknown tokens.
+        if len(tags) > 0:
+            result["tags"] = {
+                "type": "enum",
+                "values": sorted(tags),
+                "list": True,
+                "open": True,
+            }
 
         return result
