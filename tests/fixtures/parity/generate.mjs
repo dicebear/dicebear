@@ -72,6 +72,79 @@ for (const name of STYLE_NAMES) {
   writeJson(join('styles', `${name}.json`), raw);
 }
 
+// A synthetic style with tagged variants. The vendored styles carry no tags
+// yet, so this pins the `tags` filter contract for every port: axis-scoped
+// includes, excludes, `${name}Variant` precedence, and unknown-tag no-ops. Each
+// variant renders a distinct rect, so the filtered pick shows up in both the
+// SVG and the resolved options. `hair` is mandatory and tagged on three axes,
+// `facialHair` is optional (probability 50), and `nose` carries no tags so the
+// filter must leave it whole.
+const tagRect = (fill) => ({
+  type: 'element',
+  name: 'rect',
+  attributes: { width: '100', height: '100', fill },
+});
+
+styles.tagged = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      { type: 'component', name: 'hair' },
+      { type: 'component', name: 'facialHair' },
+      { type: 'component', name: 'nose' },
+    ],
+  },
+  components: {
+    hair: {
+      width: 100,
+      height: 100,
+      variants: {
+        longStraight: {
+          elements: [tagRect('#111111')],
+          tags: ['hairLength:long', 'hairTexture:straight', 'gender:female'],
+        },
+        longCurly: {
+          elements: [tagRect('#222222')],
+          tags: ['hairLength:long', 'hairTexture:curly', 'gender:female'],
+        },
+        shortStraight: {
+          elements: [tagRect('#333333')],
+          tags: ['hairLength:short', 'hairTexture:straight', 'gender:male'],
+        },
+        shortCurly: {
+          elements: [tagRect('#444444')],
+          tags: ['hairLength:short', 'hairTexture:curly', 'gender:male'],
+        },
+      },
+    },
+    facialHair: {
+      width: 100,
+      height: 100,
+      probability: 50,
+      variants: {
+        beard: {
+          elements: [tagRect('#555555')],
+          tags: ['facialHair:beard', 'gender:male'],
+        },
+        mustache: {
+          elements: [tagRect('#666666')],
+          tags: ['facialHair:mustache', 'gender:male'],
+        },
+      },
+    },
+    nose: {
+      width: 100,
+      height: 100,
+      variants: {
+        small: { elements: [tagRect('#777777')] },
+        big: { elements: [tagRect('#888888')] },
+      },
+    },
+  },
+};
+writeJson(join('styles', 'tagged.json'), styles.tagged);
+
 // ---------------------------------------------------------------------------
 // Fnv1a fixtures
 // ---------------------------------------------------------------------------
@@ -500,6 +573,34 @@ const styleValidationCases = [
     id: 'unknown-root-key',
     definition: { canvas: { width: 100, height: 100, elements: [] }, unexpected: true },
   },
+  {
+    id: 'tagged-variant',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: {
+        hair: {
+          width: 100,
+          height: 100,
+          variants: {
+            long: { elements: [], tags: ['hairLength:long', 'gender:female'] },
+          },
+        },
+      },
+    },
+  },
+  {
+    id: 'invalid-tag-uppercase',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: {
+        hair: {
+          width: 100,
+          height: 100,
+          variants: { long: { elements: [], tags: ['HairLength:Long'] } },
+        },
+      },
+    },
+  },
 ];
 
 const optionsValidationCases = [
@@ -522,6 +623,12 @@ const optionsValidationCases = [
   { id: 'background-color-list', options: { backgroundColor: ['ff0000'] } },
   { id: 'background-color-invalid-hex', options: { backgroundColor: ['zzz'] } },
   { id: 'unknown-option', options: { unknownOption: 1 } },
+  { id: 'tags-string', options: { tags: 'gender:male' } },
+  { id: 'tags-array', options: { tags: ['hairLength:long', '!facialHair:beard'] } },
+  { id: 'tags-bare-exclude', options: { tags: ['!facialHair'] } },
+  { id: 'tags-invalid-uppercase', options: { tags: ['Bad:X'] } },
+  { id: 'tags-invalid-three-segment', options: { tags: ['a:b:c'] } },
+  { id: 'tags-invalid-double-negation', options: { tags: ['!!a'] } },
 ];
 
 // A style whose canvas uses color `a`, so resolving it walks the (circular)
@@ -765,6 +872,24 @@ const avatarFixtures = {
       id: 'shape-probability-zero',
       options: { seed: 'parity-1', shapeProbability: 0 },
     },
+  ]),
+  tagged: avatarCases([
+    // gender:male keeps the male hair, filters facialHair, leaves nose whole.
+    { id: 'tags-include-gender', options: { seed: 'parity-1', tags: 'gender:male' } },
+    // hairLength:long touches only hair; facialHair has no hairLength tag.
+    { id: 'tags-include-axis', options: { seed: 'parity-1', tags: 'hairLength:long' } },
+    // exclude one value, and a bare exclude that empties the optional facialHair.
+    { id: 'tags-exclude-value', options: { seed: 'parity-1', tags: '!hairTexture:curly' } },
+    { id: 'tags-exclude-bare', options: { seed: 'parity-1', tags: '!facialHair' } },
+    // AND across axes, OR within an axis.
+    { id: 'tags-and-across-axes', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairTexture:curly'] } },
+    { id: 'tags-or-within-axis', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairLength:short'] } },
+    // unknown tag is a no-op.
+    { id: 'tags-unknown-noop', options: { seed: 'parity-1', tags: 'eyes:big' } },
+    // ${name}Variant is more specific: hair ignores the filter, facialHair obeys it.
+    { id: 'tags-variant-precedence', options: { seed: 'parity-1', tags: 'gender:male', hairVariant: 'longStraight' } },
+    // empty ${name}Variant yields no hair even though the filter would allow some.
+    { id: 'tags-empty-variant', options: { seed: 'parity-1', tags: 'gender:female', hairVariant: [] } },
   ]),
 };
 
