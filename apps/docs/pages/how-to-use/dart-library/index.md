@@ -165,9 +165,9 @@ final dataUri = avatar.toDataUri();
 
 ## Core options
 
-The core options are identical to the JavaScript library. See the
-[JS Library core options](/how-to-use/js-library/#core-options) for the full
-reference. Here are the options in Dart syntax:
+These options are the same across every DiceBear core. See
+[Core options](/guides/core-options/) for the full reference. Here are the
+options in Dart syntax:
 
 ```dart
 final avatar = Avatar(style, {
@@ -188,8 +188,8 @@ final avatar = Avatar(style, {
 });
 ```
 
-Dynamic component and color options also work the same way. See the
-[JS Library documentation](/how-to-use/js-library/#dynamic-component-options)
+Dynamic component and color options also work the same way. See
+[Dynamic component options](/guides/core-options/#dynamic-component-options)
 for all available patterns.
 
 ## Examples

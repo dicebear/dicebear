@@ -51,6 +51,27 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
+    text: 'Customization',
+    items: [
+      {
+        text: 'Options',
+        link: '/guides/core-options/',
+      },
+      {
+        text: 'Tags <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/guides/filter-variants-with-tags/',
+      },
+      {
+        text: 'Tag Reference',
+        link: '/guides/how-dicebear-tags-variants/',
+      },
+      {
+        text: 'Gender',
+        link: '/guides/how-do-i-set-a-gender/',
+      },
+    ],
+  },
+  {
     text: 'Frameworks',
     items: [
       {
@@ -110,15 +131,6 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: 'Implement DiceBear Core',
         link: '/specification/implement-dicebear-core/',
-      },
-    ],
-  },
-  {
-    text: 'Concepts',
-    items: [
-      {
-        text: 'Gender',
-        link: '/guides/how-do-i-set-a-gender/',
       },
     ],
   },
