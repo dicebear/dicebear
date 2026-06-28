@@ -11,7 +11,7 @@ const count = useCombinationCount();
       <span class="pg-combo-label">possible avatars</span>
     </p>
     <p class="pg-combo-hint">
-      Shrinks as you restrict variants, colors, or probabilities.
+      Shrinks as you restrict variants, tags, colors, or probabilities.
       <a href="/guides/how-many-unique-avatars/">Learn more →</a>
     </p>
   </div>

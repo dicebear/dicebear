@@ -36,7 +36,7 @@ actually does:
   140,000 distinct uppercased characters), and `initials` emits up to two
   letters per seed.
 
-User-supplied options (custom color palettes, variant whitelists, additional
+User-supplied options (custom color palettes, variant allowlists, additional
 backgrounds, `flip`, `rotate`, `scale`, `translate`, `borderRadius`, ID
 randomization, …) raise the count further beyond what is reported here.
 
