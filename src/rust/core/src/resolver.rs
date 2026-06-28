@@ -179,31 +179,31 @@ impl<'a> Resolver<'a> {
     /// filter, applying the parsed [`Options::tags`] tokens in one pass over the
     /// pool:
     ///
-    /// - A positive `cat:value` token is an axis-scoped include. Within each
-    ///   category some include mentions, a variant is kept only if it carries no
-    ///   tag in that category (untouched) or matches one of the included values
-    ///   (OR within the category). Distinct included categories combine with
-    ///   AND, and a category no include mentions is left unconstrained. A bare
+    /// - A positive `cat:value` token is an axis-scoped allow. Within each
+    ///   category some allow mentions, a variant is kept only if it carries no
+    ///   tag in that category (untouched) or matches one of the allowed values
+    ///   (OR within the category). Distinct allowed categories combine with
+    ///   AND, and a category no allow mentions is left unconstrained. A bare
     ///   positive `cat` token carries no value, so it imposes no constraint.
-    /// - A negative `!cat`/`!cat:value` token excludes, dropping every variant
-    ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Excludes
-    ///   are checked alongside includes but always win.
+    /// - A negative `!cat`/`!cat:value` token disallows, dropping every variant
+    ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
+    ///   are checked alongside allows but always win.
     ///
     /// Returns the surviving variant names in definition order.
     fn tag_filtered_names(&self, component: &Component) -> Vec<String> {
-        // Insertion-ordered include groups: category -> included values.
-        let mut include_categories: Vec<String> = Vec::new();
-        let mut includes: HashMap<String, Vec<String>> = HashMap::new();
-        let mut excludes: Vec<(String, Option<String>)> = Vec::new();
+        // Insertion-ordered allow groups: category -> allowed values.
+        let mut allow_categories: Vec<String> = Vec::new();
+        let mut allows: HashMap<String, Vec<String>> = HashMap::new();
+        let mut disallows: Vec<(String, Option<String>)> = Vec::new();
 
         for token in self.options.tags() {
             if token.negated {
-                excludes.push((token.category, token.value));
+                disallows.push((token.category, token.value));
             } else if let Some(value) = token.value {
-                includes
+                allows
                     .entry(token.category.clone())
                     .or_insert_with(|| {
-                        include_categories.push(token.category.clone());
+                        allow_categories.push(token.category.clone());
                         Vec::new()
                     })
                     .push(value);
@@ -213,18 +213,18 @@ impl<'a> Resolver<'a> {
         let mut names: Vec<String> = Vec::new();
 
         for (name, variant) in component.variants() {
-            let included = include_categories.iter().all(|category| {
-                let values = &includes[category];
+            let allowed = allow_categories.iter().all(|category| {
+                let values = &allows[category];
                 !variant.has_tag(category, None)
                     || values
                         .iter()
                         .any(|value| variant.has_tag(category, Some(value)))
             });
-            let excluded = excludes
+            let disallowed = disallows
                 .iter()
                 .any(|(category, value)| variant.has_tag(category, value.as_deref()));
 
-            if included && !excluded {
+            if allowed && !disallowed {
                 names.push(name.clone());
             }
         }

@@ -83,7 +83,7 @@ class Options {
 
   /// Returns the global `tags` filter as parsed tokens, or an empty list when
   /// unset. Each raw token (`category` / `category:value`, optionally
-  /// `!`-prefixed to exclude) is decoded into a [TagFilterToken] so the
+  /// `!`-prefixed to disallow) is decoded into a [TagFilterToken] so the
   /// resolver composes the filter without parsing the grammar itself. An empty
   /// list means no tag filtering (classic behavior). Memoized, since the
   /// resolver reads it once per component.
@@ -169,7 +169,7 @@ class Options {
   }
 
   /// Decodes a single raw `tags` token into a [TagFilterToken]. A leading `!`
-  /// marks an exclude. The remainder splits on the first `:` into a category
+  /// marks a disallow. The remainder splits on the first `:` into a category
   /// and an optional value (a bare category leaves [TagFilterToken.value]
   /// null). Mirrors the JS reader's `Options.tags` parse.
   static TagFilterToken _parseTagToken(String token) {

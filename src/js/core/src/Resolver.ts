@@ -244,51 +244,51 @@ export class Resolver<D = unknown> {
    * filter, applying the parsed {@link Options.tags} tokens in one pass over
    * the pool:
    *
-   * - A positive `cat:value` token is an axis-scoped include. Within each
-   *   category some include mentions, a variant is kept only if it carries no
-   *   tag in that category (untouched) or matches one of the included values
-   *   (OR within the category). Distinct included categories combine with AND,
-   *   and a category no include mentions is left unconstrained. A bare positive
+   * - A positive `cat:value` token is an axis-scoped allow. Within each
+   *   category some allow mentions, a variant is kept only if it carries no
+   *   tag in that category (untouched) or matches one of the allowed values
+   *   (OR within the category). Distinct allowed categories combine with AND,
+   *   and a category no allow mentions is left unconstrained. A bare positive
    *   `cat` token carries no value, so it imposes no constraint (a no-op).
-   * - A negative `!cat`/`!cat:value` token excludes, dropping every variant
-   *   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Excludes
-   *   are checked alongside includes but always win.
+   * - A negative `!cat`/`!cat:value` token disallows, dropping every variant
+   *   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
+   *   are checked alongside allows but always win.
    *
    * Returns the surviving variant names in definition order.
    */
   #tagFilteredNames(
     variants: ReadonlyMap<string, ComponentVariant>,
   ): string[] {
-    const includes = new Map<string, string[]>();
-    const excludes: { category: string; value?: string }[] = [];
+    const allows = new Map<string, string[]>();
+    const disallows: { category: string; value?: string }[] = [];
 
     for (const { category, value, negated } of this.#options.tags()) {
       if (negated) {
-        excludes.push({ category, value });
+        disallows.push({ category, value });
       } else if (value !== undefined) {
-        const values = includes.get(category) ?? [];
+        const values = allows.get(category) ?? [];
 
         values.push(value);
-        includes.set(category, values);
+        allows.set(category, values);
       }
     }
 
-    // Materialize the include groups once, not on every variant.
-    const includeGroups = [...includes];
+    // Materialize the allow groups once, not on every variant.
+    const allowGroups = [...allows];
 
     const names: string[] = [];
 
     for (const [name, variant] of variants) {
-      const included = includeGroups.every(
+      const allowed = allowGroups.every(
         ([category, values]) =>
           !variant.hasTag(category) ||
           values.some((value) => variant.hasTag(category, value)),
       );
-      const excluded = excludes.some(({ category, value }) =>
+      const disallowed = disallows.some(({ category, value }) =>
         variant.hasTag(category, value),
       );
 
-      if (included && !excluded) {
+      if (allowed && !disallowed) {
         names.push(name);
       }
     }

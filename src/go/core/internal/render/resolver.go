@@ -180,41 +180,41 @@ func (r *resolver) variantWeights(comp *style.Component) map[string]float64 {
 // global tags filter, applying the parsed options.tags tokens in one pass over
 // the pool:
 //
-//   - A positive cat:value token is an axis-scoped include. Within each category
-//     some include mentions, a variant is kept only if it carries no tag in that
-//     category (untouched) or matches one of the included values (OR within the
-//     category). Distinct included categories combine with AND, and a category no
-//     include mentions is left unconstrained. A bare positive cat token carries no
+//   - A positive cat:value token is an axis-scoped allow. Within each category
+//     some allow mentions, a variant is kept only if it carries no tag in that
+//     category (untouched) or matches one of the allowed values (OR within the
+//     category). Distinct allowed categories combine with AND, and a category no
+//     allow mentions is left unconstrained. A bare positive cat token carries no
 //     value, so it imposes no constraint (a no-op).
-//   - A negative !cat / !cat:value token excludes, dropping every variant
-//     carrying any tag in cat (bare) or the exact cat:value tag. Excludes are
-//     checked alongside includes but always win.
+//   - A negative !cat / !cat:value token disallows, dropping every variant
+//     carrying any tag in cat (bare) or the exact cat:value tag. Disallows are
+//     checked alongside allows but always win.
 //
 // The result order is irrelevant: WeightedPick sorts the names internally.
 func (r *resolver) tagFilteredNames(variants map[string]style.ComponentVariant) []string {
-	type include struct {
+	type allow struct {
 		category string
 		values   []string
 	}
-	type exclude struct {
+	type disallow struct {
 		category string
 		value    string
 		hasValue bool
 	}
 
-	var includeGroups []*include
-	includeIndex := map[string]*include{}
-	var excludes []exclude
+	var allowGroups []*allow
+	allowIndex := map[string]*allow{}
+	var disallows []disallow
 
 	for _, tok := range r.options.tags() {
 		if tok.negated {
-			excludes = append(excludes, exclude{category: tok.category, value: tok.value, hasValue: tok.hasValue})
+			disallows = append(disallows, disallow{category: tok.category, value: tok.value, hasValue: tok.hasValue})
 		} else if tok.hasValue {
-			grp, ok := includeIndex[tok.category]
+			grp, ok := allowIndex[tok.category]
 			if !ok {
-				grp = &include{category: tok.category}
-				includeIndex[tok.category] = grp
-				includeGroups = append(includeGroups, grp)
+				grp = &allow{category: tok.category}
+				allowIndex[tok.category] = grp
+				allowGroups = append(allowGroups, grp)
 			}
 			grp.values = append(grp.values, tok.value)
 		}
@@ -222,8 +222,8 @@ func (r *resolver) tagFilteredNames(variants map[string]style.ComponentVariant) 
 
 	var names []string
 	for name, variant := range variants {
-		included := true
-		for _, grp := range includeGroups {
+		allowed := true
+		for _, grp := range allowGroups {
 			if !variant.HasTag(grp.category, "", false) {
 				continue
 			}
@@ -235,23 +235,23 @@ func (r *resolver) tagFilteredNames(variants map[string]style.ComponentVariant) 
 				}
 			}
 			if !matched {
-				included = false
+				allowed = false
 				break
 			}
 		}
-		if !included {
+		if !allowed {
 			continue
 		}
 
-		excluded := false
-		for _, ex := range excludes {
+		disallowed := false
+		for _, ex := range disallows {
 			if variant.HasTag(ex.category, ex.value, ex.hasValue) {
-				excluded = true
+				disallowed = true
 				break
 			}
 		}
 
-		if !excluded {
+		if !disallowed {
 			names = append(names, name)
 		}
 	}
