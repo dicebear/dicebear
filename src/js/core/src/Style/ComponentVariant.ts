@@ -43,7 +43,7 @@ export class ComponentVariant {
    * `value`, it matches a whole category: the bare `category` tag or any
    * `category:value` tag. With a `value`, it matches only the exact
    * `category:value` tag. The resolver composes these checks into the
-   * include/exclude filter structure.
+   * allow/disallow filter structure.
    */
   hasTag(category: string, value?: string): boolean {
     if (value === undefined) {

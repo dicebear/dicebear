@@ -107,7 +107,7 @@ class Options
     /**
      * Returns the global `tags` filter as parsed tokens, or an empty list when
      * unset. Each raw token (`category` / `category:value`, optionally
-     * `!`-prefixed to exclude) is decoded into `['category' => …, 'value' => …,
+     * `!`-prefixed to disallow) is decoded into `['category' => …, 'value' => …,
      * 'negated' => …]` so the resolver composes the filter without parsing the
      * grammar itself. An empty list means no tag filtering (classic behavior).
      * Memoized, since the resolver reads it once per component.

@@ -141,44 +141,44 @@ class Resolver:
         ``tags`` filter, applying the parsed :meth:`Options.tags` tokens in one
         pass over the pool:
 
-        - A positive ``cat:value`` token is an axis-scoped include. Within each
-          category some include mentions, a variant is kept only if it carries no
-          tag in that category (untouched) or matches one of the included values
-          (OR within the category). Distinct included categories combine with
-          AND, and a category no include mentions is left unconstrained. A bare
+        - A positive ``cat:value`` token is an axis-scoped allow. Within each
+          category some allow mentions, a variant is kept only if it carries no
+          tag in that category (untouched) or matches one of the allowed values
+          (OR within the category). Distinct allowed categories combine with
+          AND, and a category no allow mentions is left unconstrained. A bare
           positive ``cat`` token carries no value, so it imposes no constraint (a
           no-op).
-        - A negative ``!cat``/``!cat:value`` token excludes, dropping every
+        - A negative ``!cat``/``!cat:value`` token disallows, dropping every
           variant carrying any tag in ``cat`` (bare) or the exact ``cat:value``
-          tag. Excludes are checked alongside includes but always win.
+          tag. Disallows are checked alongside allows but always win.
 
         Returns the surviving variant names in definition order.
         """
-        includes: dict[str, list[str]] = {}
-        excludes: list[tuple[str, str | None]] = []
+        allows: dict[str, list[str]] = {}
+        disallows: list[tuple[str, str | None]] = []
 
         for token in self._options.tags():
             if token.negated:
-                excludes.append((token.category, token.value))
+                disallows.append((token.category, token.value))
             elif token.value is not None:
-                includes.setdefault(token.category, []).append(token.value)
+                allows.setdefault(token.category, []).append(token.value)
 
-        # Materialize the include groups once, not on every variant.
-        include_groups = list(includes.items())
+        # Materialize the allow groups once, not on every variant.
+        allow_groups = list(allows.items())
 
         names: list[str] = []
 
         for name, variant in variants.items():
-            included = all(
+            allowed = all(
                 not variant.has_tag(category)
                 or any(variant.has_tag(category, value) for value in values)
-                for category, values in include_groups
+                for category, values in allow_groups
             )
-            excluded = any(
-                variant.has_tag(category, value) for category, value in excludes
+            disallowed = any(
+                variant.has_tag(category, value) for category, value in disallows
             )
 
-            if included and not excluded:
+            if allowed and not disallowed:
                 names.append(name)
 
         return names

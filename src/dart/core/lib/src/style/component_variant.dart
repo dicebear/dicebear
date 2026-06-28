@@ -45,7 +45,7 @@ class ComponentVariant {
   /// [value], it matches a whole category: the bare `category` tag or any
   /// `category:value` tag. With a [value], it matches only the exact
   /// `category:value` tag. The resolver composes these checks into the
-  /// include/exclude filter structure.
+  /// allow/disallow filter structure.
   bool hasTag(String category, [String? value]) {
     if (value == null) {
       final prefix = '$category:';

@@ -258,16 +258,16 @@ class Resolver
      * filter, applying the parsed {@see Options::tags()} tokens in one pass over
      * the pool:
      *
-     * - A positive `cat:value` token is an axis-scoped include. Within each
-     *   category some include mentions, a variant is kept only if it carries no
-     *   tag in that category (untouched) or matches one of the included values
-     *   (OR within the category). Distinct included categories combine with AND,
-     *   and a category no include mentions is left unconstrained. A bare
+     * - A positive `cat:value` token is an axis-scoped allow. Within each
+     *   category some allow mentions, a variant is kept only if it carries no
+     *   tag in that category (untouched) or matches one of the allowed values
+     *   (OR within the category). Distinct allowed categories combine with AND,
+     *   and a category no allow mentions is left unconstrained. A bare
      *   positive `cat` token carries no value, so it imposes no constraint (a
      *   no-op).
-     * - A negative `!cat`/`!cat:value` token excludes, dropping every variant
-     *   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Excludes
-     *   are checked alongside includes but always win.
+     * - A negative `!cat`/`!cat:value` token disallows, dropping every variant
+     *   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
+     *   are checked alongside allows but always win.
      *
      * Returns the surviving variant names in definition order.
      *
@@ -277,25 +277,25 @@ class Resolver
      */
     private function tagFilteredNames(array $variants): array
     {
-        /** @var array<string, list<string>> $includes */
-        $includes = [];
-        /** @var list<array{category: string, value?: string}> $excludes */
-        $excludes = [];
+        /** @var array<string, list<string>> $allows */
+        $allows = [];
+        /** @var list<array{category: string, value?: string}> $disallows */
+        $disallows = [];
 
         foreach ($this->options->tags() as $token) {
             if ($token['negated']) {
-                $excludes[] = ['category' => $token['category'], 'value' => $token['value'] ?? null];
+                $disallows[] = ['category' => $token['category'], 'value' => $token['value'] ?? null];
             } elseif (isset($token['value'])) {
-                $includes[$token['category']][] = $token['value'];
+                $allows[$token['category']][] = $token['value'];
             }
         }
 
         $names = [];
 
         foreach ($variants as $name => $variant) {
-            $included = true;
+            $allowed = true;
 
-            foreach ($includes as $category => $values) {
+            foreach ($allows as $category => $values) {
                 if (!$variant->hasTag($category)) {
                     continue;
                 }
@@ -310,21 +310,21 @@ class Resolver
                 }
 
                 if (!$matches) {
-                    $included = false;
+                    $allowed = false;
                     break;
                 }
             }
 
-            $excluded = false;
+            $disallowed = false;
 
-            foreach ($excludes as $exclude) {
-                if ($variant->hasTag($exclude['category'], $exclude['value'])) {
-                    $excluded = true;
+            foreach ($disallows as $disallow) {
+                if ($variant->hasTag($disallow['category'], $disallow['value'])) {
+                    $disallowed = true;
                     break;
                 }
             }
 
-            if ($included && !$excluded) {
+            if ($allowed && !$disallowed) {
                 $names[] = (string) $name;
             }
         }

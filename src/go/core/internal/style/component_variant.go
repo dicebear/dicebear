@@ -21,7 +21,7 @@ func (cv ComponentVariant) WeightOr1() float64 {
 // HasTag tests this variant against a single tag-filter token's grammar. With an
 // empty value, it matches a whole category: the bare category tag or any
 // category:value tag. With a value, it matches only the exact category:value tag.
-// The resolver composes these checks into the include/exclude filter structure.
+// The resolver composes these checks into the allow/disallow filter structure.
 func (cv ComponentVariant) HasTag(category, value string, hasValue bool) bool {
 	if !hasValue {
 		prefix := category + ":"

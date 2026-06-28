@@ -135,46 +135,46 @@ class Resolver {
   /// filter, applying the parsed [Options.tags] tokens in one pass over the
   /// pool:
   ///
-  /// - A positive `cat:value` token is an axis-scoped include. Within each
-  ///   category some include mentions, a variant is kept only if it carries no
-  ///   tag in that category (untouched) or matches one of the included values
-  ///   (OR within the category). Distinct included categories combine with
-  ///   AND, and a category no include mentions is left unconstrained. A bare
+  /// - A positive `cat:value` token is an axis-scoped allow. Within each
+  ///   category some allow mentions, a variant is kept only if it carries no
+  ///   tag in that category (untouched) or matches one of the allowed values
+  ///   (OR within the category). Distinct allowed categories combine with
+  ///   AND, and a category no allow mentions is left unconstrained. A bare
   ///   positive `cat` token carries no value, so it imposes no constraint (a
   ///   no-op).
-  /// - A negative `!cat`/`!cat:value` token excludes, dropping every variant
-  ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Excludes
-  ///   are checked alongside includes but always win.
+  /// - A negative `!cat`/`!cat:value` token disallows, dropping every variant
+  ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
+  ///   are checked alongside allows but always win.
   ///
   /// Returns the surviving variant names in definition order.
   List<String> _tagFilteredNames(Map<String, ComponentVariant> variants) {
-    final includes = <String, List<String>>{};
-    final excludes = <({String category, String? value})>[];
+    final allows = <String, List<String>>{};
+    final disallows = <({String category, String? value})>[];
 
     for (final token in _options.tags()) {
       if (token.negated) {
-        excludes.add((category: token.category, value: token.value));
+        disallows.add((category: token.category, value: token.value));
       } else if (token.value != null) {
-        includes.putIfAbsent(token.category, () => []).add(token.value!);
+        allows.putIfAbsent(token.category, () => []).add(token.value!);
       }
     }
 
-    final includeGroups = includes.entries.toList();
+    final allowGroups = allows.entries.toList();
     final names = <String>[];
 
     for (final entry in variants.entries) {
       final variant = entry.value;
 
-      final included = includeGroups.every(
+      final allowed = allowGroups.every(
         (group) =>
             !variant.hasTag(group.key) ||
             group.value.any((value) => variant.hasTag(group.key, value)),
       );
-      final excluded = excludes.any(
+      final disallowed = disallows.any(
         (token) => variant.hasTag(token.category, token.value),
       );
 
-      if (included && !excluded) {
+      if (allowed && !disallowed) {
         names.add(entry.key);
       }
     }

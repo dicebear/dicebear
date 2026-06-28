@@ -89,7 +89,7 @@ impl Options {
 
     /// Returns the global `tags` filter as parsed tokens, or an empty list when
     /// unset. Each raw token (`category` / `category:value`, optionally
-    /// `!`-prefixed to exclude) is decoded into `{ category, value?, negated }`
+    /// `!`-prefixed to disallow) is decoded into `{ category, value?, negated }`
     /// so the resolver composes the filter without parsing the grammar itself.
     /// An empty list means no tag filtering (classic behavior).
     pub(crate) fn tags(&self) -> Vec<TagFilterToken> {

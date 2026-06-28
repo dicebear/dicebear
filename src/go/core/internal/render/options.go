@@ -91,7 +91,7 @@ func (o *options) translateY() *prng.Range   { v, _ := o.get("translateY"); retu
 
 // tags returns the global `tags` filter as parsed tokens, or an empty slice when
 // unset. Each raw token (`category` / `category:value`, optionally `!`-prefixed
-// to exclude) is decoded into a tagFilterToken so the resolver composes the
+// to disallow) is decoded into a tagFilterToken so the resolver composes the
 // filter without parsing the grammar itself. Memoized, since the resolver reads
 // it once per component.
 func (o *options) tags() []tagFilterToken {
