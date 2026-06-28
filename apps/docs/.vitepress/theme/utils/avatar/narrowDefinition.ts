@@ -33,32 +33,56 @@ export function narrowDefinition(
     }
   }
 
+  // Track the base components an explicit `${name}Variant` governs — the
+  // global `tags` filter must skip those, mirroring the resolver's precedence
+  // (Resolver.#variantWeights: a set `${name}Variant` fully governs the pool).
+  const explicitVariantBases = new Set<string>();
+
   for (const [key, value] of entries) {
     if (key.endsWith('Variant')) {
-      applyVariantNarrowing(next, key.slice(0, -'Variant'.length), value);
+      const base = applyVariantNarrowing(
+        next,
+        key.slice(0, -'Variant'.length),
+        value,
+      );
+
+      if (base) {
+        explicitVariantBases.add(base);
+      }
     } else if (key.endsWith('Color')) {
       applyColorPalette(next, key.slice(0, -'Color'.length), value);
     }
   }
 
+  if (options.tags !== undefined) {
+    applyTagFilter(next, options.tags, explicitVariantBases);
+  }
+
   return next;
 }
 
+/**
+ * Applies a `${name}Variant` override and returns the resolved base component
+ * name it governs (or `undefined` when the option resolves to nothing). The
+ * caller records that name so the global `tags` filter skips this component,
+ * matching the resolver's precedence (a set `${name}Variant` fully governs the
+ * pool — see {@link applyTagFilter}).
+ */
 function applyVariantNarrowing(
   definition: MutableDefinition,
   componentName: string,
   value: unknown,
-): void {
+): string | undefined {
   const base = resolveBase(definition, componentName);
 
   if (!base || !base.component.variants) {
-    return;
+    return base?.name;
   }
 
   const baseComponent = definition.components?.[base.name];
 
   if (!baseComponent || isAlias(baseComponent)) {
-    return;
+    return base.name;
   }
 
   let active: Map<string, number> | undefined;
@@ -92,7 +116,7 @@ function applyVariantNarrowing(
   }
 
   if (!active) {
-    return;
+    return base.name;
   }
 
   // Empty selection: renderer's weightedPick returns undefined for `[]`
@@ -101,7 +125,7 @@ function applyVariantNarrowing(
   // user-set probability.
   if (active.size === 0) {
     baseComponent.probability = 0;
-    return;
+    return base.name;
   }
 
   const narrowed: Record<string, any> = {};
@@ -112,6 +136,137 @@ function applyVariantNarrowing(
   }
 
   baseComponent.variants = narrowed;
+
+  return base.name;
+}
+
+type TagToken = { category: string; value?: string; negated: boolean };
+
+/**
+ * Mirrors `ComponentVariant.hasTag` over a raw tag list. With no `value`, it
+ * matches a whole category (the bare `category` tag or any `category:value`);
+ * with a `value`, only the exact `category:value` tag.
+ */
+function variantHasTag(
+  tags: readonly string[],
+  category: string,
+  value?: string,
+): boolean {
+  if (value === undefined) {
+    return tags.some(
+      (tag) => tag === category || tag.startsWith(`${category}:`),
+    );
+  }
+
+  return tags.includes(`${category}:${value}`);
+}
+
+/**
+ * Parses the raw `tags` option into filter tokens, mirroring `Options.tags`.
+ * A single string is wrapped to an array; each `category` / `category:value`
+ * token (optionally `!`-prefixed to disallow) becomes
+ * `{ category, value?, negated }`.
+ */
+function parseTagTokens(value: unknown): TagToken[] {
+  const raw = Array.isArray(value)
+    ? value
+    : typeof value === 'string'
+      ? [value]
+      : [];
+
+  const tokens: TagToken[] = [];
+
+  for (const entry of raw) {
+    if (typeof entry !== 'string') {
+      continue;
+    }
+
+    const negated = entry.startsWith('!');
+    const body = negated ? entry.slice(1) : entry;
+    const sep = body.indexOf(':');
+
+    tokens.push(
+      sep === -1
+        ? { category: body, negated }
+        : { category: body.slice(0, sep), value: body.slice(sep + 1), negated },
+    );
+  }
+
+  return tokens;
+}
+
+/**
+ * Applies the global `tags` filter to every base component lacking an explicit
+ * `${name}Variant` override, mirroring `Resolver.#tagFilteredNames`. Within a
+ * category some allow mentions, a variant survives if it carries no tag in
+ * that category or matches one of the allowed values (OR within a category,
+ * AND across categories); a `!category[:value]` token drops matching variants
+ * and always wins. A component narrowed to no variants renders nothing — one
+ * outcome — so its probability is pinned to 0 (matching the empty-selection
+ * branch in {@link applyVariantNarrowing}).
+ */
+function applyTagFilter(
+  definition: MutableDefinition,
+  tagsOption: unknown,
+  explicitVariantBases: ReadonlySet<string>,
+): void {
+  const tokens = parseTagTokens(tagsOption);
+  const allows = new Map<string, string[]>();
+  const disallows: { category: string; value?: string }[] = [];
+
+  for (const { category, value, negated } of tokens) {
+    if (negated) {
+      disallows.push({ category, value });
+    } else if (value !== undefined) {
+      const values = allows.get(category) ?? [];
+
+      values.push(value);
+      allows.set(category, values);
+    }
+  }
+
+  const allowGroups = [...allows];
+
+  if (allowGroups.length === 0 && disallows.length === 0) {
+    return;
+  }
+
+  for (const [name, component] of Object.entries(definition.components ?? {})) {
+    if (isAlias(component) || !component.variants) {
+      continue;
+    }
+
+    if (explicitVariantBases.has(name)) {
+      continue;
+    }
+
+    const narrowed: Record<string, any> = {};
+
+    for (const [variantName, variant] of Object.entries(component.variants)) {
+      const tags: readonly string[] = Array.isArray(variant.tags)
+        ? variant.tags
+        : [];
+
+      const allowed = allowGroups.every(
+        ([category, values]) =>
+          !variantHasTag(tags, category) ||
+          values.some((value) => variantHasTag(tags, category, value)),
+      );
+      const disallowed = disallows.some(({ category, value }) =>
+        variantHasTag(tags, category, value),
+      );
+
+      if (allowed && !disallowed) {
+        narrowed[variantName] = variant;
+      }
+    }
+
+    if (Object.keys(narrowed).length === 0) {
+      component.probability = 0;
+    } else {
+      component.variants = narrowed;
+    }
+  }
 }
 
 function applyProbability(
