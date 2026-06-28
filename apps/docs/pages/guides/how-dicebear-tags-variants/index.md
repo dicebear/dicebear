@@ -22,9 +22,10 @@ A few principles keep the tags consistent:
   variant is left untagged rather than guessed.
 - Most variants carry no tag or one tag. A few carry two, such as hair with a
   visible hat, or a beard together with a mustache.
-- Variant tags are positive only. To leave something out at render time, use the
-  `!` form of the [`tags` option](/guides/filter-variants-with-tags/). Exclusion
-  lives in the filter, not in the data.
+- Variant tags only add information, they never remove a variant on their own. To
+  leave something out at render time, use the `!` form of the
+  [`tags` option](/guides/filter-variants-with-tags/). Disallowing lives in the
+  filter, not in the data.
 
 The tag grammar is `category` or `category:value`, each segment camelCase and
 alphanumeric. A variant holds at most 32 tags.
@@ -32,21 +33,25 @@ alphanumeric. A variant holds at most 32 tags.
 ## Mood
 
 The `mood` category covers the parts of the face that carry expression: the
-mouth, eyes, eyebrows, and any combined expression component. A variant gets at
-most one mood.
+mouth, eyes, eyebrows, and any combined expression component. It has two values,
+and a variant gets at most one.
 
-- `happy` for smiling, grinning, laughing, or otherwise cheerful expressions.
-- `neutral` for a flat or relaxed face with no clear emotion.
-- `sad` for downturned, frowning, or crying expressions.
-- `angry` for furrowed, scowling, or aggressive expressions.
-- `surprised` for wide-open shapes, raised brows, an "o" mouth.
-- `playful` for a wink, a tongue out, a kiss, or a cheeky, mischievous look. This
-  is the one to use when the expression is teasing rather than plainly cheerful.
-- `confused` for a puzzled, skeptical, or uncertain look.
-- `scared` for a fearful, nervous, or worried look.
+- `negative` for a clearly unfriendly or distressed expression: angry, sad, or
+  scared.
+- `positive` for everything else, including happy, neutral, surprised, playful, and
+  confused faces.
 
-When a face reads as expressionless or you cannot tell, it gets `neutral`. When it
-carries no expression at all, such as a face mask or a purely graphic shape, it is
+Only a clear negative is tagged `negative`. Anything friendly, neutral, or
+ambiguous is `positive`, so filtering on `mood:positive` always leaves a usable
+variant and never empties a component. The usual reason to filter mood is to keep
+avatars friendly, and `mood:positive` does that.
+
+Mood is deliberately coarse. A finer list of feelings would not survive filtering,
+because a specific feeling like "sad" often has no matching variant for every part
+of a face, so that part would drop out and the avatar would render incomplete. Two
+values keep every filtered face complete.
+
+A part with no expression at all, such as a face mask or a purely graphic shape, is
 left without a mood.
 
 ## Hair length

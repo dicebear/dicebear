@@ -3,13 +3,13 @@ title: Filter Avatar Variants with Tags
 description: >
   Variant tags describe each part of an avatar, such as the mood, hair length, or
   facial hair. The tags option filters the variant pool, so you can keep only
-  happy mouths, long hair, or any other trait, across DiceBear styles.
+  friendly faces, long hair, or any other trait, across DiceBear styles.
 ---
 
 # Filter avatar variants with tags
 
 Many avatar styles describe their variants with **tags**. A tag is a short label
-like `mood:happy` or `hairLength:long` that says something about how a variant
+like `mood:positive` or `hairLength:long` that says something about how a variant
 looks. Tags only describe, they never change the artwork. They let you narrow the
 pool of variants an avatar is drawn from, and they work the same way across every
 style that carries them.
@@ -26,7 +26,7 @@ import adventurer from '@dicebear/styles/adventurer.json' with { type: 'json' };
 const style = new Style(adventurer);
 const avatar = new Avatar(style, {
   seed: 'John',
-  tags: ['mood:happy'],
+  tags: ['mood:positive'],
 });
 ```
 
@@ -34,7 +34,7 @@ In the [HTTP API](/how-to-use/http-api/) the same filter is a comma-separated
 query parameter:
 
 ```
-https://api.dicebear.com/10.x/adventurer/svg?seed=John&tags=mood:happy
+https://api.dicebear.com/10.x/adventurer/svg?seed=John&tags=mood:positive
 ```
 
 ## How the filter works
@@ -42,16 +42,17 @@ https://api.dicebear.com/10.x/adventurer/svg?seed=John&tags=mood:happy
 A tag has the form `category:value`. The filter reads the tags you pass and
 narrows each component's pool of variants:
 
-- Filtering by `mood:happy` keeps the happy mouths, eyes, and eyebrows but leaves
-  the hair alone, because hair carries no `mood` tag. A category only touches the
-  components that use it, so you change one trait and the rest stays varied.
-- Values in the same category act as "or". `['mood:happy', 'mood:playful']` keeps
-  variants that are happy or playful.
-- Different categories act as "and". `['hairLength:long', 'mood:happy']` keeps long
-  hair together with a happy face.
-- A leading `!` excludes. `['!mood:sad']` drops the sad variants, and a bare
-  category like `['!facialHair']` drops every variant that has a facial-hair tag.
-  An exclude always wins over an include.
+- Filtering by `mood:positive` keeps the positive mouths, eyes, and eyebrows but
+  leaves the hair alone, because hair carries no `mood` tag. A category only touches
+  the components that use it, so you change one trait and the rest stays varied.
+- Values in the same category act as "or". `['hairLength:short', 'hairLength:medium']`
+  keeps short or medium hair.
+- Different categories act as "and". `['hairLength:long', 'mood:positive']` keeps long
+  hair together with a friendly face.
+- A leading `!` disallows. `['!mood:negative']` drops the negative faces, which is the
+  same as allowing `mood:positive` here, and a bare category like `['!facialHair']`
+  drops every variant that has a facial-hair tag. A disallow always wins over an
+  allow.
 
 A per-component variant option is more specific and takes precedence. When you set
 `mouthVariant` directly, the `tags` filter is ignored for the mouth and applies
@@ -74,7 +75,7 @@ and an abstract style may carry none.
 
 | Category     | Values                                                                                            | Found on                                          |
 | ------------ | ------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `mood`       | `happy`, `neutral`, `sad`, `angry`, `surprised`, `playful`, `confused`, `scared`                  | mouth, eyes, eyebrows, expression                 |
+| `mood`       | `positive`, `negative`                                                                            | mouth, eyes, eyebrows, expression                 |
 | `hairLength` | `bald`, `short`, `medium`, `long`                                                                  | hair, top, front hair                             |
 | `hairStyle`  | `straight`, `wavy`, `curly`, `afro`, `buzzcut`, `bob`, `updo`, `ponytail`, `braids`, `dreadlocks`, `mohawk`, `bangs` | hair, top, front hair          |
 | `headwear`   | `hat`, `cap`, `beanie`, `turban`, `hijab`, `headband`                                              | hats, and hat-like hair variants                  |
@@ -94,10 +95,10 @@ const avatar = new Avatar(style, {
   tags: ['hairLength:long', '!facialHair'],
 });
 
-// Only cheerful expressions, in any style that tags its mood.
+// Only friendly faces, in any style that tags its mood.
 const avatar = new Avatar(style, {
   seed: 'Sam',
-  tags: ['mood:happy', 'mood:playful'],
+  tags: ['mood:positive'],
 });
 ```
 
