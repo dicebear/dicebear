@@ -6,6 +6,7 @@ import type {
   CustomStyleEntry,
   PlaygroundStoreStyle,
   PlaygroundStoreOptions,
+  ThemeOptions,
 } from '@theme/types';
 import { useData } from 'vitepress';
 import {
@@ -17,7 +18,7 @@ import {
 import { track, styleLabel } from '@theme/utils/track';
 
 export default defineStore('playground', () => {
-  const data = useData();
+  const data = useData<ThemeOptions>();
 
   const availableAvatarStyles = Object.keys(data.theme.value.avatarStyles);
 

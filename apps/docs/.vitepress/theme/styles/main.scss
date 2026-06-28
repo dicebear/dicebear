@@ -49,6 +49,19 @@
   border-color: transparent !important;
 }
 
+/* Muted help/description text under a field. Spaced from the control above,
+   except when it leads its container (then the container's own spacing wins). */
+.pg-help {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ui-c-text-muted);
+}
+
+.pg-help:first-child {
+  margin-top: 0;
+}
+
 /* ----------------------------------------------------------------
  * Global Motion & Interaction Tokens
  * ---------------------------------------------------------------- */

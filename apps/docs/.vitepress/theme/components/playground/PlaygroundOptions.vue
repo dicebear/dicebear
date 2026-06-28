@@ -21,6 +21,7 @@ import Button from 'primevue/button';
 import ToggleSwitch from 'primevue/toggleswitch';
 import { Shuffle } from '@lucide/vue';
 import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
+import PlaygroundTagsSection from './PlaygroundTagsSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundTransformSection from './PlaygroundTransformSection.vue';
 import PlaygroundFontSection from './PlaygroundFontSection.vue';
@@ -67,6 +68,33 @@ const hasFontWeight = computed(() =>
     ? styleUsesVariable(avatarStyleName.value, 'fontWeight')
     : false,
 );
+
+// The `tags` filter only does something for styles whose variants carry tags;
+// OptionsDescriptor advertises the `tags` field (with the style's own tag
+// vocabulary) exactly in that case.
+const styleTags = computed<string[]>(() => {
+  const field = descriptor.value.tags;
+
+  return field && 'values' in field ? [...field.values] : [];
+});
+const hasTags = computed(() => styleTags.value.length > 0);
+
+const tagTokens = computed<string[]>(() => {
+  const value = store.avatarStyleOptions.tags;
+
+  return Array.isArray(value) ? (value as string[]) : [];
+});
+
+const tagPanels: { mode: 'allow' | 'disallow'; label: string }[] = [
+  { mode: 'allow', label: 'Allow' },
+  { mode: 'disallow', label: 'Disallow' },
+];
+
+// Number of set tokens for a panel's polarity (`!`-prefixed = disallow).
+function tagCount(mode: 'allow' | 'disallow'): number {
+  return tagTokens.value.filter((t) => t.startsWith('!') === (mode === 'disallow'))
+    .length;
+}
 
 const components = computed(() => {
   const result: ComponentInfo[] = [];
@@ -294,7 +322,7 @@ const onSeedFocus = (e: FocusEvent) => {
                 <Shuffle :size="16" />
               </Button>
             </div>
-            <p class="pg-options-seed-help">
+            <p class="pg-help">
               The seed is the starting value used to generate the avatar.
               <strong>The same seed always produces the same avatar</strong>, so
               you can reuse it whenever you need the exact same result. For
@@ -404,6 +432,33 @@ const onSeedFocus = (e: FocusEvent) => {
                 >.
               </p>
             </div>
+          </AccordionContent>
+        </AccordionPanel>
+      </Accordion>
+    </div>
+
+    <div class="pg-options-group" v-if="hasTags">
+      <h3 class="pg-options-group-title">Tags</h3>
+      <Accordion :multiple="true" class="pg-options-accordion">
+        <AccordionPanel
+          v-for="panel in tagPanels"
+          :key="panel.mode"
+          :value="panel.mode"
+        >
+          <AccordionHeader>
+            <span class="pg-options-label">{{ panel.label }}</span>
+            <Tag
+              :value="`${tagCount(panel.mode)}/${styleTags.length}`"
+              severity="secondary"
+              class="pg-options-tag"
+            />
+          </AccordionHeader>
+          <AccordionContent>
+            <PlaygroundTagsSection
+              :key="avatarStyleName"
+              :mode="panel.mode"
+              :tags="styleTags"
+            />
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
@@ -523,13 +578,6 @@ const onSeedFocus = (e: FocusEvent) => {
 .pg-options-seed {
   flex: 1;
   min-width: 0;
-}
-
-.pg-options-seed-help {
-  margin: 8px 0 0;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--ui-c-text-muted);
 }
 
 .pg-options-output {
