@@ -21,3 +21,15 @@ export const styleDefaultsDefault = readonly(ref<Record<string, unknown>>({}));
 
 export const navigateToColorKey: InjectionKey<(colorName: string) => void> =
   Symbol('navigateToColor');
+
+export type VariantTagsLookup = (
+  component: string,
+  variant: string,
+) => string[];
+export const variantTagsKey: InjectionKey<VariantTagsLookup> =
+  Symbol('variantTags');
+export const variantTagsDefault: VariantTagsLookup = () => [];
+
+export const showVariantTagsKey: InjectionKey<Ref<boolean>> =
+  Symbol('showVariantTags');
+export const showVariantTagsDefault = readonly(ref(false));

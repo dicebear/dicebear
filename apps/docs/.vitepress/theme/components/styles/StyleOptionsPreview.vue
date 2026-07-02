@@ -10,6 +10,10 @@ import {
   styleColorsDefault,
   componentPreviewKey,
   componentPreviewDefault,
+  variantTagsKey,
+  variantTagsDefault,
+  showVariantTagsKey,
+  showVariantTagsDefault,
 } from './styleOptionsKeys';
 
 const props = defineProps<{
@@ -21,6 +25,8 @@ const props = defineProps<{
 const allComponentNames = inject(componentNamesKey, componentNamesDefault);
 const styleColors = inject(styleColorsKey, styleColorsDefault);
 const preview = inject(componentPreviewKey, componentPreviewDefault);
+const variantTags = inject(variantTagsKey, variantTagsDefault);
+const showVariantTags = inject(showVariantTagsKey, showVariantTagsDefault);
 
 const previewTarget = computed(() => {
   const n = props.name;
@@ -145,6 +151,18 @@ const generalOptions = computed(() => {
   return opts;
 });
 
+const tags = computed(() => {
+  if (!showVariantTags.value) {
+    return [];
+  }
+
+  const t = previewTarget.value;
+
+  return t.type === 'variant'
+    ? variantTags(t.component, String(props.value))
+    : [];
+});
+
 function selectLabel(event: MouseEvent) {
   const range = document.createRange();
   range.selectNodeContents(event.currentTarget as Node);
@@ -172,6 +190,11 @@ function selectLabel(event: MouseEvent) {
     <code class="style-options-preview-label" @click="selectLabel">{{
       value
     }}</code>
+    <div v-if="tags.length > 0" class="style-options-preview-tags">
+      <code v-for="tag in tags" :key="tag" class="style-options-preview-tag">{{
+        tag
+      }}</code>
+    </div>
   </div>
 </template>
 
@@ -224,13 +247,37 @@ function selectLabel(event: MouseEvent) {
   &-label {
     display: block;
     text-align: center;
-    padding: 6px 4px 10px;
+    padding: 6px 4px;
     font-size: 11px;
     font-weight: 500;
     line-height: 1;
     color: var(--vp-c-text-2);
     cursor: pointer;
     background: none;
+  }
+
+  &-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    padding: 0 6px;
+  }
+
+  &-tag {
+    font-size: 10px;
+    line-height: 1.4;
+    padding: 1px 6px;
+    border-radius: 99px;
+    background: var(--vp-code-bg);
+    color: var(--vp-c-text-2);
+  }
+
+  // Bottom breathing room lives on the last element so it adapts to whether
+  // tags are present.
+  &-label:last-child,
+  &-tags {
+    padding-bottom: 10px;
   }
 }
 </style>
