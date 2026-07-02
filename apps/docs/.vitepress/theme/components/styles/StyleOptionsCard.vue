@@ -27,6 +27,7 @@ import {
   getOptionDescription,
   getOptionExamples,
 } from '@theme/utils/styleOptionMeta';
+import { groupTagsByCategory } from '@theme/utils/avatar/tags';
 import {
   styleColorsKey,
   styleColorsDefault,
@@ -144,6 +145,13 @@ const possibleValues = computed(() => {
   return fieldValues.value.slice().sort(naturalSort);
 });
 
+// The `tags` option lists the style's tag vocabulary grouped by category
+// instead of an avatar preview per value.
+const isTags = computed(() => props.name === 'tags');
+const tagCategories = computed(() =>
+  isTags.value ? groupTagsByCategory(fieldValues.value) : [],
+);
+
 const examples = computed<(string | number | boolean)[] | undefined>(() => {
   if (skipPreview.value) {
     return undefined;
@@ -169,6 +177,13 @@ const previewItems = computed(() => {
 });
 
 const codeExampleValue = computed(() => {
+  // A single tag keeps the example meaningful: two tokens from the flat list
+  // often span different categories, which combine with AND and would demo a
+  // near-empty, misleading filter.
+  if (isTags.value) {
+    return possibleValues.value.slice(0, 1);
+  }
+
   if (examples.value) {
     return isList.value ? examples.value.slice(0, 2) : examples.value[0];
   }
@@ -391,8 +406,31 @@ function onExamplesToggle(event: MouseEvent) {
         <AccordionContent>
           <div class="style-options-card-details-body">
             <div
+              class="style-options-card-tags"
+              v-if="isTags && tagCategories.length > 0"
+            >
+              <div
+                v-for="group in tagCategories"
+                :key="group.category"
+                class="style-options-card-tags-group"
+              >
+                <span class="style-options-card-tags-group-title">{{
+                  group.label
+                }}</span>
+                <div class="style-options-card-tags-chips">
+                  <code
+                    v-for="tag in group.tags"
+                    :key="tag.token"
+                    class="style-options-card-tags-chip"
+                    >{{ tag.token }}</code
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div
               class="style-options-card-preview"
-              v-if="previewItems.length > 0"
+              v-else-if="previewItems.length > 0"
             >
               <div class="style-options-card-preview-grid">
                 <StyleOptionsPreview
@@ -583,6 +621,40 @@ function onExamplesToggle(event: MouseEvent) {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
       gap: 8px;
+    }
+  }
+
+  &-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+
+    &-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    &-group-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--vp-c-text-2);
+    }
+
+    &-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    &-chip {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--vp-code-bg);
+      color: var(--vp-c-text-2);
     }
   }
 

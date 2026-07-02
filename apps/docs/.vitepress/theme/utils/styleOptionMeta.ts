@@ -11,6 +11,8 @@ export function getOptionDescription(name: string): string | undefined {
     return 'Randomizes all SVG element IDs to avoid conflicts when embedding multiple avatars in the same page.';
   if (name === 'title')
     return 'Accessible title for the SVG element. Useful for screen readers.';
+  if (name === 'tags')
+    return 'Keep only variants that carry the given tags. Within a category the values combine with or, different categories combine with and, and a leading ! disallows a tag.';
   if (name.match(/Probability$/))
     return 'Probability that this component appears in the avatar.';
   if (name.match(/Variant$/))
