@@ -76,7 +76,7 @@ export function addTranslate(
 export function addRotate(result: StyleCreateResult, rotate: number) {
   let { width, height, x, y } = getViewBox(result);
 
-  return `<g transform="rotate(${rotate}, ${width / 2 + x}, ${
+  return `<g transform="rotate(${escape.xml(`${rotate}`)}, ${width / 2 + x}, ${
     height / 2 + y
   })">${result.body}</g>`;
 }
