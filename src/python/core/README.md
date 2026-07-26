@@ -33,7 +33,7 @@ definition = json.loads(
 
 avatar = Avatar(definition, {"seed": "John Doe", "size": 128})
 
-avatar.to_string()    # SVG string
+avatar.to_string()  # SVG string
 avatar.to_data_uri()  # data:image/svg+xml;charset=utf-8,...
 ```
 
