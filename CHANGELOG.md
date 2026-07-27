@@ -10,6 +10,18 @@ and this project adheres to
 
 ## [10.3.1] - 2026-07-27
 
+### Fixed
+
+- **Converter:** Masks that declare `mask-type: alpha` in a `style` attribute
+  now rasterize correctly. resvg reads `mask-type` only as a presentation
+  attribute, and without one it falls back to the `luminance` default, which
+  turns a mask drawn in black into a mask that hides its subject. Seven styles
+  ship such masks: `bottts-neutral`, `disco`, `glyphs`, `lorelei`, `micah`,
+  `personas` and `toon-head`. On `lorelei` a bearded avatar lost its mouth in
+  the PNG while the SVG rendered fine. The HTTP API converts through this
+  package and was affected the same way. The normalization is also exported as
+  `normalizeMaskType()` for callers that drive resvg directly.
+
 ## [10.3.0] - 2026-06-13
 
 ### Added
