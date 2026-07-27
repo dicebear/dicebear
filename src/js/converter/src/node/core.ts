@@ -10,7 +10,7 @@ import type {
 } from '../types.js';
 import { promises as fs } from 'node:fs';
 import { getMimeType } from '../utils/mime-type.js';
-import { ensureSize, getMetadata } from '../utils/svg.js';
+import { ensureSize, getMetadata, normalizeMaskType } from '../utils/svg.js';
 import * as tmp from 'tmp-promise';
 import { renderAsync } from '@resvg/resvg-js';
 import sharp from 'sharp';
@@ -98,7 +98,9 @@ async function toBuffer(
 ): Promise<Buffer> {
   const hasFonts = Array.isArray(options.fonts);
 
-  const { svg, size } = ensureSize(rawSvg, options.size);
+  // Only the Node path needs this: the browser build rasterizes through
+  // <canvas>, so it inherits the browser's own mask handling.
+  const { svg, size } = ensureSize(normalizeMaskType(rawSvg), options.size);
 
   let buffer = (
     await renderAsync(svg, {

@@ -2,8 +2,12 @@ import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
-import { deepStrictEqual as equal } from 'node:assert/strict';
-import { ensureSize, getMetadata } from '../../lib/utils/svg.js';
+import { deepStrictEqual as equal, ok } from 'node:assert/strict';
+import {
+  ensureSize,
+  getMetadata,
+  normalizeMaskType,
+} from '../../lib/utils/svg.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -102,4 +106,96 @@ test(`Metadata parsing`, async () => {
       copyright: 'Remix of „Title” (https://www.dicebear.com) by „DiceBear”',
     }
   )
+});
+
+test(`"normalizeMaskType" mirrors alpha onto the presentation attribute`, async () => {
+  equal(
+    normalizeMaskType(`<svg><mask id="a" style="mask-type:alpha"></mask></svg>`),
+    `<svg><mask id="a" style="mask-type:alpha" mask-type="alpha"></mask></svg>`,
+  );
+});
+
+test(`"normalizeMaskType" leaves luminance alone`, async () => {
+  const svg = `<svg><mask id="a" style="mask-type:luminance"></mask></svg>`;
+
+  equal(normalizeMaskType(svg), svg);
+});
+
+test(`"normalizeMaskType" lets the declaration override the attribute`, async () => {
+  // A presentation attribute is an author rule of specificity 0, so `style`
+  // wins in a browser; resvg has to be told the same thing.
+  equal(
+    normalizeMaskType(
+      `<svg><mask id="a" mask-type="luminance" style="mask-type:alpha"></mask></svg>`,
+    ),
+    `<svg><mask id="a" mask-type="alpha" style="mask-type:alpha"></mask></svg>`,
+  );
+});
+
+test(`"normalizeMaskType" leaves an attribute that already agrees`, async () => {
+  const svg = `<svg><mask id="a" mask-type="alpha" style="mask-type:alpha"></mask></svg>`;
+
+  equal(normalizeMaskType(svg), svg);
+});
+
+test(`"normalizeMaskType" lowercases a CSS keyword`, async () => {
+  // CSS values are case-insensitive, SVG attribute values are not.
+  equal(
+    normalizeMaskType(`<svg><mask id="a" style="mask-type:Alpha"></mask></svg>`),
+    `<svg><mask id="a" style="mask-type:Alpha" mask-type="alpha"></mask></svg>`,
+  );
+});
+
+test(`"normalizeMaskType" ignores an attribute merely ending in "style"`, async () => {
+  const svg = `<svg><mask id="a" data-style="mask-type:alpha"></mask></svg>`;
+
+  equal(normalizeMaskType(svg), svg);
+});
+
+test(`"normalizeMaskType" stays linear on unterminated mask tokens`, async () => {
+  // Each unterminated `<mask` used to cost a scan of the rest of the string.
+  const svg = `<mask style="mask-type:alpha"` + '<mask a '.repeat(20000);
+  const started = process.hrtime.bigint();
+
+  normalizeMaskType(svg);
+
+  const ms = Number(process.hrtime.bigint() - started) / 1e6;
+
+  ok(ms < 250, `took ${ms.toFixed(0)}ms`);
+});
+
+test(`"normalizeMaskType" returns untouched input verbatim`, async () => {
+  const svg = `<svg><path d="M0 0h10v10z"/></svg>`;
+
+  equal(normalizeMaskType(svg), svg);
+});
+
+test(`"normalizeMaskType" handles nested masks and leaves the rest verbatim`, async () => {
+  equal(
+    normalizeMaskType(
+      `<svg><defs><g><mask id="a" style="mask-type:alpha"><use href="#b"/></mask></g></defs></svg>`,
+    ),
+    `<svg><defs><g><mask id="a" style="mask-type:alpha" mask-type="alpha"><use href="#b"/></mask></g></defs></svg>`,
+  );
+});
+
+test(`"normalizeMaskType" survives ">" inside an attribute value`, async () => {
+  equal(
+    normalizeMaskType(`<svg><mask id="a>b" style="mask-type:alpha"></mask></svg>`),
+    `<svg><mask id="a>b" style="mask-type:alpha" mask-type="alpha"></mask></svg>`,
+  );
+});
+
+test(`"normalizeMaskType" handles a self-closing mask`, async () => {
+  equal(
+    normalizeMaskType(`<svg><mask id="a" style="mask-type:alpha"/></svg>`),
+    `<svg><mask id="a" style="mask-type:alpha" mask-type="alpha"/></svg>`,
+  );
+});
+
+test(`"normalizeMaskType" reads single-quoted styles`, async () => {
+  equal(
+    normalizeMaskType(`<svg><mask id='a' style='mask-type:alpha'></mask></svg>`),
+    `<svg><mask id='a' style='mask-type:alpha' mask-type="alpha"></mask></svg>`,
+  );
 });

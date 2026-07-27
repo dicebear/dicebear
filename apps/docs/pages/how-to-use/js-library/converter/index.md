@@ -417,3 +417,22 @@ const options: Options = {
 const result: Result = toPng(svg, options);
 const buffer: ArrayBuffer = await result.toArrayBuffer();
 ```
+
+## Rendering with resvg yourself
+
+`toPng` and the other conversion functions handle this for you. If you drive
+[resvg](https://github.com/yisibl/resvg-js) directly instead, run the SVG
+through `normalizeMaskType` first:
+
+```js
+import { normalizeMaskType } from '@dicebear/converter';
+
+const svg = normalizeMaskType(avatar.toString());
+```
+
+resvg reads `mask-type` only as a presentation attribute, not from a `style`
+declaration. Figma writes the declaration, so seven of the official avatar
+styles carry masks that resvg would otherwise treat as the `luminance` default
+and render as fully hidden. `normalizeMaskType` mirrors the value onto the
+attribute and leaves everything else untouched. Browsers honor both forms, so
+this only matters when you rasterize.

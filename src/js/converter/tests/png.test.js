@@ -39,3 +39,33 @@ test(`PNG output clamps oversized value to 2048`, async () => {
   assert.equal(metadata.width, 2048);
   assert.equal(metadata.height, 2048);
 });
+
+test(`PNG output honors mask-type:alpha from a style declaration`, async () => {
+  // resvg reads `mask-type` only as a presentation attribute; `toBuffer` runs
+  // normalizeMaskType to bridge that. The mask shape is black, so under the
+  // `luminance` default it would hide the red square entirely. This asserts
+  // the wiring, not the string rewrite — dropping the call from node/core.ts
+  // leaves the unit tests green but turns this pixel transparent.
+  const masked = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <defs>
+      <mask id="m" style="mask-type:alpha">
+        <rect x="10" y="10" width="80" height="80" fill="#000000"/>
+      </mask>
+    </defs>
+    <g mask="url(#m)"><rect width="100" height="100" fill="#ff0000"/></g>
+  </svg>`;
+
+  const buffer = await toPng(masked, { size: 100 }).toArrayBuffer();
+  const { data } = await sharp(Buffer.from(buffer))
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const centre = (50 * 100 + 50) * 4;
+
+  assert.deepEqual(
+    [data[centre], data[centre + 1], data[centre + 2], data[centre + 3]],
+    [255, 0, 0, 255],
+    'the alpha mask should reveal the red square',
+  );
+});
