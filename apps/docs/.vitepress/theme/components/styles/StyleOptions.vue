@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, provide, ref, toRef } from 'vue';
-import { getScrollOffset, inBrowser } from 'vitepress';
+import { inBrowser } from 'vitepress';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
 import { watchOnce, watchDebounced } from '@vueuse/core';
 import { track } from '@theme/utils/track';
@@ -275,10 +275,12 @@ watchOnce(loadedStyle, async (style) => {
     return;
   }
 
-  const top =
-    window.scrollY + target.getBoundingClientRect().top - getScrollOffset();
-
-  window.scrollTo({ left: 0, top, behavior: 'instant' });
+  // VitePress 2 removed `getScrollOffset()` and now clears the sticky header
+  // in CSS instead. The option titles are `<h3>`s inside `.vp-doc`, so its own
+  // `.vp-doc h1…h6` rule already gives them the right `scroll-margin-top`.
+  // Instant, because this is a correction after the options finished loading,
+  // not a navigation.
+  target.scrollIntoView({ block: 'start', behavior: 'instant' });
 });
 </script>
 

@@ -362,8 +362,8 @@ function onExamplesToggle(event: MouseEvent) {
           :href="contrastTargetHref ?? undefined"
           class="style-options-card-contrast-banner-link"
         >
-          {{ contrastTargetLabel }}
-        </a>. The renderer picks the value with the strongest contrast against the
+          {{ contrastTargetLabel }} </a
+        >. The renderer picks the value with the strongest contrast against the
         selected {{ contrastTargetLabel.toLowerCase() }} color, so additional
         values mainly serve as fallbacks.
       </p>
