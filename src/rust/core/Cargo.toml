@@ -1,6 +1,6 @@
 [package]
 name = "dicebear-core"
-version = "10.3.0"
+version = "10.3.1"
 edition = "2021"
 description = "Core library for generating DiceBear avatars"
 license = "MIT"

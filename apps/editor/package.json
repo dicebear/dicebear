@@ -13,7 +13,7 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@dicebear/core": "10.3.0",
+    "@dicebear/core": "10.3.1",
     "@dicebear/styles": "^10.1.0",
     "@primeuix/themes": "^2.0.3",
     "@vueuse/core": "^14.2.0",
