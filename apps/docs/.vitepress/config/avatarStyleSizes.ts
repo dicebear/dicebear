@@ -4,6 +4,7 @@ import * as path from 'node:path';
 import { gzipSync } from 'node:zlib';
 
 import type { AvatarStyleSizeBundle } from '@theme/types';
+import { definitionsDir } from './avatarStyles';
 
 const require = createRequire(import.meta.url);
 
@@ -25,9 +26,6 @@ function walkJsFiles(dir: string): string[] {
   return out;
 }
 
-const stylesDir = path.dirname(
-  require.resolve('@dicebear/styles/initials.json'),
-);
 const coreLibDir = path.dirname(require.resolve('@dicebear/core'));
 // @dicebear/converter `main` points to lib/node/index.js; step up to lib/
 const converterLibDir = path.dirname(
@@ -35,10 +33,10 @@ const converterLibDir = path.dirname(
 );
 
 const styles: Record<string, { raw: number; gzip: number }> = {};
-for (const file of fs.readdirSync(stylesDir)) {
+for (const file of fs.readdirSync(definitionsDir)) {
   if (!file.endsWith('.min.json')) continue;
   const name = file.replace('.min.json', '');
-  styles[name] = sizeFor(path.join(stylesDir, file));
+  styles[name] = sizeFor(path.join(definitionsDir, file));
 }
 
 function bundleSize(

@@ -2,6 +2,8 @@ import * as path from 'node:path';
 import { defineConfig, type DefaultTheme, type HeadConfig } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
 
+import { generateOgImages, ogImagePathFor, OG_IMAGE_SIZE } from './og-images';
+import { SITE_ORIGIN, siteUrl } from './config/site';
 import sidebarDocs from './config/sidebarDocs';
 import sidebarStyles from './config/sidebarStyles';
 import sidebarTools from './config/sidebarTools';
@@ -98,7 +100,9 @@ export default defineConfig<ThemeOptions>({
     ['link', { rel: 'manifest', href: '/site.webmanifest' }],
     ['meta', { property: 'og:site_name', content: 'DiceBear' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
+    // The cards generated in buildEnd are 1200x630, so the large variant is
+    // the one that matches; `summary` would crop them into a small square.
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     [
       'script',
       { type: 'application/ld+json' },
@@ -106,7 +110,7 @@ export default defineConfig<ThemeOptions>({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'DiceBear',
-        url: 'https://www.dicebear.com',
+        url: siteUrl('/'),
         description:
           'DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with 35+ styles — privacy-focused and self-hostable.',
       }),
@@ -120,7 +124,7 @@ export default defineConfig<ThemeOptions>({
         name: 'DiceBear',
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Any',
-        url: 'https://www.dicebear.com',
+        url: siteUrl('/'),
         description:
           'Privacy-focused, open source SVG avatar library with 35+ styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, and CLI for generating deterministic profile pictures and user placeholder images.',
         offers: {
@@ -163,7 +167,7 @@ export default defineConfig<ThemeOptions>({
         .replace('index.md', '')
         .replace(/\.md$/, '');
 
-      const canonicalUrl = `https://www.dicebear.com/${canonicalPath}`;
+      const canonicalUrl = siteUrl(`/${canonicalPath}`);
 
       result.push(['link', { rel: 'canonical', href: canonicalUrl }]);
 
@@ -178,17 +182,38 @@ export default defineConfig<ThemeOptions>({
         ctx.pageData.description ||
         'DiceBear is a free, open source avatar library and Avatar API with 35+ avatar styles.';
 
+      // og-images.ts owns which page maps to which card, so the mapping and
+      // the generator cannot drift into pointing at a card that was never
+      // written.
+      const ogImageUrl = siteUrl(ogImagePathFor(ctx.pageData.relativePath));
+
       result.push(
         ['meta', { property: 'og:title', content: pageTitle }],
         ['meta', { property: 'og:description', content: pageDescription }],
         ['meta', { property: 'og:url', content: canonicalUrl }],
+        ['meta', { property: 'og:image', content: ogImageUrl }],
+        [
+          'meta',
+          { property: 'og:image:width', content: String(OG_IMAGE_SIZE.width) },
+        ],
+        [
+          'meta',
+          {
+            property: 'og:image:height',
+            content: String(OG_IMAGE_SIZE.height),
+          },
+        ],
+        ['meta', { property: 'og:image:alt', content: pageTitle }],
         ['meta', { name: 'twitter:title', content: pageTitle }],
         ['meta', { name: 'twitter:description', content: pageDescription }],
+        ['meta', { name: 'twitter:image', content: ogImageUrl }],
       );
     }
 
     return result;
   },
+  buildEnd: (siteConfig) =>
+    generateOgImages(siteConfig.outDir, siteConfig.cacheDir, siteConfig.srcDir),
   vite: {
     ssr: {
       noExternal: ['vue-countup-v3', 'vue-chartjs', 'globe.gl', 'three'],
@@ -257,7 +282,7 @@ export default defineConfig<ThemeOptions>({
     },
   },
   sitemap: {
-    hostname: 'https://www.dicebear.com',
+    hostname: SITE_ORIGIN,
   },
   markdown: {},
 });

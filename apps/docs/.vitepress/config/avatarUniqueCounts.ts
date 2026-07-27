@@ -1,16 +1,10 @@
 import type { StyleDefinition } from '@dicebear/core';
-import { createRequire } from 'node:module';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 
 import type { AvatarUniqueCount } from '@theme/types';
 import { computeCount } from '../theme/utils/avatar/combinationCount';
-
-const require = createRequire(import.meta.url);
-
-const definitionsDir = path.dirname(
-  require.resolve('@dicebear/styles/initials.json'),
-);
+import { definitionsDir } from './avatarStyles';
 
 const avatarUniqueCounts: Record<string, AvatarUniqueCount> = {};
 

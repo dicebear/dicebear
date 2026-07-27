@@ -6,7 +6,11 @@ import * as fs from 'node:fs';
 
 const require = createRequire(import.meta.url);
 
-const definitionsDir = path.dirname(
+/**
+ * Where the packaged `.min.json` definitions live. Exported so other config
+ * modules resolve them the same way instead of repeating the anchor file.
+ */
+export const definitionsDir = path.dirname(
   require.resolve('@dicebear/styles/initials.json'),
 );
 
