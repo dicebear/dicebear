@@ -39,7 +39,7 @@
     "@resvg/resvg-js": "^2.6.2",
     "exiftool-vendored": "^35.5.0",
     "fast-xml-parser": "^5.7.1",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.3",
     "tmp-promise": "^3.0.3"
   },
   "devDependencies": {

@@ -36,10 +36,14 @@
     "vue-chartjs": "^5.3.3"
   },
   "devDependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@types/canvas-confetti": "^1.9.0",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^24.0.3",
-    "typescript": "^5.9.3"
+    "sharp": "^0.35.3",
+    "typescript": "^5.9.3",
+    "wawoff2": "^2.0.1"
   },
   "private": true
 }
