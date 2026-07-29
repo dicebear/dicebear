@@ -8,6 +8,39 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **Converter:** Raster conversion no longer alters text content. The XML round
+  trip that sets the output size trimmed whitespace and converted
+  numeric-looking text, so `<text>0123</text>` rendered as `123` and `1e3` as
+  `1000` in every raster format, including through the HTTP API. Text nodes and
+  CDATA sections now survive the round trip unchanged. Previously the converter
+  unwrapped a CDATA section into raw text, which could turn a valid SVG into
+  ill-formed XML.
+- **Converter:** Raster conversion now accepts SVGs nested deeper than 100
+  elements. The XML parser's default nesting cap made `toPng()` and friends
+  throw on valid documents that resvg renders fine. The cap is now 1024 levels.
+- **Converter:** The converter now reads `mask-type` declarations the way a
+  browser does. It strips a trailing `!important` instead of copying it into the
+  presentation attribute, where resvg would reject the value and silently fall
+  back to `luminance`. It ignores invalid values, and when a `style` attribute
+  repeats the declaration, the last valid one wins.
+
+### Changed
+
+- **Converter:** `normalizeMaskType()` now works on the parsed XML tree instead
+  of rewriting the markup with regular expressions, and the raster entry points
+  apply it in the same parser pass that sets the output size. Input that needs
+  no fix comes back byte-identical. So does input the XML parser cannot read,
+  where the old version attempted a partial rewrite. When a mask does need
+  fixing, the function re-emits the SVG from the parsed tree, which can
+  normalize formatting details such as quote style or self-closing tags and
+  drops a `<!DOCTYPE>` declaration. The rendered image stays the same.
+- **Converter:** The XML serializer moved from the deprecated `XMLBuilder`
+  export of `fast-xml-parser` to its successor package `fast-xml-builder`. The
+  output is byte-identical. The only visible change for consumers is the new
+  package in the dependency tree.
+
 ## [10.3.1] - 2026-07-27
 
 ### Fixed

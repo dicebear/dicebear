@@ -1,4 +1,5 @@
-import { XMLParser, XMLBuilder } from 'fast-xml-parser';
+import { XMLParser } from 'fast-xml-parser';
+import XMLBuilder from 'fast-xml-builder';
 import { Metadata } from '../types';
 
 const MAX_SIZE = 2048;
@@ -10,12 +11,32 @@ const xmlRoundTripOptions = {
   attributeNamePrefix: '@_',
   preserveOrder: true,
   commentPropName: '#comment',
+  cdataPropName: '#cdata',
   allowBooleanAttributes: true,
   processEntities: false,
+  // Keep text nodes byte-exact. Without these two, the round trip trims
+  // whitespace and coerces numeric-looking text ("0123" becomes "123"),
+  // and that visibly changes rendered <text> content.
+  trimValues: false,
+  parseTagValue: false,
+  // The parser default of 100 rejects valid documents that resvg renders
+  // fine. The cap stays finite because parser, walker, and builder all
+  // recurse once per nesting level, and an unbounded value would trade a
+  // clean error for a stack overflow on pathological input.
+  maxNestedTags: 1024,
 };
 
 const xmlRoundTripParser = new XMLParser(xmlRoundTripOptions);
 const xmlRoundTripBuilder = new XMLBuilder(xmlRoundTripOptions);
+
+/**
+ * A node in a `preserveOrder` parse result: one key holding the child list,
+ * named after the tag, plus the attribute map under `:@`.
+ */
+type XmlNode = {
+  ':@'?: Record<string, unknown>;
+  [tagName: string]: unknown;
+};
 
 /**
  * Clamps a requested size into a sane integer range, falling back to
@@ -30,70 +51,186 @@ function sanitizeSize(size: number): number {
 }
 
 /**
+ * Sets `width`/`height` on the root `<svg>` of a parsed tree, so downstream
+ * rasterizers know how large to render.
+ */
+function setSizeAttributes(parsed: XmlNode[], size: number): void {
+  const svgNode = parsed.find((node) => 'svg' in node);
+
+  if (svgNode) {
+    const attributes = (svgNode[':@'] ??= {});
+
+    attributes['@_width'] = String(size);
+    attributes['@_height'] = String(size);
+  }
+}
+
+/**
+ * Depth-first visit of every element in a `preserveOrder` parse result.
+ * Text and comment nodes are skipped.
+ */
+function visitElements(
+  nodes: XmlNode[],
+  visit: (tagName: string, node: XmlNode) => void,
+): void {
+  for (const node of nodes) {
+    for (const [key, children] of Object.entries(node)) {
+      if (key === ':@' || key.startsWith('#') || !Array.isArray(children)) {
+        continue;
+      }
+
+      visit(key, node);
+      visitElements(children, visit);
+    }
+  }
+}
+
+/**
+ * The value of the last `mask-type` declaration in a `style` attribute. The
+ * last one wins, as it does in CSS. The value comes back lowercased: CSS
+ * keywords are case-insensitive while SVG attribute values are not, and
+ * resvg would reject a verbatim `Alpha` and silently fall back to the
+ * default.
+ */
+function declaredMaskType(style: unknown): string | undefined {
+  if (typeof style !== 'string') {
+    return undefined;
+  }
+
+  let declared: string | undefined;
+
+  for (const declaration of style.split(';')) {
+    const colon = declaration.indexOf(':');
+
+    if (colon === -1) {
+      continue;
+    }
+
+    const property = declaration.slice(0, colon).trim().toLowerCase();
+
+    if (property !== 'mask-type') {
+      continue;
+    }
+
+    // A single keyword, optionally with !important. A browser drops anything
+    // else as an invalid declaration, and copied into the attribute it would
+    // make resvg fall back to the default.
+    const value = declaration
+      .slice(colon + 1)
+      .match(/^\s*([\w-]+)\s*(?:!\s*important\s*)?$/i);
+
+    if (value) {
+      declared = value[1].toLowerCase();
+    }
+  }
+
+  return declared;
+}
+
+/**
+ * Applies the {@link normalizeMaskType} fix to a parsed tree: every `<mask>`
+ * whose `style` declares a `mask-type` gets the matching presentation
+ * attribute.
+ *
+ * The declaration always wins, because that is what a browser does: a
+ * presentation attribute is an author-origin rule of specificity 0 that sits
+ * before every other author rule, so `style` overrides it. Verified in
+ * Chrome. That is why an existing attribute is corrected instead of left
+ * alone. A mask carrying both `mask-type="luminance"` and
+ * `style="mask-type:alpha"` is `alpha` on screen, and has to be `alpha` for
+ * resvg too.
+ *
+ * The declaration itself is left in place, so nothing that renders correctly
+ * now changes. Once resvg reads `mask-type` from `style`, this becomes a
+ * no-op and can go, though only in a major, since `normalizeMaskType` is
+ * exported.
+ */
+function normalizeMaskNodes(parsed: XmlNode[]): boolean {
+  let changed = false;
+
+  visitElements(parsed, (tagName, node) => {
+    if (tagName !== 'mask') {
+      return;
+    }
+
+    const attributes = node[':@'];
+
+    if (!attributes) {
+      return;
+    }
+
+    const declared = declaredMaskType(attributes['@_style']);
+
+    if (!declared) {
+      return;
+    }
+
+    // No attribute and the declaration only restates the default: nothing to do.
+    if (declared === 'luminance' && !('@_mask-type' in attributes)) {
+      return;
+    }
+
+    if (attributes['@_mask-type'] !== declared) {
+      attributes['@_mask-type'] = declared;
+      changed = true;
+    }
+  });
+
+  return changed;
+}
+
+/**
+ * Any `mask-type` CSS declaration. Even `luminance` matters, because it has
+ * to win over a presentation attribute that says otherwise. As a substring
+ * test it can false-positive (the string may occur in text content), which
+ * only costs a tree walk that then changes nothing.
+ */
+const HAS_MASK_TYPE_DECLARATION = /mask-type\s*:/i;
+
+/**
+ * Parses the SVG once, sets the size attributes, optionally applies the
+ * mask fix on the same tree, and re-emits it.
+ */
+function rebuild(svg: string, size: number, normalizeMasks: boolean): string {
+  const parsed: XmlNode[] = xmlRoundTripParser.parse(svg);
+
+  setSizeAttributes(parsed, size);
+
+  if (normalizeMasks) {
+    normalizeMaskNodes(parsed);
+  }
+
+  return xmlRoundTripBuilder.build(parsed);
+}
+
+/**
  * Re-emits the SVG with explicit `width`/`height` attributes set to the
  * sanitized size, so downstream rasterizers know how large to render.
  */
 export function ensureSize(svg: string, size: number = DEFAULT_SIZE) {
   size = sanitizeSize(size);
 
-  const parsed = xmlRoundTripParser.parse(svg);
-  const svgNode = parsed.find((node: Record<string, unknown>) => 'svg' in node);
-
-  if (svgNode) {
-    svgNode[':@'] ??= {};
-    svgNode[':@']['@_width'] = String(size);
-    svgNode[':@']['@_height'] = String(size);
-  }
-
-  svg = xmlRoundTripBuilder.build(parsed);
-
-  return { svg, size };
+  return { svg: rebuild(svg, size, false), size };
 }
 
 /**
- * A `<mask>` open tag. A `>` inside a quoted attribute value must not end the
- * match, or a rewrite would land inside that value. A raw `<` outside quotes
- * is invalid inside a tag, so bailing on it keeps a run of unterminated
- * `<mask` tokens from costing a forward scan each. On 128 KB of them that is
- * the difference between 2.3 seconds and a fraction of a millisecond, and this
- * runs on every raster conversion, including for caller-supplied SVG.
+ * One-pass preparation of an SVG for resvg: sets the sanitized
+ * `width`/`height` and mirrors `mask-type` style declarations onto the
+ * presentation attribute. Both edits happen on the same parsed tree, so each
+ * raster conversion parses and re-emits the SVG exactly once. The function
+ * skips the mask walk when the raw string contains no `mask-type`
+ * declaration.
  */
-const MASK_OPEN_TAG = /<mask\b(?:[^<>"']|"[^"]*"|'[^']*')*>/g;
+export function prepareForResvg(
+  svg: string,
+  size: number = DEFAULT_SIZE,
+): { svg: string; size: number } {
+  size = sanitizeSize(size);
 
-/**
- * Any `mask-type` CSS declaration. Even `luminance` matters, because it has to
- * win over a presentation attribute that says otherwise.
- */
-const HAS_MASK_TYPE_DECLARATION = /mask-type\s*:/i;
-
-/** One `name="value"` pair, consuming the value whole so quotes cannot confuse it. */
-const ATTRIBUTE = /([^\s=/>]+)\s*=\s*("[^"]*"|'[^']*'|[^\s/>]+)/g;
-
-/** Reads an attribute off an open tag, case-insensitively, unquoted. */
-function readAttribute(
-  tag: string,
-  name: string,
-): { value: string; start: number; end: number } | undefined {
-  ATTRIBUTE.lastIndex = 0;
-
-  let match: RegExpExecArray | null;
-
-  while ((match = ATTRIBUTE.exec(tag)) !== null) {
-    if (match[1].toLowerCase() !== name) {
-      continue;
-    }
-
-    const raw = match[2];
-    const quoted = raw.startsWith('"') || raw.startsWith("'");
-
-    return {
-      value: quoted ? raw.slice(1, -1) : raw,
-      start: match.index,
-      end: match.index + match[0].length,
-    };
-  }
-
-  return undefined;
+  return {
+    svg: rebuild(svg, size, HAS_MASK_TYPE_DECLARATION.test(svg)),
+    size,
+  };
 }
 
 /**
@@ -103,76 +240,39 @@ function readAttribute(
  * Both forms are valid and browsers honor either. resvg reads only the
  * attribute, and it renders every raster format this package produces. Where
  * the attribute disagrees with the declaration, or is missing while the
- * declaration says `alpha`, resvg falls back to the `luminance` default, and a
- * mask whose shape is drawn in black (luminance 0) then hides everything it
- * was meant to reveal. Figma writes the CSS form, so avatar styles
- * exported from it are affected: seven of the official ones ship such masks
- * today.
+ * declaration says `alpha`, resvg falls back to the `luminance` default, and
+ * a mask whose shape is drawn in black (luminance 0) then hides everything
+ * it was meant to reveal. Figma writes the CSS form, so avatar styles
+ * exported from it are affected, including official ones. See
+ * {@link normalizeMaskNodes} for the precedence rules.
  *
- * The declaration always wins, because that is what a browser does: a
- * presentation attribute is an author-origin rule of specificity 0 that sits
- * before every other author rule, so `style` overrides it. Verified in Chrome.
- * That is why an existing attribute is corrected instead of left alone. A mask
- * carrying both `mask-type="luminance"` and `style="mask-type:alpha"` is
- * `alpha` on screen, and has to be `alpha` for resvg too.
+ * Input that needs no change comes back verbatim. That includes input the
+ * XML parser rejects: resvg would reject such a document anyway, so the
+ * function hands it back unchanged instead of throwing. Only a mask that
+ * actually needs fixing triggers a re-emit from the parsed tree, which may
+ * normalize formatting details such as quote style or self-closing tags. The
+ * rendered image stays the same.
  *
- * CSS keywords are case-insensitive while SVG attribute values are not, so a
- * declared `Alpha` is mirrored as `alpha`; copied verbatim it would be
- * rejected by resvg and silently fall back to the default.
- *
- * The declaration itself is left in place, so nothing that renders correctly
- * now changes. Once resvg reads `mask-type` from `style`, this becomes a no-op
- * and can go, though only in a major, since it is exported.
- *
- * Editing the markup rather than round-tripping it through the XML parser is
- * deliberate. This runs on every raster conversion, and therefore on every
- * HTTP API request: the parse cost is 10-16% of a `toPng` call for the styles
- * that carry masks, against 0.05-0.5% here. It is also more faithful. A round trip
- * reformats unrelated markup, expanding `<use href="#a"/>` to `<use href="#a">
- * </use>`, which contradicts the promise above of only touching what resvg
- * needs. Output was compared against the parser-based form across every
- * packaged style at 45 seeds each, with no differences. (The precedence rule
- * above is the one deliberate departure from it.)
- *
- * `toPng` and friends apply this themselves. It is exported, and documented on
- * the converter page, for callers that drive resvg directly instead of through
- * this package, so they do not have to rediscover the same limitation.
+ * `toPng` and friends apply the same fix during their single parser pass
+ * (see {@link prepareForResvg}). This standalone form is exported, and
+ * documented on the converter page, for callers that drive resvg directly
+ * instead of through this package, so they do not have to rediscover the
+ * same limitation.
  */
 export function normalizeMaskType(svg: string): string {
   if (!HAS_MASK_TYPE_DECLARATION.test(svg)) {
     return svg;
   }
 
-  return svg.replace(MASK_OPEN_TAG, (tag) => {
-    const style = readAttribute(tag, 'style');
-    const declared = style?.value
-      .match(/(?:^|;)\s*mask-type\s*:\s*([\w-]+)/i)?.[1]
-      ?.toLowerCase();
+  let parsed: XmlNode[];
 
-    if (!declared) {
-      return tag;
-    }
+  try {
+    parsed = xmlRoundTripParser.parse(svg);
+  } catch {
+    return svg;
+  }
 
-    const attribute = readAttribute(tag, 'mask-type');
-
-    if (attribute) {
-      return attribute.value.toLowerCase() === declared
-        ? tag
-        : tag.slice(0, attribute.start) +
-            `mask-type="${declared}"` +
-            tag.slice(attribute.end);
-    }
-
-    // No attribute and the declaration only restates the default: nothing to do.
-    if (declared === 'luminance') {
-      return tag;
-    }
-
-    return tag.replace(
-      /\s*\/?>$/,
-      (close) => ` mask-type="${declared}"${close.trim()}`,
-    );
-  });
+  return normalizeMaskNodes(parsed) ? xmlRoundTripBuilder.build(parsed) : svg;
 }
 
 /**

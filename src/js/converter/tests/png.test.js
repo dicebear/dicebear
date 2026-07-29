@@ -41,11 +41,11 @@ test(`PNG output clamps oversized value to 2048`, async () => {
 });
 
 test(`PNG output honors mask-type:alpha from a style declaration`, async () => {
-  // resvg reads `mask-type` only as a presentation attribute; `toBuffer` runs
-  // normalizeMaskType to bridge that. The mask shape is black, so under the
+  // resvg reads `mask-type` only as a presentation attribute, and `toBuffer`
+  // bridges that via prepareForResvg. The mask shape is black, so under the
   // `luminance` default it would hide the red square entirely. This asserts
-  // the wiring, not the string rewrite — dropping the call from node/core.ts
-  // leaves the unit tests green but turns this pixel transparent.
+  // the wiring, not the rewrite: dropping the normalization from the node
+  // path leaves the unit tests green but turns this pixel transparent.
   const masked = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
     <defs>
       <mask id="m" style="mask-type:alpha">

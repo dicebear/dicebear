@@ -431,8 +431,10 @@ const svg = normalizeMaskType(avatar.toString());
 ```
 
 resvg reads `mask-type` only as a presentation attribute, not from a `style`
-declaration. Figma writes the declaration, so seven of the official avatar
-styles carry masks that resvg would otherwise treat as the `luminance` default
-and render as fully hidden. `normalizeMaskType` mirrors the value onto the
-attribute and leaves everything else untouched. Browsers honor both forms, so
-this only matters when you rasterize.
+declaration. Figma writes the declaration, so official avatar styles carry masks
+that resvg would otherwise treat as the `luminance` default and render as fully
+hidden. `normalizeMaskType` mirrors the value onto the attribute. If nothing
+needs fixing, you get your input back unchanged. When a mask does need fixing,
+the function re-emits the SVG from a parsed tree, so formatting details like
+quote style may change, while the rendered image stays the same. Browsers honor
+both forms, so this only matters when you rasterize.
