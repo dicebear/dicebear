@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.3.2] - 2026-07-29
+
 ### Fixed
 
 - **Converter:** Raster conversion no longer alters text content. The XML round
@@ -256,7 +258,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.3.1...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.3.2...HEAD
+[10.3.2]: https://github.com/dicebear/dicebear/compare/v10.3.1...v10.3.2
 [10.3.1]: https://github.com/dicebear/dicebear/compare/v10.3.0...v10.3.1
 [10.3.0]: https://github.com/dicebear/dicebear/compare/v10.2.0...v10.3.0
 [10.2.0]: https://github.com/dicebear/dicebear/compare/v10.2.0-rc.1...v10.2.0

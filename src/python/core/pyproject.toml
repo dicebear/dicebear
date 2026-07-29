@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dicebear-core"
-version = "10.3.1"
+version = "10.3.2"
 description = "Unique avatars from dozens of styles — deterministic, customizable, vector-based."
 readme = "README.md"
 requires-python = ">=3.10"
