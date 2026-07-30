@@ -90,7 +90,50 @@ describe('dicebear --optimize', () => {
   });
 
   it('keeps the animation hooks of an animated style intact', () => {
-    const file = fixture('shapes');
+    // The published @dicebear/styles may not ship an animated style yet, so
+    // build the animation shape by hand: a childless marker group that only
+    // exists to be matched by `svg:has()`, and a `<style>` element whose CSS
+    // must survive byte-identically.
+    const file = fixture('identicon');
+    const definition = read(file);
+
+    definition.components = {
+      ...definition.components,
+      animation: {
+        width: definition.canvas.width,
+        height: definition.canvas.height,
+        variants: {
+          none: { elements: [] },
+          fast: {
+            elements: [
+              {
+                name: 'g',
+                type: 'element',
+                attributes: { class: 'dbtest-fast' },
+              },
+              {
+                name: 'style',
+                type: 'element',
+                children: [
+                  {
+                    type: 'text',
+                    value:
+                      'svg:has(.dbtest-fast){--dbtest-t:0.5}' +
+                      '@media (prefers-reduced-motion: no-preference){' +
+                      '@keyframes dbtestBob{50%{transform:translateY(-2px)}}' +
+                      '.dbtest-c{animation:dbtestBob calc(var(--dbtest-t,1)*3s) ease-in-out infinite}}',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    };
+    definition.canvas.elements.push({ name: 'animation', type: 'component' });
+
+    fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
+
     const before = read(file);
 
     assert.equal(runCli([file, '--optimize']).status, 0);
@@ -260,7 +303,12 @@ describe('dicebear --optimize', () => {
     const before = fs.readFileSync(file, 'utf-8');
 
     for (const value of ['abc', '-1', '9', '2.5']) {
-      const result = runCli([file, '--optimize', '--optimize-precision', value]);
+      const result = runCli([
+        file,
+        '--optimize',
+        '--optimize-precision',
+        value,
+      ]);
 
       assert.equal(result.status, 1, value);
       assert.match(result.stderr, /optimize-precision/);
