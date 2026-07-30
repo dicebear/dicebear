@@ -6,7 +6,11 @@ import {
   navigateToColorKey,
 } from '@theme/components/styles/styleOptionsKeys';
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
-import { groupTagsByCategory, tokenCategory } from '@theme/utils/avatar/tags';
+import {
+  groupTagsByCategory,
+  tokenCategory,
+  toTagTokens,
+} from '@theme/utils/avatar/tags';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
 import { track, styleLabel } from '@theme/utils/track';
@@ -85,8 +89,7 @@ const tagCategories = computed(() => groupTagsByCategory(styleTags.value));
 // Number of set filter tokens per category, counting bare and per-value
 // tokens in either polarity.
 const tagCounts = computed(() => {
-  const value = store.avatarStyleOptions.tags;
-  const tokens = Array.isArray(value) ? (value as string[]) : [];
+  const tokens = toTagTokens(store.avatarStyleOptions.tags);
   const counts = new Map<string, number>();
 
   for (const token of tokens) {

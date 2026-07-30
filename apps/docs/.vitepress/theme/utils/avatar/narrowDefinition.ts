@@ -1,5 +1,6 @@
 import type { StyleDefinition } from '@dicebear/core';
 import { isAlias, resolveBase } from './combinationCount';
+import { toTagTokens } from './tags';
 
 type MutableDefinition = StyleDefinition & {
   components?: Record<string, any>;
@@ -87,7 +88,17 @@ function applyVariantNarrowing(
 
   let active: Map<string, number> | undefined;
 
-  if (Array.isArray(value)) {
+  if (typeof value === 'string') {
+    // `Options.componentVariant` normalizes a bare string to `{ [value]: 1 }`,
+    // so a single name narrows the pool exactly like a one-element list. Left
+    // unhandled, the component would keep its full pool in the count while
+    // still counting as explicitly pinned, inflating the total twice over.
+    active = new Map();
+
+    if (value in (base.component.variants ?? {})) {
+      active.set(value, 1);
+    }
+  } else if (Array.isArray(value)) {
     active = new Map();
 
     for (const entry of value) {
@@ -168,19 +179,9 @@ function variantHasTag(
  * `{ category, value?, negated }`.
  */
 function parseTagTokens(value: unknown): TagToken[] {
-  const raw = Array.isArray(value)
-    ? value
-    : typeof value === 'string'
-      ? [value]
-      : [];
-
   const tokens: TagToken[] = [];
 
-  for (const entry of raw) {
-    if (typeof entry !== 'string') {
-      continue;
-    }
-
+  for (const entry of toTagTokens(value)) {
     const negated = entry.startsWith('!');
     const body = negated ? entry.slice(1) : entry;
     const sep = body.indexOf(':');
@@ -233,7 +234,11 @@ function applyTagFilter(
   const allowGroups = [...allows];
   const bareList = [...bares];
 
-  if (allowGroups.length === 0 && bareList.length === 0 && disallows.length === 0) {
+  if (
+    allowGroups.length === 0 &&
+    bareList.length === 0 &&
+    disallows.length === 0
+  ) {
     return;
   }
 

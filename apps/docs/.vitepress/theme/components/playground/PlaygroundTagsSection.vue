@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import useStore from '@theme/stores/playground';
-import type { TagCategory } from '@theme/utils/avatar/tags';
+import { toTagTokens, type TagCategory } from '@theme/utils/avatar/tags';
 import { Minus, Check, Ban } from '@lucide/vue';
 
 const props = defineProps<{ category: TagCategory }>();
@@ -22,11 +22,9 @@ const STATES: { state: RowState; icon: unknown; label: string }[] = [
   { state: 'disallow', icon: Ban, label: 'Disallow' },
 ];
 
-const selected = computed<string[]>(() => {
-  const value = store.avatarStyleOptions[TAGS_KEY];
-
-  return Array.isArray(value) ? (value as string[]) : [];
-});
+const selected = computed<string[]>(() =>
+  toTagTokens(store.avatarStyleOptions[TAGS_KEY]),
+);
 
 // The category row plus one row per value tag, each with its token and its
 // state resolved in one pass. A disallow wins over an allow in the engine,
@@ -54,7 +52,10 @@ const rows = computed(() => {
 // moot and get disabled.
 const valuesDisabled = computed(() => rows.value[0].state === 'disallow');
 
-function setRowState(row: { token: string; bare: boolean }, state: RowState): void {
+function setRowState(
+  row: { token: string; bare: boolean },
+  state: RowState,
+): void {
   let next = selected.value.filter(
     (t) => t !== row.token && t !== `!${row.token}`,
   );
@@ -63,8 +64,7 @@ function setRowState(row: { token: string; bare: boolean }, state: RowState): vo
   // category's value tokens are moot and get cleared along the way.
   if (row.bare && state === 'disallow') {
     next = next.filter(
-      (t) =>
-        !t.startsWith(`${row.token}:`) && !t.startsWith(`!${row.token}:`),
+      (t) => !t.startsWith(`${row.token}:`) && !t.startsWith(`!${row.token}:`),
     );
   }
 

@@ -31,6 +31,23 @@ export function parseTag(token: string): ParsedTag {
 }
 
 /**
+ * Normalizes a raw `tags` option to a token list. The option accepts a single
+ * string as well as a list (schema `anyOf: [tagFilter, array]`), and the core
+ * treats `'gender:male'` and `['gender:male']` alike — so must every reader
+ * here, or a string-valued filter shows up as "no filter" in the UI while the
+ * rendered avatar is filtered, and the first click overwrites it.
+ */
+export function toTagTokens(value: unknown): string[] {
+  if (typeof value === 'string') {
+    return [value];
+  }
+
+  return Array.isArray(value)
+    ? value.filter((token): token is string => typeof token === 'string')
+    : [];
+}
+
+/**
  * Returns the category a filter token addresses, ignoring a leading `!`
  * (disallow) marker. The single place the polarity grammar is decoded.
  */
