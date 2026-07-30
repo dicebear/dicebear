@@ -5,6 +5,8 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"sort"
+	"strings"
 	"testing"
 
 	"github.com/dicebear/dicebear-go/v10/color"
@@ -25,6 +27,30 @@ func fixturePath(t *testing.T, name string) string {
 		t.Skipf("parity fixtures not available (%s)", p)
 	}
 	return p
+}
+
+// fixtureStyleNames enumerates the parity style fixtures instead of repeating a
+// hand-maintained list, so a fixture added to tests/fixtures/parity/styles is
+// picked up here the way the PHP and Python suites already pick it up. Names are
+// returned sorted, so the subtest order stays stable.
+func fixtureStyleNames(t *testing.T) []string {
+	t.Helper()
+
+	paths, err := filepath.Glob(filepath.Join(fixturePath(t, "styles"), "*.json"))
+	if err != nil {
+		t.Fatalf("list style fixtures: %v", err)
+	}
+	if len(paths) == 0 {
+		t.Fatal("no style fixtures found")
+	}
+
+	names := make([]string, 0, len(paths))
+	for _, p := range paths {
+		names = append(names, strings.TrimSuffix(filepath.Base(p), ".json"))
+	}
+	sort.Strings(names)
+
+	return names
 }
 
 func readFixture(t *testing.T, name string, v any) {

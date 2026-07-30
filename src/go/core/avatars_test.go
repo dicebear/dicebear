@@ -15,7 +15,7 @@ import (
 // Python, Rust and Dart suites render against.
 
 func TestAvatarParity(t *testing.T) {
-	styleNames := []string{"initials", "thumbs", "glass", "shape-grid", "notionists", "tagged", "animated"}
+	styleNames := fixtureStyleNames(t)
 
 	for _, name := range styleNames {
 		stylePath := fixturePath(t, filepath.Join("styles", name+".json"))
@@ -79,7 +79,7 @@ func TestAvatarParity(t *testing.T) {
 // the JS-generated fixture. The number-aware decode also pins whole numbers as
 // JSON integers, like the resolved-options assertion above.
 func TestDescriptorParity(t *testing.T) {
-	styleNames := []string{"initials", "thumbs", "glass", "shape-grid", "notionists", "tagged", "animated"}
+	styleNames := fixtureStyleNames(t)
 
 	for _, name := range styleNames {
 		styleJSON, err := os.ReadFile(fixturePath(t, filepath.Join("styles", name+".json")))
