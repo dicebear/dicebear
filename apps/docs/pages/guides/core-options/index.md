@@ -32,7 +32,7 @@ tuple's range.
 | `title`           | `string`                                         | _unset_       | Accessible title; when set, the SVG becomes `role="img"` with `<title>`       |
 | `fontFamily`      | `string \| string[]`                             | `'system-ui'` | Font family for text-based styles (CSS-style font stack, no quotes)           |
 | `fontWeight`      | `integer \| integer[]`                           | `400`         | Font weight for text-based styles (1 to 1000)                                 |
-| `tags`            | `string \| string[]`                             | _unset_       | Keep only variants matching these [tags](/guides/filter-variants-with-tags/) (`category:value`, prefix with `!` to disallow) |
+| `tags`            | `string \| string[]`                             | _unset_       | Keep only variants matching these [tags](/guides/filter-variants-with-tags/) (`category` or `category:value`, prefix with `!` to disallow) |
 
 ## Background options
 
@@ -80,8 +80,9 @@ following options are available:
 ## Variant tags
 
 When a style tags its variants, the `tags` option filters the variant pool to
-the traits you want, across every component at once. A tag is `category:value`,
-such as `mood:positive` or `hairLength:long`. Within one category the values combine
-with "or", different categories combine with "and", and a leading `!` disallows.
-See [Filter variants with tags](/guides/filter-variants-with-tags/) for the full
+the traits you want, across every component at once. A tag is `category` or
+`category:value`, such as `animation` or `hairLength:long`. Within one category
+the values combine with "or", different categories combine with "and", a bare
+category requires the trait, and a leading `!` disallows. See
+[Filter variants with tags](/guides/filter-variants-with-tags/) for the full
 rules and the categories DiceBear's styles use.

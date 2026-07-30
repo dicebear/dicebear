@@ -1,18 +1,22 @@
 ---
 title: How DiceBear Tags Variants
 description: >
-  How DiceBear assigns variant tags to its own styles, and what each tag in the
-  standard set means: mood, hair length, hair style, headwear, facial hair,
-  eyewear, and accessory.
+  How DiceBear assigns variant tags to its own styles: the animation tags that
+  ship today, and the planned standard set for the character styles covering
+  mood, hair length, hair style, headwear, facial hair, eyewear, and accessory.
 ---
 
 # How DiceBear tags variants
 
 DiceBear's own styles share one set of tags, so the
 [`tags`](/guides/filter-variants-with-tags/) filter behaves the same from one
-style to the next. DiceBear tags each variant by looking at how it renders, not at
-its name. Names are not always reliable. A hair variant called `long04` can turn
-out short once you look at it, so the rendered shape decides the tag.
+style to the next. Today only one category ships: the `animation` tag of the
+animated styles. The character categories further down arrive with an upcoming
+release.
+
+DiceBear tags each variant by looking at how it renders, not at its name. Names
+are not always reliable. A hair variant called `long04` can turn out short once
+you look at it, so the rendered shape decides the tag.
 
 A few principles keep the tags consistent:
 
@@ -30,7 +34,28 @@ A few principles keep the tags consistent:
 The tag grammar is `category` or `category:value`, each segment camelCase and
 alphanumeric. A variant holds at most 32 tags.
 
-## Mood
+## Animation
+
+The `animation` category covers the animation component of animated styles. It
+is a bare category without values: every animated variant carries the plain
+`animation` tag, and the static default variant carries no tag, so the
+animation stays off until you ask for it.
+
+- `['animation']` turns the animation on, at a random speed per seed.
+- `['!animation']` keeps the avatar static. A disallow wins, so it also
+  overrides an `animation` in the same list.
+
+The speed steps are variants, not traits, so they carry no value tags. To pin
+a speed, set the `animationVariant` option (e.g. `animationVariant: 'slow'`),
+which is more specific than the filter and always wins.
+
+## Planned categories
+
+The categories below are the standard set for the character styles. They are
+not shipped yet. We publish the definitions ahead of time so custom styles can
+reuse them and stay compatible with the filter examples in the docs.
+
+### Mood
 
 The `mood` category covers the parts of the face that carry expression: the
 mouth, eyes, eyebrows, and any combined expression component. It has two values,
@@ -54,7 +79,7 @@ values keep every filtered face complete.
 A part with no expression at all, such as a face mask or a purely graphic shape, is
 left without a mood.
 
-## Hair length
+### Hair length
 
 The `hairLength` category covers hair components. It is optional and only set when
 the length is actually visible.
@@ -69,7 +94,7 @@ left off and the variant is tagged `hairStyle:updo` instead. A ponytail or pigta
 with a visible hanging tail still gets a length. A variant that is really headwear
 gets a `headwear` tag, and a variant showing both hair and a hat may carry both.
 
-## Hair style
+### Hair style
 
 The `hairStyle` category covers the same components as the length and runs
 alongside it. A variant may carry one texture value and one shape value when both
@@ -97,7 +122,7 @@ Cut or shape, how it is worn:
 A bald variant carries only `hairLength:bald` and no `hairStyle`, since there is no
 hair to style.
 
-## Headwear
+### Headwear
 
 The `headwear` category covers hats and hat-like variants.
 
@@ -107,7 +132,7 @@ The `headwear` category covers hats and hat-like variants.
 - `turban` and `hijab` for wrapped headwear.
 - `headband` for a band only, with the hair still visible.
 
-## Facial hair
+### Facial hair
 
 The `facialHair` category covers beards, mustaches, and sideburns. A full beard
 with a mustache can carry both `beard` and `mustache`.
@@ -118,14 +143,14 @@ with a mustache can carry both `beard` and `mustache`.
 - `stubble` for a short flecked shadow, not a full beard.
 - `sideburns` for side-of-face hair only.
 
-## Eyewear
+### Eyewear
 
 The `eyewear` category covers glasses.
 
 - `glasses` for clear lenses or spectacles.
 - `sunglasses` for filled or dark lenses.
 
-## Accessory
+### Accessory
 
 The `accessory` category covers worn extras.
 
