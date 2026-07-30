@@ -23,7 +23,7 @@ interface EnumField {
   readonly weighted?: true;
   // When set, `values` are suggestions, not the only allowed values. Tooling
   // should accept input outside the list (e.g. the `tags` filter, whose grammar
-  // also takes `!`-disallows and bare categories and ignores unknown tokens).
+  // also takes `!`-disallows and bare categories).
   readonly open?: true;
 }
 
@@ -141,7 +141,9 @@ export class OptionsDescriptor {
     // Only advertise the `tags` filter when the style actually carries tags.
     // The values are the sorted union of every tag across the style's variants,
     // but `open` marks them as suggestions: the filter also accepts `!`
-    // disallows and bare categories and silently ignores unknown tokens.
+    // disallows and bare categories. Only an unknown category is ignored. An
+    // unknown value inside a category the style does use matches nothing, so
+    // every variant tagged on that axis is dropped.
     if (tags.size > 0) {
       result.tags = {
         type: 'enum',
