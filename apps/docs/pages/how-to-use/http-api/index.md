@@ -191,7 +191,7 @@ The [`tags`](/guides/filter-variants-with-tags/) filter is an array too. Separat
 the tags with a comma and prefix a tag with `!` to exclude it:
 
 ```
-https://api.dicebear.com/10.x/adventurer/svg?seed=John&tags=hairLength:long,!facialHair
+https://api.dicebear.com/10.x/planets/svg?seed=John&tags=animation
 ```
 
 ### Enum options

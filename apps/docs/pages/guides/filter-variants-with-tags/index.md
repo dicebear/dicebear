@@ -1,18 +1,18 @@
 ---
 title: Filter Avatar Variants with Tags
 description: >
-  Variant tags describe each part of an avatar, such as the mood, hair length, or
-  facial hair. The tags option filters the variant pool, so you can keep only
-  friendly faces, long hair, or any other trait, across DiceBear styles.
+  Variant tags describe how a variant looks or behaves. The tags option filters
+  the variant pool. Today that turns on the opt-in animation of the animated
+  styles, and an upcoming release adds traits like mood and hair length.
 ---
 
 # Filter avatar variants with tags
 
-Many avatar styles describe their variants with **tags**. A tag is a short label
-like `mood:positive` or `hairLength:long` that says something about how a variant
-looks. Tags only describe, they never change the artwork. They let you narrow the
-pool of variants an avatar is drawn from, and they work the same way across every
-style that carries them.
+Avatar styles can describe their variants with **tags**. A tag is a short label
+like `animation` or `hairLength:long` that says something about a variant. Tags
+only describe, they never change the artwork. They let you narrow the pool of variants an
+avatar is drawn from, and they work the same way across every style that
+carries them.
 
 ## Filter with the `tags` option
 
@@ -21,12 +21,12 @@ everywhere the avatar is generated. Pass the tags you want to keep:
 
 ```js
 import { Style, Avatar } from '@dicebear/core';
-import adventurer from '@dicebear/styles/adventurer.json' with { type: 'json' };
+import planets from '@dicebear/styles/planets.json' with { type: 'json' };
 
-const style = new Style(adventurer);
+const style = new Style(planets);
 const avatar = new Avatar(style, {
   seed: 'John',
-  tags: ['mood:positive'],
+  tags: ['animation'],
 });
 ```
 
@@ -34,29 +34,30 @@ In the [HTTP API](/how-to-use/http-api/) the same filter is a comma-separated
 query parameter:
 
 ```
-https://api.dicebear.com/10.x/adventurer/svg?seed=John&tags=mood:positive
+https://api.dicebear.com/10.x/planets/svg?seed=John&tags=animation
 ```
 
 ## How the filter works
 
-A tag has the form `category:value`. The filter reads the tags you pass and
-narrows each component's pool of variants:
+A tag token is `category` or `category:value`, optionally prefixed with `!`.
+Each token narrows a component's pool of variants:
 
-- Filtering by `mood:positive` keeps the positive mouths, eyes, and eyebrows but
-  leaves the hair alone, because hair carries no `mood` tag. A category only touches
-  the components that use it, so you change one trait and the rest stays varied.
-- Values in the same category act as "or". `['hairLength:short', 'hairLength:medium']`
-  keeps short or medium hair.
-- Different categories act as "and". `['hairLength:long', 'mood:positive']` keeps long
-  hair together with a friendly face.
-- A leading `!` disallows. `['!mood:negative']` drops the negative faces, which is the
-  same as allowing `mood:positive` here, and a bare category like `['!facialHair']`
-  drops every variant that has a facial-hair tag. A disallow always wins over an
+| Token            | Effect                                                                                                                      |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `category:value` | Keeps variants that carry this tag, plus variants with no tag in the category. Several values of one category act as "or".   |
+| `category`       | Requires the category: drops variants that carry no tag in it. It binds only in components that use the category at all.     |
+| `!category:value` | Drops every variant that carries exactly this tag.                                                                          |
+| `!category`      | Drops every variant that carries any tag in the category.                                                                    |
+
+A few rules tie the tokens together:
+
+- A category only touches the components that use it, so you change one trait
+  and the rest of the avatar stays varied.
+- Different categories act as "and", and a disallow (`!`) always wins over an
   allow.
-
-A per-component variant option is more specific and takes precedence. When you set
-`mouthVariant` directly, the `tags` filter is ignored for the mouth and applies
-only to the other components.
+- A per-component variant option is more specific and takes precedence. When you
+  set `animationVariant` directly, the `tags` filter is ignored for the
+  animation and applies only to the other components.
 
 ::: tip
 
@@ -69,36 +70,33 @@ nothing.
 
 ## The tags DiceBear offers
 
-DiceBear's own styles use a shared set of categories, so the same filter behaves
-consistently from one style to the next. Not every style carries every category,
-and an abstract style may carry none.
-
-| Category     | Values                                                                                            | Found on                                          |
-| ------------ | ------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `mood`       | `positive`, `negative`                                                                            | mouth, eyes, eyebrows, expression                 |
-| `hairLength` | `bald`, `short`, `medium`, `long`                                                                  | hair, top, front hair                             |
-| `hairStyle`  | `straight`, `wavy`, `curly`, `afro`, `buzzcut`, `bob`, `updo`, `ponytail`, `braids`, `dreadlocks`, `mohawk`, `bangs` | hair, top, front hair          |
-| `headwear`   | `hat`, `cap`, `beanie`, `turban`, `hijab`, `headband`                                              | hats, and hat-like hair variants                  |
-| `facialHair` | `beard`, `mustache`, `goatee`, `stubble`, `sideburns`                                             | beard, mustache, sideburns                       |
-| `eyewear`    | `glasses`, `sunglasses`                                                                            | glasses                                           |
-| `accessory`  | `earrings`, `mask`                                                                                 | earrings, face masks                              |
-
-For what each value means and how DiceBear decides which to apply, see
+Right now, DiceBear's own styles carry tags in one place: the opt-in animation
+of the animated styles. An upcoming release adds a shared set for the character
+styles with mood, hair length, hair style, headwear, facial hair, eyewear, and
+accessory. Those definitions already live in
 [How DiceBear tags variants](/guides/how-dicebear-tags-variants/).
 
-A few more examples:
+| Category    | Values                    | Found on                                    |
+| ----------- | ------------------------- | ------------------------------------------- |
+| `animation` | (bare category, no values) | the animation component of animated styles  |
+
+The animation is off by default, and the filter controls it like this:
+
+| `tags`       | Result                                              |
+| ------------ | --------------------------------------------------- |
+| `animation`  | Turns the animation on, at a random speed per seed. |
+| `!animation` | Keeps the avatar static, which is also the default. |
+
+For a fixed speed, skip the filter and set the variant directly with the
+`animationVariant` option (e.g. `animationVariant: 'slow'`), which is more
+specific and always wins.
 
 ```js
-// A clean-shaven look with long hair.
+// Turn on the opt-in animation of an animated style, at a random speed
+// per seed.
 const avatar = new Avatar(style, {
-  seed: 'Jane',
-  tags: ['hairLength:long', '!facialHair'],
-});
-
-// Only friendly faces, in any style that tags its mood.
-const avatar = new Avatar(style, {
-  seed: 'Sam',
-  tags: ['mood:positive'],
+  seed: 'Alex',
+  tags: ['animation'],
 });
 ```
 
