@@ -7,8 +7,8 @@
 //! snapshot doubles as the only mutable state besides the `color_resolving`
 //! stack that detects circular color references.
 
-use std::cell::RefCell;
-use std::collections::HashMap;
+use std::cell::{OnceCell, RefCell};
+use std::collections::{HashMap, HashSet};
 
 use serde_json::Value;
 
@@ -18,12 +18,25 @@ use crate::prng::{Prng, Range};
 use crate::style::{Color, Component, Style};
 use crate::utils::color;
 
+/// The `tags` filter tokens grouped by role, as [`Resolver`] composes them.
+/// Every field borrows from the memoized [`Options::tags`]. `bare_disallows` is
+/// the subset of `disallows` carrying no value, kept as a lookup set for the
+/// per-component narrowing.
+struct TagFilter<'a> {
+    allow_categories: Vec<&'a str>,
+    allows: HashMap<&'a str, Vec<&'a str>>,
+    bares: Vec<&'a str>,
+    disallows: Vec<(&'a str, Option<&'a str>)>,
+    bare_disallows: HashSet<&'a str>,
+}
+
 pub struct Resolver<'a> {
     style: &'a Style,
     options: &'a Options,
     prng: Prng,
     color_resolving: RefCell<Vec<String>>,
     result: RefCell<serde_json::Map<String, Value>>,
+    tags: OnceCell<TagFilter<'a>>,
 }
 
 impl<'a> Resolver<'a> {
@@ -36,6 +49,7 @@ impl<'a> Resolver<'a> {
             prng,
             color_resolving: RefCell::new(Vec::new()),
             result: RefCell::new(serde_json::Map::new()),
+            tags: OnceCell::new(),
         }
     }
 
@@ -175,6 +189,53 @@ impl<'a> Resolver<'a> {
         weights
     }
 
+    /// Classifies the parsed [`Options::tags`] tokens into the allow groups,
+    /// bare requirements and disallows the filter is composed from. The result
+    /// depends only on the options, never on a component, so it is computed
+    /// once per avatar rather than rebuilt for each of a style's components.
+    /// The tokens are borrowed from the memoized [`Options::tags`], so the
+    /// classification itself allocates no strings.
+    fn tag_filter(&self) -> &TagFilter<'a> {
+        self.tags.get_or_init(|| {
+            // Insertion-ordered allow groups: category -> allowed values.
+            let mut allow_categories: Vec<&'a str> = Vec::new();
+            let mut allows: HashMap<&'a str, Vec<&'a str>> = HashMap::new();
+            let mut bares: Vec<&'a str> = Vec::new();
+            let mut disallows: Vec<(&'a str, Option<&'a str>)> = Vec::new();
+            let mut bare_disallows: HashSet<&'a str> = HashSet::new();
+
+            for token in self.options.tags() {
+                let category = token.category.as_str();
+
+                if token.negated {
+                    disallows.push((category, token.value.as_deref()));
+
+                    if token.value.is_none() {
+                        bare_disallows.insert(category);
+                    }
+                } else if let Some(value) = token.value.as_deref() {
+                    allows
+                        .entry(category)
+                        .or_insert_with(|| {
+                            allow_categories.push(category);
+                            Vec::new()
+                        })
+                        .push(value);
+                } else if !bares.contains(&category) {
+                    bares.push(category);
+                }
+            }
+
+            TagFilter {
+                allow_categories,
+                allows,
+                bares,
+                disallows,
+                bare_disallows,
+            }
+        })
+    }
+
     /// Narrows a component's variants to the names satisfying the global `tags`
     /// filter, applying the parsed [`Options::tags`] tokens in one pass over the
     /// pool:
@@ -195,36 +256,25 @@ impl<'a> Resolver<'a> {
     ///
     /// Returns the surviving variant names in definition order.
     fn tag_filtered_names(&self, component: &Component) -> Vec<String> {
-        // Insertion-ordered allow groups: category -> allowed values.
-        let mut allow_categories: Vec<String> = Vec::new();
-        let mut allows: HashMap<String, Vec<String>> = HashMap::new();
-        let mut bares: Vec<String> = Vec::new();
-        let mut disallows: Vec<(String, Option<String>)> = Vec::new();
+        let TagFilter {
+            allow_categories,
+            allows,
+            bares,
+            disallows,
+            bare_disallows,
+        } = self.tag_filter();
 
-        for token in self.options.tags() {
-            if token.negated {
-                disallows.push((token.category, token.value));
-            } else if let Some(value) = token.value {
-                allows
-                    .entry(token.category.clone())
-                    .or_insert_with(|| {
-                        allow_categories.push(token.category.clone());
-                        Vec::new()
-                    })
-                    .push(value);
-            } else if !bares.contains(&token.category) {
-                bares.push(token.category);
-            }
-        }
-
-        // A bare positive token only binds where its category is in use.
-        let required: Vec<&String> = bares
+        // A bare token only binds where its category is in use, so this
+        // narrowing — unlike the classification — is genuinely per-component.
+        let required: Vec<&str> = bares
             .iter()
+            .copied()
             .filter(|category| {
-                component
-                    .variants()
-                    .values()
-                    .any(|variant| variant.has_tag(category, None))
+                !bare_disallows.contains(category)
+                    && component
+                        .variants()
+                        .values()
+                        .any(|variant| variant.has_tag(category, None))
             })
             .collect();
 
@@ -242,7 +292,7 @@ impl<'a> Resolver<'a> {
                 .all(|category| variant.has_tag(category, None));
             let disallowed = disallows
                 .iter()
-                .any(|(category, value)| variant.has_tag(category, value.as_deref()));
+                .any(|(category, value)| variant.has_tag(category, *value));
 
             if allowed && !disallowed {
                 names.push(name.clone());

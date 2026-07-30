@@ -22,6 +22,7 @@ type resolver struct {
 	colorResolving []string
 	result         map[string]any
 	order          []string
+	tags           *tagFilter
 }
 
 func newResolver(s *style.Style, opts *options) *resolver {
@@ -176,6 +177,65 @@ func (r *resolver) variantWeights(comp *style.Component) map[string]float64 {
 	return weights
 }
 
+type tagAllow struct {
+	category string
+	values   []string
+}
+
+type tagDisallow struct {
+	category string
+	value    string
+	hasValue bool
+}
+
+// tagFilter holds the parsed options.tags tokens grouped by role. bareDisallows
+// is the subset of disallows carrying no value, kept as a lookup set for the
+// per-component narrowing.
+type tagFilter struct {
+	allowGroups   []*tagAllow
+	bares         []string
+	disallows     []tagDisallow
+	bareDisallows map[string]bool
+}
+
+// tagFilter classifies the parsed options.tags tokens into the allow groups,
+// bare requirements and disallows the filter is composed from. The result
+// depends only on the options, never on a component, so it is computed once per
+// avatar rather than rebuilt for each of a style's components.
+func (r *resolver) tagFilter() *tagFilter {
+	if r.tags != nil {
+		return r.tags
+	}
+
+	f := &tagFilter{bareDisallows: map[string]bool{}}
+	allowIndex := map[string]*tagAllow{}
+	bareSeen := map[string]bool{}
+
+	for _, tok := range r.options.tags() {
+		if tok.negated {
+			f.disallows = append(f.disallows, tagDisallow{category: tok.category, value: tok.value, hasValue: tok.hasValue})
+			if !tok.hasValue {
+				f.bareDisallows[tok.category] = true
+			}
+		} else if tok.hasValue {
+			grp, ok := allowIndex[tok.category]
+			if !ok {
+				grp = &tagAllow{category: tok.category}
+				allowIndex[tok.category] = grp
+				f.allowGroups = append(f.allowGroups, grp)
+			}
+			grp.values = append(grp.values, tok.value)
+		} else if !bareSeen[tok.category] {
+			bareSeen[tok.category] = true
+			f.bares = append(f.bares, tok.category)
+		}
+	}
+
+	r.tags = f
+
+	return f
+}
+
 // tagFilteredNames narrows a component's variants to the names satisfying the
 // global tags filter, applying the parsed options.tags tokens in one pass over
 // the pool:
@@ -196,42 +256,16 @@ func (r *resolver) variantWeights(comp *style.Component) map[string]float64 {
 //
 // The result order is irrelevant: WeightedPick sorts the names internally.
 func (r *resolver) tagFilteredNames(variants map[string]style.ComponentVariant) []string {
-	type allow struct {
-		category string
-		values   []string
-	}
-	type disallow struct {
-		category string
-		value    string
-		hasValue bool
-	}
+	f := r.tagFilter()
+	allowGroups, bares, disallows := f.allowGroups, f.bares, f.disallows
 
-	var allowGroups []*allow
-	allowIndex := map[string]*allow{}
-	var bares []string
-	bareSeen := map[string]bool{}
-	var disallows []disallow
-
-	for _, tok := range r.options.tags() {
-		if tok.negated {
-			disallows = append(disallows, disallow{category: tok.category, value: tok.value, hasValue: tok.hasValue})
-		} else if tok.hasValue {
-			grp, ok := allowIndex[tok.category]
-			if !ok {
-				grp = &allow{category: tok.category}
-				allowIndex[tok.category] = grp
-				allowGroups = append(allowGroups, grp)
-			}
-			grp.values = append(grp.values, tok.value)
-		} else if !bareSeen[tok.category] {
-			bareSeen[tok.category] = true
-			bares = append(bares, tok.category)
-		}
-	}
-
-	// A bare positive token only binds where its category is in use.
+	// A bare token only binds where its category is in use, so this narrowing —
+	// unlike the classification — is genuinely per-component.
 	var required []string
 	for _, category := range bares {
+		if f.bareDisallows[category] {
+			continue
+		}
 		for _, variant := range variants {
 			if variant.HasTag(category, "", false) {
 				required = append(required, category)
