@@ -151,6 +151,12 @@ writeJson(join('styles', 'tagged.json'), styles.tagged);
 // axis. This pins the bare-include contract: a bare positive token requires
 // the category where it is in use, drops the untagged default, and leaves the
 // all-zero pool to the unweighted fallback pick.
+//
+// `plain` carries the bare `animation` tag rather than a `category:value` one.
+// That is the form every vendored animated style actually authors, and it is
+// the only way to exercise `hasTag`'s whole-category branch (`tag == category`)
+// — a port that matched a bare query by `category:` prefix alone would
+// otherwise pass the entire suite while rendering `?tags=animation` static.
 styles.animated = {
   canvas: {
     width: 100,
@@ -176,6 +182,7 @@ styles.animated = {
         none: { elements: [] },
         fast: { elements: [tagRect('#aa0000')], weight: 0, tags: ['animation:fast'] },
         slow: { elements: [tagRect('#0000aa')], weight: 0, tags: ['animation:slow'] },
+        plain: { elements: [tagRect('#00aa00')], weight: 0, tags: ['animation'] },
       },
     },
   },
@@ -921,8 +928,13 @@ const avatarFixtures = {
     // AND across axes, OR within an axis.
     { id: 'tags-and-across-axes', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairTexture:curly'] } },
     { id: 'tags-or-within-axis', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairLength:short'] } },
-    // unknown tag is a no-op.
-    { id: 'tags-unknown-noop', options: { seed: 'parity-1', tags: 'eyes:big' } },
+    // An unknown category touches nothing, because no variant carries it and
+    // the allow group leaves untagged variants alone.
+    { id: 'tags-unknown-category-noop', options: { seed: 'parity-1', tags: 'eyes:big' } },
+    // An unknown value inside a category the style DOES use is not a no-op: it
+    // matches no variant, and every hair variant carries hairLength, so the
+    // whole component drops out. Only the category is forgiving, not the value.
+    { id: 'tags-unknown-value-empties-axis', options: { seed: 'parity-1', tags: 'hairLength:lng' } },
     // ${name}Variant is more specific: hair ignores the filter, facialHair obeys it.
     { id: 'tags-variant-precedence', options: { seed: 'parity-1', tags: 'gender:male', hairVariant: 'longStraight' } },
     // empty ${name}Variant yields no hair even though the filter would allow some.
@@ -936,8 +948,14 @@ const avatarFixtures = {
     { id: 'animation-bare-on', options: { seed: 'parity-1', tags: 'animation' } },
     // A speed value narrows the required pool to a single variant.
     { id: 'animation-bare-with-speed', options: { seed: 'parity-1', tags: ['animation', 'animation:slow'] } },
+    // A bare-tagged variant answers a whole-category query but not a valued
+    // one, so `animation:slow` drops `plain` and leaves the static default.
+    { id: 'animation-value-skips-bare-tag', options: { seed: 'parity-1', tags: 'animation:slow' } },
     // The bare exclude drops every tagged variant and keeps the static default.
     { id: 'animation-bare-off', options: { seed: 'parity-1', tags: '!animation' } },
+    // A disallow wins over a bare include for the same category, so the pair
+    // behaves like the bare exclude alone rather than emptying the pool.
+    { id: 'animation-bare-on-and-off', options: { seed: 'parity-1', tags: ['animation', '!animation'] } },
     // A bare include for a category no variant uses binds nothing.
     { id: 'animation-bare-unused', options: { seed: 'parity-1', tags: 'headwear' } },
   ]),
