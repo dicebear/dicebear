@@ -103,9 +103,12 @@ export function useVariantWeights(
         return;
       }
 
-      if (showWeights.value) {
+      if (showWeights.value && defined.length > 0) {
         avatarStyleOptions[variantKey.value] = Object.fromEntries(defined);
       } else {
+        // Also reached with weights on and nothing selected: the core
+        // accepts an empty array ("render nothing for this component")
+        // but rejects an empty weights object, so store the array form.
         const active = defined.filter(([, w]) => w > 0).map(([name]) => name);
 
         avatarStyleOptions[variantKey.value] = active;

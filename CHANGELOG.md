@@ -16,6 +16,12 @@ and this project adheres to
   identical ids for shared component names (`body`, `eyes`, `animation`,
   `clip`, ...) and stole each other's `<defs>` when inlined on one page.
   Rendered ids change for every avatar as a result.
+- **Docs:** In the playground, clicking "None" in a component's variant picker
+  while weights were shown stored an empty weights object, which the core
+  rejects — the preview then rendered no avatar at all. An empty selection is
+  now stored as an empty list, which renders the avatar without that
+  component. Styles that ship non-default weights were affected immediately,
+  because their pickers open in weights mode.
 
 ## [10.3.2] - 2026-07-29
 
