@@ -48,7 +48,7 @@ const highlights = [
     icon: Palette,
     title: '35+ Avatar Styles',
     description:
-      'Carefully crafted styles from talented artists. Characters, abstract, pixel art, and more.',
+      'Hand-drawn characters from independent artists, plus abstract, pixel art, and geometric designs.',
     color: '#a855f7',
   },
   {

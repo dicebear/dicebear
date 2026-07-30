@@ -14,9 +14,9 @@ import Button from 'primevue/button';
 
     <p class="app-hero-description">
       DiceBear is a privacy-focused, open source avatar library with
-      <span class="app-hero-underline">35+&nbsp;avatar&nbsp;styles</span>
-      crafted by talented artists. Generate deterministic profile pictures via
-      API, JS&nbsp;library, PHP&nbsp;library, Python&nbsp;library,
+      <span class="app-hero-underline">35+&nbsp;avatar&nbsp;styles</span>, from
+      hand-drawn characters to abstract patterns. Generate deterministic profile
+      pictures via API, JS&nbsp;library, PHP&nbsp;library, Python&nbsp;library,
       Rust&nbsp;library, Go&nbsp;library, Dart&nbsp;library &amp; CLI.
     </p>
 

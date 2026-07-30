@@ -162,7 +162,7 @@ onUnmounted(() => {
     </template>
     <UiContainer class="app-style-showcase-header">
       <UiSectionHeader
-        description="From cute characters to abstract patterns, pixel art to professional illustrations. Our avatar library features styles crafted by talented artists and designers."
+        description="Cute characters, abstract patterns, pixel art, and detailed illustrations. Some styles come from independent artists, others we designed ourselves."
       >
         <template #headline><strong>35+</strong> Unique Avatar Styles</template>
       </UiSectionHeader>

@@ -25,7 +25,7 @@ const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
       <strong>Styles</strong> Overview
     </UiHeadline>
     <UiDescription>
-      Browse our avatar library, from abstract patterns to hand-crafted character illustrations. Every style is made by artists and ready to use as profile pictures in your projects.
+      Browse our avatar library, from abstract patterns to hand-drawn character illustrations. Some styles come from independent artists, others we designed ourselves. All of them are ready to use as profile pictures in your projects.
     </UiDescription>
   </div>
 

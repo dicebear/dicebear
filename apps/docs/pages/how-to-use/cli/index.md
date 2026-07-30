@@ -52,9 +52,9 @@ The avatar will be saved as `lorelei-0.svg` in the `./avatars` directory.
 
 :::info
 
-We provide a large number of avatar styles from different artists. The avatar
-styles are licensed under different licenses that the artists can choose
-themselves. For a quick overview we have created an
+We provide a large number of avatar styles from different creators. The avatar
+styles are licensed under different licenses that the creators can choose
+themselves. For a quick overview we have created a
 [license overview](/licenses/) for you.
 
 :::
