@@ -31,35 +31,35 @@ export const comparisonServices: readonly ComparisonService[] = [
     name: 'DiceBear',
     url: 'https://www.dicebear.com',
     starsRepo: 'dicebear/dicebear',
-    starsFallback: '8k+',
+    starsFallback: '9.2k',
   },
   {
     key: 'boringAvatars',
     name: 'Boring Avatars',
     url: 'https://boringavatars.com',
     starsRepo: 'boringdesigners/boring-avatars',
-    starsFallback: '6k+',
+    starsFallback: '6.3k',
   },
   {
     key: 'avvvatars',
     name: 'Avvvatars',
     url: 'https://avvvatars.com',
     starsRepo: 'nusu/avvvatars',
-    starsFallback: '2k+',
+    starsFallback: '2k',
   },
   {
     key: 'multiavatar',
     name: 'Multiavatar',
     url: 'https://multiavatar.com',
     starsRepo: 'multiavatar/Multiavatar',
-    starsFallback: '1.9k+',
+    starsFallback: '1.9k',
   },
   {
     key: 'jdenticon',
     name: 'Jdenticon',
     url: 'https://jdenticon.com',
     starsRepo: 'dmester/jdenticon',
-    starsFallback: '1.7k+',
+    starsFallback: '1.7k',
   },
 ];
 
@@ -68,11 +68,11 @@ export function buildComparisonRows({
   styleCount,
 }: ComparisonContext): ComparisonRow[] {
   const githubStars: Record<ComparisonServiceKey, ComparisonCellValue> = {
-    dicebear: stars['dicebear/dicebear'] || '8k+',
-    boringAvatars: stars['boringdesigners/boring-avatars'] || '6k+',
-    avvvatars: stars['nusu/avvvatars'] || '2k+',
-    multiavatar: stars['multiavatar/Multiavatar'] || '1.9k+',
-    jdenticon: stars['dmester/jdenticon'] || '1.7k+',
+    dicebear: stars['dicebear/dicebear'] || '9.2k',
+    boringAvatars: stars['boringdesigners/boring-avatars'] || '6.3k',
+    avvvatars: stars['nusu/avvvatars'] || '2k',
+    multiavatar: stars['multiavatar/Multiavatar'] || '1.9k',
+    jdenticon: stars['dmester/jdenticon'] || '1.7k',
   };
 
   return [

@@ -36,12 +36,14 @@ export function formatLicenseName(name: string | undefined): string {
   return name?.replace(/\.$/, '') ?? '';
 }
 
+// Mirrors GitHub's own display: round to the nearest 0.1k and drop a
+// trailing .0, so 9151 renders as "9.2k" just like on the repo page.
 export function formatStars(count: number): string {
   if (count >= 1000) {
-    const k = Math.floor((count / 1000) * 10) / 10;
+    const k = Math.round((count / 1000) * 10) / 10;
 
-    return `${k}k+`;
+    return `${k}k`;
   }
 
-  return `${count}+`;
+  return `${count}`;
 }
