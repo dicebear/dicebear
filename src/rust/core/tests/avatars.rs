@@ -26,6 +26,7 @@ fn avatar_parity() {
         "shape-grid",
         "notionists",
         "tagged",
+        "animated",
     ];
 
     for name in styles {
@@ -81,6 +82,7 @@ fn descriptor_parity() {
         "shape-grid",
         "notionists",
         "tagged",
+        "animated",
     ];
 
     for name in styles {

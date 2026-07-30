@@ -26,6 +26,7 @@ void main() {
   }
 
   for (final name in const [
+    'animated',
     'glass',
     'initials',
     'notionists',

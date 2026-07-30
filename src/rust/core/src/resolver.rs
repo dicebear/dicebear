@@ -183,8 +183,12 @@ impl<'a> Resolver<'a> {
     ///   category some allow mentions, a variant is kept only if it carries no
     ///   tag in that category (untouched) or matches one of the allowed values
     ///   (OR within the category). Distinct allowed categories combine with
-    ///   AND, and a category no allow mentions is left unconstrained. A bare
-    ///   positive `cat` token carries no value, so it imposes no constraint.
+    ///   AND, and a category no allow mentions is left unconstrained.
+    /// - A bare positive `cat` token requires the category: it drops variants
+    ///   that carry no tag in `cat`. It only binds where the category is in
+    ///   use — a component with no `cat` tag on any variant is left untouched,
+    ///   so `animation` turns on a style's opt-in animation without erasing
+    ///   the components that know nothing about it.
     /// - A negative `!cat`/`!cat:value` token disallows, dropping every variant
     ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
     ///   are checked alongside allows but always win.
@@ -194,6 +198,7 @@ impl<'a> Resolver<'a> {
         // Insertion-ordered allow groups: category -> allowed values.
         let mut allow_categories: Vec<String> = Vec::new();
         let mut allows: HashMap<String, Vec<String>> = HashMap::new();
+        let mut bares: Vec<String> = Vec::new();
         let mut disallows: Vec<(String, Option<String>)> = Vec::new();
 
         for token in self.options.tags() {
@@ -207,8 +212,21 @@ impl<'a> Resolver<'a> {
                         Vec::new()
                     })
                     .push(value);
+            } else if !bares.contains(&token.category) {
+                bares.push(token.category);
             }
         }
+
+        // A bare positive token only binds where its category is in use.
+        let required: Vec<&String> = bares
+            .iter()
+            .filter(|category| {
+                component
+                    .variants()
+                    .values()
+                    .any(|variant| variant.has_tag(category, None))
+            })
+            .collect();
 
         let mut names: Vec<String> = Vec::new();
 
@@ -219,7 +237,9 @@ impl<'a> Resolver<'a> {
                     || values
                         .iter()
                         .any(|value| variant.has_tag(category, Some(value)))
-            });
+            }) && required
+                .iter()
+                .all(|category| variant.has_tag(category, None));
             let disallowed = disallows
                 .iter()
                 .any(|(category, value)| variant.has_tag(category, value.as_deref()));

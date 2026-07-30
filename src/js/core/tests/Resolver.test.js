@@ -895,7 +895,9 @@ describe('Resolver', () => {
       );
     });
 
-    it('should treat a bare-category include as a no-op', () => {
+    it('should keep a fully tagged component unchanged under a bare include', () => {
+      // Every hair variant carries a hairLength tag, so requiring the
+      // category drops nothing.
       assertPool(variantPool(styleWithTags, { tags: 'hairLength' }, 'hair'), [
         'longStraight',
         'longCurly',
@@ -904,8 +906,18 @@ describe('Resolver', () => {
       ]);
     });
 
-    it('should let a value include constrain a category despite a bare include', () => {
-      // The bare `hairLength` adds nothing, so the value include still applies.
+    it('should not bind a bare include where the category is unused', () => {
+      // No hair variant carries a facialHair tag, so the bare token leaves
+      // the component untouched instead of emptying it.
+      assertPool(variantPool(styleWithTags, { tags: 'facialHair' }, 'hair'), [
+        'longStraight',
+        'longCurly',
+        'shortStraight',
+        'shortCurly',
+      ]);
+    });
+
+    it('should let a value include constrain a category alongside a bare include', () => {
       assertPool(
         variantPool(
           styleWithTags,
@@ -913,6 +925,60 @@ describe('Resolver', () => {
           'hair',
         ),
         ['longStraight', 'longCurly'],
+      );
+    });
+
+    it('should drop variants untagged in a required category where it is in use', () => {
+      const style = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+        components: {
+          hat: {
+            width: 50,
+            height: 50,
+            variants: {
+              fedora: { elements: [], tags: ['headwear:hat'] },
+              cap: { elements: [], tags: ['headwear:cap'] },
+              plain: { elements: [] },
+            },
+          },
+        },
+      });
+
+      assertPool(variantPool(style, { tags: 'headwear' }, 'hat'), [
+        'fedora',
+        'cap',
+      ]);
+    });
+
+    it('should drive an opt-in animation component through bare tags', () => {
+      // The static default outweighs the zero-weight speeds until the bare
+      // include drops it; then the all-zero pool is drawn from unweighted.
+      const style = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+        components: {
+          animation: {
+            width: 50,
+            height: 50,
+            variants: {
+              none: { elements: [] },
+              fast: { elements: [], weight: 0, tags: ['animation:fast'] },
+              slow: { elements: [], weight: 0, tags: ['animation:slow'] },
+            },
+          },
+        },
+      });
+
+      assertPool(variantPool(style, {}, 'animation'), ['none']);
+      assertPool(variantPool(style, { tags: 'animation' }, 'animation'), [
+        'fast',
+        'slow',
+      ]);
+      assertPool(variantPool(style, { tags: '!animation' }, 'animation'), [
+        'none',
+      ]);
+      assertPool(
+        variantPool(style, { tags: ['animation', 'animation:slow'] }, 'animation'),
+        ['slow'],
       );
     });
 

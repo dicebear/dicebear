@@ -58,22 +58,16 @@
     "min": -1000,
     "max": 1000
   },
-  "shapeVariant": {
+  "faceVariant": {
     "type": "enum",
     "values": [
-      "a",
-      "d",
-      "e",
-      "g",
-      "i",
-      "n",
-      "r",
-      "t"
+      "round",
+      "square"
     ],
     "list": true,
     "weighted": true
   },
-  "shapeProbability": {
+  "faceProbability": {
     "type": "number",
     "min": 0,
     "max": 100
@@ -82,11 +76,8 @@
     "type": "enum",
     "values": [
       "fast",
-      "fastest",
-      "medium",
       "none",
-      "slow",
-      "slowest"
+      "slow"
     ],
     "list": true,
     "weighted": true
@@ -121,7 +112,8 @@
   "tags": {
     "type": "enum",
     "values": [
-      "animation"
+      "animation:fast",
+      "animation:slow"
     ],
     "list": true,
     "open": true

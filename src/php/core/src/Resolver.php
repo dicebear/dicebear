@@ -262,9 +262,12 @@ class Resolver
      *   category some allow mentions, a variant is kept only if it carries no
      *   tag in that category (untouched) or matches one of the allowed values
      *   (OR within the category). Distinct allowed categories combine with AND,
-     *   and a category no allow mentions is left unconstrained. A bare
-     *   positive `cat` token carries no value, so it imposes no constraint (a
-     *   no-op).
+     *   and a category no allow mentions is left unconstrained.
+     * - A bare positive `cat` token requires the category: it drops variants
+     *   that carry no tag in `cat`. It only binds where the category is in
+     *   use — a component with no `cat` tag on any variant is left untouched,
+     *   so `animation` turns on a style's opt-in animation without erasing
+     *   the components that know nothing about it.
      * - A negative `!cat`/`!cat:value` token disallows, dropping every variant
      *   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
      *   are checked alongside allows but always win.
@@ -279,6 +282,8 @@ class Resolver
     {
         /** @var array<string, list<string>> $allows */
         $allows = [];
+        /** @var list<string> $bares */
+        $bares = [];
         /** @var list<array{category: string, value?: string}> $disallows */
         $disallows = [];
 
@@ -287,6 +292,20 @@ class Resolver
                 $disallows[] = ['category' => $token['category'], 'value' => $token['value'] ?? null];
             } elseif (isset($token['value'])) {
                 $allows[$token['category']][] = $token['value'];
+            } else {
+                $bares[] = $token['category'];
+            }
+        }
+
+        // A bare positive token only binds where its category is in use.
+        $required = [];
+
+        foreach (array_unique($bares) as $category) {
+            foreach ($variants as $variant) {
+                if ($variant->hasTag($category)) {
+                    $required[] = $category;
+                    break;
+                }
             }
         }
 
@@ -294,6 +313,17 @@ class Resolver
 
         foreach ($variants as $name => $variant) {
             $allowed = true;
+
+            foreach ($required as $category) {
+                if (!$variant->hasTag($category)) {
+                    $allowed = false;
+                    break;
+                }
+            }
+
+            if (!$allowed) {
+                continue;
+            }
 
             foreach ($allows as $category => $values) {
                 if (!$variant->hasTag($category)) {
