@@ -419,10 +419,10 @@ function onExamplesToggle(event: MouseEvent) {
                 }}</span>
                 <div class="style-options-card-tags-chips">
                   <code
-                    v-for="tag in group.tags"
-                    :key="tag.token"
+                    v-for="token in group.tokens"
+                    :key="token"
                     class="style-options-card-tags-chip"
-                    >{{ tag.token }}</code
+                    >{{ token }}</code
                   >
                 </div>
               </div>
