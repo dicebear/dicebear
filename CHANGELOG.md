@@ -8,20 +8,34 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **CLI:** Definition files can now be compressed in place with
+  `dicebear ./my-style.json --optimize`. The flag runs the same svgo pass over
+  every element tree that the current Figma exporter applies on export.
+  Hand-authored definitions and files from older exporter versions shrink, by up
+  to 42% (`pixel-art`), while recent exports come back unchanged.
+  `--optimize-check` reports without writing and exits non-zero when the file
+  would change, which makes it usable as a CI gate. `--optimize-precision` sets
+  the float precision for path and transform data (default 3). Color and
+  component references, variables, element ids, CSS classes and `<style>`
+  contents are verified after the pass, and the CLI refuses to write the file
+  when any of them changed.
+
 ### Fixed
 
 - **Core (all languages):** The id suffix for `<defs>` entries now hashes the
-  style source name together with the seed. It previously hashed only the
-  seed, so two avatars of different styles with the same seed produced
-  identical ids for shared component names (`body`, `eyes`, `animation`,
-  `clip`, ...) and stole each other's `<defs>` when inlined on one page.
-  Rendered ids change for every avatar as a result.
+  style source name together with the seed. It previously hashed only the seed,
+  so two avatars of different styles with the same seed produced identical ids
+  for shared component names (`body`, `eyes`, `animation`, `clip`, ...) and
+  stole each other's `<defs>` when inlined on one page. Rendered ids change for
+  every avatar as a result.
 - **Docs:** In the playground, clicking "None" in a component's variant picker
   while weights were shown stored an empty weights object, which the core
   rejects — the preview then rendered no avatar at all. An empty selection is
-  now stored as an empty list, which renders the avatar without that
-  component. Styles that ship non-default weights were affected immediately,
-  because their pickers open in weights mode.
+  now stored as an empty list, which renders the avatar without that component.
+  Styles that ship non-default weights were affected immediately, because their
+  pickers open in weights mode.
 
 ## [10.3.2] - 2026-07-29
 

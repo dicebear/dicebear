@@ -61,8 +61,8 @@ themselves. For a quick overview we have created a
 
 ### Create multiple avatars
 
-You can also create multiple avatars at once with the `--count` option.
-Replace `<count>` with the number of avatars to create.
+You can also create multiple avatars at once with the `--count` option. Replace
+`<count>` with the number of avatars to create.
 
 ```
 dicebear <style> [outputPath] --count <count>
@@ -292,6 +292,52 @@ Generate multiple avatars in PNG format:
 ```
 dicebear ./my-style.json ./avatars --count 20 --format png
 ```
+
+### Compressing a definition file
+
+Definition files exported from the
+[Figma plugin](/guides/create-an-avatar-style-with-figma/) are already
+compressed on export. A definition you wrote or edited by hand is not, and its
+path data usually has a lot of room left. `--optimize` runs the same
+[svgo](https://github.com/svg/svgo) pass over every element tree in the file and
+rewrites it in place:
+
+```
+dicebear ./my-style.json --optimize
+```
+
+```
+  my-style.json   25.5 KB -> 22.1 KB (-12.8%)
+```
+
+Use `--optimize-precision` to control how many decimals path and transform data
+keep. The default is `3`. Lower values compress harder at the cost of accuracy:
+
+```
+dicebear ./my-style.json --optimize --optimize-precision 1
+```
+
+`--optimize-check` reports whether the file is optimized without writing
+anything, and exits with a non-zero status if it is not. This is what you want
+in continuous integration:
+
+```
+dicebear ./my-style.json --optimize-check
+```
+
+Colors, component references, dynamic values, element ids, CSS classes and the
+contents of `<style>` elements all survive unchanged, and component `width` and
+`height` are never touched. The CLI verifies this on every run and refuses to
+write the file if anything moved, so an optimized definition renders the same
+avatars as before.
+
+:::info
+
+Optimizing always rewrites the file in place, so `[outputPath]` is ignored. Copy
+the file first if you want to keep the original around. Built-in styles have no
+definition file of their own and cannot be optimized.
+
+:::
 
 ## Examples
 

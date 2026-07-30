@@ -1,5 +1,7 @@
 import { Parser } from 'yargs/helpers';
 
+import { optimizeModeFlags } from './optimizeCommandOptions.js';
+
 /**
  * Extracts the definition file path (the first positional argument) from the
  * raw CLI arguments.
@@ -10,11 +12,12 @@ import { Parser } from 'yargs/helpers';
  * definition path. Pass the result of `hideBin(process.argv)`.
  */
 export function resolveDefinitionPath(args: string[]): string | undefined {
-  // yargs' built-in `--help`/`--version` and the CLI's generic `--exif`/`--json`
-  // flags are boolean. Declaring them keeps the parser from greedily consuming
-  // the following definition path as their value (e.g. `--json my-style.json`).
+  // yargs' built-in `--help`/`--version`, the CLI's generic `--exif`/`--json`
+  // and the optimize-mode flags are boolean. Declaring them keeps the parser
+  // from greedily consuming the following definition path as their value
+  // (e.g. `--json my-style.json`).
   const positional = Parser(args, {
-    boolean: ['help', 'version', 'exif', 'json'],
+    boolean: ['help', 'version', 'exif', 'json', ...optimizeModeFlags],
   })._[0];
 
   return positional === undefined ? undefined : String(positional);

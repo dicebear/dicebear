@@ -1,25 +1,14 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { fileURLToPath } from 'node:url';
+
+import { runCli } from './helpers/runCli.js';
 
 const require = createRequire(import.meta.url);
-
-const binPath = fileURLToPath(new URL('../bin/index.js', import.meta.url));
 const pkg = require('../package.json');
-
-/** Runs the built CLI with the given arguments and captures the result. */
-function runCli(args) {
-  return spawnSync('node', [binPath, ...args], {
-    encoding: 'utf-8',
-    // Keep update-notifier from emitting noise / hitting the network.
-    env: { ...process.env, NO_UPDATE_NOTIFIER: '1' },
-  });
-}
 
 describe('dicebear CLI', () => {
   let workdir;
