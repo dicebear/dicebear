@@ -21,6 +21,29 @@ Directory? parityFixtures() {
   return dir.existsSync() ? dir : null;
 }
 
+/// Enumerates the parity style fixtures instead of repeating a hand-maintained
+/// list in every suite, so a fixture added to `tests/fixtures/parity/styles` is
+/// picked up the way the PHP and Python suites already pick it up. Sorted, so
+/// the group order stays stable. Empty when the fixture directory is absent.
+List<String> parityStyleNames() {
+  final dir = parityFixtures();
+
+  if (dir == null) {
+    return const [];
+  }
+
+  final names = Directory('${dir.path}/styles')
+      .listSync()
+      .whereType<File>()
+      .map((file) => file.uri.pathSegments.last)
+      .where((name) => name.endsWith('.json'))
+      .map((name) => name.substring(0, name.length - '.json'.length))
+      .toList()
+    ..sort();
+
+  return names;
+}
+
 /// Returns the contents of the fixture file [name], or `null` when the
 /// fixture directory is absent. A missing file inside an existing fixture
 /// directory throws — that is a broken checkout, not a published package.
