@@ -139,9 +139,12 @@ class Resolver {
   ///   category some allow mentions, a variant is kept only if it carries no
   ///   tag in that category (untouched) or matches one of the allowed values
   ///   (OR within the category). Distinct allowed categories combine with
-  ///   AND, and a category no allow mentions is left unconstrained. A bare
-  ///   positive `cat` token carries no value, so it imposes no constraint (a
-  ///   no-op).
+  ///   AND, and a category no allow mentions is left unconstrained.
+  /// - A bare positive `cat` token requires the category: it drops variants
+  ///   that carry no tag in `cat`. It only binds where the category is in
+  ///   use — a component with no `cat` tag on any variant is left untouched,
+  ///   so `animation` turns on a style's opt-in animation without erasing
+  ///   the components that know nothing about it.
   /// - A negative `!cat`/`!cat:value` token disallows, dropping every variant
   ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
   ///   are checked alongside allows but always win.
@@ -149,6 +152,7 @@ class Resolver {
   /// Returns the surviving variant names in definition order.
   List<String> _tagFilteredNames(Map<String, ComponentVariant> variants) {
     final allows = <String, List<String>>{};
+    final bares = <String>{};
     final disallows = <({String category, String? value})>[];
 
     for (final token in _options.tags()) {
@@ -156,20 +160,31 @@ class Resolver {
         disallows.add((category: token.category, value: token.value));
       } else if (token.value != null) {
         allows.putIfAbsent(token.category, () => []).add(token.value!);
+      } else {
+        bares.add(token.category);
       }
     }
 
+    // A bare positive token only binds where its category is in use.
     final allowGroups = allows.entries.toList();
+    final required = bares
+        .where(
+          (category) =>
+              variants.values.any((variant) => variant.hasTag(category)),
+        )
+        .toList();
+
     final names = <String>[];
 
     for (final entry in variants.entries) {
       final variant = entry.value;
 
       final allowed = allowGroups.every(
-        (group) =>
-            !variant.hasTag(group.key) ||
-            group.value.any((value) => variant.hasTag(group.key, value)),
-      );
+            (group) =>
+                !variant.hasTag(group.key) ||
+                group.value.any((value) => variant.hasTag(group.key, value)),
+          ) &&
+          required.every((category) => variant.hasTag(category));
       final disallowed = disallows.any(
         (token) => variant.hasTag(token.category, token.value),
       );

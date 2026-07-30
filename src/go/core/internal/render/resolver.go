@@ -184,8 +184,12 @@ func (r *resolver) variantWeights(comp *style.Component) map[string]float64 {
 //     some allow mentions, a variant is kept only if it carries no tag in that
 //     category (untouched) or matches one of the allowed values (OR within the
 //     category). Distinct allowed categories combine with AND, and a category no
-//     allow mentions is left unconstrained. A bare positive cat token carries no
-//     value, so it imposes no constraint (a no-op).
+//     allow mentions is left unconstrained.
+//   - A bare positive cat token requires the category: it drops variants that
+//     carry no tag in cat. It only binds where the category is in use — a
+//     component with no cat tag on any variant is left untouched, so animation
+//     turns on a style's opt-in animation without erasing the components that
+//     know nothing about it.
 //   - A negative !cat / !cat:value token disallows, dropping every variant
 //     carrying any tag in cat (bare) or the exact cat:value tag. Disallows are
 //     checked alongside allows but always win.
@@ -204,6 +208,8 @@ func (r *resolver) tagFilteredNames(variants map[string]style.ComponentVariant) 
 
 	var allowGroups []*allow
 	allowIndex := map[string]*allow{}
+	var bares []string
+	bareSeen := map[string]bool{}
 	var disallows []disallow
 
 	for _, tok := range r.options.tags() {
@@ -217,12 +223,36 @@ func (r *resolver) tagFilteredNames(variants map[string]style.ComponentVariant) 
 				allowGroups = append(allowGroups, grp)
 			}
 			grp.values = append(grp.values, tok.value)
+		} else if !bareSeen[tok.category] {
+			bareSeen[tok.category] = true
+			bares = append(bares, tok.category)
+		}
+	}
+
+	// A bare positive token only binds where its category is in use.
+	var required []string
+	for _, category := range bares {
+		for _, variant := range variants {
+			if variant.HasTag(category, "", false) {
+				required = append(required, category)
+				break
+			}
 		}
 	}
 
 	var names []string
 	for name, variant := range variants {
 		allowed := true
+		for _, category := range required {
+			if !variant.HasTag(category, "", false) {
+				allowed = false
+				break
+			}
+		}
+		if !allowed {
+			continue
+		}
+
 		for _, grp := range allowGroups {
 			if !variant.HasTag(grp.category, "", false) {
 				continue

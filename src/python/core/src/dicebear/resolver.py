@@ -145,9 +145,12 @@ class Resolver:
           category some allow mentions, a variant is kept only if it carries no
           tag in that category (untouched) or matches one of the allowed values
           (OR within the category). Distinct allowed categories combine with
-          AND, and a category no allow mentions is left unconstrained. A bare
-          positive ``cat`` token carries no value, so it imposes no constraint (a
-          no-op).
+          AND, and a category no allow mentions is left unconstrained.
+        - A bare positive ``cat`` token requires the category: it drops
+          variants that carry no tag in ``cat``. It only binds where the
+          category is in use -- a component with no ``cat`` tag on any variant
+          is left untouched, so ``animation`` turns on a style's opt-in
+          animation without erasing the components that know nothing about it.
         - A negative ``!cat``/``!cat:value`` token disallows, dropping every
           variant carrying any tag in ``cat`` (bare) or the exact ``cat:value``
           tag. Disallows are checked alongside allows but always win.
@@ -155,6 +158,7 @@ class Resolver:
         Returns the surviving variant names in definition order.
         """
         allows: dict[str, list[str]] = {}
+        bares: dict[str, None] = {}
         disallows: list[tuple[str, str | None]] = []
 
         for token in self._options.tags():
@@ -162,9 +166,17 @@ class Resolver:
                 disallows.append((token.category, token.value))
             elif token.value is not None:
                 allows.setdefault(token.category, []).append(token.value)
+            else:
+                bares[token.category] = None
 
-        # Materialize the allow groups once, not on every variant.
+        # Materialize the allow groups once, not on every variant. A bare
+        # token only binds where its category is in use.
         allow_groups = list(allows.items())
+        required = [
+            category
+            for category in bares
+            if any(variant.has_tag(category) for variant in variants.values())
+        ]
 
         names: list[str] = []
 
@@ -173,7 +185,7 @@ class Resolver:
                 not variant.has_tag(category)
                 or any(variant.has_tag(category, value) for value in values)
                 for category, values in allow_groups
-            )
+            ) and all(variant.has_tag(category) for category in required)
             disallowed = any(
                 variant.has_tag(category, value) for category, value in disallows
             )

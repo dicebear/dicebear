@@ -145,6 +145,43 @@ styles.tagged = {
 };
 writeJson(join('styles', 'tagged.json'), styles.tagged);
 
+// A synthetic style with an opt-in animation component, mirroring the pattern
+// the vendored animated styles use: an untagged static `none` variant with the
+// default weight, and zero-weight speed variants tagged on the `animation`
+// axis. This pins the bare-include contract: a bare positive token requires
+// the category where it is in use, drops the untagged default, and leaves the
+// all-zero pool to the unweighted fallback pick.
+styles.animated = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      { type: 'component', name: 'face' },
+      { type: 'component', name: 'animation' },
+    ],
+  },
+  components: {
+    face: {
+      width: 100,
+      height: 100,
+      variants: {
+        round: { elements: [tagRect('#111111')] },
+        square: { elements: [tagRect('#222222')] },
+      },
+    },
+    animation: {
+      width: 100,
+      height: 100,
+      variants: {
+        none: { elements: [] },
+        fast: { elements: [tagRect('#aa0000')], weight: 0, tags: ['animation:fast'] },
+        slow: { elements: [tagRect('#0000aa')], weight: 0, tags: ['animation:slow'] },
+      },
+    },
+  },
+};
+writeJson(join('styles', 'animated.json'), styles.animated);
+
 // ---------------------------------------------------------------------------
 // Fnv1a fixtures
 // ---------------------------------------------------------------------------
@@ -890,6 +927,19 @@ const avatarFixtures = {
     { id: 'tags-variant-precedence', options: { seed: 'parity-1', tags: 'gender:male', hairVariant: 'longStraight' } },
     // empty ${name}Variant yields no hair even though the filter would allow some.
     { id: 'tags-empty-variant', options: { seed: 'parity-1', tags: 'gender:female', hairVariant: [] } },
+  ]),
+  animated: avatarCases([
+    // The untagged static default outweighs the zero-weight speeds.
+    { id: 'animation-default', options: { seed: 'parity-1' } },
+    // The bare include drops the untagged default; the all-zero pool falls
+    // back to an unweighted pick among the speeds. `face` is untouched.
+    { id: 'animation-bare-on', options: { seed: 'parity-1', tags: 'animation' } },
+    // A speed value narrows the required pool to a single variant.
+    { id: 'animation-bare-with-speed', options: { seed: 'parity-1', tags: ['animation', 'animation:slow'] } },
+    // The bare exclude drops every tagged variant and keeps the static default.
+    { id: 'animation-bare-off', options: { seed: 'parity-1', tags: '!animation' } },
+    // A bare include for a category no variant uses binds nothing.
+    { id: 'animation-bare-unused', options: { seed: 'parity-1', tags: 'headwear' } },
   ]),
 };
 

@@ -228,5 +228,13 @@
     "type": "range",
     "min": -360,
     "max": 360
+  },
+  "tags": {
+    "type": "enum",
+    "values": [
+      "animation"
+    ],
+    "list": true,
+    "open": true
   }
 }
