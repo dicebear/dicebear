@@ -58,6 +58,10 @@ A few rules tie the tokens together:
 - A per-component variant option is more specific and takes precedence. When you
   set `animationVariant` directly, the `tags` filter is ignored for the
   animation and applies only to the other components.
+- Only an unknown category is ignored. An unknown value is not. Because no
+  variant matches it, every variant tagged in that category drops out. A typo in
+  `hairLenght:long` changes nothing, while a typo in `hairLength:lng` removes
+  the hair.
 
 ::: tip
 

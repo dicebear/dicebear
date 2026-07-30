@@ -113,8 +113,9 @@ class OptionsDescriptor
         // Only advertise the `tags` filter when the style actually carries tags.
         // The values are the sorted union of every tag across the style's
         // variants, but `open` marks them as suggestions: the filter also
-        // accepts `!` exclusions and bare categories and silently ignores
-        // unknown tokens.
+        // accepts `!` disallows and bare categories. Only an unknown category
+        // is ignored. An unknown value inside a category the style does use
+        // matches nothing, so every variant tagged on that axis is dropped.
         if (count($tags) > 0) {
             $tagValues = array_keys($tags);
             sort($tagValues);

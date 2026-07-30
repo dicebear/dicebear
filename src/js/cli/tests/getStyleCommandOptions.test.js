@@ -30,8 +30,10 @@ describe('getStyleCommandOptions', () => {
   });
 
   it('does not lock choices for the open tags enum', () => {
-    // tags is an open enum: its values are suggestions, and excludes (`!`) and
-    // unknown tokens are valid input, so yargs must not reject them.
+    // tags is an open enum: its values are suggestions, and disallows (`!`) and
+    // tokens outside the list are valid input, so yargs must not reject them.
+    // Whether such a token narrows anything is the resolver's business, not the
+    // parser's.
     const options = getStyleCommandOptions(taggedStyle);
 
     assert.ok(options.tags, 'tags option should be present for a tagged style');
