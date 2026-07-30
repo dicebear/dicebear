@@ -16,7 +16,10 @@ export type ParsedTag = {
 export type TagCategory = {
   category: string;
   label: string;
+  /** Value tags only, without the bare category token. */
   tags: ParsedTag[];
+  /** Every vocabulary token of the category, the bare one (if any) first. */
+  tokens: string[];
 };
 
 export function parseTag(token: string): ParsedTag {
@@ -28,29 +31,47 @@ export function parseTag(token: string): ParsedTag {
 }
 
 /**
+ * Returns the category a filter token addresses, ignoring a leading `!`
+ * (disallow) marker. The single place the polarity grammar is decoded.
+ */
+export function tokenCategory(token: string): string {
+  return parseTag(token.startsWith('!') ? token.slice(1) : token).category;
+}
+
+/**
  * Groups a flat tag list into its categories, sorted by category label and by
- * value within each category. Bare-category tags (no `value`) are dropped, as
- * they impose no constraint in the filter.
+ * value within each category. A bare-category tag (no `value`) registers its
+ * category without contributing a value tag, so a category tagged only bare
+ * (e.g. the opt-in `animation`) still shows up, just with an empty value
+ * list. Every token, bare included, lands in the group's `tokens`.
  */
 export function groupTagsByCategory(tags: string[]): TagCategory[] {
-  const byCategory = new Map<string, ParsedTag[]>();
+  const byCategory = new Map<string, { bare: boolean; tags: ParsedTag[] }>();
 
   for (const token of tags) {
     const parsed = parseTag(token);
+    const group = byCategory.get(parsed.category) ?? { bare: false, tags: [] };
 
     if (parsed.value === '') {
-      continue;
+      group.bare = true;
+    } else {
+      group.tags.push(parsed);
     }
 
-    const group = byCategory.get(parsed.category) ?? [];
-
-    group.push(parsed);
     byCategory.set(parsed.category, group);
   }
 
-  return Array.from(byCategory, ([category, group]) => ({
-    category,
-    label: capitalCase(category),
-    tags: group.sort((a, b) => a.value.localeCompare(b.value)),
-  })).sort((a, b) => a.label.localeCompare(b.label));
+  return Array.from(byCategory, ([category, group]) => {
+    const sorted = group.tags.sort((a, b) => a.value.localeCompare(b.value));
+
+    return {
+      category,
+      label: capitalCase(category),
+      tags: sorted,
+      tokens: [
+        ...(group.bare ? [category] : []),
+        ...sorted.map((tag) => tag.token),
+      ],
+    };
+  }).sort((a, b) => a.label.localeCompare(b.label));
 }

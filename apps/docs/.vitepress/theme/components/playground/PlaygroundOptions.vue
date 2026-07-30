@@ -6,6 +6,7 @@ import {
   navigateToColorKey,
 } from '@theme/components/styles/styleOptionsKeys';
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
+import { groupTagsByCategory, tokenCategory } from '@theme/utils/avatar/tags';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
 import { track, styleLabel } from '@theme/utils/track';
@@ -79,22 +80,23 @@ const styleTags = computed<string[]>(() => {
 });
 const hasTags = computed(() => styleTags.value.length > 0);
 
-const tagTokens = computed<string[]>(() => {
+const tagCategories = computed(() => groupTagsByCategory(styleTags.value));
+
+// Number of set filter tokens per category, counting bare and per-value
+// tokens in either polarity.
+const tagCounts = computed(() => {
   const value = store.avatarStyleOptions.tags;
+  const tokens = Array.isArray(value) ? (value as string[]) : [];
+  const counts = new Map<string, number>();
 
-  return Array.isArray(value) ? (value as string[]) : [];
+  for (const token of tokens) {
+    const category = tokenCategory(token);
+
+    counts.set(category, (counts.get(category) ?? 0) + 1);
+  }
+
+  return counts;
 });
-
-const tagPanels: { mode: 'allow' | 'disallow'; label: string }[] = [
-  { mode: 'allow', label: 'Allow' },
-  { mode: 'disallow', label: 'Disallow' },
-];
-
-// Number of set tokens for a panel's polarity (`!`-prefixed = disallow).
-function tagCount(mode: 'allow' | 'disallow'): number {
-  return tagTokens.value.filter((t) => t.startsWith('!') === (mode === 'disallow'))
-    .length;
-}
 
 const components = computed(() => {
   const result: ComponentInfo[] = [];
@@ -439,25 +441,30 @@ const onSeedFocus = (e: FocusEvent) => {
 
     <div class="pg-options-group" v-if="hasTags">
       <h3 class="pg-options-group-title">Tags</h3>
+      <p class="pg-help">
+        Allow keeps only matching variants, disallow drops them. Allowing a
+        whole category requires it, which turns an opt-in feature like the
+        animation on. Components with a variant chosen manually ignore the
+        filter.
+      </p>
       <Accordion :multiple="true" class="pg-options-accordion">
         <AccordionPanel
-          v-for="panel in tagPanels"
-          :key="panel.mode"
-          :value="panel.mode"
+          v-for="group in tagCategories"
+          :key="`${avatarStyleName}-${group.category}`"
+          :value="group.category"
         >
           <AccordionHeader>
-            <span class="pg-options-label">{{ panel.label }}</span>
+            <span class="pg-options-label">{{ group.label }}</span>
             <Tag
-              :value="`${tagCount(panel.mode)}/${styleTags.length}`"
+              :value="`${tagCounts.get(group.category) ?? 0}`"
               severity="secondary"
               class="pg-options-tag"
             />
           </AccordionHeader>
           <AccordionContent>
             <PlaygroundTagsSection
-              :key="avatarStyleName"
-              :mode="panel.mode"
-              :tags="styleTags"
+              :key="`${avatarStyleName}-${group.category}`"
+              :category="group"
             />
           </AccordionContent>
         </AccordionPanel>
@@ -540,6 +547,12 @@ const onSeedFocus = (e: FocusEvent) => {
 }
 
 .pg-options-group {
+  /* A help paragraph between the group title and its cards (e.g. the tags
+     filter intro) needs its own spacing toward the card below. */
+  > .pg-help {
+    margin: 0 2px 10px;
+  }
+
   &-title {
     font-size: 11px;
     font-weight: 700;

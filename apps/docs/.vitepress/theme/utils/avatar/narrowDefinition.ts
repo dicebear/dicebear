@@ -200,7 +200,9 @@ function parseTagTokens(value: unknown): TagToken[] {
  * `${name}Variant` override, mirroring `Resolver.#tagFilteredNames`. Within a
  * category some allow mentions, a variant survives if it carries no tag in
  * that category or matches one of the allowed values (OR within a category,
- * AND across categories); a `!category[:value]` token drops matching variants
+ * AND across categories). A bare `category` token requires the category and
+ * drops variants without a tag in it, but only in components where the
+ * category is in use. A `!category[:value]` token drops matching variants
  * and always wins. A component narrowed to no variants renders nothing — one
  * outcome — so its probability is pinned to 0 (matching the empty-selection
  * branch in {@link applyVariantNarrowing}).
@@ -212,6 +214,7 @@ function applyTagFilter(
 ): void {
   const tokens = parseTagTokens(tagsOption);
   const allows = new Map<string, string[]>();
+  const bares = new Set<string>();
   const disallows: { category: string; value?: string }[] = [];
 
   for (const { category, value, negated } of tokens) {
@@ -222,12 +225,15 @@ function applyTagFilter(
 
       values.push(value);
       allows.set(category, values);
+    } else {
+      bares.add(category);
     }
   }
 
   const allowGroups = [...allows];
+  const bareList = [...bares];
 
-  if (allowGroups.length === 0 && disallows.length === 0) {
+  if (allowGroups.length === 0 && bareList.length === 0 && disallows.length === 0) {
     return;
   }
 
@@ -240,6 +246,17 @@ function applyTagFilter(
       continue;
     }
 
+    // A bare token only binds where its category is in use.
+    const variantList = Object.values(component.variants);
+    const required = bareList.filter((category) =>
+      variantList.some((variant) =>
+        variantHasTag(
+          Array.isArray(variant.tags) ? variant.tags : [],
+          category,
+        ),
+      ),
+    );
+
     const narrowed: Record<string, any> = {};
 
     for (const [variantName, variant] of Object.entries(component.variants)) {
@@ -247,11 +264,12 @@ function applyTagFilter(
         ? variant.tags
         : [];
 
-      const allowed = allowGroups.every(
-        ([category, values]) =>
-          !variantHasTag(tags, category) ||
-          values.some((value) => variantHasTag(tags, category, value)),
-      );
+      const allowed =
+        allowGroups.every(
+          ([category, values]) =>
+            !variantHasTag(tags, category) ||
+            values.some((value) => variantHasTag(tags, category, value)),
+        ) && required.every((category) => variantHasTag(tags, category));
       const disallowed = disallows.some(({ category, value }) =>
         variantHasTag(tags, category, value),
       );
