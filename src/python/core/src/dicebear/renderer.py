@@ -481,8 +481,17 @@ class Renderer:
         return self._cached_initials
 
     def _hash_seed(self) -> str:
-        """Return the FNV-1a hex hash of the seed, cached after the first call."""
+        """Return the FNV-1a hex hash of the style source name and the seed.
+
+        Cached after the first call. The style name is part of the hash
+        because styles share component and variant names: two avatars of
+        different styles with the same seed would otherwise produce identical
+        ids and steal each other's ``<defs>`` when inlined on one page.
+        """
         if self._cached_seed_hash is None:
-            self._cached_seed_hash = Fnv1a.hex(self._resolver.seed())
+            source_name = self._style.meta().source().name() or ""
+            self._cached_seed_hash = Fnv1a.hex(
+                source_name + ":" + self._resolver.seed()
+            )
 
         return self._cached_seed_hash

@@ -579,11 +579,17 @@ class Renderer
     }
 
     /**
-     * Returns the FNV-1a hex hash of the seed, cached after the first call.
-     * The value is used to derive stable but unique IDs for `<defs>` entries.
+     * Returns the FNV-1a hex hash of the style source name and the seed,
+     * cached after the first call. The value is used to derive stable but
+     * unique IDs for `<defs>` entries. The style name is part of the hash
+     * because styles share component and variant names: two avatars of
+     * different styles with the same seed would otherwise produce identical
+     * IDs and steal each other's `<defs>` when inlined on one page.
      */
     private function hashSeed(): string
     {
-        return $this->cachedSeedHash ??= Fnv1a::hex($this->resolver->seed());
+        return $this->cachedSeedHash ??= Fnv1a::hex(
+            ($this->style->meta()->source()->name() ?? '') . ':' . $this->resolver->seed()
+        );
     }
 }

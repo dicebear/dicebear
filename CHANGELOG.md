@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **Core (all languages):** The id suffix for `<defs>` entries now hashes the
+  style source name together with the seed. It previously hashed only the
+  seed, so two avatars of different styles with the same seed produced
+  identical ids for shared component names (`body`, `eyes`, `animation`,
+  `clip`, ...) and stole each other's `<defs>` when inlined on one page.
+  Rendered ids change for every avatar as a result.
+
 ## [10.3.2] - 2026-07-29
 
 ### Fixed

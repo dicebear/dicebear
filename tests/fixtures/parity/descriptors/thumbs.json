@@ -121,6 +121,24 @@
     "min": 0,
     "max": 100
   },
+  "animationVariant": {
+    "type": "enum",
+    "values": [
+      "fast",
+      "fastest",
+      "medium",
+      "none",
+      "slow",
+      "slowest"
+    ],
+    "list": true,
+    "weighted": true
+  },
+  "animationProbability": {
+    "type": "number",
+    "min": 0,
+    "max": 100
+  },
   "backgroundColor": {
     "type": "color",
     "list": true

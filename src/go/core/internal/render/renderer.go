@@ -486,9 +486,18 @@ func (r *renderer) initials() string {
 	return *r.cachedInitials
 }
 
+// hashSeed returns the FNV-1a hex hash of the style source name and the
+// seed, cached after the first call. The style name is part of the hash
+// because styles share component and variant names: two avatars of different
+// styles with the same seed would otherwise produce identical ids and steal
+// each other's <defs> when inlined on one page.
 func (r *renderer) hashSeed() string {
 	if r.cachedSeedHash == nil {
-		v := prng.Hex(r.resolver.seed())
+		sourceName := ""
+		if meta := r.style.Meta(); meta != nil && meta.Source.Name != nil {
+			sourceName = *meta.Source.Name
+		}
+		v := prng.Hex(sourceName + ":" + r.resolver.seed())
 		r.cachedSeedHash = &v
 	}
 	return *r.cachedSeedHash

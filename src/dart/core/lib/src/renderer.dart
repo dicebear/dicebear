@@ -553,9 +553,12 @@ class Renderer {
   /// Returns the seed-derived initials, cached after the first call.
   String _initials() => _cachedInitials ??= initialsFromSeed(_resolver.seed());
 
-  /// Returns the FNV-1a hex hash of the seed, cached after the first call.
-  /// The value is used to derive stable but unique IDs for `<defs>` entries.
-  String _hashSeed() => _cachedSeedHash ??= fnv1aHex(_resolver.seed());
+  /// Returns the FNV-1a hex hash of the style source name and seed, cached
+  /// after the first call. The value is used to derive stable but unique IDs
+  /// for `<defs>` entries; the source name keeps same-seed avatars of
+  /// different styles from colliding when inlined on one page.
+  String _hashSeed() => _cachedSeedHash ??= fnv1aHex(
+      '${_style.meta.source().name() ?? ''}:${_resolver.seed()}');
 }
 
 // Shared process-randomness source for _randomizeIds.

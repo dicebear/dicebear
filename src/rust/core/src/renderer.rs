@@ -493,9 +493,21 @@ impl<'a> Renderer<'a> {
             .clone()
     }
 
+    /// Returns the FNV-1a hex hash of the style source name and the seed,
+    /// cached after the first call. The style name is part of the hash
+    /// because styles share component and variant names: two avatars of
+    /// different styles with the same seed would otherwise produce identical
+    /// ids and steal each other's `<defs>` when inlined on one page.
     fn hash_seed(&mut self) -> String {
         self.cached_seed_hash
-            .get_or_insert_with(|| fnv1a::hex(&self.resolver.seed()))
+            .get_or_insert_with(|| {
+                let source_name = self
+                    .style
+                    .meta()
+                    .and_then(|meta| meta.source().name())
+                    .unwrap_or("");
+                fnv1a::hex(&format!("{}:{}", source_name, self.resolver.seed()))
+            })
             .clone()
     }
 }
