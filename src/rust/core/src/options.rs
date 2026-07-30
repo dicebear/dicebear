@@ -5,6 +5,7 @@
 //! [`crate::Resolver`] never has to normalize. Resolution against the style and
 //! the PRNG happens there; this type is purely about reading input.
 
+use std::cell::OnceCell;
 use std::collections::HashMap;
 
 use serde_json::Value;
@@ -22,6 +23,7 @@ pub(crate) struct TagFilterToken {
 
 pub struct Options {
     data: Value,
+    tags: OnceCell<Vec<TagFilterToken>>,
 }
 
 impl Options {
@@ -32,7 +34,10 @@ impl Options {
             Value::Object(serde_json::Map::new())
         };
 
-        Self { data }
+        Self {
+            data,
+            tags: OnceCell::new(),
+        }
     }
 
     fn get(&self, key: &str) -> Option<&Value> {
@@ -91,28 +96,31 @@ impl Options {
     /// unset. Each raw token (`category` / `category:value`, optionally
     /// `!`-prefixed to disallow) is decoded into `{ category, value?, negated }`
     /// so the resolver composes the filter without parsing the grammar itself.
-    /// An empty list means no tag filtering (classic behavior).
-    pub(crate) fn tags(&self) -> Vec<TagFilterToken> {
-        as_string_array(self.get("tags"))
-            .into_iter()
-            .map(|token| {
-                let negated = token.starts_with('!');
-                let body = if negated { &token[1..] } else { &token[..] };
+    /// An empty list means no tag filtering (classic behavior). Memoized, since
+    /// the resolver reads it once per component.
+    pub(crate) fn tags(&self) -> &[TagFilterToken] {
+        self.tags.get_or_init(|| {
+            as_string_array(self.get("tags"))
+                .into_iter()
+                .map(|token| {
+                    let negated = token.starts_with('!');
+                    let body = if negated { &token[1..] } else { &token[..] };
 
-                match body.find(':') {
-                    None => TagFilterToken {
-                        category: body.to_string(),
-                        value: None,
-                        negated,
-                    },
-                    Some(sep) => TagFilterToken {
-                        category: body[..sep].to_string(),
-                        value: Some(body[sep + 1..].to_string()),
-                        negated,
-                    },
-                }
-            })
-            .collect()
+                    match body.find(':') {
+                        None => TagFilterToken {
+                            category: body.to_string(),
+                            value: None,
+                            negated,
+                        },
+                        Some(sep) => TagFilterToken {
+                            category: body[..sep].to_string(),
+                            value: Some(body[sep + 1..].to_string()),
+                            negated,
+                        },
+                    }
+                })
+                .collect()
+        })
     }
 
     /// Returns the `${name}Variant` constraint as a weighted map, or `None` when

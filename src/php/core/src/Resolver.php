@@ -26,6 +26,15 @@ class Resolver
     private array $colorResolving = [];
     /** @var array<string, mixed> */
     private array $result = [];
+    /**
+     * @var ?array{
+     *     allows: array<string, list<string>>,
+     *     bares: list<string>,
+     *     disallows: list<array{category: string, value: ?string}>,
+     *     bareDisallows: array<string, true>,
+     * }
+     */
+    private ?array $tagFilter = null;
 
     public function __construct(Style $style, Options $options)
     {
@@ -254,6 +263,57 @@ class Resolver
     }
 
     /**
+     * Classifies the parsed {@see Options::tags()} tokens into the allow
+     * groups, bare requirements and disallows the filter is composed from. The
+     * result depends only on the options, never on a component, so it is
+     * computed once per avatar rather than rebuilt for each of a style's
+     * components. `bareDisallows` is the subset of `disallows` carrying no
+     * value, kept as a lookup set for the per-component narrowing.
+     *
+     * @return array{
+     *     allows: array<string, list<string>>,
+     *     bares: list<string>,
+     *     disallows: list<array{category: string, value: ?string}>,
+     *     bareDisallows: array<string, true>,
+     * }
+     */
+    private function tagFilter(): array
+    {
+        if ($this->tagFilter !== null) {
+            return $this->tagFilter;
+        }
+
+        $allows = [];
+        $bares = [];
+        $disallows = [];
+        $bareDisallows = [];
+
+        foreach ($this->options->tags() as $token) {
+            if ($token['negated']) {
+                $value = $token['value'] ?? null;
+                $disallows[] = ['category' => $token['category'], 'value' => $value];
+
+                if ($value === null) {
+                    $bareDisallows[$token['category']] = true;
+                }
+            } elseif (isset($token['value'])) {
+                $allows[$token['category']][] = $token['value'];
+            } else {
+                $bares[] = $token['category'];
+            }
+        }
+
+        $this->tagFilter = [
+            'allows' => $allows,
+            'bares' => array_values(array_unique($bares)),
+            'disallows' => $disallows,
+            'bareDisallows' => $bareDisallows,
+        ];
+
+        return $this->tagFilter;
+    }
+
+    /**
      * Narrows a component's variants to the names satisfying the global `tags`
      * filter, applying the parsed {@see Options::tags()} tokens in one pass over
      * the pool:
@@ -280,27 +340,17 @@ class Resolver
      */
     private function tagFilteredNames(array $variants): array
     {
-        /** @var array<string, list<string>> $allows */
-        $allows = [];
-        /** @var list<string> $bares */
-        $bares = [];
-        /** @var list<array{category: string, value?: string}> $disallows */
-        $disallows = [];
+        ['allows' => $allows, 'bares' => $bares, 'disallows' => $disallows, 'bareDisallows' => $bareDisallows] = $this->tagFilter();
 
-        foreach ($this->options->tags() as $token) {
-            if ($token['negated']) {
-                $disallows[] = ['category' => $token['category'], 'value' => $token['value'] ?? null];
-            } elseif (isset($token['value'])) {
-                $allows[$token['category']][] = $token['value'];
-            } else {
-                $bares[] = $token['category'];
-            }
-        }
-
-        // A bare positive token only binds where its category is in use.
+        // A bare token only binds where its category is in use, so this
+        // narrowing — unlike the classification — is genuinely per-component.
         $required = [];
 
-        foreach (array_unique($bares) as $category) {
+        foreach ($bares as $category) {
+            if (isset($bareDisallows[$category])) {
+                continue;
+            }
+
             foreach ($variants as $variant) {
                 if ($variant->hasTag($category)) {
                     $required[] = $category;

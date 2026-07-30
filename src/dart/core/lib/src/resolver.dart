@@ -18,6 +18,14 @@ import 'utils/color.dart';
 /// that repeated calls cannot drift. The memo also serves as the
 /// informational snapshot returned by [resolved] — every value the resolver
 /// picks during one resolution lands there, except for the raw seed.
+/// The `tags` filter tokens grouped by role, as [Resolver] composes them.
+typedef _TagFilter = ({
+  List<MapEntry<String, List<String>>> allowGroups,
+  Set<String> bares,
+  List<({String category, String? value})> disallows,
+  Set<String> bareDisallows,
+});
+
 class Resolver {
   final Style _style;
   final Options _options;
@@ -29,6 +37,8 @@ class Resolver {
   // envelope emits (Dart maps preserve it natively; Go had to track the order
   // explicitly). Unset values are recorded as null and filtered on exposure.
   final Map<String, Object?> _result = {};
+
+  _TagFilter? _tagFilterCache;
 
   Resolver(Style style, Options options)
       : _style = style,
@@ -131,6 +141,47 @@ class Resolver {
     return weights;
   }
 
+  /// Classifies the parsed [Options.tags] tokens into the allow groups, bare
+  /// requirements and disallows the filter is composed from. The result depends
+  /// only on the options, never on a component, so it is computed once per
+  /// avatar rather than rebuilt for each of a style's components.
+  /// `bareDisallows` is the subset of `disallows` carrying no value, kept as a
+  /// lookup set for the per-component narrowing.
+  _TagFilter _tagFilter() {
+    final cached = _tagFilterCache;
+
+    if (cached != null) {
+      return cached;
+    }
+
+    final allows = <String, List<String>>{};
+    final bares = <String>{};
+    final disallows = <({String category, String? value})>[];
+    final bareDisallows = <String>{};
+
+    for (final token in _options.tags()) {
+      if (token.negated) {
+        disallows.add((category: token.category, value: token.value));
+
+        if (token.value == null) {
+          bareDisallows.add(token.category);
+        }
+      } else if (token.value != null) {
+        allows.putIfAbsent(token.category, () => []).add(token.value!);
+      } else {
+        bares.add(token.category);
+      }
+    }
+
+    // Materialize the allow groups once, not on every variant.
+    return _tagFilterCache = (
+      allowGroups: allows.entries.toList(),
+      bares: bares,
+      disallows: disallows,
+      bareDisallows: bareDisallows,
+    );
+  }
+
   /// Narrows a component's variants to the names satisfying the global `tags`
   /// filter, applying the parsed [Options.tags] tokens in one pass over the
   /// pool:
@@ -151,25 +202,14 @@ class Resolver {
   ///
   /// Returns the surviving variant names in definition order.
   List<String> _tagFilteredNames(Map<String, ComponentVariant> variants) {
-    final allows = <String, List<String>>{};
-    final bares = <String>{};
-    final disallows = <({String category, String? value})>[];
+    final (:allowGroups, :bares, :disallows, :bareDisallows) = _tagFilter();
 
-    for (final token in _options.tags()) {
-      if (token.negated) {
-        disallows.add((category: token.category, value: token.value));
-      } else if (token.value != null) {
-        allows.putIfAbsent(token.category, () => []).add(token.value!);
-      } else {
-        bares.add(token.category);
-      }
-    }
-
-    // A bare positive token only binds where its category is in use.
-    final allowGroups = allows.entries.toList();
+    // A bare token only binds where its category is in use, so this narrowing
+    // — unlike the classification — is genuinely per-component.
     final required = bares
         .where(
           (category) =>
+              !bareDisallows.contains(category) &&
               variants.values.any((variant) => variant.hasTag(category)),
         )
         .toList();

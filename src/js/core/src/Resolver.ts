@@ -13,6 +13,18 @@ import type {
 } from './StyleOptions.js';
 
 /**
+ * The `tags` filter tokens grouped by role, as {@link Resolver} composes them.
+ * `bareDisallows` is the subset of `disallows` carrying no value, cached so the
+ * per-component narrowing can cancel the matching bare requirements.
+ */
+type TagFilter = {
+  allowGroups: [string, string[]][];
+  bares: ReadonlySet<string>;
+  disallows: { category: string; value?: string }[];
+  bareDisallows: ReadonlySet<string>;
+};
+
+/**
  * Bundles the three inputs needed to derive any deterministic value for an
  * avatar — the {@link Style}, the validated user {@link Options}, and a
  * seeded {@link Prng} — and exposes them as named accessors. Each accessor
@@ -27,6 +39,7 @@ export class Resolver<D = unknown> {
   #prng: Prng;
   #colorResolving: string[] = [];
   #result: Record<string, unknown> = {};
+  #tagFilterCache?: TagFilter;
 
   constructor(style: Style<D>, options: Options<D>) {
     this.#style = style;
@@ -240,6 +253,50 @@ export class Resolver<D = unknown> {
   }
 
   /**
+   * Classifies the parsed {@link Options.tags} tokens into the allow groups,
+   * bare requirements and disallows the filter is composed from. The result
+   * depends only on the options, never on a component, so it is computed once
+   * per avatar rather than rebuilt for each of a style's components.
+   */
+  #tagFilter(): TagFilter {
+    if (this.#tagFilterCache) {
+      return this.#tagFilterCache;
+    }
+
+    const allows = new Map<string, string[]>();
+    const bares = new Set<string>();
+    const disallows: { category: string; value?: string }[] = [];
+    const bareDisallows = new Set<string>();
+
+    for (const { category, value, negated } of this.#options.tags()) {
+      if (negated) {
+        disallows.push({ category, value });
+
+        if (value === undefined) {
+          bareDisallows.add(category);
+        }
+      } else if (value !== undefined) {
+        const values = allows.get(category) ?? [];
+
+        values.push(value);
+        allows.set(category, values);
+      } else {
+        bares.add(category);
+      }
+    }
+
+    this.#tagFilterCache = {
+      // Materialize the allow groups once, not on every variant.
+      allowGroups: [...allows],
+      bares,
+      disallows,
+      bareDisallows,
+    };
+
+    return this.#tagFilterCache;
+  }
+
+  /**
    * Narrows a component's variants to the names satisfying the global `tags`
    * filter, applying the parsed {@link Options.tags} tokens in one pass over
    * the pool:
@@ -260,30 +317,16 @@ export class Resolver<D = unknown> {
    *
    * Returns the surviving variant names in definition order.
    */
-  #tagFilteredNames(
-    variants: ReadonlyMap<string, ComponentVariant>,
-  ): string[] {
-    const allows = new Map<string, string[]>();
-    const bares = new Set<string>();
-    const disallows: { category: string; value?: string }[] = [];
+  #tagFilteredNames(variants: ReadonlyMap<string, ComponentVariant>): string[] {
+    const { allowGroups, bares, disallows, bareDisallows } = this.#tagFilter();
 
-    for (const { category, value, negated } of this.#options.tags()) {
-      if (negated) {
-        disallows.push({ category, value });
-      } else if (value !== undefined) {
-        const values = allows.get(category) ?? [];
-
-        values.push(value);
-        allows.set(category, values);
-      } else {
-        bares.add(category);
-      }
-    }
-
-    // Materialize the allow groups once, not on every variant. A bare token
-    // only binds where its category is in use.
-    const allowGroups = [...allows];
+    // A bare token only binds where its category is in use, so this narrowing
+    // — unlike the classification above — is genuinely per-component.
     const required = [...bares].filter((category) => {
+      if (bareDisallows.has(category)) {
+        return false;
+      }
+
       for (const variant of variants.values()) {
         if (variant.hasTag(category)) {
           return true;

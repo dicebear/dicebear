@@ -31,6 +31,15 @@ class Resolver:
         self._prng = Prng(self.seed())
         self._color_resolving: list[str] = []
         self._result: dict[str, Any] = {}
+        self._tag_filter_cache: (
+            tuple[
+                list[tuple[str, list[str]]],
+                dict[str, None],
+                list[tuple[str, str | None]],
+                set[str],
+            ]
+            | None
+        ) = None
 
     def seed(self) -> str:
         # Deliberately not memoized — the seed is the only input kept out of the
@@ -136,6 +145,51 @@ class Resolver:
 
         return weights
 
+    def _tag_filter(
+        self,
+    ) -> tuple[
+        list[tuple[str, list[str]]],
+        dict[str, None],
+        list[tuple[str, str | None]],
+        set[str],
+    ]:
+        """Classify the parsed :meth:`Options.tags` tokens into the allow
+        groups, bare requirements and disallows the filter is composed from.
+
+        The result depends only on the options, never on a component, so it is
+        computed once per avatar rather than rebuilt for each of a style's
+        components. The fourth element is the subset of the disallows carrying
+        no value, kept as a lookup set for the per-component narrowing.
+        """
+        if self._tag_filter_cache is not None:
+            return self._tag_filter_cache
+
+        allows: dict[str, list[str]] = {}
+        bares: dict[str, None] = {}
+        disallows: list[tuple[str, str | None]] = []
+        bare_disallows: set[str] = set()
+
+        for token in self._options.tags():
+            if token.negated:
+                disallows.append((token.category, token.value))
+
+                if token.value is None:
+                    bare_disallows.add(token.category)
+            elif token.value is not None:
+                allows.setdefault(token.category, []).append(token.value)
+            else:
+                bares[token.category] = None
+
+        # Materialize the allow groups once, not on every variant.
+        self._tag_filter_cache = (
+            list(allows.items()),
+            bares,
+            disallows,
+            bare_disallows,
+        )
+
+        return self._tag_filter_cache
+
     def _tag_filtered_names(self, variants: dict[str, ComponentVariant]) -> list[str]:
         """Narrow a component's variants to the names satisfying the global
         ``tags`` filter, applying the parsed :meth:`Options.tags` tokens in one
@@ -157,25 +211,15 @@ class Resolver:
 
         Returns the surviving variant names in definition order.
         """
-        allows: dict[str, list[str]] = {}
-        bares: dict[str, None] = {}
-        disallows: list[tuple[str, str | None]] = []
+        allow_groups, bares, disallows, bare_disallows = self._tag_filter()
 
-        for token in self._options.tags():
-            if token.negated:
-                disallows.append((token.category, token.value))
-            elif token.value is not None:
-                allows.setdefault(token.category, []).append(token.value)
-            else:
-                bares[token.category] = None
-
-        # Materialize the allow groups once, not on every variant. A bare
-        # token only binds where its category is in use.
-        allow_groups = list(allows.items())
+        # A bare token only binds where its category is in use, so this
+        # narrowing -- unlike the classification -- is genuinely per-component.
         required = [
             category
             for category in bares
-            if any(variant.has_tag(category) for variant in variants.values())
+            if category not in bare_disallows
+            and any(variant.has_tag(category) for variant in variants.values())
         ]
 
         names: list[str] = []
