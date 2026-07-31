@@ -22,7 +22,7 @@
       "width": 100,
       "height": 100,
       "variants": {
-        "longStraight": {
+        "longLight": {
           "elements": [
             {
               "type": "element",
@@ -36,11 +36,11 @@
           ],
           "tags": [
             "hairLength:long",
-            "hairTexture:straight",
+            "hairShade:light",
             "tone:cool"
           ]
         },
-        "longCurly": {
+        "longDark": {
           "elements": [
             {
               "type": "element",
@@ -54,11 +54,11 @@
           ],
           "tags": [
             "hairLength:long",
-            "hairTexture:curly",
+            "hairShade:dark",
             "tone:cool"
           ]
         },
-        "shortStraight": {
+        "shortLight": {
           "elements": [
             {
               "type": "element",
@@ -72,11 +72,11 @@
           ],
           "tags": [
             "hairLength:short",
-            "hairTexture:straight",
+            "hairShade:light",
             "tone:warm"
           ]
         },
-        "shortCurly": {
+        "shortDark": {
           "elements": [
             {
               "type": "element",
@@ -90,7 +90,7 @@
           ],
           "tags": [
             "hairLength:short",
-            "hairTexture:curly",
+            "hairShade:dark",
             "tone:warm"
           ]
         }

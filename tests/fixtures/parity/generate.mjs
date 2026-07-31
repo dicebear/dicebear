@@ -100,21 +100,21 @@ styles.tagged = {
       width: 100,
       height: 100,
       variants: {
-        longStraight: {
+        longLight: {
           elements: [tagRect('#111111')],
-          tags: ['hairLength:long', 'hairTexture:straight', 'tone:cool'],
+          tags: ['hairLength:long', 'hairShade:light', 'tone:cool'],
         },
-        longCurly: {
+        longDark: {
           elements: [tagRect('#222222')],
-          tags: ['hairLength:long', 'hairTexture:curly', 'tone:cool'],
+          tags: ['hairLength:long', 'hairShade:dark', 'tone:cool'],
         },
-        shortStraight: {
+        shortLight: {
           elements: [tagRect('#333333')],
-          tags: ['hairLength:short', 'hairTexture:straight', 'tone:warm'],
+          tags: ['hairLength:short', 'hairShade:light', 'tone:warm'],
         },
-        shortCurly: {
+        shortDark: {
           elements: [tagRect('#444444')],
-          tags: ['hairLength:short', 'hairTexture:curly', 'tone:warm'],
+          tags: ['hairLength:short', 'hairShade:dark', 'tone:warm'],
         },
       },
     },
@@ -923,10 +923,10 @@ const avatarFixtures = {
     // hairLength:long touches only hair; facialHair has no hairLength tag.
     { id: 'tags-include-axis', options: { seed: 'parity-1', tags: 'hairLength:long' } },
     // exclude one value, and a bare exclude that empties the optional facialHair.
-    { id: 'tags-exclude-value', options: { seed: 'parity-1', tags: '!hairTexture:curly' } },
+    { id: 'tags-exclude-value', options: { seed: 'parity-1', tags: '!hairShade:dark' } },
     { id: 'tags-exclude-bare', options: { seed: 'parity-1', tags: '!facialHair' } },
     // AND across axes, OR within an axis.
-    { id: 'tags-and-across-axes', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairTexture:curly'] } },
+    { id: 'tags-and-across-axes', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairShade:dark'] } },
     { id: 'tags-or-within-axis', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairLength:short'] } },
     // An unknown category touches nothing, because no variant carries it and
     // the allow group leaves untagged variants alone.
@@ -936,7 +936,7 @@ const avatarFixtures = {
     // whole component drops out. Only the category is forgiving, not the value.
     { id: 'tags-unknown-value-empties-axis', options: { seed: 'parity-1', tags: 'hairLength:lng' } },
     // ${name}Variant is more specific: hair ignores the filter, facialHair obeys it.
-    { id: 'tags-variant-precedence', options: { seed: 'parity-1', tags: 'tone:warm', hairVariant: 'longStraight' } },
+    { id: 'tags-variant-precedence', options: { seed: 'parity-1', tags: 'tone:warm', hairVariant: 'longLight' } },
     // empty ${name}Variant yields no hair even though the filter would allow some.
     { id: 'tags-empty-variant', options: { seed: 'parity-1', tags: 'tone:cool', hairVariant: [] } },
   ]),

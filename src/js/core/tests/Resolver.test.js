@@ -788,7 +788,7 @@ describe('Resolver', () => {
 
   describe('variant tags', () => {
     // hair is mandatory (prob 100). Every variant is tagged on three axes
-    // (hairLength, hairTexture, tone). facialHair is optional (prob 50) and
+    // (hairLength, hairShade, tone). facialHair is optional (prob 50) and
     // tagged. nose carries no tags at all, so no tag filter should touch it.
     const styleWithTags = new Style({
       canvas: { width: 100, height: 100, elements: [] },
@@ -797,21 +797,21 @@ describe('Resolver', () => {
           width: 50,
           height: 50,
           variants: {
-            longStraight: {
+            longLight: {
               elements: [],
-              tags: ['hairLength:long', 'hairTexture:straight', 'tone:cool'],
+              tags: ['hairLength:long', 'hairShade:light', 'tone:cool'],
             },
-            longCurly: {
+            longDark: {
               elements: [],
-              tags: ['hairLength:long', 'hairTexture:curly', 'tone:cool'],
+              tags: ['hairLength:long', 'hairShade:dark', 'tone:cool'],
             },
-            shortStraight: {
+            shortLight: {
               elements: [],
-              tags: ['hairLength:short', 'hairTexture:straight', 'tone:warm'],
+              tags: ['hairLength:short', 'hairShade:light', 'tone:warm'],
             },
-            shortCurly: {
+            shortDark: {
               elements: [],
-              tags: ['hairLength:short', 'hairTexture:curly', 'tone:warm'],
+              tags: ['hairLength:short', 'hairShade:dark', 'tone:warm'],
             },
           },
         },
@@ -861,15 +861,15 @@ describe('Resolver', () => {
 
     it('should restrict to variants matching an include token', () => {
       assertPool(variantPool(styleWithTags, { tags: 'hairLength:long' }, 'hair'), [
-        'longStraight',
-        'longCurly',
+        'longLight',
+        'longDark',
       ]);
     });
 
     it('should filter an axis that spans several components', () => {
       assertPool(variantPool(styleWithTags, { tags: 'tone:warm' }, 'hair'), [
-        'shortStraight',
-        'shortCurly',
+        'shortLight',
+        'shortDark',
       ]);
     });
 
@@ -880,7 +880,7 @@ describe('Resolver', () => {
           { tags: ['hairLength:long', 'hairLength:short'] },
           'hair',
         ),
-        ['longStraight', 'longCurly', 'shortStraight', 'shortCurly'],
+        ['longLight', 'longDark', 'shortLight', 'shortDark'],
       );
     });
 
@@ -888,10 +888,10 @@ describe('Resolver', () => {
       assertPool(
         variantPool(
           styleWithTags,
-          { tags: ['hairLength:long', 'hairTexture:curly'] },
+          { tags: ['hairLength:long', 'hairShade:dark'] },
           'hair',
         ),
-        ['longCurly'],
+        ['longDark'],
       );
     });
 
@@ -899,10 +899,10 @@ describe('Resolver', () => {
       // Every hair variant carries a hairLength tag, so requiring the
       // category drops nothing.
       assertPool(variantPool(styleWithTags, { tags: 'hairLength' }, 'hair'), [
-        'longStraight',
-        'longCurly',
-        'shortStraight',
-        'shortCurly',
+        'longLight',
+        'longDark',
+        'shortLight',
+        'shortDark',
       ]);
     });
 
@@ -910,10 +910,10 @@ describe('Resolver', () => {
       // No hair variant carries a facialHair tag, so the bare token leaves
       // the component untouched instead of emptying it.
       assertPool(variantPool(styleWithTags, { tags: 'facialHair' }, 'hair'), [
-        'longStraight',
-        'longCurly',
-        'shortStraight',
-        'shortCurly',
+        'longLight',
+        'longDark',
+        'shortLight',
+        'shortDark',
       ]);
     });
 
@@ -924,7 +924,7 @@ describe('Resolver', () => {
           { tags: ['hairLength', 'hairLength:long'] },
           'hair',
         ),
-        ['longStraight', 'longCurly'],
+        ['longLight', 'longDark'],
       );
     });
 
@@ -984,8 +984,8 @@ describe('Resolver', () => {
 
     it('should remove variants matching an exclude token', () => {
       assertPool(
-        variantPool(styleWithTags, { tags: '!hairTexture:curly' }, 'hair'),
-        ['longStraight', 'shortStraight'],
+        variantPool(styleWithTags, { tags: '!hairShade:dark' }, 'hair'),
+        ['longLight', 'shortLight'],
       );
     });
 
@@ -993,10 +993,10 @@ describe('Resolver', () => {
       assertPool(
         variantPool(
           styleWithTags,
-          { tags: ['hairLength:long', '!hairTexture:curly'] },
+          { tags: ['hairLength:long', '!hairShade:dark'] },
           'hair',
         ),
-        ['longStraight'],
+        ['longLight'],
       );
     });
 
@@ -1031,33 +1031,33 @@ describe('Resolver', () => {
 
     it('should let ${name}Variant override the tag filter', () => {
       // ${name}Variant is more specific, so it ignores the tags filter: both
-      // named variants are kept even though shortStraight is outside the pool.
+      // named variants are kept even though shortLight is outside the pool.
       assertPool(
         variantPool(
           styleWithTags,
           {
             tags: 'hairLength:long',
-            hairVariant: ['longCurly', 'shortStraight'],
+            hairVariant: ['longDark', 'shortLight'],
           },
           'hair',
         ),
-        ['longCurly', 'shortStraight'],
+        ['longDark', 'shortLight'],
       );
     });
 
     it('should keep a ${name}Variant name despite a tag exclude', () => {
-      // The explicit option wins over the descriptive filter: longStraight is
+      // The explicit option wins over the descriptive filter: longLight is
       // kept even though !tone:cool would otherwise drop it.
       assertPool(
         variantPool(
           styleWithTags,
           {
             tags: '!tone:cool',
-            hairVariant: ['longStraight', 'shortCurly'],
+            hairVariant: ['longLight', 'shortDark'],
           },
           'hair',
         ),
-        ['longStraight', 'shortCurly'],
+        ['longLight', 'shortDark'],
       );
     });
 
@@ -1107,17 +1107,17 @@ describe('Resolver', () => {
       assertPool(
         variantPool(
           styleWithTags,
-          { tags: [], hairVariant: 'longStraight' },
+          { tags: [], hairVariant: 'longLight' },
           'hair',
         ),
-        ['longStraight'],
+        ['longLight'],
       );
     });
 
     it('should resolve to no variant when the filter empties a mandatory component', () => {
-      // !hairTexture drops every hair variant. Like an empty `${name}Variant`,
+      // !hairShade drops every hair variant. Like an empty `${name}Variant`,
       // an empty pool yields nothing rather than forcing variants back in.
-      assertPool(variantPool(styleWithTags, { tags: '!hairTexture' }, 'hair'), [
+      assertPool(variantPool(styleWithTags, { tags: '!hairShade' }, 'hair'), [
         undefined,
       ]);
     });
@@ -1137,7 +1137,7 @@ describe('Resolver', () => {
 
       assert.equal(a, b);
       // and the result is constrained by the filter, not just stable
-      assert.ok(['longStraight', 'longCurly'].includes(a));
+      assert.ok(['longLight', 'longDark'].includes(a));
     });
 
     it('should yield no variant for an empty ${name}Variant even with tags', () => {
