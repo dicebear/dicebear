@@ -121,7 +121,9 @@ const animatedStyles = computed(() =>
 
   &-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    /* Four columns so the 16 animated styles fill four even rows. Revisit the
+       count when a new animated style ships. */
+    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
     justify-items: center;
   }
@@ -188,14 +190,6 @@ const animatedStyles = computed(() =>
   &-cta {
     text-align: center;
     margin-top: 48px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .app-animated-styles {
-    &-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
   }
 }
 

@@ -7,13 +7,13 @@ const gridRef = ref<HTMLElement>();
 const isVisible = useVisibility(gridRef, { threshold: 0.1 });
 
 // One tile per animated style family: a creature, a planet, an abstract
-// pattern, and a face, so the hero shows the range of motion at a glance.
-// Seeds picked by eye for friendly faces and distinct background colors.
+// pattern, and a molded face, so the hero shows the range of motion at a
+// glance. Seeds picked by eye for friendly faces and distinct backgrounds.
 const tiles = [
   { styleName: 'critters', seed: 'Aneka' },
   { styleName: 'planets', seed: 'Luna' },
-  { styleName: 'loops', seed: 'Felix' },
-  { styleName: 'moods', seed: 'Leo' },
+  { styleName: 'waves', seed: 'Felix' },
+  { styleName: 'clay', seed: 'Wren' },
 ];
 </script>
 
@@ -36,7 +36,7 @@ const tiles = [
         :style-options="{
           seed: tile.seed,
           size: 160,
-          animationVariant: 'medium',
+          animationVariant: 'fast',
         }"
         :alt="`Animated ${tile.styleName} avatar`"
       />
