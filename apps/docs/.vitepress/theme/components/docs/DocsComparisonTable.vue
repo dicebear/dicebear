@@ -12,6 +12,7 @@ const { theme } = useData<ThemeOptions>();
 const rows = buildComparisonRows({
   stars: theme.value.githubStars ?? {},
   styleCount: theme.value.styleCount,
+  animatedStyleCount: theme.value.animatedStyleCount,
 });
 </script>
 

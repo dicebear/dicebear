@@ -1,11 +1,7 @@
 export type ComparisonCellValue = 'yes' | 'no' | 'free' | 'paid' | string;
 
 export type ComparisonServiceKey =
-  | 'dicebear'
-  | 'boringAvatars'
-  | 'avvvatars'
-  | 'multiavatar'
-  | 'jdenticon';
+  'dicebear' | 'boringAvatars' | 'avvvatars' | 'multiavatar' | 'jdenticon';
 
 export interface ComparisonService {
   key: ComparisonServiceKey;
@@ -23,6 +19,7 @@ export interface ComparisonRow {
 export interface ComparisonContext {
   stars: Record<string, string>;
   styleCount: number;
+  animatedStyleCount: number;
 }
 
 export const comparisonServices: readonly ComparisonService[] = [
@@ -66,6 +63,7 @@ export const comparisonServices: readonly ComparisonService[] = [
 export function buildComparisonRows({
   stars,
   styleCount,
+  animatedStyleCount,
 }: ComparisonContext): ComparisonRow[] {
   const githubStars: Record<ComparisonServiceKey, ComparisonCellValue> = {
     dicebear: stars['dicebear/dicebear'] || '9.2k',
@@ -85,6 +83,19 @@ export function buildComparisonRows({
         avvvatars: '2',
         multiavatar: '1',
         jdenticon: '1',
+      },
+    },
+    {
+      // Counted rather than a plain "yes" because only some of the styles
+      // animate. The other four ship static output only, per their READMEs
+      // as of August 2026.
+      feature: 'Animated Avatar Styles',
+      values: {
+        dicebear: `${animatedStyleCount}`,
+        boringAvatars: 'no',
+        avvvatars: 'no',
+        multiavatar: 'no',
+        jdenticon: 'no',
       },
     },
     {

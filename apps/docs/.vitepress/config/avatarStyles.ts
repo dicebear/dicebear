@@ -65,6 +65,14 @@ if (uncategorized.length > 0) {
  */
 export const styleCount = Object.keys(avatarStyles).length;
 
+/**
+ * How many of those styles ship an animation. Derived from the same
+ * `@keyframes` probe that sets the per-style `animated` flag above.
+ */
+export const animatedStyleCount = Object.values(avatarStyles).filter(
+  (style) => style.animated,
+).length;
+
 export const STYLE_COUNT_TOKEN = '%STYLE_COUNT%';
 
 export default avatarStyles;

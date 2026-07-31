@@ -39,6 +39,7 @@ export type AvatarStyleSizeBundle = {
 export type ThemeOptions = {
   avatarStyles: AvatarStyles;
   styleCount: number;
+  animatedStyleCount: number;
   avatarUniqueCounts: Record<string, AvatarUniqueCount>;
   avatarStyleSizes: AvatarStyleSizeBundle;
   githubStars: Record<string, string>;

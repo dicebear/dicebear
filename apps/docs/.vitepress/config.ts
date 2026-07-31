@@ -13,6 +13,7 @@ import sidebarStyles from './config/sidebarStyles.ts';
 import sidebarTools from './config/sidebarTools.ts';
 import avatarStyles, {
   styleCount,
+  animatedStyleCount,
   STYLE_COUNT_TOKEN,
 } from './config/avatarStyles.ts';
 import avatarUniqueCounts from './config/avatarUniqueCounts.ts';
@@ -302,6 +303,7 @@ export default defineConfig<ThemeOptions>({
   themeConfig: {
     avatarStyles,
     styleCount,
+    animatedStyleCount,
     avatarUniqueCounts,
     avatarStyleSizes,
     githubStars,
