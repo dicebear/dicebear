@@ -30,6 +30,12 @@ and this project adheres to
   for shared component names (`body`, `eyes`, `animation`, `clip`, ...) and
   stole each other's `<defs>` when inlined on one page. Rendered ids change for
   every avatar as a result.
+- **Core (all languages):** The generator comment now points at
+  `https://www.dicebear.com`. It carried the bare `dicebear.com` host since
+  10.3.0, which only redirects to the canonical `www` host that the `<metadata>`
+  block already used. The byte output of every avatar changes as a result,
+  including data URIs and content hashes, so consumers that compare rendered
+  SVGs against stored snapshots need to update them.
 - **Docs:** In the playground, clicking "None" in a component's variant picker
   while weights were shown stored an empty weights object, which the core
   rejects — the preview then rendered no avatar at all. An empty selection is
