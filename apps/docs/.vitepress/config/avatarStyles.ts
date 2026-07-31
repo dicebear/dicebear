@@ -23,14 +23,17 @@ for (const file of fs.readdirSync(definitionsDir)) {
   }
 
   const name = file.replace('.min.json', '');
-  const definition = JSON.parse(
-    fs.readFileSync(path.join(definitionsDir, file), 'utf-8'),
+  const rawDefinition = fs.readFileSync(
+    path.join(definitionsDir, file),
+    'utf-8',
   );
+  const definition = JSON.parse(rawDefinition);
   const style = new Style(definition);
   const meta = style.meta();
 
   avatarStyles[name] = {
     definitionUrl: style.id(),
+    animated: rawDefinition.includes('@keyframes'),
     meta: {
       title: meta.source().name(),
       creator: meta.creator().name(),

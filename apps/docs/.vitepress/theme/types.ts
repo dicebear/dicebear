@@ -14,6 +14,7 @@ export type AvatarStyleMeta = {
 
 export type AvatarStyle = {
   definitionUrl?: string;
+  animated?: boolean;
   meta: AvatarStyleMeta;
 };
 

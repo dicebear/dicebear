@@ -10,6 +10,7 @@ import {
 } from '@theme/config/styleCategories';
 
 interface StyleMeta {
+  animated?: boolean;
   meta: {
     license?: { name?: string };
     creator?: string;
@@ -23,6 +24,7 @@ export function useStyleFiltering(
   const searchQuery = ref('');
   const selectedLicenses = ref<string[]>([]);
   const selectedCategories = ref<string[]>([]);
+  const animatedOnly = ref(false);
 
   const allStyles = computed(() => {
     const builtIn = Object.entries(styles)
@@ -37,6 +39,7 @@ export function useStyleFiltering(
           license: rawLicense,
           licenseNormalized: normalizeLicense(rawLicense),
           category: getStyleCategory(kebabCase(styleName)),
+          animated: style.animated ?? false,
           isCustom: false,
           avatars: previewSeeds.map((seed) => ({
             seed,
@@ -57,6 +60,7 @@ export function useStyleFiltering(
       license: 'Unknown',
       licenseNormalized: 'Unknown',
       category: CUSTOM_CATEGORY,
+      animated: false,
       isCustom: true,
       avatars: previewSeeds.map((seed) => ({
         seed,
@@ -106,6 +110,10 @@ export function useStyleFiltering(
         return false;
       }
 
+      if (animatedOnly.value && !style.animated) {
+        return false;
+      }
+
       return true;
     });
   });
@@ -136,6 +144,7 @@ export function useStyleFiltering(
     searchQuery,
     selectedLicenses,
     selectedCategories,
+    animatedOnly,
     allStyles,
     availableLicenses,
     availableCategories,

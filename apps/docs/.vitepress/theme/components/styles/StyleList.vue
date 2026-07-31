@@ -2,9 +2,17 @@
 import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
-import { Search, CircleUser, Scale, ArrowRight, Filter } from '@lucide/vue';
+import {
+  Search,
+  CircleUser,
+  Scale,
+  ArrowRight,
+  Filter,
+  Play,
+} from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
+import ToggleSwitch from 'primevue/toggleswitch';
 import { UiAvatar, UiCard } from '../ui';
 
 const { theme } = useData<ThemeOptions>();
@@ -13,6 +21,7 @@ const {
   searchQuery,
   selectedLicenses,
   selectedCategories,
+  animatedOnly,
   availableLicenses,
   availableCategories,
   styleList,
@@ -64,6 +73,17 @@ const {
             fluid
           />
         </div>
+
+        <div class="style-list-filter-group">
+          <span class="style-list-filter-label">
+            <Play />
+            Animation
+          </span>
+          <label class="style-list-filter-toggle">
+            <ToggleSwitch v-model="animatedOnly" />
+            <span>Animated only</span>
+          </label>
+        </div>
       </div>
     </UiCard>
 
@@ -106,6 +126,10 @@ const {
                 <Scale />
                 {{ style.license }}
               </span>
+              <span v-if="style.animated" class="style-list-card-tag">
+                <Play />
+                Animated
+              </span>
             </div>
           </div>
 
@@ -133,9 +157,20 @@ const {
 
   &-filter-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr auto;
     gap: 16px;
     align-items: flex-start;
+  }
+
+  &-filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    font-size: 14px;
+    color: var(--vp-c-text-1);
+    cursor: pointer;
+    white-space: nowrap;
   }
 
   &-filter-group {
@@ -237,6 +272,23 @@ const {
         width: 16px;
         height: 16px;
         color: var(--vp-c-text-3);
+      }
+    }
+
+    &-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--vp-c-brand-1);
+      background: var(--vp-c-brand-soft);
+      border-radius: 999px;
+      padding: 2px 10px;
+
+      svg {
+        width: 12px;
+        height: 12px;
       }
     }
 
