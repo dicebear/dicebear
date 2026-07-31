@@ -37,7 +37,7 @@
           "tags": [
             "hairLength:long",
             "hairTexture:straight",
-            "gender:female"
+            "tone:cool"
           ]
         },
         "longCurly": {
@@ -55,7 +55,7 @@
           "tags": [
             "hairLength:long",
             "hairTexture:curly",
-            "gender:female"
+            "tone:cool"
           ]
         },
         "shortStraight": {
@@ -73,7 +73,7 @@
           "tags": [
             "hairLength:short",
             "hairTexture:straight",
-            "gender:male"
+            "tone:warm"
           ]
         },
         "shortCurly": {
@@ -91,7 +91,7 @@
           "tags": [
             "hairLength:short",
             "hairTexture:curly",
-            "gender:male"
+            "tone:warm"
           ]
         }
       }
@@ -115,7 +115,7 @@
           ],
           "tags": [
             "facialHair:beard",
-            "gender:male"
+            "tone:warm"
           ]
         },
         "mustache": {
@@ -132,7 +132,7 @@
           ],
           "tags": [
             "facialHair:mustache",
-            "gender:male"
+            "tone:warm"
           ]
         }
       }

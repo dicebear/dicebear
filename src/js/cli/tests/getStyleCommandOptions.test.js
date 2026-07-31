@@ -10,8 +10,8 @@ const taggedStyle = new Style({
       width: 100,
       height: 100,
       variants: {
-        long: { elements: [], tags: ['gender:female', 'hairLength:long'] },
-        short: { elements: [], tags: ['gender:male', 'hairLength:short'] },
+        long: { elements: [], tags: ['tone:cool', 'hairLength:long'] },
+        short: { elements: [], tags: ['tone:warm', 'hairLength:short'] },
       },
     },
   },

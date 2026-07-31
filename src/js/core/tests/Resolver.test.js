@@ -788,7 +788,7 @@ describe('Resolver', () => {
 
   describe('variant tags', () => {
     // hair is mandatory (prob 100). Every variant is tagged on three axes
-    // (hairLength, hairTexture, gender). facialHair is optional (prob 50) and
+    // (hairLength, hairTexture, tone). facialHair is optional (prob 50) and
     // tagged. nose carries no tags at all, so no tag filter should touch it.
     const styleWithTags = new Style({
       canvas: { width: 100, height: 100, elements: [] },
@@ -799,19 +799,19 @@ describe('Resolver', () => {
           variants: {
             longStraight: {
               elements: [],
-              tags: ['hairLength:long', 'hairTexture:straight', 'gender:female'],
+              tags: ['hairLength:long', 'hairTexture:straight', 'tone:cool'],
             },
             longCurly: {
               elements: [],
-              tags: ['hairLength:long', 'hairTexture:curly', 'gender:female'],
+              tags: ['hairLength:long', 'hairTexture:curly', 'tone:cool'],
             },
             shortStraight: {
               elements: [],
-              tags: ['hairLength:short', 'hairTexture:straight', 'gender:male'],
+              tags: ['hairLength:short', 'hairTexture:straight', 'tone:warm'],
             },
             shortCurly: {
               elements: [],
-              tags: ['hairLength:short', 'hairTexture:curly', 'gender:male'],
+              tags: ['hairLength:short', 'hairTexture:curly', 'tone:warm'],
             },
           },
         },
@@ -820,10 +820,10 @@ describe('Resolver', () => {
           height: 50,
           probability: 50,
           variants: {
-            beard: { elements: [], tags: ['facialHair:beard', 'gender:male'] },
+            beard: { elements: [], tags: ['facialHair:beard', 'tone:warm'] },
             mustache: {
               elements: [],
-              tags: ['facialHair:mustache', 'gender:male'],
+              tags: ['facialHair:mustache', 'tone:warm'],
             },
           },
         },
@@ -866,8 +866,8 @@ describe('Resolver', () => {
       ]);
     });
 
-    it('should filter a cross-cutting axis like gender', () => {
-      assertPool(variantPool(styleWithTags, { tags: 'gender:male' }, 'hair'), [
+    it('should filter an axis that spans several components', () => {
+      assertPool(variantPool(styleWithTags, { tags: 'tone:warm' }, 'hair'), [
         'shortStraight',
         'shortCurly',
       ]);
@@ -1023,7 +1023,7 @@ describe('Resolver', () => {
     });
 
     it('should leave a component whose variants carry no matching tag untouched', () => {
-      assertPool(variantPool(styleWithTags, { tags: 'gender:male' }, 'nose'), [
+      assertPool(variantPool(styleWithTags, { tags: 'tone:warm' }, 'nose'), [
         'small',
         'big',
       ]);
@@ -1047,12 +1047,12 @@ describe('Resolver', () => {
 
     it('should keep a ${name}Variant name despite a tag exclude', () => {
       // The explicit option wins over the descriptive filter: longStraight is
-      // kept even though !gender:female would otherwise drop it.
+      // kept even though !tone:cool would otherwise drop it.
       assertPool(
         variantPool(
           styleWithTags,
           {
-            tags: '!gender:female',
+            tags: '!tone:cool',
             hairVariant: ['longStraight', 'shortCurly'],
           },
           'hair',
@@ -1144,7 +1144,7 @@ describe('Resolver', () => {
       // An explicit empty allowlist means "none". Since ${name}Variant governs
       // the component, the tags filter is ignored and cannot resurrect the pool.
       assertPool(
-        variantPool(styleWithTags, { tags: 'gender:male', noseVariant: [] }, 'nose'),
+        variantPool(styleWithTags, { tags: 'tone:warm', noseVariant: [] }, 'nose'),
         [undefined],
       );
     });

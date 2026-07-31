@@ -116,7 +116,7 @@
                 "elements": [],
                 "tags": [
                   "hairLength:long",
-                  "gender:female"
+                  "tone:cool"
                 ]
               }
             }
@@ -290,7 +290,7 @@
     {
       "id": "tags-string",
       "options": {
-        "tags": "gender:male"
+        "tags": "tone:warm"
       },
       "valid": true
     },

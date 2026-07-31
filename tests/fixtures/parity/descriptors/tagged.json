@@ -129,12 +129,12 @@
     "values": [
       "facialHair:beard",
       "facialHair:mustache",
-      "gender:female",
-      "gender:male",
       "hairLength:long",
       "hairLength:short",
       "hairTexture:curly",
-      "hairTexture:straight"
+      "hairTexture:straight",
+      "tone:cool",
+      "tone:warm"
     ],
     "list": true,
     "open": true
