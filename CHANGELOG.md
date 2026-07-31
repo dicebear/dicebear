@@ -10,6 +10,34 @@ and this project adheres to
 
 ### Added
 
+- **Core (all languages):** A new `tags` render option narrows the pool of
+  variants an avatar is drawn from. Styles may label their variants with tags
+  such as `animation` or `hairLength:long`, and the option keeps or drops
+  variants by those labels, so one trait is pinned down while the rest of the
+  avatar stays varied. A token is `category` or `category:value`, with a leading
+  `!` to exclude. An include keeps the variants carrying a matching tag together
+  with those that carry no tag in the category. Several values of one category
+  act as "or", different categories act as "and", and an exclude wins over an
+  include. A bare `category` token requires the category and drops the variants
+  without a tag in it, but only in the components where the category is in use.
+  An unknown category is ignored, an unknown value is not: since nothing matches
+  it, every variant tagged in that category drops out. A per-component
+  `{component}Variant` option is more specific and switches the filter off for
+  that component. If a filter leaves a component without a variant, the
+  component is not drawn. The option takes a string or an array of strings, and
+  in the HTTP API it is the comma-separated `tags` query parameter. Styles that
+  carry no tags are unaffected. In the DiceBear styles, tags currently describe
+  one thing, the opt-in animation of the animated styles, so `tags=animation`
+  turns that animation on at a random speed per seed and `!animation` keeps it
+  off. The character categories follow in a later release.
+- **Docs:** Two guides cover the new option, "Filter Avatar Variants with Tags"
+  for the filter itself and "How DiceBear Tags Variants" for the vocabulary the
+  DiceBear styles use. The playground has a tag panel per category, where every
+  token is an allow/disallow switch, and its count of unique avatars accounts
+  for the filter. Style pages list the tags a style provides and mark every
+  variant preview with its own. The core option reference moved out of the
+  JavaScript page onto a shared "Core options" page that all six library pages
+  link to.
 - **CLI:** Definition files can now be compressed in place with
   `dicebear ./my-style.json --optimize`. The flag runs the same svgo pass over
   every element tree that the current Figma exporter applies on export.
