@@ -36,7 +36,7 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: '35+ styles',
+    title: '45+ styles',
     description:
       'Pick the visual style that fits your product, from abstract geometric shapes to illustrated characters.',
     color: '#a855f7',

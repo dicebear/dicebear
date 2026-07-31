@@ -19,7 +19,7 @@ withDefaults(
     seeds: () => ['Felix', 'Emma', 'Leo', 'Mia'],
     avatarSize: 48,
     allStylesLink: '/styles/',
-    allStylesLabel: 'Browse all 35+ avatar styles',
+    allStylesLabel: 'Browse all 45+ avatar styles',
   },
 );
 </script>

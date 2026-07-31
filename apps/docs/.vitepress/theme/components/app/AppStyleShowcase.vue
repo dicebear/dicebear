@@ -164,7 +164,7 @@ onUnmounted(() => {
       <UiSectionHeader
         description="Cute characters, abstract patterns, pixel art, and detailed illustrations. Some styles come from independent artists, others we designed ourselves."
       >
-        <template #headline><strong>35+</strong> Unique Avatar Styles</template>
+        <template #headline><strong>45+</strong> Unique Avatar Styles</template>
       </UiSectionHeader>
     </UiContainer>
 

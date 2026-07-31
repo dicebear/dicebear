@@ -74,7 +74,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
   description:
-    'DiceBear is a free, open source avatar library and avatar API with 35+ avatar styles. Generate profile pictures and user placeholder images for any project.',
+    'DiceBear is a free, open source avatar library and avatar API with 45+ avatar styles. Generate profile pictures and user placeholder images for any project.',
   head: [
     // Most pages load avatars from the HTTP API (seed demo, style showcase,
     // playground). Warming up the connection hides the DNS/TLS latency on
@@ -116,7 +116,7 @@ export default defineConfig<ThemeOptions>({
         name: 'DiceBear',
         url: siteUrl('/'),
         description:
-          'DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with 35+ styles — privacy-focused and self-hostable.',
+          'DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with 45+ styles — privacy-focused and self-hostable.',
       }),
     ],
     [
@@ -130,7 +130,7 @@ export default defineConfig<ThemeOptions>({
         operatingSystem: 'Any',
         url: siteUrl('/'),
         description:
-          'Privacy-focused, open source SVG avatar library with 35+ styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, and CLI for generating deterministic profile pictures and user placeholder images.',
+          'Privacy-focused, open source SVG avatar library with 45+ styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, and CLI for generating deterministic profile pictures and user placeholder images.',
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -184,7 +184,7 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear is a free, open source avatar library and Avatar API with 35+ avatar styles.';
+        'DiceBear is a free, open source avatar library and Avatar API with 45+ avatar styles.';
 
       // og-images.ts owns which page maps to which card, so the mapping and
       // the generator cannot drift into pointing at a card that was never

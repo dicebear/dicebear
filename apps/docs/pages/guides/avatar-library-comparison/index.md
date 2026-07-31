@@ -12,7 +12,7 @@ import DocsComparisonTable from '@theme/components/docs/DocsComparisonTable.vue'
 
 # Avatar library comparison
 
-DiceBear is an open source avatar library with [35+ styles](/styles/), a
+DiceBear is an open source avatar library with [45+ styles](/styles/), a
 [free HTTP API](/how-to-use/http-api/), and libraries for six languages. Each
 style has a [deep set of options](/guides/access-all-available-options/): you
 can recolor the avatar, swap individual features, control the background, and
