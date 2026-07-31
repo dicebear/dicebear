@@ -8,6 +8,20 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **Converter:** Raster conversion no longer drops parts of rotated avatars with
+  translucent layers. The resvg build that `resvg-js` bundles places the
+  isolation layer of an `opacity` group in the wrong coordinate space when the
+  group sits under both a `clip-path` and a large rotation, and cuts the group's
+  content. The `waves` style lost about half of its image in every raster
+  format, including through the HTTP API. Since the viewport crops to the canvas
+  anyway, the converter now removes clip paths that cover exactly the canvas
+  before it hands the SVG to resvg. A clip with rounded corners is removed as
+  well and re-applied to the rendered image, so the `radius` option keeps
+  working. Its corners are drawn by sharp instead of resvg as a result, which
+  changes their antialiasing slightly.
+
 ## [10.4.0-rc.1] - 2026-07-31
 
 ### Added

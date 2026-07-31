@@ -51,18 +51,39 @@ function sanitizeSize(size: number): number {
 }
 
 /**
- * Sets `width`/`height` on the root `<svg>` of a parsed tree, so downstream
- * rasterizers know how large to render.
+ * Sets `width`/`height` on the root `<svg>` node, so downstream rasterizers
+ * know how large to render.
  */
-function setSizeAttributes(parsed: XmlNode[], size: number): void {
-  const svgNode = parsed.find((node) => 'svg' in node);
-
+function setSizeAttributes(svgNode: XmlNode | undefined, size: number): void {
   if (svgNode) {
     const attributes = (svgNode[':@'] ??= {});
 
     attributes['@_width'] = String(size);
     attributes['@_height'] = String(size);
   }
+}
+
+/**
+ * The tag names of a `preserveOrder` node — every key that is not the
+ * attribute map or a text/comment/cdata entry. This is the one place that
+ * encodes the parser's node shape.
+ */
+function elementTags(node: XmlNode): string[] {
+  return Object.keys(node).filter(
+    (key) => key !== ':@' && !key.startsWith('#') && Array.isArray(node[key]),
+  );
+}
+
+/**
+ * The element children of a `preserveOrder` child list, with text and
+ * comment nodes skipped.
+ */
+function elementChildren(
+  children: XmlNode[],
+): Array<{ tagName: string; node: XmlNode }> {
+  return children.flatMap((node) =>
+    elementTags(node).map((tagName) => ({ tagName, node })),
+  );
 }
 
 /**
@@ -74,13 +95,9 @@ function visitElements(
   visit: (tagName: string, node: XmlNode) => void,
 ): void {
   for (const node of nodes) {
-    for (const [key, children] of Object.entries(node)) {
-      if (key === ':@' || key.startsWith('#') || !Array.isArray(children)) {
-        continue;
-      }
-
-      visit(key, node);
-      visitElements(children, visit);
+    for (const tagName of elementTags(node)) {
+      visit(tagName, node);
+      visitElements(node[tagName] as XmlNode[], visit);
     }
   }
 }
@@ -188,16 +205,322 @@ function normalizeMaskNodes(parsed: XmlNode[]): boolean {
 const HAS_MASK_TYPE_DECLARATION = /mask-type\s*:/i;
 
 /**
- * Parses the SVG once, sets the size attributes, optionally applies the
- * mask fix on the same tree, and re-emits it.
+ * A `clip-path` attribute value referencing a local id, with any of the
+ * quote styles the `url()` syntax allows.
  */
-function rebuild(svg: string, size: number, normalizeMasks: boolean): string {
+const CLIP_PATH_REFERENCE =
+  /^url\(\s*(?:'#([^']*)'|"#([^"]*)"|#([^)\s]*))\s*\)$/;
+
+/**
+ * Rounded-corner radii of a stripped full-canvas clip, as fractions of the
+ * canvas size. The raster pipeline multiplies them by the output dimensions
+ * and re-applies the crop after rendering.
+ */
+export type CornerRadius = {
+  rx: number;
+  ry: number;
+};
+
+/**
+ * The numeric value of a geometric attribute, or `undefined` when the
+ * attribute is absent or not a plain number (percentages, `auto`, junk).
+ */
+function attributeNumber(value: unknown): number | undefined {
+  if (typeof value !== 'string' || value.trim() === '') {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+/**
+ * The `viewBox` of the root `<svg>`, but only in the origin-anchored form
+ * the clip strip can reason about. Any other origin makes the full-canvas
+ * comparison meaningless, so it counts as "no viewBox".
+ */
+function parseViewBox(
+  attributes: Record<string, unknown> | undefined,
+): { width: number; height: number } | undefined {
+  const raw = attributes?.['@_viewBox'];
+
+  if (typeof raw !== 'string') {
+    return undefined;
+  }
+
+  const parts = raw
+    .trim()
+    .split(/[\s,]+/)
+    .map(attributeNumber);
+
+  if (parts.length !== 4 || parts.some((part) => part === undefined)) {
+    return undefined;
+  }
+
+  const [minX, minY, width, height] = parts as number[];
+
+  if (minX !== 0 || minY !== 0 || width <= 0 || height <= 0) {
+    return undefined;
+  }
+
+  return { width, height };
+}
+
+/**
+ * Reads a `<clipPath>` as a full-canvas rectangle clip: exactly one `<rect>`
+ * at the origin covering the whole viewBox, in user space, with nothing
+ * (transforms, units, percentages) that could move the crop away from the
+ * viewport. Returns its corner radii, or `undefined` when the clip is
+ * anything else.
+ */
+function fullCanvasClip(
+  node: XmlNode,
+  viewBox: { width: number; height: number },
+): { rx: number; ry: number } | undefined {
+  const attributes = node[':@'] ?? {};
+  const units = attributes['@_clipPathUnits'];
+
+  if (units !== undefined && units !== 'userSpaceOnUse') {
+    return undefined;
+  }
+
+  // A clip on the clip narrows the crop, and `transform` moves it.
+  if ('@_transform' in attributes || '@_clip-path' in attributes) {
+    return undefined;
+  }
+
+  const children = elementChildren(node['clipPath'] as XmlNode[]);
+
+  if (children.length !== 1 || children[0].tagName !== 'rect') {
+    return undefined;
+  }
+
+  const rect = children[0].node[':@'] ?? {};
+
+  // `display:none` on a clip shape drops it from the clip, which makes the
+  // clip empty rather than full-canvas, and `style` can carry that as well as
+  // a transform. Both are rare enough to just disqualify the clip.
+  if (
+    '@_transform' in rect ||
+    '@_clip-path' in rect ||
+    '@_display' in rect ||
+    '@_style' in rect
+  ) {
+    return undefined;
+  }
+
+  // Every geometric attribute must either be absent or parse cleanly; a
+  // present-but-unparsable value (say `rx="50%"`) means the crop is not the
+  // one this code would reproduce, so the clip stays.
+  const geometry: Record<string, number | undefined> = {};
+
+  for (const name of ['x', 'y', 'width', 'height', 'rx', 'ry']) {
+    const value = rect[`@_${name}`];
+
+    if (value === undefined) {
+      continue;
+    }
+
+    const parsed = attributeNumber(value);
+
+    if (parsed === undefined) {
+      return undefined;
+    }
+
+    geometry[name] = parsed;
+  }
+
+  if ((geometry.x ?? 0) !== 0 || (geometry.y ?? 0) !== 0) {
+    return undefined;
+  }
+
+  if (geometry.width !== viewBox.width || geometry.height !== viewBox.height) {
+    return undefined;
+  }
+
+  // The SVG auto rules: a missing radius takes the other one's value.
+  const rx = geometry.rx ?? geometry.ry ?? 0;
+  const ry = geometry.ry ?? geometry.rx ?? 0;
+
+  if (rx < 0 || ry < 0) {
+    return undefined;
+  }
+
+  return { rx, ry };
+}
+
+/**
+ * Removes full-canvas `clip-path` references from the root level of a parsed
+ * tree.
+ *
+ * The resvg version bundled by resvg-js (0.42 line) computes the isolation
+ * layer of an opacity group in the wrong coordinate space when the group
+ * sits under both a `clip-path` and a large rotation, and silently drops or
+ * cuts the group's content (styles with free rotation and translucent
+ * layers, such as waves, lose half the image). Current resvg has the fix,
+ * but resvg-js pins an old fork, so the converter routes around it: a clip
+ * that covers exactly the viewBox crops nothing the viewport does not crop
+ * anyway and can be dropped before rasterizing.
+ *
+ * Only references that provably mean "crop to the canvas" are touched: the
+ * root `<svg>` must have an origin-anchored viewBox, the `<clipPath>` must
+ * be a plain full-canvas rectangle, and the referencing element must be a
+ * direct child of the root without its own transform (a transform would
+ * re-anchor the clip away from the viewport). Everything else keeps its
+ * clip.
+ *
+ * A rounded clip is stripped too, and its radii are returned so the caller
+ * can re-apply the rounded crop on the raster. When several distinct rounded
+ * clips match, none of them is stripped: one returned radius could not
+ * represent them all.
+ *
+ * The emitter this shadows is `Renderer#applyBorderRadius` in
+ * `@dicebear/core`, which wraps every avatar in exactly this clip. Should
+ * core ever stop emitting it for `borderRadius: 0`, most of this code can
+ * go.
+ */
+function stripFullCanvasClips(
+  parsed: XmlNode[],
+  svgNode: XmlNode | undefined,
+): CornerRadius | undefined {
+  if (!svgNode) {
+    return undefined;
+  }
+
+  const viewBox = parseViewBox(svgNode[':@']);
+
+  if (!viewBox) {
+    return undefined;
+  }
+
+  // `setSizeAttributes` writes a square viewport. A viewBox of a different
+  // aspect is then letterboxed inside it, and the viewport reaches past the
+  // viewBox on two sides: the clip does crop content the viewport keeps, and
+  // one square corner mask cannot describe the crop either. Leave it alone.
+  if (viewBox.width !== viewBox.height) {
+    return undefined;
+  }
+
+  // Root-level references first: they are cheap to find, and without any
+  // there is nothing to do — no full-tree walk.
+  const references: Array<{ attributes: Record<string, unknown>; id: string }> =
+    [];
+
+  for (const { node } of elementChildren(svgNode['svg'] as XmlNode[])) {
+    const attributes = node[':@'];
+
+    if (!attributes || '@_transform' in attributes) {
+      continue;
+    }
+
+    const reference = attributes['@_clip-path'];
+
+    if (typeof reference !== 'string') {
+      continue;
+    }
+
+    const match = reference.match(CLIP_PATH_REFERENCE);
+    const id = match?.[1] ?? match?.[2] ?? match?.[3];
+
+    if (id !== undefined) {
+      references.push({ attributes, id });
+    }
+  }
+
+  if (references.length === 0) {
+    return undefined;
+  }
+
+  // Resolve the referenced defs. The walk still covers the whole tree so a
+  // duplicated id is caught — that is ambiguous and drops the candidate.
+  const wanted = new Set(references.map((entry) => entry.id));
+  const clips = new Map<string, { rx: number; ry: number }>();
+  const seen = new Set<string>();
+
+  visitElements(parsed, (tagName, node) => {
+    if (tagName !== 'clipPath') {
+      return;
+    }
+
+    const id = node[':@']?.['@_id'];
+
+    if (typeof id !== 'string' || !wanted.has(id)) {
+      return;
+    }
+
+    if (seen.has(id)) {
+      clips.delete(id);
+      return;
+    }
+
+    seen.add(id);
+
+    const clip = fullCanvasClip(node, viewBox);
+
+    if (clip) {
+      clips.set(id, clip);
+    }
+  });
+
+  let roundedId: string | undefined;
+  let roundedMixed = false;
+  const roundedAttributes: Array<Record<string, unknown>> = [];
+
+  for (const { attributes, id } of references) {
+    const clip = clips.get(id);
+
+    if (!clip) {
+      continue;
+    }
+
+    if (clip.rx === 0 && clip.ry === 0) {
+      delete attributes['@_clip-path'];
+      continue;
+    }
+
+    if (roundedId !== undefined && roundedId !== id) {
+      roundedMixed = true;
+      continue;
+    }
+
+    roundedId = id;
+    roundedAttributes.push(attributes);
+  }
+
+  if (roundedId === undefined || roundedMixed) {
+    return undefined;
+  }
+
+  for (const attributes of roundedAttributes) {
+    delete attributes['@_clip-path'];
+  }
+
+  const { rx, ry } = clips.get(roundedId)!;
+
+  return { rx: rx / viewBox.width, ry: ry / viewBox.height };
+}
+
+/**
+ * An edit applied to the parsed tree between parsing and re-emitting.
+ * Receives the whole tree plus the already-resolved root `<svg>` node.
+ */
+type TreePass = (parsed: XmlNode[], svgNode: XmlNode | undefined) => void;
+
+/**
+ * Parses the SVG once, sets the size attributes, applies the given passes on
+ * the same tree, and re-emits it. Keeping the passes as parameters (instead
+ * of flags) leaves this function unaware of the individual fixes, so a
+ * caller only pulls in the fixes it actually uses.
+ */
+function rebuild(svg: string, size: number, passes: TreePass[]): string {
   const parsed: XmlNode[] = xmlRoundTripParser.parse(svg);
+  const svgNode = parsed.find((node) => 'svg' in node);
 
-  setSizeAttributes(parsed, size);
+  setSizeAttributes(svgNode, size);
 
-  if (normalizeMasks) {
-    normalizeMaskNodes(parsed);
+  for (const pass of passes) {
+    pass(parsed, svgNode);
   }
 
   return xmlRoundTripBuilder.build(parsed);
@@ -210,27 +533,44 @@ function rebuild(svg: string, size: number, normalizeMasks: boolean): string {
 export function ensureSize(svg: string, size: number = DEFAULT_SIZE) {
   size = sanitizeSize(size);
 
-  return { svg: rebuild(svg, size, false), size };
+  return { svg: rebuild(svg, size, []), size };
 }
 
 /**
  * One-pass preparation of an SVG for resvg: sets the sanitized
- * `width`/`height` and mirrors `mask-type` style declarations onto the
- * presentation attribute. Both edits happen on the same parsed tree, so each
- * raster conversion parses and re-emits the SVG exactly once. The function
- * skips the mask walk when the raw string contains no `mask-type`
- * declaration.
+ * `width`/`height`, mirrors `mask-type` style declarations onto the
+ * presentation attribute, and strips full-canvas clips that the bundled
+ * resvg mishandles (see {@link stripFullCanvasClips}). All edits happen on
+ * the same parsed tree, so each raster conversion parses and re-emits the
+ * SVG exactly once. Passes are skipped when the raw string cannot contain
+ * their target ("clip-path" needs no case folding: XML attribute names are
+ * case-sensitive, so differently-cased occurrences would not be acted on
+ * anyway).
+ *
+ * When a stripped clip had rounded corners, `cornerRadius` carries its radii
+ * as fractions of the canvas size; the caller has to re-apply the rounded
+ * crop to the rendered raster.
  */
 export function prepareForResvg(
   svg: string,
   size: number = DEFAULT_SIZE,
-): { svg: string; size: number } {
+): { svg: string; size: number; cornerRadius?: CornerRadius } {
   size = sanitizeSize(size);
 
-  return {
-    svg: rebuild(svg, size, HAS_MASK_TYPE_DECLARATION.test(svg)),
-    size,
-  };
+  let cornerRadius: CornerRadius | undefined;
+  const passes: TreePass[] = [];
+
+  if (HAS_MASK_TYPE_DECLARATION.test(svg)) {
+    passes.push((parsed) => normalizeMaskNodes(parsed));
+  }
+
+  if (svg.includes('clip-path')) {
+    passes.push((parsed, svgNode) => {
+      cornerRadius = stripFullCanvasClips(parsed, svgNode);
+    });
+  }
+
+  return { svg: rebuild(svg, size, passes), size, cornerRadius };
 }
 
 /**

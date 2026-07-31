@@ -296,3 +296,114 @@ test(`"normalizeMaskType" returns input beyond the nesting cap unchanged`, async
 
   equal(normalizeMaskType(svg), svg);
 });
+
+test(`"prepareForResvg" strips a full-canvas clip`, async () => {
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 100"><defs><clipPath id="c"><rect width="100" height="100" rx="0" ry="0"/></clipPath></defs><g clip-path="url(#c)"><rect width="100" height="100"/></g></svg>`,
+    100,
+  );
+
+  equal(
+    result.svg,
+    `<svg viewBox="0 0 100 100" width="100" height="100"><defs><clipPath id="c"><rect width="100" height="100" rx="0" ry="0"></rect></clipPath></defs><g><rect width="100" height="100"></rect></g></svg>`,
+  );
+  equal(result.cornerRadius, undefined);
+});
+
+test(`"prepareForResvg" strips a rounded full-canvas clip and returns its radii`, async () => {
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 100"><defs><clipPath id="c"><rect width="100" height="100" rx="20" ry="10"/></clipPath></defs><g clip-path="url(#c)"><rect width="100" height="100"/></g></svg>`,
+    100,
+  );
+
+  // Radii come back as fractions of the canvas size.
+  equal(result.cornerRadius, { rx: 0.2, ry: 0.1 });
+  equal(result.svg.includes('clip-path='), false);
+});
+
+test(`"prepareForResvg" keeps a clip that covers only part of the canvas`, async () => {
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 100"><defs><clipPath id="c"><rect width="50" height="100"/></clipPath></defs><g clip-path="url(#c)"></g></svg>`,
+    100,
+  );
+
+  equal(result.svg.includes('clip-path="url(#c)"'), true);
+  equal(result.cornerRadius, undefined);
+});
+
+test(`"prepareForResvg" keeps a clip whose reference carries a transform`, async () => {
+  // A transform re-anchors the clip away from the viewport, so the crop is
+  // no longer the one the viewport applies anyway.
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 100"><defs><clipPath id="c"><rect width="100" height="100"/></clipPath></defs><g transform="translate(10)" clip-path="url(#c)"></g></svg>`,
+    100,
+  );
+
+  equal(result.svg.includes('clip-path="url(#c)"'), true);
+});
+
+test(`"prepareForResvg" keeps a clip when the viewBox is not origin-anchored`, async () => {
+  const result = prepareForResvg(
+    `<svg viewBox="-25 -25 100 100"><defs><clipPath id="c"><rect width="100" height="100"/></clipPath></defs><g clip-path="url(#c)"></g></svg>`,
+    100,
+  );
+
+  equal(result.svg.includes('clip-path="url(#c)"'), true);
+});
+
+test(`"prepareForResvg" keeps a clip with a percentage radius`, async () => {
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 100"><defs><clipPath id="c"><rect width="100" height="100" rx="20%"/></clipPath></defs><g clip-path="url(#c)"></g></svg>`,
+    100,
+  );
+
+  equal(result.svg.includes('clip-path="url(#c)"'), true);
+  equal(result.cornerRadius, undefined);
+});
+
+test(`"prepareForResvg" keeps a deeper clip reference`, async () => {
+  // Only direct children of the root are provably cropped to the viewport;
+  // anything deeper may sit under a transformed ancestor.
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 100"><defs><clipPath id="c"><rect width="100" height="100"/></clipPath></defs><g transform="rotate(45, 50, 50)"><g clip-path="url(#c)"></g></g></svg>`,
+    100,
+  );
+
+  equal(result.svg.includes('clip-path="url(#c)"'), true);
+});
+
+test(`"prepareForResvg" keeps a clip when the viewBox is not square`, async () => {
+  // The rebuilt SVG has a square viewport, so a 2:1 viewBox is letterboxed
+  // and the viewport reaches past it: the clip crops content the viewport
+  // keeps.
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 50"><defs><clipPath id="c"><rect width="100" height="50"/></clipPath></defs><g clip-path="url(#c)"></g></svg>`,
+    100,
+  );
+
+  equal(result.svg.includes('clip-path="url(#c)"'), true);
+  equal(result.cornerRadius, undefined);
+});
+
+test(`"prepareForResvg" keeps a clip whose shape carries a style attribute`, async () => {
+  // `display:none` in there would empty the clip instead of leaving it
+  // full-canvas.
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 100"><defs><clipPath id="c"><rect width="100" height="100" style="display:none"/></clipPath></defs><g clip-path="url(#c)"></g></svg>`,
+    100,
+  );
+
+  equal(result.svg.includes('clip-path="url(#c)"'), true);
+});
+
+test(`"prepareForResvg" keeps two distinct rounded full-canvas clips`, async () => {
+  // One returned radius could not represent both crops.
+  const result = prepareForResvg(
+    `<svg viewBox="0 0 100 100"><defs><clipPath id="a"><rect width="100" height="100" rx="10"/></clipPath><clipPath id="b"><rect width="100" height="100" rx="30"/></clipPath></defs><g clip-path="url(#a)"></g><g clip-path="url(#b)"></g></svg>`,
+    100,
+  );
+
+  equal(result.svg.includes('clip-path="url(#a)"'), true);
+  equal(result.svg.includes('clip-path="url(#b)"'), true);
+  equal(result.cornerRadius, undefined);
+});

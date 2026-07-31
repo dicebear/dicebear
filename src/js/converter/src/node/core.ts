@@ -10,7 +10,11 @@ import type {
 } from '../types.js';
 import { promises as fs } from 'node:fs';
 import { getMimeType } from '../utils/mime-type.js';
-import { getMetadata, prepareForResvg } from '../utils/svg.js';
+import {
+  getMetadata,
+  prepareForResvg,
+  type CornerRadius,
+} from '../utils/svg.js';
 import * as tmp from 'tmp-promise';
 import { renderAsync } from '@resvg/resvg-js';
 import sharp from 'sharp';
@@ -98,30 +102,67 @@ async function toBuffer(
 ): Promise<Buffer> {
   const hasFonts = Array.isArray(options.fonts);
 
-  // prepareForResvg sets the size and normalizes masks in a single parser
-  // pass. Only the Node path needs the mask fix: the browser build
-  // rasterizes through <canvas>, so it inherits the browser's own mask
-  // handling.
-  const { svg, size } = prepareForResvg(rawSvg, options.size);
+  // prepareForResvg sets the size, normalizes masks, and strips full-canvas
+  // clips in a single parser pass. Only the Node path needs those fixes: the
+  // browser build rasterizes through <canvas>, so it inherits the browser's
+  // own mask and clip handling.
+  const { svg, size, cornerRadius } = prepareForResvg(rawSvg, options.size);
 
-  let buffer = (
-    await renderAsync(svg, {
-      fitTo: { mode: 'width', value: size },
-      font: {
-        loadSystemFonts: !hasFonts,
-        fontFiles: hasFonts ? options.fonts : undefined,
-      },
-    })
-  ).asPng();
+  const rendered = await renderAsync(svg, {
+    fitTo: { mode: 'width', value: size },
+    font: {
+      loadSystemFonts: !hasFonts,
+      fontFiles: hasFonts ? options.fonts : undefined,
+    },
+  });
 
-  if (format !== 'png') {
-    const sharpInstance = sharp(buffer);
+  let buffer: Buffer;
 
-    if (format === 'jpeg') {
-      sharpInstance.flatten({ background: '#ffffff' });
+  if (!cornerRadius && format === 'png') {
+    buffer = rendered.asPng();
+  } else {
+    // A single sharp pipeline from resvg's raw pixels, so the raster is
+    // encoded exactly once and never decoded. resvg hands out premultiplied
+    // RGBA, and sharp has to be told: read as straight alpha, every
+    // translucent pixel comes out darkened (a 25% red turns into 25% of the
+    // red channel instead of full red at 25% alpha).
+    const raw = {
+      width: rendered.width,
+      height: rendered.height,
+      channels: 4,
+      premultiplied: true,
+    } as const;
+
+    let image = sharp(rendered.pixels, { raw });
+
+    if (cornerRadius) {
+      image.composite([
+        {
+          input: cornerMask(rendered.width, rendered.height, cornerRadius),
+          blend: 'dest-in',
+        },
+      ]);
+
+      if (format === 'jpeg') {
+        // sharp applies flatten before composite regardless of call order,
+        // which would punch the corners back out of the flattened image. A
+        // raw handoff into a second pipeline keeps the order right without
+        // an intermediate encode.
+        const { data } = await image.raw().toBuffer({
+          resolveWithObject: true,
+        });
+
+        // sharp writes raw output with straight alpha, so the flag does not
+        // carry over into the second pipeline.
+        image = sharp(data, { raw: { ...raw, premultiplied: false } });
+      }
     }
 
-    buffer = await sharpInstance.toFormat(format).toBuffer();
+    if (format === 'jpeg') {
+      image.flatten({ background: '#ffffff' });
+    }
+
+    buffer = await image.toFormat(format).toBuffer();
   }
 
   if (Object.keys(exif).length > 0) {
@@ -134,6 +175,26 @@ async function toBuffer(
   }
 
   return buffer;
+}
+
+/**
+ * The alpha mask that re-applies the rounded crop of a stripped full-canvas
+ * clip (see `prepareForResvg`): composited with `dest-in`, the corners
+ * outside the rounded rectangle become transparent, exactly as the SVG clip
+ * would have left them. The jpeg flatten downstream turns them white, as it
+ * did before.
+ */
+function cornerMask(
+  width: number,
+  height: number,
+  cornerRadius: CornerRadius,
+): Buffer {
+  const rx = cornerRadius.rx * width;
+  const ry = cornerRadius.ry * height;
+
+  return Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}" rx="${rx}" ry="${ry}" fill="#ffffff"/></svg>`,
+  );
 }
 
 /**
