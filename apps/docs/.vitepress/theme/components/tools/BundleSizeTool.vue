@@ -583,7 +583,7 @@ html.dark {
 
 @media (max-width: 640px) {
   // Mirror the summary row layout: name on top, size on a second line,
-  // left-aligned under the title so it reads as a labelled column.
+  // left-aligned under the title so it reads as a labeled column.
   .bundle-size-row-label {
     flex-wrap: wrap;
     gap: 6px 12px;

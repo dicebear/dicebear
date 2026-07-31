@@ -99,7 +99,7 @@ export function hsvToHex(hsv: Hsv): string {
 }
 
 // At S=0 (achromatic), hue is undefined. Preserve the caller's previous hue so
-// the canvas crosshair doesn't snap to red when the user picks a grey.
+// the canvas crosshair doesn't snap to red when the user picks a gray.
 export function rgbToHsvPreservingHue(rgb: Rgb, fallback: Hsv): Hsv {
   const max = Math.max(rgb.r, rgb.g, rgb.b) / 255;
   const min = Math.min(rgb.r, rgb.g, rgb.b) / 255;

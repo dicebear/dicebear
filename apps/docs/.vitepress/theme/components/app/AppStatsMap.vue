@@ -305,7 +305,7 @@ const formattedRate = (r: number) => {
     display: flex;
     align-items: center;
     justify-content: center;
-    // `left` and `top` place the marker's corner, this pulls its centre onto
+    // `left` and `top` place the marker's corner, this pulls its center onto
     // the coordinate.
     transform: translate(-50%, -50%);
 

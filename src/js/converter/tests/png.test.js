@@ -61,10 +61,10 @@ test(`PNG output honors mask-type:alpha from a style declaration`, async () => {
     .raw()
     .toBuffer({ resolveWithObject: true });
 
-  const centre = (50 * 100 + 50) * 4;
+  const center = (50 * 100 + 50) * 4;
 
   assert.deepEqual(
-    [data[centre], data[centre + 1], data[centre + 2], data[centre + 3]],
+    [data[center], data[center + 1], data[center + 2], data[center + 3]],
     [255, 0, 0, 255],
     'the alpha mask should reveal the red square',
   );

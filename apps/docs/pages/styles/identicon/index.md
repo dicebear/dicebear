@@ -16,7 +16,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Identicon
 
 Identicon renders symmetrical pixel-grid patterns in a single color on a tinted
-background, the classic identicon look popularised by developer tools and
+background, the classic identicon look popularized by developer tools and
 version control hosts. Each pattern is deterministically derived from its seed,
 so it works well for technical profile icons and identicon API use cases.
 
@@ -27,8 +27,8 @@ so it works well for technical profile icons and identicon API use cases.
 ## What is an identicon?
 
 An identicon is a small image built from a value like a username, email, or user
-ID. The same input always produces the same picture, so people can recognise an
-account at a glance and nobody has to upload a photo. GitHub popularised them as
+ID. The same input always produces the same picture, so people can recognize an
+account at a glance and nobody has to upload a photo. GitHub popularized them as
 default profile pictures, and many developer tools do the same. DiceBear's
 Identicon style works this way too: it hashes the seed and draws a symmetrical
 grid, so you can use it as an identicon generator for profile icons and

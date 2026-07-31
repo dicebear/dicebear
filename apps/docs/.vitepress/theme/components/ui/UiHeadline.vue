@@ -40,7 +40,7 @@ defineProps<{
     font-size: 34px;
   }
 
-  /* Highlighted words use the solid brand colour (not a gradient). */
+  /* Highlighted words use the solid brand color (not a gradient). */
   :deep(strong) {
     display: var(--hl-display, inline);
     color: var(--vp-c-brand-2);

@@ -108,7 +108,7 @@ const isVisible = useVisibility('.app-hero', { once: false, threshold: 0.1 });
     animation: fade-up var(--duration-reveal) var(--ease-smooth) 0.2s both;
   }
 
-  /* Accent underline: solid brand colour, matching the headline accent word. */
+  /* Accent underline: solid brand color, matching the headline accent word. */
   &-underline {
     background-image: linear-gradient(var(--vp-c-brand-2), var(--vp-c-brand-2));
     background-repeat: no-repeat;

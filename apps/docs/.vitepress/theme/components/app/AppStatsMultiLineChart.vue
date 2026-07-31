@@ -27,9 +27,9 @@ const props = defineProps<{
   formatValue: (value: number) => string;
 }>();
 
-// Generate one distinct colour per series so the palette never repeats, even
+// Generate one distinct color per series so the palette never repeats, even
 // with all 36+ styles. Golden-angle hue spacing (137.5°) keeps adjacent lines
-// far apart on the colour wheel; starting near the brand-blue hue keeps the
+// far apart on the color wheel; starting near the brand-blue hue keeps the
 // first (top) series on-brand. Alternating lightness adds extra separation.
 const palette = computed(() =>
   props.series.map((_, i) => {

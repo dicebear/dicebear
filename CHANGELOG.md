@@ -240,7 +240,7 @@ and this project adheres to
   `translateX`/`translateY`, and per-color angle/fill-stops) given as a
   single-element array `[n]` are now treated as the fixed value `n` (identical
   to the scalar `n`), and an empty array `[]` falls back to the option's
-  default. Both forms are permitted by the schema. Previously the behaviour
+  default. Both forms are permitted by the schema. Previously the behavior
   diverged: the JavaScript library emitted `NaN` (e.g. `scale(NaN)`), while PHP
   dropped `[n]` to the default. All three now agree.
 

@@ -7,11 +7,11 @@ const props = defineProps<{
   styleName: string;
 }>();
 
-// Seeds chosen to maximise visual variety in the preview row. Picked by
+// Seeds chosen to maximize visual variety in the preview row. Picked by
 // fingerprinting candidate seeds against the dylan style (the hardest case: its
 // default palette has only 3 backgrounds + 2 skin tones) and balancing
-// background, hair colour and skin tone; ordered so no two neighbours repeat a
-// background or hair colour and skin alternates. Verified distinct across other
+// background, hair color and skin tone; ordered so no two neighbors repeat a
+// background or hair color and skin alternates. Verified distinct across other
 // styles too (lorelei, avataaars, bottts, …).
 const seeds = [
   'Jasper',

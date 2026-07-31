@@ -42,7 +42,7 @@ function avatar(
       <div class="app-use-cases-grid">
         <AppUseCasesCard
           title="User Profiles"
-          description="Give every user a unique avatar from day one. No upload, no Gravatar fallback, no awkward grey silhouette."
+          description="Give every user a unique avatar from day one. No upload, no Gravatar fallback, no awkward gray silhouette."
         >
           <div class="uc-stack">
             <img
@@ -82,7 +82,7 @@ function avatar(
 
         <AppUseCasesCard
           title="Chat Applications"
-          description="Instantly recognisable participants. Deterministic from a user ID, so the same person looks the same on every device."
+          description="Instantly recognizable participants. Deterministic from a user ID, so the same person looks the same on every device."
         >
           <div class="uc-bubbles">
             <div class="uc-bubble uc-bubble-light uc-bubble-pink">

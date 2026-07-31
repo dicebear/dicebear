@@ -12,7 +12,7 @@ const UINT32_MAX_PLUS_1: f64 = 4_294_967_296.0;
 /// ```
 ///
 /// All arithmetic is unsigned 32-bit; `wrapping_*` and the logical `>>` on
-/// `u32` reproduce the JS `Math.imul` / `>>>` / `| 0` behaviour exactly.
+/// `u32` reproduce the JS `Math.imul` / `>>>` / `| 0` behavior exactly.
 ///
 /// See <https://gist.github.com/tommyettinger/46a874533244883189143505d203312c>
 pub struct Mulberry32 {

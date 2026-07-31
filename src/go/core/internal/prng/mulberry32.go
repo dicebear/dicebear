@@ -13,7 +13,7 @@ const uint32MaxPlus1 = 4294967296.0
 //	return z ^ (z >> 14);
 //
 // All arithmetic is unsigned 32-bit; Go's wrapping uint32 ops and logical >>
-// reproduce the JS Math.imul / >>> / | 0 behaviour exactly.
+// reproduce the JS Math.imul / >>> / | 0 behavior exactly.
 //
 // See https://gist.github.com/tommyettinger/46a874533244883189143505d203312c
 type Mulberry32 struct {
