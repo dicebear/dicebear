@@ -3,6 +3,7 @@ import type { AvatarStyles } from '@theme/types';
 import { createRequire } from 'node:module';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
+import { findUncategorizedStyles } from '../theme/config/styleCategories.ts';
 
 const require = createRequire(import.meta.url);
 
@@ -42,6 +43,15 @@ for (const file of fs.readdirSync(definitionsDir)) {
       },
     },
   };
+}
+
+const uncategorized = findUncategorizedStyles(Object.keys(avatarStyles));
+
+if (uncategorized.length > 0) {
+  throw new Error(
+    `These styles have no category: ${uncategorized.join(', ')}. ` +
+      'Add them to .vitepress/theme/config/styleCategories.ts.',
+  );
 }
 
 export default avatarStyles;
