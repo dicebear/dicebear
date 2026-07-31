@@ -63,8 +63,8 @@ const taggedStyle = new Style({
       width: 100,
       height: 100,
       variants: {
-        long: { elements: [], tags: ['hairLength:long', 'gender:female'] },
-        short: { elements: [], tags: ['hairLength:short', 'gender:male'] },
+        long: { elements: [], tags: ['hairLength:long', 'tone:cool'] },
+        short: { elements: [], tags: ['hairLength:short', 'tone:warm'] },
       },
     },
     nose: {
@@ -177,7 +177,7 @@ describe('OptionsDescriptor', () => {
 
       assert.deepEqual(schema.tags, {
         type: 'enum',
-        values: ['gender:female', 'gender:male', 'hairLength:long', 'hairLength:short'],
+        values: ['hairLength:long', 'hairLength:short', 'tone:cool', 'tone:warm'],
         list: true,
         open: true,
       });

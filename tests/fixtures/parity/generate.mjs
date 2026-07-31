@@ -102,19 +102,19 @@ styles.tagged = {
       variants: {
         longStraight: {
           elements: [tagRect('#111111')],
-          tags: ['hairLength:long', 'hairTexture:straight', 'gender:female'],
+          tags: ['hairLength:long', 'hairTexture:straight', 'tone:cool'],
         },
         longCurly: {
           elements: [tagRect('#222222')],
-          tags: ['hairLength:long', 'hairTexture:curly', 'gender:female'],
+          tags: ['hairLength:long', 'hairTexture:curly', 'tone:cool'],
         },
         shortStraight: {
           elements: [tagRect('#333333')],
-          tags: ['hairLength:short', 'hairTexture:straight', 'gender:male'],
+          tags: ['hairLength:short', 'hairTexture:straight', 'tone:warm'],
         },
         shortCurly: {
           elements: [tagRect('#444444')],
-          tags: ['hairLength:short', 'hairTexture:curly', 'gender:male'],
+          tags: ['hairLength:short', 'hairTexture:curly', 'tone:warm'],
         },
       },
     },
@@ -125,11 +125,11 @@ styles.tagged = {
       variants: {
         beard: {
           elements: [tagRect('#555555')],
-          tags: ['facialHair:beard', 'gender:male'],
+          tags: ['facialHair:beard', 'tone:warm'],
         },
         mustache: {
           elements: [tagRect('#666666')],
-          tags: ['facialHair:mustache', 'gender:male'],
+          tags: ['facialHair:mustache', 'tone:warm'],
         },
       },
     },
@@ -626,7 +626,7 @@ const styleValidationCases = [
           width: 100,
           height: 100,
           variants: {
-            long: { elements: [], tags: ['hairLength:long', 'gender:female'] },
+            long: { elements: [], tags: ['hairLength:long', 'tone:cool'] },
           },
         },
       },
@@ -667,7 +667,7 @@ const optionsValidationCases = [
   { id: 'background-color-list', options: { backgroundColor: ['ff0000'] } },
   { id: 'background-color-invalid-hex', options: { backgroundColor: ['zzz'] } },
   { id: 'unknown-option', options: { unknownOption: 1 } },
-  { id: 'tags-string', options: { tags: 'gender:male' } },
+  { id: 'tags-string', options: { tags: 'tone:warm' } },
   { id: 'tags-array', options: { tags: ['hairLength:long', '!facialHair:beard'] } },
   { id: 'tags-bare-exclude', options: { tags: ['!facialHair'] } },
   { id: 'tags-invalid-uppercase', options: { tags: ['Bad:X'] } },
@@ -918,8 +918,8 @@ const avatarFixtures = {
     },
   ]),
   tagged: avatarCases([
-    // gender:male keeps the male hair, filters facialHair, leaves nose whole.
-    { id: 'tags-include-gender', options: { seed: 'parity-1', tags: 'gender:male' } },
+    // tone:warm cuts both hair and facialHair, and leaves the untagged nose whole.
+    { id: 'tags-include-cross-axis', options: { seed: 'parity-1', tags: 'tone:warm' } },
     // hairLength:long touches only hair; facialHair has no hairLength tag.
     { id: 'tags-include-axis', options: { seed: 'parity-1', tags: 'hairLength:long' } },
     // exclude one value, and a bare exclude that empties the optional facialHair.
@@ -936,9 +936,9 @@ const avatarFixtures = {
     // whole component drops out. Only the category is forgiving, not the value.
     { id: 'tags-unknown-value-empties-axis', options: { seed: 'parity-1', tags: 'hairLength:lng' } },
     // ${name}Variant is more specific: hair ignores the filter, facialHair obeys it.
-    { id: 'tags-variant-precedence', options: { seed: 'parity-1', tags: 'gender:male', hairVariant: 'longStraight' } },
+    { id: 'tags-variant-precedence', options: { seed: 'parity-1', tags: 'tone:warm', hairVariant: 'longStraight' } },
     // empty ${name}Variant yields no hair even though the filter would allow some.
-    { id: 'tags-empty-variant', options: { seed: 'parity-1', tags: 'gender:female', hairVariant: [] } },
+    { id: 'tags-empty-variant', options: { seed: 'parity-1', tags: 'tone:cool', hairVariant: [] } },
   ]),
   animated: avatarCases([
     // The untagged static default outweighs the zero-weight speeds.
