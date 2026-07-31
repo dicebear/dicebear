@@ -7,12 +7,24 @@ import avatarStyles from './avatarStyles.ts';
 // (v10.0.0). Update this set when new styles ship. The badge markup is rendered
 // via v-html (see `.vp-sidebar-badge` in theme/styles/main.scss).
 const NEW_STYLES = new Set<string>([
+  'blobs',
+  'constellation',
+  'critters',
   'disco',
   'glyphs',
   'initial-face',
+  'landscape',
+  'loops',
+  'moods',
+  'pixelbot',
+  'planets',
   'shape-grid',
+  'sprouts',
+  'squircles',
   'stripes',
   'triangles',
+  'waves',
+  'weave',
 ]);
 
 const sidebar: DefaultTheme.SidebarItem[] = [
