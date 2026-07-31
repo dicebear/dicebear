@@ -116,6 +116,11 @@ const isVisible = useVisibility('.app-hero', { once: false, threshold: 0.1 });
     background-size: 100% 2px;
     padding-bottom: 1px;
     white-space: nowrap;
+    transition: color var(--duration-fast) ease;
+
+    &:hover {
+      color: var(--vp-c-brand-2);
+    }
   }
 
   &-actions {
