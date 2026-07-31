@@ -61,10 +61,10 @@
   "hairVariant": {
     "type": "enum",
     "values": [
-      "longCurly",
-      "longStraight",
-      "shortCurly",
-      "shortStraight"
+      "longDark",
+      "longLight",
+      "shortDark",
+      "shortLight"
     ],
     "list": true,
     "weighted": true
@@ -131,8 +131,8 @@
       "facialHair:mustache",
       "hairLength:long",
       "hairLength:short",
-      "hairTexture:curly",
-      "hairTexture:straight",
+      "hairShade:dark",
+      "hairShade:light",
       "tone:cool",
       "tone:warm"
     ],
