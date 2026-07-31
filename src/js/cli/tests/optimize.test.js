@@ -38,6 +38,29 @@ describe('dicebear --optimize', () => {
 
   const read = (file) => JSON.parse(fs.readFileSync(file, 'utf-8'));
 
+  /**
+   * A shipped style with one path that svgo can still compact. Every definition
+   * in @dicebear/styles has been through the optimizer, so a fixture that is
+   * supposed to have room left has to bring that room itself.
+   */
+  function unoptimizedFixture() {
+    const definition = read(fixture('identicon'));
+    const target = path.join(workdir, 'unoptimized.json');
+
+    // svgo rewrites this to "M10 10h10v10h-10z".
+    definition.canvas.elements.push({
+      name: 'path',
+      type: 'element',
+      attributes: {
+        d: 'M 10.000 10.000 L 20.000 10.000 L 20.000 20.000 L 10.000 20.000 Z',
+      },
+    });
+
+    fs.writeFileSync(target, `${JSON.stringify(definition, null, 2)}\n`);
+
+    return target;
+  }
+
   before(() => {
     workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'dicebear-optimize-test-'));
   });
@@ -56,8 +79,8 @@ describe('dicebear --optimize', () => {
     assert.equal(fs.readFileSync(file, 'utf-8'), before);
   });
 
-  it('reports a hand-authored definition as not optimized and writes nothing', () => {
-    const file = fixture('pixel-art');
+  it('reports an unoptimized definition and writes nothing', () => {
+    const file = unoptimizedFixture();
     const before = fs.readFileSync(file, 'utf-8');
     const result = runCli([file, '--optimize-check']);
 
@@ -67,8 +90,8 @@ describe('dicebear --optimize', () => {
     assert.equal(fs.readFileSync(file, 'utf-8'), before);
   });
 
-  it('shrinks a hand-authored definition', () => {
-    const file = fixture('pixel-art');
+  it('shrinks an unoptimized definition', () => {
+    const file = unoptimizedFixture();
     const before = fs.readFileSync(file, 'utf-8').length;
     const result = runCli([file, '--optimize']);
 
