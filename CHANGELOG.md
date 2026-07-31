@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.4.0-rc.2] - 2026-07-31
+
 ### Fixed
 
 - **Converter:** Raster conversion no longer drops parts of rotated avatars with
@@ -337,7 +339,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.4.0-rc.1...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.4.0-rc.2...HEAD
+[10.4.0-rc.2]: https://github.com/dicebear/dicebear/compare/v10.4.0-rc.1...v10.4.0-rc.2
 [10.4.0-rc.1]: https://github.com/dicebear/dicebear/compare/v10.3.2...v10.4.0-rc.1
 [10.3.2]: https://github.com/dicebear/dicebear/compare/v10.3.1...v10.3.2
 [10.3.1]: https://github.com/dicebear/dicebear/compare/v10.3.0...v10.3.1
