@@ -17,6 +17,7 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
   blobs: () => import('@dicebear/styles/blobs.json'),
   bottts: () => import('@dicebear/styles/bottts.json'),
   'bottts-neutral': () => import('@dicebear/styles/bottts-neutral.json'),
+  clay: () => import('@dicebear/styles/clay.json'),
   constellation: () => import('@dicebear/styles/constellation.json'),
   critters: () => import('@dicebear/styles/critters.json'),
   croodles: () => import('@dicebear/styles/croodles.json'),

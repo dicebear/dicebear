@@ -28,6 +28,7 @@ const styleCategories: Record<string, StyleCategory> = {
   blobs: 'Minimalist',
   bottts: 'Characters',
   'bottts-neutral': 'Characters',
+  clay: 'Characters',
   constellation: 'Scenes',
   critters: 'Characters',
   croodles: 'Characters',

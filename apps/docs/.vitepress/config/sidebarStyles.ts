@@ -8,6 +8,7 @@ import avatarStyles from './avatarStyles.ts';
 // via v-html (see `.vp-sidebar-badge` in theme/styles/main.scss).
 const NEW_STYLES = new Set<string>([
   'blobs',
+  'clay',
   'constellation',
   'critters',
   'disco',
