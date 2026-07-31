@@ -4,7 +4,7 @@ import { UiSection, UiContainer, UiSectionHeader, UiCard } from '../ui';
 import AppSmallHero from '../app/AppSmallHero.vue';
 import AppStatsChart from '../app/AppStatsChart.vue';
 import AppStatsMultiLineChart from '../app/AppStatsMultiLineChart.vue';
-import AppStatsGlobe from '../app/AppStatsGlobe.vue';
+import AppStatsMap from '../app/AppStatsMap.vue';
 import {
   useApiStatsRaw,
   lastCompleteMonth,
@@ -263,31 +263,46 @@ const monthlyStats = computed(() => {
     >
     <template #actions><!-- no actions --></template>
     <template #below-actions>
-      <div v-if="monthlyStats" class="page-stats-hero-kpis">
+      <!--
+        The numbers come from a runtime fetch, but the block is rendered from
+        the first paint on. Letting it appear late moved everything below it
+        down by its own height, which on narrow viewports put the map inside
+        the viewport just long enough to trigger its lazy load.
+
+        NBSP, not an empty string: an empty span has no line box, so the rows
+        would collapse and reserve nothing.
+      -->
+      <div class="page-stats-hero-kpis">
         <p class="page-stats-hero-kpis-label">
-          Statistics from {{ monthlyStats.label }}
+          {{ monthlyStats ? `Statistics from ${monthlyStats.label}` : '\xa0' }}
         </p>
         <div class="page-stats-hero-kpis-row">
           <div class="page-stats-hero-kpi">
             <span class="page-stats-hero-kpi-value">{{
-              monthlyStats.requests
+              monthlyStats?.requests ?? '\xa0'
             }}</span>
             <span class="page-stats-hero-kpi-label">API Requests</span>
           </div>
           <div class="page-stats-hero-kpi-divider"></div>
-          <div v-if="monthlyStats.traffic" class="page-stats-hero-kpi">
+          <div
+            v-if="!monthlyStats || monthlyStats.traffic"
+            class="page-stats-hero-kpi"
+          >
             <span class="page-stats-hero-kpi-value">{{
-              monthlyStats.traffic
+              monthlyStats?.traffic ?? '\xa0'
             }}</span>
             <span class="page-stats-hero-kpi-label">Data Served</span>
           </div>
           <div
-            v-if="monthlyStats.downloads"
+            v-if="!monthlyStats || monthlyStats.downloads"
             class="page-stats-hero-kpi-divider"
           ></div>
-          <div v-if="monthlyStats.downloads" class="page-stats-hero-kpi">
+          <div
+            v-if="!monthlyStats || monthlyStats.downloads"
+            class="page-stats-hero-kpi"
+          >
             <span class="page-stats-hero-kpi-value">{{
-              monthlyStats.downloads
+              monthlyStats?.downloads ?? '\xa0'
             }}</span>
             <span class="page-stats-hero-kpi-label">npm Downloads</span>
           </div>
@@ -296,7 +311,7 @@ const monthlyStats = computed(() => {
     </template>
     <template #aside>
       <ClientOnly>
-        <AppStatsGlobe :rate="requestsPerSecond" />
+        <AppStatsMap :rate="requestsPerSecond" />
       </ClientOnly>
     </template>
   </AppSmallHero>

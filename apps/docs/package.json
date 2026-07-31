@@ -21,7 +21,6 @@
     "change-case": "^5.4.4",
     "chart.js": "^4.5.1",
     "copy-to-clipboard": "^3.3.3",
-    "globe.gl": "^2.45.0",
     "highlight.js": "^11.11.1",
     "idb-keyval": "^6.2.2",
     "jszip": "^3.10.1",

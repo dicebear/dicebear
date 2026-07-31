@@ -259,7 +259,7 @@ export default defineConfig<ThemeOptions>({
       },
     ],
     ssr: {
-      noExternal: ['vue-countup-v3', 'vue-chartjs', 'globe.gl', 'three'],
+      noExternal: ['vue-countup-v3', 'vue-chartjs'],
     },
     resolve: {
       alias: {
