@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { PawPrint, ArrowRight } from '@lucide/vue';
 import Button from 'primevue/button';
+import { useData } from 'vitepress';
+import type { ThemeOptions } from '@theme/types';
+
+const { theme } = useData<ThemeOptions>();
 </script>
 
 <template>
@@ -15,7 +19,7 @@ import Button from 'primevue/button';
     <p class="app-hero-description">
       DiceBear is a privacy-focused, open source avatar library with
       <a class="app-hero-underline" href="/styles/"
-        >45+&nbsp;avatar&nbsp;styles</a
+        >{{ theme.styleCount }}&nbsp;avatar&nbsp;styles</a
       >, from hand-drawn characters to abstract patterns. Generate deterministic
       profile pictures via API, JS&nbsp;library, PHP&nbsp;library,
       Python&nbsp;library, Rust&nbsp;library, Go&nbsp;library, Dart&nbsp;library

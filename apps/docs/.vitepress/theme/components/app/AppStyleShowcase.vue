@@ -4,10 +4,13 @@ import { kebabCase } from 'change-case';
 import Prando from 'prando';
 import { ArrowRight, ArrowLeft, Shapes } from '@lucide/vue';
 import Button from 'primevue/button';
+import { useData } from 'vitepress';
+import type { ThemeOptions } from '@theme/types';
 import { UiAvatar, UiContainer, UiSection, UiSectionHeader } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';
 
+const { theme } = useData<ThemeOptions>();
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { once: false, threshold: 0.1 });
 const avatarStyleList = useAvatarStyleList();
@@ -164,7 +167,10 @@ onUnmounted(() => {
       <UiSectionHeader
         description="Cute characters, abstract patterns, pixel art, and detailed illustrations. Some styles come from independent artists, others we designed ourselves."
       >
-        <template #headline><strong>45+</strong> Unique Avatar Styles</template>
+        <template #headline
+          ><strong>{{ theme.styleCount }}</strong> Unique Avatar
+          Styles</template
+        >
       </UiSectionHeader>
     </UiContainer>
 

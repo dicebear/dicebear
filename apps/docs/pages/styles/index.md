@@ -1,22 +1,17 @@
 ---
 layout: page
-title: Avatar Styles – Browse 45+ Avatar Designs
+title: Avatar Styles – Browse %STYLE_COUNT% Avatar Designs
 description: >
-  Browse 45+ styles and generate avatars with the DiceBear avatar library. From
-  abstract patterns to character designs: the perfect avatar generator for
-  profile pictures and user avatars.
+  Browse %STYLE_COUNT% styles and generate avatars with the DiceBear avatar
+  library. From abstract patterns to character designs: the perfect avatar
+  generator for profile pictures and user avatars.
 aside: false
 sidebar: false
 ---
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useData } from 'vitepress';
 import StyleList from "@theme/components/styles/StyleList.vue";
 import { UiContainer, UiHeadline, UiDescription } from "@theme/components/ui";
-
-const { theme } = useData();
-const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
 </script>
 
 <UiContainer class="styles-page">

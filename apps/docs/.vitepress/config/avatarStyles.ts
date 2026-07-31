@@ -57,4 +57,14 @@ if (uncategorized.length > 0) {
   );
 }
 
+/**
+ * How many styles @dicebear/styles ships. Every headline, meta description and
+ * marketing line that names a number reads it from here, so shipping a style
+ * updates the copy on its own. Frontmatter cannot import, so those pages write
+ * {@link STYLE_COUNT_TOKEN} instead and the build fills it in.
+ */
+export const styleCount = Object.keys(avatarStyles).length;
+
+export const STYLE_COUNT_TOKEN = '%STYLE_COUNT%';
+
 export default avatarStyles;

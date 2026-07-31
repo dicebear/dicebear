@@ -11,7 +11,10 @@ import { SITE_ORIGIN, siteUrl } from './config/site.ts';
 import sidebarDocs from './config/sidebarDocs.ts';
 import sidebarStyles from './config/sidebarStyles.ts';
 import sidebarTools from './config/sidebarTools.ts';
-import avatarStyles from './config/avatarStyles.ts';
+import avatarStyles, {
+  styleCount,
+  STYLE_COUNT_TOKEN,
+} from './config/avatarStyles.ts';
 import avatarUniqueCounts from './config/avatarUniqueCounts.ts';
 import avatarStyleSizes from './config/avatarStyleSizes.ts';
 import { formatStars } from './theme/utils/format.ts';
@@ -73,8 +76,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
-  description:
-    'DiceBear is a free, open source avatar library and avatar API with 45+ avatar styles. Generate profile pictures and user placeholder images for any project.',
+  description: `DiceBear is a free, open source avatar library and avatar API with ${styleCount} avatar styles. Generate profile pictures and user placeholder images for any project.`,
   head: [
     // Most pages load avatars from the HTTP API (seed demo, style showcase,
     // playground). Warming up the connection hides the DNS/TLS latency on
@@ -115,8 +117,7 @@ export default defineConfig<ThemeOptions>({
         '@type': 'WebSite',
         name: 'DiceBear',
         url: siteUrl('/'),
-        description:
-          'DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with 45+ styles — privacy-focused and self-hostable.',
+        description: `DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with ${styleCount} styles, privacy-focused and self-hostable.`,
       }),
     ],
     [
@@ -129,8 +130,7 @@ export default defineConfig<ThemeOptions>({
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Any',
         url: siteUrl('/'),
-        description:
-          'Privacy-focused, open source SVG avatar library with 45+ styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, and CLI for generating deterministic profile pictures and user placeholder images.',
+        description: `Privacy-focused, open source SVG avatar library with ${styleCount} styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, and CLI for generating deterministic profile pictures and user placeholder images.`,
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -141,6 +141,30 @@ export default defineConfig<ThemeOptions>({
     ...thirdPartyScripts,
   ],
   srcDir: path.join(import.meta.dirname, '..', 'pages'),
+  // Frontmatter is static YAML and cannot import the style count, so pages
+  // write the token where the number belongs and the build substitutes it.
+  // Runs before transformHead, which reads these two fields for the canonical
+  // title and the og:description.
+  transformPageData: (pageData) => {
+    const fill = (value: string) =>
+      value.replaceAll(STYLE_COUNT_TOKEN, String(styleCount));
+
+    if (typeof pageData.frontmatter.title === 'string') {
+      pageData.frontmatter.title = fill(pageData.frontmatter.title);
+    }
+
+    if (typeof pageData.frontmatter.description === 'string') {
+      pageData.frontmatter.description = fill(pageData.frontmatter.description);
+    }
+
+    if (typeof pageData.title === 'string') {
+      pageData.title = fill(pageData.title);
+    }
+
+    if (typeof pageData.description === 'string') {
+      pageData.description = fill(pageData.description);
+    }
+  },
   transformHead: (ctx) => {
     const result: HeadConfig[] = [];
 
@@ -184,7 +208,7 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear is a free, open source avatar library and Avatar API with 45+ avatar styles.';
+        `DiceBear is a free, open source avatar library and Avatar API with ${styleCount} avatar styles.`;
 
       // og-images.ts owns which page maps to which card, so the mapping and
       // the generator cannot drift into pointing at a card that was never
@@ -277,6 +301,7 @@ export default defineConfig<ThemeOptions>({
   },
   themeConfig: {
     avatarStyles,
+    styleCount,
     avatarUniqueCounts,
     avatarStyleSizes,
     githubStars,

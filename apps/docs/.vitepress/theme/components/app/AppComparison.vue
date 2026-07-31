@@ -16,7 +16,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.1 });
 
 const rows = buildComparisonRows({
   stars: theme.value.githubStars ?? {},
-  styleCount: Object.keys(theme.value.avatarStyles ?? {}).length,
+  styleCount: theme.value.styleCount,
 });
 </script>
 

@@ -7,10 +7,13 @@ description: >
 ---
 
 <script setup>
+import { useData } from 'vitepress';
 import { Fingerprint, Zap, Server, Palette } from '@lucide/vue';
 import BrowserPreview from '@theme/components/ui/UiBrowserPreview.vue';
 import DocsHighlights from '@theme/components/docs/DocsHighlights.vue';
 import DocsStyleGrid from '@theme/components/docs/DocsStyleGrid.vue';
+
+const { theme } = useData();
 
 const highlights = [
   {
@@ -36,7 +39,7 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: '45+ styles',
+    title: `${theme.value.styleCount} styles`,
     description:
       'Pick the visual style that fits your product, from abstract geometric shapes to illustrated characters.',
     color: '#a855f7',

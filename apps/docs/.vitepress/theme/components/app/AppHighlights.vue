@@ -18,7 +18,11 @@ import {
   SlidersHorizontal,
 } from '@lucide/vue';
 import { siGithub, siFigma } from 'simple-icons';
+import { useData } from 'vitepress';
+import type { ThemeOptions } from '@theme/types';
 import { useVisibility } from '../../composables/useVisibility';
+
+const { theme } = useData<ThemeOptions>();
 
 withDefaults(
   defineProps<{
@@ -46,7 +50,7 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: '45+ Avatar Styles',
+    title: `${theme.value.styleCount} Avatar Styles`,
     description:
       'Hand-drawn characters from independent artists, plus abstract, pixel art, and geometric designs.',
     color: '#a855f7',

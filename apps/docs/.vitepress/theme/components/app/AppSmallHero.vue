@@ -2,19 +2,30 @@
 import { ref, useSlots, computed } from 'vue';
 import { PawPrint, ArrowRight } from '@lucide/vue';
 import Button from 'primevue/button';
+import { useData } from 'vitepress';
+import type { ThemeOptions } from '@theme/types';
 import { UiHeadline, UiDescription, UiContainer, UiSection } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     headline?: string;
     description?: string;
   }>(),
   {
     headline: 'Avatars That Stand Out',
-    description:
-      'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art, our privacy-focused SVG avatar library gives you 45+ styles to choose from.',
+    description: undefined,
   },
+);
+
+const { theme } = useData<ThemeOptions>();
+
+// Prop defaults are evaluated outside the setup scope, so the fallback copy
+// lives here where it can read the style count.
+const resolvedDescription = computed(
+  () =>
+    props.description ??
+    `DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art, our privacy-focused SVG avatar library gives you ${theme.value.styleCount} styles to choose from.`,
 );
 
 const sectionRef = ref();
@@ -40,7 +51,7 @@ const hasActions = computed(() => !!slots.actions);
             <slot name="headline">{{ headline }}</slot>
           </UiHeadline>
           <UiDescription class="app-small-hero-description">
-            <slot name="description">{{ description }}</slot>
+            <slot name="description">{{ resolvedDescription }}</slot>
           </UiDescription>
 
           <div v-if="hasActions" class="app-small-hero-actions">
