@@ -3,8 +3,8 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 
 import type { AvatarUniqueCount } from '@theme/types';
-import { computeCount } from '../theme/utils/avatar/combinationCount';
-import { definitionsDir } from './avatarStyles';
+import { computeCount } from '../theme/utils/avatar/combinationCount.ts';
+import { definitionsDir } from './avatarStyles.ts';
 
 const avatarUniqueCounts: Record<string, AvatarUniqueCount> = {};
 

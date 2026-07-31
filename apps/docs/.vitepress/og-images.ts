@@ -35,11 +35,11 @@ import sharp from 'sharp';
 import { createRequire } from 'node:module';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import avatarStyles, { definitionsDir } from './config/avatarStyles';
-import { previewSeeds } from './theme/config/styleCategories';
-import { escapeHtml } from './theme/utils/escape';
-import { formatLicenseName } from './theme/utils/format';
-import { attributionKind, isPublicDomain } from './theme/utils/license';
+import avatarStyles, { definitionsDir } from './config/avatarStyles.ts';
+import { previewSeeds } from './theme/config/styleCategories.ts';
+import { escapeHtml } from './theme/utils/escape.ts';
+import { formatLicenseName } from './theme/utils/format.ts';
+import { attributionKind, isPublicDomain } from './theme/utils/license.ts';
 
 const require = createRequire(import.meta.url);
 

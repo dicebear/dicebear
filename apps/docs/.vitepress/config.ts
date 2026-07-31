@@ -1,16 +1,20 @@
 import * as path from 'node:path';
 import { defineConfig, type DefaultTheme, type HeadConfig } from 'vitepress';
-import { ThemeOptions } from '@theme/types';
+import type { ThemeOptions } from '@theme/types';
 
-import { generateOgImages, ogImagePathFor, OG_IMAGE_SIZE } from './og-images';
-import { SITE_ORIGIN, siteUrl } from './config/site';
-import sidebarDocs from './config/sidebarDocs';
-import sidebarStyles from './config/sidebarStyles';
-import sidebarTools from './config/sidebarTools';
-import avatarStyles from './config/avatarStyles';
-import avatarUniqueCounts from './config/avatarUniqueCounts';
-import avatarStyleSizes from './config/avatarStyleSizes';
-import { formatStars } from './theme/utils/format';
+import {
+  generateOgImages,
+  ogImagePathFor,
+  OG_IMAGE_SIZE,
+} from './og-images.ts';
+import { SITE_ORIGIN, siteUrl } from './config/site.ts';
+import sidebarDocs from './config/sidebarDocs.ts';
+import sidebarStyles from './config/sidebarStyles.ts';
+import sidebarTools from './config/sidebarTools.ts';
+import avatarStyles from './config/avatarStyles.ts';
+import avatarUniqueCounts from './config/avatarUniqueCounts.ts';
+import avatarStyleSizes from './config/avatarStyleSizes.ts';
+import { formatStars } from './theme/utils/format.ts';
 
 async function fetchGitHubStars(
   repos: string[],
@@ -136,7 +140,7 @@ export default defineConfig<ThemeOptions>({
     ],
     ...thirdPartyScripts,
   ],
-  srcDir: path.join(__dirname, '..', 'pages'),
+  srcDir: path.join(import.meta.dirname, '..', 'pages'),
   transformHead: (ctx) => {
     const result: HeadConfig[] = [];
 
@@ -220,10 +224,13 @@ export default defineConfig<ThemeOptions>({
     },
     resolve: {
       alias: {
-        '@playground': path.resolve(__dirname, 'theme/components/playground'),
-        '@theme': path.resolve(__dirname, 'theme'),
+        '@playground': path.resolve(
+          import.meta.dirname,
+          'theme/components/playground',
+        ),
+        '@theme': path.resolve(import.meta.dirname, 'theme'),
         './components/VPLocalNav.vue': path.resolve(
-          __dirname,
+          import.meta.dirname,
           'theme/components/layout/LayoutVPLocalNav.vue',
         ),
       },

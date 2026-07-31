@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'vitepress';
+import type { DefaultTheme } from 'vitepress';
 
 const sidebar: DefaultTheme.SidebarItem[] = [
   {

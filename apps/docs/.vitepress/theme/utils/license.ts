@@ -1,6 +1,6 @@
 import type { AvatarStyleMeta } from '@theme/types';
-import { normalizeLicense } from '../config/styleCategories';
-import { formatLicenseName } from './format';
+import { normalizeLicense } from '../config/styleCategories.ts';
+import { formatLicenseName } from './format.ts';
 
 // Value imports are relative on purpose: the OG card generator pulls this
 // module into the VitePress config bundle, where the `@theme` alias is only

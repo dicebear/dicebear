@@ -1,5 +1,5 @@
 import { Style } from '@dicebear/core';
-import { AvatarStyles } from '@theme/types';
+import type { AvatarStyles } from '@theme/types';
 import { createRequire } from 'node:module';
 import * as path from 'node:path';
 import * as fs from 'node:fs';

@@ -4,7 +4,7 @@ import * as path from 'node:path';
 import { gzipSync } from 'node:zlib';
 
 import type { AvatarStyleSizeBundle } from '@theme/types';
-import { definitionsDir } from './avatarStyles';
+import { definitionsDir } from './avatarStyles.ts';
 
 const require = createRequire(import.meta.url);
 

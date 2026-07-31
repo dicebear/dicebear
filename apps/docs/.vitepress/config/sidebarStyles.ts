@@ -1,6 +1,6 @@
 import { capitalCase } from 'change-case';
-import { DefaultTheme } from 'vitepress';
-import avatarStyles from './avatarStyles';
+import type { DefaultTheme } from 'vitepress';
+import avatarStyles from './avatarStyles.ts';
 
 // Avatar styles to flag with a "New" badge in the sidebar. These are the styles
 // added in the most recent @dicebear/styles release that introduced new styles

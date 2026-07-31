@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'vitepress';
+import type { DefaultTheme } from 'vitepress';
 
 // NOTE: VitePress renders sidebar item `text` with `v-html`, so inline markup is
 // allowed — we use it to attach small status badges (styled via
