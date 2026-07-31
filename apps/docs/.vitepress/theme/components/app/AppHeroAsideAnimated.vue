@@ -38,7 +38,6 @@ const tiles = [
           size: 160,
           animationVariant: 'medium',
         }"
-        mode="library"
         :alt="`Animated ${tile.styleName} avatar`"
       />
     </div>

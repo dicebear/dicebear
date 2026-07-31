@@ -86,7 +86,6 @@ const svg = new Avatar(style, {
                   :size="148"
                   :style-name="styleName"
                   :style-options="{ ...demoOptions, size: 160 }"
-                  mode="library"
                   alt="Animated avatar preview"
                 />
               </div>

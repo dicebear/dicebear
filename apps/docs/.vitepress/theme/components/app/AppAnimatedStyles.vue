@@ -74,7 +74,6 @@ const animatedStyles = computed(() =>
                 size: 120,
                 animationVariant: 'medium',
               }"
-              mode="library"
               :alt="`Animated ${style.displayName} avatar`"
             />
           </div>
