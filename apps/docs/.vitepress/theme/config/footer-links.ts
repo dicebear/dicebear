@@ -8,6 +8,7 @@ export interface FooterLink {
 
 export const productLinks: FooterLink[] = [
   { label: 'Why DiceBear?', href: '/why-dicebear/' },
+  { label: 'Animated Avatars', href: '/animated-avatars/' },
   { label: 'Playground', href: '/playground/' },
   { label: 'All Styles', href: '/styles/' },
   { label: 'Tools', href: '/tools/' },
