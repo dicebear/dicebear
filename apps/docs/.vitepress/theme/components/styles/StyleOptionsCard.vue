@@ -26,6 +26,7 @@ import { unsupportedHttpApiOptions } from '@theme/utils/avatar/api';
 import {
   getOptionDescription,
   getOptionExamples,
+  getOptionValueOrder,
 } from '@theme/utils/styleOptionMeta';
 import { groupTagsByCategory } from '@theme/utils/avatar/tags';
 import {
@@ -142,7 +143,31 @@ const possibleValues = computed(() => {
     return [];
   }
 
-  return fieldValues.value.slice().sort(naturalSort);
+  const order = getOptionValueOrder(props.name);
+
+  if (!order) {
+    return fieldValues.value.slice().sort(naturalSort);
+  }
+
+  return fieldValues.value.slice().sort((a, b) => {
+    const ia = order.indexOf(a);
+    const ib = order.indexOf(b);
+
+    if (ia === -1 && ib === -1) return naturalSort(a, b);
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+
+    return ia - ib;
+  });
+});
+
+// Values the code snippets pick from. A `none` variant is real but makes a
+// weak sample, because the snippet would mostly show the component switched
+// off. The other values win whenever the option has any.
+const sampleValues = computed(() => {
+  const withoutNone = possibleValues.value.filter((v) => v !== 'none');
+
+  return withoutNone.length > 0 ? withoutNone : possibleValues.value;
 });
 
 // The `tags` option lists the style's tag vocabulary grouped by category
@@ -188,10 +213,10 @@ const codeExampleValue = computed(() => {
     return isList.value ? examples.value.slice(0, 2) : examples.value[0];
   }
 
-  if (possibleValues.value.length > 0) {
+  if (sampleValues.value.length > 0) {
     return isList.value
-      ? possibleValues.value.slice(0, 2)
-      : possibleValues.value[0];
+      ? sampleValues.value.slice(0, 2)
+      : sampleValues.value[0];
   }
 
   if (fieldType.value === 'boolean') {
@@ -300,7 +325,7 @@ const descriptionWithHints = computed(() => {
 const weightedExampleValue = computed(() => {
   if (!isWeighted.value) return undefined;
 
-  const vals = fieldValues.value;
+  const vals = sampleValues.value;
 
   if (vals.length >= 2) {
     return { [vals[0]]: 2, [vals[1]]: 1 };

@@ -71,6 +71,12 @@ const previewTarget = computed(() => {
   return { type: 'general' as const };
 });
 
+// The `animation` component has no artwork of its own. Its variants are a
+// marker class plus a <style> block that animates the other components, so an
+// isolated preview would render an empty canvas. Those options go through the
+// full-avatar path instead.
+const animationComponent = 'animation';
+
 const isComponentPreview = computed(() => {
   if (!preview.value) return false;
 
@@ -81,7 +87,10 @@ const isComponentPreview = computed(() => {
   // HTTP-API path, so e.g. Identicon's rowColor preview shows every row
   // instead of a single isolated row from one component.
   if (t.type === 'variant' || t.type === 'probability') {
-    return allComponentNames.value.includes(t.component);
+    return (
+      t.component !== animationComponent &&
+      allComponentNames.value.includes(t.component)
+    );
   }
 
   return false;
@@ -144,7 +153,10 @@ const generalOptions = computed(() => {
     }
   }
 
-  if (t.type === 'variant') {
+  // Isolated component previews drop the background so the shape reads on the
+  // checkerboard. The animation previews are complete avatars, so they keep
+  // the style's own background like every other full-avatar preview.
+  if (t.type === 'variant' && t.component !== animationComponent) {
     opts.backgroundColor = [];
   }
 

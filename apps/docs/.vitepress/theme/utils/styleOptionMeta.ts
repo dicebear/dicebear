@@ -48,6 +48,24 @@ export function getOptionDescription(name: string): string | undefined {
 }
 
 /**
+ * Returns a curated display order for an option's values, or undefined when
+ * the generic sort applies.
+ *
+ * `OptionsDescriptor` sorts variant names alphabetically, which scrambles the
+ * animation speeds into `fast, fastest, medium, none, slow, slowest`. The docs
+ * list them as a ramp instead, so motion increases from left to right and
+ * `none` sits next to the slowest speed rather than the fastest. Values
+ * outside the list keep their natural order at the end.
+ */
+export function getOptionValueOrder(name: string): string[] | undefined {
+  if (name === 'animationVariant') {
+    return ['none', 'slowest', 'slow', 'medium', 'fast', 'fastest'];
+  }
+
+  return undefined;
+}
+
+/**
  * Returns curated example values for a style option, or undefined if none.
  * `colorExamples` is a callback that returns colors for a given color name
  * (so we don't pull `padColors`/`styleColors` into this util).
