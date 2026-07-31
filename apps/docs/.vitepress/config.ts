@@ -219,6 +219,45 @@ export default defineConfig<ThemeOptions>({
   buildEnd: (siteConfig) =>
     generateOgImages(siteConfig.outDir, siteConfig.cacheDir, siteConfig.srcDir),
   vite: {
+    plugins: [
+      {
+        // VitePress puts everything the theme entry reaches into one `theme`
+        // chunk, and rolldown then folds the modules that many pages share
+        // into it as well. @dicebear/core rides along that way: its two
+        // compiled JSON Schema validators alone are ~160 kB, and they were
+        // downloaded on text-only pages that never render an avatar.
+        //
+        // The grouping has to be injected here rather than through
+        // `build.rolldownOptions`, because VitePress writes its own
+        // `output.codeSplitting` after the user config has been merged.
+        name: 'dicebear:chunks',
+        apply: 'build',
+        outputOptions(options) {
+          const { codeSplitting } = options as {
+            codeSplitting?: { groups?: unknown[] };
+          };
+
+          // Only extend a grouping that is actually there. If VitePress ever
+          // stops setting one, leaving the defaults alone beats replacing
+          // them with just this group.
+          if (!codeSplitting?.groups) return null;
+
+          return {
+            ...options,
+            codeSplitting: {
+              ...codeSplitting,
+              groups: [
+                {
+                  name: 'dicebear-core',
+                  test: /[/\\](@dicebear[/\\]core|js[/\\]core)[/\\]lib[/\\]/,
+                },
+                ...codeSplitting.groups,
+              ],
+            },
+          } as typeof options;
+        },
+      },
+    ],
     ssr: {
       noExternal: ['vue-countup-v3', 'vue-chartjs', 'globe.gl', 'three'],
     },
