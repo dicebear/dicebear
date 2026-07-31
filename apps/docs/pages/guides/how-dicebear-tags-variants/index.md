@@ -3,7 +3,7 @@ title: How DiceBear Tags Variants
 description: >
   How DiceBear assigns variant tags to its own styles: the animation tags that
   ship today, and the planned standard set for the character styles covering
-  mood, hair length, hair style, headwear, facial hair, eyewear, and accessory.
+  mood, hair length, headwear, facial hair, eyewear, and accessory.
 ---
 
 # How DiceBear tags variants
@@ -23,9 +23,10 @@ A few principles keep the tags consistent:
 - Tags only describe. A variant carries the labels that fit what it shows, and
   never a category outside the set below.
 - A tag is added only when the trait is clear. An ambiguous or purely decorative
-  variant is left untagged rather than guessed.
+  variant is left untagged rather than guessed. Where a category has a bare form,
+  as `headwear` does, the bare tag is still set and only the value is left off.
 - Most variants carry no tag or one tag. A few carry two, such as hair with a
-  visible hat, or a beard together with a mustache.
+  visible hat.
 - Variant tags only add information, they never remove a variant on their own. To
   leave something out at render time, use the `!` form of the
   [`tags` option](/guides/filter-variants-with-tags/). Disallowing lives in the
@@ -51,9 +52,16 @@ which is more specific than the filter and always wins.
 
 ## Planned categories
 
-The categories below are the standard set for the character styles. They are
-not shipped yet. We publish the definitions ahead of time so custom styles can
-reuse them and stay compatible with the filter examples in the docs.
+::: warning Not shipped yet
+
+No DiceBear style carries the categories below, so filtering on them has no
+effect for now.
+
+:::
+
+The categories below are the standard set for the character styles. We publish
+the definitions ahead of time so custom styles can reuse them and stay
+compatible with the filter examples in the docs.
 
 ### Mood
 
@@ -89,59 +97,50 @@ the length is actually visible.
 - `medium` for around ear-to-jaw length.
 - `long` for hair past the jaw, shoulder length or longer.
 
-When the hair is gathered or pinned up so the length cannot be read, the length is
-left off and the variant is tagged `hairStyle:updo` instead. A ponytail or pigtails
-with a visible hanging tail still gets a length. A variant that is really headwear
-gets a `headwear` tag, and a variant showing both hair and a hat may carry both.
+When the hair is gathered or pinned up so the length cannot be read, such as a bun
+or a top-knot, the length is left off. A ponytail or pigtails with a visible
+hanging tail still gets a length. A variant that is really headwear gets a
+`headwear` tag, and a variant showing both hair and a hat may carry both.
 
-### Hair style
-
-The `hairStyle` category covers the same components as the length and runs
-alongside it. A variant may carry one texture value and one shape value when both
-read clearly, for example a curly updo is both `curly` and `updo`.
-
-Texture, how the hair falls:
-
-- `straight` for smooth hair with no curl.
-- `wavy` for loose waves or kinks.
-- `curly` for defined curls, ringlets, or spirals.
-- `afro` for dense, afro-textured volume.
-
-Cut or shape, how it is worn:
-
-- `buzzcut` for shaved or very short all-over hair.
-- `bob` for a chin-to-jaw bob.
-- `updo` for hair gathered and pinned up, such as a bun, top-knot, or French
-  twist. The length is hidden, so an `updo` variant carries no `hairLength`.
-- `ponytail` for a ponytail, pigtails, or a tied tail that hangs down.
-- `braids` for braids, plaits, or cornrows.
-- `dreadlocks` for locs or dreads.
-- `mohawk` for shaved sides with a central crest.
-- `bangs` for a fringe over the forehead.
-
-A bald variant carries only `hairLength:bald` and no `hairStyle`, since there is no
-hair to style.
+The cut and the texture of the hair carry no tags. Whether hair reads as wavy or
+curly is a judgment call that would come out differently from one style to the
+next, and the filter is there to steer the look in broad strokes, not to pick a
+haircut. For a specific hairstyle, set the style's own hair variant option.
 
 ### Headwear
 
-The `headwear` category covers hats and hat-like variants.
+The `headwear` category covers anything worn on the head. Every such variant
+carries at least the bare `headwear` tag, so `!headwear` removes all of them.
+A value comes on top of it when the shape is unmistakable:
 
-- `hat` for a brimmed or general hat, including a winter or sun hat.
-- `cap` for a baseball or flat cap.
-- `beanie` for a knitted, close-fitting hat.
-- `turban` and `hijab` for wrapped headwear.
-- `headband` for a band only, with the hair still visible.
+- `hat` for a crown with a brim all the way around, such as a sun hat or a
+  fedora.
+- `cap` for a brim at the front only, such as a baseball or a flat cap.
+- `beanie` for a soft, close-fitting hat without a brim.
+- `turban` for wrapped cloth that covers the hair and leaves the neck free.
+- `headscarf` for wrapped cloth that covers the hair together with the neck or
+  the shoulders.
+- `headband` for a band alone, with the hair still visible.
+
+The values name the shape of the garment, not the person wearing it. That is
+why the two wrapped forms are told apart by the neck, and why the tag says
+`headscarf` rather than naming a particular garment: the drawing shows cloth,
+and the same cloth means different things to different people.
 
 ### Facial hair
 
-The `facialHair` category covers beards, mustaches, and sideburns. A full beard
-with a mustache can carry both `beard` and `mustache`.
+The `facialHair` category covers beards, mustaches, and sideburns. Like
+`animation` it is a bare category without values: a variant showing any facial
+hair carries the plain `facialHair` tag, and a clean-shaven one carries none.
 
-- `beard` for hair across the jaw and chin.
-- `mustache` for the upper lip only.
-- `goatee` for a chin tuft, with or without a connected mustache.
-- `stubble` for a short flecked shadow, not a full beard.
-- `sideburns` for side-of-face hair only.
+- `['!facialHair']` leaves facial hair out.
+- `['facialHair']` drops the untagged variants of the components that use the
+  category. Whether such a component is drawn at all is still up to its
+  probability.
+
+Where stubble ends and a beard begins is a call that would land differently from
+one style to the next, and what the filter is good for is saying yes or no to
+facial hair. For a specific beard, set the style's facial hair variant option.
 
 ### Eyewear
 

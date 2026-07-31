@@ -74,10 +74,17 @@ nothing.
 
 ## The tags DiceBear offers
 
+::: warning Only the animation tag ships today
+
+The character categories are not set on any style yet. A filter like
+`mood:positive` or `hairLength:long` has no effect for now.
+
+:::
+
 Right now, DiceBear's own styles carry tags in one place: the opt-in animation
 of the animated styles. An upcoming release adds a shared set for the character
-styles with mood, hair length, hair style, headwear, facial hair, eyewear, and
-accessory. Those definitions already live in
+styles with mood, hair length, headwear, facial hair, eyewear, and accessory.
+Those definitions already live in
 [How DiceBear tags variants](/guides/how-dicebear-tags-variants/).
 
 | Category    | Values                    | Found on                                    |

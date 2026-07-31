@@ -38,8 +38,16 @@ use.
 
 ## Filter by tags
 
+::: warning The character tags are not available yet
+
+No DiceBear style carries tags such as `hairLength` or `facialHair` today, so
+the filters in this section have no effect for now. Until they ship, set the
+per-feature options described above.
+
+:::
+
 An upcoming release tags the character styles' variants with descriptive labels
-such as `facialHair:beard` or `hairLength:long`. The
+such as `hairLength:long` or `headwear:headscarf`. The
 [`tags`](/guides/filter-variants-with-tags/) option keeps only the variants you
 choose, which will often be the quickest way to lean on the features that read
 as more masculine or feminine. For example, keep long hair and leave out facial
@@ -73,20 +81,21 @@ shared.
 
 ## Why there is no dedicated gender option
 
-Most DiceBear styles draw a face or head, not a whole body. A face shows very
-few features that clearly read as male or female, so there is no dependable set
-of traits a `male`/`female` switch could flip. The closest thing to an exception
-is facial hair, which grows mainly on men. Even that is a weak signal: many men
-are clean-shaven by choice, culture, or religion, and in many populations men
-naturally grow little facial hair, so a missing beard tells you nothing.
+Every DiceBear option names something that is drawn: a hairstyle, a beard,
+glasses, a hat. None of those features belongs to a gender. Whether long hair, a
+headscarf, or earrings reads as masculine or feminine is a matter of convention,
+and conventions differ by culture and by personal taste.
 
-Beyond facial hair, what reads as "masculine" or "feminine" depends on culture
-and personal taste. A hairstyle, a piece of clothing, or an accessory can mean
-something different depending on where and who you are. A built-in switch would
-have to settle on one fixed interpretation for everyone, and that would not fit
-every project or audience.
+A `male`/`female` switch would have to settle on one such convention for
+everyone. DiceBear is used all over the world, in every kind of project, so a
+fixed mapping would be wrong for a good part of that audience, and the library
+would be the one deciding what a man or a woman looks like. That call belongs to
+your project, not to us.
 
-DiceBear is used all over the world, in every kind of project, so it makes no
-assumptions about what a male or female avatar should look like. No option is
-tied to a gender unless the style's designer deliberately built it that way. The
-options describe features such as hair or glasses, not a gender.
+Facial hair is the feature that comes closest to a signal, and it still says
+little. People grow a beard or shave it for reasons of taste, culture, and
+religion, so its presence describes the drawing rather than the person.
+
+No option is tied to a gender unless the style's designer deliberately built it
+that way. The options describe features such as hair or glasses, and what you
+make of them is up to you.

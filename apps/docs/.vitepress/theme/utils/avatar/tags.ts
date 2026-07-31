@@ -2,14 +2,14 @@ import { capitalCase } from 'change-case';
 
 /**
  * A single parsed tag of the `category:value` grammar used by the core's
- * `tags` variant filter (e.g. `hairStyle:braids`). Tokens without a colon are
+ * `tags` variant filter (e.g. `hairLength:long`). Tokens without a colon are
  * treated as a bare category and carry an empty `value`.
  */
 export type ParsedTag = {
   token: string;
   category: string;
   value: string;
-  /** Display label for the value, computed once (e.g. `braids` -> `Braids`). */
+  /** Display label for the value, computed once (e.g. `long` -> `Long`). */
   label: string;
 };
 
@@ -33,7 +33,7 @@ export function parseTag(token: string): ParsedTag {
 /**
  * Normalizes a raw `tags` option to a token list. The option accepts a single
  * string as well as a list (schema `anyOf: [tagFilter, array]`), and the core
- * treats `'gender:male'` and `['gender:male']` alike — so must every reader
+ * treats `'mood:positive'` and `['mood:positive']` alike — so must every reader
  * here, or a string-valued filter shows up as "no filter" in the UI while the
  * rendered avatar is filtered, and the first click overwrites it.
  */
