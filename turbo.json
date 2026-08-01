@@ -9,6 +9,9 @@
       "dependsOn": ["build"],
       "cache": false
     },
+    "type-check": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "dependsOn": ["^build"],
       "persistent": true,

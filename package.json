@@ -11,11 +11,13 @@
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
+    "type-check": "turbo run type-check",
     "test:scripts": "node --test 'tests/**/*.test.js'",
     "fixtures:parity": "node tests/fixtures/parity/generate.mjs",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --cache --fix",
-    "prettier": "prettier --write \"{src,apps}/**/*.{js,ts,vue,json,md}\" \"*.md\""
+    "prettier": "prettier --write \"{src,apps}/**/*.{js,ts,vue,json,md}\" \"*.md\"",
+    "prettier:check": "prettier --check \"{src,apps}/**/*.{js,ts,vue,json,md}\" \"*.md\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

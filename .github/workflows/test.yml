@@ -28,6 +28,98 @@ jobs:
       - run: npx turbo run build --filter='!@dicebear/docs' --filter='!@dicebear/editor'
       - run: npx turbo run test
 
+  # Style only, so a failure shows up as its own red check without failing the
+  # run. Kept apart from type-check-js, which does gate: ESLint runs no
+  # type-aware rules here and therefore needs no build.
+  lint-js:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run lint
+
+  # The two Vue apps are excluded from the build above, so their `.vue` files
+  # are only ever type-checked here. Result does not vary by Node version.
+  type-check-js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npx turbo run type-check
+
+  # Formatting across all six languages, gathered into one job. Like lint-js it
+  # only reports: a violation is its own red check, but the run stays green, so
+  # a stray blank line cannot block a release or a deploy through the
+  # workflow_call above. Every check carries `!cancelled()` so one pass reports
+  # all of them instead of stopping at the first. None of these results vary by
+  # language version, which is why they no longer sit in the matrix jobs below.
+  format:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Use Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Use Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'
+      - name: Use Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install JS dependencies
+        if: ${{ !cancelled() }}
+        run: npm ci
+      # Ruff comes from the `dev` extra so its version stays tied to the
+      # pyproject, matching what test-python resolves.
+      - name: Install Ruff
+        if: ${{ !cancelled() }}
+        working-directory: src/python/core
+        run: pip install -e ".[dev]"
+
+      - name: Prettier
+        if: ${{ !cancelled() }}
+        run: npm run prettier:check
+      - name: Ruff
+        if: ${{ !cancelled() }}
+        working-directory: src/python/core
+        run: ruff format --check .
+      - name: Rustfmt
+        if: ${{ !cancelled() }}
+        working-directory: src/rust/core
+        run: cargo fmt --check
+      - name: Gofmt
+        if: ${{ !cancelled() }}
+        working-directory: src/go/core
+        run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+      - name: Dart format
+        if: ${{ !cancelled() }}
+        working-directory: src/dart/core
+        run: dart format --output=none --set-exit-if-changed .
+
   test-php:
     runs-on: ubuntu-latest
 
@@ -70,9 +162,7 @@ jobs:
         run: pip install -e ".[dev]"
       - name: Run Ruff
         working-directory: src/python/core
-        run: |
-          ruff check .
-          ruff format --check .
+        run: ruff check .
       - name: Run mypy
         working-directory: src/python/core
         run: mypy src
@@ -88,10 +178,7 @@ jobs:
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy, rustfmt
-      - name: Check formatting
-        working-directory: src/rust/core
-        run: cargo fmt --check
+          components: clippy
       - name: Run Clippy
         working-directory: src/rust/core
         run: cargo clippy --all-targets --all-features -- -D warnings
@@ -112,9 +199,6 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
-      - name: Check formatting
-        working-directory: src/go/core
-        run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
       - name: Run go vet
         working-directory: src/go/core
         run: go vet ./...
@@ -148,9 +232,6 @@ jobs:
           dart run tool/generate_web_fixtures.dart
           dart format test/parity/embedded_fixtures.dart
           git diff --exit-code test/parity/embedded_fixtures.dart
-      - name: Check formatting
-        working-directory: src/dart/core
-        run: dart format --output=none --set-exit-if-changed .
       - name: Analyze
         working-directory: src/dart/core
         run: dart analyze --fatal-infos
