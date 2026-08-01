@@ -63,7 +63,7 @@ const styleCategories: Record<string, StyleCategory> = {
   sprouts: 'Characters',
   squircles: 'Minimalist',
   stripes: 'Minimalist',
-  thumbs: 'Minimalist',
+  thumbs: 'Characters',
   'toon-head': 'Characters',
   triangles: 'Minimalist',
   waves: 'Minimalist',
