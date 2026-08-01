@@ -58,12 +58,12 @@ jobs:
       - run: npm ci
       - run: npx turbo run type-check
 
-  # Formatting across all six languages, gathered into one job. Like lint-js it
+  # Every language that ships a formatter, gathered into one job. Like lint-js it
   # only reports: a violation is its own red check, but the run stays green, so
   # a stray blank line cannot block a release or a deploy through the
   # workflow_call above. Every check carries `!cancelled()` so one pass reports
   # all of them instead of stopping at the first. None of these results vary by
-  # language version, which is why they no longer sit in the matrix jobs below.
+  # the SDK versions the matrix jobs below sweep, which is why they moved here.
   format:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -99,6 +99,14 @@ jobs:
         if: ${{ !cancelled() }}
         working-directory: src/python/core
         run: pip install -e ".[dev]"
+      # dart format takes the language version from .dart_tool/package_config.json.
+      # Without it there is no pubspec to read, so it falls back to the installed
+      # SDK and rewrites the package in the tall style Dart 3.7 introduced instead
+      # of the short style that `sdk: ^3.4.0` selects.
+      - name: Resolve Dart dependencies
+        if: ${{ !cancelled() }}
+        working-directory: src/dart/core
+        run: dart pub get
 
       - name: Prettier
         if: ${{ !cancelled() }}
