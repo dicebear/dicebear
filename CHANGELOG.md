@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Styles:** Bumped `@dicebear/styles` to `10.3.0`. The release adds thirteen
+  styles: `blobs`, `clay`, `constellation`, `critters`, `landscape`, `loops`,
+  `moods`, `pixelbot`, `planets`, `sprouts`, `squircles`, `waves`, and `weave`.
+  It also gives `shapes`, `glass`, `thumbs`, `initial-face`, and every new style
+  except `weave` an opt-in `animation` component, which stays off until the
+  `animationVariant` or `tags` render option turns it on.
+
 ## [10.4.0-rc.2] - 2026-07-31
 
 ### Fixed
