@@ -1,6 +1,6 @@
 import { XMLParser } from 'fast-xml-parser';
 import XMLBuilder from 'fast-xml-builder';
-import { Metadata } from '../types';
+import { Metadata } from '../types.js';
 
 const MAX_SIZE = 2048;
 const DEFAULT_SIZE = 512;

@@ -1,5 +1,5 @@
 import type { Style } from '@dicebear/core';
-import yargs from 'yargs';
+import type { Argv } from 'yargs';
 import chalk from 'chalk';
 
 import { getStyleCommandOptions } from './getStyleCommandOptions.js';
@@ -11,7 +11,7 @@ import { isOptimizeMode } from './optimizeCommandOptions.js';
  * wired up to render avatars for the given style.
  */
 export function addStyleCommand(
-  cli: yargs.Argv<Record<string, unknown>>,
+  cli: Argv<Record<string, unknown>>,
   name: string,
   style: Style,
 ) {
