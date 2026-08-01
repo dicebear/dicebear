@@ -1,10 +1,29 @@
 import type { StyleDefinition } from '@dicebear/core';
-import { isAlias, resolveBase } from './combinationCount';
+import {
+  isAlias,
+  resolveBase,
+  type ColorGroup,
+  type ComponentAlias,
+  type ComponentBase,
+  type Variant,
+} from './combinationCount';
 import { toTagTokens } from './tags';
 
-type MutableDefinition = StyleDefinition & {
-  components?: Record<string, any>;
-  colors?: Record<string, any>;
+// `structuredClone` hands us a private copy of the definition, so the `readonly`
+// modifiers the core types carry no longer protect anything. These mirrors drop
+// them on exactly the fields this module writes to.
+type MutableComponentBase = Omit<ComponentBase, 'probability' | 'variants'> & {
+  probability?: number;
+  variants: Record<string, Variant>;
+};
+
+type MutableComponent = MutableComponentBase | ComponentAlias;
+
+type MutableColorGroup = Omit<ColorGroup, 'values'> & { values: string[] };
+
+type MutableDefinition = Omit<StyleDefinition, 'components' | 'colors'> & {
+  components?: Record<string, MutableComponent>;
+  colors?: Record<string, MutableColorGroup>;
 };
 
 /**
@@ -139,7 +158,7 @@ function applyVariantNarrowing(
     return base.name;
   }
 
-  const narrowed: Record<string, any> = {};
+  const narrowed: Record<string, Variant> = {};
 
   for (const [name, weight] of active) {
     const original = base.component.variants![name];
@@ -255,19 +274,14 @@ function applyTagFilter(
     const variantList = Object.values(component.variants);
     const required = bareList.filter((category) =>
       variantList.some((variant) =>
-        variantHasTag(
-          Array.isArray(variant.tags) ? variant.tags : [],
-          category,
-        ),
+        variantHasTag(variant.tags ?? [], category),
       ),
     );
 
-    const narrowed: Record<string, any> = {};
+    const narrowed: Record<string, Variant> = {};
 
     for (const [variantName, variant] of Object.entries(component.variants)) {
-      const tags: readonly string[] = Array.isArray(variant.tags)
-        ? variant.tags
-        : [];
+      const tags = variant.tags ?? [];
 
       const allowed =
         allowGroups.every(

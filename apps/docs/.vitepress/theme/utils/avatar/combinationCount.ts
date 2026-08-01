@@ -5,12 +5,12 @@ import type { AvatarUniqueCount } from '@theme/types';
 // the core only re-exports the root type, but we need to address the nested
 // pieces directly.
 type Components = NonNullable<StyleDefinition['components']>;
-type Component = Components[string];
-type ComponentBase = Extract<Component, { variants: unknown }>;
-type ComponentAlias = Extract<Component, { extends: string }>;
-type Variant = ComponentBase['variants'][string];
+export type Component = Components[string];
+export type ComponentBase = Extract<Component, { variants: unknown }>;
+export type ComponentAlias = Extract<Component, { extends: string }>;
+export type Variant = ComponentBase['variants'][string];
 type Range = NonNullable<ComponentBase['rotate']>;
-type ColorGroup = NonNullable<StyleDefinition['colors']>[string];
+export type ColorGroup = NonNullable<StyleDefinition['colors']>[string];
 
 export function isAlias(
   component: Component | undefined,

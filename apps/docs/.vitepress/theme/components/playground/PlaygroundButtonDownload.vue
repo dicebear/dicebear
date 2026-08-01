@@ -12,6 +12,7 @@ import PlaygroundBatchDownload from './PlaygroundBatchDownload.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
+import type { MenuItem } from 'primevue/menuitem';
 import { DIALOG_PREVIEW_AVATAR_SIZE, DOWNLOAD_AVATAR_SIZE } from './constants';
 
 const props = defineProps<{
@@ -68,20 +69,30 @@ function openBatch() {
 // For built-in styles the API serves PNG/JPEG/WebP/AVIF; for custom styles we
 // can only produce SVGs locally — so the format choices collapse to SVG +
 // Batch. Batch stays available in both modes via a separator at the bottom.
-const builtInMenuItems = [
+// `iconComponent` rather than PrimeVue's `icon`, which is typed as a CSS class
+// name — the `#item` slot below renders the Lucide component directly.
+const builtInMenuItems: MenuItem[] = [
   { label: 'SVG', command: () => downloadSvg() },
   { label: 'PNG', command: () => downloadBinary('png') },
   { label: 'JPEG', command: () => downloadBinary('jpg') },
   { label: 'WebP', command: () => downloadBinary('webp') },
   { label: 'AVIF', command: () => downloadBinary('avif') },
   { separator: true },
-  { label: 'Batch download…', icon: Archive, command: () => openBatch() },
+  {
+    label: 'Batch download…',
+    iconComponent: Archive,
+    command: () => openBatch(),
+  },
 ];
 
-const customMenuItems = [
+const customMenuItems: MenuItem[] = [
   { label: 'SVG', command: () => downloadSvg() },
   { separator: true },
-  { label: 'Batch download…', icon: Archive, command: () => openBatch() },
+  {
+    label: 'Batch download…',
+    iconComponent: Archive,
+    command: () => openBatch(),
+  },
 ];
 
 function onDownloadClick(e: Event) {
@@ -102,7 +113,11 @@ function onDownloadClick(e: Event) {
   >
     <template #item="{ item, props }">
       <a v-bind="props.action" class="pg-download-menu-item">
-        <component :is="item.icon" v-if="item.icon" :size="14" />
+        <component
+          :is="item.iconComponent"
+          v-if="item.iconComponent"
+          :size="14"
+        />
         <span>{{ item.label }}</span>
       </a>
     </template>

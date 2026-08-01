@@ -132,17 +132,18 @@ const activeChannels = computed<ChannelDef[]>(() => {
   return hsvChannels;
 });
 
+function roundChannels(
+  channels: Record<string, number>,
+): Record<string, number> {
+  return Object.fromEntries(
+    Object.entries(channels).map(([key, value]) => [key, Math.round(value)]),
+  );
+}
+
 const activeValues = computed<Record<string, number>>(() => {
-  if (activeSpace.value === 'RGB') {
-    const { r, g, b } = rgb.value;
-    return { r: Math.round(r), g: Math.round(g), b: Math.round(b) };
-  }
-  if (activeSpace.value === 'HSL') {
-    const { h, s, l } = hsl.value;
-    return { h: Math.round(h), s: Math.round(s), l: Math.round(l) };
-  }
-  const { h, s, v } = props.hsv;
-  return { h: Math.round(h), s: Math.round(s), v: Math.round(v) };
+  if (activeSpace.value === 'RGB') return roundChannels(rgb.value);
+  if (activeSpace.value === 'HSL') return roundChannels(hsl.value);
+  return roundChannels(props.hsv);
 });
 
 function updateActiveChannel(key: string, value: number) {
