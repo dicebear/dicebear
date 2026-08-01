@@ -2,12 +2,14 @@
 import {
   productLinks,
   resourceLinks,
+  versionLinks,
   legalLinks,
 } from '../../config/footer-links';
 
 const columns = [
   { title: 'Explore', links: productLinks },
   { title: 'Resources', links: resourceLinks },
+  { title: 'Versions', links: versionLinks },
   { title: 'Legal', links: legalLinks },
 ] as const;
 </script>

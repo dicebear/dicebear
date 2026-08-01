@@ -321,22 +321,31 @@ export default defineConfig<ThemeOptions>({
     search: {
       provider: 'local',
     },
+    // The nav serves the developer audience of this site. The Editor targets
+    // end users looking for a single avatar, so it lives on the home page and
+    // in the footer instead of taking a slot on every docs page. The version
+    // switcher moved to the footer as well (see theme/config/footer-links.ts).
     nav: [
       { text: 'Playground', link: '/playground/', activeMatch: '^/playground' },
+      {
+        text: 'Styles',
+        link: '/styles/',
+        activeMatch: '^/styles',
+      },
+      {
+        text: 'Animated',
+        link: '/animated-avatars/',
+        activeMatch: '^/animated-avatars',
+      },
       {
         text: 'Docs',
         link: '/introduction/',
         activeMatch: '^/(introduction|how-to-use|guides|specification)',
       },
       {
-        text: 'Styles',
-        link: '/styles/',
-        activeMatch: '^/styles',
-      },
-      { text: 'Editor', link: 'https://editor.dicebear.com' },
-      {
-        text: '10.x',
-        items: [{ text: '9.x', link: 'https://v9.dicebear.com' }],
+        text: 'About',
+        link: '/why-dicebear/',
+        activeMatch: '^/why-dicebear',
       },
     ],
     outline: [2, 2],
