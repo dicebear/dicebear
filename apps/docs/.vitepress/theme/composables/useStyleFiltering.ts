@@ -4,10 +4,11 @@ import type { CustomStyleEntry } from '@theme/types';
 import {
   CUSTOM_CATEGORY,
   categoryOrder,
-  previewSeeds,
+  exampleSeeds,
   getStyleCategory,
   normalizeLicense,
 } from '@theme/config/styleCategories';
+import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 
 interface StyleMeta {
   animated?: boolean;
@@ -41,7 +42,9 @@ export function useStyleFiltering(
           category: getStyleCategory(kebabCase(styleName)),
           animated: style.animated ?? false,
           isCustom: false,
-          avatars: previewSeeds.map((seed) => ({
+          // Four seeds picked for this style, so no two avatars on a card look
+          // alike and none of them repeats what the style page opens with.
+          avatars: getStyleCardSeeds(kebabCase(styleName)).map((seed) => ({
             seed,
           })),
         };
@@ -62,7 +65,9 @@ export function useStyleFiltering(
       category: CUSTOM_CATEGORY,
       animated: false,
       isCustom: true,
-      avatars: previewSeeds.map((seed) => ({
+      // A style someone uploaded has no generated row, so these cards fall back
+      // to the shared example seeds.
+      avatars: exampleSeeds.map((seed) => ({
         seed,
       })),
     }));

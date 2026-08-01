@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
+import { exampleSeeds } from '@theme/config/styleCategories';
 import { UiAvatar } from '../ui';
 import { ArrowRight } from '@lucide/vue';
 
@@ -19,7 +20,7 @@ const props = withDefaults(
     allStylesLabel?: string;
   }>(),
   {
-    seeds: () => ['Felix', 'Emma', 'Leo', 'Mia'],
+    seeds: () => [...exampleSeeds],
     avatarSize: 48,
     allStylesLink: '/styles/',
     allStylesLabel: undefined,

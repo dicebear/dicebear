@@ -70,7 +70,16 @@ const styleCategories: Record<string, StyleCategory> = {
   weave: 'Minimalist',
 };
 
-export const previewSeeds = ['Felix', 'Aneka', 'Milo', 'Luna'];
+/**
+ * The seeds to reach for wherever the docs need an example avatar and the style
+ * is not the point: the seed option's own preview, a style picker's swatch, the
+ * code samples. One list rather than a different name invented at each call
+ * site, so a reader who moves between pages keeps seeing the same faces.
+ *
+ * Rows that showcase a style pick their own seeds instead, per style, in
+ * previewRowSeeds.ts.
+ */
+export const exampleSeeds = ['Felix', 'Aneka', 'Milo', 'Luna'];
 
 export function getStyleCategory(name: string): StyleCategory {
   const category = styleCategories[name];

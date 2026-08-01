@@ -36,7 +36,7 @@ import { createRequire } from 'node:module';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import avatarStyles, { definitionsDir } from './config/avatarStyles.ts';
-import { previewSeeds } from './theme/config/styleCategories.ts';
+import { getOgTileSeeds } from './theme/config/previewRowSeeds.ts';
 import { escapeHtml } from './theme/utils/escape.ts';
 import { formatLicenseName } from './theme/utils/format.ts';
 import { attributionKind, isPublicDomain } from './theme/utils/license.ts';
@@ -80,30 +80,6 @@ const SUBTITLE_BASELINE = TITLE_BASELINE + 50;
 const SOURCE_BASELINE = HEIGHT - MARGIN;
 const CREDIT_BASELINE = SOURCE_BASELINE - 30;
 const RULE_Y = CREDIT_BASELINE - 40;
-
-/**
- * Candidate seeds, walked in order. Fixed and ordered so a card only changes
- * when the style definition does. Opens with `previewSeeds`, which the styles
- * index grid uses. The style *detail* page a card links to has its own set in
- * StylePreview.vue, so the two do not show the same avatars.
- */
-const SEED_POOL = [
-  ...previewSeeds,
-  'Sage',
-  'Jasper',
-  'Nova',
-  'Kai',
-  'Iris',
-  'Odin',
-  'Wren',
-  'Juno',
-  'Maya',
-  'Otis',
-  'Cleo',
-  'Rex',
-  'Vera',
-  'Pixel',
-];
 
 /**
  * What shows through a transparent avatar. No avatar is ever given a
@@ -292,55 +268,25 @@ async function renderTile(styleName: string, seed: string): Promise<string> {
 }
 
 /**
- * Reduces an avatar to what a viewer actually distinguishes on a card:
- * component variants, geometry and text, but not color.
+ * Renders the five tiles a style's card carries.
  *
- * Color has to go, or `icons` slips through: two seeds there can select the
- * same pictogram and differ only in hue, which looks like the same tile
- * printed twice. Text has to stay, or `initials` collapses, because every
- * seed picks the same `letters-double` variant and differs only in the
- * letters drawn.
+ * Which seeds those are is decided ahead of time by
+ * scripts/generate-preview-seeds.mjs, which searches each style's palette for a
+ * row whose tiles stay distinct in both artwork and color. Picking here instead
+ * meant filtering candidates on a fingerprint with color stripped, which let
+ * five differently drawn robots through in five shades of the same gold.
  */
-function fingerprint(svg: string): string {
-  return svg
-    .replace(/-[0-9a-f]{8}\b/g, '') // per-avatar id hash
-    .replace(/(?:fill|stroke)="[^"]*"/g, '')
-    .replace(/#[0-9a-fA-F]{3,8}\b/g, '');
-}
+async function renderTiles(styleName: string): Promise<string[]> {
+  const seeds = getOgTileSeeds(styleName);
 
-/**
- * Renders a style's tiles, keeping only visibly distinct artwork. A style
- * with few variants (`icons` is the clearest case) otherwise maps neighboring
- * seeds onto the same drawing, and two identical tiles side by
- * side read as a rendering bug, not a showcase.
- */
-async function pickTiles(styleName: string): Promise<string[]> {
-  const style = await loadStyle(styleName);
-  const distinct = new Map<string, string>();
-
-  for (const seed of SEED_POOL) {
-    if (distinct.size === TILE_COUNT) {
-      break;
-    }
-
-    const svg = new Avatar(style, { seed, size: TILE_SIZE }).toString();
-    const key = fingerprint(svg);
-
-    if (!distinct.has(key)) {
-      distinct.set(key, svg);
-    }
+  if (seeds.length !== TILE_COUNT) {
+    throw new Error(
+      `Style "${styleName}" has ${seeds.length} social card seeds, expected ${TILE_COUNT}. ` +
+        'OG_TILES in scripts/generate-preview-seeds.mjs and TILE_COUNT here have to agree.',
+    );
   }
 
-  const tiles = [...distinct.values()];
-
-  // A style offering fewer distinct avatars than there are tiles has nothing
-  // further to show, so cycle what it has instead of leaving a gap. No style
-  // in the current catalog reaches this.
-  while (tiles.length < TILE_COUNT) {
-    tiles.push(tiles[tiles.length % distinct.size]);
-  }
-
-  return tiles;
+  return Promise.all(seeds.map((seed) => renderTile(styleName, seed)));
 }
 
 /**
@@ -461,8 +407,8 @@ function buildCard({
     .map((rawSvg, index) => {
       const x = MARGIN + index * (TILE_SIZE + TILE_GAP);
 
-      // Applied here, not where the avatars are rendered, because both
-      // pickTiles() and renderTile() feed this. `toPng` would do it for us,
+      // Applied here, not where the avatars are rendered, because both the
+      // per-style rows and the default card feed this. `toPng` would do it for us,
       // but the cards drive resvg directly. Without it, styles whose masks rely
       // on `mask-type:alpha` lose detail: a bearded Lorelei renders with no
       // mouth at all.
@@ -696,7 +642,7 @@ export async function generateOgImages(
     cards.push({
       name: styleName,
       svg: buildCard({
-        tiles: await pickTiles(styleName),
+        tiles: await renderTiles(styleName),
         logo,
         normalizeMaskType,
         measure,

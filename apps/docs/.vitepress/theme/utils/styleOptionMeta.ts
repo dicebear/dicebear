@@ -1,3 +1,5 @@
+import { exampleSeeds } from '@theme/config/styleCategories';
+
 /**
  * Returns a curated description for a style option, or undefined if none exists.
  * Used by StyleOptionsCard to render help text under each option.
@@ -82,7 +84,7 @@ export function getOptionExamples(
   if (name.match(/ColorFill$/)) return ['solid', 'linear', 'radial'];
   if (name.match(/ColorFillStops$/)) return [2, 3, 4, 5];
   if (name.match(/ColorAngle$/)) return [0, 90, 180, 270];
-  if (name === 'seed') return ['Felix', 'Aneka', 'Mia', 'James'];
+  if (name === 'seed') return [...exampleSeeds];
   if (name === 'flip') return ['none', 'horizontal', 'vertical', 'both'];
   if (name === 'rotate') return [0, 90, 180, 270];
   if (name === 'scale') return [0.5, 0.75, 1, 1.5];

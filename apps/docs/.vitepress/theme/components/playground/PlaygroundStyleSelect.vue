@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia';
 import { Plus, Trash2 } from '@lucide/vue';
 import ChevronRightIcon from '@primevue/icons/chevronright';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
-import { CUSTOM_CATEGORY } from '@theme/config/styleCategories';
+import { CUSTOM_CATEGORY, exampleSeeds } from '@theme/config/styleCategories';
 import useStore from '@theme/stores/playground';
 import { ThemeOptions } from '@theme/types';
 import { UiAvatar } from '../ui';
@@ -86,7 +86,7 @@ const currentDisplayName = computed(() => {
       <UiAvatar
         :size="40"
         :style-name="avatarStyleName"
-        :style-options="{ seed: 'JD' }"
+        :style-options="{ seed: exampleSeeds[0] }"
         mode="library"
       />
     </span>

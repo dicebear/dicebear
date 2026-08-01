@@ -1,3 +1,5 @@
+import { exampleSeeds } from '@theme/config/styleCategories';
+
 /**
  * Build preview options for general (non-component) avatar properties —
  * seed, backgroundType, backgroundRotation, and generic values.
@@ -29,8 +31,10 @@ export function getAvatarPropertyPreviewOptions(
     };
   }
 
+  // Every tile in the row shows the same avatar so the option being previewed is
+  // the only thing that changes between them.
   return {
-    seed: 'JD',
+    seed: exampleSeeds[0],
     [propertyName]:
       typeof propertyValue === 'string' ? [propertyValue] : propertyValue,
   };

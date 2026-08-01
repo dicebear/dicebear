@@ -2,6 +2,7 @@
 import { computed, inject } from 'vue';
 import { getAvatarPropertyPreviewOptions } from '@theme/utils/avatar/preview';
 import { padColors, resolveColors } from '@theme/utils/avatar/colors';
+import { exampleSeeds } from '@theme/config/styleCategories';
 import { UiAvatar } from '../ui';
 import {
   componentNamesKey,
@@ -134,7 +135,7 @@ const generalOptions = computed(() => {
   } else {
     const colorKey = `${t.color}Color`;
     const fillKey = `${t.color}ColorFill`;
-    opts = { seed: 'JD' };
+    opts = { seed: exampleSeeds[0] };
 
     if (t.type === 'color') {
       opts[colorKey] = [props.value];

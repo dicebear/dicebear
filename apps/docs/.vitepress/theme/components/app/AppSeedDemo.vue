@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { kebabCase, camelCase, capitalCase } from 'change-case';
 import { track } from '@theme/utils/track';
+import { exampleSeeds } from '@theme/config/styleCategories';
 import {
   UiHeadline,
   UiDescription,
@@ -22,13 +23,7 @@ import AppSeedDemoPreview from './AppSeedDemoPreview.vue';
 
 const DEFAULT_STYLE = 'lorelei';
 
-const RANDOM_SEEDS: readonly string[] = [
-  'Felix',
-  'Aneka',
-  'Milo',
-  'Luna',
-  'Sophie',
-];
+const RANDOM_SEEDS: readonly string[] = [...exampleSeeds, 'Sophie'];
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);

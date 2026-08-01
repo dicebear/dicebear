@@ -6,6 +6,7 @@ import { ArrowRight, ArrowLeft, Shapes } from '@lucide/vue';
 import Button from 'primevue/button';
 import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
+import { exampleSeeds } from '@theme/config/styleCategories';
 import { UiAvatar, UiContainer, UiSection, UiSectionHeader } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';
@@ -15,11 +16,10 @@ const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { once: false, threshold: 0.1 });
 const avatarStyleList = useAvatarStyleList();
 
+// A pool rather than a row: one seed is drawn per style, so this only needs
+// enough names that the carousel does not repeat a face, not a curated order.
 const SHOWCASE_SEEDS = [
-  'Felix',
-  'Aneka',
-  'Milo',
-  'Luna',
+  ...exampleSeeds,
   'Max',
   'Sophie',
   'Leo',

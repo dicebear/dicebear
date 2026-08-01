@@ -1,4 +1,5 @@
 import { Style, Avatar, type StyleDefinition } from '@dicebear/core';
+import { exampleSeeds } from '@theme/config/styleCategories';
 
 export class ComponentPreview {
   #style: Style;
@@ -66,7 +67,7 @@ export class ComponentPreview {
     // `initials` text content in the initials style) resolve, otherwise
     // text-driven colors render onto an empty <text> and stay invisible.
     const previewOptions: Record<string, unknown> = {
-      seed: 'JD',
+      seed: exampleSeeds[0],
       backgroundColor: [],
       [`${componentName}Probability`]: 100,
     };

@@ -5,6 +5,7 @@ import { capitalCase } from 'change-case';
 import { ArrowRight, Shapes } from '@lucide/vue';
 import Button from 'primevue/button';
 import type { ThemeOptions } from '@theme/types';
+import { getPreviewRowSeeds } from '@theme/config/previewRowSeeds';
 import { UiAvatar, UiContainer, UiSection, UiSectionHeader } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
@@ -13,26 +14,17 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.1 });
 
 const { theme } = useData<ThemeOptions>();
 
-// Seeds cycled through the grid for visual variety, reused from the style
-// preview row where they were fingerprinted for distinct results.
-const SEEDS = [
-  'Jasper',
-  'Aiden',
-  'Nadia',
-  'Isla',
-  'Kai',
-  'Bianca',
-  'Riley',
-  'Dante',
-];
-
 const animatedStyles = computed(() =>
   Object.entries(theme.value.avatarStyles)
     .filter(([, style]) => style.animated)
+    // Each tile draws the seed its own style's preview row put in this slot, so
+    // the grid varies down the column while every avatar still comes from a row
+    // searched for that style. Walking the slot by index rather than fixing it
+    // keeps neighboring tiles off the same letter.
     .map(([slug], index) => ({
       slug,
       displayName: capitalCase(slug),
-      seed: SEEDS[index % SEEDS.length],
+      seed: getPreviewRowSeeds(slug)[index % 8],
     })),
 );
 </script>

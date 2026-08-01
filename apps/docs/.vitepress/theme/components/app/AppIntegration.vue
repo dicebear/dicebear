@@ -28,7 +28,7 @@ import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const style = new Style(lorelei);
 const svg = new Avatar(style, {
-  seed: 'Mia',
+  seed: 'Felix',
 }).toString();`,
   php: `<?php
 use Composer\\InstalledVersions;
@@ -41,7 +41,7 @@ $style = Style::fromJson(
 );
 
 $svg = (string) new Avatar($style, [
-  'seed' => 'Mia',
+  'seed' => 'Felix',
 ]);`,
   python: `from importlib.resources import files
 
@@ -51,27 +51,27 @@ style = Style.from_json(
     files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
 )
 
-svg = Avatar(style, {"seed": "Mia"}).to_string()`,
+svg = Avatar(style, {"seed": "Felix"}).to_string()`,
   rust: `use dicebear_core::{Avatar, Style};
 use serde_json::json;
 
 let style = Style::from_str(dicebear_styles::LORELEI)?;
-let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
+let svg = Avatar::new(&style, json!({ "seed": "Felix" }))?.to_svg();`,
   go: `import (
 	dicebear "github.com/dicebear/dicebear-go/v10"
 	"github.com/dicebear/styles/v10"
 )
 
 style, _ := dicebear.NewStyle([]byte(styles.Lorelei))
-avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Mia"})
+avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Felix"})
 svg := avatar.SVG()`,
   dart: `import 'package:dicebear_core/dicebear_core.dart';
 import 'package:dicebear_styles/lorelei.dart';
 
 final style = Style.parse(lorelei);
-final svg = Avatar(style, {'seed': 'Mia'}).svg;`,
-  api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Mia`,
-  cli: `npx dicebear lorelei --seed "Mia" --format svg`,
+final svg = Avatar(style, {'seed': 'Felix'}).svg;`,
+  api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Felix`,
+  cli: `npx dicebear lorelei --seed "Felix" --format svg`,
 };
 </script>
 
