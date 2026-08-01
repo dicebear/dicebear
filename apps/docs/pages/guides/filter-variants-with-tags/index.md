@@ -10,14 +10,14 @@ description: >
 
 Avatar styles can describe their variants with **tags**. A tag is a short label
 like `animation` or `hairLength:long` that says something about a variant. Tags
-only describe, they never change the artwork. They let you narrow the pool of variants an
-avatar is drawn from, and they work the same way across every style that
-carries them.
+only describe, they never change the artwork. They let you narrow the pool of
+variants an avatar is drawn from, and they work the same way across every style
+that carries them.
 
 ## Filter with the `tags` option
 
-`tags` is a [core option](/guides/core-options/), so it works
-everywhere the avatar is generated. Pass the tags you want to keep:
+`tags` is a [core option](/guides/core-options/), so it works everywhere the
+avatar is generated. Pass the tags you want to keep:
 
 ```js
 import { Style, Avatar } from '@dicebear/core';
@@ -42,12 +42,12 @@ https://api.dicebear.com/10.x/planets/svg?seed=John&tags=animation
 A tag token is `category` or `category:value`, optionally prefixed with `!`.
 Each token narrows a component's pool of variants:
 
-| Token            | Effect                                                                                                                      |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `category:value` | Keeps variants that carry this tag, plus variants with no tag in the category. Several values of one category act as "or".   |
-| `category`       | Requires the category: drops variants that carry no tag in it. It binds only in components that use the category at all.     |
-| `!category:value` | Drops every variant that carries exactly this tag.                                                                          |
-| `!category`      | Drops every variant that carries any tag in the category.                                                                    |
+| Token             | Effect                                                                                                                     |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `category:value`  | Keeps variants that carry this tag, plus variants with no tag in the category. Several values of one category act as "or". |
+| `category`        | Requires the category: drops variants that carry no tag in it. It binds only in components that use the category at all.   |
+| `!category:value` | Drops every variant that carries exactly this tag.                                                                         |
+| `!category`       | Drops every variant that carries any tag in the category.                                                                  |
 
 A few rules tie the tokens together:
 
@@ -87,9 +87,9 @@ styles with mood, hair length, headwear, facial hair, eyewear, and accessory.
 Those definitions already live in
 [How DiceBear tags variants](/guides/how-dicebear-tags-variants/).
 
-| Category    | Values                    | Found on                                    |
-| ----------- | ------------------------- | ------------------------------------------- |
-| `animation` | (bare category, no values) | the animation component of animated styles  |
+| Category    | Values                     | Found on                                   |
+| ----------- | -------------------------- | ------------------------------------------ |
+| `animation` | (bare category, no values) | the animation component of animated styles |
 
 The animation is off by default, and the filter controls it like this:
 
@@ -113,9 +113,10 @@ const avatar = new Avatar(style, {
 
 ## Custom styles
 
-Tags are not limited to this list. A [custom style](/guides/create-an-avatar-style-with-figma/)
-can reuse these categories, add its own values, or define entirely different ones.
-The only rule is the grammar: a tag is `category` or `category:value`, and each
-segment is camelCase (for example `mouthExpression:smug` or `species:robot`).
-There is no fixed vocabulary a style has to follow, so pick the categories that
-describe your artwork.
+Tags are not limited to this list. A
+[custom style](/guides/create-an-avatar-style-with-figma/) can reuse these
+categories, add its own values, or define entirely different ones. The only rule
+is the grammar: a tag is `category` or `category:value`, and each segment is
+camelCase (for example `mouthExpression:smug` or `species:robot`). There is no
+fixed vocabulary a style has to follow, so pick the categories that describe
+your artwork.

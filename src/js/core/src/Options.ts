@@ -147,18 +147,14 @@ export class Options<D = unknown> {
   colorAngle(name: string): Range | undefined {
     return this.#toRange(
       this.#dynamic(`${name}ColorAngle`) as
-        | number
-        | readonly number[]
-        | undefined,
+        number | readonly number[] | undefined,
     );
   }
 
   colorFillStops(name: string): Range | undefined {
     return this.#toRange(
       this.#dynamic(`${name}ColorFillStops`) as
-        | number
-        | readonly number[]
-        | undefined,
+        number | readonly number[] | undefined,
     );
   }
 

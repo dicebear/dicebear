@@ -117,13 +117,13 @@ type IsAlias<D, C extends string> = D extends {
 type ComponentOptions<D, C extends string> = [C] extends [never]
   ? unknown
   : {
-      readonly [K in C as IsAlias<D, K> extends true
-        ? never
-        : `${K}Variant`]?: ComponentVariantOption<D, K>;
+      readonly [
+        K in C as IsAlias<D, K> extends true ? never : `${K}Variant`
+      ]?: ComponentVariantOption<D, K>;
     } & {
-      readonly [K in C as IsAlias<D, K> extends true
-        ? never
-        : `${K}Probability`]?: number;
+      readonly [
+        K in C as IsAlias<D, K> extends true ? never : `${K}Probability`
+      ]?: number;
     };
 
 // For each color C generates: Color, ColorFill, ColorFillStops, ColorAngle.
@@ -131,16 +131,13 @@ type ColorOptions<C extends string> = [C] extends [never]
   ? unknown
   : { readonly [K in C as `${K}Color`]?: string | readonly string[] } & {
       readonly [K in C as `${K}ColorFill`]?:
-        | StyleOptionsColorFillValue
-        | readonly StyleOptionsColorFillValue[];
+        StyleOptionsColorFillValue | readonly StyleOptionsColorFillValue[];
     } & {
       readonly [K in C as `${K}ColorFillStops`]?:
-        | number
-        | readonly [number, number];
+        number | readonly [number, number];
     } & {
       readonly [K in C as `${K}ColorAngle`]?:
-        | number
-        | readonly [number, number];
+        number | readonly [number, number];
     };
 
 export type StyleOptions<D = unknown> = StyleOptionsBase &

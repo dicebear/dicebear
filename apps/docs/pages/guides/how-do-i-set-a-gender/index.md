@@ -8,20 +8,20 @@ description: >
 
 # How do I set a gender?
 
-DiceBear has no single `gender` switch, but you can shape any avatar to look more
-masculine or feminine. Every feature is its own option you can set directly, so
-you pick the traits that fit the look you want, such as the hair or facial hair,
-and leave out the rest. An upcoming release adds descriptive variant tags that
-turn the common cases into a one-liner.
+DiceBear has no single `gender` switch, but you can shape any avatar to look
+more masculine or feminine. Every feature is its own option you can set
+directly, so you pick the traits that fit the look you want, such as the hair or
+facial hair, and leave out the rest. An upcoming release adds descriptive
+variant tags that turn the common cases into a one-liner.
 
 ## Find and apply the options
 
 The [Playground](/playground/) shows a preview for every option value and lets
 you combine them, with the avatar updating as you go. Every
 [avatar style page](/styles/) lists the same options as a static reference, also
-with previews, so you can look them up at any time. If you would rather not write
-any code, the [Editor](https://editor.dicebear.com) lets you browse styles and
-adjust options visually.
+with previews, so you can look them up at any time. If you would rather not
+write any code, the [Editor](https://editor.dicebear.com) lets you browse styles
+and adjust options visually.
 
 Once you know which options you want, pass them as
 [query parameters in the HTTP API](/how-to-use/http-api/#options) or as options

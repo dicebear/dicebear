@@ -2,3 +2,21 @@ package.json
 LICENSE
 .github
 tests
+
+# Build output and installed dependencies. The `prettier` script globs
+# `{src,apps}/**/*.{js,ts,vue,json,md}`, which otherwise reaches into compiled
+# libraries, Composer's vendor tree and Cargo's fingerprint JSON. Prettier does
+# not read the nested .gitignore files that already exclude these from git.
+**/lib/
+**/dist/
+**/target/
+**/vendor/
+**/.dart_tool/
+apps/docs/.vitepress/cache/
+src/js/core/src/Validator/*.js
+
+# Generated, but tracked. Both are rewritten by their generator on every run, so
+# formatting them here would only drift back. The seed lists are also far easier
+# to scan one style per line than exploded across eight.
+apps/editor/components.d.ts
+apps/docs/.vitepress/theme/config/previewRowSeeds.ts

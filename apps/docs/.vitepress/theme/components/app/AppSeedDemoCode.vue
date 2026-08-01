@@ -8,14 +8,7 @@ import { escapeJsString, escapeShellArg } from '../../utils/escape';
 import { formatDartValue } from '@theme/utils/code-examples';
 
 type CodeExample =
-  | 'api'
-  | 'js'
-  | 'php'
-  | 'python'
-  | 'rust'
-  | 'go'
-  | 'dart'
-  | 'cli';
+  'api' | 'js' | 'php' | 'python' | 'rust' | 'go' | 'dart' | 'cli';
 
 const props = defineProps<{
   seed: string;

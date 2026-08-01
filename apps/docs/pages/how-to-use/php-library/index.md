@@ -180,8 +180,8 @@ $avatar = new Avatar($style, [
 ```
 
 Dynamic component and color options also work the same way. See
-[Dynamic component options](/guides/core-options/#dynamic-component-options)
-for all available patterns.
+[Dynamic component options](/guides/core-options/#dynamic-component-options) for
+all available patterns.
 
 ## Examples
 
