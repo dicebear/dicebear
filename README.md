@@ -4,6 +4,10 @@
   <img src="https://www.dicebear.com/readme-hero.svg" alt="A grid of DiceBear avatars in twenty-four different styles" width="100%" />
 </p>
 
+[![npm](https://www.dicebear.com/badges/npm.svg)](https://www.npmjs.com/package/@dicebear/core)
+[![stars](https://www.dicebear.com/badges/stars.svg)](https://github.com/dicebear/dicebear/stargazers)
+[![license](https://www.dicebear.com/badges/license.svg)](./LICENSE)
+
 DiceBear is an open source avatar library. It turns any seed string (a username
 or an email address, for example) into an SVG avatar in one of 52 styles, from
 hand-drawn characters to abstract patterns. The same seed always produces the
@@ -92,6 +96,12 @@ The code is [MIT licensed](./LICENSE), including commercial use. The avatar
 styles are the work of their respective creators and carry their own licenses;
 the [license overview](https://www.dicebear.com/licenses/) lists them all, and
 many only ask for attribution.
+
+## Star this repository
+
+If DiceBear saved you some work, a star makes the project easier to find for the
+next person looking for an avatar library. The
+[support page](https://www.dicebear.com/support/) lists the other ways to help.
 
 ## Sponsors
 

@@ -33,6 +33,7 @@ jobs:
 
       - name: Build with VitePress
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VITE_PRIVACY_POLICY_URL: ${{ vars.VITE_PRIVACY_POLICY_URL }}
           VITE_COOKIE_POLICY_URL: ${{ vars.VITE_COOKIE_POLICY_URL }}
           VITE_LEGAL_NOTICE_URL: ${{ vars.VITE_LEGAL_NOTICE_URL }}

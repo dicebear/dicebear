@@ -31,6 +31,7 @@ export const resourceLinks: FooterLink[] = [
   { label: 'HTTP API', href: '/how-to-use/http-api/' },
   { label: 'CLI', href: '/how-to-use/cli/' },
   { label: 'Statistics', href: '/stats/' },
+  { label: 'Support DiceBear', href: '/support/' },
 ];
 
 // Older major versions keep their docs on a subdomain of their own. This list

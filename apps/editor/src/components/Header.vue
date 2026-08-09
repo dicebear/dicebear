@@ -85,6 +85,19 @@ function onFullscreen() {
         })
       "
     ></p>
+    <p class="header-dialog-text">{{ t('starOnGithubDescription') }}</p>
+    <div class="header-dialog-actions">
+      <Button
+        as="a"
+        href="https://github.com/dicebear/dicebear"
+        target="_blank"
+        rel="noopener"
+        rounded
+        severity="secondary"
+        icon="pi pi-github"
+        :label="t('starOnGithub')"
+      />
+    </div>
   </Dialog>
 
   <div class="header">
@@ -129,6 +142,16 @@ function onFullscreen() {
     text-align: center;
     font-size: 14px;
     margin: 16px 12px;
+  }
+
+  &-dialog-actions {
+    display: flex;
+    justify-content: center;
+    margin: 16px 12px 0;
+
+    a {
+      text-decoration: none;
+    }
   }
 }
 </style>

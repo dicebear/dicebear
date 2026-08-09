@@ -8,6 +8,7 @@ import { track, styleLabel } from '@theme/utils/track';
 import { UiAvatar, UiConfetti, UiDialog } from '../ui';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
+import PlaygroundStarCta from './PlaygroundStarCta.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import { DIALOG_PREVIEW_AVATAR_SIZE, DOWNLOAD_AVATAR_SIZE } from './constants';
 
@@ -70,6 +71,7 @@ async function onClick() {
     </div>
     <div class="dialog-text">
       <PlaygroundLicenseAlert />
+      <PlaygroundStarCta source="copy" />
     </div>
   </UiDialog>
 </template>

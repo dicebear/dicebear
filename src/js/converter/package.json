@@ -13,6 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/dicebear/dicebear.git"
   },
+  "funding": "https://www.dicebear.com/support/",
   "license": "MIT",
   "author": "Florian Körner <contact@florian-koerner.com>",
   "type": "module",

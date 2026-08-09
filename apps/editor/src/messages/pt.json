@@ -2,6 +2,8 @@
   "downloadStarted": "Download iniciado!",
   "downloadStartedDescriptionLicense": "<b>Por favor se atente a licença:</b><br /><a href=\"{source}\" target=\"_blank\" rel=\"noopener noreferrer\">{title}</a> por <a href=\"{homepage}\" target=\"_blank\" rel=\"noopener noreferrer\">{creator}</a> é licenciado sob <a href=\"{licenseUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">{licenseName}</a>.",
   "downloadStartedDescription": "Você criou um ótimo avatar! Ficou fantástico!",
+  "starOnGithubDescription": "O DiceBear é gratuito e de código aberto. Uma estrela no GitHub ajuda outras pessoas a encontrar o projeto.",
+  "starOnGithub": "Dar uma estrela no GitHub",
   "close": "Fechar",
   "shuffle": "Aleatorizar",
   "save": "Salvar",

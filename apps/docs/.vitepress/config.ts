@@ -1,3 +1,4 @@
+import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { defineConfig, type DefaultTheme, type HeadConfig } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
@@ -7,6 +8,7 @@ import {
   ogImagePathFor,
   OG_IMAGE_SIZE,
 } from './og-images.ts';
+import { generateBadges } from './badges.ts';
 import { SITE_ORIGIN, siteUrl } from './config/site.ts';
 import sidebarDocs from './config/sidebarDocs.ts';
 import sidebarStyles from './config/sidebarStyles.ts';
@@ -19,6 +21,13 @@ import avatarStyles, {
 import avatarUniqueCounts from './config/avatarUniqueCounts.ts';
 import avatarStyleSizes from './config/avatarStyleSizes.ts';
 import { formatStars } from './theme/utils/format.ts';
+
+// Unauthenticated api.github.com allows 60 requests per hour and per IP, which
+// shared CI runners and repeated local builds exhaust quickly. A token raises
+// that to 5000; without one the fetch simply fails and the callers fall back.
+const githubHeaders: Record<string, string> = process.env.GITHUB_TOKEN
+  ? { authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+  : {};
 
 async function fetchGitHubStars(
   repos: string[],
@@ -33,10 +42,13 @@ async function fetchGitHubStars(
       try {
         const res = await fetch(`https://api.github.com/repos/${repo}`, {
           signal: controller.signal,
+          headers: githubHeaders,
         });
         if (res.ok) {
           const data = await res.json();
           result[repo] = formatStars(data.stargazers_count);
+        } else {
+          console.warn(`[github-stars] ${repo} responded ${res.status}`);
         }
       } catch (err) {
         console.warn(
@@ -59,6 +71,15 @@ const githubStars = await fetchGitHubStars([
   'multiavatar/Multiavatar',
   'boringdesigners/boring-avatars',
 ]);
+
+// Read from the workspace rather than through a package import: @dicebear/core
+// has a string `exports` field, which blocks the `package.json` subpath.
+const coreVersion: string = JSON.parse(
+  await fs.readFile(
+    path.resolve(import.meta.dirname, '../../../src/js/core/package.json'),
+    'utf8',
+  ),
+).version;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -243,8 +264,18 @@ export default defineConfig<ThemeOptions>({
 
     return result;
   },
-  buildEnd: (siteConfig) =>
-    generateOgImages(siteConfig.outDir, siteConfig.cacheDir, siteConfig.srcDir),
+  buildEnd: async (siteConfig) => {
+    await generateOgImages(
+      siteConfig.outDir,
+      siteConfig.cacheDir,
+      siteConfig.srcDir,
+    );
+    await generateBadges(
+      siteConfig.outDir,
+      githubStars['dicebear/dicebear'],
+      coreVersion,
+    );
+  },
   vite: {
     plugins: [
       {

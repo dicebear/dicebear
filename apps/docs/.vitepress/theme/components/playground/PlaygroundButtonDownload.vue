@@ -8,6 +8,7 @@ import { triggerDownload } from '@theme/utils/download';
 import { track, styleLabel } from '@theme/utils/track';
 import { UiAvatar, UiConfetti, UiDialog } from '../ui';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
+import PlaygroundStarCta from './PlaygroundStarCta.vue';
 import PlaygroundBatchDownload from './PlaygroundBatchDownload.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import Button from 'primevue/button';
@@ -139,6 +140,7 @@ function onDownloadClick(e: Event) {
     </div>
     <div class="dialog-text">
       <PlaygroundLicenseAlert />
+      <PlaygroundStarCta source="download" />
     </div>
   </UiDialog>
 
