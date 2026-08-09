@@ -9,10 +9,20 @@ export interface FooterLink {
 export const productLinks: FooterLink[] = [
   { label: 'Why DiceBear?', href: '/why-dicebear/' },
   { label: 'Animated Avatars', href: '/animated-avatars/' },
-  { label: 'Playground', href: '/playground/' },
   { label: 'All Styles', href: '/styles/' },
-  { label: 'Tools', href: '/tools/' },
+];
+
+// Mirrors the tool list on /tools/ (see theme/components/tools/ToolList.vue).
+export const toolLinks: FooterLink[] = [
+  { label: 'Playground', href: '/playground/' },
+  { label: 'WCAG Contrast Picker', href: '/tools/contrast/' },
+  { label: 'Bundle Size Estimator', href: '/tools/bundle-size/' },
   { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
+  {
+    label: 'Figma Plugin',
+    href: 'https://www.figma.com/community/plugin/1005765655729342787',
+    external: true,
+  },
 ];
 
 export const resourceLinks: FooterLink[] = [

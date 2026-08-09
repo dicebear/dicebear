@@ -138,11 +138,14 @@ const { hasSidebar } = useLayout();
     }
   }
 
+  /* Equal-width grid tracks keep wrapped columns aligned with the ones
+   * above them. The 150px minimum fits the widest label
+   * ("Bundle Size Estimator"). */
   &-links {
-    display: flex;
-    gap: 64px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 32px 64px;
     flex: 1;
-    justify-content: flex-end;
   }
 
   &-column {
@@ -268,11 +271,6 @@ const { hasSidebar } = useLayout();
     &-has-sidebar .layout-footer-brand {
       max-width: 100%;
     }
-
-    &-has-sidebar .layout-footer-links {
-      justify-content: flex-start;
-      gap: 40px;
-    }
   }
 
   @media (min-width: 1340px) {
@@ -284,11 +282,6 @@ const { hasSidebar } = useLayout();
     &-has-sidebar .layout-footer-brand {
       max-width: 260px;
     }
-
-    &-has-sidebar .layout-footer-links {
-      justify-content: flex-end;
-      gap: 64px;
-    }
   }
 
   @media (max-width: 768px) {
@@ -299,18 +292,6 @@ const { hasSidebar } = useLayout();
 
     .layout-footer-brand {
       max-width: 100%;
-    }
-
-    .layout-footer-links {
-      justify-content: flex-start;
-      gap: 40px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .layout-footer-links {
-      flex-direction: column;
-      gap: 32px;
     }
   }
 }

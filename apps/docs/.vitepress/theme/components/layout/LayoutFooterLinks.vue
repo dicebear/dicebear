@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   productLinks,
+  toolLinks,
   resourceLinks,
   versionLinks,
   legalLinks,
@@ -8,6 +9,7 @@ import {
 
 const columns = [
   { title: 'Explore', links: productLinks },
+  { title: 'Tools', links: toolLinks },
   { title: 'Resources', links: resourceLinks },
   { title: 'Versions', links: versionLinks },
   { title: 'Legal', links: legalLinks },
