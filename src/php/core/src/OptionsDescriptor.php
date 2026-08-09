@@ -102,7 +102,7 @@ class OptionsDescriptor
             }
 
             if ($notEqualTo !== []) {
-                $colorField['notEqualTo'] = array_values($notEqualTo);
+                $colorField['notEqualTo'] = $notEqualTo;
             }
 
             $result["{$name}Color"] = $colorField;
