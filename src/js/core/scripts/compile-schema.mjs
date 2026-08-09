@@ -1,5 +1,4 @@
-import Ajv from 'ajv';
-import standaloneCode from 'ajv/dist/standalone/index.js';
+import { validator } from '@exodus/schemasafe';
 import { createRequire } from 'module';
 import { writeFileSync, mkdirSync } from 'fs';
 
@@ -11,45 +10,70 @@ function compileValidator({ schemaModule, domain }) {
 
   const schema = require(schemaModule);
 
-  const ajv = new Ajv({ code: { source: true, esm: true } });
-  const validate = ajv.compile(schema);
-  const moduleCode = standaloneCode(ajv, validate);
+  // isJSON matches Ajv's presence semantics: a property whose value is
+  // `undefined` counts as absent. Without it, schemasafe uses an `in` check
+  // and would reject calls like `createAvatar(style, { size: undefined })`.
+  const validate = validator(schema, {
+    includeErrors: true,
+    allErrors: true,
+    isJSON: true,
+  });
 
-  const match = moduleCode.match(/export default (\w+)/);
+  // toModule() emits the validator as a single self-contained IIFE expression
+  // without imports or requires, so the generated file has no runtime
+  // dependency on the @exodus/schemasafe package.
+  const moduleCode = validate.toModule().trim();
 
-  if (!match) {
-    throw new Error(`Could not find default export in Ajv standalone output for ${schemaModule}`);
-  }
+  const classCode = `import { ${errorClass} } from '../Error/${errorClass}.js';
 
-  const fnName = match[1];
+const validate = ${moduleCode}
 
-  // Strip Ajv's own exports and replace its require() call for the ucs2length
-  // runtime helper with a plain function reference. This eliminates any runtime
-  // dependency on the ajv package — the generated validators are fully standalone.
-  const internalCode = moduleCode
-    .replaceAll(`export const validate = ${fnName};`, '')
-    .replaceAll(`export default ${fnName};`, '')
-    .replaceAll('require("ajv/dist/runtime/ucs2length").default', 'ucs2length');
+// schemasafe reports errors as JSON pointers only (instanceLocation into the
+// data, keywordLocation into the schema) without prose. Derive a short message
+// from the failing keyword; the detail keeps keywordLocation as schemaPath for
+// anyone who needs the exact schema rule.
+const KEYWORD_MESSAGES = {
+  type: 'has an invalid type',
+  enum: 'must be one of the allowed values',
+  const: 'must equal the expected value',
+  pattern: 'does not match the required pattern',
+  required: 'is required but missing',
+  additionalProperties: 'has an unexpected property',
+  propertyNames: 'has an invalid property name',
+  minimum: 'is smaller than allowed',
+  maximum: 'is larger than allowed',
+  exclusiveMinimum: 'is smaller than allowed',
+  exclusiveMaximum: 'is larger than allowed',
+  minLength: 'is too short',
+  maxLength: 'is too long',
+  minItems: 'has too few items',
+  maxItems: 'has too many items',
+  uniqueItems: 'has duplicate items',
+  minProperties: 'has too few properties',
+  maxProperties: 'has too many properties',
+  anyOf: 'does not match any allowed variant',
+  oneOf: 'does not match exactly one allowed variant',
+  allOf: 'does not match all required schemas',
+  not: 'matches a disallowed schema',
+};
 
-  const needsUcs2 = internalCode.includes('ucs2length');
+function toDetail(error) {
+  const keyword = error.keywordLocation.slice(
+    error.keywordLocation.lastIndexOf('/') + 1,
+  );
 
-  const preamble = [`import { ${errorClass} } from '../Error/${errorClass}.js';`];
-
-  if (needsUcs2) {
-    // Ajv's ucs2length manually detects surrogate pairs via charCodeAt() for
-    // ES5 compatibility. Since ES2015, the string iterator (used by for...of)
-    // handles this natively, making the manual approach unnecessary.
-    preamble.push(`function ucs2length(str) { let n = 0; for (const _ of str) n++; return n; }`);
-  }
-
-  const classCode = `${preamble.join('\n')}
-
-${internalCode}
+  return {
+    instancePath: error.instanceLocation.slice(1),
+    schemaPath: error.keywordLocation,
+    keyword,
+    message: KEYWORD_MESSAGES[keyword] ?? \`must satisfy '\${keyword}'\`,
+  };
+}
 
 export class ${validatorClass} {
   static validate(data) {
-    if (!${fnName}(data)) {
-      throw new ${errorClass}(${fnName}.errors || []);
+    if (!validate(data)) {
+      throw new ${errorClass}((validate.errors ?? []).map(toDetail));
     }
   }
 }
@@ -60,6 +84,11 @@ export class ${validatorClass} {
 
 mkdirSync('./src/Validator', { recursive: true });
 
-compileValidator({ schemaModule: '@dicebear/schema/definition.json', domain: 'Style' });
-compileValidator({ schemaModule: '@dicebear/schema/options.json', domain: 'Options' });
-
+compileValidator({
+  schemaModule: '@dicebear/schema/definition.json',
+  domain: 'Style',
+});
+compileValidator({
+  schemaModule: '@dicebear/schema/options.json',
+  domain: 'Options',
+});

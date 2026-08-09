@@ -8,6 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Core (JavaScript):** The schema validators are now generated with
+  [`@exodus/schemasafe`](https://github.com/ExodusMovement/schemasafe) instead
+  of Ajv. The published package still has no runtime dependencies, and the
+  validator code shrinks from 164 KB to 114 KB minified, so browser bundles of
+  `@dicebear/core` shrink by the same amount. Both compilers accept and reject
+  the same inputs: every published style definition and a set of deliberately
+  broken samples produced identical verdicts. Error messages change, however.
+  schemasafe reports JSON pointers without prose, so the message is now derived
+  from the failing keyword (`/size is smaller than allowed`), and every
+  `ValidationErrorDetail` carries two new optional fields, `schemaPath` and
+  `keyword`, that name the schema rule behind a failure. When an object violates
+  a named property and a pattern property at the same time, the error list only
+  reports the first group; the verdict is not affected.
+- **CLI:** Removed the unused `ajv` dependency, which makes a CLI install about
+  2.7 MB smaller.
+
 ## [10.4.0] - 2026-08-01
 
 ### Changed

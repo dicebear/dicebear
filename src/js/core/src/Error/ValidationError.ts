@@ -1,6 +1,10 @@
 export interface ValidationErrorDetail {
   readonly message?: string;
   readonly instancePath?: string;
+  /** JSON pointer to the schema rule that failed, e.g. `#/properties/size/minimum`. */
+  readonly schemaPath?: string;
+  /** The failing schema keyword, e.g. `minimum` or `pattern`. */
+  readonly keyword?: string;
 }
 
 /**

@@ -29,7 +29,6 @@
     "@dicebear/converter": "10.4.0",
     "@dicebear/core": "10.4.0",
     "@dicebear/styles": "^10.3.0",
-    "ajv": "^8.17.1",
     "chalk": "^5.4.1",
     "chalk-template": "^1.1.2",
     "cli-progress": "^3.12.0",
