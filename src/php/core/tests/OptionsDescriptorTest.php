@@ -40,6 +40,11 @@ class OptionsDescriptorTest extends TestCase
                 'skin' => ['values' => ['#ff0000', '#00ff00']],
                 'hair' => ['values' => ['#000000']],
                 'text' => ['values' => ['#ffffff', '#000000'], 'contrastTo' => 'background'],
+                'outline' => [
+                    'values' => ['#111111', '#eeeeee'],
+                    'contrastTo' => 'skin',
+                    'notEqualTo' => ['skin'],
+                ],
             ],
         ]);
     }
@@ -135,6 +140,19 @@ class OptionsDescriptorTest extends TestCase
             'contrastTo' => 'background',
         ], $schema['textColor']);
         $this->assertArrayNotHasKey('contrastTo', $schema['skinColor']);
+    }
+
+    public function testExposesNotEqualToOnColorFields(): void
+    {
+        $schema = (new OptionsDescriptor(self::fullStyle()))->toJSON();
+
+        $this->assertSame([
+            'type' => 'color',
+            'list' => true,
+            'contrastTo' => 'skin',
+            'notEqualTo' => ['skin'],
+        ], $schema['outlineColor']);
+        $this->assertArrayNotHasKey('notEqualTo', $schema['skinColor']);
     }
 
     // caching

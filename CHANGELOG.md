@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Core:** Color fields in `OptionsDescriptor` now carry `notEqualTo`, the list
+  of color groups a group must differ from, next to the existing `contrastTo`,
+  in all six core implementations (JavaScript, PHP, Python, Rust, Go, and Dart).
+  Tooling that picks colors itself needs both constraints, because one explicit
+  color per group leaves the renderer nothing to sort or filter. The descriptor
+  parity fixtures and the guide on accessing all available options cover the new
+  property.
+
 ## [10.5.0] - 2026-08-09
 
 ### Added

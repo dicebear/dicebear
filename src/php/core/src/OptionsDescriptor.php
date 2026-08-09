@@ -95,9 +95,14 @@ class OptionsDescriptor
         foreach ($colorNames as $name) {
             $colorField = ['type' => 'color', 'list' => true];
             $contrastTo = isset($colors[$name]) ? $colors[$name]->contrastTo() : null;
+            $notEqualTo = isset($colors[$name]) ? $colors[$name]->notEqualTo() : [];
 
             if ($contrastTo !== null) {
                 $colorField['contrastTo'] = $contrastTo;
+            }
+
+            if ($notEqualTo !== []) {
+                $colorField['notEqualTo'] = array_values($notEqualTo);
             }
 
             $result["{$name}Color"] = $colorField;

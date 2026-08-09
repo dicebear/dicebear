@@ -26,7 +26,10 @@ fn options_descriptor_describes_components_and_colors() {
             "components": {
                 "shape": { "width": 100, "height": 100, "variants": { "a": { "elements": [] }, "b": { "elements": [] } } }
             },
-            "colors": { "fill": { "values": ["#000000"] } }
+            "colors": {
+                "fill": { "values": ["#000000"] },
+                "outline": { "values": ["#111111", "#eeeeee"], "contrastTo": "fill", "notEqualTo": ["fill"] }
+            }
         }"##,
     )
     .unwrap();
@@ -49,6 +52,14 @@ fn options_descriptor_describes_components_and_colors() {
         descriptor["backgroundColorOrder"],
         json!({ "type": "enum", "values": ["random", "fixed"] })
     );
+    // A color group repeats the constraints of its definition, so tooling that
+    // picks colors itself can apply them.
+    assert_eq!(
+        descriptor["outlineColor"],
+        json!({ "type": "color", "list": true, "contrastTo": "fill", "notEqualTo": ["fill"] })
+    );
+    assert!(descriptor["fillColor"].get("contrastTo").is_none());
+    assert!(descriptor["fillColor"].get("notEqualTo").is_none());
 }
 
 #[test]

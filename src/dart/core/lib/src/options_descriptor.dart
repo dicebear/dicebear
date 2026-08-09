@@ -80,6 +80,7 @@ class OptionsDescriptor {
     // keeps the first position, like the JS object semantics.
     for (final name in [..._style.colors.keys, 'background']) {
       final contrastTo = _style.colors[name]?.contrastTo();
+      final notEqualTo = _style.colors[name]?.notEqualTo() ?? const <String>[];
 
       result['${name}Color'] = {
         'type': 'color',
@@ -87,6 +88,7 @@ class OptionsDescriptor {
         // The JS truthy spread: an empty contrastTo is treated as unset.
         if (contrastTo != null && contrastTo.isNotEmpty)
           'contrastTo': contrastTo,
+        if (notEqualTo.isNotEmpty) 'notEqualTo': List<String>.of(notEqualTo),
       };
       result['${name}ColorFill'] = {
         'type': 'enum',

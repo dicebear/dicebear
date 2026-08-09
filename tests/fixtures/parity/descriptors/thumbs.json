@@ -171,7 +171,10 @@
   "eyesColor": {
     "type": "color",
     "list": true,
-    "contrastTo": "shape"
+    "contrastTo": "shape",
+    "notEqualTo": [
+      "shape"
+    ]
   },
   "eyesColorFill": {
     "type": "enum",
@@ -201,7 +204,10 @@
   "mouthColor": {
     "type": "color",
     "list": true,
-    "contrastTo": "shape"
+    "contrastTo": "shape",
+    "notEqualTo": [
+      "shape"
+    ]
   },
   "mouthColorFill": {
     "type": "enum",
@@ -230,7 +236,10 @@
   },
   "shapeColor": {
     "type": "color",
-    "list": true
+    "list": true,
+    "notEqualTo": [
+      "background"
+    ]
   },
   "shapeColorFill": {
     "type": "enum",

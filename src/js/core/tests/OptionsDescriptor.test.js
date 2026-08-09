@@ -53,6 +53,11 @@ const fullStyle = new Style({
     skin: { values: ['#ff0000', '#00ff00'] },
     hair: { values: ['#000000'] },
     text: { values: ['#ffffff', '#000000'], contrastTo: 'background' },
+    outline: {
+      values: ['#111111', '#eeeeee'],
+      contrastTo: 'skin',
+      notEqualTo: ['skin'],
+    },
   },
 });
 
@@ -170,6 +175,18 @@ describe('OptionsDescriptor', () => {
         contrastTo: 'background',
       });
       assert.ok(!('contrastTo' in schema.skinColor));
+    });
+
+    it('should expose notEqualTo on color fields when set', () => {
+      const schema = new OptionsDescriptor(fullStyle).toJSON();
+
+      assert.deepEqual(schema.outlineColor, {
+        type: 'color',
+        list: true,
+        contrastTo: 'skin',
+        notEqualTo: ['skin'],
+      });
+      assert.ok(!('notEqualTo' in schema.skinColor));
     });
   });
 

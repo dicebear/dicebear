@@ -32,6 +32,7 @@ interface ColorField {
   readonly type: 'color';
   readonly list?: true;
   readonly contrastTo?: string;
+  readonly notEqualTo?: readonly string[];
 }
 
 interface RangeField {
@@ -123,12 +124,17 @@ export class OptionsDescriptor {
     }
 
     for (const name of [...this.#style.colors().keys(), 'background']) {
-      const contrastTo = this.#style.colors().get(name)?.contrastTo();
+      const color = this.#style.colors().get(name);
+      const contrastTo = color?.contrastTo();
+      const notEqualTo = color?.notEqualTo() ?? [];
 
       result[`${name}Color`] = {
         type: 'color',
         list: true,
         ...(contrastTo ? { contrastTo } : {}),
+        ...(notEqualTo.length > 0
+          ? { notEqualTo: Array.from(notEqualTo) }
+          : {}),
       };
       result[`${name}ColorFill`] = {
         type: 'enum',

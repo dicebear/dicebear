@@ -39,6 +39,11 @@ def _full_style() -> Style:
                     "values": ["#ffffff", "#000000"],
                     "contrastTo": "background",
                 },
+                "outline": {
+                    "values": ["#111111", "#eeeeee"],
+                    "contrastTo": "skin",
+                    "notEqualTo": ["skin"],
+                },
             },
         }
     )
@@ -150,6 +155,17 @@ def test_exposes_contrast_to_on_color_fields() -> None:
         "contrastTo": "background",
     }
     assert "contrastTo" not in schema["skinColor"]
+
+
+def test_exposes_not_equal_to_on_color_fields() -> None:
+    schema = OptionsDescriptor(_full_style()).to_json()
+    assert schema["outlineColor"] == {
+        "type": "color",
+        "list": True,
+        "contrastTo": "skin",
+        "notEqualTo": ["skin"],
+    }
+    assert "notEqualTo" not in schema["skinColor"]
 
 
 # ---------------------------------------------------------------------------

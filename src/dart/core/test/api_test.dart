@@ -95,7 +95,10 @@ void main() {
       "components": {
         "shape": { "width": 100, "height": 100, "variants": { "a": { "elements": [] }, "b": { "elements": [] } } }
       },
-      "colors": { "fill": { "values": ["#000000"] } }
+      "colors": {
+        "fill": { "values": ["#000000"] },
+        "outline": { "values": ["#111111", "#eeeeee"], "contrastTo": "fill", "notEqualTo": ["fill"] }
+      }
     }
     '''));
 
@@ -119,6 +122,17 @@ void main() {
 
     expect(fillColor['type'], 'color');
     expect(backgroundColor['type'], 'color');
+
+    // A color group repeats the constraints of its definition, so tooling that
+    // picks colors itself can apply them.
+    expect(descriptor['outlineColor'], {
+      'type': 'color',
+      'list': true,
+      'contrastTo': 'fill',
+      'notEqualTo': ['fill'],
+    });
+    expect(fillColor.containsKey('contrastTo'), isFalse);
+    expect(fillColor.containsKey('notEqualTo'), isFalse);
   });
 
   test('circular color reference is reported', () {

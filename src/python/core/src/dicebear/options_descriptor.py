@@ -80,9 +80,13 @@ class OptionsDescriptor:
         for name in color_names:
             color_field: dict[str, Any] = {"type": "color", "list": True}
             contrast_to = colors[name].contrast_to() if name in colors else None
+            not_equal_to = colors[name].not_equal_to() if name in colors else []
 
             if contrast_to is not None:
                 color_field["contrastTo"] = contrast_to
+
+            if not_equal_to:
+                color_field["notEqualTo"] = list(not_equal_to)
 
             result[f"{name}Color"] = color_field
             result[f"{name}ColorFill"] = {

@@ -57,7 +57,10 @@ func TestOptionsDescriptorDescribesComponentsAndColors(t *testing.T) {
 		"components": {
 			"shape": { "width": 100, "height": 100, "variants": { "a": { "elements": [] }, "b": { "elements": [] } } }
 		},
-		"colors": { "fill": { "values": ["#000000"] } }
+		"colors": {
+			"fill": { "values": ["#000000"] },
+			"outline": { "values": ["#111111", "#eeeeee"], "contrastTo": "fill", "notEqualTo": ["fill"] }
+		}
 	}`)
 
 	descriptor := NewOptionsDescriptor(style).ToJSON()
@@ -82,6 +85,26 @@ func TestOptionsDescriptorDescribesComponentsAndColors(t *testing.T) {
 	}
 	if bg, _ := descriptor["backgroundColor"].(map[string]any); bg["type"] != "color" {
 		t.Errorf("backgroundColor type = %v", descriptor["backgroundColor"])
+	}
+
+	// A color group repeats the constraints of its definition, so tooling that
+	// picks colors itself can apply them.
+	wantOutline := map[string]any{
+		"type":       "color",
+		"list":       true,
+		"contrastTo": "fill",
+		"notEqualTo": []string{"fill"},
+	}
+	if got, _ := descriptor["outlineColor"].(map[string]any); !reflect.DeepEqual(got, wantOutline) {
+		t.Errorf("outlineColor = %v, want %v", descriptor["outlineColor"], wantOutline)
+	}
+
+	fillColor, _ := descriptor["fillColor"].(map[string]any)
+	if _, ok := fillColor["contrastTo"]; ok {
+		t.Errorf("fillColor = %v, want no contrastTo", fillColor)
+	}
+	if _, ok := fillColor["notEqualTo"]; ok {
+		t.Errorf("fillColor = %v, want no notEqualTo", fillColor)
 	}
 
 	// Every color name carries a single-valued ColorOrder enum, without a list

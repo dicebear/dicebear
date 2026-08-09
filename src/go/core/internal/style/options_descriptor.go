@@ -68,8 +68,13 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 
 	for _, name := range colorNames {
 		field := map[string]any{"type": "color", "list": true}
-		if cd, ok := d.style.colors[name]; ok && cd.ContrastTo != "" {
-			field["contrastTo"] = cd.ContrastTo
+		if cd, ok := d.style.colors[name]; ok {
+			if cd.ContrastTo != "" {
+				field["contrastTo"] = cd.ContrastTo
+			}
+			if len(cd.NotEqualTo) > 0 {
+				field["notEqualTo"] = append([]string(nil), cd.NotEqualTo...)
+			}
 		}
 
 		result[name+"Color"] = field

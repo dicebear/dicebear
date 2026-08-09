@@ -95,6 +95,15 @@ impl<'a> OptionsDescriptor<'a> {
                 field.insert("contrastTo".into(), json!(contrast_to));
             }
 
+            let not_equal_to = colors
+                .get(&name)
+                .map(|c| c.not_equal_to())
+                .unwrap_or_default();
+
+            if !not_equal_to.is_empty() {
+                field.insert("notEqualTo".into(), json!(not_equal_to));
+            }
+
             result.insert(format!("{name}Color"), Value::Object(field));
             result.insert(
                 format!("{name}ColorFill"),
