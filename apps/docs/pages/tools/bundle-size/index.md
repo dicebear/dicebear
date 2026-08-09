@@ -1,5 +1,5 @@
 ---
-layout: doc
+layout: page
 title: Bundle Size Estimator – Tools
 description: >
   Pick the DiceBear styles you plan to use and see how many minified, gzipped

@@ -1,5 +1,5 @@
 ---
-layout: doc
+layout: page
 title: WCAG Contrast Picker – Tools
 description: >
   Interactive WCAG 2.1 contrast picker built on the @dicebear/core algorithm.

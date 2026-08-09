@@ -56,12 +56,11 @@ const selectedGzip = computed(() => {
   return total;
 });
 
-const grandTotalGzip = computed(
-  () =>
-    sizes.core.gzip +
-    (includeConverter.value ? sizes.converter.gzip : 0) +
-    selectedGzip.value,
+const libraryGzip = computed(
+  () => sizes.core.gzip + (includeConverter.value ? sizes.converter.gzip : 0),
 );
+
+const grandTotalGzip = computed(() => libraryGzip.value + selectedGzip.value);
 
 function toggle(name: string) {
   const next = new Set(selected.value);
@@ -90,7 +89,7 @@ function styleTitle(name: string): string {
 </script>
 
 <template>
-  <UiContainer size="sm" class="bundle-size-tool">
+  <UiContainer class="bundle-size-tool">
     <header class="bundle-size-tool-hero">
       <UiHeadline tag="h1"> <strong>Bundle Size</strong> Estimator </UiHeadline>
       <UiDescription>
@@ -99,150 +98,176 @@ function styleTitle(name: string): string {
       </UiDescription>
     </header>
 
-    <div
-      ref="summarySentinel"
-      class="bundle-size-summary-sentinel"
-      aria-hidden="true"
-    />
-    <UiCard
-      padding="lg"
-      class="bundle-size-summary"
-      :class="{ 'is-stuck': isSummaryStuck }"
-    >
-      <div
-        class="bundle-size-summary-row bundle-size-summary-row-toggle is-disabled"
-      >
-        <label class="bundle-size-summary-row-label">
-          <Checkbox :model-value="true" :binary="true" :disabled="true" />
-          <span class="bundle-size-summary-label">
-            <code>@dicebear/core</code>
-            <span class="bundle-size-summary-hint">always required</span>
-          </span>
-          <span class="bundle-size-summary-values">
-            <span class="bundle-size-summary-raw">{{
-              formatSize(sizes.core.gzip)
-            }}</span>
-            <span class="bundle-size-summary-gzip">gzip</span>
-          </span>
-        </label>
-      </div>
-      <div class="bundle-size-summary-row bundle-size-summary-row-toggle">
-        <label class="bundle-size-summary-row-label">
-          <Checkbox v-model="includeConverter" :binary="true" />
-          <span class="bundle-size-summary-label">
-            <code>@dicebear/converter</code>
-            <span class="bundle-size-summary-hint"
-              >PNG, JPEG, WebP & AVIF output</span
-            >
-          </span>
-          <span class="bundle-size-summary-values">
-            <span class="bundle-size-summary-raw">{{
-              formatSize(sizes.converter.gzip)
-            }}</span>
-            <span class="bundle-size-summary-gzip">gzip</span>
-          </span>
-        </label>
-      </div>
-      <div class="bundle-size-summary-row">
-        <div class="bundle-size-summary-row-label">
-          <span class="bundle-size-summary-label">
-            {{ selected.size }} style{{ selected.size === 1 ? '' : 's' }}
-            selected
-          </span>
-          <span class="bundle-size-summary-values">
-            <span class="bundle-size-summary-raw">{{
-              formatSize(selectedGzip)
-            }}</span>
-            <span class="bundle-size-summary-gzip">gzip</span>
-          </span>
-        </div>
-      </div>
-      <div class="bundle-size-summary-row bundle-size-summary-row-total">
-        <div class="bundle-size-summary-row-label">
-          <span class="bundle-size-summary-label">Total</span>
-          <span class="bundle-size-summary-values">
-            <span class="bundle-size-summary-raw">{{
-              formatSize(grandTotalGzip)
-            }}</span>
-            <span class="bundle-size-summary-gzip">gzip</span>
-          </span>
-        </div>
-      </div>
-    </UiCard>
-
-    <UiCard padding="lg" class="bundle-size-picker">
-      <div class="bundle-size-picker-toolbar">
-        <IconField class="bundle-size-picker-search">
-          <InputIcon>
-            <Search :size="16" />
-          </InputIcon>
-          <InputText
-            v-model="filter"
-            placeholder="Filter styles…"
-            spellcheck="false"
-            fluid
-          />
-        </IconField>
-        <div class="bundle-size-picker-actions">
-          <Button
-            label="Select all"
-            severity="secondary"
-            variant="outlined"
-            @click="selectAll"
-          />
-          <Button
-            label="Clear"
-            severity="secondary"
-            variant="outlined"
-            @click="clear"
-          >
-            <template #icon><X :size="14" /></template>
-          </Button>
-        </div>
-      </div>
-
-      <ul class="bundle-size-list">
-        <li
-          v-for="name in visibleStyles"
-          :key="name"
-          class="bundle-size-row"
-          :class="{ 'bundle-size-row-selected': selected.has(name) }"
+    <div class="bundle-size-columns">
+      <!-- The calculation stays first in the DOM, so the stacked layout on
+           narrow viewports shows the result above the pickers; the grid
+           moves it into the right column. -->
+      <aside class="bundle-size-aside">
+        <div
+          ref="summarySentinel"
+          class="bundle-size-summary-sentinel"
+          aria-hidden="true"
+        />
+        <UiCard
+          padding="lg"
+          class="bundle-size-summary"
+          :class="{ 'is-stuck': isSummaryStuck }"
         >
-          <label class="bundle-size-row-label">
-            <Checkbox
-              :model-value="selected.has(name)"
-              :binary="true"
-              @update:model-value="toggle(name)"
-            />
-            <UiAvatar
-              :style-name="name"
-              :style-options="{ seed: name, size: 28 }"
-              :size="28"
-              alt=""
-              mode="library"
-              class="bundle-size-row-avatar"
-            />
-            <span class="bundle-size-row-title">{{ styleTitle(name) }}</span>
-            <code class="bundle-size-row-slug">{{ name }}</code>
-            <span class="bundle-size-row-values">
-              <span class="bundle-size-row-raw">{{
-                formatSize(sizes.styles[name]?.gzip ?? 0)
-              }}</span>
-              <span class="bundle-size-row-gzip">gzip</span>
-            </span>
-          </label>
-        </li>
-        <li v-if="visibleStyles.length === 0" class="bundle-size-empty">
-          No styles match "{{ filter }}".
-        </li>
-      </ul>
-    </UiCard>
+          <div class="bundle-size-summary-row">
+            <div class="bundle-size-summary-row-label">
+              <span class="bundle-size-summary-label">Library</span>
+              <span class="bundle-size-summary-values">
+                <span class="bundle-size-summary-raw">{{
+                  formatSize(libraryGzip)
+                }}</span>
+                <span class="bundle-size-summary-gzip">gzip</span>
+              </span>
+            </div>
+          </div>
+          <div class="bundle-size-summary-row">
+            <div class="bundle-size-summary-row-label">
+              <span class="bundle-size-summary-label">
+                {{ selected.size }} style{{ selected.size === 1 ? '' : 's' }}
+                selected
+              </span>
+              <span class="bundle-size-summary-values">
+                <span class="bundle-size-summary-raw">{{
+                  formatSize(selectedGzip)
+                }}</span>
+                <span class="bundle-size-summary-gzip">gzip</span>
+              </span>
+            </div>
+          </div>
+          <div class="bundle-size-summary-row bundle-size-summary-row-total">
+            <div class="bundle-size-summary-row-label">
+              <span class="bundle-size-summary-label">Total</span>
+              <span class="bundle-size-summary-values">
+                <span class="bundle-size-summary-raw">{{
+                  formatSize(grandTotalGzip)
+                }}</span>
+                <span class="bundle-size-summary-gzip">gzip</span>
+              </span>
+            </div>
+          </div>
+        </UiCard>
+      </aside>
+
+      <div class="bundle-size-main">
+        <UiCard padding="lg" class="bundle-size-packages">
+          <div
+            class="bundle-size-summary-row bundle-size-summary-row-toggle is-disabled"
+          >
+            <label class="bundle-size-summary-row-label">
+              <Checkbox :model-value="true" :binary="true" :disabled="true" />
+              <span class="bundle-size-summary-label">
+                <code>@dicebear/core</code>
+                <span class="bundle-size-summary-hint">always required</span>
+              </span>
+              <span class="bundle-size-summary-values">
+                <span class="bundle-size-summary-raw">{{
+                  formatSize(sizes.core.gzip)
+                }}</span>
+                <span class="bundle-size-summary-gzip">gzip</span>
+              </span>
+            </label>
+          </div>
+          <div class="bundle-size-summary-row bundle-size-summary-row-toggle">
+            <label class="bundle-size-summary-row-label">
+              <Checkbox v-model="includeConverter" :binary="true" />
+              <span class="bundle-size-summary-label">
+                <code>@dicebear/converter</code>
+                <span class="bundle-size-summary-hint"
+                  >PNG, JPEG, WebP & AVIF output</span
+                >
+              </span>
+              <span class="bundle-size-summary-values">
+                <span class="bundle-size-summary-raw">{{
+                  formatSize(sizes.converter.gzip)
+                }}</span>
+                <span class="bundle-size-summary-gzip">gzip</span>
+              </span>
+            </label>
+          </div>
+        </UiCard>
+
+        <UiCard padding="lg" class="bundle-size-picker">
+          <div class="bundle-size-picker-toolbar">
+            <IconField class="bundle-size-picker-search">
+              <InputIcon>
+                <Search :size="16" />
+              </InputIcon>
+              <InputText
+                v-model="filter"
+                placeholder="Filter styles…"
+                spellcheck="false"
+                fluid
+              />
+            </IconField>
+            <div class="bundle-size-picker-actions">
+              <Button
+                label="Select all"
+                severity="secondary"
+                variant="outlined"
+                @click="selectAll"
+              />
+              <Button
+                label="Clear"
+                severity="secondary"
+                variant="outlined"
+                @click="clear"
+              >
+                <template #icon><X :size="14" /></template>
+              </Button>
+            </div>
+          </div>
+
+          <ul class="bundle-size-list">
+            <li
+              v-for="name in visibleStyles"
+              :key="name"
+              class="bundle-size-row"
+              :class="{ 'bundle-size-row-selected': selected.has(name) }"
+            >
+              <label class="bundle-size-row-label">
+                <Checkbox
+                  :model-value="selected.has(name)"
+                  :binary="true"
+                  @update:model-value="toggle(name)"
+                />
+                <UiAvatar
+                  :style-name="name"
+                  :style-options="{ seed: name, size: 28 }"
+                  :size="28"
+                  alt=""
+                  mode="library"
+                  class="bundle-size-row-avatar"
+                />
+                <span class="bundle-size-row-title">{{
+                  styleTitle(name)
+                }}</span>
+                <code class="bundle-size-row-slug">{{ name }}</code>
+                <span class="bundle-size-row-values">
+                  <span class="bundle-size-row-raw">{{
+                    formatSize(sizes.styles[name]?.gzip ?? 0)
+                  }}</span>
+                  <span class="bundle-size-row-gzip">gzip</span>
+                </span>
+              </label>
+            </li>
+            <li v-if="visibleStyles.length === 0" class="bundle-size-empty">
+              No styles match "{{ filter }}".
+            </li>
+          </ul>
+        </UiCard>
+      </div>
+    </div>
   </UiContainer>
 </template>
 
 <style lang="scss">
 html.dark {
   .bundle-size-summary,
+  .bundle-size-packages,
   .bundle-size-picker {
     background: var(--vp-c-bg-soft);
   }
@@ -252,7 +277,8 @@ html.dark {
     background: var(--vp-c-bg);
   }
 
-  .bundle-size-row-slug {
+  .bundle-size-row-slug,
+  .bundle-size-summary-label code {
     background: var(--vp-c-bg);
   }
 
@@ -296,6 +322,47 @@ html.dark {
 
   @media (max-width: 640px) {
     padding-top: 32px;
+  }
+}
+
+.bundle-size-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 28px;
+
+  @media (max-width: 959px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// Explicit placement flips the visual order: the summary is first in the DOM
+// (and in the stacked layout), but sits in the right column on wide screens.
+// The aside stretches to the row height, which gives the sticky card room.
+.bundle-size-main {
+  grid-row: 1;
+  grid-column: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+
+  @media (max-width: 959px) {
+    grid-row: auto;
+    grid-column: auto;
+  }
+}
+
+.bundle-size-aside {
+  grid-row: 1;
+  grid-column: 2;
+  min-width: 0;
+  // The compact summary styles key on this column's width, so the narrow
+  // desktop column and small viewports get the same treatment.
+  container-type: inline-size;
+
+  @media (max-width: 959px) {
+    grid-row: auto;
+    grid-column: auto;
   }
 }
 
@@ -356,12 +423,6 @@ html.dark {
     cursor: not-allowed;
   }
 
-  // Info rows (no checkbox) get extra left padding so their label aligns
-  // with the package name in the toggle rows above (checkbox width + gap).
-  &-row:not(&-row-toggle) &-row-label {
-    padding-left: 40px;
-  }
-
   &-label {
     font-size: 13px;
     color: var(--ui-c-text-muted);
@@ -416,6 +477,16 @@ html.dark {
     color: var(--ui-c-text-subtle);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+  }
+}
+
+// The package toggles reuse the summary row primitives, so the card only
+// needs the same stacked body.
+.bundle-size-packages {
+  :deep(.ui-card-body) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 }
 
@@ -535,9 +606,14 @@ html.dark {
     position: static;
     box-shadow: none !important;
   }
+}
 
-  // Tighter row padding + smaller "raw" value so summary rows fit on narrow
-  // viewports without the value crashing into the label. Allow wrapping so
+// Compact summary rows, keyed on the aside's width instead of the viewport:
+// the narrow desktop column and small stacked viewports get the same
+// treatment.
+@container (max-width: 480px) {
+  // Tighter row padding + smaller "raw" value so summary rows fit in narrow
+  // columns without the value crashing into the label. Allow wrapping so
   // the values drop to a second line if the label needs the full width.
   .bundle-size-summary-row-label {
     flex-wrap: wrap;
@@ -568,7 +644,7 @@ html.dark {
     font-size: 18px;
   }
 
-  // Allow the label/hint to wrap to a second line on tiny viewports if needed.
+  // Allow the label/hint to wrap to a second line in tight columns if needed.
   .bundle-size-summary-label {
     flex-wrap: wrap;
     gap: 2px 10px;
