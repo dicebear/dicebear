@@ -1,5 +1,9 @@
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Avatar Library</h1>
 
+<p>
+  <img src="https://www.dicebear.com/readme-hero.svg" alt="A grid of DiceBear avatars in twenty-four different styles" width="100%" />
+</p>
+
 DiceBear is an open source avatar library. It turns any seed string (a username
 or an email address, for example) into an SVG avatar in one of 52 styles, from
 hand-drawn characters to abstract patterns. The same seed always produces the
