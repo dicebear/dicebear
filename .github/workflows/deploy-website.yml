@@ -2,9 +2,20 @@ name: Deploy Website
 
 on:
   workflow_dispatch: {}
+  # The star badge and the star counts in the comparison table are baked in at
+  # build time, so the site needs a rebuild to pick them up. Scheduled runs only
+  # ever use the default branch, which leaves the 9.x site to manual dispatch.
+  schedule:
+    - cron: '17 4 * * 1'
 
 permissions:
   contents: read
+
+# A scheduled run must not overlap with a manual one. Queue instead of cancel,
+# so a deploy that is already uploading to Bunny finishes.
+concurrency:
+  group: deploy-website-${{ github.ref_name }}
+  cancel-in-progress: false
 
 jobs:
   test:
