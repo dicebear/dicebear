@@ -10,7 +10,6 @@ import {
 import { SITE_ORIGIN, siteUrl } from './config/site.ts';
 import sidebarDocs from './config/sidebarDocs.ts';
 import sidebarStyles from './config/sidebarStyles.ts';
-import sidebarTools from './config/sidebarTools.ts';
 import avatarStyles, {
   styleCount,
   animatedStyleCount,
@@ -363,7 +362,6 @@ export default defineConfig<ThemeOptions>({
       '/how-to-use/': sidebarDocs,
       '/guides/': sidebarDocs,
       '/specification/': sidebarDocs,
-      '/tools/': sidebarTools,
     },
   },
   sitemap: {
