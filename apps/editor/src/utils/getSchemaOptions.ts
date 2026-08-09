@@ -112,6 +112,7 @@ export default function getSchemaOptions(style: Style): ConfigStyleOptions {
 
     const isArray = 'list' in field && field.list === true;
     const componentName = key.replace(/Variant$/, '');
+    const styleColor = style.colors().get(key.replace(/Color$/, ''));
 
     // A component is only optional when the style gives it a default
     // probability below 100. Components that are always rendered (the
@@ -132,15 +133,10 @@ export default function getSchemaOptions(style: Style): ConfigStyleOptions {
       }
     }
 
-    if (isColor) {
+    if (isColor && styleColor) {
       // Use the style's defined color values (strip # prefix for the editor)
-      const colorName = key.replace(/Color$/, '');
-      const styleColor = style.colors().get(colorName);
-
-      if (styleColor) {
-        for (const value of styleColor.values()) {
-          values.add(value.replace(/^#/, ''));
-        }
+      for (const value of styleColor.values()) {
+        values.add(value.replace(/^#/, ''));
       }
     }
 
@@ -150,12 +146,19 @@ export default function getSchemaOptions(style: Style): ConfigStyleOptions {
       }
     }
 
+    const contrastTo = styleColor?.contrastTo();
+    const notEqualTo = styleColor?.notEqualTo() ?? [];
+
     result[key] = {
       values: Array.from(values.values()),
       isColor,
       isArray,
       hasProbability,
       probability: componentProbability,
+      ...(isColor && contrastTo ? { contrastTo } : {}),
+      ...(isColor && notEqualTo.length > 0
+        ? { notEqualTo: Array.from(notEqualTo) }
+        : {}),
     };
   }
 

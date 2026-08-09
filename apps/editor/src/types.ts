@@ -6,6 +6,10 @@ export type ConfigStyleOption = {
   isColor?: boolean;
   isArray?: boolean;
   values: string[];
+  // Color group names, as declared by the style definition. `contrastTo` is a
+  // single group, `notEqualTo` a list.
+  contrastTo?: string;
+  notEqualTo?: string[];
 };
 
 export type ConfigStyleOptions = Record<string, ConfigStyleOption>;

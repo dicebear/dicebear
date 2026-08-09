@@ -18,6 +18,16 @@ and this project adheres to
   parity fixtures and the guide on accessing all available options cover the new
   property.
 
+### Fixed
+
+- **Editor:** Shuffle drew every color on its own and ignored the `contrastTo`
+  and `notEqualTo` constraints from the style definition. In `thumbs` that gave
+  the shape the background color in about one of five shuffles, where it then
+  vanished, and picked the worse of black and white for eyes and mouth about
+  half the time. `clay`, `critters`, `micah`, `voxel-art`, and `voxel-bot` were
+  affected too. Shuffle now resolves colors in dependency order and applies the
+  same constraints as the renderer.
+
 ## [10.5.0] - 2026-08-09
 
 ### Added
