@@ -41,6 +41,7 @@
     "@types/canvas-confetti": "^1.9.0",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^24.0.3",
+    "esbuild": "^0.28.1",
     "sharp": "^0.35.3",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.4",

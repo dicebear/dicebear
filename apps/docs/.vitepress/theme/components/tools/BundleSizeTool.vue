@@ -94,8 +94,8 @@ function styleTitle(name: string): string {
     <header class="bundle-size-tool-hero">
       <UiHeadline tag="h1"> <strong>Bundle Size</strong> Estimator </UiHeadline>
       <UiDescription>
-        Pick the styles you plan to use and see how many gzipped kilobytes
-        they'll add to your JavaScript bundle.
+        Pick the styles you plan to use and see how many minified, gzipped
+        kilobytes they'll add to your JavaScript bundle.
       </UiDescription>
     </header>
 
@@ -132,7 +132,7 @@ function styleTitle(name: string): string {
           <span class="bundle-size-summary-label">
             <code>@dicebear/converter</code>
             <span class="bundle-size-summary-hint"
-              >PNG, JPEG, WebP & PDF output</span
+              >PNG, JPEG, WebP & AVIF output</span
             >
           </span>
           <span class="bundle-size-summary-values">

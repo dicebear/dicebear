@@ -26,6 +26,16 @@ and this project adheres to
 - **CLI:** Removed the unused `ajv` dependency, which makes a CLI install about
   2.7 MB smaller.
 
+### Fixed
+
+- **Docs:** The bundle size estimator now reports what a bundler actually ships:
+  one minified bundle per package, gzipped as a whole. It previously gzipped
+  every published file on its own without minification, which showed
+  `@dicebear/core` at 58 kB instead of 26 kB and `@dicebear/converter` at 8 kB
+  instead of 26 kB, since the converter's browser build pulls its XML
+  dependencies into the bundle. The converter hint also claimed PDF output; the
+  package converts to PNG, JPEG, WebP, and AVIF.
+
 ## [10.4.0] - 2026-08-01
 
 ### Changed
