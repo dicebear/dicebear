@@ -50,8 +50,8 @@ and this project adheres to
   instead of a parser-specific one, and when `normalizeMaskType` rewrites a
   document in the browser, empty elements come back self-closing. Both helpers
   are covered by new jsdom-based tests.
-- **Styles:** Bumped `@dicebear/styles` to `10.4.0` for the docs, the editor,
-  and the CLI. The release adds `voxel-art` and `voxel-bot`, which take the
+- **Styles:** Bumped `@dicebear/styles` to `10.4.0` for the CLI, the docs, and
+  the editor. The release adds `voxel-art` and `voxel-bot`, which take the
   collection from 50 to 52 styles. Both ship the opt-in `animation` component,
   so 18 of the 52 styles can now animate.
 
