@@ -22,10 +22,10 @@ and this project adheres to
   result seed-dependent. Existing avatars are unaffected, since `random` stays
   the default. Requested in discussion
   [#549](https://github.com/orgs/dicebear/discussions/549) for building
-  gradients with a fixed color sequence, such as flag colors. The option is
-  validated by `@dicebear/schema` 1.4.0, documented in the core options guide
-  and the implementation specification, and pinned by two new parity fixture
-  cases per style.
+  gradients with a fixed color sequence, such as flag colors. `@dicebear/schema`
+  1.4.0 validates the option, and two new parity fixture cases per style pin its
+  behavior across the ports. The core options guide and the implementation
+  specification cover the details.
 - **Docs:** Style pages for `voxel-art` and `voxel-bot`, the two styles new in
   `@dicebear/styles` 10.4.0. The animated-avatars page now fills its style count
   from the definitions at build time, through the same token mechanism the
@@ -74,14 +74,13 @@ and this project adheres to
 ### Deprecated
 
 - **Core:** The sorted fallback order that `*ColorOrder: 'fixed'` applies when
-  no `*Color` option is set. Within DiceBear 10 the style palette is
-  deduplicated and code-point sorted in this case, so palettes keep their
-  canonical order and only the shuffle is skipped. DiceBear 11 will use the
-  palette in its definition order instead, the same verbatim rule that already
-  applies to user-supplied colors. That removes the user-colors/palette
-  distinction from the resolvers and makes `fixed` mean the same thing for both
-  sources. The sort site in each of the six ports carries a matching deprecation
-  comment.
+  no `*Color` option is set. In DiceBear 10, this case deduplicates and
+  code-point sorts the style palette, so palettes keep their canonical order and
+  only the shuffle is skipped. DiceBear 11 will use the palette in its
+  definition order instead, the same verbatim rule that already applies to
+  user-supplied colors. That removes the user-colors/palette distinction from
+  the resolvers and makes `fixed` mean the same thing for both sources. The sort
+  site in each of the six ports carries a matching deprecation comment.
 
 ### Fixed
 
