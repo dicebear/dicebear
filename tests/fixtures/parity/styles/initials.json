@@ -1,5 +1,5 @@
 {
-  "$id": "https://cdn.hopjs.net/npm/@dicebear/styles@10.3.0-rc.1/dist/initials.min.json",
+  "$id": "https://cdn.hopjs.net/npm/@dicebear/styles@10.3.0/dist/initials.min.json",
   "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@1.3.0/dist/definition.min.json",
   "meta": {
     "license": {
@@ -19,8 +19,8 @@
   "canvas": {
     "elements": [
       {
-        "type": "component",
-        "name": "initials"
+        "name": "initials",
+        "type": "component"
       }
     ],
     "width": 100,
@@ -59,7 +59,7 @@
               "name": "g",
               "type": "element",
               "attributes": {
-                "opacity": "0.5"
+                "opacity": ".5"
               },
               "children": [
                 {
@@ -80,8 +80,8 @@
           "weight": 0,
           "elements": [
             {
-              "type": "element",
               "name": "text",
+              "type": "element",
               "attributes": {
                 "x": "50%",
                 "y": "50%",
@@ -117,8 +117,8 @@
           "weight": 1,
           "elements": [
             {
-              "type": "element",
               "name": "text",
+              "type": "element",
               "attributes": {
                 "x": "50%",
                 "y": "50%",
