@@ -14,6 +14,7 @@ import StyleOptionsCard, { type OptionValue } from './StyleOptionsCard.vue';
 
 const props = defineProps<{
   styleName: string;
+  groupId: string;
   label: string;
   category: keyof typeof categoryIcons;
   options: Record<string, OptionValue>;
@@ -22,13 +23,21 @@ const props = defineProps<{
 const icon = computed(() => categoryIcons[props.category]);
 
 const optionCount = computed(() => Object.keys(props.options).length);
+
+const headerId = computed(() => `options-group-${props.groupId}`);
 </script>
 
 <template>
   <div class="style-options-group">
     <div class="style-options-group-header">
       <component :is="icon" :size="16" class="style-options-group-icon" />
-      <span class="style-options-group-label">{{ label }}</span>
+      <!-- A real heading, so the group shows up in the aside outline. Icon
+           and count sit outside the h3: the outline title is the label
+           alone. -->
+      <h3 :id="headerId" tabindex="-1" class="style-options-group-label">
+        {{ label }}
+        <a class="header-anchor" :href="`#${headerId}`" aria-hidden="true"></a>
+      </h3>
       <span class="style-options-group-count">{{ optionCount }}</span>
     </div>
     <div class="style-options-group-cards">
@@ -57,8 +66,16 @@ const optionCount = computed(() => Object.keys(props.options).length);
     flex-shrink: 0;
   }
 
+  // Neutralizes the `.vp-doc h3` typography; the heading exists for the
+  // aside outline and the anchor, not for the document scale.
   &-label {
+    margin: 0 !important;
+    padding: 0;
+    border: none;
+    font-size: 16px;
     font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: normal;
   }
 
   &-count {

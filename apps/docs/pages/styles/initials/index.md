@@ -3,6 +3,7 @@ title: Initials – Avatar Placeholder API
 description: >
   Generate SVG initials avatars with DiceBear, a free avatar placeholder API and
   JavaScript library for user profile pictures.
+outline: [2, 3]
 ---
 
 <script setup lang="ts">

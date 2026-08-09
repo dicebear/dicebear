@@ -367,10 +367,12 @@ function onExamplesToggle(event: MouseEvent) {
 <template>
   <UiCard class="style-options-card">
     <div class="style-options-card-header">
-      <h3 :id="headerId" tabindex="-1" class="style-options-card-title">
+      <!-- h4, one level below the group headings, so an `outline: [2, 3]`
+           page lists the groups in the aside without every option card. -->
+      <h4 :id="headerId" tabindex="-1" class="style-options-card-title">
         {{ name }}
         <a class="header-anchor" :href="`#${headerId}`" aria-hidden="true"></a>
-      </h3>
+      </h4>
       <div class="style-options-card-badges">
         <Tag
           v-for="badge in badges"

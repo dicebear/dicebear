@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { computed, nextTick, provide, ref, toRef } from 'vue';
+import { computed, nextTick, provide, ref, toRef, watch } from 'vue';
 import { inBrowser } from 'vitepress';
+// The aside outline rebuilds itself through these callbacks whenever
+// VitePress announces new markdown content. Not part of the public API,
+// hence the deep import; the bundle shares one module instance with the
+// theme, so the registry is the same one the outline listens on.
+// @ts-expect-error -- the deep client path ships no type definitions
+import { contentUpdatedCallbacks } from 'vitepress/dist/client/app/utils.js';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
 import { watchOnce, watchDebounced } from '@vueuse/core';
 import { track } from '@theme/utils/track';
@@ -268,6 +274,21 @@ const filteredGroups = computed(() => {
     .filter((group) => Object.keys(group.options).length > 0);
 });
 
+// The group headings render after the async style load and appear or
+// disappear with the search filter, both after the outline's own DOM scan.
+// Replay the content-updated announcement so the aside picks them up.
+watch([loadedStyle, filteredGroups], async () => {
+  if (!inBrowser) {
+    return;
+  }
+
+  await nextTick();
+
+  for (const callback of [...contentUpdatedCallbacks]) {
+    callback();
+  }
+});
+
 // Option cards render asynchronously, so the browser's initial hash-scroll
 // runs before the target anchors exist. Re-do the scroll once they're in.
 watchOnce(loadedStyle, async (style) => {
@@ -298,8 +319,9 @@ watchOnce(loadedStyle, async (style) => {
   }
 
   // VitePress 2 removed `getScrollOffset()` and now clears the sticky header
-  // in CSS instead. The option titles are `<h3>`s inside `.vp-doc`, so its own
-  // `.vp-doc h1…h6` rule already gives them the right `scroll-margin-top`.
+  // in CSS instead. The group titles are `<h3>`s and the option titles
+  // `<h4>`s inside `.vp-doc`, so its own `.vp-doc h1…h6` rule already gives
+  // them the right `scroll-margin-top`.
   // Instant, because this is a correction after the options finished loading,
   // not a navigation.
   target.scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -331,6 +353,7 @@ watchOnce(loadedStyle, async (style) => {
         v-for="group in filteredGroups"
         :key="group.id"
         :style-name="styleName"
+        :group-id="group.id"
         :label="group.label"
         :category="group.category"
         :options="group.options"
