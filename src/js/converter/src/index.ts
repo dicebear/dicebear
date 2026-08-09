@@ -6,5 +6,5 @@
  */
 
 export { toPng, toJpeg, toWebp, toAvif } from './core.js';
-export { normalizeMaskType } from './utils/svg.js';
+export { normalizeMaskType } from './utils/svg-browser.js';
 export type * from './types.js';

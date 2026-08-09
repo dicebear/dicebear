@@ -25,6 +25,16 @@ and this project adheres to
   reports the first group; the verdict is not affected.
 - **CLI:** Removed the unused `ajv` dependency, which makes a CLI install about
   2.7 MB smaller.
+- **Converter:** The browser build no longer bundles an XML parser. Setting the
+  render size and mirroring `mask-type` declarations now run on the native
+  `DOMParser` and `XMLSerializer`, which every browser ships. The XML dependency
+  stack (fast-xml-parser and friends) made up nine tenths of the browser bundle;
+  it stays in the Node build, where no native XML machinery exists. A browser
+  bundle of `@dicebear/converter` shrinks from 26 kB to 1.4 kB gzipped. Two
+  edges change with the parser: a malformed SVG now fails with a clear error
+  instead of a parser-specific one, and when `normalizeMaskType` rewrites a
+  document in the browser, empty elements come back self-closing. Both helpers
+  are covered by new jsdom-based tests.
 
 ### Fixed
 

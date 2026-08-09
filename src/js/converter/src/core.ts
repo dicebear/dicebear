@@ -8,7 +8,7 @@ import type {
   Options,
 } from './types.js';
 import { getMimeType } from './utils/mime-type.js';
-import { ensureSize } from './utils/svg.js';
+import { ensureSize } from './utils/svg-browser.js';
 
 export const toPng: ToPng = (avatar: Avatar, options: Options = {}) => {
   return toFormat(avatar, 'png', options);
