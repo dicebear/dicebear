@@ -83,9 +83,10 @@ const RULE_Y = CREDIT_BASELINE - 40;
 
 /**
  * What shows through a transparent avatar. No avatar is ever given a
- * `backgroundColor`: 20 of the 37 styles declare their own `colors.background`
- * palette (every `-neutral` variant, plus glass, disco, icons, initials and the
- * geometric ones), and overriding it would replace a color the artist chose. The other 17 render transparent and sit on this.
+ * `backgroundColor`: 33 of the 50 styles declare their own `colors.background`
+ * palette (every `-neutral` variant, every v10 addition except glyphs, and a
+ * handful of older ones), and overriding it would replace a color the artist
+ * chose. The other 17 render transparent and sit on this.
  *
  * sky-100 rather than white, because white artwork disappears against a white
  * tile: `lorelei` loses its face and shows only hair and outlines, and
@@ -135,14 +136,17 @@ const DEFAULT_CARD = 'default';
  * artist behind it, so it carries none. That only holds while every style on
  * it waives attribution. Restricted to CC0 and asserted
  * at build time in {@link generateOgImages}. Picked for contrast: line art,
- * character, pixel, geometric, people.
+ * monster, clay figure, pixel grid, scene. Everything but lorelei shipped
+ * with v10, so the card also shows what is new. The seeds are hand-picked for
+ * this row and set the tile order, warm and cool tiles alternating against
+ * the blue gradient.
  */
 const DEFAULT_TILES = [
   { styleName: 'lorelei', seed: 'Felix' },
-  { styleName: 'thumbs', seed: 'Aneka' },
-  { styleName: 'pixel-art', seed: 'Milo' },
-  { styleName: 'shapes', seed: 'Luna' },
-  { styleName: 'open-peeps', seed: 'Sage' },
+  { styleName: 'critters', seed: 'Pia' },
+  { styleName: 'clay', seed: 'Ilan' },
+  { styleName: 'pixelbot', seed: 'Iker' },
+  { styleName: 'planets', seed: 'Ruby' },
 ];
 
 /**
