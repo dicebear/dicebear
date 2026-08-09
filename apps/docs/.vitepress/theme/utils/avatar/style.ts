@@ -56,6 +56,8 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
   thumbs: () => import('@dicebear/styles/thumbs.json'),
   'toon-head': () => import('@dicebear/styles/toon-head.json'),
   triangles: () => import('@dicebear/styles/triangles.json'),
+  'voxel-art': () => import('@dicebear/styles/voxel-art.json'),
+  'voxel-bot': () => import('@dicebear/styles/voxel-bot.json'),
   waves: () => import('@dicebear/styles/waves.json'),
   weave: () => import('@dicebear/styles/weave.json'),
 };

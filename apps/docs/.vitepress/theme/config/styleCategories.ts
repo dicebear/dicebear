@@ -66,6 +66,8 @@ const styleCategories: Record<string, StyleCategory> = {
   thumbs: 'Characters',
   'toon-head': 'Characters',
   triangles: 'Minimalist',
+  'voxel-art': 'Characters',
+  'voxel-bot': 'Characters',
   waves: 'Minimalist',
   weave: 'Minimalist',
 };

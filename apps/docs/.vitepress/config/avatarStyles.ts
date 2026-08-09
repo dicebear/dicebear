@@ -67,12 +67,15 @@ export const styleCount = Object.keys(avatarStyles).length;
 
 /**
  * How many of those styles ship an animation. Derived from the same
- * `@keyframes` probe that sets the per-style `animated` flag above.
+ * `@keyframes` probe that sets the per-style `animated` flag above. Frontmatter
+ * writes {@link ANIMATED_STYLE_COUNT_TOKEN} where this number belongs.
  */
 export const animatedStyleCount = Object.values(avatarStyles).filter(
   (style) => style.animated,
 ).length;
 
 export const STYLE_COUNT_TOKEN = '%STYLE_COUNT%';
+
+export const ANIMATED_STYLE_COUNT_TOKEN = '%ANIMATED_STYLE_COUNT%';
 
 export default avatarStyles;

@@ -113,9 +113,9 @@ const animatedStyles = computed(() =>
 
   &-grid {
     display: grid;
-    /* Four columns so the 16 animated styles fill four even rows. Revisit the
+    /* Six columns so the 18 animated styles fill three even rows. Revisit the
        count when a new animated style ships. */
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 24px;
     justify-items: center;
   }

@@ -83,7 +83,7 @@ const RULE_Y = CREDIT_BASELINE - 40;
 
 /**
  * What shows through a transparent avatar. No avatar is ever given a
- * `backgroundColor`: 33 of the 50 styles declare their own `colors.background`
+ * `backgroundColor`: 35 of the 52 styles declare their own `colors.background`
  * palette (every `-neutral` variant, every v10 addition except glyphs, and a
  * handful of older ones), and overriding it would replace a color the artist
  * chose. The other 17 render transparent and sit on this.

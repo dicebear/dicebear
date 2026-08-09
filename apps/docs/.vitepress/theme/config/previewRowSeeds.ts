@@ -56,6 +56,8 @@ export const previewRowSeeds: Record<string, string[]> = {
   thumbs: ['Drew', 'Ina', 'Curtis', 'Edgar', 'Ben', 'Emery', 'Alba', 'Reese'],
   'toon-head': ['Denver', 'Ilona', 'Chloe', 'Eloise', 'Brenda', 'Evren', 'Anika', 'Remy'],
   triangles: ['Dax', 'Ilse', 'Cato', 'Elio', 'Baris', 'Edgar', 'Adil', 'Rhys'],
+  'voxel-art': ['Denver', 'Ilaria', 'Casper', 'Elin', 'Ben', 'Erik', 'Aden', 'Roshan'],
+  'voxel-bot': ['Dion', 'Ida', 'Celia', 'Edda', 'Bodhi', 'Emery', 'Alia', 'Rosie'],
   waves: ['Dov', 'Iva', 'Cyrus', 'Eloise', 'Brody', 'Evelyn', 'Ari', 'Rania'],
   weave: ['Dax', 'Ilya', 'Chloe', 'Enid', 'Brody', 'Elif', 'Anders', 'Renzo'],
 };
@@ -109,6 +111,8 @@ export const styleCardSeeds: Record<string, string[]> = {
   thumbs: ['Dara', 'Iva', 'Cecile', 'Emil'],
   'toon-head': ['Dana', 'Ines', 'Ciro', 'Elise'],
   triangles: ['Dion', 'Ingrid', 'Cyrus', 'Ella'],
+  'voxel-art': ['Drew', 'Ingrid', 'Cora', 'Elise'],
+  'voxel-bot': ['Drew', 'Inaya', 'Ciro', 'Elsa'],
   waves: ['Davi', 'Ilse', 'Calla', 'Elise'],
   weave: ['Dora', 'Iona', 'Cyrus', 'Elsa'],
 };
@@ -162,6 +166,8 @@ export const ogTileSeeds: Record<string, string[]> = {
   thumbs: ['Dahlia', 'Delia', 'Elif', 'Dima', 'Ilona'],
   'toon-head': ['Dahlia', 'Ana', 'Ravi', 'Calla', 'Emil'],
   triangles: ['Dahlia', 'Curtis', 'Celia', 'Inaya', 'Drew'],
+  'voxel-art': ['Dahlia', 'Rosie', 'Rita', 'Beau', 'Dilan'],
+  'voxel-bot': ['Dahlia', 'Ciara', 'Ronan', 'Rhea', 'Ruben'],
   waves: ['Diana', 'Andre', 'Roshan', 'Cato', 'Chloe'],
   weave: ['Dahlia', 'Doria', 'Alia', 'Roman', 'Imani'],
 };

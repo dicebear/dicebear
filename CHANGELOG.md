@@ -8,6 +8,14 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Docs:** Style pages for `voxel-art` and `voxel-bot`, the two styles new in
+  `@dicebear/styles` 10.4.0. The animated-avatars page now fills its style
+  count from the definitions at build time, through the same token mechanism
+  the overall count already uses; the hardcoded number it replaces had gone
+  stale at 15.
+
 ### Changed
 
 - **Core (JavaScript):** The schema validators are now generated with
@@ -35,6 +43,10 @@ and this project adheres to
   instead of a parser-specific one, and when `normalizeMaskType` rewrites a
   document in the browser, empty elements come back self-closing. Both helpers
   are covered by new jsdom-based tests.
+- **Styles:** Bumped `@dicebear/styles` to `10.4.0` for the docs, the editor,
+  and the CLI. The release adds `voxel-art` and `voxel-bot`, which take the
+  collection from 50 to 52 styles. Both ship the opt-in `animation` component,
+  so 18 of the 52 styles can now animate.
 
 ### Fixed
 

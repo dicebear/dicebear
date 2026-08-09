@@ -15,6 +15,7 @@ import avatarStyles, {
   styleCount,
   animatedStyleCount,
   STYLE_COUNT_TOKEN,
+  ANIMATED_STYLE_COUNT_TOKEN,
 } from './config/avatarStyles.ts';
 import avatarUniqueCounts from './config/avatarUniqueCounts.ts';
 import avatarStyleSizes from './config/avatarStyleSizes.ts';
@@ -142,13 +143,15 @@ export default defineConfig<ThemeOptions>({
     ...thirdPartyScripts,
   ],
   srcDir: path.join(import.meta.dirname, '..', 'pages'),
-  // Frontmatter is static YAML and cannot import the style count, so pages
-  // write the token where the number belongs and the build substitutes it.
+  // Frontmatter is static YAML and cannot import the style counts, so pages
+  // write the tokens where the numbers belong and the build substitutes them.
   // Runs before transformHead, which reads these two fields for the canonical
   // title and the og:description.
   transformPageData: (pageData) => {
     const fill = (value: string) =>
-      value.replaceAll(STYLE_COUNT_TOKEN, String(styleCount));
+      value
+        .replaceAll(STYLE_COUNT_TOKEN, String(styleCount))
+        .replaceAll(ANIMATED_STYLE_COUNT_TOKEN, String(animatedStyleCount));
 
     if (typeof pageData.frontmatter.title === 'string') {
       pageData.frontmatter.title = fill(pageData.frontmatter.title);
