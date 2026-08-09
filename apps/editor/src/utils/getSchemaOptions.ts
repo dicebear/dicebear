@@ -93,6 +93,13 @@ export default function getSchemaOptions(style: Style): ConfigStyleOptions {
   const result: ConfigStyleOptions = {};
 
   for (const [key, field] of Object.entries(descriptor)) {
+    // The editor's export produces static files, so the animation option is
+    // hidden. Animated variants carry weight 0 in every style, which keeps
+    // avatars static as long as nothing sets animationVariant.
+    if (key === 'animationVariant') {
+      continue;
+    }
+
     // Only show variant (enum with weighted) and color options in the editor
     const isColor = field.type === 'color';
     const isVariant =

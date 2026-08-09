@@ -15,6 +15,13 @@ and this project adheres to
   count from the definitions at build time, through the same token mechanism
   the overall count already uses; the hardcoded number it replaces had gone
   stale at 15.
+- **Editor:** The eight character styles the editor was missing: `clay`,
+  `critters`, `moods`, `pixelbot`, `sprouts`, `thumbs`, `voxel-art`, and
+  `voxel-bot`. Its style list now matches the docs' Characters category
+  exactly, and the new option labels are translated into English, German, and
+  Portuguese. The animation option stays hidden in the editor, since its
+  export writes static files; an avatar without an explicit `animationVariant`
+  never animates, because every animated variant carries weight 0.
 
 ### Changed
 
