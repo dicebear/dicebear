@@ -159,6 +159,59 @@ function withoutEmptyMembers(
   });
 }
 
+/**
+ * Swaps every `<style>` text for a comment placeholder and returns the
+ * originals keyed by placeholder.
+ *
+ * svgo's stylesheet collector skips `@keyframes` only at the top level; the
+ * keyframes the animation components wrap in `@media (prefers-reduced-motion)`
+ * leak their `0%, …` steps into the rule list, where css-select then fails on
+ * the `%` selector. The retained plugins never rewrite CSS, so the text is
+ * hidden from svgo entirely and restored afterwards; if svgo dropped a style
+ * element regardless, restoration misses it and the css fingerprint gate
+ * fails the run.
+ */
+function shieldStyleTexts(
+  elements: readonly DefinitionElement[],
+): Map<string, string> {
+  const shielded = new Map<string, string>();
+
+  walkElements(elements, (element) => {
+    if (element.name !== 'style') {
+      return;
+    }
+
+    for (const child of element.children ?? []) {
+      if (typeof child.value === 'string' && child.value !== '') {
+        const token = `/*dicebear-css-${shielded.size}*/`;
+
+        shielded.set(token, child.value);
+        child.value = token;
+      }
+    }
+  });
+
+  return shielded;
+}
+
+/** Reverses {@link shieldStyleTexts} on an optimized tree. */
+function restoreStyleTexts(
+  elements: readonly DefinitionElement[],
+  shielded: Map<string, string>,
+): void {
+  walkElements(elements, (element) => {
+    if (element.name !== 'style') {
+      return;
+    }
+
+    for (const child of element.children ?? []) {
+      if (typeof child.value === 'string' && shielded.has(child.value)) {
+        child.value = shielded.get(child.value) as string;
+      }
+    }
+  });
+}
+
 /** Renders one avatar per seed and returns the SVG strings. */
 function renderProbe(definition: Definition): string[] {
   const style = new Style(definition);
@@ -207,6 +260,8 @@ export async function optimizeDefinition(
       continue;
     }
 
+    const shieldedCss = shieldStyleTexts(elements);
+
     const document: INode = {
       name: 'svg',
       type: 'element',
@@ -236,6 +291,8 @@ export async function optimizeDefinition(
     unit.owner.elements = (await parse(optimized)).children.map(
       svgsonToDefinition,
     );
+
+    restoreStyleTexts(unit.owner.elements, shieldedCss);
   }
 
   // Identical trees cannot differ in fingerprint or rendered output, so the
