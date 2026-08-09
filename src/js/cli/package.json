@@ -1,6 +1,6 @@
 {
   "name": "dicebear",
-  "version": "10.4.0",
+  "version": "10.5.0",
   "private": false,
   "description": "CLI for DiceBear — unique avatars from dozens of styles.",
   "homepage": "https://github.com/dicebear/dicebear",
@@ -26,8 +26,8 @@
     "test": "node --test"
   },
   "dependencies": {
-    "@dicebear/converter": "10.4.0",
-    "@dicebear/core": "10.4.0",
+    "@dicebear/converter": "10.5.0",
+    "@dicebear/core": "10.5.0",
     "@dicebear/styles": "^10.4.0",
     "chalk": "^5.4.1",
     "chalk-template": "^1.1.2",
