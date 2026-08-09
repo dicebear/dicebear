@@ -1,5 +1,8 @@
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear CLI</h1>
 
+[![stars](https://www.dicebear.com/badges/stars.svg)](https://github.com/dicebear/dicebear/stargazers)
+[![license](https://www.dicebear.com/badges/license.svg)](https://github.com/dicebear/dicebear/blob/10.x/LICENSE)
+
 Command-line interface for the DiceBear avatar library. Generates avatars from
 any built-in or custom style and saves them as SVG, PNG, JPEG, WebP or AVIF.
 
