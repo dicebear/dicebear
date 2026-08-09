@@ -405,5 +405,12 @@
     "type": "range",
     "min": -360,
     "max": 360
+  },
+  "backgroundColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
   }
 }

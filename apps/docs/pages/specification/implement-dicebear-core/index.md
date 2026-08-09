@@ -400,7 +400,7 @@ Rules:
 ### Color options
 
 For each color group declared in the definition (**plus** an implicit
-`background` group) the user can supply four options:
+`background` group) the user can supply five options:
 
 | Option                  | Type                                     | PRNG key                | Notes                                                                             |
 | ----------------------- | ---------------------------------------- | ----------------------- | --------------------------------------------------------------------------------- |
@@ -408,30 +408,47 @@ For each color group declared in the definition (**plus** an implicit
 | `${name}ColorFill`      | enum `solid` / `linear` / `radial`       | `${name}ColorFill`      | `pick` over a list, default `'solid'`                                             |
 | `${name}ColorFillStops` | integer ≥ 2, or `[min, max]` of same     | `${name}ColorFillStops` | `integer` sample, default `2`; ignored when fill is `solid`                       |
 | `${name}ColorAngle`     | number in `[-360, 360]`, or `[min, max]` | `${name}ColorAngle`     | `float` sample, default `0`                                                       |
+| `${name}ColorOrder`     | enum `random` / `fixed`                  | none                    | Single value, no PRNG draw; default `'random'`                                    |
+
+The resolver-level `colorOrder` accessor returns the user value or `'random'`.
+Unlike `colorFill` it is not memoized into the resolved-options snapshot: it is
+no PRNG pick, so the snapshot stays unchanged for existing inputs.
 
 Resolution for each group:
 
 1. Get candidate colors from the user option (`${name}Color`) or fall back to
-   the style definition's palette.
+   the style definition's palette. Remember which source was used: `'fixed'`
+   treats user-supplied candidates ("verbatim") differently from the definition
+   palette.
 2. Normalize every candidate to lowercase hex (6 or 8 digits, leading `#`).
    3-/4-digit shorthand expands to 6/8.
 3. Determine the number of stops: `1` if fill is `solid`, otherwise sample
-   `${name}ColorFillStops` (PRNG `integer`, default `2`).
+   `${name}ColorFillStops` (PRNG `integer`). When the option is unset the
+   fallback is `2`; in the verbatim case (`'fixed'` with user-supplied
+   candidates) it is the candidate count instead, measured before the
+   `notEqualTo` filtering below.
 4. Apply constraints from the style definition:
    - **`contrastTo`**: Sort the candidates by WCAG 2.1 contrast ratio
      (descending) against the referenced color. The reference is resolved by
      calling the color-resolver recursively, so cycles must be detected and
-     rejected.
+     rejected. Skipped in the verbatim case: the user's order wins.
    - **`notEqualTo`**: Strip the alpha channel from every candidate and every
      already-picked color in the referenced groups, then drop the matches. If
      filtering would empty the candidate list, fall back to the unfiltered list:
-     color constraints are best-effort, not hard.
-5. If there is no `contrastTo` constraint, shuffle the candidates.
+     color constraints are best-effort, not hard. Applies regardless of
+     `${name}ColorOrder`.
+5. Order the candidates. If the definition declares `contrastTo`, keep the
+   current order, even when the sort itself was skipped because the reference
+   resolved to no color. Otherwise shuffle, unless `${name}ColorOrder` is
+   `'fixed'`: verbatim candidates then keep exactly the given order (duplicates
+   included), while a definition palette is deduplicated (first occurrence wins)
+   and sorted by UTF-16 code units (the same canonicalization `shuffle` applies
+   before drawing, without the shuffle itself).
 6. Slice to the number of stops.
 
 A group declared without a color entry in the style definition (the implicit
 `background` group is the most common case) skips constraint handling entirely
-and just shuffles the user-supplied candidates.
+and orders the user-supplied candidates as in step 5.
 
 #### WCAG 2.1 contrast ratio
 

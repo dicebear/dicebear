@@ -158,6 +158,13 @@ class Resolver
         return $this->memoFloat("{$name}ColorAngle", $this->options->colorAngle($name), 0.0);
     }
 
+    public function colorOrder(string $name): string
+    {
+        // Deliberately not memoized: unlike colorFill this is no PRNG pick, so
+        // it stays out of the {@see resolved} snapshot.
+        return $this->options->colorOrder($name) ?? Options::COLOR_ORDER_RANDOM;
+    }
+
     /**
      * Picks the rotate/translateX/translateY/scale values for a single
      * component. Memoized per `name`, so the four values land in
@@ -418,6 +425,13 @@ class Resolver
      * circular references between colors and throws
      * {@see CircularColorReferenceError}.
      *
+     * A user-set `${name}ColorOrder: 'fixed'` pins user-supplied colors to
+     * their verbatim order: the shuffle and the contrast sort are skipped
+     * (`notEqualTo` filtering still applies), and the gradient stop count
+     * defaults to the number of supplied colors instead of 2. A style palette
+     * carries no order contract, so with `fixed` it is still deduplicated,
+     * code-point sorted, and contrast sorted; only the shuffle is skipped.
+     *
      * @return list<string>
      */
     private function resolveColor(string $name): array
@@ -428,11 +442,13 @@ class Resolver
         $source = $userColors ?? $styleColor?->values() ?? [];
 
         $candidates = array_map(fn($c) => ColorUtil::toHex($c), $source);
+        $fixed = $this->colorOrder($name) === Options::COLOR_ORDER_FIXED;
+        $verbatim = $userColors !== null && $fixed;
         $fill = $this->colorFill($name);
-        $stops = $fill === 'solid' ? 1 : $this->colorFillStops($name);
+        $stops = $fill === 'solid' ? 1 : $this->colorFillStops($name, $verbatim ? count($candidates) : 2);
 
         if ($styleColor === null) {
-            return array_slice($this->prng->shuffle("{$name}Color", $candidates), 0, $stops);
+            return array_slice($this->order($name, $candidates, $fixed, $verbatim), 0, $stops);
         }
 
         // Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a)
@@ -445,7 +461,7 @@ class Resolver
         $notEqualTo = $styleColor->notEqualTo();
 
         try {
-            if ($contrastTo !== null) {
+            if ($contrastTo !== null && !$verbatim) {
                 $refColor = $this->color($contrastTo)[0] ?? null;
 
                 if ($refColor !== null) {
@@ -471,16 +487,48 @@ class Resolver
         // Skip shuffle when sorted by contrast to preserve the ordering
         $ordered = $contrastTo !== null
             ? $candidates
-            : $this->prng->shuffle("{$name}Color", $candidates);
+            : $this->order($name, $candidates, $fixed, $verbatim);
 
         return array_slice($ordered, 0, $stops);
     }
 
-    private function colorFillStops(string $name): int
+    /**
+     * Applies `${name}ColorOrder` to the candidate list. `random` shuffles via
+     * the PRNG. `fixed` skips the shuffle: user-supplied colors (`$verbatim`)
+     * keep exactly the given order, while a style palette is still
+     * deduplicated and sorted by UTF-16 code units, matching the
+     * canonicalization the shuffle applies before drawing.
+     *
+     * @param list<string> $candidates
+     *
+     * @return list<string>
+     */
+    private function order(string $name, array $candidates, bool $fixed, bool $verbatim): array
+    {
+        if (!$fixed) {
+            return $this->prng->shuffle("{$name}Color", $candidates);
+        }
+
+        if ($verbatim) {
+            return $candidates;
+        }
+
+        // Hex colors are ASCII, so a byte sort equals the UTF-16 code unit
+        // sort the JS reference applies.
+        // Deprecated: DiceBear 11 will take the palette in its definition
+        // order here, the same verbatim rule as user-supplied colors, and
+        // drop this sort (see CHANGELOG.md, "Deprecated").
+        $unique = array_values(array_unique($candidates));
+        sort($unique, SORT_STRING);
+
+        return $unique;
+    }
+
+    private function colorFillStops(string $name, int $fallback): int
     {
         $range = $this->options->colorFillStops($name);
 
-        return $range === null ? 2 : $this->prng->integer("{$name}ColorFillStops", $range);
+        return $range === null ? $fallback : $this->prng->integer("{$name}ColorFillStops", $range);
     }
 
     /** @param array{min: int|float, max: int|float, step?: int|float}|null $range */

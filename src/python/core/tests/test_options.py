@@ -195,3 +195,26 @@ def test_color_meta_defaults_when_unset() -> None:
     assert options.color_fill("skin") == []
     assert options.color_angle("skin") is None
     assert options.color_fill_stops("skin") is None
+
+
+# ---------------------------------------------------------------------------
+# color_order
+# ---------------------------------------------------------------------------
+
+
+def test_color_order_returns_none_when_unset() -> None:
+    assert Options({}).color_order("skin") is None
+
+
+def test_color_order_passes_value_through() -> None:
+    assert Options({"skinColorOrder": "fixed"}).color_order("skin") == "fixed"
+
+
+def test_color_order_rejects_unknown_value() -> None:
+    with pytest.raises(OptionsValidationError):
+        Options({"skinColorOrder": "sorted"})
+
+
+def test_color_order_rejects_list_value() -> None:
+    with pytest.raises(OptionsValidationError):
+        Options({"skinColorOrder": ["fixed"]})

@@ -13,8 +13,8 @@ use std::collections::{HashMap, HashSet};
 use serde_json::Value;
 
 use crate::error::Error;
-use crate::options::Options;
-use crate::prng::{Prng, Range};
+use crate::options::{Options, COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM};
+use crate::prng::{cmp_utf16, unique_by_code_point, Prng, Range};
 use crate::style::{Color, Component, Style};
 use crate::utils::color;
 
@@ -352,6 +352,14 @@ impl<'a> Resolver<'a> {
         )
     }
 
+    pub fn color_order(&self, name: &str) -> String {
+        // Deliberately not recorded: unlike colorFill this is no PRNG pick, so
+        // it stays out of the resolved() snapshot.
+        self.options
+            .color_order(name)
+            .unwrap_or_else(|| COLOR_ORDER_RANDOM.to_string())
+    }
+
     /// Returns `(rotate, translate_x, translate_y, scale)` for a component, each
     /// recorded as `{name}Rotate` / `{name}TranslateX` / … in the snapshot.
     pub fn component_transform(&self, name: &str) -> (f64, f64, f64, f64) {
@@ -406,11 +414,23 @@ impl<'a> Resolver<'a> {
             .bool(&format!("{name}Probability"), self.probability(component))
     }
 
+    /// Resolves a named color to its final stop list, applying contrast sorting
+    /// and `notEqualTo` filtering from the style definition. Returns
+    /// [`Error::CircularColorReference`] when colors reference each other in a
+    /// cycle.
+    ///
+    /// A user-set `${name}ColorOrder: 'fixed'` pins user-supplied colors to
+    /// their verbatim order: the shuffle and the contrast sort are skipped
+    /// (`notEqualTo` filtering still applies), and the gradient stop count
+    /// defaults to the number of supplied colors instead of 2. A style palette
+    /// carries no order contract, so with `fixed` it is still deduplicated,
+    /// code-point sorted, and contrast sorted; only the shuffle is skipped.
     fn resolve_color(&self, name: &str) -> Result<Vec<String>, Error> {
         let style_color = self.style.colors().get(name);
-        let source: Vec<String> = self
-            .options
-            .color(name)
+        let user_colors = self.options.color(name);
+        let fixed = self.color_order(name) == COLOR_ORDER_FIXED;
+        let verbatim = user_colors.is_some() && fixed;
+        let source: Vec<String> = user_colors
             .or_else(|| style_color.map(|c| c.values().to_vec()))
             .unwrap_or_default();
 
@@ -419,12 +439,12 @@ impl<'a> Resolver<'a> {
         let stops = if fill == "solid" {
             1
         } else {
-            self.color_fill_stops(name)
+            self.color_fill_stops(name, if verbatim { candidates.len() } else { 2 })
         };
 
         let Some(style_color) = style_color else {
-            let shuffled = self.prng.shuffle(&format!("{name}Color"), &candidates);
-            return Ok(shuffled.into_iter().take(stops).collect());
+            let ordered = self.order(name, candidates, fixed, verbatim);
+            return Ok(ordered.into_iter().take(stops).collect());
         };
 
         if self.color_resolving.borrow().iter().any(|n| n == name) {
@@ -435,7 +455,7 @@ impl<'a> Resolver<'a> {
 
         self.color_resolving.borrow_mut().push(name.to_string());
         // Apply constraints, then always pop the stack (even on error).
-        let outcome = self.apply_color_constraints(style_color, &mut candidates);
+        let outcome = self.apply_color_constraints(style_color, &mut candidates, verbatim);
         self.color_resolving.borrow_mut().pop();
         outcome?;
 
@@ -443,7 +463,7 @@ impl<'a> Resolver<'a> {
         let ordered = if style_color.contrast_to().is_some() {
             candidates
         } else {
-            self.prng.shuffle(&format!("{name}Color"), &candidates)
+            self.order(name, candidates, fixed, verbatim)
         };
 
         Ok(ordered.into_iter().take(stops).collect())
@@ -453,10 +473,13 @@ impl<'a> Resolver<'a> {
         &self,
         style_color: &Color,
         candidates: &mut Vec<String>,
+        verbatim: bool,
     ) -> Result<(), Error> {
         if let Some(reference) = style_color.contrast_to() {
-            if let Some(ref_color) = self.color(reference)?.into_iter().next() {
-                *candidates = color::sort_by_contrast(candidates, &ref_color);
+            if !verbatim {
+                if let Some(ref_color) = self.color(reference)?.into_iter().next() {
+                    *candidates = color::sort_by_contrast(candidates, &ref_color);
+                }
             }
         }
 
@@ -471,13 +494,42 @@ impl<'a> Resolver<'a> {
         Ok(())
     }
 
-    fn color_fill_stops(&self, name: &str) -> usize {
+    /// Applies `${name}ColorOrder` to the candidate list. `random` shuffles via
+    /// the PRNG. `fixed` skips the shuffle: user-supplied colors (`verbatim`)
+    /// keep exactly the given order, while a style palette is still deduplicated
+    /// and sorted by UTF-16 code units, matching the canonicalization the
+    /// shuffle applies before drawing.
+    fn order(
+        &self,
+        name: &str,
+        candidates: Vec<String>,
+        fixed: bool,
+        verbatim: bool,
+    ) -> Vec<String> {
+        if !fixed {
+            return self.prng.shuffle(&format!("{name}Color"), &candidates);
+        }
+
+        if verbatim {
+            return candidates;
+        }
+
+        // Deprecated: DiceBear 11 will take the palette in its definition
+        // order here, the same verbatim rule as user-supplied colors, and
+        // drop this sort (see CHANGELOG.md, "Deprecated").
+        let mut unique = unique_by_code_point(&candidates);
+        unique.sort_by(|a, b| cmp_utf16(a.as_str(), b.as_str()));
+
+        unique.into_iter().cloned().collect()
+    }
+
+    fn color_fill_stops(&self, name: &str, fallback: usize) -> usize {
         match self.options.color_fill_stops(name) {
             Some(range) => self
                 .prng
                 .integer(&format!("{name}ColorFillStops"), &range)
                 .max(0) as usize,
-            None => 2,
+            None => fallback,
         }
     }
 
@@ -506,5 +558,229 @@ fn num_value(value: f64) -> Value {
         Value::from(value as i64)
     } else {
         Value::from(value)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::{json, Value};
+
+    use super::Resolver;
+    use crate::options::Options;
+    use crate::style::Style;
+
+    const MINIMAL_STYLE: &str = r#"{"canvas":{"width":100,"height":100,"elements":[]}}"#;
+
+    /// Mirrors the JS test fixture: `hair.notEqualTo = skin` and
+    /// `background.contrastTo = skin`.
+    fn style_with_colors() -> Style {
+        Style::from_str(
+            r##"{
+                "canvas": { "width": 100, "height": 100, "elements": [] },
+                "colors": {
+                    "skin": { "values": ["#f0c8a0", "#d4a574", "#8d5524"] },
+                    "hair": { "values": ["#2c1b18", "#b55239", "#d6b370"], "notEqualTo": ["skin"] },
+                    "background": { "values": ["#ffffff", "#000000", "#cccccc"], "contrastTo": "skin" }
+                }
+            }"##,
+        )
+        .unwrap()
+    }
+
+    fn resolve(style: &Style, options: Value, name: &str) -> Vec<String> {
+        let options = Options::new(options);
+        let resolver = Resolver::new(style, &options);
+
+        resolver.color(name).unwrap()
+    }
+
+    #[test]
+    fn color_order_defaults_to_random() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let options = Options::new(json!({ "seed": "order-default" }));
+        let resolver = Resolver::new(&style, &options);
+
+        assert_eq!(resolver.color_order("skin"), "random");
+    }
+
+    #[test]
+    fn fixed_order_keeps_the_given_order_for_gradient_fills() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let colors = resolve(
+            &style,
+            json!({
+                "seed": "order-fixed",
+                "skinColor": ["#0055a4", "#ffffff", "#ef4135"],
+                "skinColorFill": "linear",
+                "skinColorOrder": "fixed",
+            }),
+            "skin",
+        );
+
+        assert_eq!(colors, vec!["#0055a4", "#ffffff", "#ef4135"]);
+    }
+
+    #[test]
+    fn fixed_order_keeps_the_order_for_every_seed() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+
+        for i in 0..20 {
+            let colors = resolve(
+                &style,
+                json!({
+                    "seed": format!("order-fixed-{i}"),
+                    "skinColor": ["#0055a4", "#ffffff", "#ef4135"],
+                    "skinColorFill": "linear",
+                    "skinColorOrder": "fixed",
+                }),
+                "skin",
+            );
+
+            assert_eq!(colors, vec!["#0055a4", "#ffffff", "#ef4135"]);
+        }
+    }
+
+    #[test]
+    fn fixed_order_defaults_the_stop_count_to_the_number_of_colors() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let colors = resolve(
+            &style,
+            json!({
+                "seed": "order-stops",
+                "skinColor": ["#ff0000", "#00ff00", "#0000ff", "#ffffff"],
+                "skinColorFill": "linear",
+                "skinColorOrder": "fixed",
+            }),
+            "skin",
+        );
+
+        assert_eq!(colors.len(), 4);
+    }
+
+    #[test]
+    fn fixed_order_respects_an_explicit_stop_count() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let colors = resolve(
+            &style,
+            json!({
+                "seed": "order-explicit-stops",
+                "skinColor": ["#0055a4", "#ffffff", "#ef4135"],
+                "skinColorFill": "linear",
+                "skinColorFillStops": 2,
+                "skinColorOrder": "fixed",
+            }),
+            "skin",
+        );
+
+        assert_eq!(colors, vec!["#0055a4", "#ffffff"]);
+    }
+
+    #[test]
+    fn fixed_order_always_uses_the_first_color_for_solid_fills() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let colors = resolve(
+            &style,
+            json!({
+                "seed": "order-solid",
+                "skinColor": ["#ef4135", "#0055a4"],
+                "skinColorOrder": "fixed",
+            }),
+            "skin",
+        );
+
+        assert_eq!(colors, vec!["#ef4135"]);
+    }
+
+    #[test]
+    fn fixed_order_skips_contrast_sorting() {
+        // background.contrastTo = skin: by default the strongest-contrast
+        // candidate comes first, with a fixed order the user's first color wins.
+        let style = style_with_colors();
+        let options = json!({
+            "seed": "order-contrast",
+            "skinColor": "#000000",
+            "backgroundColor": ["#111111", "#ffffff"],
+        });
+
+        let mut fixed = options.clone();
+        fixed["backgroundColorOrder"] = json!("fixed");
+
+        assert_eq!(resolve(&style, options, "background"), vec!["#ffffff"]);
+        assert_eq!(resolve(&style, fixed, "background"), vec!["#111111"]);
+    }
+
+    #[test]
+    fn fixed_order_still_applies_not_equal_to_filtering() {
+        // hair.notEqualTo = skin
+        let style = style_with_colors();
+        let colors = resolve(
+            &style,
+            json!({
+                "seed": "order-not-equal",
+                "skinColor": "#2c1b18",
+                "hairColor": ["#2c1b18", "#b55239", "#d6b370"],
+                "hairColorFill": "linear",
+                "hairColorOrder": "fixed",
+            }),
+            "hair",
+        );
+
+        assert_eq!(colors, vec!["#b55239", "#d6b370"]);
+    }
+
+    #[test]
+    fn fixed_order_sorts_a_style_palette_instead_of_taking_it_verbatim() {
+        // Without user-supplied colors, 'fixed' only skips the shuffle: the
+        // style palette keeps the canonical code-point sort, for every seed.
+        let style = style_with_colors();
+
+        for i in 0..5 {
+            let colors = resolve(
+                &style,
+                json!({
+                    "seed": format!("order-style-{i}"),
+                    "skinColorFill": "linear",
+                    "skinColorFillStops": 3,
+                    "skinColorOrder": "fixed",
+                }),
+                "skin",
+            );
+
+            assert_eq!(colors, vec!["#8d5524", "#d4a574", "#f0c8a0"]);
+        }
+    }
+
+    #[test]
+    fn fixed_order_keeps_contrast_sorting_for_a_style_palette() {
+        // background.contrastTo = skin and no user-supplied background colors:
+        // the strongest-contrast candidate still comes first.
+        let style = style_with_colors();
+        let colors = resolve(
+            &style,
+            json!({
+                "seed": "order-style-contrast",
+                "skinColor": "#000000",
+                "backgroundColorOrder": "fixed",
+            }),
+            "background",
+        );
+
+        assert_eq!(colors, vec!["#ffffff"]);
+    }
+
+    #[test]
+    fn fixed_order_keeps_the_default_of_two_stops_for_a_style_palette() {
+        let style = style_with_colors();
+        let colors = resolve(
+            &style,
+            json!({
+                "seed": "order-style-stops",
+                "skinColorFill": "linear",
+                "skinColorOrder": "fixed",
+            }),
+            "skin",
+        );
+
+        assert_eq!(colors, vec!["#8d5524", "#d4a574"]);
     }
 }

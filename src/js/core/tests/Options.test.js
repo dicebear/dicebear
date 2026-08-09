@@ -201,4 +201,30 @@ describe('Options', () => {
       assert.equal(options.colorFillStops('skin'), undefined);
     });
   });
+
+  describe('colorOrder()', () => {
+    it('should return undefined when unset', () => {
+      assert.equal(new Options({}).colorOrder('skin'), undefined);
+    });
+
+    it('should pass the value through', () => {
+      const options = new Options({ skinColorOrder: 'fixed' });
+
+      assert.equal(options.colorOrder('skin'), 'fixed');
+    });
+
+    it('should reject an unknown value', () => {
+      assert.throws(
+        () => new Options({ skinColorOrder: 'sorted' }),
+        OptionsValidationError,
+      );
+    });
+
+    it('should reject an array value', () => {
+      assert.throws(
+        () => new Options({ skinColorOrder: ['fixed'] }),
+        OptionsValidationError,
+      );
+    });
+  });
 });

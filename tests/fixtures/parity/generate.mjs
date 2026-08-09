@@ -815,6 +815,26 @@ function avatarCases(extra) {
         backgroundColorFill: ['radial'],
       },
     },
+    // User-supplied colors deliberately not in code-point order: with a
+    // fixed color order the gradient stops must keep this exact sequence.
+    {
+      id: 'background-fixed-order',
+      options: {
+        seed: 'parity-1',
+        backgroundColor: ['ef4135', 'ffffff', '0055a4'],
+        backgroundColorFill: ['linear'],
+        backgroundColorOrder: 'fixed',
+      },
+    },
+    // Without user-supplied colors a fixed order falls back to the style's
+    // palette in canonical sorted order, independent of the seed.
+    {
+      id: 'background-fixed-order-palette',
+      options: {
+        seed: 'parity-2',
+        backgroundColorOrder: 'fixed',
+      },
+    },
     // `size` and `title` together pin the resolution order of the resolved
     // options snapshot (size is recorded before title).
     {

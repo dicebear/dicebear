@@ -193,6 +193,17 @@ func (o *options) colorFillStops(name string) *prng.Range {
 	return toRange(v)
 }
 
+// colorOrder returns the ${name}ColorOrder value, or "" when unset. The option
+// is a single enum value ("random" or "fixed"), never a slice.
+func (o *options) colorOrder(name string) string {
+	if v, ok := o.get(name + "ColorOrder"); ok {
+		if s, ok := v.(string); ok {
+			return s
+		}
+	}
+	return ""
+}
+
 // asStringArray normalizes a scalar/array/absent string value into a slice.
 func asStringArray(value any) []string {
 	switch v := value.(type) {

@@ -1,11 +1,8 @@
-github.com/dicebear/schema v1.3.0 h1:8njL3bj4lKefE+wG8WAwYyxpSVJOdIfbbRZbqdORfSQ=
-github.com/dicebear/schema v1.3.0/go.mod h1:MPcjp3gkb9i9qJZ1CttUo/brppkIN4f+7CFFlW6KWU4=
+github.com/dicebear/schema v1.4.0 h1:nhc1QcEyXI7z5HWQAOtUTIVgO8H2QNygb4Zhe6T+q0c=
+github.com/dicebear/schema v1.4.0/go.mod h1:MPcjp3gkb9i9qJZ1CttUo/brppkIN4f+7CFFlW6KWU4=
 github.com/dlclark/regexp2 v1.11.0 h1:G/nrcoOa7ZXlpoa/91N3X7mM3r8eIlMBBJZvsz/mxKI=
 github.com/dlclark/regexp2 v1.11.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
 github.com/santhosh-tekuri/jsonschema/v6 v6.0.2 h1:KRzFb2m7YtdldCEkzs6KqmJw4nqEVZGK7IN2kJkjTuQ=
 github.com/santhosh-tekuri/jsonschema/v6 v6.0.2/go.mod h1:JXeL+ps8p7/KNMjDQk3TCwPpBy0wYklyWTfbkIzdIFU=
-golang.org/x/mod v0.8.0/go.mod h1:iBbtSCu2XBx23ZKBPSOrRkjjQPZFPuis4dIYUhu/chs=
-golang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/text v0.14.0 h1:ScX5w1eTa3QqT8oi6+ziP7dTV1S2+ALU0bI+0zXKWiQ=
 golang.org/x/text v0.14.0/go.mod h1:18ZOQIKpY8NJVqYksKHtTdi31H5itFRjB5/qKTNYzSU=
-golang.org/x/tools v0.6.0/go.mod h1:Xwgl3UAJ/d3gWutnCtw505GrjyAbvKui8lOU390QaIU=

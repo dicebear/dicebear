@@ -323,6 +323,150 @@ class ResolverTest extends TestCase
         }
     }
 
+    // colorOrder
+
+    public function testColorOrderDefaultsToRandom(): void
+    {
+        $resolver = self::makeResolver(self::minimalStyle(), ['seed' => 'order-default']);
+        $this->assertSame('random', $resolver->colorOrder('skin'));
+    }
+
+    public function testColorOrderFixedKeepsGivenOrderForGradientFills(): void
+    {
+        $resolver = self::makeResolver(self::minimalStyle(), [
+            'seed' => 'order-fixed',
+            'skinColor' => ['#0055a4', '#ffffff', '#ef4135'],
+            'skinColorFill' => 'linear',
+            'skinColorOrder' => 'fixed',
+        ]);
+
+        $this->assertSame(['#0055a4', '#ffffff', '#ef4135'], $resolver->color('skin'));
+    }
+
+    public function testColorOrderFixedKeepsOrderForEverySeed(): void
+    {
+        for ($i = 0; $i < 20; $i++) {
+            $resolver = self::makeResolver(self::minimalStyle(), [
+                'seed' => "order-fixed-{$i}",
+                'skinColor' => ['#0055a4', '#ffffff', '#ef4135'],
+                'skinColorFill' => 'linear',
+                'skinColorOrder' => 'fixed',
+            ]);
+
+            $this->assertSame(['#0055a4', '#ffffff', '#ef4135'], $resolver->color('skin'));
+        }
+    }
+
+    public function testColorOrderFixedDefaultsStopCountToNumberOfColors(): void
+    {
+        $resolver = self::makeResolver(self::minimalStyle(), [
+            'seed' => 'order-stops',
+            'skinColor' => ['#ff0000', '#00ff00', '#0000ff', '#ffffff'],
+            'skinColorFill' => 'linear',
+            'skinColorOrder' => 'fixed',
+        ]);
+
+        $this->assertCount(4, $resolver->color('skin'));
+    }
+
+    public function testColorOrderFixedRespectsExplicitStopCount(): void
+    {
+        $resolver = self::makeResolver(self::minimalStyle(), [
+            'seed' => 'order-explicit-stops',
+            'skinColor' => ['#0055a4', '#ffffff', '#ef4135'],
+            'skinColorFill' => 'linear',
+            'skinColorFillStops' => 2,
+            'skinColorOrder' => 'fixed',
+        ]);
+
+        $this->assertSame(['#0055a4', '#ffffff'], $resolver->color('skin'));
+    }
+
+    public function testColorOrderFixedAlwaysUsesFirstColorForSolidFill(): void
+    {
+        $resolver = self::makeResolver(self::minimalStyle(), [
+            'seed' => 'order-solid',
+            'skinColor' => ['#ef4135', '#0055a4'],
+            'skinColorOrder' => 'fixed',
+        ]);
+
+        $this->assertSame(['#ef4135'], $resolver->color('skin'));
+    }
+
+    public function testColorOrderFixedSkipsContrastSorting(): void
+    {
+        // background.contrastTo = skin: by default the strongest-contrast
+        // candidate comes first, with a fixed order the user's first color wins.
+        $options = [
+            'seed' => 'order-contrast',
+            'skinColor' => '#000000',
+            'backgroundColor' => ['#111111', '#ffffff'],
+        ];
+
+        $control = self::makeResolver(self::styleWithColors(), $options);
+        $fixed = self::makeResolver(
+            self::styleWithColors(),
+            array_merge($options, ['backgroundColorOrder' => 'fixed']),
+        );
+
+        $this->assertSame(['#ffffff'], $control->color('background'));
+        $this->assertSame(['#111111'], $fixed->color('background'));
+    }
+
+    public function testColorOrderFixedStillAppliesNotEqualToFiltering(): void
+    {
+        // hair.notEqualTo = skin
+        $resolver = self::makeResolver(self::styleWithColors(), [
+            'seed' => 'order-not-equal',
+            'skinColor' => '#2c1b18',
+            'hairColor' => ['#2c1b18', '#b55239', '#d6b370'],
+            'hairColorFill' => 'linear',
+            'hairColorOrder' => 'fixed',
+        ]);
+
+        $this->assertSame(['#b55239', '#d6b370'], $resolver->color('hair'));
+    }
+
+    public function testColorOrderFixedSortsStylePaletteInsteadOfVerbatim(): void
+    {
+        // Without user-supplied colors, 'fixed' only skips the shuffle: the
+        // style palette keeps the canonical code-point sort, for every seed.
+        for ($i = 0; $i < 5; $i++) {
+            $resolver = self::makeResolver(self::styleWithColors(), [
+                'seed' => "order-style-{$i}",
+                'skinColorFill' => 'linear',
+                'skinColorFillStops' => 3,
+                'skinColorOrder' => 'fixed',
+            ]);
+
+            $this->assertSame(['#8d5524', '#d4a574', '#f0c8a0'], $resolver->color('skin'));
+        }
+    }
+
+    public function testColorOrderFixedKeepsContrastSortingForStylePalette(): void
+    {
+        // background.contrastTo = skin and no user-supplied background colors:
+        // the strongest-contrast candidate still comes first.
+        $resolver = self::makeResolver(self::styleWithColors(), [
+            'seed' => 'order-style-contrast',
+            'skinColor' => '#000000',
+            'backgroundColorOrder' => 'fixed',
+        ]);
+
+        $this->assertSame(['#ffffff'], $resolver->color('background'));
+    }
+
+    public function testColorOrderFixedKeepsDefaultTwoStopsForStylePalette(): void
+    {
+        $resolver = self::makeResolver(self::styleWithColors(), [
+            'seed' => 'order-style-stops',
+            'skinColorFill' => 'linear',
+            'skinColorOrder' => 'fixed',
+        ]);
+
+        $this->assertSame(['#8d5524', '#d4a574'], $resolver->color('skin'));
+    }
+
     // componentTransform()
 
     public function testComponentTransformIdentityDefaults(): void

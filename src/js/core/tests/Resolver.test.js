@@ -359,6 +359,152 @@ describe('Resolver', () => {
     });
   });
 
+  describe('colorOrder', () => {
+    it('should default to random', () => {
+      const resolver = makeResolver(minimalStyle, { seed: 'order-default' });
+
+      assert.equal(resolver.colorOrder('skin'), 'random');
+    });
+
+    it('should keep the given order for gradient fills when fixed', () => {
+      const resolver = makeResolver(minimalStyle, {
+        seed: 'order-fixed',
+        skinColor: ['#0055a4', '#ffffff', '#ef4135'],
+        skinColorFill: 'linear',
+        skinColorOrder: 'fixed',
+      });
+
+      assert.deepEqual(resolver.color('skin'), [
+        '#0055a4',
+        '#ffffff',
+        '#ef4135',
+      ]);
+    });
+
+    it('should keep the order for every seed', () => {
+      for (let i = 0; i < 20; i++) {
+        const resolver = makeResolver(minimalStyle, {
+          seed: `order-fixed-${i}`,
+          skinColor: ['#0055a4', '#ffffff', '#ef4135'],
+          skinColorFill: 'linear',
+          skinColorOrder: 'fixed',
+        });
+
+        assert.deepEqual(resolver.color('skin'), [
+          '#0055a4',
+          '#ffffff',
+          '#ef4135',
+        ]);
+      }
+    });
+
+    it('should default the stop count to the number of colors when fixed', () => {
+      const resolver = makeResolver(minimalStyle, {
+        seed: 'order-stops',
+        skinColor: ['#ff0000', '#00ff00', '#0000ff', '#ffffff'],
+        skinColorFill: 'linear',
+        skinColorOrder: 'fixed',
+      });
+
+      assert.equal(resolver.color('skin').length, 4);
+    });
+
+    it('should respect an explicit stop count when fixed', () => {
+      const resolver = makeResolver(minimalStyle, {
+        seed: 'order-explicit-stops',
+        skinColor: ['#0055a4', '#ffffff', '#ef4135'],
+        skinColorFill: 'linear',
+        skinColorFillStops: 2,
+        skinColorOrder: 'fixed',
+      });
+
+      assert.deepEqual(resolver.color('skin'), ['#0055a4', '#ffffff']);
+    });
+
+    it('should always use the first color for solid fills when fixed', () => {
+      const resolver = makeResolver(minimalStyle, {
+        seed: 'order-solid',
+        skinColor: ['#ef4135', '#0055a4'],
+        skinColorOrder: 'fixed',
+      });
+
+      assert.deepEqual(resolver.color('skin'), ['#ef4135']);
+    });
+
+    it('should skip contrast sorting when fixed', () => {
+      // background.contrastTo = skin: by default the strongest-contrast
+      // candidate comes first, with a fixed order the user's first color wins.
+      const options = {
+        seed: 'order-contrast',
+        skinColor: '#000000',
+        backgroundColor: ['#111111', '#ffffff'],
+      };
+
+      const control = makeResolver(styleWithColors, options);
+      const fixed = makeResolver(styleWithColors, {
+        ...options,
+        backgroundColorOrder: 'fixed',
+      });
+
+      assert.deepEqual(control.color('background'), ['#ffffff']);
+      assert.deepEqual(fixed.color('background'), ['#111111']);
+    });
+
+    it('should still apply notEqualTo filtering when fixed', () => {
+      // hair.notEqualTo = skin
+      const resolver = makeResolver(styleWithColors, {
+        seed: 'order-not-equal',
+        skinColor: '#2c1b18',
+        hairColor: ['#2c1b18', '#b55239', '#d6b370'],
+        hairColorFill: 'linear',
+        hairColorOrder: 'fixed',
+      });
+
+      assert.deepEqual(resolver.color('hair'), ['#b55239', '#d6b370']);
+    });
+
+    it('should sort a style palette instead of taking it verbatim', () => {
+      // Without user-supplied colors, 'fixed' only skips the shuffle: the
+      // style palette keeps the canonical code-point sort, for every seed.
+      for (let i = 0; i < 5; i++) {
+        const resolver = makeResolver(styleWithColors, {
+          seed: `order-style-${i}`,
+          skinColorFill: 'linear',
+          skinColorFillStops: 3,
+          skinColorOrder: 'fixed',
+        });
+
+        assert.deepEqual(resolver.color('skin'), [
+          '#8d5524',
+          '#d4a574',
+          '#f0c8a0',
+        ]);
+      }
+    });
+
+    it('should keep contrast sorting for a style palette when fixed', () => {
+      // background.contrastTo = skin and no user-supplied background colors:
+      // the strongest-contrast candidate still comes first.
+      const resolver = makeResolver(styleWithColors, {
+        seed: 'order-style-contrast',
+        skinColor: '#000000',
+        backgroundColorOrder: 'fixed',
+      });
+
+      assert.deepEqual(resolver.color('background'), ['#ffffff']);
+    });
+
+    it('should keep the default of 2 stops for a style palette when fixed', () => {
+      const resolver = makeResolver(styleWithColors, {
+        seed: 'order-style-stops',
+        skinColorFill: 'linear',
+        skinColorOrder: 'fixed',
+      });
+
+      assert.deepEqual(resolver.color('skin'), ['#8d5524', '#d4a574']);
+    });
+  });
+
   describe('componentTransform()', () => {
     it('should default to identity transform when component has no definition ranges', () => {
       const resolver = makeResolver(styleWithComponents, { seed: 'identity' });

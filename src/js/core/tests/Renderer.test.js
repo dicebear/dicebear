@@ -652,6 +652,40 @@ describe('Renderer', () => {
       assert.ok(svg.includes('<radialGradient id="bg-color-'));
       assert.ok(svg.includes('fill="url(#bg-color-'));
     });
+
+    it('should keep the stop order when the color order is fixed', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'rect',
+              attributes: { fill: { type: 'color', name: 'bg' } },
+            },
+          ],
+        },
+        colors: {
+          bg: { values: ['#ff0000', '#0000ff'] },
+        },
+      });
+
+      const svg = new Avatar(style, {
+        seed: 'test',
+        bgColor: ['#0055a4', '#ffffff', '#ef4135'],
+        bgColorFill: 'linear',
+        bgColorOrder: 'fixed',
+      }).toString();
+
+      assert.ok(
+        svg.includes(
+          '<stop offset="0%" stop-color="#0055a4"/>' +
+            '<stop offset="50%" stop-color="#ffffff"/>' +
+            '<stop offset="100%" stop-color="#ef4135"/>',
+        ),
+      );
+    });
   });
 
   describe('flip', () => {

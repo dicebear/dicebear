@@ -20,6 +20,9 @@ use DiceBear\Validator\OptionsValidator;
  */
 class Options
 {
+    public const COLOR_ORDER_RANDOM = 'random';
+    public const COLOR_ORDER_FIXED = 'fixed';
+
     /** @var array<string, mixed> */
     private array $data;
 
@@ -196,6 +199,11 @@ class Options
     public function colorFillStops(string $name): ?array
     {
         return $this->toRange($this->dynamic($name . 'ColorFillStops'));
+    }
+
+    public function colorOrder(string $name): ?string
+    {
+        return $this->dynamic($name . 'ColorOrder');
     }
 
     /**

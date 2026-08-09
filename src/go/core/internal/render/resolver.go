@@ -1,6 +1,8 @@
 package render
 
 import (
+	"sort"
+
 	"github.com/dicebear/dicebear-go/v10/color"
 	"github.com/dicebear/dicebear-go/v10/internal/errs"
 	"github.com/dicebear/dicebear-go/v10/internal/prng"
@@ -366,6 +368,16 @@ func (r *resolver) colorAngle(name string) float64 {
 	return r.floatOpt(name+"ColorAngle", r.options.colorAngle(name), 0)
 }
 
+// colorOrder returns the user's ${name}ColorOrder, or "random" when unset.
+// Deliberately not recorded: unlike colorFill this is no PRNG pick, so it
+// stays out of the resolved snapshot.
+func (r *resolver) colorOrder(name string) string {
+	if v := r.options.colorOrder(name); v != "" {
+		return v
+	}
+	return style.ColorOrderRandom
+}
+
 // componentTransform returns (rotate, translateX, translateY, scale) for a
 // component, each recorded as ${name}Rotate / ${name}TranslateX / … in the
 // snapshot.
@@ -423,11 +435,24 @@ func (r *resolver) isVisible(name string, comp *style.Component) bool {
 	return r.rng.Bool(name+"Probability", r.probability(comp))
 }
 
+// resolveColor resolves a named color to its final stop list, applying
+// contrast sorting and notEqualTo filtering from the style definition.
+// Circular references between colors (e.g. a.contrastTo = b, b.contrastTo = a)
+// are detected via the colorResolving stack and reported as a
+// CircularColorReferenceError.
+//
+// A user-set ${name}ColorOrder: "fixed" pins user-supplied colors to their
+// verbatim order: the shuffle and the contrast sort are skipped (notEqualTo
+// filtering still applies), and the gradient stop count defaults to the number
+// of supplied colors instead of 2. A style palette carries no order contract,
+// so with "fixed" it is still deduplicated, code-point sorted, and contrast
+// sorted; only the shuffle is skipped.
 func (r *resolver) resolveColor(name string) ([]string, error) {
 	styleColor, hasStyleColor := r.style.Colors()[name]
 
+	userColors, hasUserColors := r.options.color(name)
 	var source []string
-	if userColors, ok := r.options.color(name); ok {
+	if hasUserColors {
 		source = userColors
 	} else if hasStyleColor {
 		source = styleColor.Values
@@ -438,15 +463,20 @@ func (r *resolver) resolveColor(name string) ([]string, error) {
 		candidates[i] = color.ToHex(c)
 	}
 
+	fixed := r.colorOrder(name) == style.ColorOrderFixed
+	verbatim := hasUserColors && fixed
 	fill := r.colorFill(name)
 	stops := 1
 	if fill != "solid" {
-		stops = r.colorFillStops(name)
+		fallback := 2
+		if verbatim {
+			fallback = len(candidates)
+		}
+		stops = r.colorFillStops(name, fallback)
 	}
 
 	if !hasStyleColor {
-		shuffled := r.rng.Shuffle(name+"Color", candidates)
-		return takeN(shuffled, stops), nil
+		return takeN(r.orderColors(name, candidates, fixed, verbatim), stops), nil
 	}
 
 	// Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a).
@@ -458,7 +488,7 @@ func (r *resolver) resolveColor(name string) ([]string, error) {
 	}
 
 	r.colorResolving = append(r.colorResolving, name)
-	err := r.applyColorConstraints(styleColor, &candidates)
+	err := r.applyColorConstraints(styleColor, &candidates, verbatim)
 	r.colorResolving = r.colorResolving[:len(r.colorResolving)-1]
 	if err != nil {
 		return nil, err
@@ -467,14 +497,44 @@ func (r *resolver) resolveColor(name string) ([]string, error) {
 	// Skip the shuffle when sorted by contrast, to preserve that ordering.
 	ordered := candidates
 	if styleColor.ContrastTo == "" {
-		ordered = r.rng.Shuffle(name+"Color", candidates)
+		ordered = r.orderColors(name, candidates, fixed, verbatim)
 	}
 
 	return takeN(ordered, stops), nil
 }
 
-func (r *resolver) applyColorConstraints(styleColor style.ColorDef, candidates *[]string) error {
-	if styleColor.ContrastTo != "" {
+// orderColors applies ${name}ColorOrder to the candidate list. "random"
+// shuffles via the PRNG. "fixed" skips the shuffle: user-supplied colors
+// (verbatim) keep exactly the given order, while a style palette is still
+// deduplicated and sorted by UTF-16 code units, matching the canonicalization
+// the shuffle applies before drawing. The candidates are normalized hex
+// strings, so Go's byte order equals the UTF-16 code unit order here.
+func (r *resolver) orderColors(name string, candidates []string, fixed, verbatim bool) []string {
+	if !fixed {
+		return r.rng.Shuffle(name+"Color", candidates)
+	}
+
+	if verbatim {
+		return candidates
+	}
+
+	// Deprecated: DiceBear 11 will take the palette in its definition order
+	// here, the same verbatim rule as user-supplied colors, and drop this
+	// sort (see CHANGELOG.md, "Deprecated").
+	seen := make(map[string]struct{}, len(candidates))
+	unique := make([]string, 0, len(candidates))
+	for _, c := range candidates {
+		if _, ok := seen[c]; !ok {
+			seen[c] = struct{}{}
+			unique = append(unique, c)
+		}
+	}
+	sort.Strings(unique)
+	return unique
+}
+
+func (r *resolver) applyColorConstraints(styleColor style.ColorDef, candidates *[]string, verbatim bool) error {
+	if styleColor.ContrastTo != "" && !verbatim {
 		refColors, err := r.color(styleColor.ContrastTo)
 		if err != nil {
 			return err
@@ -499,7 +559,7 @@ func (r *resolver) applyColorConstraints(styleColor style.ColorDef, candidates *
 	return nil
 }
 
-func (r *resolver) colorFillStops(name string) int {
+func (r *resolver) colorFillStops(name string, fallback int) int {
 	if rng := r.options.colorFillStops(name); rng != nil {
 		n := r.rng.Integer(name+"ColorFillStops", rng)
 		if n < 0 {
@@ -507,7 +567,7 @@ func (r *resolver) colorFillStops(name string) int {
 		}
 		return n
 	}
-	return 2
+	return fallback
 }
 
 func (r *resolver) floatOpt(key string, rng *prng.Range, fallback float64) float64 {

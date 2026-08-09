@@ -71,6 +71,7 @@ class OptionsDescriptorTest extends TestCase
         $this->assertSame(['type' => 'enum', 'values' => ['solid', 'linear', 'radial'], 'list' => true], $schema['backgroundColorFill']);
         $this->assertSame(['type' => 'range', 'min' => 2], $schema['backgroundColorFillStops']);
         $this->assertSame(['type' => 'range', 'min' => -360, 'max' => 360], $schema['backgroundColorAngle']);
+        $this->assertSame(['type' => 'enum', 'values' => ['random', 'fixed']], $schema['backgroundColorOrder']);
     }
 
     // component options
@@ -121,6 +122,7 @@ class OptionsDescriptorTest extends TestCase
         $this->assertSame(['type' => 'color', 'list' => true], $schema['skinColor']);
         $this->assertSame(['type' => 'color', 'list' => true], $schema['hairColor']);
         $this->assertSame(['type' => 'enum', 'values' => ['solid', 'linear', 'radial'], 'list' => true], $schema['skinColorFill']);
+        $this->assertSame(['type' => 'enum', 'values' => ['random', 'fixed']], $schema['skinColorOrder']);
     }
 
     public function testExposesContrastToOnColorFields(): void

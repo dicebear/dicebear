@@ -11,6 +11,9 @@ from .validator import OptionsValidator
 Numeric = int | float
 Range = dict[str, Numeric]
 
+COLOR_ORDER_RANDOM = "random"
+COLOR_ORDER_FIXED = "fixed"
+
 
 @dataclass(frozen=True)
 class TagFilterToken:
@@ -150,6 +153,9 @@ class Options:
 
     def color_fill_stops(self, name: str) -> Range | None:
         return self._to_range(self._data.get(name + "ColorFillStops"))
+
+    def color_order(self, name: str) -> str | None:
+        return cast("str | None", self._data.get(name + "ColorOrder"))
 
     @staticmethod
     def _as_array(value: Any) -> list[Any]:

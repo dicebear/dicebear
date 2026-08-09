@@ -108,6 +108,13 @@
     "min": -360,
     "max": 360
   },
+  "backgroundColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
   "textColor": {
     "type": "color",
     "list": true,
@@ -130,5 +137,12 @@
     "type": "range",
     "min": -360,
     "max": 360
+  },
+  "textColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
   }
 }

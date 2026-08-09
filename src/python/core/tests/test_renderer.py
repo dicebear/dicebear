@@ -597,6 +597,39 @@ def test_radial_gradient() -> None:
     assert '<radialGradient id="bg-color-' in svg
 
 
+def test_keeps_stop_order_when_color_order_fixed() -> None:
+    style = Style(
+        {
+            "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                    {
+                        "type": "element",
+                        "name": "rect",
+                        "attributes": {"fill": {"type": "color", "name": "bg"}},
+                    }
+                ],
+            },
+            "colors": {"bg": {"values": ["#ff0000", "#0000ff"]}},
+        }
+    )
+    svg = Avatar(
+        style,
+        {
+            "seed": "test",
+            "bgColor": ["#0055a4", "#ffffff", "#ef4135"],
+            "bgColorFill": "linear",
+            "bgColorOrder": "fixed",
+        },
+    ).to_string()
+    assert (
+        '<stop offset="0%" stop-color="#0055a4"/>'
+        '<stop offset="50%" stop-color="#ffffff"/>'
+        '<stop offset="100%" stop-color="#ef4135"/>'
+    ) in svg
+
+
 # ---------------------------------------------------------------------------
 # flip
 # ---------------------------------------------------------------------------

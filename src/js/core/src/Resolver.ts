@@ -6,10 +6,13 @@ import { CircularColorReferenceError } from './Error/CircularColorReferenceError
 import type { Style } from './Style.js';
 import type { Component } from './Style/Component.js';
 import type { ComponentVariant } from './Style/ComponentVariant.js';
-import type {
-  StyleOptionsFlipValue,
-  StyleOptionsColorFillValue,
-  StyleOptions,
+import {
+  COLOR_ORDER_FIXED,
+  COLOR_ORDER_RANDOM,
+  type StyleOptionsFlipValue,
+  type StyleOptionsColorFillValue,
+  type StyleOptionsColorOrderValue,
+  type StyleOptions,
 } from './StyleOptions.js';
 
 /**
@@ -151,6 +154,12 @@ export class Resolver<D = unknown> {
       this.#options.colorAngle(name),
       0,
     );
+  }
+
+  colorOrder(name: string): StyleOptionsColorOrderValue {
+    // Deliberately not memoized: unlike colorFill this is no PRNG pick, so it
+    // stays out of the {@link resolved} snapshot.
+    return this.#options.colorOrder(name) ?? COLOR_ORDER_RANDOM;
   }
 
   /**
@@ -361,6 +370,13 @@ export class Resolver<D = unknown> {
    * Resolves a named color to its final stop list, applying contrast sorting
    * and `notEqualTo` filtering from the style definition. Detects circular
    * references between colors and throws {@link CircularColorReferenceError}.
+   *
+   * A user-set `${name}ColorOrder: 'fixed'` pins user-supplied colors to
+   * their verbatim order: the shuffle and the contrast sort are skipped
+   * (`notEqualTo` filtering still applies), and the gradient stop count
+   * defaults to the number of supplied colors instead of 2. A style palette
+   * carries no order contract, so with `fixed` it is still deduplicated,
+   * code-point sorted, and contrast sorted; only the shuffle is skipped.
    */
   #resolveColor(name: string): readonly string[] {
     const userColors = this.#options.color(name);
@@ -368,11 +384,16 @@ export class Resolver<D = unknown> {
     const source = userColors ?? styleColor?.values() ?? [];
 
     let candidates = source.map((c) => Color.toHex(c));
+    const fixed = this.colorOrder(name) === COLOR_ORDER_FIXED;
+    const verbatim = userColors !== undefined && fixed;
     const fill = this.colorFill(name);
-    const stops = fill === 'solid' ? 1 : this.#colorFillStops(name);
+    const stops =
+      fill === 'solid'
+        ? 1
+        : this.#colorFillStops(name, verbatim ? candidates.length : 2);
 
     if (!styleColor) {
-      return this.#prng.shuffle(`${name}Color`, candidates).slice(0, stops);
+      return this.#order(name, candidates, fixed, verbatim).slice(0, stops);
     }
 
     // Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a)
@@ -385,7 +406,7 @@ export class Resolver<D = unknown> {
     const notEqualTo = styleColor.notEqualTo();
 
     try {
-      if (contrastTo) {
+      if (contrastTo && !verbatim) {
         const refColor = this.color(contrastTo)[0];
 
         if (refColor) {
@@ -411,15 +432,44 @@ export class Resolver<D = unknown> {
     // Skip shuffle when sorted by contrast to preserve the ordering
     const ordered = contrastTo
       ? candidates
-      : this.#prng.shuffle(`${name}Color`, candidates);
+      : this.#order(name, candidates, fixed, verbatim);
 
     return ordered.slice(0, stops);
   }
 
-  #colorFillStops(name: string): number {
+  /**
+   * Applies `${name}ColorOrder` to the candidate list. `random` shuffles via
+   * the PRNG. `fixed` skips the shuffle: user-supplied colors (`verbatim`)
+   * keep exactly the given order, while a style palette is still deduplicated
+   * and sorted by UTF-16 code units, matching the canonicalization the
+   * shuffle applies before drawing.
+   */
+  #order(
+    name: string,
+    candidates: string[],
+    fixed: boolean,
+    verbatim: boolean,
+  ): string[] {
+    if (!fixed) {
+      return this.#prng.shuffle(`${name}Color`, candidates);
+    }
+
+    if (verbatim) {
+      return candidates;
+    }
+
+    // Deprecated: DiceBear 11 will take the palette in its definition order
+    // here, the same verbatim rule as user-supplied colors, and drop this
+    // sort (see CHANGELOG.md, "Deprecated").
+    return Array.from(new Set(candidates)).sort();
+  }
+
+  #colorFillStops(name: string, fallback: number): number {
     const range = this.#options.colorFillStops(name);
 
-    return range ? this.#prng.integer(`${name}ColorFillStops`, range) : 2;
+    return range
+      ? this.#prng.integer(`${name}ColorFillStops`, range)
+      : fallback;
   }
 
   #memoFloat(key: string, range: Range | undefined, fallback: number): number {

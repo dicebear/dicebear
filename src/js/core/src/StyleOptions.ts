@@ -1,5 +1,9 @@
 export type StyleOptionsFlipValue = 'none' | 'horizontal' | 'vertical' | 'both';
 export type StyleOptionsColorFillValue = 'solid' | 'linear' | 'radial';
+export type StyleOptionsColorOrderValue = 'random' | 'fixed';
+
+export const COLOR_ORDER_RANDOM: StyleOptionsColorOrderValue = 'random';
+export const COLOR_ORDER_FIXED: StyleOptionsColorOrderValue = 'fixed';
 
 /**
  * A parsed `tags` filter token. {@link Options.tags} decodes each raw
@@ -126,7 +130,8 @@ type ComponentOptions<D, C extends string> = [C] extends [never]
       ]?: number;
     };
 
-// For each color C generates: Color, ColorFill, ColorFillStops, ColorAngle.
+// For each color C generates: Color, ColorFill, ColorFillStops, ColorAngle,
+// ColorOrder.
 type ColorOptions<C extends string> = [C] extends [never]
   ? unknown
   : { readonly [K in C as `${K}Color`]?: string | readonly string[] } & {
@@ -138,6 +143,8 @@ type ColorOptions<C extends string> = [C] extends [never]
     } & {
       readonly [K in C as `${K}ColorAngle`]?:
         number | readonly [number, number];
+    } & {
+      readonly [K in C as `${K}ColorOrder`]?: StyleOptionsColorOrderValue;
     };
 
 export type StyleOptions<D = unknown> = StyleOptionsBase &

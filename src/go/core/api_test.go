@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -81,6 +82,15 @@ func TestOptionsDescriptorDescribesComponentsAndColors(t *testing.T) {
 	}
 	if bg, _ := descriptor["backgroundColor"].(map[string]any); bg["type"] != "color" {
 		t.Errorf("backgroundColor type = %v", descriptor["backgroundColor"])
+	}
+
+	// Every color name carries a single-valued ColorOrder enum, without a list
+	// flag.
+	wantOrder := map[string]any{"type": "enum", "values": []string{"random", "fixed"}}
+	for _, key := range []string{"backgroundColorOrder", "fillColorOrder"} {
+		if got, _ := descriptor[key].(map[string]any); !reflect.DeepEqual(got, wantOrder) {
+			t.Errorf("%s = %v, want %v", key, descriptor[key], wantOrder)
+		}
 	}
 }
 
@@ -230,6 +240,59 @@ func TestValidation(t *testing.T) {
 	// Rejects options with a wrong type (seed must be a string).
 	if _, err := NewAvatar(style, map[string]any{"seed": 123}); err == nil {
 		t.Error("seed: 123 must fail validation")
+	}
+}
+
+func TestColorOrderValidation(t *testing.T) {
+	style := mustStyle(t, minimalStyle)
+
+	// Accepts the two known values.
+	for _, value := range []string{"random", "fixed"} {
+		if _, err := NewAvatar(style, map[string]any{"skinColorOrder": value}); err != nil {
+			t.Errorf("skinColorOrder: %q rejected: %v", value, err)
+		}
+	}
+
+	// Rejects an unknown value.
+	if _, err := NewAvatar(style, map[string]any{"skinColorOrder": "sorted"}); err == nil {
+		t.Error(`skinColorOrder: "sorted" must fail validation`)
+	} else if _, ok := err.(*ValidationError); !ok {
+		t.Errorf("error type = %T, want *ValidationError", err)
+	}
+
+	// Rejects an array value. The option takes a single value, since a list
+	// would reintroduce the PRNG pick that "fixed" exists to avoid.
+	if _, err := NewAvatar(style, map[string]any{"skinColorOrder": []string{"fixed"}}); err == nil {
+		t.Error(`skinColorOrder: ["fixed"] must fail validation`)
+	} else if _, ok := err.(*ValidationError); !ok {
+		t.Errorf("error type = %T, want *ValidationError", err)
+	}
+}
+
+func TestFixedColorOrderKeepsStopOrder(t *testing.T) {
+	style := mustStyle(t, `{
+		"canvas": {
+			"width": 100, "height": 100,
+			"elements": [{ "type": "element", "name": "rect", "attributes": { "fill": { "type": "color", "name": "bg" } } }]
+		},
+		"colors": { "bg": { "values": ["#ff0000", "#0000ff"] } }
+	}`)
+
+	avatar, err := NewAvatar(style, map[string]any{
+		"seed":         "test",
+		"bgColor":      []string{"#0055a4", "#ffffff", "#ef4135"},
+		"bgColorFill":  "linear",
+		"bgColorOrder": "fixed",
+	})
+	if err != nil {
+		t.Fatalf("NewAvatar: %v", err)
+	}
+
+	want := `<stop offset="0%" stop-color="#0055a4"/>` +
+		`<stop offset="50%" stop-color="#ffffff"/>` +
+		`<stop offset="100%" stop-color="#ef4135"/>`
+	if !strings.Contains(avatar.SVG(), want) {
+		t.Errorf("SVG lacks the fixed-order stops\n got: %s\nwant substring: %s", avatar.SVG(), want)
 	}
 }
 

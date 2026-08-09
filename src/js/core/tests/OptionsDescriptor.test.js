@@ -102,6 +102,7 @@ describe('OptionsDescriptor', () => {
       assert.deepEqual(schema.backgroundColorFill, { type: 'enum', values: ['solid', 'linear', 'radial'], list: true });
       assert.deepEqual(schema.backgroundColorFillStops, { type: 'range', min: 2 });
       assert.deepEqual(schema.backgroundColorAngle, { type: 'range', min: -360, max: 360 });
+      assert.deepEqual(schema.backgroundColorOrder, { type: 'enum', values: ['random', 'fixed'] });
     });
   });
 
@@ -157,6 +158,7 @@ describe('OptionsDescriptor', () => {
       assert.deepEqual(schema.skinColor, { type: 'color', list: true });
       assert.deepEqual(schema.hairColor, { type: 'color', list: true });
       assert.deepEqual(schema.skinColorFill, { type: 'enum', values: ['solid', 'linear', 'radial'], list: true });
+      assert.deepEqual(schema.skinColorOrder, { type: 'enum', values: ['random', 'fixed'] });
     });
 
     it('should expose contrastTo on color fields when set', () => {

@@ -1,5 +1,5 @@
-//! Public-API behavior: resolved-options JSON, the options descriptor, and the
-//! circular-color-reference error.
+//! Public-API behavior: resolved-options JSON, the options descriptor, gradient
+//! stop order, and the circular-color-reference error.
 
 use dicebear_core::{Avatar, OptionsDescriptor, Style};
 use serde_json::json;
@@ -41,6 +41,14 @@ fn options_descriptor_describes_components_and_colors() {
     // Per-color fields, plus the implicit `background` color.
     assert_eq!(descriptor["fillColor"]["type"], json!("color"));
     assert_eq!(descriptor["backgroundColor"]["type"], json!("color"));
+    assert_eq!(
+        descriptor["fillColorOrder"],
+        json!({ "type": "enum", "values": ["random", "fixed"] })
+    );
+    assert_eq!(
+        descriptor["backgroundColorOrder"],
+        json!({ "type": "enum", "values": ["random", "fixed"] })
+    );
 }
 
 #[test]
@@ -63,6 +71,37 @@ fn circular_color_reference_is_reported() {
         Ok(_) => panic!("expected a circular color reference error"),
         Err(err) => assert!(err.to_string().contains("Circular color reference")),
     }
+}
+
+#[test]
+fn fixed_color_order_keeps_the_stop_order() {
+    let style = Style::from_str(
+        r##"{
+            "canvas": {
+                "width": 100, "height": 100,
+                "elements": [{ "type": "element", "name": "rect", "attributes": { "fill": { "type": "color", "name": "bg" } } }]
+            },
+            "colors": { "bg": { "values": ["#ff0000", "#0000ff"] } }
+        }"##,
+    )
+    .unwrap();
+
+    let avatar = Avatar::new(
+        &style,
+        json!({
+            "seed": "test",
+            "bgColor": ["#0055a4", "#ffffff", "#ef4135"],
+            "bgColorFill": "linear",
+            "bgColorOrder": "fixed",
+        }),
+    )
+    .unwrap();
+
+    assert!(avatar.to_svg().contains(
+        "<stop offset=\"0%\" stop-color=\"#0055a4\"/>\
+         <stop offset=\"50%\" stop-color=\"#ffffff\"/>\
+         <stop offset=\"100%\" stop-color=\"#ef4135\"/>"
+    ));
 }
 
 #[test]

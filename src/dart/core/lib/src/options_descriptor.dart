@@ -1,6 +1,7 @@
 /// Builds a descriptor of every option a given style accepts.
 library;
 
+import 'options.dart';
 import 'style.dart';
 import 'utils/deep_copy.dart';
 
@@ -94,6 +95,10 @@ class OptionsDescriptor {
       };
       result['${name}ColorFillStops'] = {'type': 'range', 'min': 2};
       result['${name}ColorAngle'] = _rotateRange;
+      result['${name}ColorOrder'] = {
+        'type': 'enum',
+        'values': [colorOrderRandom, colorOrderFixed],
+      };
     }
 
     // Only advertise the `tags` filter when the style actually carries tags.

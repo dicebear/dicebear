@@ -6,7 +6,7 @@ from collections.abc import Callable
 from typing import Any, TypeVar, cast
 
 from .errors import CircularColorReferenceError
-from .options import Options, Range
+from .options import COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM, Options, Range
 from .prng import Prng
 from .style import Style
 from .style.component import Component
@@ -256,6 +256,11 @@ class Resolver:
             f"{name}ColorAngle", self._options.color_angle(name), 0.0
         )
 
+    def color_order(self, name: str) -> str:
+        # Deliberately not memoized: unlike color_fill this is no PRNG pick, so
+        # it stays out of the resolved() snapshot.
+        return self._options.color_order(name) or COLOR_ORDER_RANDOM
+
     def component_transform(self, name: str) -> dict[str, float]:
         """Pick the rotate/translateX/translateY/scale values for a component.
 
@@ -314,6 +319,13 @@ class Resolver:
     def _resolve_color(self, name: str) -> list[str]:
         """Resolve a named color to its final stop list, applying contrast
         sorting and ``notEqualTo`` filtering from the style definition.
+
+        A user-set ``{name}ColorOrder: 'fixed'`` pins user-supplied colors to
+        their verbatim order: the shuffle and the contrast sort are skipped
+        (``notEqualTo`` filtering still applies), and the gradient stop count
+        defaults to the number of supplied colors instead of 2. A style palette
+        carries no order contract, so with ``fixed`` it is still deduplicated,
+        code-point sorted, and contrast sorted; only the shuffle is skipped.
         """
         user_colors = self._options.color(name)
         style_color = self._style.colors().get(name)
@@ -326,11 +338,17 @@ class Resolver:
             source = []
 
         candidates = [ColorUtil.to_hex(c) for c in source]
+        fixed = self.color_order(name) == COLOR_ORDER_FIXED
+        verbatim = user_colors is not None and fixed
         fill = self.color_fill(name)
-        stops = 1 if fill == "solid" else self._color_fill_stops(name)
+        stops = (
+            1
+            if fill == "solid"
+            else self._color_fill_stops(name, len(candidates) if verbatim else 2)
+        )
 
         if style_color is None:
-            return self._prng.shuffle(f"{name}Color", candidates)[:stops]
+            return self._order(name, candidates, fixed, verbatim)[:stops]
 
         # Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a).
         if name in self._color_resolving:
@@ -341,7 +359,7 @@ class Resolver:
         not_equal_to = style_color.not_equal_to()
 
         try:
-            if contrast_to is not None:
+            if contrast_to is not None and not verbatim:
                 ref = self.color(contrast_to)
                 ref_color = ref[0] if len(ref) > 0 else None
 
@@ -362,16 +380,40 @@ class Resolver:
         ordered = (
             candidates
             if contrast_to is not None
-            else self._prng.shuffle(f"{name}Color", candidates)
+            else self._order(name, candidates, fixed, verbatim)
         )
 
         return ordered[:stops]
 
-    def _color_fill_stops(self, name: str) -> int:
+    def _order(
+        self, name: str, candidates: list[str], fixed: bool, verbatim: bool
+    ) -> list[str]:
+        """Apply ``{name}ColorOrder`` to the candidate list.
+
+        ``random`` shuffles via the PRNG. ``fixed`` skips the shuffle:
+        user-supplied colors (``verbatim``) keep exactly the given order, while
+        a style palette is still deduplicated and sorted by UTF-16 code units,
+        matching the canonicalization the shuffle applies before drawing. For
+        the ASCII hex strings involved a plain lexicographic sort is identical.
+        """
+        if not fixed:
+            return self._prng.shuffle(f"{name}Color", candidates)
+
+        if verbatim:
+            return candidates
+
+        # Deprecated: DiceBear 11 will take the palette in its definition
+        # order here, the same verbatim rule as user-supplied colors, and
+        # drop this sort (see CHANGELOG.md, "Deprecated").
+        return sorted(dict.fromkeys(candidates))
+
+    def _color_fill_stops(self, name: str, fallback: int) -> int:
         range_ = self._options.color_fill_stops(name)
 
         return (
-            2 if range_ is None else self._prng.integer(f"{name}ColorFillStops", range_)
+            fallback
+            if range_ is None
+            else self._prng.integer(f"{name}ColorFillStops", range_)
         )
 
     def _memo_float(self, key: str, range_: Range | None, fallback: float) -> float:

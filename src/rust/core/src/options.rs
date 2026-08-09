@@ -12,6 +12,10 @@ use serde_json::Value;
 
 use crate::prng::Range;
 
+/// The two values of the per-color `${name}ColorOrder` option.
+pub(crate) const COLOR_ORDER_RANDOM: &str = "random";
+pub(crate) const COLOR_ORDER_FIXED: &str = "fixed";
+
 /// A parsed `tags` filter token. [`Options::tags`] decodes each raw
 /// `category` / `category:value` / `!…` string into this shape so the resolver
 /// composes the filter without parsing the grammar itself.
@@ -166,6 +170,12 @@ impl Options {
     pub fn color_fill_stops(&self, name: &str) -> Option<Range> {
         to_range(self.get(&format!("{name}ColorFillStops")))
     }
+
+    pub fn color_order(&self, name: &str) -> Option<String> {
+        self.get(&format!("{name}ColorOrder"))
+            .and_then(Value::as_str)
+            .map(String::from)
+    }
 }
 
 /// Normalizes a scalar/array/absent string value into a list.
@@ -217,5 +227,24 @@ fn to_range(value: Option<&Value>) -> Option<Range> {
             })
         }
         _ => None,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use super::Options;
+
+    #[test]
+    fn color_order_returns_none_when_unset() {
+        assert_eq!(Options::new(json!({})).color_order("skin"), None);
+    }
+
+    #[test]
+    fn color_order_passes_the_value_through() {
+        let options = Options::new(json!({ "skinColorOrder": "fixed" }));
+
+        assert_eq!(options.color_order("skin").as_deref(), Some("fixed"));
     }
 }

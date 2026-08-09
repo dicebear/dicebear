@@ -206,4 +206,29 @@ class OptionsTest extends TestCase
         $this->assertNull($options->colorAngle('skin'));
         $this->assertNull($options->colorFillStops('skin'));
     }
+
+    // colorOrder()
+
+    public function testColorOrderReturnsNullWhenUnset(): void
+    {
+        $this->assertNull((new Options([]))->colorOrder('skin'));
+    }
+
+    public function testColorOrderPassesValueThrough(): void
+    {
+        $options = new Options(['skinColorOrder' => 'fixed']);
+        $this->assertSame('fixed', $options->colorOrder('skin'));
+    }
+
+    public function testColorOrderRejectsUnknownValue(): void
+    {
+        $this->expectException(OptionsValidationError::class);
+        new Options(['skinColorOrder' => 'sorted']);
+    }
+
+    public function testColorOrderRejectsListValue(): void
+    {
+        $this->expectException(OptionsValidationError::class);
+        new Options(['skinColorOrder' => ['fixed']]);
+    }
 }

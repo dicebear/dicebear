@@ -4,6 +4,7 @@ import type {
   StyleOptions,
   StyleOptionsFlipValue,
   StyleOptionsColorFillValue,
+  StyleOptionsColorOrderValue,
   TagFilterToken,
 } from './StyleOptions.js';
 
@@ -156,6 +157,11 @@ export class Options<D = unknown> {
       this.#dynamic(`${name}ColorFillStops`) as
         number | readonly number[] | undefined,
     );
+  }
+
+  colorOrder(name: string): StyleOptionsColorOrderValue | undefined {
+    return this.#dynamic(`${name}ColorOrder`) as
+      StyleOptionsColorOrderValue | undefined;
   }
 
   /**

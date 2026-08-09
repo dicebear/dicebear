@@ -7,6 +7,7 @@ use std::collections::BTreeSet;
 
 use serde_json::{json, Map, Value};
 
+use crate::options::{COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM};
 use crate::style::Style;
 
 pub struct OptionsDescriptor<'a> {
@@ -104,6 +105,10 @@ impl<'a> OptionsDescriptor<'a> {
                 json!({ "type": "range", "min": 2 }),
             );
             result.insert(format!("{name}ColorAngle"), rotate_range());
+            result.insert(
+                format!("{name}ColorOrder"),
+                json!({ "type": "enum", "values": [COLOR_ORDER_RANDOM, COLOR_ORDER_FIXED] }),
+            );
         }
 
         // Only advertise the `tags` filter when the style actually carries tags.

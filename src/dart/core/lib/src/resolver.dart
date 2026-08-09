@@ -258,6 +258,11 @@ class Resolver {
   double colorAngle(String name) =>
       _memoFloat('${name}ColorAngle', _options.colorAngle(name), 0);
 
+  /// Deliberately not memoized: unlike [colorFill] this is no PRNG pick, so
+  /// it stays out of the [resolved] snapshot.
+  String colorOrder(String name) =>
+      _options.colorOrder(name) ?? colorOrderRandom;
+
   /// Picks the rotate/translateX/translateY/scale values for a single
   /// component. Memoized per `name`, so the four values land in [resolved] as
   /// `${name}Rotate` / `${name}TranslateX` / `${name}TranslateY` /
@@ -305,20 +310,31 @@ class Resolver {
   /// Resolves a named color to its final stop list, applying contrast sorting
   /// and `notEqualTo` filtering from the style definition. Detects circular
   /// references between colors and throws [CircularColorReferenceError].
+  ///
+  /// A user-set `${name}ColorOrder: 'fixed'` pins user-supplied colors to
+  /// their verbatim order: the shuffle and the contrast sort are skipped
+  /// (`notEqualTo` filtering still applies), and the gradient stop count
+  /// defaults to the number of supplied colors instead of 2. A style palette
+  /// carries no order contract, so with `fixed` it is still deduplicated,
+  /// code-point sorted, and contrast sorted; only the shuffle is skipped.
   List<String> _resolveColor(String name) {
     final userColors = _options.color(name);
     final styleColor = _style.colors[name];
     final source = userColors ?? styleColor?.values() ?? const <String>[];
 
     var candidates = [for (final c in source) Color.toHex(c)];
+    final fixed = colorOrder(name) == colorOrderFixed;
+    final verbatim = userColors != null && fixed;
 
     // colorFill is memoized inside this computation, so it lands in the
     // snapshot before `${name}Color` — the memo writes after compute returns.
     final fill = colorFill(name);
-    final stops = fill == 'solid' ? 1 : _colorFillStops(name);
+    final stops = fill == 'solid'
+        ? 1
+        : _colorFillStops(name, verbatim ? candidates.length : 2);
 
     if (styleColor == null) {
-      return _takeN(_prng.shuffle('${name}Color', candidates), stops);
+      return _takeN(_order(name, candidates, fixed, verbatim), stops);
     }
 
     // Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a).
@@ -331,7 +347,7 @@ class Resolver {
     final notEqualTo = styleColor.notEqualTo();
 
     try {
-      if (contrastTo != null) {
+      if (contrastTo != null && !verbatim) {
         final refColors = color(contrastTo);
 
         if (refColors.isNotEmpty) {
@@ -355,9 +371,34 @@ class Resolver {
     // Skip the shuffle when sorted by contrast, to preserve that ordering.
     final ordered = contrastTo != null
         ? candidates
-        : _prng.shuffle('${name}Color', candidates);
+        : _order(name, candidates, fixed, verbatim);
 
     return _takeN(ordered, stops);
+  }
+
+  /// Applies `${name}ColorOrder` to the candidate list. `random` shuffles via
+  /// the PRNG. `fixed` skips the shuffle: user-supplied colors ([verbatim])
+  /// keep exactly the given order, while a style palette is still deduplicated
+  /// and sorted by UTF-16 code units, matching the canonicalization the
+  /// shuffle applies before drawing.
+  List<String> _order(
+    String name,
+    List<String> candidates,
+    bool fixed,
+    bool verbatim,
+  ) {
+    if (!fixed) {
+      return _prng.shuffle('${name}Color', candidates);
+    }
+
+    if (verbatim) {
+      return candidates;
+    }
+
+    // Deprecated: DiceBear 11 will take the palette in its definition order
+    // here, the same verbatim rule as user-supplied colors, and drop this
+    // sort (see CHANGELOG.md, "Deprecated").
+    return candidates.toSet().toList()..sort();
   }
 
   // The JS port's truthy check: an empty `contrastTo` counts as unset.
@@ -367,12 +408,14 @@ class Resolver {
     return value == null || value.isEmpty ? null : value;
   }
 
-  /// Draws the gradient stop count, defaulting to `2`. Not memoized — the
-  /// `${name}ColorFillStops` PRNG key never appears in the snapshot.
-  int _colorFillStops(String name) {
+  /// Draws the gradient stop count, defaulting to [fallback]. Not memoized:
+  /// the `${name}ColorFillStops` PRNG key never appears in the snapshot.
+  int _colorFillStops(String name, int fallback) {
     final range = _options.colorFillStops(name);
 
-    return range != null ? _prng.integer('${name}ColorFillStops', range) : 2;
+    return range != null
+        ? _prng.integer('${name}ColorFillStops', range)
+        : fallback;
   }
 
   double _memoFloat(String key, Range? range, double fallback) =>

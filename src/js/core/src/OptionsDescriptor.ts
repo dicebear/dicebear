@@ -1,4 +1,5 @@
 import type { Style } from './Style.js';
+import { COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM } from './StyleOptions.js';
 
 interface StringField {
   readonly type: 'string';
@@ -136,6 +137,10 @@ export class OptionsDescriptor {
       };
       result[`${name}ColorFillStops`] = { type: 'range', min: 2 };
       result[`${name}ColorAngle`] = OptionsDescriptor.#rotateRange;
+      result[`${name}ColorOrder`] = {
+        type: 'enum',
+        values: [COLOR_ORDER_RANDOM, COLOR_ORDER_FIXED],
+      };
     }
 
     // Only advertise the `tags` filter when the style actually carries tags.

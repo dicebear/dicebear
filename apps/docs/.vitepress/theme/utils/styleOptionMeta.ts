@@ -27,6 +27,8 @@ export function getOptionDescription(name: string): string | undefined {
     return 'Number of color stops for gradient fills.';
   if (name.match(/ColorAngle$/))
     return 'Rotation angle for gradient fills in degrees.';
+  if (name.match(/ColorOrder$/))
+    return 'With fixed, the given colors keep their order instead of being shuffled; gradient stops follow the color list from first to last.';
   if (name === 'flip') return 'Mirror direction for the avatar.';
   if (name === 'scale' || name.match(/Scale$/))
     return 'Scale factor. A value of 1 corresponds to the original size. As a range [min, max], the PRNG picks a value in between.';
@@ -62,6 +64,11 @@ export function getOptionDescription(name: string): string | undefined {
 export function getOptionValueOrder(name: string): string[] | undefined {
   if (name === 'animationVariant') {
     return ['none', 'slowest', 'slow', 'medium', 'fast', 'fastest'];
+  }
+
+  // Default first: the alphabetical sort would lead with `fixed`.
+  if (name.match(/ColorOrder$/)) {
+    return ['random', 'fixed'];
   }
 
   return undefined;

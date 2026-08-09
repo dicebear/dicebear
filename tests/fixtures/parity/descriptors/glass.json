@@ -118,6 +118,13 @@
     "min": -360,
     "max": 360
   },
+  "backgroundColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
   "tags": {
     "type": "enum",
     "values": [

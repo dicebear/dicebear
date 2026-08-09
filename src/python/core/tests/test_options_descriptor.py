@@ -83,6 +83,10 @@ def test_always_includes_background_color_options() -> None:
     }
     assert schema["backgroundColorFillStops"] == {"type": "range", "min": 2}
     assert schema["backgroundColorAngle"] == {"type": "range", "min": -360, "max": 360}
+    assert schema["backgroundColorOrder"] == {
+        "type": "enum",
+        "values": ["random", "fixed"],
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -135,6 +139,7 @@ def test_generates_color_options() -> None:
         "values": ["solid", "linear", "radial"],
         "list": True,
     }
+    assert schema["skinColorOrder"] == {"type": "enum", "values": ["random", "fixed"]}
 
 
 def test_exposes_contrast_to_on_color_fields() -> None:

@@ -334,6 +334,155 @@ def test_picks_integer_stops_from_range() -> None:
 
 
 # ---------------------------------------------------------------------------
+# color_order
+# ---------------------------------------------------------------------------
+
+
+def test_color_order_defaults_to_random() -> None:
+    resolver = _make_resolver(_minimal_style(), {"seed": "order-default"})
+    assert resolver.color_order("skin") == "random"
+
+
+def test_color_order_keeps_given_order_for_gradient_fills_when_fixed() -> None:
+    resolver = _make_resolver(
+        _minimal_style(),
+        {
+            "seed": "order-fixed",
+            "skinColor": ["#0055a4", "#ffffff", "#ef4135"],
+            "skinColorFill": "linear",
+            "skinColorOrder": "fixed",
+        },
+    )
+    assert resolver.color("skin") == ["#0055a4", "#ffffff", "#ef4135"]
+
+
+def test_color_order_keeps_order_for_every_seed() -> None:
+    for i in range(20):
+        resolver = _make_resolver(
+            _minimal_style(),
+            {
+                "seed": f"order-fixed-{i}",
+                "skinColor": ["#0055a4", "#ffffff", "#ef4135"],
+                "skinColorFill": "linear",
+                "skinColorOrder": "fixed",
+            },
+        )
+        assert resolver.color("skin") == ["#0055a4", "#ffffff", "#ef4135"]
+
+
+def test_color_order_defaults_stops_to_number_of_colors_when_fixed() -> None:
+    resolver = _make_resolver(
+        _minimal_style(),
+        {
+            "seed": "order-stops",
+            "skinColor": ["#ff0000", "#00ff00", "#0000ff", "#ffffff"],
+            "skinColorFill": "linear",
+            "skinColorOrder": "fixed",
+        },
+    )
+    assert len(resolver.color("skin")) == 4
+
+
+def test_color_order_respects_explicit_stop_count_when_fixed() -> None:
+    resolver = _make_resolver(
+        _minimal_style(),
+        {
+            "seed": "order-explicit-stops",
+            "skinColor": ["#0055a4", "#ffffff", "#ef4135"],
+            "skinColorFill": "linear",
+            "skinColorFillStops": 2,
+            "skinColorOrder": "fixed",
+        },
+    )
+    assert resolver.color("skin") == ["#0055a4", "#ffffff"]
+
+
+def test_color_order_always_uses_first_color_for_solid_fills_when_fixed() -> None:
+    resolver = _make_resolver(
+        _minimal_style(),
+        {
+            "seed": "order-solid",
+            "skinColor": ["#ef4135", "#0055a4"],
+            "skinColorOrder": "fixed",
+        },
+    )
+    assert resolver.color("skin") == ["#ef4135"]
+
+
+def test_color_order_skips_contrast_sorting_when_fixed() -> None:
+    # background.contrastTo = skin: by default the strongest-contrast candidate
+    # comes first, with a fixed order the user's first color wins.
+    options = {
+        "seed": "order-contrast",
+        "skinColor": "#000000",
+        "backgroundColor": ["#111111", "#ffffff"],
+    }
+    control = _make_resolver(_style_with_colors(), options)
+    fixed = _make_resolver(
+        _style_with_colors(), {**options, "backgroundColorOrder": "fixed"}
+    )
+    assert control.color("background") == ["#ffffff"]
+    assert fixed.color("background") == ["#111111"]
+
+
+def test_color_order_still_applies_not_equal_to_filtering_when_fixed() -> None:
+    # hair.notEqualTo = skin
+    resolver = _make_resolver(
+        _style_with_colors(),
+        {
+            "seed": "order-not-equal",
+            "skinColor": "#2c1b18",
+            "hairColor": ["#2c1b18", "#b55239", "#d6b370"],
+            "hairColorFill": "linear",
+            "hairColorOrder": "fixed",
+        },
+    )
+    assert resolver.color("hair") == ["#b55239", "#d6b370"]
+
+
+def test_color_order_sorts_style_palette_instead_of_taking_it_verbatim() -> None:
+    # Without user-supplied colors, 'fixed' only skips the shuffle: the style
+    # palette keeps the canonical code-point sort, for every seed.
+    for i in range(5):
+        resolver = _make_resolver(
+            _style_with_colors(),
+            {
+                "seed": f"order-style-{i}",
+                "skinColorFill": "linear",
+                "skinColorFillStops": 3,
+                "skinColorOrder": "fixed",
+            },
+        )
+        assert resolver.color("skin") == ["#8d5524", "#d4a574", "#f0c8a0"]
+
+
+def test_color_order_keeps_contrast_sorting_for_style_palette_when_fixed() -> None:
+    # background.contrastTo = skin and no user-supplied background colors: the
+    # strongest-contrast candidate still comes first.
+    resolver = _make_resolver(
+        _style_with_colors(),
+        {
+            "seed": "order-style-contrast",
+            "skinColor": "#000000",
+            "backgroundColorOrder": "fixed",
+        },
+    )
+    assert resolver.color("background") == ["#ffffff"]
+
+
+def test_color_order_keeps_default_of_2_stops_for_style_palette_when_fixed() -> None:
+    resolver = _make_resolver(
+        _style_with_colors(),
+        {
+            "seed": "order-style-stops",
+            "skinColorFill": "linear",
+            "skinColorOrder": "fixed",
+        },
+    )
+    assert resolver.color("skin") == ["#8d5524", "#d4a574"]
+
+
+# ---------------------------------------------------------------------------
 # component_transform
 # ---------------------------------------------------------------------------
 

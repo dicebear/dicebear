@@ -168,13 +168,13 @@ impl Prng {
 /// the JS reference's `#compareByCodePoint` (JS string `<` compares code units).
 /// Agrees with Rust's default `str` ordering for all BMP text; differs only for
 /// supplementary-plane characters, where UTF-16 and code-point order disagree.
-fn cmp_utf16(a: impl AsRef<str>, b: impl AsRef<str>) -> std::cmp::Ordering {
+pub(crate) fn cmp_utf16(a: impl AsRef<str>, b: impl AsRef<str>) -> std::cmp::Ordering {
     a.as_ref().encode_utf16().cmp(b.as_ref().encode_utf16())
 }
 
 /// Deduplicates by string representation, keeping the first occurrence, and
 /// returns references into `items`.
-fn unique_by_code_point<T: Display>(items: &[T]) -> Vec<&T> {
+pub(crate) fn unique_by_code_point<T: Display>(items: &[T]) -> Vec<&T> {
     let mut seen = HashSet::new();
     let mut result = Vec::new();
 

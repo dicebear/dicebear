@@ -428,6 +428,31 @@ class RendererTest extends TestCase
         $this->assertStringContainsString('<radialGradient id="bg-color-', $svg);
     }
 
+    public function testKeepsStopOrderWhenColorOrderFixed(): void
+    {
+        $style = new Style([
+            'canvas' => [
+                'width' => 100, 'height' => 100,
+                'elements' => [
+                    ['type' => 'element', 'name' => 'rect', 'attributes' => ['fill' => ['type' => 'color', 'name' => 'bg']]],
+                ],
+            ],
+            'colors' => ['bg' => ['values' => ['#ff0000', '#0000ff']]],
+        ]);
+        $svg = (new Avatar($style, [
+            'seed' => 'test',
+            'bgColor' => ['#0055a4', '#ffffff', '#ef4135'],
+            'bgColorFill' => 'linear',
+            'bgColorOrder' => 'fixed',
+        ]))->toString();
+        $this->assertStringContainsString(
+            '<stop offset="0%" stop-color="#0055a4"/>'
+                . '<stop offset="50%" stop-color="#ffffff"/>'
+                . '<stop offset="100%" stop-color="#ef4135"/>',
+            $svg,
+        );
+    }
+
     // flip
 
     public function testHorizontalFlip(): void

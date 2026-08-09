@@ -37,6 +37,21 @@ fn rejects_options_with_a_wrong_type() {
     assert!(Avatar::new(&style, json!({ "seed": 123 })).is_err());
 }
 
+#[test]
+fn rejects_a_color_order_with_an_unknown_value() {
+    let style = Style::from_str(MINIMAL_STYLE).unwrap();
+
+    assert!(Avatar::new(&style, json!({ "skinColorOrder": "sorted" })).is_err());
+}
+
+#[test]
+fn rejects_a_color_order_array() {
+    let style = Style::from_str(MINIMAL_STYLE).unwrap();
+
+    // `${name}ColorOrder` takes a single value, never a list.
+    assert!(Avatar::new(&style, json!({ "skinColorOrder": ["fixed"] })).is_err());
+}
+
 /// Cross-language validation parity: every port must accept and reject the
 /// same inputs (error messages are language-specific and not compared). The
 /// circular color reference cases additionally pin the reported chain.

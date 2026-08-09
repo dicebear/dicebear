@@ -6,6 +6,10 @@ import 'range.dart';
 import 'utils/deep_copy.dart';
 import 'validator/options_validator.dart';
 
+/// The two values of the per-color `${name}ColorOrder` option.
+const colorOrderRandom = 'random';
+const colorOrderFixed = 'fixed';
+
 /// A parsed `tags` filter token. [Options.tags] decodes each raw
 /// `category` / `category:value` / `!…` string into this shape so the resolver
 /// composes the filter without parsing the grammar itself.
@@ -154,6 +158,12 @@ class Options {
   Range? colorAngle(String name) => _toRange(_get('${name}ColorAngle'));
 
   Range? colorFillStops(String name) => _toRange(_get('${name}ColorFillStops'));
+
+  String? colorOrder(String name) {
+    final value = _get('${name}ColorOrder');
+
+    return value is String ? value : null;
+  }
 
   /// Returns the raw value of [key], with a JSON `null` value collapsed to
   /// absent (Dart map lookup already yields `null` for missing keys).

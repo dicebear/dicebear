@@ -39,12 +39,13 @@ the tuple's range.
 These options are available for every style, even ones that don't declare a
 `background` color group in their definition.
 
-| Option                     | Type                              | Default   | Description                                                        |
-| -------------------------- | --------------------------------- | --------- | ------------------------------------------------------------------ |
-| `backgroundColor`          | `string \| string[]`              | _unset_   | Background colors as hex (`#` optional, `#RGB` to `#RRGGBBAA`)     |
-| `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'` | Background fill type (accepts an array of values to randomize)     |
-| `backgroundColorFillStops` | `integer \| [min, max]`           | `2`       | Number of gradient stops (minimum 2); ignored when fill is `solid` |
-| `backgroundColorAngle`     | `number \| [min, max]`            | `0`       | Gradient angle in degrees (−360 to 360)                            |
+| Option                     | Type                              | Default    | Description                                                        |
+| -------------------------- | --------------------------------- | ---------- | ------------------------------------------------------------------ |
+| `backgroundColor`          | `string \| string[]`              | _unset_    | Background colors as hex (`#` optional, `#RGB` to `#RRGGBBAA`)     |
+| `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'`  | Background fill type (accepts an array of values to randomize)     |
+| `backgroundColorFillStops` | `integer \| [min, max]`           | `2`        | Number of gradient stops (minimum 2); ignored when fill is `solid` |
+| `backgroundColorAngle`     | `number \| [min, max]`            | `0`        | Gradient angle in degrees (−360 to 360)                            |
+| `backgroundColorOrder`     | `'random' \| 'fixed'`             | `'random'` | Use the given colors in order (`fixed`) instead of shuffling them  |
 
 ## Dynamic component options
 
@@ -76,6 +77,15 @@ following options are available:
 | `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | Fill type (accepts an array of values to randomize)                |
 | `{color}ColorFillStops` | `integer \| [min, max]`           | Number of gradient stops (minimum 2); ignored when fill is `solid` |
 | `{color}ColorAngle`     | `number \| [min, max]`            | Gradient angle in degrees (−360 to 360)                            |
+| `{color}ColorOrder`     | `'random' \| 'fixed'`             | Use the given colors in order (`fixed`) instead of shuffling them  |
+
+With `{color}ColorOrder: 'fixed'`, colors passed via `{color}Color` keep exactly
+the order you give them: gradient fills apply them as stops from first to last,
+solid fills always use the first color, and the number of gradient stops
+defaults to the number of given colors. Without `{color}Color`, `fixed` only
+skips the shuffle; the style's palette is deduplicated and used in sorted order.
+Constraints in the style definition (`contrastTo`, `notEqualTo`) still apply, so
+the result can stay seed-dependent through the referenced color groups.
 
 ## Variant tags
 

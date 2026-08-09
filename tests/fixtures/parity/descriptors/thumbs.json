@@ -161,6 +161,13 @@
     "min": -360,
     "max": 360
   },
+  "backgroundColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
   "eyesColor": {
     "type": "color",
     "list": true,
@@ -183,6 +190,13 @@
     "type": "range",
     "min": -360,
     "max": 360
+  },
+  "eyesColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
   },
   "mouthColor": {
     "type": "color",
@@ -207,6 +221,13 @@
     "min": -360,
     "max": 360
   },
+  "mouthColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
   "shapeColor": {
     "type": "color",
     "list": true
@@ -228,6 +249,13 @@
     "type": "range",
     "min": -360,
     "max": 360
+  },
+  "shapeColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
   },
   "tags": {
     "type": "enum",
