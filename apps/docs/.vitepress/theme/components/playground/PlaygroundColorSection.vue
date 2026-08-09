@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue';
+import { computed, inject, watch } from 'vue';
 import { Trash2, ArrowLeftRight, Link2 } from '@lucide/vue';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
@@ -18,6 +18,7 @@ const props = defineProps<{
   hasFill: boolean;
   hasAngle: boolean;
   hasFillStops: boolean;
+  hasOrder: boolean;
   contrastTo?: string | null;
 }>();
 
@@ -35,6 +36,7 @@ const colorKey = `${props.colorName}Color`;
 const fillKey = `${colorKey}Fill`;
 const angleKey = `${colorKey}Angle`;
 const fillStopsKey = `${colorKey}FillStops`;
+const orderKey = `${colorKey}Order`;
 
 const colors = computed<string[]>({
   get: () => {
@@ -95,6 +97,38 @@ const fill = computed({
       store.avatarStyleOptions[fillKey] = [val];
     }
   },
+});
+
+const orderOptions = [
+  { label: 'Random', value: 'random' },
+  { label: 'Fixed', value: 'fixed' },
+];
+
+// Unlike *ColorFill, the *ColorOrder option takes a single value only; the
+// schema rejects the array form.
+const order = computed({
+  get: () => {
+    const val = store.avatarStyleOptions[orderKey];
+
+    return typeof val === 'string' ? val : 'random';
+  },
+  set: (val: string) => {
+    if (val === 'random') {
+      delete store.avatarStyleOptions[orderKey];
+    } else {
+      store.avatarStyleOptions[orderKey] = val;
+    }
+  },
+});
+
+// The order field only shows for gradient fills, but unlike angle or stops
+// the core would still apply a lingering value to a solid fill (`fixed` pins
+// the first color). Clear it when the fill returns to solid, so a hidden
+// field never changes the avatar.
+watch(fill, (val) => {
+  if (val === 'solid') {
+    delete store.avatarStyleOptions[orderKey];
+  }
 });
 
 const {
@@ -169,6 +203,23 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
         <Select
           v-model="fill"
           :options="fillOptions"
+          option-label="label"
+          option-value="value"
+          class="pg-color-fill-select"
+        />
+      </div>
+
+      <div class="pg-field" v-if="hasOrder && fill !== 'solid'">
+        <div class="pg-field-label">
+          <span>Order</span>
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(orderKey)"
+            @click="store.resetOption(orderKey)"
+          />
+        </div>
+        <Select
+          v-model="order"
+          :options="orderOptions"
           option-label="label"
           option-value="value"
           class="pg-color-fill-select"

@@ -135,6 +135,7 @@ const styleDefaults = computed<Record<string, unknown>>(() => {
     result[`${name}ColorFill`] = 'solid';
     result[`${name}ColorFillStops`] = 2;
     result[`${name}ColorAngle`] = 0;
+    result[`${name}ColorOrder`] = 'random';
   }
 
   return result;
@@ -160,7 +161,8 @@ function isColorOption(key: string, names: string[]): boolean {
       key === `${name}Color` ||
       key === `${name}ColorFill` ||
       key === `${name}ColorFillStops` ||
-      key === `${name}ColorAngle`,
+      key === `${name}ColorAngle` ||
+      key === `${name}ColorOrder`,
   );
 }
 

@@ -65,6 +65,13 @@ const previewTarget = computed(() => {
     };
   }
 
+  if (n.endsWith('ColorOrder')) {
+    return {
+      type: 'colorOrder' as const,
+      color: n.slice(0, -'ColorOrder'.length),
+    };
+  }
+
   if (n.endsWith('Color')) {
     return { type: 'color' as const, color: n.replace(/Color$/, '') };
   }
@@ -139,6 +146,17 @@ const generalOptions = computed(() => {
 
     if (t.type === 'color') {
       opts[colorKey] = [props.value];
+    } else if (t.type === 'colorOrder') {
+      // Three palette colors through a linear gradient make the order
+      // visible: `random` shuffles them per seed, `fixed` keeps the list
+      // order and takes all three as stops. Single value, not an array; the
+      // schema rejects the array form for this option.
+      opts[colorKey] = padColors(
+        resolveColors(t.color, styleColors.value),
+        3,
+      ).slice(0, 3);
+      opts[fillKey] = ['linear'];
+      opts[`${t.color}ColorOrder`] = props.value;
     } else {
       const stops = t.type === 'colorFillStops' ? Number(props.value) || 2 : 2;
 
@@ -163,6 +181,15 @@ const generalOptions = computed(() => {
 
   return opts;
 });
+
+// The HTTP API can only render options its deployed core already knows, so
+// the *ColorOrder previews go through the local library until the API ships
+// a core with the option.
+const previewMode = computed(() =>
+  previewTarget.value.type === 'colorOrder'
+    ? ('library' as const)
+    : ('http-api' as const),
+);
 
 const tags = computed(() => {
   if (!showVariantTags.value) {
@@ -196,7 +223,7 @@ function selectLabel(event: MouseEvent) {
         :size="name === 'size' ? Number(value) : 80"
         :styleName="styleName"
         :styleOptions="generalOptions"
-        mode="http-api"
+        :mode="previewMode"
         class="style-options-preview-avatar"
       />
     </div>

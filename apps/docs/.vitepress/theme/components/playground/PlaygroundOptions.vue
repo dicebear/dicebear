@@ -49,6 +49,7 @@ type ColorInfo = {
   hasFill: boolean;
   hasAngle: boolean;
   hasFillStops: boolean;
+  hasOrder: boolean;
   contrastTo: string | null;
 };
 
@@ -164,6 +165,7 @@ const allColors = computed(() => {
       hasFill: `${key}Fill` in descriptor.value,
       hasAngle: `${key}Angle` in descriptor.value,
       hasFillStops: `${key}FillStops` in descriptor.value,
+      hasOrder: `${key}Order` in descriptor.value,
       contrastTo:
         field.type === 'color' && typeof field.contrastTo === 'string'
           ? field.contrastTo
@@ -533,6 +535,7 @@ const onSeedFocus = (e: FocusEvent) => {
               :has-fill="color.hasFill"
               :has-angle="color.hasAngle"
               :has-fill-stops="color.hasFillStops"
+              :has-order="color.hasOrder"
               :contrast-to="color.contrastTo"
             />
           </AccordionContent>
