@@ -13,6 +13,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         text: 'DiceBear vs. Alternatives',
         link: '/guides/avatar-library-comparison/',
       },
+      {
+        text: 'For AI Assistants <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/guides/dicebear-for-ai-assistants/',
+      },
     ],
   },
   {

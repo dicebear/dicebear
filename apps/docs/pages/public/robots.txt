@@ -1,4 +1,12 @@
+# Machine-readable documentation:
+#   https://www.dicebear.com/llms.txt       index with the current versions
+#   https://www.dicebear.com/llms-full.txt  the complete prose documentation
+# Every page is also served as Markdown, by appending index.md to its URL.
+#
+# AI assistants and their crawlers are welcome. There is deliberately no
+# per-bot section: the wildcard rule below is the whole policy.
+
 Sitemap: https://www.dicebear.com/sitemap.xml
 
 User-agent: *
-Disallow: /legal/site-notice/
+Disallow: /legal/

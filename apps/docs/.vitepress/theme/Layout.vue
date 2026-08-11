@@ -4,6 +4,7 @@ import { VPDocAsideSponsors } from 'vitepress/theme-without-fonts';
 import { withBase } from 'vitepress';
 import LayoutFooter from './components/layout/LayoutFooter.vue';
 import LayoutNavActions from './components/layout/LayoutNavActions.vue';
+import DocsCopyPage from './components/docs/DocsCopyPage.vue';
 import './styles/main.scss';
 
 const { Layout } = DefaultTheme;
@@ -27,6 +28,9 @@ const sponsors = [
   <Layout>
     <template #nav-bar-content-after>
       <LayoutNavActions />
+    </template>
+    <template #doc-before>
+      <DocsCopyPage />
     </template>
     <template #aside-outline-after>
       <div class="layout-aside-sponsors">

@@ -1,157 +1,60 @@
 <script setup lang="ts">
-import {
-  kebabCase,
-  constantCase,
-  pascalCase,
-  snakeCase,
-  camelCase,
-} from 'change-case';
+/**
+ * The usage tabs of a style page. The code comes from usageSnippets.ts, the
+ * module the Markdown mirrors read as well; only the copy around it lives
+ * here.
+ */
 import { UiCard, UiCode as Code } from '../ui';
 import { computed, ref } from 'vue';
+import { useData } from 'vitepress';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
+import { httpApiUrl, usageSnippets } from '@theme/config/usageSnippets';
+import type { ThemeOptions } from '@theme/types';
 
 const props = defineProps<{
   styleName: string;
 }>();
 
+const { theme } = useData<ThemeOptions>();
+
 const tab = ref('http-api');
 
-const exampleHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/10.x/${kebabCase(props.styleName)}/svg`;
-});
+const snippets = computed(() =>
+  usageSnippets(props.styleName, { major: theme.value.majorVersion }),
+);
+
+// Short names for the tab bar and the docs links, where the full language
+// names would crowd the row.
+const shortLabels: Record<string, string> = {
+  'http-api': 'HTTP-API',
+  'js-library': 'JS',
+  'php-library': 'PHP',
+  'python-library': 'Python',
+  'rust-library': 'Rust',
+  'go-library': 'Go',
+  'dart-library': 'Dart',
+  cli: 'CLI',
+};
+
+const installIntros: Record<string, string> = {
+  'js-library': 'First install the required packages via npm:',
+  'php-library': 'First install the required packages via Composer:',
+  'python-library': 'First install the required packages via pip:',
+  'rust-library': 'First add the required crates via Cargo:',
+  'go-library': 'First add the required modules with go get:',
+  'dart-library': 'First add the required packages with dart pub:',
+  cli: 'First install the CLI package via npm:',
+};
 
 const exampleHttpApiImgTag = computed(() => {
   return `<img
-  src="https://api.dicebear.com/10.x/${kebabCase(props.styleName)}/svg"
+  src="${httpApiUrl(props.styleName, { major: theme.value.majorVersion })}"
   alt="avatar"
 />`;
-});
-
-const exampleJsLibraryInstall = computed(() => {
-  return `npm install @dicebear/core @dicebear/styles --save`;
-});
-
-const exampleJsLibraryUsage = computed(() => {
-  return `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/styles/${kebabCase(props.styleName)}.json' with { type: 'json' };
-
-const style = new Style(definition);
-const avatar = new Avatar(style, {
-  // ... options
-});
-
-const svg = avatar.toString();
-`;
-});
-
-const exampleRustInstall = computed(() => {
-  return `cargo add dicebear-core serde_json
-cargo add dicebear-styles --features ${kebabCase(props.styleName)}`;
-});
-
-const exampleRustUsage = computed(() => {
-  return `use dicebear_core::{Avatar, Style};
-use serde_json::json;
-
-let style = Style::from_str(dicebear_styles::${constantCase(props.styleName)})?;
-let avatar = Avatar::new(&style, json!({
-  // ... options
-}))?;
-
-let svg = avatar.to_svg();
-`;
-});
-
-const exampleGoInstall = computed(() => {
-  return `go get github.com/dicebear/dicebear-go/v10
-go get github.com/dicebear/styles/v10`;
-});
-
-const exampleGoUsage = computed(() => {
-  return `import (
-	dicebear "github.com/dicebear/dicebear-go/v10"
-	"github.com/dicebear/styles/v10"
-)
-
-style, _ := dicebear.NewStyle([]byte(styles.${pascalCase(props.styleName)}))
-avatar, _ := dicebear.NewAvatar(style, map[string]any{
-	// ... options
-})
-
-svg := avatar.SVG()
-`;
-});
-
-const exampleDartInstall = computed(() => {
-  return `dart pub add dicebear_core dicebear_styles`;
-});
-
-const exampleDartUsage = computed(() => {
-  return `import 'package:dicebear_core/dicebear_core.dart';
-import 'package:dicebear_styles/${snakeCase(props.styleName)}.dart';
-
-final style = Style.parse(${camelCase(props.styleName)});
-final avatar = Avatar(style, {
-  // ... options
-});
-
-final svg = avatar.svg;
-`;
-});
-
-const exampleCliInstall = computed(() => {
-  return `npm install --global dicebear`;
-});
-
-const examplePhpInstall = computed(() => {
-  return `composer require dicebear/core dicebear/styles`;
-});
-
-const examplePhpUsage = computed(() => {
-  return `<?php
-
-use Composer\\InstalledVersions;
-use DiceBear\\Style;
-use DiceBear\\Avatar;
-
-$basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$style = Style::fromJson(file_get_contents($basePath . '/src/${kebabCase(props.styleName)}.json'));
-
-$avatar = new Avatar($style, [
-  // ... options
-]);
-
-$svg = (string) $avatar;
-`;
-});
-
-const examplePythonInstall = computed(() => {
-  return `pip install dicebear-core dicebear-styles`;
-});
-
-const examplePythonUsage = computed(() => {
-  return `from importlib.resources import files
-
-from dicebear import Avatar, Style
-
-style = Style.from_json(
-    files("dicebear_styles").joinpath("${kebabCase(props.styleName)}.json").read_text("utf-8")
-)
-
-avatar = Avatar(style, {
-    # ... options
-})
-
-svg = avatar.to_string()
-`;
-});
-
-const exampleCliUsage = computed(() => {
-  return `dicebear ${props.styleName}`;
 });
 </script>
 
@@ -159,101 +62,34 @@ const exampleCliUsage = computed(() => {
   <UiCard class="style-usage" flush>
     <Tabs v-model:value="tab">
       <TabList>
-        <Tab value="http-api">HTTP-API</Tab>
-        <Tab value="js-library">JS</Tab>
-        <Tab value="php-library">PHP</Tab>
-        <Tab value="python-library">Python</Tab>
-        <Tab value="rust-library">Rust</Tab>
-        <Tab value="go-library">Go</Tab>
-        <Tab value="dart-library">Dart</Tab>
-        <Tab value="cli">CLI</Tab>
+        <Tab v-for="snippet in snippets" :key="snippet.id" :value="snippet.id">
+          {{ shortLabels[snippet.id] }}
+        </Tab>
       </TabList>
       <TabPanels>
-        <TabPanel value="http-api" class="style-usage-body">
-          <p>Use this URL to request this avatar style via our HTTP API.</p>
-          <Code :code="exampleHttpApiUrl" />
+        <TabPanel
+          v-for="snippet in snippets"
+          :key="snippet.id"
+          :value="snippet.id"
+          class="style-usage-body"
+        >
+          <template v-if="snippet.id === 'http-api'">
+            <p>Use this URL to request this avatar style via our HTTP API.</p>
+            <Code :code="snippet.code" />
 
-          <p>You can use the URL directly as image source.</p>
-          <Code lang="html" :code="exampleHttpApiImgTag" />
-          <p>
-            See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
-            information.
-          </p>
-        </TabPanel>
-        <TabPanel value="js-library" class="style-usage-body">
-          <p>First install the required packages via npm:</p>
-          <Code :code="exampleJsLibraryInstall" />
+            <p>You can use the URL directly as image source.</p>
+            <Code lang="html" :code="exampleHttpApiImgTag" />
+          </template>
+          <template v-else>
+            <p>{{ installIntros[snippet.id] }}</p>
+            <Code :code="snippet.install ?? ''" />
 
-          <p>Then you can create this avatar as follows:</p>
-          <Code lang="js" :code="exampleJsLibraryUsage" />
+            <p>Then you can create this avatar as follows:</p>
+            <Code :lang="snippet.lang" :code="snippet.code" />
+          </template>
           <p>
-            See <a href="/how-to-use/js-library">JS</a> docs for more
-            information.
-          </p>
-        </TabPanel>
-        <TabPanel value="php-library" class="style-usage-body">
-          <p>First install the required packages via Composer:</p>
-          <Code :code="examplePhpInstall" />
-
-          <p>Then you can create this avatar as follows:</p>
-          <Code lang="php" :code="examplePhpUsage" />
-          <p>
-            See <a href="/how-to-use/php-library">PHP</a> docs for more
-            information.
-          </p>
-        </TabPanel>
-        <TabPanel value="python-library" class="style-usage-body">
-          <p>First install the required packages via pip:</p>
-          <Code :code="examplePythonInstall" />
-
-          <p>Then you can create this avatar as follows:</p>
-          <Code lang="python" :code="examplePythonUsage" />
-          <p>
-            See <a href="/how-to-use/python-library">Python</a> docs for more
-            information.
-          </p>
-        </TabPanel>
-        <TabPanel value="rust-library" class="style-usage-body">
-          <p>First add the required crates via Cargo:</p>
-          <Code :code="exampleRustInstall" />
-
-          <p>Then you can create this avatar as follows:</p>
-          <Code lang="rust" :code="exampleRustUsage" />
-          <p>
-            See <a href="/how-to-use/rust-library">Rust</a> docs for more
-            information.
-          </p>
-        </TabPanel>
-        <TabPanel value="go-library" class="style-usage-body">
-          <p>First add the required modules with go get:</p>
-          <Code :code="exampleGoInstall" />
-
-          <p>Then you can create this avatar as follows:</p>
-          <Code lang="go" :code="exampleGoUsage" />
-          <p>
-            See <a href="/how-to-use/go-library">Go</a> docs for more
-            information.
-          </p>
-        </TabPanel>
-        <TabPanel value="dart-library" class="style-usage-body">
-          <p>First add the required packages with dart pub:</p>
-          <Code :code="exampleDartInstall" />
-
-          <p>Then you can create this avatar as follows:</p>
-          <Code lang="dart" :code="exampleDartUsage" />
-          <p>
-            See <a href="/how-to-use/dart-library">Dart</a> docs for more
-            information.
-          </p>
-        </TabPanel>
-        <TabPanel value="cli" class="style-usage-body">
-          <p>First install the CLI package via npm:</p>
-          <Code :code="exampleCliInstall" />
-
-          <p>Then you can create this avatar as follows:</p>
-          <Code :code="exampleCliUsage" />
-          <p>
-            See <a href="/how-to-use/cli">CLI</a> docs for more information.
+            See <a :href="snippet.docs">{{ shortLabels[snippet.id] }}</a> docs
+            for more information.
           </p>
         </TabPanel>
       </TabPanels>

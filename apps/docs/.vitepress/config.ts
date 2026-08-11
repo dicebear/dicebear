@@ -1,4 +1,3 @@
-import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { defineConfig, type DefaultTheme, type HeadConfig } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
@@ -9,6 +8,8 @@ import {
   OG_IMAGE_SIZE,
 } from './og-images.ts';
 import { generateBadges } from './badges.ts';
+import { prepareLlms } from './llms.ts';
+import { versions } from './config/versions.ts';
 import { SITE_ORIGIN, siteUrl } from './config/site.ts';
 import sidebarDocs from './config/sidebarDocs.ts';
 import sidebarStyles from './config/sidebarStyles.ts';
@@ -72,14 +73,12 @@ const githubStars = await fetchGitHubStars([
   'boringdesigners/boring-avatars',
 ]);
 
-// Read from the workspace rather than through a package import: @dicebear/core
-// has a string `exports` field, which blocks the `package.json` subpath.
-const coreVersion: string = JSON.parse(
-  await fs.readFile(
-    path.resolve(import.meta.dirname, '../../../src/js/core/package.json'),
-    'utf8',
-  ),
-).version;
+const pagesDir = path.join(import.meta.dirname, '..', 'pages');
+
+// Read here rather than in buildEnd: themeConfig has to know which pages have
+// a Markdown mirror before the first page renders, so the copy button only
+// appears where the file it points at exists.
+const llms = await prepareLlms(pagesDir);
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -162,7 +161,7 @@ export default defineConfig<ThemeOptions>({
     ],
     ...thirdPartyScripts,
   ],
-  srcDir: path.join(import.meta.dirname, '..', 'pages'),
+  srcDir: pagesDir,
   // Frontmatter is static YAML and cannot import the style counts, so pages
   // write the tokens where the numbers belong and the build substitutes them.
   // Runs before transformHead, which reads these two fields for the canonical
@@ -227,6 +226,22 @@ export default defineConfig<ThemeOptions>({
         result.push(['meta', { name: 'robots', content: 'noindex, nofollow' }]);
       }
 
+      // The Markdown twin of the page, for agents that fetch the HTML first.
+      // Typed as text/markdown because the link names the format; the file
+      // itself is served as text/plain, see deploy-website.yml.
+      const mirrorRoute = `/${canonicalPath}`.replace(/\/?$/, '/');
+
+      if (llms.routes.includes(mirrorRoute)) {
+        result.push([
+          'link',
+          {
+            rel: 'alternate',
+            type: 'text/markdown',
+            href: siteUrl(`${mirrorRoute}index.md`),
+          },
+        ]);
+      }
+
       const pageTitle =
         ctx.pageData.frontmatter.title || ctx.pageData.title || 'DiceBear';
       const pageDescription =
@@ -273,11 +288,48 @@ export default defineConfig<ThemeOptions>({
     await generateBadges(
       siteConfig.outDir,
       githubStars['dicebear/dicebear'],
-      coreVersion,
+      versions.core,
     );
+    await llms.write(siteConfig.outDir);
   },
   vite: {
     plugins: [
+      {
+        // The Markdown mirrors and the two llms files are written in
+        // buildEnd, which never runs under `vitepress dev`. Without this the
+        // copy button would 404 for anyone working on the docs locally.
+        name: 'dicebear:llms-dev',
+        apply: 'serve',
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            const pathname = req.url?.split('?')[0];
+
+            if (pathname === '/llms.txt' || pathname === '/llms-full.txt') {
+              res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+              res.end(pathname === '/llms.txt' ? llms.index : llms.full);
+              return;
+            }
+
+            if (!pathname?.endsWith('.md')) {
+              return next();
+            }
+
+            const markdown = await llms.render(
+              pathname.replace(/index\.md$/, '').replace(/\.md$/, '/'),
+            );
+
+            if (markdown === undefined) {
+              return next();
+            }
+
+            // text/plain rather than text/markdown, matching the edge rule
+            // documented in deploy-website.yml: Firefox downloads a
+            // text/markdown response instead of displaying it.
+            res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+            res.end(markdown);
+          });
+        },
+      },
       {
         // VitePress puts everything the theme entry reaches into one `theme`
         // chunk, and rolldown then folds the modules that many pages share
@@ -340,6 +392,8 @@ export default defineConfig<ThemeOptions>({
     avatarUniqueCounts,
     avatarStyleSizes,
     githubStars,
+    llmsRoutes: llms.routes,
+    majorVersion: versions.major,
     siteTitle: '',
     // Intrinsic SVG dimensions as explicit attributes so the browser can
     // reserve the aspect ratio before the file loads (the displayed size
@@ -398,5 +452,17 @@ export default defineConfig<ThemeOptions>({
   sitemap: {
     hostname: SITE_ORIGIN,
   },
-  markdown: {},
+  markdown: {
+    config: (md) => {
+      // The counterpart of transformPageData for page bodies: prose cannot
+      // read themeConfig at build time, and a Vue interpolation would reach
+      // the Markdown mirrors as literal source text. Substituted before
+      // parsing, so the tokens work in any Markdown position.
+      md.core.ruler.before('normalize', 'dicebear-count-tokens', (state) => {
+        state.src = state.src
+          .replaceAll(STYLE_COUNT_TOKEN, String(styleCount))
+          .replaceAll(ANIMATED_STYLE_COUNT_TOKEN, String(animatedStyleCount));
+      });
+    },
+  },
 });

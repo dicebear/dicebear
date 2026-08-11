@@ -50,6 +50,21 @@ jobs:
           VITE_LEGAL_NOTICE_URL: ${{ vars.VITE_LEGAL_NOTICE_URL }}
         run: npx turbo run build --filter='@dicebear/docs...'
 
+      # Two Bunny.net edge rules back llms.txt, llms-full.txt and the Markdown
+      # mirrors (*.md). They live in the pull zone dashboard, not in this
+      # repository:
+      #
+      #  1. `Content-Type: text/plain; charset=utf-8`. The pull zone serves no
+      #     charset of its own. HTML pages survive that because they declare
+      #     one in a <meta> tag; plain text cannot, and a browser then falls
+      #     back to windows-1252 and turns every non-ASCII character into
+      #     mojibake. The type is text/plain rather than text/markdown because
+      #     Firefox downloads text/markdown instead of displaying it.
+      #  2. `X-Robots-Tag: noindex`. Every docs page links its mirror, so
+      #     search engines find them, and without the header they compete with
+      #     the HTML pages as duplicate content.
+      #
+      # The verify step below fails the deploy when either rule is missing.
       - name: Deploy to Bunny.net
         uses: ayeressian/bunnycdn-storage-deploy@251c77f4b9e7e683ad00086de2bef5770c3386b2 # v2.4.5
         with:
@@ -62,3 +77,8 @@ jobs:
           upload: 'true'
           remove: 'true'
           purgePullZone: 'true'
+
+      - name: Verify the llms edge rules
+        # The 9.x site has no llms files and deploys to its own pull zone.
+        if: github.ref_name != '9.x'
+        run: ./apps/docs/scripts/verify-llms-headers.sh
