@@ -39,7 +39,10 @@ jobs:
           if [[ "$TAG" =~ -(alpha|beta|rc)\. ]]; then
             echo "DIST_TAG=next" >> $GITHUB_ENV
           else
-            git fetch origin "$DEFAULT_BRANCH" --depth=1
+            # No --depth here: a shallow fetch cuts the branch history and
+            # makes the ancestor check below fail for any tag that is not
+            # the branch tip (10.5.0 landed on npm as v10-lts because of it).
+            git fetch origin "$DEFAULT_BRANCH"
             if git merge-base --is-ancestor "$GITHUB_SHA" "origin/$DEFAULT_BRANCH"; then
               echo "DIST_TAG=latest" >> $GITHUB_ENV
             else
