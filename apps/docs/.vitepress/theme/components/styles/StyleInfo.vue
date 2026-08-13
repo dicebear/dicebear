@@ -7,6 +7,7 @@ import { kebabCase } from 'change-case';
 import { safeHttpUrl } from '@theme/utils/url';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import StylePopularity from './StylePopularity.vue';
 
 const { theme } = useData<ThemeOptions>();
 
@@ -131,6 +132,8 @@ const sourceRows = computed<Row[]>(() => {
       </Column>
     </DataTable>
   </UiCard>
+
+  <StylePopularity :style-name="styleName" />
 </template>
 
 <style lang="scss" scoped>

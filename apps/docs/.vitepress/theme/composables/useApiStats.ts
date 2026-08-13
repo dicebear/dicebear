@@ -3,13 +3,36 @@ import { ref, onMounted } from 'vue';
 const STATS_API_URL = 'https://api.dicebear.com/stats.json';
 const MONTH_KEY_LENGTH = 7;
 
-export interface StatsData {
-  requests: Record<string, number>;
-  traffic: Record<string, number>;
-  downloads: { npm: Record<string, number> };
+export interface StatsWeekly {
+  /** Unique referer hosts per complete week, keyed by the week's Monday. */
+  referers: Record<string, number>;
+  /** Unique referer hosts per style and complete week, ranked per week. */
   styles: Record<string, [string, number][]>;
   versions: Record<string, [string, number][]>;
   formats: Record<string, [string, number][]>;
+  /**
+   * Weeks whose logs were only partially collected. Their referer counts
+   * are removed from the records above, so charts and trends skip them;
+   * the list itself is currently unused by the docs.
+   */
+  gaps?: string[];
+}
+
+export interface StatsData {
+  requests: Record<string, number>;
+  traffic: Record<string, number>;
+  downloads: {
+    npm: Record<string, number>;
+    /** Absent while a CDN-cached response predates the extra registries. */
+    packagist?: Record<string, number>;
+    pypi?: Record<string, number>;
+    crates?: Record<string, number>;
+  };
+  styles: Record<string, [string, number][]>;
+  versions: Record<string, [string, number][]>;
+  formats: Record<string, [string, number][]>;
+  /** Absent while a CDN-cached response predates the weekly aggregates. */
+  weekly?: StatsWeekly;
 }
 
 interface ApiStats {
@@ -75,7 +98,7 @@ async function doFetch() {
 
     const requests = lastCompleteMonth(data.requests);
     const traffic = lastCompleteMonth(data.traffic);
-    const npmDownloads = lastCompleteMonth(data.downloads.npm);
+    const npmDownloads = lastCompleteMonth(data.downloads?.npm ?? {});
 
     if (!requests || !traffic) {
       return;
@@ -111,3 +134,9 @@ export function useApiStatsRaw() {
 
   return rawData;
 }
+
+/**
+ * The same payload without the fetch-on-mount hookup, for module-scope
+ * derivations that cannot register lifecycle hooks (useStyleRankings).
+ */
+export const apiStatsData = rawData;

@@ -5,42 +5,28 @@ import AppSmallHero from '../app/AppSmallHero.vue';
 import AppStatsChart from '../app/AppStatsChart.vue';
 import AppStatsMultiLineChart from '../app/AppStatsMultiLineChart.vue';
 import AppStatsMap from '../app/AppStatsMap.vue';
+import AppStatsStyleTable from '../app/AppStatsStyleTable.vue';
+import AppStatsTrendingCard from '../app/AppStatsTrendingCard.vue';
+import { lastCompleteMonth } from '../../composables/useApiStats';
+import { useStyleRankings } from '../../composables/useStyleRankings';
 import {
-  useApiStatsRaw,
-  lastCompleteMonth,
-} from '../../composables/useApiStats';
-import { formatNumber, formatBytes } from '../../utils/format';
+  buildWeeklySeries,
+  formatWeekRange,
+  shiftDays,
+  weekStartKey,
+} from '../../utils/statsTrends';
+import { formatNumber, formatBytes, formatPercent } from '../../utils/format';
 
 const SECONDS_PER_DAY = 86400;
 const ROLLING_WINDOW_DAYS = 7;
-const TOP_STYLES = 10;
+const TRENDING_COUNT = 4;
 
-const stats = useApiStatsRaw();
-
-function fmtDay(d: Date): string {
-  return d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
-}
-
-function weekStartKey(dateStr: string): string {
-  const d = new Date(`${dateStr}T00:00:00Z`);
-  const dow = d.getUTCDay();
-  const offset = (dow + 6) % 7;
-
-  d.setUTCDate(d.getUTCDate() - offset);
-
-  return d.toISOString().slice(0, 10);
-}
-
-function fmtWeekRange(weekStartStr: string): string {
-  const start = new Date(weekStartStr);
-  const end = new Date(start.getTime() + 6 * SECONDS_PER_DAY * 1000);
-
-  if (start.getMonth() === end.getMonth()) {
-    return `${fmtDay(start)}–${end.getDate()}`;
-  }
-
-  return `${fmtDay(start)} – ${fmtDay(end)}`;
-}
+const {
+  stats,
+  weekly,
+  currentWeekLabel,
+  rankings: styleRows,
+} = useStyleRankings();
 
 function completeWeeks(dayKeys: string[], weekOrder: string[]): string[] {
   if (weekOrder.length === 0) {
@@ -84,7 +70,7 @@ function aggregateWeekly(data: Record<string, number>): {
   const weeks = completeWeeks(dayKeys, weekOrder);
 
   return {
-    labels: weeks.map((k) => fmtWeekRange(k)),
+    labels: weeks.map((k) => formatWeekRange(k)),
     values: weeks.map((week) => sums[week]),
   };
 }
@@ -97,115 +83,162 @@ const requestsData = computed(() => {
   return aggregateWeekly(stats.value.requests);
 });
 
-const downloadsData = computed(() => {
-  if (!stats.value) {
+// One tab per registry the ports are published on. Registries whose data
+// has not arrived yet (or whose history is empty) get no tab.
+const DOWNLOAD_SOURCES = [
+  { key: 'npm', label: 'npm', title: 'npm Downloads', color: '#cb3837' },
+  {
+    key: 'packagist',
+    label: 'Packagist',
+    title: 'Packagist Downloads',
+    color: '#f28d1a',
+  },
+  { key: 'pypi', label: 'PyPI', title: 'PyPI Downloads', color: '#3775a9' },
+  {
+    key: 'crates',
+    label: 'crates.io',
+    title: 'crates.io Downloads',
+    color: '#b7410e',
+  },
+] as const;
+
+const downloadCharts = computed(() => {
+  const downloads = stats.value?.downloads;
+
+  if (!downloads) {
+    return [];
+  }
+
+  const sources = DOWNLOAD_SOURCES.map((source) => ({
+    ...source,
+    daily: downloads[source.key] ?? {},
+  })).filter((source) => Object.keys(source.daily).length > 0);
+
+  // Every registry chart runs on one shared week axis, so switching tabs
+  // never changes the time range. Weeks a registry reports nothing for
+  // count as zero; the young ports simply had no downloads back then.
+  const days = sources.flatMap((source) => Object.keys(source.daily)).sort();
+
+  if (days.length === 0) {
+    return [];
+  }
+
+  const startMonday = weekStartKey(days[0]);
+  const firstWeek =
+    startMonday === days[0] ? startMonday : shiftDays(startMonday, 7);
+  const lastWeek = weekStartKey(shiftDays(days[days.length - 1], -6));
+
+  const axis: string[] = [];
+
+  for (let week = firstWeek; week <= lastWeek; week = shiftDays(week, 7)) {
+    axis.push(week);
+  }
+
+  const labels = axis.map(formatWeekRange);
+
+  return sources.map(({ daily, ...source }) => {
+    const sums: Record<string, number> = {};
+
+    for (const [day, value] of Object.entries(daily)) {
+      const week = weekStartKey(day);
+      sums[week] = (sums[week] ?? 0) + value;
+    }
+
+    return {
+      ...source,
+      data: { labels, values: axis.map((week) => sums[week] ?? 0) },
+    };
+  });
+});
+
+// The biggest gainers among styles with enough usage that a handful of
+// websites cannot swing the percentage. The floor scales with the total
+// so it works at any traffic level, but stays low: 0.05% of the weekly
+// volume (~150 websites at the current scale). A tighter floor silently
+// dropped mid-tail styles whose growth was the most interesting number
+// on the page.
+const trendingStyles = computed(() => {
+  const rows = styleRows.value;
+
+  if (!rows) {
     return null;
   }
 
-  return aggregateWeekly(stats.value.downloads.npm);
+  const totalRecent = rows.reduce((sum, row) => sum + row.recentAvg, 0);
+  const floor = Math.max(50, totalRecent * 0.0005);
+
+  const eligible = rows.filter(
+    (row) =>
+      row.recentAvg >= floor &&
+      (row.isNew || (row.growth !== null && row.growth > 0)),
+  );
+
+  eligible.sort((a, b) => {
+    if (a.isNew !== b.isNew) {
+      return a.isNew ? -1 : 1;
+    }
+
+    if (a.isNew) {
+      return b.websites - a.websites;
+    }
+
+    return (b.growth ?? 0) - (a.growth ?? 0);
+  });
+
+  return eligible.slice(0, TRENDING_COUNT);
 });
 
-function buildSeries(source: Record<string, [string, number][]>): {
+// Weeks with lost logs never reach the weekly records (the API drops
+// them), so the share charts simply skip them; shares stay comparable
+// across the missing weeks.
+function weeklyShareData(
+  source: Record<string, [string, number][]>,
+  referers: Record<string, number>,
+): {
   labels: string[];
   series: Array<{ name: string; values: number[] }>;
 } | null {
-  const dayKeys = Object.keys(source).sort();
-
-  if (dayKeys.length === 0) {
-    return null;
-  }
-
-  const sums: Record<string, Record<string, number>> = {};
-  const dayCount: Record<string, number> = {};
-  const weekOrder: string[] = [];
-
-  for (const dayKey of dayKeys) {
-    const wk = weekStartKey(dayKey);
-
-    if (!sums[wk]) {
-      sums[wk] = {};
-      dayCount[wk] = 0;
-      weekOrder.push(wk);
-    }
-
-    dayCount[wk] += 1;
-
-    for (const [name, value] of source[dayKey]) {
-      sums[wk][name] = (sums[wk][name] ?? 0) + value;
-    }
-  }
-
-  const weeks = completeWeeks(dayKeys, weekOrder);
+  const { weeks, byName } = buildWeeklySeries(source);
 
   if (weeks.length === 0) {
     return null;
   }
 
-  const totals: Record<string, number> = {};
+  const names = Object.keys(byName).sort(
+    (a, b) => byName[b][weeks.length - 1] - byName[a][weeks.length - 1],
+  );
 
-  for (const week of weeks) {
-    const count = dayCount[week] || 1;
+  return {
+    labels: weeks.map(formatWeekRange),
+    series: names.map((name) => ({
+      name,
+      values: byName[name].map((value, index) => {
+        const total = referers[weeks[index]] ?? 0;
 
-    for (const [name, sum] of Object.entries(sums[week])) {
-      totals[name] = (totals[name] ?? 0) + sum / count;
-    }
-  }
-
-  const ranked = Object.keys(totals).sort((a, b) => totals[b] - totals[a]);
-
-  if (ranked.length === 0) {
-    return null;
-  }
-
-  const labels = weeks.map((k) => fmtWeekRange(k));
-  const series = ranked.map((name) => ({
-    name,
-    values: weeks.map(
-      (week) => (sums[week][name] ?? 0) / (dayCount[week] || 1),
-    ),
-  }));
-
-  return { labels, series };
+        return total > 0 ? (value / total) * 100 : 0;
+      }),
+    })),
+  };
 }
 
-function formatPercent(value: number): string {
-  if (value === 0) {
-    return '0%';
-  }
+const versionsData = computed(() =>
+  weekly.value
+    ? weeklyShareData(weekly.value.versions, weekly.value.referers)
+    : null,
+);
 
-  if (value < 0.1) {
-    return '<0.1%';
-  }
+const formatsData = computed(() =>
+  weekly.value
+    ? weeklyShareData(weekly.value.formats, weekly.value.referers)
+    : null,
+);
 
-  return `${value.toFixed(1)}%`;
-}
+const activeTab = ref<string>('api');
 
-const stylesData = computed(() => {
-  if (!stats.value) {
-    return null;
-  }
-
-  return buildSeries(stats.value.styles);
-});
-
-const versionsData = computed(() => {
-  if (!stats.value) {
-    return null;
-  }
-
-  return buildSeries(stats.value.versions);
-});
-
-const formatsData = computed(() => {
-  if (!stats.value) {
-    return null;
-  }
-
-  return buildSeries(stats.value.formats);
-});
-
-const showAllStyles = ref(false);
-const activeTab = ref<'api' | 'npm'>('api');
+const activeDownload = computed(
+  () =>
+    downloadCharts.value.find((chart) => chart.key === activeTab.value) ?? null,
+);
 
 const requestsPerSecond = computed(() => {
   if (!stats.value) {
@@ -319,7 +352,7 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        description="Weekly request and download volumes. Toggle between the HTTP API and npm packages."
+        description="Weekly totals for API requests and package downloads, shown once a week is complete."
       >
         <template #headline>Usage Over <strong>Time</strong></template>
       </UiSectionHeader>
@@ -332,10 +365,12 @@ const monthlyStats = computed(() => {
           HTTP API
         </button>
         <button
-          :class="{ active: activeTab === 'npm' }"
-          @click="activeTab = 'npm'"
+          v-for="chart in downloadCharts"
+          :key="chart.key"
+          :class="{ active: activeTab === chart.key }"
+          @click="activeTab = chart.key"
         >
-          npm
+          {{ chart.label }}
         </button>
       </div>
 
@@ -355,15 +390,15 @@ const monthlyStats = computed(() => {
         </UiCard>
 
         <UiCard
-          v-if="downloadsData && activeTab === 'npm'"
+          v-if="activeDownload"
           padding="xl"
           class="page-stats-chart-card"
         >
-          <h3 class="page-stats-chart-title">Package Downloads</h3>
+          <h3 class="page-stats-chart-title">{{ activeDownload.title }}</h3>
           <AppStatsChart
-            :labels="downloadsData.labels"
-            :values="downloadsData.values"
-            color="#cb3837"
+            :labels="activeDownload.data.labels"
+            :values="activeDownload.data.values"
+            :color="activeDownload.color"
             :format-value="formatNumber"
           />
         </UiCard>
@@ -371,35 +406,47 @@ const monthlyStats = computed(() => {
     </UiContainer>
   </UiSection>
 
-  <UiSection divider>
+  <UiSection v-if="styleRows" divider>
     <UiContainer>
       <UiSectionHeader
-        description="Based on API request data. Shows which styles, versions, and output formats are used most."
+        description="Every style, ranked by the number of websites that used it in the last complete week. Trends compare the past four weeks with the four before."
+      >
+        <template #headline>Style <strong>Rankings</strong></template>
+      </UiSectionHeader>
+
+      <ClientOnly>
+        <div
+          v-if="trendingStyles && trendingStyles.length > 0"
+          class="page-stats-trending"
+        >
+          <h3 class="page-stats-block-title">Trending</h3>
+          <div class="page-stats-trending-grid">
+            <AppStatsTrendingCard
+              v-for="row in trendingStyles"
+              :key="row.name"
+              :row="row"
+            />
+          </div>
+        </div>
+
+        <AppStatsStyleTable
+          v-if="styleRows && currentWeekLabel"
+          :rows="styleRows"
+          :week-label="currentWeekLabel"
+        />
+      </ClientOnly>
+    </UiContainer>
+  </UiSection>
+
+  <UiSection v-if="versionsData || formatsData" divider>
+    <UiContainer>
+      <UiSectionHeader
+        description="The API versions and output formats in use, as a share of the websites active each week."
       >
         <template #headline>Usage <strong>Details</strong></template>
       </UiSectionHeader>
 
       <ClientOnly>
-        <UiCard v-if="stylesData" padding="xl" class="page-stats-styles-card">
-          <h3 class="page-stats-chart-title">Popular Styles</h3>
-          <AppStatsMultiLineChart
-            :labels="stylesData.labels"
-            :series="
-              showAllStyles
-                ? stylesData.series
-                : stylesData.series.slice(0, TOP_STYLES)
-            "
-            :format-value="formatPercent"
-          />
-          <button
-            v-if="stylesData.series.length > TOP_STYLES"
-            class="page-stats-show-all"
-            @click="showAllStyles = !showAllStyles"
-          >
-            {{ showAllStyles ? `Show Top ${TOP_STYLES}` : 'Show All' }}
-          </button>
-        </UiCard>
-
         <div class="page-stats-breakdown-grid">
           <UiCard v-if="versionsData" padding="xl">
             <h3 class="page-stats-chart-title">API Versions</h3>
@@ -522,27 +569,21 @@ const monthlyStats = computed(() => {
   margin-bottom: 24px;
 }
 
-.page-stats-show-all {
-  display: block;
-  margin: 16px auto 0;
-  padding: 6px 16px;
-  border: 1px solid var(--vp-c-border);
-  background: transparent;
-  color: var(--vp-c-text-2);
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: var(--vp-radius-xs);
-  cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-smooth);
-
-  &:hover {
-    color: var(--vp-c-text-1);
-    border-color: var(--vp-c-text-2);
-  }
+.page-stats-block-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  margin-bottom: 16px;
 }
 
-.page-stats-styles-card {
+.page-stats-trending {
   margin-bottom: 32px;
+}
+
+.page-stats-trending-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
 }
 
 .page-stats-breakdown-grid {

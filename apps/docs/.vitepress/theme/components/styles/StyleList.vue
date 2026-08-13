@@ -1,17 +1,24 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
 import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
+import { useStyleRankings } from '@theme/composables/useStyleRankings';
+import { formatGrowth, trendSortValue } from '@theme/utils/statsTrends';
 import {
   Search,
   CircleUser,
   Scale,
   ArrowRight,
+  ArrowUpDown,
+  ChartNoAxesColumn,
   Filter,
   Play,
+  TrendingUp,
 } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
+import Select from 'primevue/select';
 import ToggleSwitch from 'primevue/toggleswitch';
 import { UiAvatar, UiCard } from '../ui';
 
@@ -28,6 +35,64 @@ const {
   groupedStyles,
   totalStyles,
 } = useStyleFiltering(theme.value.avatarStyles);
+
+const { rankingByName } = useStyleRankings();
+
+type SortMode = 'category' | 'popular' | 'trending';
+
+const sortBy = ref<SortMode>('category');
+
+const sortOptions: { label: string; value: SortMode }[] = [
+  { label: 'Category', value: 'category' },
+  { label: 'Most used', value: 'popular' },
+  { label: 'Trending', value: 'trending' },
+];
+
+function usageRank(slug: string): number {
+  return rankingByName.value?.[slug]?.rank ?? Number.MAX_SAFE_INTEGER;
+}
+
+function trendScore(slug: string): number {
+  const row = rankingByName.value?.[slug];
+
+  return row ? trendSortValue(row) : Number.NEGATIVE_INFINITY;
+}
+
+// Category view keeps the grouped sections; the usage-based sorts flatten
+// the list into one ranked grid. Until the stats have loaded, both fall
+// back to the alphabetical order the list already has.
+const displayGroups = computed<
+  { title: string | null; styles: typeof styleList.value }[]
+>(() => {
+  if (sortBy.value === 'category') {
+    return Object.entries(groupedStyles.value).map(([title, styles]) => ({
+      title,
+      styles,
+    }));
+  }
+
+  const list = [...styleList.value];
+
+  if (sortBy.value === 'popular') {
+    list.sort(
+      (a, b) =>
+        usageRank(a.slug) - usageRank(b.slug) ||
+        a.displayName.localeCompare(b.displayName),
+    );
+  } else {
+    list.sort((a, b) => {
+      const diff = trendScore(b.slug) - trendScore(a.slug);
+
+      if (Number.isNaN(diff) || diff === 0) {
+        return usageRank(a.slug) - usageRank(b.slug);
+      }
+
+      return diff;
+    });
+  }
+
+  return [{ title: null, styles: list }];
+});
 </script>
 
 <template>
@@ -76,6 +141,20 @@ const {
 
         <div class="style-list-filter-group">
           <span class="style-list-filter-label">
+            <ArrowUpDown />
+            Sort
+          </span>
+          <Select
+            v-model="sortBy"
+            :options="sortOptions"
+            optionLabel="label"
+            optionValue="value"
+            fluid
+          />
+        </div>
+
+        <div class="style-list-filter-group">
+          <span class="style-list-filter-label">
             <Play />
             Animation
           </span>
@@ -88,14 +167,16 @@ const {
     </UiCard>
 
     <div
-      v-for="(styles, category) in groupedStyles"
-      :key="category"
+      v-for="group in displayGroups"
+      :key="group.title ?? 'ranked'"
       class="style-list-category"
     >
-      <h2 class="style-list-category-title">{{ category }}</h2>
+      <h2 v-if="group.title" class="style-list-category-title">
+        {{ group.title }}
+      </h2>
       <div class="style-list-grid">
         <UiCard
-          v-for="style in styles"
+          v-for="style in group.styles"
           :key="style.name"
           :href="`/styles/${style.slug}/`"
           class="style-list-card"
@@ -130,6 +211,24 @@ const {
                 <Play />
                 Animated
               </span>
+              <span
+                v-if="sortBy === 'popular' && rankingByName?.[style.slug]"
+                class="style-list-card-tag"
+              >
+                <ChartNoAxesColumn />
+                #{{ rankingByName[style.slug].rank }}
+              </span>
+              <span
+                v-else-if="sortBy === 'trending' && rankingByName?.[style.slug]"
+                class="style-list-card-tag"
+              >
+                <TrendingUp />
+                {{
+                  rankingByName[style.slug].isNew
+                    ? 'New'
+                    : formatGrowth(rankingByName[style.slug].growth)
+                }}
+              </span>
             </div>
           </div>
 
@@ -157,7 +256,7 @@ const {
 
   &-filter-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr auto;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
     gap: 16px;
     align-items: flex-start;
   }

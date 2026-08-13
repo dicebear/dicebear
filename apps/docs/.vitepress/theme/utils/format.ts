@@ -32,6 +32,18 @@ export function formatBytes(bytes: number): string {
   return `${value}${unit}`;
 }
 
+export function formatPercent(value: number): string {
+  if (value === 0) {
+    return '0%';
+  }
+
+  if (value < 0.1) {
+    return '<0.1%';
+  }
+
+  return `${value.toFixed(1)}%`;
+}
+
 export function formatLicenseName(name: string | undefined): string {
   return name?.replace(/\.$/, '') ?? '';
 }
