@@ -302,7 +302,7 @@ export default defineConfig<ThemeOptions>({
         apply: 'serve',
         configureServer(server) {
           server.middlewares.use(async (req, res, next) => {
-            const pathname = req.url?.split('?')[0];
+            const [pathname, query] = req.url?.split('?') ?? [];
 
             if (pathname === '/llms.txt' || pathname === '/llms-full.txt') {
               res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -310,7 +310,12 @@ export default defineConfig<ThemeOptions>({
               return;
             }
 
-            if (!pathname?.endsWith('.md')) {
+            // Vite requests the page modules of the dev server under these
+            // same .md paths, always with a query (?import, ?t=…). Serving
+            // the mirror there replaces the compiled page with raw Markdown
+            // and every mirrored route renders the 404 page. The mirror
+            // itself is only ever fetched bare.
+            if (!pathname?.endsWith('.md') || query) {
               return next();
             }
 
