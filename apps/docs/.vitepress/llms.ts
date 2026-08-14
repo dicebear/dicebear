@@ -40,12 +40,20 @@ import avatarStyles, {
   ANIMATED_STYLE_COUNT_TOKEN,
 } from './config/avatarStyles.ts';
 import { versions, libraryVersions } from './config/versions.ts';
+import { softwareLicense } from './config/softwareLicense.ts';
 import {
   categoryOrder,
   getStyleCategory,
+  normalizeLicense,
+  type LicenseBucket,
 } from './theme/config/styleCategories.ts';
 import { usageSnippets } from './theme/config/usageSnippets.ts';
 import { formatLicenseName } from './theme/utils/format.ts';
+import {
+  attributionKind,
+  attributionPrefix,
+} from './theme/utils/license.ts';
+import { capitalCase } from 'change-case';
 
 /**
  * How much prose a page needs for a Markdown mirror to be worth writing.
@@ -467,6 +475,108 @@ raw definition at
 \`https://api.dicebear.com/${versions.httpApi}/${name}/definition.json\`.`;
 }
 
+/**
+ * Builds the licenses page from the style metadata and the repository
+ * LICENSE. Like the style pages, the source page is almost entirely a
+ * component mount, so its mirror is assembled from the same data the page
+ * reads: the buckets come from normalizeLicense and the remix/port wording
+ * from attributionPrefix, which the page and the OG cards also use.
+ */
+function renderLicensesPage(intro: string): string {
+  const rows: Record<LicenseBucket, string[]> = {
+    'CC BY 4.0': [],
+    'CC0 1.0': [],
+    MIT: [],
+    Other: [],
+  };
+  let mitNotice: string | undefined;
+
+  for (const [name, style] of Object.entries(avatarStyles)) {
+    const meta = style.meta;
+    const licenseName = formatLicenseName(meta?.license?.name);
+    const bucket = normalizeLicense(licenseName);
+    const kind = attributionKind(meta);
+
+    let credit =
+      kind === 'own-work'
+        ? 'By DiceBear'
+        : `${attributionPrefix(kind)} ${meta?.title ?? 'the original work'}${
+            meta?.source ? ` (${meta.source})` : ''
+          } by ${meta?.creator}${meta?.homepage ? ` (${meta.homepage})` : ''}`;
+
+    if (bucket === 'Other') {
+      credit += `, licensed under ${licenseName}${
+        meta?.license?.url ? ` (${meta.license.url})` : ''
+      }`;
+    }
+
+    if (bucket === 'MIT') {
+      mitNotice ??= meta?.license?.text;
+    }
+
+    rows[bucket].push(
+      `- ${capitalCase(name)} (${siteUrl(`/styles/${name}/`)}): ${credit}`,
+    );
+  }
+
+  const sections: string[] = [];
+
+  if (rows['CC0 1.0'].length > 0) {
+    sections.push(`## CC0 1.0
+
+These styles use the CC0 1.0 Public Domain Dedication, a waiver rather than a
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+${rows['CC0 1.0'].join('\n')}`);
+  }
+
+  if (rows['CC BY 4.0'].length > 0) {
+    sections.push(`## CC BY 4.0
+
+These styles are remixes of works licensed under CC BY 4.0, which requires
+naming the original artist, linking the license, and mentioning that the work
+was modified: https://creativecommons.org/licenses/by/4.0/
+
+${rows['CC BY 4.0'].join('\n')}`);
+  }
+
+  if (rows.MIT.length > 0) {
+    sections.push(`## MIT
+
+The MIT license has a single condition: the copyright and permission notice
+stays with the work.
+
+${rows.MIT.join('\n')}${
+      mitNotice === undefined ? '' : `\n\nThe notice:\n\n${fence('', mitNotice)}`
+    }`);
+  }
+
+  if (rows.Other.length > 0) {
+    sections.push(`## Artist's own terms
+
+The artists of these styles wrote their own terms instead of picking a
+standard license. They describe their work as free for personal and
+commercial use.
+
+${rows.Other.join('\n')}`);
+  }
+
+  sections.push(`## Software
+
+The source code in the dicebear/dicebear repository is available under the
+MIT license. That covers the libraries, the HTTP API, and this website. The
+LICENSE file: https://github.com/dicebear/dicebear/blob/${versions.major}.x/LICENSE
+
+${fence('', softwareLicense)}`);
+
+  return `${intro}
+
+${sections.join('\n\n')}
+
+The summaries on this page are meant as orientation, not as legal advice. The
+linked license texts are the authoritative source.`;
+}
+
 /** The route a source file is served under, e.g. `/how-to-use/cli/`. */
 function routeFor(relativePath: string): string {
   const withoutExtension = relativePath
@@ -521,6 +631,8 @@ async function buildPage(
       styleName,
       renderMarkdown(body.split(/^<[A-Z]/m)[0]),
     );
+  } else if (route === '/licenses/') {
+    markdown = renderLicensesPage(renderMarkdown(body.split(/^<[A-Z]/m)[0]));
   } else {
     markdown = renderMarkdown(body);
   }
