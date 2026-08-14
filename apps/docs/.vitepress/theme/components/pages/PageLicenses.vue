@@ -37,19 +37,51 @@ interface StyleRow {
 }
 
 /**
- * Source line of a quoted Creative Commons deed summary; the quote bodies
- * are static markup in the template. CC wrote the deed summaries to stand
- * alone, which is what makes them quotable; the MIT license has no such
+ * A quoted Creative Commons deed summary. CC wrote the deed summaries to
+ * stand alone, which is what makes them quotable; the MIT license has no such
  * summary, so the MIT sections describe the condition in one sentence and
  * let the full notice in the card speak for itself. CC dedicates its deed
  * texts to the public domain under CC0 (creativecommons.org/policies#license;
  * the site-wide CC BY footer applies "unless otherwise marked"), so quoting
  * them needs no attribution; the cite line names the source anyway and
  * links that dedication.
+ *
+ * The bodies are data instead of markup in the template for a build reason.
+ * Vue stringifies a run of static elements into one createStaticVNode, and
+ * VitePress rewrites those calls with a greedy regex when it strips the
+ * static content out of the lean page chunk (staticInjectMarkerRE in its
+ * build plugin). Two such blocks on one line of the chunk get merged into a
+ * single call with the wrong node count, the initial hydration then walks
+ * past the end of the quote, and the page dies before any avatar URL lands
+ * in the DOM. Rendered from data, the paragraphs stay dynamic and no static
+ * block is emitted.
  */
 interface DeedQuote {
   sourceLabel: string;
   sourceHref: string;
+  body: DeedParagraph[];
+}
+
+/** One paragraph of a deed, quoted verbatim. */
+interface DeedParagraph {
+  /** `**` wraps the terms the deed prints in bold. */
+  text: string;
+  /** Set on the deed's own sub-headings, such as "No Copyright". */
+  heading?: boolean;
+}
+
+interface DeedRun {
+  text: string;
+  strong: boolean;
+}
+
+// Every second segment sits between a pair of `**` and is the bold one. A
+// paragraph that opens with a bold term yields an empty segment first.
+function deedRuns(text: string): DeedRun[] {
+  return text
+    .split('**')
+    .map((part, index) => ({ text: part, strong: index % 2 === 1 }))
+    .filter((run) => run.text !== '');
 }
 
 interface LicenseGroup {
@@ -77,6 +109,43 @@ const licenseGroups: Record<LicenseBucket, LicenseGroup> = {
     quote: {
       sourceLabel: 'CC0 1.0 deed',
       sourceHref: 'https://creativecommons.org/publicdomain/zero/1.0/',
+      body: [
+        { heading: true, text: 'No Copyright' },
+        {
+          text:
+            'The person who associated a work with this deed has ' +
+            '**dedicated** the work to the public domain by waiving all of ' +
+            'his or her rights to the work worldwide under copyright law, ' +
+            'including all related and neighboring rights, to the extent ' +
+            'allowed by law.',
+        },
+        {
+          text:
+            'You can copy, modify, distribute and perform the work, even ' +
+            'for commercial purposes, all without asking permission. See ' +
+            '**Other Information** below.',
+        },
+        { heading: true, text: 'Other Information' },
+        {
+          text:
+            'In no way are the patent or trademark rights of any person ' +
+            'affected by CC0, nor are the rights that other persons may ' +
+            'have in the work or in how the work is used, such as publicity ' +
+            'or privacy rights.',
+        },
+        {
+          text:
+            'Unless expressly stated otherwise, the person who associated a ' +
+            'work with this deed makes no warranties about the work, and ' +
+            'disclaims liability for all uses of the work, to the fullest ' +
+            'extent permitted by applicable law.',
+        },
+        {
+          text:
+            'When using or citing the work, you should not imply ' +
+            'endorsement by the author or the affirmer.',
+        },
+      ],
     },
   },
   'CC BY 4.0': {
@@ -88,6 +157,52 @@ const licenseGroups: Record<LicenseBucket, LicenseGroup> = {
     quote: {
       sourceLabel: 'CC BY 4.0 deed',
       sourceHref: 'https://creativecommons.org/licenses/by/4.0/',
+      body: [
+        { heading: true, text: 'You are free to:' },
+        {
+          text:
+            '**Share** — copy and redistribute the material in any medium ' +
+            'or format for any purpose, even commercially.',
+        },
+        {
+          text:
+            '**Adapt** — remix, transform, and build upon the material for ' +
+            'any purpose, even commercially.',
+        },
+        {
+          text:
+            'The licensor cannot revoke these freedoms as long as you ' +
+            'follow the license terms.',
+        },
+        { heading: true, text: 'Under the following terms:' },
+        {
+          text:
+            '**Attribution** — You must give appropriate credit, provide a ' +
+            'link to the license, and indicate if changes were made. You ' +
+            'may do so in any reasonable manner, but not in any way that ' +
+            'suggests the licensor endorses you or your use.',
+        },
+        {
+          text:
+            '**No additional restrictions** — You may not apply legal terms ' +
+            'or technological measures that legally restrict others from ' +
+            'doing anything the license permits.',
+        },
+        { heading: true, text: 'Notices:' },
+        {
+          text:
+            'You do not have to comply with the license for elements of the ' +
+            'material in the public domain or where your use is permitted ' +
+            'by an applicable exception or limitation.',
+        },
+        {
+          text:
+            'No warranties are given. The license may not give you all of ' +
+            'the permissions necessary for your intended use. For example, ' +
+            'other rights such as publicity, privacy, or moral rights may ' +
+            'limit how you use the material.',
+        },
+      ],
     },
   },
   MIT: {
@@ -138,7 +253,18 @@ for (const [styleName, style] of Object.entries(theme.value.avatarStyles)) {
 const groups = (
   Object.entries(licenseGroups) as [LicenseBucket, LicenseGroup][]
 )
-  .map(([key, group]) => ({ key, ...group, styles: rowsByLicense[key] ?? [] }))
+  .map(([key, group]) => ({
+    key,
+    ...group,
+    quote: group.quote && {
+      ...group.quote,
+      body: group.quote.body.map((paragraph) => ({
+        heading: paragraph.heading === true,
+        runs: deedRuns(paragraph.text),
+      })),
+    },
+    styles: rowsByLicense[key] ?? [],
+  }))
   .filter((group) => group.styles.length > 0);
 
 const softwareLicense = theme.value.softwareLicense;
@@ -187,78 +313,16 @@ function reflowParagraphs(text: string): string {
       >
         {{ group.quote.sourceLabel }}
       </a>
-      <!-- Verbatim from the Creative Commons deeds, including their
-           sub-headings and bold terms; do not edit. -->
-      <template v-if="group.id === 'cc0-1-0'">
-        <p class="page-licenses-quote-heading">No Copyright</p>
-        <p>
-          The person who associated a work with this deed has
-          <strong>dedicated</strong> the work to the public domain by waiving
-          all of his or her rights to the work worldwide under copyright law,
-          including all related and neighboring rights, to the extent allowed by
-          law.
-        </p>
-        <p>
-          You can copy, modify, distribute and perform the work, even for
-          commercial purposes, all without asking permission. See
-          <strong>Other Information</strong> below.
-        </p>
-        <p class="page-licenses-quote-heading">Other Information</p>
-        <p>
-          In no way are the patent or trademark rights of any person affected by
-          CC0, nor are the rights that other persons may have in the work or in
-          how the work is used, such as publicity or privacy rights.
-        </p>
-        <p>
-          Unless expressly stated otherwise, the person who associated a work
-          with this deed makes no warranties about the work, and disclaims
-          liability for all uses of the work, to the fullest extent permitted by
-          applicable law.
-        </p>
-        <p>
-          When using or citing the work, you should not imply endorsement by the
-          author or the affirmer.
-        </p>
-      </template>
-      <template v-else-if="group.id === 'cc-by-4-0'">
-        <p class="page-licenses-quote-heading">You are free to:</p>
-        <p>
-          <strong>Share</strong> — copy and redistribute the material in any
-          medium or format for any purpose, even commercially.
-        </p>
-        <p>
-          <strong>Adapt</strong> — remix, transform, and build upon the material
-          for any purpose, even commercially.
-        </p>
-        <p>
-          The licensor cannot revoke these freedoms as long as you follow the
-          license terms.
-        </p>
-        <p class="page-licenses-quote-heading">Under the following terms:</p>
-        <p>
-          <strong>Attribution</strong> — You must give appropriate credit,
-          provide a link to the license, and indicate if changes were made. You
-          may do so in any reasonable manner, but not in any way that suggests
-          the licensor endorses you or your use.
-        </p>
-        <p>
-          <strong>No additional restrictions</strong> — You may not apply legal
-          terms or technological measures that legally restrict others from
-          doing anything the license permits.
-        </p>
-        <p class="page-licenses-quote-heading">Notices:</p>
-        <p>
-          You do not have to comply with the license for elements of the
-          material in the public domain or where your use is permitted by an
-          applicable exception or limitation.
-        </p>
-        <p>
-          No warranties are given. The license may not give you all of the
-          permissions necessary for your intended use. For example, other rights
-          such as publicity, privacy, or moral rights may limit how you use the
-          material.
-        </p>
-      </template>
+      <p
+        v-for="(paragraph, index) in group.quote.body"
+        :key="index"
+        :class="{ 'page-licenses-quote-heading': paragraph.heading }"
+      >
+        <template v-for="(run, runIndex) in paragraph.runs" :key="runIndex">
+          <strong v-if="run.strong">{{ run.text }}</strong>
+          <template v-else>{{ run.text }}</template>
+        </template>
+      </p>
       <cite class="page-licenses-quote-cite">
         By
         <a
