@@ -28,8 +28,10 @@ interface StyleRow {
   creatorUrl?: string;
   licenseName: string;
   licenseUrl?: string;
-  /** The license text from the definition; only the MIT rows surface it,
-   *  since that license requires shipping its notice. */
+  /**
+   * The license text from the definition; only the MIT rows surface it,
+   * since that license requires shipping its notice.
+   */
   credit?: string;
   seed: string;
 }
@@ -193,8 +195,8 @@ function reflowParagraphs(text: string): string {
           The person who associated a work with this deed has
           <strong>dedicated</strong> the work to the public domain by waiving
           all of his or her rights to the work worldwide under copyright law,
-          including all related and neighboring rights, to the extent allowed
-          by law.
+          including all related and neighboring rights, to the extent allowed by
+          law.
         </p>
         <p>
           You can copy, modify, distribute and perform the work, even for
@@ -203,19 +205,19 @@ function reflowParagraphs(text: string): string {
         </p>
         <p class="page-licenses-quote-heading">Other Information</p>
         <p>
-          In no way are the patent or trademark rights of any person affected
-          by CC0, nor are the rights that other persons may have in the work
-          or in how the work is used, such as publicity or privacy rights.
+          In no way are the patent or trademark rights of any person affected by
+          CC0, nor are the rights that other persons may have in the work or in
+          how the work is used, such as publicity or privacy rights.
         </p>
         <p>
           Unless expressly stated otherwise, the person who associated a work
           with this deed makes no warranties about the work, and disclaims
-          liability for all uses of the work, to the fullest extent permitted
-          by applicable law.
+          liability for all uses of the work, to the fullest extent permitted by
+          applicable law.
         </p>
         <p>
-          When using or citing the work, you should not imply endorsement by
-          the author or the affirmer.
+          When using or citing the work, you should not imply endorsement by the
+          author or the affirmer.
         </p>
       </template>
       <template v-else-if="group.id === 'cc-by-4-0'">
@@ -225,8 +227,8 @@ function reflowParagraphs(text: string): string {
           medium or format for any purpose, even commercially.
         </p>
         <p>
-          <strong>Adapt</strong> — remix, transform, and build upon the
-          material for any purpose, even commercially.
+          <strong>Adapt</strong> — remix, transform, and build upon the material
+          for any purpose, even commercially.
         </p>
         <p>
           The licensor cannot revoke these freedoms as long as you follow the
@@ -235,14 +237,14 @@ function reflowParagraphs(text: string): string {
         <p class="page-licenses-quote-heading">Under the following terms:</p>
         <p>
           <strong>Attribution</strong> — You must give appropriate credit,
-          provide a link to the license, and indicate if changes were made.
-          You may do so in any reasonable manner, but not in any way that
-          suggests the licensor endorses you or your use.
+          provide a link to the license, and indicate if changes were made. You
+          may do so in any reasonable manner, but not in any way that suggests
+          the licensor endorses you or your use.
         </p>
         <p>
-          <strong>No additional restrictions</strong> — You may not apply
-          legal terms or technological measures that legally restrict others
-          from doing anything the license permits.
+          <strong>No additional restrictions</strong> — You may not apply legal
+          terms or technological measures that legally restrict others from
+          doing anything the license permits.
         </p>
         <p class="page-licenses-quote-heading">Notices:</p>
         <p>
@@ -252,9 +254,9 @@ function reflowParagraphs(text: string): string {
         </p>
         <p>
           No warranties are given. The license may not give you all of the
-          permissions necessary for your intended use. For example, other
-          rights such as publicity, privacy, or moral rights may limit how
-          you use the material.
+          permissions necessary for your intended use. For example, other rights
+          such as publicity, privacy, or moral rights may limit how you use the
+          material.
         </p>
       </template>
       <cite class="page-licenses-quote-cite">
@@ -276,7 +278,11 @@ function reflowParagraphs(text: string): string {
 
     <UiCard flush>
       <ul class="page-licenses-rows">
-        <li v-for="row in group.styles" :key="row.slug" class="page-licenses-row">
+        <li
+          v-for="row in group.styles"
+          :key="row.slug"
+          class="page-licenses-row"
+        >
           <div class="page-licenses-avatar" aria-hidden="true">
             <UiAvatar
               :style-name="row.slug"
@@ -301,7 +307,9 @@ function reflowParagraphs(text: string): string {
                   rel="noopener noreferrer"
                   >{{ row.title ?? 'the original work' }}</a
                 >
-                <template v-else>{{ row.title ?? 'the original work' }}</template>
+                <template v-else>{{
+                  row.title ?? 'the original work'
+                }}</template>
                 by
                 <a
                   v-if="row.creatorUrl"
@@ -354,9 +362,9 @@ function reflowParagraphs(text: string): string {
       </a>
     </header>
     <p class="page-licenses-section-intro">
-      The source code in the dicebear/dicebear repository is available under
-      the MIT license. That covers the libraries, the HTTP API, and this
-      website. The copyright notice and the full license text are below.
+      The source code in the dicebear/dicebear repository is available under the
+      MIT license. That covers the libraries, the HTTP API, and this website.
+      The copyright notice and the full license text are below.
     </p>
 
     <UiCard flush>

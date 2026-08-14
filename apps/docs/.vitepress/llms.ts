@@ -49,10 +49,7 @@ import {
 } from './theme/config/styleCategories.ts';
 import { usageSnippets } from './theme/config/usageSnippets.ts';
 import { formatLicenseName } from './theme/utils/format.ts';
-import {
-  attributionKind,
-  attributionPrefix,
-} from './theme/utils/license.ts';
+import { attributionKind, attributionPrefix } from './theme/utils/license.ts';
 import { capitalCase } from 'change-case';
 
 /**
@@ -547,7 +544,9 @@ The MIT license has a single condition: the copyright and permission notice
 stays with the work.
 
 ${rows.MIT.join('\n')}${
-      mitNotice === undefined ? '' : `\n\nThe notice:\n\n${fence('', mitNotice)}`
+      mitNotice === undefined
+        ? ''
+        : `\n\nThe notice:\n\n${fence('', mitNotice)}`
     }`);
   }
 

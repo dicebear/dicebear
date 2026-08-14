@@ -79,7 +79,10 @@ const sourceRows = computed<SourceRow[]>(() => {
               {{ row.url }}
             </a>
           </span>
-          <UiCopyButton class="ui-copy-button style-info-copy" :text="row.url" />
+          <UiCopyButton
+            class="ui-copy-button style-info-copy"
+            :text="row.url"
+          />
         </dd>
       </div>
     </dl>

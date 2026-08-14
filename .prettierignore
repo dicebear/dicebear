@@ -12,6 +12,7 @@ tests
 **/target/
 **/vendor/
 **/.dart_tool/
+**/.pytest_cache/
 apps/docs/.vitepress/cache/
 src/js/core/src/Validator/*.js
 
