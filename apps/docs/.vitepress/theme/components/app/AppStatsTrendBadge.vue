@@ -4,8 +4,9 @@ import { formatGrowth, growthDirection } from '../../utils/statsTrends';
 
 // One rendering for the trend of a style, shared by the ranking table, the
 // trending cards, and the style pages: a "New" pill when the style has no
-// baseline yet, otherwise the growth percentage with a direction arrow.
-// `variant` picks between colored text (tables) and a filled pill (cards).
+// baseline yet, a muted dot when there is no usable growth value, otherwise
+// the growth percentage with a direction arrow. `variant` picks between
+// colored text (tables) and a filled pill (cards).
 const props = withDefaults(
   defineProps<{
     growth: number | null;
@@ -25,6 +26,12 @@ const direction = computed(() => growthDirection(props.growth));
     :class="`app-stats-trend-badge--${variant}`"
   >
     New
+  </span>
+  <span
+    v-else-if="growth === null"
+    class="app-stats-trend-badge app-stats-trend-badge--none"
+  >
+    {{ formatGrowth(null) }}
   </span>
   <span
     v-else
@@ -50,6 +57,11 @@ const direction = computed(() => growthDirection(props.growth));
   align-items: center;
   gap: 4px;
   font-variant-numeric: tabular-nums;
+
+  &--none {
+    font-weight: 500;
+    color: var(--vp-c-text-3);
+  }
 
   &-arrow {
     font-size: 9px;

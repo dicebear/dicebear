@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { seriesCoords } from '../../utils/chartGeometry';
 
 const props = withDefaults(
   defineProps<{
@@ -13,26 +14,15 @@ const props = withDefaults(
 // Keeps the stroke and the end dot inside the viewBox.
 const PAD = 3;
 
-// The scale runs from zero to the series' own peak. A min-to-max scale
-// would blow every wiggle up to the full height and make a noisy small
-// style look as dramatic as a real climb; anchored at zero, the amplitude
-// reflects the change relative to the style's own level, so the shapes of
-// different rows can be compared.
-const coords = computed(() => {
-  const { values, width, height } = props;
-
-  if (values.length < 2) {
-    return [];
-  }
-
-  const max = Math.max(...values) || 1;
-  const stepX = (width - PAD * 2) / (values.length - 1);
-
-  return values.map((value, index) => ({
-    x: PAD + index * stepX,
-    y: height - PAD - (value / max) * (height - PAD * 2),
-  }));
-});
+const coords = computed(() =>
+  seriesCoords(props.values, {
+    width: props.width,
+    height: props.height,
+    padX: PAD,
+    padTop: PAD,
+    padBottom: PAD,
+  }),
+);
 
 const points = computed(() =>
   coords.value.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '),

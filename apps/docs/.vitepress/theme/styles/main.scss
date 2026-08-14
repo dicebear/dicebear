@@ -58,6 +58,19 @@
   color: var(--ui-c-text-muted);
 }
 
+/* ----------------------------------------------------------------
+ * Eyebrow label: small mono all-caps field label used inside cards
+ * (style page URLs/Source rows, popularity tiles).
+ * ---------------------------------------------------------------- */
+.ui-eyebrow {
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+}
+
 .pg-help:first-child {
   margin-top: 0;
 }

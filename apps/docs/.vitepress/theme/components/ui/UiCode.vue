@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { Copy, Check } from '@lucide/vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { escapeHtml } from '@theme/utils/escape';
 import { loadHljs, type Hljs } from '@theme/utils/hljs';
+import UiCopyButton from './UiCopyButton.vue';
 
 const props = defineProps<{
   lang?: string;
@@ -12,8 +12,6 @@ const props = defineProps<{
 
 const preRef = ref<HTMLPreElement>();
 const codeHtml = ref(escapeHtml(props.code));
-const copied = ref(false);
-let timeout: ReturnType<typeof setTimeout> | null = null;
 
 function scrollPreToBottom() {
   if (props.scrollToBottom && preRef.value) {
@@ -30,26 +28,6 @@ function updateCodeHtml(instance?: Hljs) {
     codeHtml.value = escapeHtml(props.code);
   }
 }
-
-function onCopy() {
-  navigator.clipboard.writeText(props.code);
-
-  copied.value = true;
-
-  if (timeout) {
-    clearTimeout(timeout);
-  }
-
-  timeout = setTimeout(() => {
-    copied.value = false;
-  }, 3000);
-}
-
-onBeforeUnmount(() => {
-  if (timeout) {
-    clearTimeout(timeout);
-  }
-});
 
 onMounted(async () => {
   if (props.lang) {
@@ -74,14 +52,7 @@ watch(
 <template>
   <div class="ui-code">
     <pre ref="preRef" class="ui-code-text"><code v-html="codeHtml" /></pre>
-    <button
-      class="ui-code-copy"
-      @click="onCopy"
-      :title="copied ? 'Copied!' : 'Copy'"
-    >
-      <Check v-if="copied" :size="14" />
-      <Copy v-else :size="14" />
-    </button>
+    <UiCopyButton class="ui-code-copy" :text="code" :duration="3000" />
   </div>
 </template>
 

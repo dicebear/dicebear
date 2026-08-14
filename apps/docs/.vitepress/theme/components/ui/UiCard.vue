@@ -22,7 +22,12 @@ const hasHref = computed(
   () => typeof props.href === 'string' && props.href.length > 0,
 );
 const tag = computed(() => (hasHref.value ? 'a' : 'div'));
-const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
+const hasHeader = computed(
+  () =>
+    Boolean(props.title) ||
+    Boolean(slots.header) ||
+    Boolean(slots['header-actions']),
+);
 </script>
 
 <template>
@@ -43,6 +48,7 @@ const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
     <header v-if="hasHeader" class="ui-card-header">
       <slot name="header">
         <h3 class="ui-card-title">{{ title }}</h3>
+        <slot name="header-actions" />
       </slot>
     </header>
     <div class="ui-card-body">
@@ -95,11 +101,15 @@ const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
   }
 
   &-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
     padding: var(--ui-card-padding);
     border-bottom: 1px solid var(--ui-card-border-color);
   }
 
   &-title {
+    flex: 1;
     margin: 0 !important;
     font-size: 1.125rem;
     font-weight: 600;

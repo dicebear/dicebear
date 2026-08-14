@@ -6,6 +6,11 @@ import {
   formatMonthKey,
   type MonthlyEntry,
 } from '../../composables/useApiStats';
+import {
+  seriesAreaPath,
+  seriesCoords,
+  seriesLinePath,
+} from '../../utils/chartGeometry';
 
 interface Chart {
   line: string;
@@ -43,28 +48,19 @@ const history = computed<MonthlyEntry[]>(() => {
 
 // Anchored at 0 so a low month reads as "fewer", not as a phantom drop to zero.
 const chart = computed<Chart>(() => {
-  const empty: Chart = { line: '', area: '', points: [], labels: [] };
   const h = history.value;
+  const points = seriesCoords(
+    h.map((m) => m.total),
+    { width: 200, height: 60, padTop: 14, padBottom: 10 },
+  );
 
-  if (h.length < 2) {
-    return empty;
+  if (points.length === 0) {
+    return { line: '', area: '', points: [], labels: [] };
   }
 
-  const max = Math.max(...h.map((m) => m.total)) || 1;
-  const stepX = 200 / (h.length - 1);
-  const points = h.map((m, i) => ({
-    x: i * stepX,
-    y: 50 - (m.total / max) * 36,
-  }));
-  const line = points
-    .map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`)
-    .join(' ');
-  const last = points[points.length - 1];
-  const area = `${line} L${last.x.toFixed(1)},60 L0,60 Z`;
-
   return {
-    line,
-    area,
+    line: seriesLinePath(points),
+    area: seriesAreaPath(points, 60),
     points,
     labels: h.map((m) =>
       formatMonthKey(m.key, { month: 'short' }).toUpperCase(),

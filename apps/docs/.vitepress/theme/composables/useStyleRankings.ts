@@ -8,7 +8,7 @@ import {
 } from '../utils/statsTrends';
 import { findUncategorizedStyles } from '../config/styleCategories';
 
-const SPARK_WEEKS = 12;
+export const SPARK_WEEKS = 12;
 
 /**
  * The style ranking derived from the stats API's weekly unique-referer
