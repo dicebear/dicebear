@@ -21,6 +21,7 @@ import avatarStyles, {
 } from './config/avatarStyles.ts';
 import avatarUniqueCounts from './config/avatarUniqueCounts.ts';
 import avatarStyleSizes from './config/avatarStyleSizes.ts';
+import { softwareLicense } from './config/softwareLicense.ts';
 import { formatStars } from './theme/utils/format.ts';
 
 // Unauthenticated api.github.com allows 60 requests per hour and per IP, which
@@ -399,6 +400,7 @@ export default defineConfig<ThemeOptions>({
     githubStars,
     llmsRoutes: llms.routes,
     majorVersion: versions.major,
+    softwareLicense,
     siteTitle: '',
     // Intrinsic SVG dimensions as explicit attributes so the browser can
     // reserve the aspect ratio before the file loads (the displayed size

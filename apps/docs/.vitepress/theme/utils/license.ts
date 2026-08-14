@@ -45,6 +45,15 @@ export function attributionKind(meta?: AvatarStyleMeta): AttributionKind {
 }
 
 /**
+ * The two-word credit prefix a non-own-work style carries. Shared because it
+ * is the user-visible carrier of the {@link attributionKind} decision: the OG
+ * cards and the licenses page must not disagree on remix vs. port wording.
+ */
+export function attributionPrefix(kind: AttributionKind): string {
+  return kind === 'port' ? 'Based on' : 'Remix of';
+}
+
+/**
  * Whether a style waives attribution entirely. The OG generator asserts this
  * for the styles on its default card, which carries no credit line.
  */

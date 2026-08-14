@@ -39,7 +39,11 @@ import avatarStyles, { definitionsDir } from './config/avatarStyles.ts';
 import { getOgTileSeeds } from './theme/config/previewRowSeeds.ts';
 import { escapeHtml } from './theme/utils/escape.ts';
 import { formatLicenseName } from './theme/utils/format.ts';
-import { attributionKind, isPublicDomain } from './theme/utils/license.ts';
+import {
+  attributionKind,
+  attributionPrefix,
+  isPublicDomain,
+} from './theme/utils/license.ts';
 
 const require = createRequire(import.meta.url);
 
@@ -255,9 +259,7 @@ function creditFor(styleName: string): string | undefined {
     return `${sourceName} by ${creator} · ${license}`;
   }
 
-  const prefix = kind === 'port' ? 'Based on' : 'Remix of';
-
-  return `${prefix} ${sourceName} by ${creator} · ${license}`;
+  return `${attributionPrefix(kind)} ${sourceName} by ${creator} · ${license}`;
 }
 
 /**

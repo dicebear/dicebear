@@ -47,6 +47,8 @@ export type ThemeOptions = {
   llmsRoutes: readonly string[];
   /** Major version of the release train, e.g. `10`, see config/versions.ts. */
   majorVersion: string;
+  /** Full text of the repo's MIT LICENSE, see config/softwareLicense.ts. */
+  softwareLicense: string;
 } & DefaultTheme.Config;
 
 export type CustomStyleEntry = {

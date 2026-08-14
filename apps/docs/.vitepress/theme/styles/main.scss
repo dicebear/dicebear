@@ -71,6 +71,38 @@
   color: var(--vp-c-text-3);
 }
 
+/* ----------------------------------------------------------------
+ * Ghost copy button: the quiet 28px icon button wrapped around
+ * UiCopyButton in card rows (style page URLs, licenses page).
+ * Consumers add their own reveal/spacing on top.
+ * ---------------------------------------------------------------- */
+.ui-copy-button {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--vp-radius-chrome);
+  color: var(--vp-c-text-3);
+  cursor: pointer;
+  transition:
+    opacity var(--duration-fast),
+    color var(--duration-fast),
+    border-color var(--duration-fast);
+}
+
+.ui-copy-button:hover {
+  color: var(--vp-c-text-1);
+  border-color: var(--vp-c-divider);
+}
+
+.ui-copy-button:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 1px;
+}
+
 .pg-help:first-child {
   margin-top: 0;
 }

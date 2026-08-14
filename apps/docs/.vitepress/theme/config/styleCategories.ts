@@ -104,7 +104,14 @@ export function findUncategorizedStyles(styleNames: string[]): string[] {
   return styleNames.filter((name) => !(name in styleCategories));
 }
 
-export function normalizeLicense(license: string): string {
+/**
+ * The buckets normalizeLicense sorts license names into. The licenses page
+ * types its sections against this union, so adding a bucket fails the build
+ * there instead of silently dropping styles from the page.
+ */
+export type LicenseBucket = 'CC BY 4.0' | 'CC0 1.0' | 'MIT' | 'Other';
+
+export function normalizeLicense(license: string): LicenseBucket {
   if (license.includes('CC BY 4.0')) {
     return 'CC BY 4.0';
   }

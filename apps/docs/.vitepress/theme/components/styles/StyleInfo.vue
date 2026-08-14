@@ -79,7 +79,7 @@ const sourceRows = computed<SourceRow[]>(() => {
               {{ row.url }}
             </a>
           </span>
-          <UiCopyButton class="style-info-copy" :text="row.url" />
+          <UiCopyButton class="ui-copy-button style-info-copy" :text="row.url" />
         </dd>
       </div>
     </dl>
@@ -161,38 +161,16 @@ const sourceRows = computed<SourceRow[]>(() => {
   font-size: 13px;
 }
 
+/* The button chrome comes from the global .ui-copy-button class; this row
+   only adds the hover reveal. */
 .style-info-copy {
   flex: none;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: var(--vp-radius-chrome);
-  color: var(--vp-c-text-3);
-  cursor: pointer;
   opacity: 0;
-  transition:
-    opacity 0.25s,
-    color 0.25s,
-    border-color 0.25s;
 }
 
-.style-info-row:hover .style-info-copy {
-  opacity: 1;
-}
-
-.style-info-copy:hover {
-  color: var(--vp-c-text-1);
-  border-color: var(--vp-c-divider);
-}
-
+.style-info-row:hover .style-info-copy,
 .style-info-copy:focus-visible {
   opacity: 1;
-  outline: 2px solid var(--vp-c-brand-1);
-  outline-offset: 1px;
 }
 
 /* Touch screens have no hover to reveal the button. */
