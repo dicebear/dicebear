@@ -970,7 +970,7 @@ ${stylePages.map(section).join('\n\n')}
 }
 
 export interface LlmsBundle {
-  /** Routes that have a Markdown mirror, for the copy button in the theme. */
+  /** Routes that have a Markdown mirror, for the Markdown link in the theme. */
   readonly routes: readonly string[];
   /** Contents of `llms.txt`. */
   readonly index: string;

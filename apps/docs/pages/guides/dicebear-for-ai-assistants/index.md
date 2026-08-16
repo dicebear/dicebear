@@ -104,9 +104,8 @@ the address is enough:
 https://www.dicebear.com/how-to-use/http-api/index.md
 ```
 
-Each page also carries a copy button in its header that puts the same text on
-your clipboard, which saves a round trip when you want to paste one page into a
-chat window.
+Each page also links to its Markdown version from the header, so you do not
+have to edit the address yourself.
 
 Option names are what assistants invent most often, and the API answers that
 question directly, without a page to parse:

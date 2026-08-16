@@ -1,21 +1,21 @@
 <script setup lang="ts">
 /**
- * The strip above a page title: where you are on the left, what you can do
- * with the page on the right.
+ * The strip above a page title: where you are on the left, the Markdown
+ * mirror of the page on the right.
  *
- * The Markdown actions used to sit here alone, right-aligned against nothing.
- * Pairing them with the trail gives the row a left edge and turns two loose
- * controls into a page header. Either half can be missing: pages without a
- * Markdown mirror drop the actions, top-level pages drop the trail.
+ * The Markdown link used to sit here alone, right-aligned against nothing.
+ * Pairing it with the trail gives the row a left edge and turns two loose
+ * elements into a page header. Either half can be missing: pages without a
+ * Markdown mirror drop the link, top-level pages drop the trail.
  */
 import DocsBreadcrumb from './DocsBreadcrumb.vue';
-import DocsCopyPage from './DocsCopyPage.vue';
+import DocsMarkdownLink from './DocsMarkdownLink.vue';
 </script>
 
 <template>
   <div class="docs-page-header">
     <DocsBreadcrumb />
-    <DocsCopyPage />
+    <DocsMarkdownLink />
   </div>
 </template>
 
@@ -26,12 +26,12 @@ import DocsCopyPage from './DocsCopyPage.vue';
   gap: 16px;
   // The slot renders outside `.vp-doc`, so nothing else spaces this row from
   // the page title below it.
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   min-height: 32px;
 
-  // Pushing one child right, rather than spacing both apart, keeps the actions
+  // Pushing one child right, rather than spacing both apart, keeps the link
   // on the right edge on the pages where the trail renders nothing.
-  :deep(.docs-copy-page) {
+  :deep(.docs-markdown-link) {
     margin-left: auto;
   }
 }

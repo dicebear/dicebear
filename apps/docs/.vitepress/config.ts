@@ -77,7 +77,7 @@ const githubStars = await fetchGitHubStars([
 const pagesDir = path.join(import.meta.dirname, '..', 'pages');
 
 // Read here rather than in buildEnd: themeConfig has to know which pages have
-// a Markdown mirror before the first page renders, so the copy button only
+// a Markdown mirror before the first page renders, so the Markdown link only
 // appears where the file it points at exists.
 const llms = await prepareLlms(pagesDir);
 
@@ -298,7 +298,7 @@ export default defineConfig<ThemeOptions>({
       {
         // The Markdown mirrors and the two llms files are written in
         // buildEnd, which never runs under `vitepress dev`. Without this the
-        // copy button would 404 for anyone working on the docs locally.
+        // Markdown link would 404 for anyone working on the docs locally.
         name: 'dicebear:llms-dev',
         apply: 'serve',
         configureServer(server) {
