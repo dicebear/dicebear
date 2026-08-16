@@ -107,9 +107,7 @@ async function onClick() {
   align-items: center;
   justify-content: flex-end;
   gap: 16px;
-  // The slot renders outside `.vp-doc`, so nothing else spaces this row from
-  // the page title below it.
-  margin-bottom: 8px;
+  flex: none;
 }
 
 .docs-copy-page-link {

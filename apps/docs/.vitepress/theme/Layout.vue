@@ -4,7 +4,7 @@ import { VPDocAsideSponsors } from 'vitepress/theme-without-fonts';
 import { withBase } from 'vitepress';
 import LayoutFooter from './components/layout/LayoutFooter.vue';
 import LayoutNavActions from './components/layout/LayoutNavActions.vue';
-import DocsCopyPage from './components/docs/DocsCopyPage.vue';
+import DocsPageHeader from './components/docs/DocsPageHeader.vue';
 import './styles/main.scss';
 
 const { Layout } = DefaultTheme;
@@ -30,7 +30,7 @@ const sponsors = [
       <LayoutNavActions />
     </template>
     <template #doc-before>
-      <DocsCopyPage />
+      <DocsPageHeader />
     </template>
     <template #aside-outline-after>
       <div class="layout-aside-sponsors">
