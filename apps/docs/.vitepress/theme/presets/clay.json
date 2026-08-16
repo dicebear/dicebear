@@ -1,0 +1,213 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No head piece, no surface pattern.",
+      "description": "Two optional components off at once. What is left is the body shape and the face, and the fourteen body shapes carry a set on their own.",
+      "options": {
+        "topProbability": 0,
+        "patternProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown ramp, background included.",
+      "description": "The style's own palette is already earthy, so this is a short trip. Four mouth variants show a tongue painted into the artwork rather than taking a color option, and they are excluded here.",
+      "options": {
+        "backgroundColor": ["ede0c9"],
+        "bodyColor": ["b39572", "9c7d5c", "c7ab8a", "8a6a4d"],
+        "accentColor": ["7a5c3f", "a8895f"],
+        "inkColor": ["3b2f21"],
+        "mouthVariant": [
+          "teeth",
+          "smile",
+          "o",
+          "frown",
+          "line",
+          "wavy",
+          "toothy",
+          "pout",
+          "grin",
+          "smirk",
+          "zigzag",
+          "dot",
+          "cat",
+          "smileBig",
+          "uu",
+          "openSmall"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on body, accent or ground.",
+      "description": "The style models its bodies with a soft shadow underneath, and that shadow is what keeps them from looking flat once the color is gone. Same mouth exclusion as Sepia.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "bodyColor": ["c1c1c7", "a1a1aa", "d4d4d8", "8a8a92"],
+        "accentColor": ["71717a", "9c9ca4"],
+        "inkColor": ["27272a"],
+        "mouthVariant": [
+          "teeth",
+          "smile",
+          "o",
+          "frown",
+          "line",
+          "wavy",
+          "toothy",
+          "pout",
+          "grin",
+          "smirk",
+          "zigzag",
+          "dot",
+          "cat",
+          "smileBig",
+          "uu",
+          "openSmall"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One blue body on one pale ground.",
+      "description": "A single body color for a whole set. The style has twenty mouths and fifteen eye arrangements, so the faces still differ plenty without any help from color.",
+      "options": {
+        "backgroundColor": ["e2ecf4"],
+        "bodyColor": ["6f8fb0"],
+        "accentColor": ["44607a"],
+        "inkColor": ["23323f"],
+        "mouthVariant": [
+          "teeth",
+          "smile",
+          "o",
+          "frown",
+          "line",
+          "wavy",
+          "toothy",
+          "pout",
+          "grin",
+          "smirk",
+          "zigzag",
+          "dot",
+          "cat",
+          "smileBig",
+          "uu",
+          "openSmall"
+        ]
+      }
+    },
+    {
+      "id": "cool",
+      "name": "Cool",
+      "summary": "Blues, greens and violets only.",
+      "description": "The shipped palette runs the full wheel from rust to lilac. Half of it, and the counterpart to Warm, so two groups can be told apart by temperature alone. The tongue mouths are excluded: their terracotta is painted into the artwork, and it pulls warm against a cool body.",
+      "options": {
+        "mouthVariant": [
+          "teeth",
+          "smile",
+          "o",
+          "frown",
+          "line",
+          "wavy",
+          "toothy",
+          "pout",
+          "grin",
+          "smirk",
+          "zigzag",
+          "dot",
+          "cat",
+          "smileBig",
+          "uu",
+          "openSmall"
+        ],
+        "bodyColor": ["83b0a4", "86a5c3", "9793bd", "8ba06b", "6f9fb8"],
+        "accentColor": ["5d8b80", "63819e", "70689c", "6b7d4f"]
+      }
+    },
+    {
+      "id": "warm",
+      "name": "Warm",
+      "summary": "Rust, ochre and rose only.",
+      "description": "The other half of the same wheel. Clay is a warm material to begin with, so this is the version of the style closest to its own name.",
+      "options": {
+        "bodyColor": ["c4795c", "d99277", "e0bd6a", "cf9f52", "cd8ea6"],
+        "accentColor": ["9c5940", "b0714f", "b3903f", "a86b7f"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Neon bodies, quiet ground.",
+      "description": "The style ships nothing this loud. Only the body moves, because a neon body on a neon ground would flatten the shadow that gives it its shape.",
+      "options": {
+        "backgroundColor": ["f4f4f5"],
+        "bodyColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated ground behind an earthy body.",
+      "description": "Every background the style ships is a pale wash. A loud one pushes the muted bodies forward instead of competing with them.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Dark room, unchanged bodies.",
+      "description": "For dark interfaces. The bodies are mid-toned already, so they hold their edge against a near-black tile without moving the palette.",
+      "options": {
+        "backgroundColor": ["18181b"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the body.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffd5a8", "ffb0c4"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "The body scaled up, shadow cropped away.",
+      "description": "The style leaves room under the body for its shadow, which costs size at 24 or 32 pixels. This crops in far enough that the face carries and keeps whatever sits on the head.",
+      "options": {
+        "scale": 1.2
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}

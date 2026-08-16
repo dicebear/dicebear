@@ -1,0 +1,200 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No background, no facial hair.",
+      "description": "The style stripped back: no background, so the avatar sits on whatever your page is, and the facial hair component switched off.",
+      "options": {
+        "backgroundColor": [],
+        "facialHairProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown for skin, hair and shirt.",
+      "description": "A real sepia print, which means the skin tone goes with it. Every other preset here leaves skin to the seed; this one cannot, because a color photograph of a face is not sepia. Six hairstyles carry a colored cap or band and two mouths a pink that no option reaches, so those drop out.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "skinColor": ["d8b48c", "c19a70", "a37e58", "8f6f4e"],
+        "hairColor": ["4a3526", "5f4531", "7a5c43"],
+        "facialHairColor": ["4a3526", "5f4531"],
+        "clothingColor": ["8a6a48", "9c7c58", "6f5433"],
+        "hairVariant": [
+          "bald",
+          "balding",
+          "bobBangs",
+          "bobCut",
+          "buzzcut",
+          "curly",
+          "curlyHighTop",
+          "extraLong",
+          "fade",
+          "long",
+          "mohawk",
+          "shortCombover",
+          "shortComboverChops",
+          "sideShave"
+        ],
+        "mouthVariant": ["bigSmile", "frown", "smile", "smirk", "surprise"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No color anywhere, skin included.",
+      "description": "Properly grey rather than grey hair on a colored face. Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not. Six hairstyles carry a colored cap or band and two mouths a pink that no option reaches, so those drop out.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "skinColor": ["dcdcde", "bcbcc0", "98989c", "6e6e72"],
+        "hairColor": ["2a2a2d", "454549", "6a6a6e"],
+        "facialHairColor": ["2a2a2d", "454549"],
+        "clothingColor": ["7c7c80", "9a9a9e", "5e5e62"],
+        "hairVariant": [
+          "bald",
+          "balding",
+          "bobBangs",
+          "bobCut",
+          "buzzcut",
+          "curly",
+          "curlyHighTop",
+          "extraLong",
+          "fade",
+          "long",
+          "mohawk",
+          "shortCombover",
+          "shortComboverChops",
+          "sideShave"
+        ],
+        "mouthVariant": ["bigSmile", "frown", "smile", "smirk", "surprise"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Three steps of one indigo and nothing else.",
+      "description": "Background, skin, hair and clothing take the same hue at different lightnesses. As with Sepia, a duotone only works if the face joins in, so the seed loses its say over skin here. Six hairstyles carry a colored cap or band and two mouths a pink that no option reaches, so those drop out.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "skinColor": ["9aa2d2"],
+        "hairColor": ["3d4272"],
+        "facialHairColor": ["3d4272"],
+        "clothingColor": ["6a71a8"],
+        "hairVariant": [
+          "bald",
+          "balding",
+          "bobBangs",
+          "bobCut",
+          "buzzcut",
+          "curly",
+          "curlyHighTop",
+          "extraLong",
+          "fade",
+          "long",
+          "mohawk",
+          "shortCombover",
+          "shortComboverChops",
+          "sideShave"
+        ],
+        "mouthVariant": ["bigSmile", "frown", "smile", "smirk", "surprise"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty clothing and hair, nothing shouts.",
+      "description": "The style ships seven saturated clothing colors and a hair palette that runs to pink. This replaces both with dusty tones, for interfaces where the avatar should be present without being the loudest thing on screen.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "clothingColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "hairColor": ["362c47", "6c4545", "8e7f6b", "5a5f52", "7c6a5c"],
+        "facialHairColor": ["362c47", "6c4545", "8e7f6b"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Clothing at full saturation on near black.",
+      "description": "The other direction on the same lever. Only the clothing changes: six colors at the top of their saturation. Hair stays natural on purpose, because two loud layers cancel each other out and the shirt is the larger area.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "clothingColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "hairColor": ["362c47", "6c4545", "dee1f5"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft backgrounds, everything else untouched.",
+      "description": "Changes nothing about the people, only what they stand in front of. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "The loud counterpart to Pastel Wall. Strong enough that the avatar holds its own against a busy page, and the only preset here that will fight with a colorful interface rather than sit inside it.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind, everything else untouched.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black behind, light clothing in front.",
+      "description": "For dark interfaces. The clothing pool drops to the light end so the figure does not disappear into the background.",
+      "options": {
+        "backgroundColor": ["16161c"],
+        "clothingColor": ["dee1f5", "54d7c7", "f3b63a", "6dbb58"]
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Facial hair turned way up.",
+      "description": "The facial hair component sits at ten percent, so a small set shows it on nobody. This raises it, which is what you want when showing the style off rather than filling a user list.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "facialHairProbability": 60
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face, for small avatars.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, the default framing spends a lot of it on empty space, and cropping in buys the detail back.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "scale": 1.2
+      }
+    }
+  ]
+}

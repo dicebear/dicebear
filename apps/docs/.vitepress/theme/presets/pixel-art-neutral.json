@@ -1,0 +1,129 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No glasses, just eyes and mouth.",
+      "description": "Glasses appear on one avatar in ten by default. Off, three components become two, and every avatar in a set is built the same way. Worth knowing before you read the rest of these: what this style calls the background is the face. There is no separate skin group, so `backgroundColor` sets the complexion and the tile at once.",
+      "options": {
+        "glassesProbability": 0
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Everyone wears glasses.",
+      "description": "The opposite end of the same lever. The style ships fourteen frames, and at the default probability most of them are never seen.",
+      "options": {
+        "glassesProbability": 100
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm ramp, face included.",
+      "description": "One warm ramp across the face and the features. Since the background is the complexion here, a sepia set commits everyone to the same four tones rather than leaving skin to the seed.",
+      "options": {
+        "backgroundColor": ["d9bd94", "c4a377", "a8865a", "8a6a43"],
+        "eyesColor": ["4a3018"],
+        "mouthColor": ["9c7147"],
+        "glassesColor": ["3a2916"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on the face or the features.",
+      "description": "Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not. Four steps of grey stand in for the eight skin tones, which is enough for the faces to stay distinguishable.",
+      "options": {
+        "backgroundColor": ["dcdce0", "bfbfc6", "9c9ca4", "76767e"],
+        "eyesColor": ["27272a"],
+        "mouthColor": ["8a8a92"],
+        "glassesColor": ["18181b"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One blue face for every avatar.",
+      "description": "A single color for the whole set, so nothing but the eye and mouth shapes tells two avatars apart. It commits everyone to the same complexion, which is the point here and would be a problem anywhere else.",
+      "options": {
+        "backgroundColor": ["9ec9e8"],
+        "eyesColor": ["0f2d4a"],
+        "mouthColor": ["4a7fa8"],
+        "glassesColor": ["0f2d4a"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty faces instead of skin tones.",
+      "description": "Six tones that do not read as complexions at all. Useful when the avatars stand for accounts or machines rather than people.",
+      "options": {
+        "backgroundColor": [
+          "a5a58d",
+          "8e9aaf",
+          "9c8a94",
+          "8fa38f",
+          "b0a58c",
+          "94a3ad"
+        ],
+        "eyesColor": ["3f3f46"],
+        "mouthColor": ["6b6b73"],
+        "glassesColor": ["3f3f46", "52525b"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Six faces at full saturation.",
+      "description": "The same idea past the end of the scale. On a 14 pixel grid a loud face carries much further down a list than a loud detail would.",
+      "options": {
+        "backgroundColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ],
+        "eyesColor": ["141418"],
+        "mouthColor": ["141418"]
+      }
+    },
+    {
+      "id": "cool",
+      "name": "Cool",
+      "summary": "Blues, teals and violets only.",
+      "description": "Half the color wheel, and the counterpart to Warm. Two groups of accounts can be told apart by temperature without a second badge.",
+      "options": {
+        "backgroundColor": ["7dd3fc", "5eead4", "a5b4fc", "c4b5fd", "67e8f9"],
+        "eyesColor": ["1e293b"],
+        "mouthColor": ["475569"]
+      }
+    },
+    {
+      "id": "warm",
+      "name": "Warm",
+      "summary": "Reds, oranges and golds only.",
+      "description": "The other half of the same wheel.",
+      "options": {
+        "backgroundColor": ["fdba74", "fcd34d", "fca5a5", "fb923c", "f9a8d4"],
+        "eyesColor": ["3b1f14"],
+        "mouthColor": ["7c3f2a"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Dark faces, light features.",
+      "description": "For dark interfaces. Eyes and mouth invert to pale, because the near-black features the style ships disappear on a dark face.",
+      "options": {
+        "backgroundColor": ["2a2a32", "34343d", "3d3d47", "26262d"],
+        "eyesColor": ["e4e4e7"],
+        "mouthColor": ["a1a1aa"],
+        "glassesColor": ["71717a"]
+      }
+    }
+  ]
+}

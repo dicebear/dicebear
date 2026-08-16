@@ -1,0 +1,90 @@
+{
+  "presets": [
+    {
+      "id": "ink",
+      "name": "Ink",
+      "summary": "One near-black glyph on its own pale ground.",
+      "description": "The plainest the style gets. Worth knowing while you read the rest of these: Glyphs paints its own background as a pale version of the glyph color, so the `backgroundColor` option never reaches the canvas and every preset here moves one color, not two.",
+      "options": {
+        "glyphColor": ["1f1f22"]
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "A brown glyph on tanned ground.",
+      "description": "One color carries both the mark and the ground it sits on, which is what makes this style so cheap to retint.",
+      "options": {
+        "glyphColor": ["6b4f35"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Four greys, no hue at all.",
+      "description": "Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not.",
+      "options": {
+        "glyphColor": ["343437", "5e5e62", "8c8c90", "4a4d52"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One deep teal for every avatar.",
+      "description": "A single glyph color means every avatar in a set shares both mark and ground, and only the shape changes.",
+      "options": {
+        "glyphColor": ["0f3d38"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Six dusty glyph colors.",
+      "description": "The style ships seven saturated colors. This trades them for dusty tones, which suits a dense list where seven bright marks would compete.",
+      "options": {
+        "glyphColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Six colors at full saturation.",
+      "description": "The other direction on the same lever: colors past anything the style ships. The pale ground goes with them, so the whole tile gets louder rather than just the mark.",
+      "options": {
+        "glyphColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "cool",
+      "name": "Cool",
+      "summary": "Blues, teals and violets only.",
+      "description": "Half the color wheel. Useful next to Warm when two groups of avatars need to be told apart at a glance.",
+      "options": {
+        "glyphColor": ["2f6fb5", "2f8f8a", "4a5fb8", "6b4bd6", "2f9ec4"]
+      }
+    },
+    {
+      "id": "warm",
+      "name": "Warm",
+      "summary": "Reds, oranges and golds only.",
+      "description": "The other half of the same wheel, and the counterpart to Cool.",
+      "options": {
+        "glyphColor": ["c4443f", "c67a2c", "b8542f", "c43f7a", "a8842c"]
+      }
+    }
+  ]
+}

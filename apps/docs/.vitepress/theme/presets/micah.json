@@ -1,0 +1,204 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No background, no glasses, earrings or stubble.",
+      "description": "The style stripped back: no background, so the avatar sits on whatever your page is, and the three components that only show on a third of seeds switched off.",
+      "options": {
+        "backgroundColor": [],
+        "earringsProbability": 0,
+        "glassesProbability": 0,
+        "facialHairProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown for skin, hair and shirt.",
+      "description": "A real sepia print, which means the skin tone goes with it. Every other preset here leaves skin to the seed; this one cannot, because a color photograph of a face is not sepia. Two of the eight mouths are painted pink rather than taking the mouth color group, so those drop out.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "baseColor": ["d8b48c", "c19a70", "a37e58"],
+        "hairColor": ["5a3d28", "6b4f35", "7d6047"],
+        "shirtColor": ["8a6a48", "9c7c58"],
+        "eyebrowsColor": ["3f2d1e"],
+        "eyesColor": ["3f2d1e"],
+        "mouthColor": ["3f2d1e"],
+        "facialHairColor": ["3f2d1e"],
+        "eyeShadowColor": ["f0e2cc"],
+        "glassesColor": ["3f2d1e"],
+        "earringColor": ["8a6a48"],
+        "mouthVariant": ["frown", "nervous", "pucker", "sad", "smile", "smirk"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No color anywhere, skin included.",
+      "description": "Properly grey rather than grey hair on a colored face. Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not. Two of the eight mouths are painted pink rather than taking the mouth color group, so those drop out.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "baseColor": ["dcdcde", "b6b6b9", "8c8c90"],
+        "hairColor": ["343437", "5a5a5e", "828286"],
+        "shirtColor": ["6e6e72", "9a9a9e"],
+        "eyebrowsColor": ["232326"],
+        "eyesColor": ["232326"],
+        "mouthColor": ["232326"],
+        "facialHairColor": ["232326"],
+        "eyeShadowColor": ["f2f2f4"],
+        "glassesColor": ["232326"],
+        "earringColor": ["6e6e72"],
+        "mouthVariant": ["frown", "nervous", "pucker", "sad", "smile", "smirk"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Four steps of one indigo and nothing else.",
+      "description": "Background, skin, hair and shirt take the same hue at four lightnesses. The style requires each of them to differ from the others, so a duotone here is really a four-step tonal ladder. Two of the eight mouths are painted pink rather than taking the mouth color group, so those drop out.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "baseColor": ["9aa2d2"],
+        "hairColor": ["3d4272"],
+        "shirtColor": ["6a71a8"],
+        "eyebrowsColor": ["23264a"],
+        "eyesColor": ["23264a"],
+        "mouthColor": ["23264a"],
+        "facialHairColor": ["23264a"],
+        "eyeShadowColor": ["e8eaf7"],
+        "glassesColor": ["23264a"],
+        "earringColor": ["6a71a8"],
+        "mouthVariant": ["frown", "nervous", "pucker", "sad", "smile", "smirk"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty hair and shirts, skin left to the seed.",
+      "description": "The style shares one bright thirteen-color palette across hair, shirt, glasses and earrings. This swaps it for dusty tones, which stops a page of avatars looking like a paint box.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "hairColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "shirtColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "glassesColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "earringColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Hair and shirts at full saturation on near black.",
+      "description": "The other direction on the same lever: six colors past anything the style ships, on a dark background so they read as lit. Skin still comes from the seed.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "hairColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "shirtColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft backgrounds, everything else untouched.",
+      "description": "Changes nothing about the people, only what they stand in front of. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "The loud counterpart to Pastel Wall. Strong enough that the avatar holds its own against a busy page, and the only preset here that will fight with a colorful interface rather than sit inside it.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind, everything else untouched.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black behind, light hair and shirts.",
+      "description": "For dark interfaces. Hair and shirt drop to the pale end of the style's own palette so the silhouette does not disappear into the background.",
+      "options": {
+        "backgroundColor": ["16161c"],
+        "hairColor": ["f9c9b6", "d2eff3", "e0ddff", "ffeba4", "ffedef"],
+        "shirtColor": ["d2eff3", "e0ddff", "ffeba4", "6bd9e9"]
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Glasses, earrings and stubble turned up.",
+      "description": "Three components sit at 10 to 30 percent, so a small set of avatars rarely shows them. This raises all three, which is what you want when showing the style off rather than filling a user list.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "earringsProbability": 60,
+        "glassesProbability": 55,
+        "facialHairProbability": 40
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face, for small avatars.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, the default framing spends most of it on shoulders, and cropping in buys the detail back.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "scale": 1.2
+      }
+    }
+  ]
+}

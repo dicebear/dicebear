@@ -5,13 +5,13 @@ import { generateCodeExamples } from '@theme/utils/code-examples';
 
 const props = defineProps<{
   styleName: string;
-  optionName: string;
-  value: unknown;
+  /** One entry from the options table, or a whole preset's option set. */
+  options: Record<string, unknown>;
   excludeHttpApi?: boolean;
 }>();
 
 const examples = computed(() =>
-  generateCodeExamples(props.styleName, props.optionName, props.value),
+  generateCodeExamples(props.styleName, props.options),
 );
 
 const groupId = useId();

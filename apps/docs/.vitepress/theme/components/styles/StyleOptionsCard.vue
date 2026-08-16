@@ -338,6 +338,17 @@ const weightedExampleValue = computed(() => {
   return { variant01: 2, variant02: 1 };
 });
 
+// The code panel takes a whole option set, and an object literal in the
+// template would be a new one on every render, re-generating all eight
+// snippets each time an option card re-renders for an unrelated reason.
+const codeExampleOptions = computed(() => ({
+  [props.name]: codeExampleValue.value,
+}));
+
+const weightedExampleOptions = computed(() => ({
+  [props.name]: weightedExampleValue.value,
+}));
+
 const hasDetails = computed(() => {
   return (
     previewItems.value.length > 0 ||
@@ -476,8 +487,7 @@ function onExamplesToggle(event: MouseEvent) {
             >
               <StyleOptionsCodePanel
                 :style-name="styleName"
-                :option-name="name"
-                :value="codeExampleValue"
+                :options="codeExampleOptions"
                 :exclude-http-api="excludeHttpApi"
               />
             </div>
@@ -490,8 +500,7 @@ function onExamplesToggle(event: MouseEvent) {
                 <span class="style-options-card-code-label">Usage</span>
                 <StyleOptionsCodePanel
                   :style-name="styleName"
-                  :option-name="name"
-                  :value="codeExampleValue"
+                  :options="codeExampleOptions"
                   :exclude-http-api="excludeHttpApi"
                 />
               </div>
@@ -499,8 +508,7 @@ function onExamplesToggle(event: MouseEvent) {
                 <span class="style-options-card-code-label">Weighted</span>
                 <StyleOptionsCodePanel
                   :style-name="styleName"
-                  :option-name="name"
-                  :value="weightedExampleValue"
+                  :options="weightedExampleOptions"
                   :exclude-http-api="excludeHttpApi"
                 />
               </div>

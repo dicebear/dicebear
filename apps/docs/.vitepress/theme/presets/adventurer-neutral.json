@@ -1,0 +1,130 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No glasses, the plain face.",
+      "description": "The style stripped back: the glasses component switched off so only the face is left.",
+      "options": {
+        "glassesProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown for face and features.",
+      "description": "The background is the face in this style, so a sepia set moves it along with the mouth. Lips, tongue and throat are warmed to match, since nothing red survives a sepia treatment.",
+      "options": {
+        "backgroundColor": ["c9a883", "b08e66", "967458"],
+        "inkColor": ["3a2a1c"],
+        "eyesColor": ["3a2a1c"],
+        "glassesColor": ["3a2a1c"],
+        "scleraColor": ["f7ecd8"],
+        "teethColor": ["f7ecd8"],
+        "lipsColor": ["8a5a44"],
+        "tongueColor": ["a87a5e"],
+        "throatColor": ["6b4230"],
+        "uvulaColor": ["6b4230"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No color anywhere, face included.",
+      "description": "Properly grey rather than a grey mouth on a colored face. Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not.",
+      "options": {
+        "backgroundColor": ["d6d6d6", "b4b4b4", "8c8c8c"],
+        "inkColor": ["1c1c1c"],
+        "eyesColor": ["1c1c1c"],
+        "glassesColor": ["1c1c1c"],
+        "scleraColor": ["f2f2f2"],
+        "teethColor": ["f2f2f2"],
+        "lipsColor": ["707070"],
+        "tongueColor": ["8a8a8a"],
+        "throatColor": ["4a4a4a"],
+        "uvulaColor": ["4a4a4a"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Two steps of one indigo.",
+      "description": "Face and features take the same hue at two lightnesses, and the mouth follows.",
+      "options": {
+        "backgroundColor": ["8e97cc"],
+        "inkColor": ["1e2246"],
+        "eyesColor": ["1e2246"],
+        "glassesColor": ["1e2246"],
+        "scleraColor": ["dfe3f5"],
+        "teethColor": ["dfe3f5"],
+        "lipsColor": ["4a4f80"],
+        "tongueColor": ["6b73a8"],
+        "throatColor": ["353a6b"],
+        "uvulaColor": ["353a6b"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty skin tones instead of the four defaults.",
+      "description": "The style ships four skin tones as its background palette. This trades them for dusty ones, which reads less like a portrait and more like a printed icon.",
+      "options": {
+        "backgroundColor": ["c8b7a6", "b0a08e", "9a8b7c", "cbbfae"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "An acid face with black features.",
+      "description": "The other direction: colors past anything the style ships, with the linework left black so the face still reads.",
+      "options": {
+        "backgroundColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft faces.",
+      "description": "The lightest way to make a set of avatars feel like it belongs together, though it does mean giving up the skin tones.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient across the face.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Everyone wears glasses.",
+      "description": "The glasses component sits at ten percent, so a small set shows them on nobody. This puts them on everyone, which suits a demo rather than a user list.",
+      "options": {
+        "glassesProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the features.",
+      "description": "Uses scale rather than color. The style leaves a lot of face around the eyes and mouth, and cropping in buys detail back.",
+      "options": {
+        "scale": 1.3
+      }
+    }
+  ]
+}

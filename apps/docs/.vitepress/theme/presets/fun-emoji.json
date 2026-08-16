@@ -1,0 +1,230 @@
+{
+  "presets": [
+    {
+      "id": "plain",
+      "name": "Plain",
+      "summary": "Black and white features only.",
+      "description": "Several eyes and mouths carry printed color: red hearts, a blue tear, a pink tongue. Dropping those leaves the black and white drawing on a single field, which is the style at its cleanest. It also makes every color preset below a one-color change.",
+      "options": {
+        "eyesVariant": [
+          "closed",
+          "closed2",
+          "cute",
+          "glasses",
+          "plain",
+          "sad",
+          "shades",
+          "sleepClose",
+          "wink",
+          "wink2"
+        ],
+        "mouthVariant": [
+          "cute",
+          "faceMask",
+          "lilSmile",
+          "plain",
+          "sad",
+          "shy",
+          "smileTeeth",
+          "wideSmile"
+        ]
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Black ink on tanned ground.",
+      "description": "The style has one color group, so a monochrome set is one field plus the exclusions Plain explains.",
+      "options": {
+        "backgroundColor": ["c9a678", "b08d5f", "d9bd94", "8f6d43"],
+        "eyesVariant": [
+          "closed",
+          "closed2",
+          "cute",
+          "glasses",
+          "plain",
+          "sad",
+          "shades",
+          "sleepClose",
+          "wink",
+          "wink2"
+        ],
+        "mouthVariant": [
+          "cute",
+          "faceMask",
+          "lilSmile",
+          "plain",
+          "sad",
+          "shy",
+          "smileTeeth",
+          "wideSmile"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Four greys, no hue at all.",
+      "description": "The drawing is already black and white once the colored expressions are out, so this only asks the ground to follow.",
+      "options": {
+        "backgroundColor": ["e4e4e7", "c1c1c7", "9c9ca4", "76767e"],
+        "eyesVariant": [
+          "closed",
+          "closed2",
+          "cute",
+          "glasses",
+          "plain",
+          "sad",
+          "shades",
+          "sleepClose",
+          "wink",
+          "wink2"
+        ],
+        "mouthVariant": [
+          "cute",
+          "faceMask",
+          "lilSmile",
+          "plain",
+          "sad",
+          "shy",
+          "smileTeeth",
+          "wideSmile"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One teal field for every avatar.",
+      "description": "A single ground across a whole set. Only the pair of eyes and the mouth separates two avatars, which for this style is the whole identity anyway.",
+      "options": {
+        "backgroundColor": ["2f8a86"],
+        "eyesVariant": [
+          "closed",
+          "closed2",
+          "cute",
+          "glasses",
+          "plain",
+          "sad",
+          "shades",
+          "sleepClose",
+          "wink",
+          "wink2"
+        ],
+        "mouthVariant": [
+          "cute",
+          "faceMask",
+          "lilSmile",
+          "plain",
+          "sad",
+          "shy",
+          "smileTeeth",
+          "wideSmile"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Six dusty fields.",
+      "description": "The six colors the style ships are all fully saturated, which is a lot of shouting when a page shows twenty of them. These carry the same drawing without the volume. The colored expressions come out too, the same ones Plain drops: a red heart is the loudest thing on the page next to these.",
+      "options": {
+        "eyesVariant": [
+          "closed",
+          "closed2",
+          "cute",
+          "glasses",
+          "plain",
+          "sad",
+          "shades",
+          "sleepClose",
+          "wink",
+          "wink2"
+        ],
+        "mouthVariant": [
+          "cute",
+          "faceMask",
+          "lilSmile",
+          "plain",
+          "sad",
+          "shy",
+          "smileTeeth",
+          "wideSmile"
+        ],
+        "backgroundColor": [
+          "9aa88f",
+          "b0a48c",
+          "8fa3ad",
+          "a894a3",
+          "b8a06f",
+          "8d9bb5"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Six fields past the shipped set.",
+      "description": "The other direction on the same lever. The features are solid black, so they hold up against anything behind them.",
+      "options": {
+        "backgroundColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "cool",
+      "name": "Cool",
+      "summary": "Blues, teals and violets only.",
+      "description": "Half the color wheel, and the counterpart to Warm. Useful when two groups of avatars need telling apart at a glance.",
+      "options": {
+        "backgroundColor": ["38bdf8", "2dd4bf", "818cf8", "a78bfa", "22d3ee"]
+      }
+    },
+    {
+      "id": "warm",
+      "name": "Warm",
+      "summary": "Reds, oranges and golds only.",
+      "description": "The other half of the same wheel.",
+      "options": {
+        "backgroundColor": ["fb923c", "fbbf24", "f87171", "f472b6", "ea580c"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Dark fields, features that survive them.",
+      "description": "The features are solid black and cannot be recolored, so on a dark ground only the expressions with light in them still read: glasses, shades, a mask, a row of teeth. Everything else would disappear, so this preset leaves it out.",
+      "options": {
+        "backgroundColor": ["1e293b", "312e81", "3b0764", "134e4a"],
+        "eyesVariant": ["glasses", "shades", "closed", "closed2", "sleepClose"],
+        "mouthVariant": ["faceMask", "smileTeeth", "wideSmile"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient across the tile.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffb37a", "ff7a9c"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Eyes and mouth scaled up.",
+      "description": "The field fills the tile either way, so nothing is lost by cropping. What changes is the size of the two things that carry the expression.",
+      "options": {
+        "scale": 1.25
+      }
+    }
+  ]
+}

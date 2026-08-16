@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -27,6 +28,10 @@ technical profile icons for developer tools, AI apps, and API services.
 ## Usage
 
 <StyleUsage styleName="bottts" />
+
+## Presets
+
+<StylePresets styleName="bottts" :limit="5" />
 
 ## Options
 

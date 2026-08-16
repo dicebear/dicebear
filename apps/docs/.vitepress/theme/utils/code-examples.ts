@@ -181,26 +181,87 @@ export function formatDartValue(value: unknown, depth = 0): string {
   return String(value);
 }
 
+/**
+ * The body of a map literal: one `key: value` line per option at the given
+ * indent, wrapped in the newlines that separate it from the braces. Values are
+ * formatted at depth 0, which keeps nested arrays on a single line. A preset
+ * sets a dozen color groups, and putting every hex on its own line would bury
+ * the snippet.
+ *
+ * An empty option set collapses to nothing, so the braces close on the same
+ * line instead of wrapping a blank line or, in Go and Dart, a lone comma.
+ */
+function optionLines(
+  options: Record<string, unknown>,
+  indent: string,
+  line: (key: string, value: unknown) => string,
+  trailingComma = false,
+): string {
+  const entries = Object.entries(options);
+
+  if (entries.length === 0) {
+    return '';
+  }
+
+  const body = entries
+    .map(([key, value]) => `${indent}${line(key, value)}`)
+    .join(',\n');
+
+  return `\n${body}${trailingComma ? ',' : ''}\n`;
+}
+
+/**
+ * The eight snippets shown next to an option: one call per library, plus the
+ * HTTP-API URL and the CLI invocation. Takes a whole option set, because the
+ * options table passes one entry and a preset card passes a dozen.
+ */
 export function generateCodeExamples(
   styleName: string,
-  optionName: string,
-  value: unknown,
+  options: Record<string, unknown>,
 ): CodeExamples {
-  const httpApi = getAvatarApiUrl(styleName, { [optionName]: value });
+  const httpApi = getAvatarApiUrl(styleName, options);
 
-  const js = `new Avatar(style, {\n  ${optionName}: ${JSON.stringify(value)}\n});`;
+  const js = `new Avatar(style, {${optionLines(
+    options,
+    '  ',
+    (key, value) => `${key}: ${JSON.stringify(value)}`,
+  )}});`;
 
-  const php = `new Avatar($style, [\n  '${optionName}' => ${formatPhpValue(value)}\n]);`;
+  const php = `new Avatar($style, [${optionLines(
+    options,
+    '  ',
+    (key, value) => `'${key}' => ${formatPhpValue(value)}`,
+  )}]);`;
 
-  const python = `Avatar(style, {\n    "${optionName}": ${formatPythonValue(value)}\n})`;
+  const python = `Avatar(style, {${optionLines(
+    options,
+    '    ',
+    (key, value) => `"${key}": ${formatPythonValue(value)}`,
+  )}})`;
 
-  const rust = `Avatar::new(&style, json!({\n    "${optionName}": ${JSON.stringify(value)}\n}))?;`;
+  const rust = `Avatar::new(&style, json!({${optionLines(
+    options,
+    '    ',
+    (key, value) => `"${key}": ${JSON.stringify(value)}`,
+  )}}))?;`;
 
-  const go = `dicebear.NewAvatar(style, map[string]any{\n\t"${optionName}": ${formatGoValue(value)},\n})`;
+  // Go and Dart keep a trailing comma when the closing brace sits on its own
+  // line, matching what gofmt and dart format produce.
+  const go = `dicebear.NewAvatar(style, map[string]any{${optionLines(
+    options,
+    '\t',
+    (key, value) => `"${key}": ${formatGoValue(value)}`,
+    true,
+  )}})`;
 
-  const dart = `Avatar(style, {\n  '${optionName}': ${formatDartValue(value)},\n});`;
+  const dart = `Avatar(style, {${optionLines(
+    options,
+    '  ',
+    (key, value) => `'${key}': ${formatDartValue(value)}`,
+    true,
+  )}});`;
 
-  const cli = getAvatarApiCommand(styleName, { [optionName]: value });
+  const cli = getAvatarApiCommand(styleName, options);
 
   return { httpApi, js, php, python, rust, go, dart, cli };
 }

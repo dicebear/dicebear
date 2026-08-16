@@ -1,0 +1,83 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "A warm brown grid on tanned paper.",
+      "description": "The style has one color group for the whole grid, so a single palette change carries the picture.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "rowColor": ["8a6a48", "6b4f35", "a3855f", "54402c"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Four steps of grey.",
+      "description": "No hue anywhere, which suits an identicon: the pattern carries the identity, not the color.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "rowColor": ["343437", "5e5e62", "8c8c90"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One indigo on a pale indigo ground.",
+      "description": "Background and grid take the same hue at two lightnesses. The most restrained this style gets, and the easiest to place next to an existing brand color.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "rowColor": ["3d4272"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty tones instead of the full spectrum.",
+      "description": "The style ships nineteen colors around the wheel. This trades them for six dusty tones, which stops a table of identicons looking like a test chart.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "rowColor": ["6b705c", "a5a58d", "b98b73", "7c9082", "8e9aaf", "9c6b58"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Acid grid on near black.",
+      "description": "The other direction on the same lever: six colors past anything the style ships, on a dark background so they read as lit.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "rowColor": ["ff2e88", "00e5ff", "ffe600", "7cff00", "ff6a00", "b400ff"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Soft backgrounds, the grid untouched.",
+      "description": "Changes only what the grid sits on. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "The loud counterpart to Pastel Wall, strong enough that the avatar holds its own against a busy page.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the shapes.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    }
+  ]
+}

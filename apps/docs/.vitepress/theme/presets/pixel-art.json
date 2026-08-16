@@ -1,0 +1,163 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No hat, glasses, beard or accessory.",
+      "description": "Four optional components switched off at once. On a 16 by 16 grid an accessory costs a lot of the pixels available, so the plain face reads better at small sizes.",
+      "options": {
+        "hatProbability": 0,
+        "glassesProbability": 0,
+        "beardProbability": 0,
+        "accessoriesProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Brown throughout, skin and clothes included.",
+      "description": "Eight color groups all moved onto one warm ramp. Leaving the skin palette out would keep a natural face in the middle of a monochrome avatar, which is worse than doing nothing.",
+      "options": {
+        "backgroundColor": ["e7d5b8"],
+        "skinColor": ["c9a678", "b08d5f", "8f6d43", "6d5031"],
+        "hairColor": ["4a3018", "3a2916", "5c4223", "7d6038", "a08256"],
+        "clothingColor": ["8a6a3c", "6d5031", "a88b60", "5a4227"],
+        "eyesColor": ["4a3018"],
+        "mouthColor": ["9c7147"],
+        "glassesColor": ["3a2916"],
+        "hatColor": ["5c4223"],
+        "accessoriesColor": ["b0946a"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on any of the eight groups.",
+      "description": "For a print stylesheet, a disabled state, or anywhere color already carries meaning. Pixel art holds up well here because the shapes are the identity, not the palette.",
+      "options": {
+        "backgroundColor": ["e4e4e7"],
+        "skinColor": ["d4d4d8", "b4b4bb", "94949c", "6e6e76"],
+        "hairColor": ["18181b", "3f3f46", "71717a", "a1a1aa"],
+        "clothingColor": ["52525b", "3f3f46", "71717a", "27272a"],
+        "eyesColor": ["27272a"],
+        "mouthColor": ["8a8a92"],
+        "glassesColor": ["18181b"],
+        "hatColor": ["3f3f46"],
+        "accessoriesColor": ["a1a1aa"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One blue, one cream, nothing else.",
+      "description": "Two colors across the whole avatar. A row of these reads as one set, and only the haircut and expression tell them apart.",
+      "options": {
+        "backgroundColor": ["0f2d4a"],
+        "skinColor": ["9ec9e8"],
+        "hairColor": ["0f2d4a"],
+        "clothingColor": ["1c4f7c"],
+        "eyesColor": ["0f2d4a"],
+        "mouthColor": ["6ba5cc"],
+        "glassesColor": ["0f2d4a"],
+        "hatColor": ["1c4f7c"],
+        "accessoriesColor": ["9ec9e8"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty clothes and hair, skin untouched.",
+      "description": "The style dresses everyone in twelve saturated colors and ships lime and pillar-box red among the hair. Both move to tones that sit quietly, which helps when a table shows thirty avatars at once. Skin keeps its own palette.",
+      "options": {
+        "clothingColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58",
+          "8a7f6d"
+        ],
+        "hairColor": [
+          "4a4238",
+          "6b5a48",
+          "8a7a64",
+          "a3937c",
+          "5f6357",
+          "7b6a58"
+        ],
+        "mouthColor": ["a8756b", "9c6f66", "b08278"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Clothes past anything the style ships.",
+      "description": "The same group pulled the other way, and only that group. Loud clothes under loud hair would cancel out, so the hair keeps the palette it was born with.",
+      "options": {
+        "clothingColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "A soft ground behind the sprite.",
+      "description": "The style ships no background at all, so an avatar sits on whatever is behind it. Six pale colors give it a tile of its own without pulling attention off the face.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Six backgrounds at full strength.",
+      "description": "The sprites are small and high contrast, so they hold their own against a saturated ground rather than dissolving into it.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, pale hair and clothes.",
+      "description": "For dark interfaces. Hair and clothing move to light tones, because the style's default dark browns and navies vanish against a dark tile.",
+      "options": {
+        "backgroundColor": ["16161a"],
+        "hairColor": ["e4e4e7", "cab188", "a78961", "9fb8d9"],
+        "clothingColor": ["e2e8f0", "cbd5e1", "94a3b8", "a5b4fc"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the sprite.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. Both stops stay light so the dark outline of the sprite keeps its edge.",
+      "options": {
+        "backgroundColor": ["ffd5a8", "ff9db4"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    }
+  ]
+}

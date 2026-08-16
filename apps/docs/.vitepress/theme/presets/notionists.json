@@ -1,0 +1,113 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No background, none of the rare extras.",
+      "description": "The style stripped back: no background, so the drawing sits on whatever your page is, and the beard, gesture, glasses and shirt print all switched off.",
+      "options": {
+        "backgroundColor": [],
+        "beardProbability": 0,
+        "gestureProbability": 0,
+        "glassesProbability": 0,
+        "clothesGraphicProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Brown ink on aged paper.",
+      "description": "The style only has two colors, so a sepia treatment is the whole picture at once: warm brown for every line and filled mass, tanned paper for the body.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "inkColor": ["4a3526"],
+        "paperColor": ["f5ead6"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Charcoal on light grey.",
+      "description": "The quietest set here. Nothing competes with the page around it, which suits an admin table or a comment thread where the avatar is a marker rather than a picture.",
+      "options": {
+        "backgroundColor": ["ececed"],
+        "inkColor": ["3b3d42"],
+        "paperColor": ["fafafa"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Deep teal on mint, two colors total.",
+      "description": "Notionists draws with exactly one dark and one light color, which makes it the one style where a duotone is not an approximation. These two are the entire palette.",
+      "options": {
+        "backgroundColor": ["dff0eb"],
+        "inkColor": ["0f3d38"],
+        "paperColor": ["eefaf6"]
+      }
+    },
+    {
+      "id": "inverted",
+      "name": "Inverted",
+      "summary": "White line on black, like chalk.",
+      "description": "Swaps the two colors. Most styles break when the linework goes pale, because their fills stay light and the outlines dissolve. Here the fill is a color group too, so it goes dark with the background and the drawing reads as chalk on a board.",
+      "options": {
+        "backgroundColor": ["111113"],
+        "inkColor": ["f2f2f4"],
+        "paperColor": ["1c1c20"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft backgrounds, the drawing untouched.",
+      "description": "Changes nothing about the people, only what they stand in front of. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "Black on a strong color is the most legible this style gets. Strong enough that the avatar holds its own against a busy page.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind, the drawing untouched.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Beards, glasses, gestures and shirt prints turned up.",
+      "description": "Four components sit between 10 and 50 percent, so a small set of avatars rarely shows any of them. This raises all four, which is what you want when showing the style off rather than filling a user list.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "beardProbability": 45,
+        "gestureProbability": 40,
+        "glassesProbability": 50,
+        "clothesGraphicProbability": 70
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face, for small avatars.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, the default framing spends most of it on shoulders, and cropping in buys the detail back.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "scale": 1.2
+      }
+    }
+  ]
+}

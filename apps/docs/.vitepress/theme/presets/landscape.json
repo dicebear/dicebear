@@ -1,0 +1,120 @@
+{
+  "presets": [
+    {
+      "id": "dawn",
+      "name": "Dawn",
+      "summary": "Pale sky, low sun, hills still cool.",
+      "description": "The style ships one warm sky palette and a sun that is always golden. This sets an early morning instead: a pale blue sky, a low sun still white-gold, and hills that have not warmed up yet.",
+      "options": {
+        "backgroundColor": ["e6f1fb", "dfeef7", "e8f3f8"],
+        "orbColor": ["f8e6a8", "f5d98a"],
+        "hill1Color": ["bcd4e6", "b6cfdd"],
+        "hill2Color": ["8ea9bd", "93aab4"],
+        "hill3Color": ["5f7d92", "647f88"],
+        "hill4Color": ["36505f", "3a5259"]
+      }
+    },
+    {
+      "id": "dusk",
+      "name": "Dusk",
+      "summary": "Violet sky, red sun, hills going dark.",
+      "description": "The other end of the day. The sky turns violet, the sun drops to a deep orange-red, and the hill ladder loses its green so the ridges read as silhouettes.",
+      "options": {
+        "backgroundColor": ["f3e2ef", "ecdcee", "f6e4e6"],
+        "orbColor": ["f2724f", "e85f45"],
+        "hill1Color": ["d8b6c4", "cfaebd"],
+        "hill2Color": ["a8849c", "9c7c93"],
+        "hill3Color": ["6f5470", "67506a"],
+        "hill4Color": ["3b2c43", "36283e"]
+      }
+    },
+    {
+      "id": "night",
+      "name": "Night",
+      "summary": "Deep blue sky, a pale moon, black ridges.",
+      "description": "The sun becomes a moon. Everything drops several steps in lightness, and the front ridge goes nearly black, which is what makes the depth read without any color left to help.",
+      "options": {
+        "backgroundColor": ["1b2740", "172236", "1d2a44"],
+        "orbColor": ["e8ecf5", "dbe2ef"],
+        "hill1Color": ["44546f", "3f4f6a"],
+        "hill2Color": ["334059", "2f3c53"],
+        "hill3Color": ["222c40", "1f2a3c"],
+        "hill4Color": ["141b28", "121825"]
+      }
+    },
+    {
+      "id": "autumn",
+      "name": "Autumn",
+      "summary": "Warm sky, rust and ochre hills.",
+      "description": "Keeps the style's daylight sky and swaps the hill ladder for rust, ochre and brown, so the scene reads as late in the year rather than late in the day.",
+      "options": {
+        "backgroundColor": ["fdf0dc", "fbe9d4", "fdf3e4"],
+        "orbColor": ["f5b942", "f0a63a"],
+        "hill1Color": ["e8c9a0", "e3c199"],
+        "hill2Color": ["cfa066", "c79a62"],
+        "hill3Color": ["a86f3d", "9e683a"],
+        "hill4Color": ["6b4326", "643f24"]
+      }
+    },
+    {
+      "id": "winter",
+      "name": "Winter",
+      "summary": "Cold sky, a low sun, snow on the ridges.",
+      "description": "A cold, high-key scene: near-white sky, a sun with no heat in it, and hills that go from snow to slate. The narrowest contrast range of the five, which is what makes it read as overcast.",
+      "options": {
+        "backgroundColor": ["eef5fa", "e8f1f7", "f2f7fb"],
+        "orbColor": ["fdf3d9", "f8ecd0"],
+        "hill1Color": ["dfe8ee", "d8e3ea"],
+        "hill2Color": ["bccbd6", "b4c4d0"],
+        "hill3Color": ["8fa3b3", "879bac"],
+        "hill4Color": ["5b6f7f", "55697a"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "The depth ladder without any color.",
+      "description": "Landscape builds its depth from four hill layers that get darker towards the front. Stripping the color leaves that ladder intact, which makes this the clearest way to see how the style works.",
+      "options": {
+        "backgroundColor": ["f0f0f2"],
+        "orbColor": ["d8d8dc"],
+        "hill1Color": ["c2c2c6"],
+        "hill2Color": ["9a9a9e"],
+        "hill3Color": ["6e6e72"],
+        "hill4Color": ["3a3a3d"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "An acid sky over neon ridges.",
+      "description": "The one preset here that abandons naturalism. The ladder still runs dark towards the front, so the depth survives even though nothing else about it is plausible.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "orbColor": ["ffe600"],
+        "hill1Color": ["00e5ff"],
+        "hill2Color": ["00b3d6"],
+        "hill3Color": ["7a2ff2"],
+        "hill4Color": ["3d0f8f"]
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the front ridges.",
+      "description": "Uses scale rather than color. Cropping in drops the sky and pushes the front hills forward, which reads better at small sizes than the full scene.",
+      "options": {
+        "scale": 1.4
+      }
+    }
+  ]
+}

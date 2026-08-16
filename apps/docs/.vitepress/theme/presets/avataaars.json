@@ -1,0 +1,375 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No glasses, no facial hair.",
+      "description": "Two optional components off at once. Both appear on one avatar in ten by default, so this mostly makes a set more even rather than plainer.",
+      "options": {
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One brown ramp across every layer.",
+      "description": "Six color groups moved onto one ramp. The tops with printed color come out, along with the crying eyes and the mouths that open onto a pink tongue, since no option reaches any of those.",
+      "options": {
+        "backgroundColor": ["ede2ce"],
+        "skinColor": ["d9bd94", "c4a377", "a8865a", "8a6a43", "e3cdb0"],
+        "hairColor": ["3a2916", "4a3018", "5c4223", "7d6038", "a08256"],
+        "facialHairColor": ["3a2916", "4a3018", "5c4223"],
+        "clothesColor": ["8a6a3c", "6d5031", "a88b60", "5a4227"],
+        "hatColor": ["6d5031", "8a6a3c"],
+        "accessoriesColor": ["4a3018", "7d6038"],
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ],
+        "topVariant": [
+          "bigHair",
+          "bob",
+          "bun",
+          "curly",
+          "curvy",
+          "dreads",
+          "dreads01",
+          "dreads02",
+          "frizzle",
+          "fro",
+          "hat",
+          "hijab",
+          "longButNotTooLong",
+          "miaWallace",
+          "shaggy",
+          "shaggyMullet",
+          "shavedSides",
+          "shortCurly",
+          "shortFlat",
+          "shortRound",
+          "shortWaved",
+          "sides",
+          "straight01",
+          "straight02",
+          "straightAndStrand",
+          "theCaesar",
+          "theCaesarAndSidePart",
+          "turban",
+          "winterHat02",
+          "winterHat03",
+          "winterHat04",
+          "winterHat1"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on any of the six groups.",
+      "description": "Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not. The style separates its layers by shape rather than by color, so a grey set stays readable. Same exclusions as Sepia.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "skinColor": ["e4e4e7", "c1c1c7", "a1a1aa", "76767e", "d4d4d8"],
+        "hairColor": ["18181b", "3f3f46", "52525b", "71717a", "a1a1aa"],
+        "facialHairColor": ["18181b", "3f3f46", "52525b"],
+        "clothesColor": ["3f3f46", "52525b", "71717a", "27272a"],
+        "hatColor": ["27272a", "52525b"],
+        "accessoriesColor": ["18181b", "71717a"],
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ],
+        "topVariant": [
+          "bigHair",
+          "bob",
+          "bun",
+          "curly",
+          "curvy",
+          "dreads",
+          "dreads01",
+          "dreads02",
+          "frizzle",
+          "fro",
+          "hat",
+          "hijab",
+          "longButNotTooLong",
+          "miaWallace",
+          "shaggy",
+          "shaggyMullet",
+          "shavedSides",
+          "shortCurly",
+          "shortFlat",
+          "shortRound",
+          "shortWaved",
+          "sides",
+          "straight01",
+          "straight02",
+          "straightAndStrand",
+          "theCaesar",
+          "theCaesarAndSidePart",
+          "turban",
+          "winterHat02",
+          "winterHat03",
+          "winterHat04",
+          "winterHat1"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Three steps of one blue.",
+      "description": "Pale skin, mid shirt, dark hair, all the same hue. Every avatar in a set shares them, so only the haircut and the expression separate two of them.",
+      "options": {
+        "backgroundColor": ["e6ecef"],
+        "skinColor": ["9ec9e8"],
+        "hairColor": ["1d3d52"],
+        "facialHairColor": ["1d3d52"],
+        "clothesColor": ["37718e"],
+        "hatColor": ["1d3d52"],
+        "accessoriesColor": ["1d3d52"],
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ],
+        "topVariant": [
+          "bigHair",
+          "bob",
+          "bun",
+          "curly",
+          "curvy",
+          "dreads",
+          "dreads01",
+          "dreads02",
+          "frizzle",
+          "fro",
+          "hat",
+          "hijab",
+          "longButNotTooLong",
+          "miaWallace",
+          "shaggy",
+          "shaggyMullet",
+          "shavedSides",
+          "shortCurly",
+          "shortFlat",
+          "shortRound",
+          "shortWaved",
+          "sides",
+          "straight01",
+          "straight02",
+          "straightAndStrand",
+          "theCaesar",
+          "theCaesarAndSidePart",
+          "turban",
+          "winterHat02",
+          "winterHat03",
+          "winterHat04",
+          "winterHat1"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty clothes, everything else untouched.",
+      "description": "The style dresses everyone in fourteen colors, most of them fully saturated. These are the same garments in tones that hold still, which helps when a table shows thirty avatars. The printed expressions come out as well, the ones Sepia lists: a red tongue or a green mouth undoes a quiet palette on its own.",
+      "options": {
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ],
+        "topVariant": [
+          "bigHair",
+          "bob",
+          "bun",
+          "curly",
+          "curvy",
+          "dreads",
+          "dreads01",
+          "dreads02",
+          "frizzle",
+          "fro",
+          "hat",
+          "hijab",
+          "longButNotTooLong",
+          "miaWallace",
+          "shaggy",
+          "shaggyMullet",
+          "shavedSides",
+          "shortCurly",
+          "shortFlat",
+          "shortRound",
+          "shortWaved",
+          "sides",
+          "straight01",
+          "straight02",
+          "straightAndStrand",
+          "theCaesar",
+          "theCaesarAndSidePart",
+          "turban",
+          "winterHat02",
+          "winterHat03",
+          "winterHat04",
+          "winterHat1"
+        ],
+        "clothesColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58",
+          "8a7f6d"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Clothes past anything the style ships.",
+      "description": "The same group the other way. Only the clothes move, because loud clothes under loud hair cancel each other out.",
+      "options": {
+        "clothesColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "A soft ground behind the shoulders.",
+      "description": "The style ships no background at all. Six pale colors give each avatar a tile without competing with the clothes.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Six saturated grounds behind the shoulders.",
+      "description": "The style requires clothes, hair and skin to differ from the background, so it picks its way around whatever you put behind it rather than clashing with it.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, pale clothes.",
+      "description": "For dark interfaces. The clothes palette moves to light tones, since the charcoal and navy shirts the style ships disappear into a dark tile.",
+      "options": {
+        "backgroundColor": ["16161a"],
+        "clothesColor": ["e6e6e6", "b1e2ff", "a7ffc4", "ffffb1", "ffafb9"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the portrait.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. Both stops stay light, so the hair keeps its edge against them.",
+      "options": {
+        "backgroundColor": ["ffd5a8", "ff9db4"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Glasses and facial hair on everyone.",
+      "description": "Both optional components turned all the way up. The style ships seven pairs of glasses and five beards that nine seeds in ten never reach.",
+      "options": {
+        "accessoriesProbability": 100,
+        "facialHairProbability": 100
+      }
+    }
+  ]
+}

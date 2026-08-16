@@ -1,0 +1,128 @@
+{
+  "presets": [
+    {
+      "id": "terminal",
+      "name": "Terminal",
+      "summary": "Green pixels on near-black.",
+      "description": "The style is a lit dot matrix, and this is the oldest version of that: one phosphor green, one dark ground, no second color anywhere.",
+      "options": {
+        "backgroundColor": ["0a0f0a"],
+        "glowColor": ["4ade80"]
+      }
+    },
+    {
+      "id": "amber",
+      "name": "Amber",
+      "summary": "The warm counterpart to Terminal.",
+      "description": "Same idea, the other phosphor. Amber on a brown-black ground reads warmer in a list than green does.",
+      "options": {
+        "backgroundColor": ["120c05"],
+        "glowColor": ["ffb020"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "White pixels, no hue at all.",
+      "description": "For interfaces where color already carries meaning. The style loses nothing structural, because the shapes of the eyes and mouth are what identify an avatar.",
+      "options": {
+        "backgroundColor": ["141416"],
+        "glowColor": ["f4f4f5", "d4d4d8", "a1a1aa"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One cyan for every avatar.",
+      "description": "A single glow color across a whole set, so the eye and mouth shapes are the only thing that changes from one avatar to the next.",
+      "options": {
+        "backgroundColor": ["061626"],
+        "glowColor": ["22d3ee"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty pixels on a slate ground.",
+      "description": "The style ships nine bright colors, which is a lot of shouting in a sidebar. These six are lit enough to read on dark and quiet enough to sit still.",
+      "options": {
+        "backgroundColor": ["1b1d22"],
+        "glowColor": [
+          "9aa88f",
+          "b0a48c",
+          "8fa3ad",
+          "a894a3",
+          "b8a06f",
+          "8d9bb5"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Six colors at full saturation.",
+      "description": "Past what the style ships. On a black ground these read as actual light rather than as paint.",
+      "options": {
+        "backgroundColor": ["000000"],
+        "glowColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "cool",
+      "name": "Cool",
+      "summary": "Blues, teals and violets only.",
+      "description": "Half the color wheel, and the counterpart to Warm. Two groups of avatars can be told apart by temperature alone.",
+      "options": {
+        "backgroundColor": ["0b1220"],
+        "glowColor": ["7dd3fc", "5eead4", "a5b4fc", "c4b5fd", "67e8f9"]
+      }
+    },
+    {
+      "id": "warm",
+      "name": "Warm",
+      "summary": "Reds, oranges and golds only.",
+      "description": "The other half of the same wheel, on a ground warmed to match.",
+      "options": {
+        "backgroundColor": ["1a0d06"],
+        "glowColor": ["fdba74", "fcd34d", "fca5a5", "fb923c", "f9a8d4"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A gradient behind the matrix.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. Both stops stay dark, because the lit pixels need something to be lit against.",
+      "options": {
+        "backgroundColor": ["1e1b4b", "3b0764"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45,
+        "glowColor": ["fde68a", "f9a8d4", "c4b5fd"]
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Fewer grid cells, larger pixels.",
+      "description": "The face sits in the middle of a wide grid. Scaling up trades some of the grid for size, which is the trade you want at 32 pixels.",
+      "options": {
+        "scale": 1.3
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}

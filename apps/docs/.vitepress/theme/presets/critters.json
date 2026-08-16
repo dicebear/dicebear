@@ -1,0 +1,222 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No horns, no markings, no blush.",
+      "description": "Three optional components off at once. The body silhouette and the face are what is left, and the style ships nineteen mouths and nineteen eye arrangements to fill that.",
+      "options": {
+        "topProbability": 0,
+        "patternProbability": 0,
+        "cheeksProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown ramp, ground included.",
+      "description": "Four mouth variants are excluded here. They show a pink tongue painted straight into the artwork, where no color option reaches it.",
+      "options": {
+        "backgroundColor": ["43301c"],
+        "bodyColor": ["d9bd94", "c4a377", "e3cdb0", "b08d5f"],
+        "accentColor": ["a8865a", "8f6d43"],
+        "inkColor": ["2b1d10"],
+        "mouthVariant": [
+          "smile",
+          "tinySmile",
+          "teeth",
+          "ooh",
+          "line",
+          "smirk",
+          "wavy",
+          "catMouth",
+          "zigzag",
+          "frown",
+          "sad",
+          "slant",
+          "dot",
+          "tooth"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on body, markings or ground.",
+      "description": "Flat shapes with a hard shadow, which is the kind of drawing that survives losing color. Same mouth exclusion as Sepia.",
+      "options": {
+        "backgroundColor": ["3f3f46"],
+        "bodyColor": ["e4e4e7", "d4d4d8", "c1c1c7", "a1a1aa"],
+        "accentColor": ["9c9ca4", "b4b4bb"],
+        "inkColor": ["18181b"],
+        "mouthVariant": [
+          "smile",
+          "tinySmile",
+          "teeth",
+          "ooh",
+          "line",
+          "smirk",
+          "wavy",
+          "catMouth",
+          "zigzag",
+          "frown",
+          "sad",
+          "slant",
+          "dot",
+          "tooth"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One mint critter on one deep green.",
+      "description": "A single body color across a whole set, so nothing but the silhouette and the face separates two of them. The markings stay a shade apart, because the style requires them to differ from the body.",
+      "options": {
+        "backgroundColor": ["0d3b2e"],
+        "bodyColor": ["6ee7b9"],
+        "accentColor": ["3fbf95"],
+        "inkColor": ["07281e"],
+        "mouthVariant": [
+          "smile",
+          "tinySmile",
+          "teeth",
+          "ooh",
+          "line",
+          "smirk",
+          "wavy",
+          "catMouth",
+          "zigzag",
+          "frown",
+          "sad",
+          "slant",
+          "dot",
+          "tooth"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "A dusty menagerie.",
+      "description": "The style ships twelve bodies at candy brightness. These are the same creatures in tones that hold still, which suits a list where a dozen appear at once. The tongue mouths are excluded, the same ones the monochrome presets drop, because their pink is painted in rather than picked.",
+      "options": {
+        "mouthVariant": [
+          "smile",
+          "tinySmile",
+          "teeth",
+          "ooh",
+          "line",
+          "smirk",
+          "wavy",
+          "catMouth",
+          "zigzag",
+          "frown",
+          "sad",
+          "slant",
+          "dot",
+          "tooth"
+        ],
+        "backgroundColor": ["3a3a3f", "41413a", "3a4140", "3f3a41"],
+        "bodyColor": [
+          "a5a58d",
+          "b98b73",
+          "8e9aaf",
+          "9c8a94",
+          "8fa38f",
+          "b0a58c"
+        ],
+        "accentColor": ["8a8a72", "9c7460", "737f94", "82707c"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Bodies past anything the style ships.",
+      "description": "The same lever the other way. The ground stays near-black so the creature is the only lit thing on the tile.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "bodyColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Pale ground behind the creature.",
+      "description": "Every background the style ships is dark and saturated. Pale ones turn the same creature from a spotlit specimen into a sticker.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated ground behind a pale creature.",
+      "description": "Louder than the shipped set and pushed toward the primaries. The bodies are pale, so they keep their edge on top of it.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, bodies unchanged.",
+      "description": "For dark interfaces. The body palette is light already, so nothing else has to move for the creature to stay visible.",
+      "options": {
+        "backgroundColor": ["16161a"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the creature.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ff9db4", "ffd5a8"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Horns, markings and blush on everyone.",
+      "description": "All three optional components turned up. The style ships fifteen head pieces and ten body markings, and at the default probabilities most seeds never reach them.",
+      "options": {
+        "topProbability": 100,
+        "patternProbability": 100,
+        "cheeksProbability": 100
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}

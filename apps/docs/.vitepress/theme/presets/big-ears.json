@@ -1,0 +1,289 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No freckles, no birthmark.",
+      "description": "The details component appears on one avatar in ten. Off, every avatar in a set is built from the same seven parts, which reads more evenly down a list.",
+      "options": {
+        "detailsProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm ramp, skin and hair.",
+      "description": "The style prints a pink lip on twenty-four of its thirty-eight mouths, plus a few colored eyes, and no option reaches any of them. This keeps the fourteen mouths and twenty-eight eyes that are drawn in line alone.",
+      "options": {
+        "backgroundColor": ["ede2ce"],
+        "skinColor": ["d9bd94", "c4a377", "a8865a", "8a6a43", "e3cdb0"],
+        "hairColor": ["3a2916", "4a3018", "5c4223", "7d6038", "a08256"],
+        "eyesVariant": [
+          "variant01",
+          "variant02",
+          "variant03",
+          "variant04",
+          "variant05",
+          "variant08",
+          "variant09",
+          "variant11",
+          "variant12",
+          "variant14",
+          "variant15",
+          "variant16",
+          "variant17",
+          "variant18",
+          "variant19",
+          "variant20",
+          "variant21",
+          "variant22",
+          "variant23",
+          "variant24",
+          "variant25",
+          "variant26",
+          "variant27",
+          "variant28",
+          "variant29",
+          "variant30",
+          "variant31",
+          "variant32"
+        ],
+        "mouthVariant": [
+          "variant0104",
+          "variant0204",
+          "variant0304",
+          "variant0404",
+          "variant0504",
+          "variant0604",
+          "variant0701",
+          "variant0702",
+          "variant0703",
+          "variant0704",
+          "variant0705",
+          "variant0706",
+          "variant0707",
+          "variant0708"
+        ],
+        "detailsProbability": 0
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on skin or hair.",
+      "description": "Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not. The ears and the linework carry the drawing once the color is gone. Same exclusions as Sepia.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "skinColor": ["e4e4e7", "c1c1c7", "a1a1aa", "76767e", "d4d4d8"],
+        "hairColor": ["18181b", "3f3f46", "52525b", "71717a", "a1a1aa"],
+        "eyesVariant": [
+          "variant01",
+          "variant02",
+          "variant03",
+          "variant04",
+          "variant05",
+          "variant08",
+          "variant09",
+          "variant11",
+          "variant12",
+          "variant14",
+          "variant15",
+          "variant16",
+          "variant17",
+          "variant18",
+          "variant19",
+          "variant20",
+          "variant21",
+          "variant22",
+          "variant23",
+          "variant24",
+          "variant25",
+          "variant26",
+          "variant27",
+          "variant28",
+          "variant29",
+          "variant30",
+          "variant31",
+          "variant32"
+        ],
+        "mouthVariant": [
+          "variant0104",
+          "variant0204",
+          "variant0304",
+          "variant0404",
+          "variant0504",
+          "variant0604",
+          "variant0701",
+          "variant0702",
+          "variant0703",
+          "variant0704",
+          "variant0705",
+          "variant0706",
+          "variant0707",
+          "variant0708"
+        ],
+        "detailsProbability": 0
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Pale blue face, deep blue hair.",
+      "description": "Two steps of one hue for a whole set, so only the haircut, the ears and the expression separate two avatars.",
+      "options": {
+        "backgroundColor": ["e6ecef"],
+        "skinColor": ["9ec9e8"],
+        "hairColor": ["1d3d52"],
+        "eyesVariant": [
+          "variant01",
+          "variant02",
+          "variant03",
+          "variant04",
+          "variant05",
+          "variant08",
+          "variant09",
+          "variant11",
+          "variant12",
+          "variant14",
+          "variant15",
+          "variant16",
+          "variant17",
+          "variant18",
+          "variant19",
+          "variant20",
+          "variant21",
+          "variant22",
+          "variant23",
+          "variant24",
+          "variant25",
+          "variant26",
+          "variant27",
+          "variant28",
+          "variant29",
+          "variant30",
+          "variant31",
+          "variant32"
+        ],
+        "mouthVariant": [
+          "variant0104",
+          "variant0204",
+          "variant0304",
+          "variant0404",
+          "variant0504",
+          "variant0604",
+          "variant0701",
+          "variant0702",
+          "variant0703",
+          "variant0704",
+          "variant0705",
+          "variant0706",
+          "variant0707",
+          "variant0708"
+        ],
+        "detailsProbability": 0
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty hair, skin untouched.",
+      "description": "The style ships pink, red and bleached white among its hair colors. These are tones that hold still, for a page where many avatars appear together.",
+      "options": {
+        "hairColor": [
+          "4a4238",
+          "6b5a48",
+          "8a7a64",
+          "a3937c",
+          "5f6357",
+          "7b6a58"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Hair past anything the style ships.",
+      "description": "The same group the other way. The style draws hair as a large flat mass, which makes it the right place to put the one loud color.",
+      "options": {
+        "hairColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "A soft ground behind the head.",
+      "description": "The style ships no background at all, so an avatar sits on whatever is behind it. Six pale colors give it a tile of its own.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Six saturated grounds behind the ears.",
+      "description": "The heads are pale and the hair is dark, so the drawing keeps its edge on a saturated ground.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, hair unchanged.",
+      "description": "For dark interfaces. The skin palette is light enough on its own that nothing else has to move.",
+      "options": {
+        "backgroundColor": ["16161a"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the ears.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. Both stops stay light so the dark hair keeps its contrast.",
+      "options": {
+        "backgroundColor": ["ffd5a8", "ff9db4"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Freckles and birthmarks on everyone.",
+      "description": "The details component turned all the way up. The style ships six of them that nine seeds in ten never reach.",
+      "options": {
+        "detailsProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "The head scaled up in the frame.",
+      "description": "The style leaves a wide margin, which costs size at 24 or 32 pixels. This stops short of the tallest hairstyles, so nothing spiky gets cut.",
+      "options": {
+        "scale": 1.15
+      }
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "presets": [
+    {
+      "id": "plain",
+      "name": "Plain",
+      "summary": "No hearts, no tears, no vomit.",
+      "description": "The style keeps a few cartoon extremes among its eyes and mouths, and they carry printed color that no option reaches. Dropping them leaves the everyday expressions. Worth knowing for the rest of these: what this style calls the background is the face, so `backgroundColor` sets the complexion and the tile at once.",
+      "options": {
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ]
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm ramp, face and features.",
+      "description": "Since the background is the complexion here, a monochrome set commits everyone to the same four tones. The cartoon extremes come out too, for the reason Plain gives.",
+      "options": {
+        "backgroundColor": ["e3c39c", "cba87e", "ad8659", "8a6a43"],
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on the face at all.",
+      "description": "Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not. The brows and mouth are drawn as dark shapes over the face, so they keep their contrast on every step of the ramp.",
+      "options": {
+        "backgroundColor": ["dcdce0", "bfbfc6", "9c9ca4", "76767e"],
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One blue complexion, shared by everyone.",
+      "description": "A single color across a whole set, so nothing but the brows, eyes and mouth tells two avatars apart. It commits everyone to one complexion, which is the point here and would be a problem anywhere else.",
+      "options": {
+        "backgroundColor": ["9ec9e8"],
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Six tones that read as neither skin nor paint.",
+      "description": "Six tones that do not read as complexions at all, which suits avatars standing in for accounts or teams rather than people. The printed expressions come out too, the ones Plain lists.",
+      "options": {
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ],
+        "backgroundColor": [
+          "a5a58d",
+          "8e9aaf",
+          "9c8a94",
+          "8fa38f",
+          "b0a58c",
+          "94a3ad"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Neon faces, features left dark.",
+      "description": "The same group past the end of its scale. The brows and mouth are dark and heavy enough to stay legible on top of any of these.",
+      "options": {
+        "backgroundColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "cool",
+      "name": "Cool",
+      "summary": "Blues, teals and violets only.",
+      "description": "Half the color wheel, and the counterpart to Warm. Two groups of accounts can be told apart by temperature without a second badge. The printed expressions come out with them, since a red tongue pulls warm against every color here.",
+      "options": {
+        "eyesVariant": [
+          "closed",
+          "default",
+          "eyeRoll",
+          "happy",
+          "side",
+          "squint",
+          "surprised",
+          "wink",
+          "winkWacky",
+          "xDizzy"
+        ],
+        "mouthVariant": [
+          "default",
+          "disbelief",
+          "eating",
+          "grimace",
+          "sad",
+          "serious",
+          "twinkle"
+        ],
+        "backgroundColor": ["7dd3fc", "5eead4", "a5b4fc", "c4b5fd", "67e8f9"]
+      }
+    },
+    {
+      "id": "warm",
+      "name": "Warm",
+      "summary": "Reds, oranges and golds only.",
+      "description": "The other half of the same wheel. The style's own palette already leans this way, so this is the smaller step of the two.",
+      "options": {
+        "backgroundColor": ["fdba74", "fcd34d", "fca5a5", "fb923c", "f9a8d4"]
+      }
+    }
+  ]
+}

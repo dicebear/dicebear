@@ -12,6 +12,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -27,6 +28,10 @@ eyes and mouth on a solid colored square, with no head, antennas, or side units.
 ## Usage
 
 <StyleUsage styleName="bottts-neutral" />
+
+## Presets
+
+<StylePresets styleName="bottts-neutral" :limit="5" />
 
 ## Options
 

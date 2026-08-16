@@ -1,0 +1,73 @@
+{
+  "presets": [
+    {
+      "id": "deep-space",
+      "name": "Deep Space",
+      "summary": "Near black, stars in cold white.",
+      "description": "Darker and colder than the style's own skies, which pushes the constellation forward and drops everything else away.",
+      "options": {
+        "backgroundColor": ["07080d", "0a0b12"],
+        "constellationColor": ["eaf2ff", "d8e6f5"]
+      }
+    },
+    {
+      "id": "warm-night",
+      "name": "Warm Night",
+      "summary": "A brown-violet sky and amber stars.",
+      "description": "The other end of the same idea: a sky closer to city light than to deep space, with stars that read as amber rather than white.",
+      "options": {
+        "backgroundColor": ["2a1c2b", "2e1f24"],
+        "constellationColor": ["f2d9a8", "e9c98c"]
+      }
+    },
+    {
+      "id": "blueprint",
+      "name": "Blueprint",
+      "summary": "Pale lines on a flat blue.",
+      "description": "Trades the night for plan paper. The sky becomes one flat blue and the stars a single pale ink, which reads as a diagram of a constellation rather than a photograph of one.",
+      "options": {
+        "backgroundColor": ["12395c"],
+        "constellationColor": ["dbe9f7"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "A grey sky and white stars.",
+      "description": "Strips the color from a style that is mostly one color anyway. What is left is the geometry: points and the lines between them.",
+      "options": {
+        "backgroundColor": ["1c1c1f"],
+        "constellationColor": ["f0f0f2"]
+      }
+    },
+    {
+      "id": "daylight",
+      "name": "Daylight",
+      "summary": "A pale sky with dark stars.",
+      "description": "The one preset that abandons the night. Inverting sky and stars turns the constellation into a mark on paper, which suits a light interface where a black square would punch a hole.",
+      "options": {
+        "backgroundColor": ["eef2f7", "e8eef5"],
+        "constellationColor": ["2a3550"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Neon stars on black.",
+      "description": "Colors past anything the style ships, on the darkest sky, so the constellation reads as lit rather than lit up.",
+      "options": {
+        "backgroundColor": ["07080d"],
+        "constellationColor": ["00e5ff", "ff2e88", "7cff00"]
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}

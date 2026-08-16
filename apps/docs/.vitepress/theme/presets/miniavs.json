@@ -1,0 +1,134 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No background, no blush, glasses or moustache.",
+      "description": "The style stripped back: no background, so the avatar sits on whatever your page is, and the three components that only show on a fifth of seeds switched off.",
+      "options": {
+        "backgroundColor": [],
+        "blushProbability": 0,
+        "glassesProbability": 0,
+        "mustacheProbability": 0
+      }
+    },
+    {
+      "id": "terracotta",
+      "name": "Terracotta",
+      "summary": "A warm red-brown set built around the fixed mouth.",
+      "description": "Not quite a sepia. Miniavs paints the inside of both mouths a pink-red that no option reaches, so a brown or grey set keeps one loud spot. This leans the whole palette red instead, which takes that color in rather than fighting it. The blush and the pink hair tie still switch off.",
+      "options": {
+        "backgroundColor": ["e7cdbd"],
+        "skinColor": ["dcae95", "c08e77", "9c6b58"],
+        "hairColor": ["6b3529", "8a4433", "4a231c"],
+        "bodyColor": ["a85440", "8f4436", "c26850"],
+        "blushProbability": 0,
+        "hairVariant": [
+          "balndess",
+          "classic01",
+          "classic02",
+          "curly",
+          "elvis",
+          "long",
+          "slaughter",
+          "stylish"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty shirts, hair left natural.",
+      "description": "The style ships three shirt colors and all of them are loud: cobalt, orange and magenta. This replaces them with dusty tones, which is a bigger change here than in most styles because the shirt is a large flat area.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "bodyColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Shirts at full saturation on near black.",
+      "description": "The other direction on the same lever: six colors past anything the style ships, on a dark background so they read as lit. Hair and skin still come from the seed.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "bodyColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft backgrounds, everything else untouched.",
+      "description": "Changes nothing about the people, only what they stand in front of. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "The loud counterpart to Pastel Wall. Strong enough that the avatar holds its own against a busy page, and the only preset here that will fight with a colorful interface rather than sit inside it.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind, everything else untouched.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black behind, light shirts in front.",
+      "description": "For dark interfaces. The shirt pool goes light so the body does not disappear into the background, and the hair stays dark, which reads as a silhouette rather than a mistake.",
+      "options": {
+        "backgroundColor": ["16161c"],
+        "bodyColor": ["dfe3f5", "c9d6e8", "e8dcc4"]
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Blush, glasses and moustaches turned up.",
+      "description": "Three components sit at twenty percent, so most avatars show none of them. This raises all three, which is what you want when showing the style off rather than filling a user list.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "blushProbability": 60,
+        "glassesProbability": 50,
+        "mustacheProbability": 45
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face, for small avatars.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, the default framing spends a lot of it on shoulders, and cropping in buys the detail back.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "scale": 1.2
+      }
+    }
+  ]
+}

@@ -1,0 +1,273 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No beard, no glasses, no blush.",
+      "description": "Three optional components off at once. What is left is the outfit, the hair and the face, which is where most of this style's variety lives anyway.",
+      "options": {
+        "beardProbability": 0,
+        "glassesProbability": 0,
+        "cheeksProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Eight groups on one brown ramp.",
+      "description": "Two mouths and two head pieces are excluded: the tongue mouths and the animal ears carry a printed pink that no color option reaches.",
+      "options": {
+        "backgroundColor": ["ede2ce"],
+        "skinColor": ["d9bd94", "c4a377", "a8865a", "8a6a43", "e3cdb0"],
+        "hairColor": ["3a2916", "4a3018", "5c4223", "7d6038", "a08256"],
+        "hatColor": ["6d5031", "8a6a3c", "a88b60"],
+        "shirtColor": ["8a6a3c", "6d5031", "a88b60", "5a4227"],
+        "pantsColor": ["4a3018", "5c4223", "3a2916"],
+        "shoesColor": ["2b1d10", "4a3018"],
+        "jacketColor": ["6d5031", "3a2916", "a08256"],
+        "mouthVariant": [
+          "smile",
+          "bigSmile",
+          "flat",
+          "ooh",
+          "smirk",
+          "wideSmile",
+          "frown",
+          "grin"
+        ],
+        "topVariant": [
+          "short",
+          "spiky",
+          "bowl",
+          "sideSwept",
+          "curly",
+          "mohawk",
+          "buns",
+          "ponytail",
+          "bob",
+          "shoulderLength",
+          "longStraight",
+          "longWavy",
+          "partedLong",
+          "braids",
+          "twinTails",
+          "cap",
+          "beanie",
+          "afro",
+          "halfShaved"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on any of the eight groups.",
+      "description": "The style shades every cube face separately, so a set of greys keeps all its depth. Same exclusions as Sepia.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "skinColor": ["e4e4e7", "c1c1c7", "a1a1aa", "76767e", "d4d4d8"],
+        "hairColor": ["18181b", "3f3f46", "52525b", "71717a", "a1a1aa"],
+        "hatColor": ["52525b", "71717a", "27272a"],
+        "shirtColor": ["3f3f46", "52525b", "71717a", "27272a"],
+        "pantsColor": ["27272a", "3f3f46", "18181b"],
+        "shoesColor": ["18181b", "3f3f46"],
+        "jacketColor": ["52525b", "18181b", "a1a1aa"],
+        "mouthVariant": [
+          "smile",
+          "bigSmile",
+          "flat",
+          "ooh",
+          "smirk",
+          "wideSmile",
+          "frown",
+          "grin"
+        ],
+        "topVariant": [
+          "short",
+          "spiky",
+          "bowl",
+          "sideSwept",
+          "curly",
+          "mohawk",
+          "buns",
+          "ponytail",
+          "bob",
+          "shoulderLength",
+          "longStraight",
+          "longWavy",
+          "partedLong",
+          "braids",
+          "twinTails",
+          "cap",
+          "beanie",
+          "afro",
+          "halfShaved"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One blue, four steps of it.",
+      "description": "Skin, hair and every garment take a step of the same hue. What separates two avatars is the haircut, the outfit shape and the face.",
+      "options": {
+        "backgroundColor": ["e6ecef"],
+        "skinColor": ["9ec9e8"],
+        "hairColor": ["12293a"],
+        "hatColor": ["1d3d52"],
+        "shirtColor": ["37718e"],
+        "pantsColor": ["1d3d52"],
+        "shoesColor": ["12293a"],
+        "jacketColor": ["4a8bab"],
+        "mouthVariant": [
+          "smile",
+          "bigSmile",
+          "flat",
+          "ooh",
+          "smirk",
+          "wideSmile",
+          "frown",
+          "grin"
+        ],
+        "topVariant": [
+          "short",
+          "spiky",
+          "bowl",
+          "sideSwept",
+          "curly",
+          "mohawk",
+          "buns",
+          "ponytail",
+          "bob",
+          "shoulderLength",
+          "longStraight",
+          "longWavy",
+          "partedLong",
+          "braids",
+          "twinTails",
+          "cap",
+          "beanie",
+          "afro",
+          "halfShaved"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "A dusty wardrobe, faces untouched.",
+      "description": "The style ships ten shirt colors at full strength. These are the same clothes in tones that sit quietly, which suits a list where a dozen figures appear at once.",
+      "options": {
+        "shirtColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58",
+          "8a7f6d"
+        ],
+        "jacketColor": ["5f6357", "7b6a58", "6b7280", "8a7f6d"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Neon shirts, natural hair.",
+      "description": "Only the shirt moves. The style already offers fantasy hair colors, and pairing those with a neon shirt leaves nothing for the eye to settle on.",
+      "options": {
+        "shirtColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Six soft grounds instead of five.",
+      "description": "Close to what the style ships, with a green added and each color pulled a little further apart, so a row of tiles reads as six choices rather than five near-misses.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated ground behind the figure.",
+      "description": "The five grounds the style ships are all pale. A loud one turns the same figure from a portrait into a poster.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, lit shirts.",
+      "description": "For dark interfaces. The shirt palette moves to light tones, because the style's charcoal shirts and dark trousers merge into a dark tile.",
+      "options": {
+        "backgroundColor": ["16161a"],
+        "shirtColor": ["f1f3f5", "fab005", "40c057", "228be6", "e64980"],
+        "pantsColor": ["7a86a8", "4a4e69", "495057"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the figure.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffd5a8", "ff9db4"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Glasses, beard and blush on everyone.",
+      "description": "Three optional components turned up. The style ships five pairs of glasses and four beards that most seeds never reach.",
+      "options": {
+        "glassesProbability": 100,
+        "beardProbability": 100,
+        "cheeksProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Head and torso, legs cropped away.",
+      "description": "The full figure is small at avatar sizes and its identity is in the face. This crops to the top two thirds and keeps the hair.",
+      "options": {
+        "scale": 1.25
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}

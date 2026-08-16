@@ -1,0 +1,97 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Three browns for the quilt.",
+      "description": "The three fabrics take a warm ladder and the paper goes tan, which reads like a quilt photographed decades ago.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "fabricAColor": ["8a6a48"],
+        "fabricBColor": ["6b4f35"],
+        "fabricCColor": ["a3855f"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Three greys, no hue at all.",
+      "description": "The block geometry carries the picture on its own, which makes this style one of the few where a greyscale set loses almost nothing.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "fabricAColor": ["5e5e62"],
+        "fabricBColor": ["343437"],
+        "fabricCColor": ["8c8c90"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Three steps of one indigo.",
+      "description": "Background and all three fabrics take the same hue at different lightnesses.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "fabricAColor": ["9aa2d2"],
+        "fabricBColor": ["3d4272"],
+        "fabricCColor": ["6a71a8"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty fabrics on unbleached cloth.",
+      "description": "The style ships strong reds, greens and golds. This trades them for dusty tones, which moves the quilt from folk art towards linen.",
+      "options": {
+        "backgroundColor": ["e8e4dc"],
+        "fabricAColor": ["9c6b58", "b98b73"],
+        "fabricBColor": ["6b705c", "7c9082"],
+        "fabricCColor": ["a5a58d", "8e9aaf"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Acid fabrics on near black.",
+      "description": "The other direction on the same lever: colors past anything the style ships, on a dark ground so the quilt reads as lit.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "fabricAColor": ["ff2e88", "ff6a00"],
+        "fabricBColor": ["00e5ff", "7cff00"],
+        "fabricCColor": ["ffe600", "b400ff"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Soft fabrics throughout.",
+      "description": "The whole quilt drops to pastels, which suits a nursery or an onboarding screen better than the default folk palette.",
+      "options": {
+        "backgroundColor": ["fdf6ec"],
+        "fabricAColor": ["ffc9d6", "ffd9b0"],
+        "fabricBColor": ["bfe3d0", "b8d8f0"],
+        "fabricCColor": ["ffeaa8", "e0d4f5"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Primary colors, no shading.",
+      "description": "Three flat primaries and nothing between them. The block geometry is strong enough to carry a palette this blunt.",
+      "options": {
+        "backgroundColor": ["fdf6ec"],
+        "fabricAColor": ["e63946"],
+        "fabricBColor": ["1d3557"],
+        "fabricCColor": ["f4a261"]
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on a couple of blocks.",
+      "description": "Uses scale rather than color. Two large blocks read better at avatar size than a full quilt of small ones.",
+      "options": {
+        "scale": 1.6
+      }
+    }
+  ]
+}

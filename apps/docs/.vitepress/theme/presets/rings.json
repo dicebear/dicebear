@@ -1,0 +1,97 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Warm brown rings on tanned paper.",
+      "description": "The style has a single color group for all five rings, so one palette change carries the whole picture.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "ringColor": ["8a6a48", "6b4f35", "a3855f", "54402c"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Four steps of grey.",
+      "description": "No hue anywhere. Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "ringColor": ["343437", "5e5e62", "8c8c90", "b6b6b9"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One indigo on a pale indigo ground.",
+      "description": "Background and rings take the same hue at two lightnesses. The most restrained this style gets, and the easiest to place next to an existing brand color.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "ringColor": ["3d4272"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty rings instead of the full spectrum.",
+      "description": "The style ships sixteen colors evenly spaced around the wheel, which is a lot of rainbow. This trades them for six dusty tones that sit closer together.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "ringColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Acid rings on near black.",
+      "description": "The other direction on the same lever: six colors past anything the style ships, on a dark background so they read as lit.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "ringColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Soft backgrounds, the rings untouched.",
+      "description": "Changes only what the rings sit on. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "The loud counterpart to Pastel Wall, strong enough that the avatar holds its own against a busy page.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the shapes.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "Black on nothing, every accessory switched off.",
+      "description": "The style stripped to its drawing. No background at all, so the avatar sits on whatever your page is, and no glasses, earrings, freckles, beards or hair clips to distract from the line.",
+      "options": {
+        "backgroundColor": [],
+        "beardProbability": 0,
+        "earringsProbability": 0,
+        "frecklesProbability": 0,
+        "glassesProbability": 0,
+        "hairAccessoriesProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Brown ink on tanned paper, contour included.",
+      "description": "Warm all the way through. Lorelei used to paint its head and ear contours black where no option reached them, so a sepia set kept a hard black edge; `outlineColor` closes that gap and the whole drawing goes brown.",
+      "options": {
+        "backgroundColor": ["d6bd97"],
+        "skinColor": ["e9d3b0"],
+        "hairColor": ["4a3526"],
+        "outlineColor": ["4a3526"],
+        "eyebrowsColor": ["4a3526"],
+        "eyesColor": ["4a3526"],
+        "noseColor": ["4a3526"],
+        "mouthColor": ["4a3526"],
+        "frecklesColor": ["4a3526"],
+        "glassesColor": ["4a3526"],
+        "earringsColor": ["4a3526"],
+        "hairAccessoriesColor": ["4a3526"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "One grey for the whole drawing.",
+      "description": "The quietest set here. Nothing competes with the page around it, which suits an admin table or a comment thread where the avatar is a marker rather than a picture.",
+      "options": {
+        "backgroundColor": ["f0f0f2"],
+        "skinColor": ["e4e4e6"],
+        "hairColor": ["3f4247"],
+        "outlineColor": ["3f4247"],
+        "eyebrowsColor": ["3f4247"],
+        "eyesColor": ["3f4247"],
+        "noseColor": ["3f4247"],
+        "mouthColor": ["3f4247"],
+        "frecklesColor": ["3f4247"],
+        "glassesColor": ["3f4247"],
+        "earringsColor": ["3f4247"],
+        "hairAccessoriesColor": ["3f4247"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Two colors and nothing else, deep teal on mint.",
+      "description": "One teal for every line and the head contour, one pale mint for the face, and that is the entire palette. Restrictive on purpose: two colors is the point at which a set of avatars stops looking like a collection of people and starts looking like an icon set.",
+      "options": {
+        "backgroundColor": ["e8f3f0"],
+        "skinColor": ["cfe4de"],
+        "hairColor": ["0f3d38"],
+        "outlineColor": ["0f3d38"],
+        "eyebrowsColor": ["0f3d38"],
+        "eyesColor": ["0f3d38"],
+        "noseColor": ["0f3d38"],
+        "mouthColor": ["0f3d38"],
+        "frecklesColor": ["0f3d38"],
+        "glassesColor": ["0f3d38"],
+        "earringsColor": ["0f3d38"],
+        "hairAccessoriesColor": ["0f3d38"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Hair in six dusty tones, black line kept.",
+      "description": "Lorelei draws hair as a filled shape, which makes it the one area with real surface. Six dusty tones there, and the linework left black, gives the style color without turning it into a cartoon.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "skinColor": ["fdfbf7"],
+        "hairColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Hair at full saturation on near black.",
+      "description": "The other direction: six hair colors past anything the style ships, on a dark background, with the face and linework pale so the hair is what carries the color.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "skinColor": ["f2f2f4"],
+        "outlineColor": ["101216"],
+        "hairColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "eyebrowsColor": ["101216"],
+        "eyesColor": ["101216"],
+        "noseColor": ["101216"],
+        "mouthColor": ["101216"],
+        "frecklesColor": ["101216"],
+        "glassesColor": ["101216"],
+        "earringsColor": ["101216"],
+        "hairAccessoriesColor": ["101216"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft backgrounds, the drawing untouched.",
+      "description": "Changes nothing about the people, only what they stand in front of. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Eight backgrounds, eight hair colors, no restraint.",
+      "description": "The loudest set here, and the one where two avatars next to each other are least likely to look related. Everything still comes from the seed, so it stays deterministic, it just does not stay quiet.",
+      "options": {
+        "backgroundColor": [
+          "ff5d8f",
+          "ffb703",
+          "43aa8b",
+          "4d96ff",
+          "b57bff",
+          "ff8c42",
+          "2ec4b6",
+          "f15bb5"
+        ],
+        "skinColor": ["fffdfb"],
+        "hairColor": [
+          "1b1b3a",
+          "d90429",
+          "0466c8",
+          "007f5f",
+          "7b2cbf",
+          "f77f00",
+          "006d77",
+          "9d0208"
+        ],
+        "eyebrowsColor": ["1b1b3a"],
+        "eyesColor": ["1b1b3a"],
+        "noseColor": ["1b1b3a"],
+        "mouthColor": ["1b1b3a"],
+        "frecklesColor": ["1b1b3a"],
+        "glassesColor": ["1b1b3a"],
+        "earringsColor": ["1b1b3a"],
+        "hairAccessoriesColor": ["1b1b3a"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Pale face and violet hair on near black.",
+      "description": "For dark interfaces. The head stays light so the drawing keeps its detail, and only the hair carries color. The linework goes deep indigo rather than black, which stops it looking like a hole in the face.",
+      "options": {
+        "backgroundColor": ["121219"],
+        "skinColor": ["e9e6f5"],
+        "hairColor": ["8b6cff"],
+        "eyebrowsColor": ["3a3350"],
+        "eyesColor": ["2a2440"],
+        "noseColor": ["3a3350"],
+        "mouthColor": ["6b4bd6"],
+        "frecklesColor": ["3a3350"],
+        "glassesColor": ["2a2440"],
+        "earringsColor": ["8b6cff"],
+        "hairAccessoriesColor": ["8b6cff"],
+        "outlineColor": ["3a3350"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind, the drawing untouched.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "sunset-fade",
+      "name": "Sunset Fade",
+      "summary": "The hair itself is a gradient, top to bottom.",
+      "description": "The same gradient options aimed at a component instead of the background: two hair colors, a linear fill and a fixed angle. Which color ends up on top is still the seed's choice, so the fade runs both ways across a set.",
+      "options": {
+        "backgroundColor": ["fff1e0"],
+        "skinColor": ["fffaf4"],
+        "hairColor": ["ff8a4c", "b0468c"],
+        "hairColorFill": "linear",
+        "hairColorAngle": 90,
+        "eyebrowsColor": ["7a3a63"],
+        "eyesColor": ["3b2233"],
+        "noseColor": ["7a3a63"],
+        "mouthColor": ["b0468c"],
+        "frecklesColor": ["b0468c"],
+        "glassesColor": ["3b2233"],
+        "earringsColor": ["b0468c"],
+        "hairAccessoriesColor": ["ff8a4c"],
+        "outlineColor": ["3b2233"]
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face, for small avatars.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, the default framing spends most of it on empty shoulders, and cropping in buys the detail back.",
+      "options": {
+        "backgroundColor": ["f1ece4"],
+        "scale": 1.15,
+        "skinColor": ["fffdf9"],
+        "hairColor": ["2f2a24"],
+        "eyebrowsColor": ["2f2a24"],
+        "eyesColor": ["2f2a24"],
+        "noseColor": ["2f2a24"],
+        "mouthColor": ["2f2a24"],
+        "frecklesColor": ["2f2a24"],
+        "glassesColor": ["2f2a24"],
+        "earringsColor": ["2f2a24"],
+        "hairAccessoriesColor": ["2f2a24"],
+        "outlineColor": ["2f2a24"]
+      }
+    }
+  ]
+}

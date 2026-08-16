@@ -1,0 +1,158 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No beard, no hair behind the shoulders.",
+      "description": "Both components appear on half the avatars by default. Off, the silhouette tightens to the head and the shirt, which reads more evenly down a list.",
+      "options": {
+        "beardProbability": 0,
+        "rearHairProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Skin, hair and shirt on one brown ramp.",
+      "description": "Two mouths are excluded: they open onto a bright tongue that is painted into the artwork rather than taking a color option. One thing stays warm through all of this: the iris is painted a dark brown that no option reaches, so each eye keeps a small colored dot.",
+      "options": {
+        "backgroundColor": ["ede2ce"],
+        "skinColor": ["d9bd94", "c4a377", "a8865a", "8a6a43", "e3cdb0"],
+        "hairColor": ["3a2916", "4a3018", "5c4223", "7d6038", "a08256"],
+        "clothesColor": ["8a6a3c", "6d5031", "a88b60", "5a4227", "3a2916"],
+        "mouthVariant": ["angry", "sad", "smile"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on skin, hair or shirt.",
+      "description": "The style outlines everything in a dark line and shades with flat blocks, both of which survive losing color. Same mouth exclusion as Sepia. One thing stays warm through all of this: the iris is painted a dark brown that no option reaches, so each eye keeps a small colored dot.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "skinColor": ["d4d4d8", "b4b4bb", "94949c", "76767e", "e4e4e7"],
+        "hairColor": ["18181b", "3f3f46", "52525b", "71717a", "a1a1aa"],
+        "clothesColor": ["3f3f46", "52525b", "71717a", "27272a", "e4e4e7"],
+        "mouthVariant": ["angry", "sad", "smile"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One blue, three steps of it.",
+      "description": "Skin, hair and shirt each take one step of the same hue. What separates two avatars is the haircut, the brows and the mouth. One thing stays warm through all of this: the iris is painted a dark brown that no option reaches, so each eye keeps a small colored dot.",
+      "options": {
+        "backgroundColor": ["e6ecef"],
+        "skinColor": ["9ec9e8"],
+        "hairColor": ["1d3d52"],
+        "clothesColor": ["37718e"],
+        "mouthVariant": ["angry", "sad", "smile"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty shirts, skin and hair untouched.",
+      "description": "The style ships ten shirt colors, most of them fully saturated. These are the same garments in tones that sit quietly next to each other.",
+      "options": {
+        "clothesColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58",
+          "8a7f6d"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Shirts past anything the style ships.",
+      "description": "The same group the other way, and only that group. The hair keeps its natural palette, because loud hair over a loud shirt leaves nothing for the eye to land on.",
+      "options": {
+        "clothesColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "A soft ground behind the head.",
+      "description": "The style ships no background at all, so an avatar sits on whatever is behind it. Six pale colors give it a tile of its own.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Six saturated grounds.",
+      "description": "Everything in this style is outlined, which is what lets it sit on a saturated ground without the edges dissolving.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, pale shirts.",
+      "description": "For dark interfaces. The shirt palette moves to light tones, because the style's default charcoal and navy shirts merge into a dark tile.",
+      "options": {
+        "backgroundColor": ["16161a"],
+        "clothesColor": ["e8e9e6", "d4d4d8", "eab308", "f97316", "9ca3af"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the shoulders.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. Both stops stay light so the dark outline around the head keeps its edge.",
+      "options": {
+        "backgroundColor": ["ffd5a8", "ff9db4"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Beard and long hair on everyone.",
+      "description": "Both optional components turned up. The style ships five beards and four back-hair shapes that half the seeds never reach.",
+      "options": {
+        "beardProbability": 100,
+        "rearHairProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "The head scaled up, shoulders cropped.",
+      "description": "The style frames head and shoulders, and the shoulders cost size at small dimensions. This trades them for a face that carries at 32 pixels.",
+      "options": {
+        "scale": 1.2
+      }
+    }
+  ]
+}

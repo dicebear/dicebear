@@ -1,0 +1,128 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No stubble, just hair and expression.",
+      "description": "Facial hair appears on one avatar in five by default. Switching it off leaves the two things that carry the style: the haircut and the mood.",
+      "options": {
+        "facialHairProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Brown on tan, skin included.",
+      "description": "The skin palette moves with the rest here. A monochrome set with two natural skin tones in it would not read as monochrome at all.",
+      "options": {
+        "backgroundColor": ["e7d5b8"],
+        "hairColor": ["3d2a17", "5c4223", "8a6a3c", "b0946a"],
+        "skinColor": ["c39a6b", "a87f52"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue anywhere on the avatar.",
+      "description": "For interfaces where color already means something else, or for a print stylesheet. The heavy black linework the style draws with survives the treatment better than most.",
+      "options": {
+        "backgroundColor": ["e4e4e7"],
+        "hairColor": ["18181b", "3f3f46", "71717a", "a1a1aa"],
+        "skinColor": ["c9c9cf", "9c9ca4"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Three steps of one teal.",
+      "description": "Dark ground, mid hair, pale face. The hair needs its own step here: the style draws it as a flat shape with no outline, so hair the color of the background loses the haircut entirely.",
+      "options": {
+        "backgroundColor": ["0d3b3f"],
+        "hairColor": ["2f8a86"],
+        "skinColor": ["cfeceb"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty hair colors instead of primaries.",
+      "description": "The style ships black, white and three primaries for hair. This trades them for tones that sit quietly next to each other, which suits a dense list where five primaries would fight.",
+      "options": {
+        "backgroundColor": ["dcd7cc"],
+        "hairColor": ["4a4238", "7b6a58", "a3937c", "6b7361", "8c6f63"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Hair past anything the style ships.",
+      "description": "The same lever pulled the other way. The background stays pale so the hair is the only loud thing in the frame.",
+      "options": {
+        "backgroundColor": ["f4f4f5"],
+        "hairColor": ["ff2e88", "00e5ff", "7cff00", "ffe600", "b400ff"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Soft backgrounds, the style's own hair.",
+      "description": "The three backgrounds the style ships are fully saturated. These six are not, which lets the black linework do the work.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Six backgrounds, loud on purpose.",
+      "description": "The style is already flat and graphic, so it takes a loud ground without turning to mush.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, pale hair.",
+      "description": "For dark interfaces. The hair palette moves to light tones so the silhouette still separates from the background.",
+      "options": {
+        "backgroundColor": ["16161a"],
+        "hairColor": ["f4f4f5", "d4d4d8", "fcd34d", "a5b4fc"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the head.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffb37a", "ff7a9c"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "The head scaled up in the frame.",
+      "description": "The style leaves a wide margin around the head, which reads as small at avatar sizes. This crops in far enough to matter and still keeps the ears.",
+      "options": {
+        "scale": 1.25
+      }
+    }
+  ]
+}

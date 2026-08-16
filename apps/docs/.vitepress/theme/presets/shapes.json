@@ -1,0 +1,144 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Four steps of warm brown.",
+      "description": "The style requires each shape to differ from the background and from the shapes behind it, so a monochrome set here is a four-step ladder rather than one color repeated.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "shape1Color": ["b08e66"],
+        "shape2Color": ["7d6047"],
+        "shape3Color": ["4a3526"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Four steps of grey.",
+      "description": "The same four-step ladder without any hue. Useful for a print stylesheet or anywhere color would carry meaning it should not.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "shape1Color": ["b6b6b9"],
+        "shape2Color": ["7c7c80"],
+        "shape3Color": ["343437"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Four steps of one indigo.",
+      "description": "Background and all three shapes take the same hue at four lightnesses, which is as close to two colors as the style's own constraints allow.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "shape1Color": ["9aa2d2"],
+        "shape2Color": ["6a71a8"],
+        "shape3Color": ["23264a"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty tones instead of the teal and orange.",
+      "description": "The style ships one five-color palette shared by the background and all three shapes. This swaps it for dusty tones, which keeps the composition and drops the poster energy.",
+      "options": {
+        "backgroundColor": ["e8e4dc"],
+        "shape1Color": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "shape2Color": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "shape3Color": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Acid shapes on near black.",
+      "description": "The other direction on the same lever: six colors past anything the style ships, on a dark background so they read as lit rather than printed.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "shape1Color": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "shape2Color": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "shape3Color": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Soft backgrounds, the shapes untouched.",
+      "description": "Changes only what the shapes sit on. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "The loud counterpart to Pastel Wall, strong enough that the avatar holds its own against a busy page.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the shapes.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed, so a set of these drifts rather than sits still. The animation respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}

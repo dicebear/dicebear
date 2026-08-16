@@ -1,0 +1,148 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "Black on nothing, no beard or moustache.",
+      "description": "The style stripped to its drawing. No background at all, so the avatar sits on whatever your page is, and the two facial hair components switched off.",
+      "options": {
+        "backgroundColor": [],
+        "beardProbability": 0,
+        "mustacheProbability": 0,
+        "topColor": ["000000"]
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Brown ink on tanned paper.",
+      "description": "Warm all the way through, face included. Croodles draws with a single pen, so recoloring the ink recolors the whole portrait at once.",
+      "options": {
+        "backgroundColor": ["dfc9a3"],
+        "baseColor": ["f2e4cc"],
+        "inkColor": ["5a3d28"],
+        "topColor": ["5a3d28"],
+        "facialHairColor": ["5a3d28"],
+        "glassesColor": ["5a3d28"],
+        "eyepatchColor": ["5a3d28"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "One grey for the whole drawing.",
+      "description": "The quietest set here. Nothing competes with the page around it, which suits an admin table or a comment thread where the avatar is a marker rather than a picture.",
+      "options": {
+        "backgroundColor": ["ececed"],
+        "baseColor": ["fafafa"],
+        "inkColor": ["4a4d52"],
+        "topColor": ["4a4d52"],
+        "facialHairColor": ["4a4d52"],
+        "glassesColor": ["4a4d52"],
+        "eyepatchColor": ["4a4d52"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Deep teal on mint, two colors total.",
+      "description": "One teal for every line and one pale mint for the face, and that is the entire palette. Restrictive on purpose: two colors is the point at which a set of avatars stops looking like a collection of people and starts looking like an icon set.",
+      "options": {
+        "backgroundColor": ["dff0eb"],
+        "baseColor": ["eefaf6"],
+        "inkColor": ["0f3d38"],
+        "topColor": ["0f3d38"],
+        "facialHairColor": ["0f3d38"],
+        "glassesColor": ["0f3d38"],
+        "eyepatchColor": ["0f3d38"]
+      }
+    },
+    {
+      "id": "inverted",
+      "name": "Inverted",
+      "summary": "White line on black, like chalk.",
+      "description": "Swaps line and face. This works here because the face fill is a color group of its own, so it can go dark with the background instead of leaving a bright shape behind pale outlines.",
+      "options": {
+        "backgroundColor": ["111113"],
+        "baseColor": ["1c1c20"],
+        "inkColor": ["f2f2f4"],
+        "topColor": ["f2f2f4"],
+        "facialHairColor": ["f2f2f4"],
+        "glassesColor": ["f2f2f4"],
+        "eyepatchColor": ["f2f2f4"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Hair in six dusty tones instead of six bright ones.",
+      "description": "Croodles ships black plus five saturated hair colors. This trades them for dusty greens, clays and blues, which keeps the drawing playful without the primary-color energy.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "topColor": ["6b705c", "a5a58d", "b98b73", "7c9082", "8e9aaf", "9c6b58"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Hair at full saturation on near black.",
+      "description": "The other direction: six hair colors past anything the style ships, on a dark background. The linework stays black, so the hair is the only thing that glows.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "baseColor": ["f2f2f4"],
+        "topColor": ["ff2e88", "00e5ff", "ffe600", "7cff00", "ff6a00", "b400ff"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft backgrounds, the drawing untouched.",
+      "description": "Changes nothing about the people, only what they stand in front of. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds and the style's own bright hair.",
+      "description": "Croodles ships five bright hair colors next to black. This keeps only those and puts a strong background behind them.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"],
+        "topColor": ["699bf7", "0fa958", "9747ff", "f24e1e", "ffc700"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind, the drawing untouched.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Beards and moustaches turned up.",
+      "description": "Both facial hair components sit at ten percent, so a small set shows them on nobody. This raises them, which is what you want when showing the style off rather than filling a user list.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "beardProbability": 45,
+        "mustacheProbability": 40
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face, for small avatars.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, the default framing leaves a lot of air around the head, and cropping in buys the detail back.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "scale": 1.2
+      }
+    }
+  ]
+}

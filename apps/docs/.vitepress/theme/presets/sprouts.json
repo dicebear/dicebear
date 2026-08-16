@@ -1,0 +1,193 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "Plain pot, no pattern and no blush.",
+      "description": "Two optional components off at once. What is left is the plant, the pot and the face, which is the whole idea of the style at its simplest.",
+      "options": {
+        "patternProbability": 0,
+        "cheeksProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "A dried-out plant in a terracotta pot.",
+      "description": "Three mouth variants are excluded. They show a pink tongue painted into the artwork rather than taking a color option, and one pink tongue undoes the whole set.",
+      "options": {
+        "backgroundColor": ["4a3520"],
+        "potColor": ["c9a678", "b08d5f", "d9bd94"],
+        "plantColor": ["8f6d43", "a0805a", "7a5c37"],
+        "bloomColor": ["c4a377"],
+        "inkColor": ["2b1d10"],
+        "mouthVariant": [
+          "smile",
+          "tinySmile",
+          "ooh",
+          "line",
+          "catMouth",
+          "frown",
+          "wavy",
+          "tooth"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue on plant, pot or bloom.",
+      "description": "The style leans on flat shapes and a hard drop shadow, both of which survive losing color. Same mouth exclusion as Sepia.",
+      "options": {
+        "backgroundColor": ["3f3f46"],
+        "potColor": ["e4e4e7", "d4d4d8", "c1c1c7"],
+        "plantColor": ["8a8a92", "a1a1aa", "71717a"],
+        "bloomColor": ["b4b4bb"],
+        "inkColor": ["18181b"],
+        "mouthVariant": [
+          "smile",
+          "tinySmile",
+          "ooh",
+          "line",
+          "catMouth",
+          "frown",
+          "wavy",
+          "tooth"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One sage green, one cream pot.",
+      "description": "Two colors and a shadow. Only the species of plant and the expression change from avatar to avatar.",
+      "options": {
+        "backgroundColor": ["16302a"],
+        "potColor": ["e8e4d3"],
+        "plantColor": ["6f9c7a"],
+        "bloomColor": ["e8e4d3"],
+        "inkColor": ["0d1c18"],
+        "mouthVariant": [
+          "smile",
+          "tinySmile",
+          "ooh",
+          "line",
+          "catMouth",
+          "frown",
+          "wavy",
+          "tooth"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "A dusty nursery.",
+      "description": "The style ships bright pots and eight greens at full brightness. These are the same plants in tones that hold still, which suits a shelf of thirty of them. The tongue mouths are excluded, the same ones the monochrome presets drop, because their pink is painted in rather than picked.",
+      "options": {
+        "mouthVariant": [
+          "smile",
+          "tinySmile",
+          "ooh",
+          "line",
+          "catMouth",
+          "frown",
+          "wavy",
+          "tooth"
+        ],
+        "backgroundColor": ["3a3a3f", "41413a", "3a4140", "3f3a41"],
+        "potColor": [
+          "a5a58d",
+          "b98b73",
+          "8e9aaf",
+          "9c8a94",
+          "b0a58c",
+          "94a3ad"
+        ],
+        "plantColor": ["7c9082", "6b7a5e", "8a9c7a", "5f7263"],
+        "bloomColor": ["c4a898", "b0938c", "a89b7c"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Neon pots, plants left green.",
+      "description": "Only one layer goes loud. Neon pots under neon foliage would cancel each other out, so the plant keeps the palette it was born with.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "potColor": ["ff2e88", "00e5ff", "7cff00", "ffe600", "ff6a00", "b400ff"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Pale ground under the pot.",
+      "description": "Every background the style ships is dark and saturated. Pale ones turn the same plant from a spotlit specimen into something sitting on a windowsill.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Six grounds, no restraint.",
+      "description": "Louder than the shipped set and pushed toward the primaries. The pot and plant are both pale enough to hold their edge against it.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, plants unchanged.",
+      "description": "For dark interfaces. Both the pot palette and the greens are already light, so nothing else has to move for the plant to stay visible.",
+      "options": {
+        "backgroundColor": ["16161a"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the pot.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ff9db4", "ffd5a8"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Every pot patterned, every face blushing.",
+      "description": "Both optional components turned all the way up. The style ships six pot patterns that most seeds never reach at the default probability.",
+      "options": {
+        "patternProbability": 100,
+        "cheeksProbability": 100
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No background, no surface texture.",
+      "description": "The style stripped back: no background, so the robot sits on whatever your page is, and the texture overlay switched off for a flat, clean shell.",
+      "options": {
+        "backgroundColor": [],
+        "textureProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "A brass robot on tanned paper.",
+      "description": "Bottts has one color group for the whole shell, so a warm palette turns the machine into brass. The texture stays on, which reads as patina here. Five eye sets, one mouth and three antennas carry a color painted into the artwork rather than exposed as a group, so those variants drop out. A single blue LED undoes the whole treatment.",
+      "options": {
+        "backgroundColor": ["dfc9a3"],
+        "baseColor": ["8a6a3f", "a3814f", "6f5433", "b59463"],
+        "eyesVariant": [
+          "bulging",
+          "dizzy",
+          "glow",
+          "happy",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "roundFrame02",
+          "sensor"
+        ],
+        "mouthVariant": [
+          "bite",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ],
+        "topVariant": [
+          "bulb01",
+          "glowingBulb01",
+          "glowingBulb02",
+          "horns",
+          "lights",
+          "pyramid",
+          "radar"
+        ],
+        "sidesVariant": [
+          "antenna02",
+          "cables01",
+          "cables02",
+          "round",
+          "square",
+          "squareAssymetric"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Bare metal, four steps of grey.",
+      "description": "The shell drops to grey, which suits the subject better than most styles: a robot in steel is not a compromise. Useful anywhere color would carry meaning it should not. Five eye sets, one mouth and three antennas carry a color painted into the artwork rather than exposed as a group, so those variants drop out. A single blue LED undoes the whole treatment.",
+      "options": {
+        "backgroundColor": ["ececed"],
+        "baseColor": ["4a4d52", "6b6f75", "8d9197", "b2b6bc"],
+        "eyesVariant": [
+          "bulging",
+          "dizzy",
+          "glow",
+          "happy",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "roundFrame02",
+          "sensor"
+        ],
+        "mouthVariant": [
+          "bite",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ],
+        "topVariant": [
+          "bulb01",
+          "glowingBulb01",
+          "glowingBulb02",
+          "horns",
+          "lights",
+          "pyramid",
+          "radar"
+        ],
+        "sidesVariant": [
+          "antenna02",
+          "cables01",
+          "cables02",
+          "round",
+          "square",
+          "squareAssymetric"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One indigo shell on a pale indigo wall.",
+      "description": "Background and shell take the same hue at two lightnesses. The most restrained this style gets, and the easiest to place next to an existing brand color. Five eye sets, one mouth and three antennas carry a color painted into the artwork rather than exposed as a group, so those variants drop out. A single blue LED undoes the whole treatment.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "baseColor": ["3d4272"],
+        "eyesVariant": [
+          "bulging",
+          "dizzy",
+          "glow",
+          "happy",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "roundFrame02",
+          "sensor"
+        ],
+        "mouthVariant": [
+          "bite",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ],
+        "topVariant": [
+          "bulb01",
+          "glowingBulb01",
+          "glowingBulb02",
+          "horns",
+          "lights",
+          "pyramid",
+          "radar"
+        ],
+        "sidesVariant": [
+          "antenna02",
+          "cables01",
+          "cables02",
+          "round",
+          "square",
+          "squareAssymetric"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "An earthy shell instead of the bright one.",
+      "description": "The style ships 22 saturated shell colors. This swaps them for six earthy ones, which turns the robots from toys into equipment. Works well in dense tables where 22 bright hues would fight each other. The variants whose LEDs and hearts are painted in a fixed color drop out too, since a red heart on a dusty shell is exactly what this preset is trying to avoid.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "baseColor": [
+          "8a8f7a",
+          "a89078",
+          "7d8a94",
+          "9a8b9e",
+          "6f7f76",
+          "b0a08a"
+        ],
+        "eyesVariant": [
+          "bulging",
+          "dizzy",
+          "glow",
+          "happy",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "roundFrame02",
+          "sensor"
+        ],
+        "mouthVariant": [
+          "bite",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ],
+        "topVariant": [
+          "bulb01",
+          "glowingBulb01",
+          "glowingBulb02",
+          "horns",
+          "lights",
+          "pyramid",
+          "radar"
+        ],
+        "sidesVariant": [
+          "antenna02",
+          "cables01",
+          "cables02",
+          "round",
+          "square",
+          "squareAssymetric"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Acid shells on near black.",
+      "description": "The other direction: six colors pushed past anything in the style's own palette, on a dark background so they read as lit rather than painted.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "baseColor": [
+          "00ff9d",
+          "ff007a",
+          "ffe600",
+          "00c8ff",
+          "b400ff",
+          "ff5e00"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft backgrounds, the shell untouched.",
+      "description": "Changes nothing about the robots, only what they stand in front of. The shell keeps all 22 of its colors, so the set stays as varied as the plain style.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds behind a saturated shell.",
+      "description": "The loud counterpart to Pastel Wall. The style already has a bright palette, and a strong background pushes it further rather than calming it down.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black behind, a glowing shell in front.",
+      "description": "For dark interfaces. The shell pool drops to the bright end of the style's own palette so the robot does not disappear into the background.",
+      "options": {
+        "backgroundColor": ["14161a"],
+        "baseColor": ["15a894", "1499da", "7681f5", "ca62bb", "7a9f12"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind, the shell untouched.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Every robot gets the surface texture.",
+      "description": "The texture overlay sits at fifty percent, so half the robots come out flat. This puts it on all of them, which makes a set read as one production run rather than two.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "textureProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face plate, for small avatars.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, the antennas and side parts eat most of the frame, and cropping in buys the face back.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "scale": 1.2
+      }
+    }
+  ]
+}

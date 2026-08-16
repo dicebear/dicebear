@@ -1,0 +1,108 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Brown brush on tanned paper.",
+      "description": "The style is one ink color on one ground, so a sepia treatment is the whole picture at once.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "inkColor": ["4a3526"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Charcoal on light grey.",
+      "description": "The quietest set here. Nothing competes with the page around it.",
+      "options": {
+        "backgroundColor": ["ececed"],
+        "inkColor": ["3b3d42"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Deep teal on mint, two colors total.",
+      "description": "Line Face draws with exactly one ink on one ground, which makes it the one style where a duotone is not an approximation.",
+      "options": {
+        "backgroundColor": ["dff0eb"],
+        "inkColor": ["0f3d38"]
+      }
+    },
+    {
+      "id": "inverted",
+      "name": "Inverted",
+      "summary": "White brush on near black.",
+      "description": "Swaps ink and ground. There is no filled shape to dissolve here, only the stroke, so the inversion is clean.",
+      "options": {
+        "backgroundColor": ["111113"],
+        "inkColor": ["f2f2f4"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Six dusty grounds under the same brush.",
+      "description": "The style ships six warm grounds. This trades them for dusty tones that sit further from cream.",
+      "options": {
+        "backgroundColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "inkColor": ["1f1f22"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Black brush on six acid grounds.",
+      "description": "The other direction: six grounds past anything the style ships, with the brush left black so it survives them.",
+      "options": {
+        "backgroundColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "inkColor": ["101216"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft grounds.",
+      "description": "The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient under the brush.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face.",
+      "description": "Uses scale rather than color. The style leaves a lot of air around the strokes, and cropping in buys it back.",
+      "options": {
+        "backgroundColor": ["f4f1ea"],
+        "scale": 1.3
+      }
+    }
+  ]
+}

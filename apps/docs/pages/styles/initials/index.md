@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -29,6 +30,10 @@ can generate it from any name or seed.
 ## Usage
 
 <StyleUsage styleName="initials" />
+
+## Presets
+
+<StylePresets styleName="initials" :limit="5" />
 
 ## Options
 

@@ -1,19 +1,22 @@
 {
   "name": "@dicebear/docs",
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=22.18.0"
   },
   "type": "module",
   "scripts": {
     "dev": "vitepress dev .",
-    "build": "vitepress build .",
+    "build": "npm run validate:presets && vitepress build .",
     "preview": "vitepress preview .",
+    "validate:presets": "node scripts/validate-presets.ts && node scripts/sync-preset-pages.ts --check",
+    "presets:sync": "node scripts/sync-preset-pages.ts",
+    "presets:sheet": "node scripts/render-presets.ts",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@dicebear/converter": "10.5.0",
     "@dicebear/core": "10.5.0",
-    "@dicebear/styles": "^10.4.0",
+    "@dicebear/styles": "^10.5.0",
     "@fontsource-variable/inter": "^5.2.8",
     "@lucide/vue": "^1.7.0",
     "@primeuix/themes": "^2.0.3",

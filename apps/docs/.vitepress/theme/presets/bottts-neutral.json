@@ -1,0 +1,195 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No surface texture, flat shell.",
+      "description": "The style stripped back: the texture overlay switched off for a flat, clean face plate.",
+      "options": {
+        "textureProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "A brass robot on tanned metal.",
+      "description": "The whole robot is drawn on the background here, so one palette change carries the picture. Seven eye sets and one mouth carry a color painted into the artwork rather than exposed as a group, so those variants drop out.",
+      "options": {
+        "backgroundColor": ["8a6a3f", "a3814f", "6f5433", "b59463"],
+        "eyesVariant": [
+          "dizzy",
+          "glow",
+          "happy",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "sensor"
+        ],
+        "mouthVariant": [
+          "bite",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Bare metal, four steps of grey.",
+      "description": "Grey suits the subject better than most styles: a robot in steel is not a compromise. Seven eye sets and one mouth carry a color painted into the artwork rather than exposed as a group, so those variants drop out.",
+      "options": {
+        "backgroundColor": ["4a4d52", "6b6f75", "8d9197", "b2b6bc"],
+        "eyesVariant": [
+          "dizzy",
+          "glow",
+          "happy",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "sensor"
+        ],
+        "mouthVariant": [
+          "bite",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One indigo for the whole face.",
+      "description": "A single hue, which is the most restrained this style gets and the easiest to place next to an existing brand color. Seven eye sets and one mouth carry a color painted into the artwork rather than exposed as a group, so those variants drop out.",
+      "options": {
+        "backgroundColor": ["3d4272"],
+        "eyesVariant": [
+          "dizzy",
+          "glow",
+          "happy",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "sensor"
+        ],
+        "mouthVariant": [
+          "bite",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "An earthy shell instead of the bright one.",
+      "description": "The style ships 22 saturated colors. Six earthy ones turn the robots from toys into equipment. Seven eye sets and one mouth carry a color painted into the artwork rather than exposed as a group, so those variants drop out.",
+      "options": {
+        "backgroundColor": [
+          "8a8f7a",
+          "a89078",
+          "7d8a94",
+          "9a8b9e",
+          "6f7f76",
+          "b0a08a"
+        ],
+        "eyesVariant": [
+          "dizzy",
+          "glow",
+          "happy",
+          "robocop",
+          "round",
+          "roundFrame01",
+          "sensor"
+        ],
+        "mouthVariant": [
+          "bite",
+          "grill01",
+          "grill02",
+          "grill03",
+          "smile01",
+          "smile02",
+          "square01",
+          "square02"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Acid shells at full saturation.",
+      "description": "The other direction: six colors past anything the style ships. The LEDs and hearts stay, because loud is the point here.",
+      "options": {
+        "backgroundColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft shells.",
+      "description": "The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Five saturated shells.",
+      "description": "The loud counterpart to Pastel Wall, strong enough that the avatar holds its own against a busy page.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient across the face plate.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Every robot gets the surface texture.",
+      "description": "The texture overlay sits at fifty percent, so half the robots come out flat. This puts it on all of them, which makes a set read as one production run.",
+      "options": {
+        "textureProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face plate.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, cropping in buys back the eyes and mouth.",
+      "options": {
+        "scale": 1.25
+      }
+    }
+  ]
+}

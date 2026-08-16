@@ -1,0 +1,203 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No blush, just the face and its expression.",
+      "description": "Blush shows up on half the avatars by default. Off, the two things left are the shape of the head and what it is doing with its eyes and mouth.",
+      "options": {
+        "cheeksProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Brown face, brown ground, brown ink.",
+      "description": "Two mouth variants are excluded here. They are drawn with a pink tongue painted straight into the artwork, and no color option reaches it.",
+      "options": {
+        "backgroundColor": ["4a3520"],
+        "faceColor": ["d9bd94", "c4a377", "e3cdb0"],
+        "inkColor": ["2b1d10"],
+        "mouthVariant": [
+          "smile",
+          "wide",
+          "bigSmile",
+          "grin",
+          "cat",
+          "smirk",
+          "gasp",
+          "line",
+          "frown",
+          "wavy",
+          "teeth"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No hue at all, same mouth exclusion.",
+      "description": "The style is built on flat shapes with a soft drop shadow, so it survives losing color better than a line style would.",
+      "options": {
+        "backgroundColor": ["3f3f46"],
+        "faceColor": ["e4e4e7", "d4d4d8", "c1c1c7"],
+        "inkColor": ["18181b"],
+        "mouthVariant": [
+          "smile",
+          "wide",
+          "bigSmile",
+          "grin",
+          "cat",
+          "smirk",
+          "gasp",
+          "line",
+          "frown",
+          "wavy",
+          "teeth"
+        ]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One mint face on one deep green.",
+      "description": "A single face color across a whole set. What is left to tell avatars apart is the head shape and the expression, which in this style is plenty.",
+      "options": {
+        "backgroundColor": ["0d3b2e"],
+        "faceColor": ["6ee7b9"],
+        "inkColor": ["07281e"],
+        "mouthVariant": [
+          "smile",
+          "wide",
+          "bigSmile",
+          "grin",
+          "cat",
+          "smirk",
+          "gasp",
+          "line",
+          "frown",
+          "wavy",
+          "teeth"
+        ]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty faces on a dusty ground.",
+      "description": "The style ships twelve faces at candy brightness. These twelve are the same idea in tones that hold still, for a list where a dozen appear at once. The tongue mouths are excluded, the same ones the monochrome presets drop, because their pink is painted in rather than picked.",
+      "options": {
+        "mouthVariant": [
+          "smile",
+          "wide",
+          "bigSmile",
+          "grin",
+          "cat",
+          "smirk",
+          "gasp",
+          "line",
+          "frown",
+          "wavy",
+          "teeth"
+        ],
+        "backgroundColor": ["3a3a3f", "41413a", "3a4140", "3f3a41"],
+        "faceColor": [
+          "a5a58d",
+          "b98b73",
+          "8e9aaf",
+          "9c8a94",
+          "8fa38f",
+          "b0a58c"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Faces past anything the style ships.",
+      "description": "The same lever the other way. The ground stays near-black so the face is the only lit thing on the tile.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "faceColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Soft ground instead of the deep one.",
+      "description": "Every background the style ships is dark and saturated. These are pale, which turns the same avatar from a spotlight into a sticker.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Six grounds at full strength.",
+      "description": "Louder than the shipped set and pushed toward the primaries. The dark ink around the eyes keeps the face readable on top of it.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near-black ground, pale face.",
+      "description": "For dark interfaces. The face palette stays light rather than inverting, because a dark face loses its eyes and its drop shadow at the same time.",
+      "options": {
+        "backgroundColor": ["16161a"],
+        "faceColor": ["e2e8f0", "a5b4fc", "5eead4", "fcd34d"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the face.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ff7a9c", "ffb37a"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "The face scaled up in the frame.",
+      "description": "The style leaves a generous margin, which costs size at 24 or 32 pixels. This crops in until the face nearly touches the edge and the expression carries.",
+      "options": {
+        "scale": 1.3
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}

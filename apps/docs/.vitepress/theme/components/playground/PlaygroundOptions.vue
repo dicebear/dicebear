@@ -31,6 +31,7 @@ import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundTransformSection from './PlaygroundTransformSection.vue';
 import PlaygroundFontSection from './PlaygroundFontSection.vue';
 import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
+import PlaygroundPresetSelect from './PlaygroundPresetSelect.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 
 type ComponentInfo = {
@@ -62,6 +63,11 @@ const { loadedStyle, descriptor, styleColors, preview } =
   useStyleOptions(avatarStyleName);
 
 provide(componentPreviewKey, preview);
+
+// Set by the picker itself once it knows it has presets to show. The wrapper
+// carries the heading, so it is hidden rather than unmounted: the picker has to
+// stay mounted to answer the question in the first place.
+const hasPresets = ref(false);
 
 const hasFontFamily = computed(() =>
   loadedStyle.value
@@ -299,6 +305,11 @@ const onSeedFocus = (e: FocusEvent) => {
     <div class="pg-options-group">
       <h3 class="pg-options-group-title">Avatar Style</h3>
       <PlaygroundStyleSelect />
+    </div>
+
+    <div v-show="hasPresets" class="pg-options-group">
+      <h3 class="pg-options-group-title">Preset</h3>
+      <PlaygroundPresetSelect v-model:ready="hasPresets" />
     </div>
 
     <div class="pg-options-group">

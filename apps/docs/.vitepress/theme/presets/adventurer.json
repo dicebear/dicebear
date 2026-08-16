@@ -1,0 +1,159 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No background, no extras, nothing added.",
+      "description": "The style with everything switched off: no background, so the avatar sits on whatever your page is, and none of the low-probability extras. The baseline the rest of these presets move away from.",
+      "options": {
+        "backgroundColor": [],
+        "detailsProbability": 0,
+        "earringsProbability": 0,
+        "glassesProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown for skin, hair and paper.",
+      "description": "A real sepia print, which means the skin tone goes with it. Every other preset here leaves skin to the seed; this one cannot, because a color photograph of a face is not sepia. Lips, tongue and throat are warmed to match, so nothing red survives the treatment. One face detail is a pink blush painted into the artwork rather than exposed as a color group, so that variant drops out; the other three follow the ink.",
+      "options": {
+        "backgroundColor": ["e7d7bd"],
+        "skinColor": ["c9a883", "b08e66", "967458"],
+        "hairColor": ["5a3d28", "6b4f35", "7d6047"],
+        "inkColor": ["3a2a1c"],
+        "eyesColor": ["3a2a1c"],
+        "scleraColor": ["f7ecd8"],
+        "lipsColor": ["8a5a44"],
+        "tongueColor": ["a87a5e"],
+        "throatColor": ["6b4230"],
+        "uvulaColor": ["6b4230"],
+        "teethColor": ["f7ecd8"],
+        "detailsVariant": ["birthmark", "freckles", "mustache"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "No color anywhere, skin included.",
+      "description": "Properly grey rather than grey hair on a colored face. Useful for a print stylesheet, a disabled state, or anywhere color would carry meaning it should not. One face detail is a pink blush painted into the artwork rather than exposed as a color group, so that variant drops out; the other three follow the ink.",
+      "options": {
+        "backgroundColor": ["e9e9ec"],
+        "skinColor": ["d6d6d6", "b4b4b4", "8c8c8c", "5e5e5e"],
+        "hairColor": ["1a1a1a", "4a4a4a", "8a8a8a", "c2c2c2"],
+        "inkColor": ["1c1c1c"],
+        "eyesColor": ["1c1c1c"],
+        "scleraColor": ["f2f2f2"],
+        "lipsColor": ["707070"],
+        "tongueColor": ["8a8a8a"],
+        "throatColor": ["4a4a4a"],
+        "uvulaColor": ["4a4a4a"],
+        "teethColor": ["f2f2f2"],
+        "detailsVariant": ["birthmark", "freckles", "mustache"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Three steps of one indigo and nothing else.",
+      "description": "Background, skin and hair take the same hue at three lightnesses, and the mouth follows. As with Sepia, a duotone only works if the face joins in, so the seed loses its say over skin here. One face detail is a pink blush painted into the artwork rather than exposed as a color group, so that variant drops out; the other three follow the ink.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "skinColor": ["8e97cc"],
+        "hairColor": ["2b2f5e"],
+        "inkColor": ["1e2246"],
+        "eyesColor": ["1e2246"],
+        "scleraColor": ["dfe3f5"],
+        "lipsColor": ["4a4f80"],
+        "tongueColor": ["6b73a8"],
+        "throatColor": ["353a6b"],
+        "uvulaColor": ["353a6b"],
+        "teethColor": ["dfe3f5"],
+        "detailsVariant": ["birthmark", "freckles", "mustache"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Hair in six dusty tones, skin left to the seed.",
+      "description": "The style's hair palette runs from black to teal and pink. This replaces it with six dusty tones that sit closer together, so a page full of these reads as one set rather than as a box of crayons.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "hairColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Hair at full saturation on near black.",
+      "description": "The other direction, on the same lever: six hair colors past anything the style ships. The background goes dark so they read as lit, and skin still comes from the seed.",
+      "options": {
+        "backgroundColor": ["16161c"],
+        "hairColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Five soft backgrounds, everything else untouched.",
+      "description": "Changes nothing about the people, only what they stand in front of. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "The loud counterpart to Pastel Wall. Strong enough that the avatar holds its own against a busy page, and the only preset here that will fight with a colorful interface rather than sit inside it.",
+      "options": {
+        "backgroundColor": ["ff8fab", "ffb703", "4cc9a7", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black behind, light hair in front.",
+      "description": "For dark interfaces. The hair pool drops to the pale end so the silhouette does not disappear into the background. The linework stays black on purpose: pale ink inverts the eyes and dissolves the outline against light hair, which looks like a bug rather than a night mode.",
+      "options": {
+        "backgroundColor": ["16161c"],
+        "hairColor": ["e5d7a3", "b9a05f", "afafaf", "85c2c6", "dba3be"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind, everything else untouched.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in on the face, for small avatars.",
+      "description": "Uses scale rather than color. At the size a comment thread gives an avatar, the default framing spends most of it on empty shoulders, and cropping in buys the detail back.",
+      "options": {
+        "backgroundColor": ["f3ede4"],
+        "scale": 1.1
+      }
+    }
+  ]
+}

@@ -48,6 +48,7 @@ import {
   type LicenseBucket,
 } from './theme/config/styleCategories.ts';
 import { usageSnippets } from './theme/config/usageSnippets.ts';
+import type { StylePreset } from './theme/config/presets.ts';
 import { formatLicenseName } from './theme/utils/format.ts';
 import { attributionKind, attributionPrefix } from './theme/utils/license.ts';
 import { capitalCase } from 'change-case';
@@ -406,6 +407,112 @@ async function loadStyle(name: string): Promise<Style> {
   );
 }
 
+const presetsDir = path.join(import.meta.dirname, 'theme', 'presets');
+
+/**
+ * The gallery presets of a style. Read from disk rather than through
+ * theme/config/presets.ts, which discovers its files with `import.meta.glob`
+ * and therefore only works inside the Vite pipeline. Most styles have none
+ * yet, so a missing file is a normal result.
+ *
+ * Only a missing file is. A malformed one throws, because swallowing it would
+ * ship every mirror with the preset sections silently empty, which is exactly
+ * what scripts/validate-presets.ts exists to prevent on the other reader.
+ *
+ * Deliberately uncached. Two pages read each file, and holding the parsed
+ * result would leave the dev server serving the presets from whenever the
+ * process started, which is the staleness `render` below re-reads to avoid.
+ */
+function loadPresets(name: string): Promise<StylePreset[]> {
+  return fs
+    .readFile(path.join(presetsDir, `${name}.json`), 'utf8')
+    .then((raw): StylePreset[] => {
+      const presets = JSON.parse(raw).presets;
+
+      // A file whose top level is not `{ "presets": [...] }` parses fine and
+      // would otherwise pass as a style with no presets, which reads the same
+      // as a style that has none yet.
+      if (!Array.isArray(presets)) {
+        throw new Error(`${name}.json has no "presets" array.`);
+      }
+
+      return presets;
+    })
+    .catch((error: NodeJS.ErrnoException) => {
+      if (error.code === 'ENOENT') {
+        return [];
+      }
+
+      throw error;
+    });
+}
+
+/**
+ * One option per line, but each value compact. A preset sets a dozen color
+ * groups, and JSON.stringify's indentation would put every single hex on a
+ * line of its own.
+ */
+function formatPresetOptions(options: Record<string, unknown>): string {
+  return `{\n${Object.entries(options)
+    .map(([key, value]) => `  ${JSON.stringify(key)}: ${JSON.stringify(value)}`)
+    .join(',\n')}\n}`;
+}
+
+/**
+ * Every preset with its full option set, for the gallery mirror. Presets carry
+ * no API of their own, only ordinary render options, so this prints the set
+ * verbatim and leaves the calling convention to the style page.
+ *
+ * The headings are `##` because the gallery page title is already an `h1`.
+ */
+function renderPresetBlocks(presets: readonly StylePreset[]): string {
+  if (presets.length === 0) {
+    return '';
+  }
+
+  const blocks = presets.map((preset) =>
+    [
+      `## ${preset.name}`,
+      preset.description,
+      fence('json', formatPresetOptions(preset.options)),
+    ].join('\n\n'),
+  );
+
+  return `\n\n${blocks.join('\n\n')}`;
+}
+
+/**
+ * The `## Presets` section of a style page: what presets are, one line each,
+ * and where to get the option sets.
+ *
+ * The sets themselves stay on the gallery mirror. Printing them on both put the
+ * same text into llms-full.txt twice, roughly 177 KB of a one-megabyte file
+ * whose whole point is to spare a model the wading.
+ */
+function renderPresetSummary(
+  name: string,
+  presets: readonly StylePreset[],
+): string {
+  if (presets.length === 0) {
+    return '';
+  }
+
+  const galleryUrl = `${siteUrl(`/styles/${name}/presets/`)}index.md`;
+
+  return `
+
+## Presets
+
+${presets.length} ready-made option sets for this style. Each is a plain set of
+render options: pass it to any of the libraries or send it as HTTP-API query
+parameters. You do not need to install anything for them, and any option a
+preset leaves out keeps varying with the seed.
+
+${presets.map((preset) => `- **${preset.name}:** ${preset.summary}`).join('\n')}
+
+The full option set of each one is at ${galleryUrl}.`;
+}
+
 /**
  * Builds a style page from its definition.
  *
@@ -418,6 +525,7 @@ async function loadStyle(name: string): Promise<Style> {
 async function renderStylePage(name: string, intro: string): Promise<string> {
   const meta = avatarStyles[name];
   const descriptor = new OptionsDescriptor(await loadStyle(name)).toJSON();
+  const presets = await loadPresets(name);
   const license = formatLicenseName(meta.meta?.license?.name);
 
   const facts = [
@@ -451,7 +559,7 @@ ${usageSnippets(name, { major: versions.major, seed: EXAMPLE_SEED })
       .filter((block) => block !== undefined)
       .join('\n\n'),
   )
-  .join('\n\n')}
+  .join('\n\n')}${renderPresetSummary(name, presets)}
 
 ## Options
 
@@ -620,6 +728,7 @@ async function buildPage(
   const { data, body } = splitFrontmatter(source);
 
   const styleName = route.match(/^\/styles\/([^/]+)\/$/)?.[1];
+  const presetsOf = route.match(/^\/styles\/([^/]+)\/presets\/$/)?.[1];
 
   let markdown: string;
 
@@ -630,6 +739,12 @@ async function buildPage(
       styleName,
       renderMarkdown(body.split(/^<[A-Z]/m)[0]),
     );
+  } else if (presetsOf && avatarStyles[presetsOf]) {
+    // Same deal one level down: the page is an intro plus a gallery mount, so
+    // the presets themselves come from the data the gallery reads.
+    markdown =
+      renderMarkdown(body.split(/^<[A-Z]/m)[0]).trimEnd() +
+      renderPresetBlocks(await loadPresets(presetsOf));
   } else if (route === '/licenses/') {
     markdown = renderLicensesPage(renderMarkdown(body.split(/^<[A-Z]/m)[0]));
   } else {
@@ -723,15 +838,17 @@ function renderIndex(pages: readonly LlmsPage[]): string {
       : undefined;
   }).filter((section) => section !== undefined);
 
+  // Two lookups per style below, over every page in the site. Indexed once
+  // instead.
+  const byRoute = new Map(pages.map((page) => [page.route, page]));
+
   const styleSections = categoryOrder
     .map((category) => {
       const items = Object.keys(avatarStyles)
         .filter((name) => getStyleCategory(name) === category)
         .sort()
         .map((name) => {
-          const page = pages.find(
-            (entry) => entry.route === `/styles/${name}/`,
-          );
+          const page = byRoute.get(`/styles/${name}/`);
 
           if (!page) {
             return undefined;
@@ -742,7 +859,14 @@ function renderIndex(pages: readonly LlmsPage[]): string {
             formatLicenseName(avatarStyles[name].meta?.license?.name),
           ].filter(Boolean);
 
-          return `- [${name}](${siteUrl(page.route)}index.md) (${traits.join(', ')}): ${page.summary || page.description}`;
+          // The gallery mirror sits under the style's own route, which neither
+          // this list nor `rest` below would otherwise reach, so it is named
+          // here rather than left served but unlisted.
+          const gallery = byRoute.has(`/styles/${name}/presets/`)
+            ? ` [Presets](${siteUrl(`/styles/${name}/presets/`)}index.md).`
+            : '';
+
+          return `- [${name}](${siteUrl(page.route)}index.md) (${traits.join(', ')}): ${page.summary || page.description}${gallery}`;
         })
         .filter((item) => item !== undefined);
 

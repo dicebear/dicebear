@@ -1,0 +1,149 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Three browns woven on tanned paper.",
+      "description": "The three band colors have to differ from each other, so a monochrome weave is really a three-step ladder. The accent line goes with them.",
+      "options": {
+        "backgroundColor": ["e3d2b4"],
+        "colorAColor": ["8a6a48"],
+        "colorBColor": ["6b4f35"],
+        "colorCColor": ["a3855f"],
+        "lineColor": ["54402c"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Three greys, no hue at all.",
+      "description": "The same three-step ladder without color. The weave structure carries the picture on its own.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "colorAColor": ["5e5e62"],
+        "colorBColor": ["8c8c90"],
+        "colorCColor": ["343437"],
+        "lineColor": ["b6b6b9"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Three steps of one indigo.",
+      "description": "Background and all three bands take the same hue at different lightnesses, which is as close to two colors as the style's own constraints allow.",
+      "options": {
+        "backgroundColor": ["dfe3f5"],
+        "colorAColor": ["9aa2d2"],
+        "colorBColor": ["6a71a8"],
+        "colorCColor": ["3d4272"],
+        "lineColor": ["23264a"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty bands instead of the bright ones.",
+      "description": "The style ships eight saturated band colors. This trades them for dusty tones, which turns the tartan from a beach towel into a wool blanket.",
+      "options": {
+        "backgroundColor": ["ece7de"],
+        "colorAColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "colorBColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "colorCColor": [
+          "6b705c",
+          "a5a58d",
+          "b98b73",
+          "7c9082",
+          "8e9aaf",
+          "9c6b58"
+        ],
+        "lineColor": ["54402c"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Acid bands at full saturation.",
+      "description": "The other direction on the same lever: six colors past anything the style ships.",
+      "options": {
+        "backgroundColor": ["101216"],
+        "colorAColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "colorBColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "colorCColor": [
+          "ff2e88",
+          "00e5ff",
+          "ffe600",
+          "7cff00",
+          "ff6a00",
+          "b400ff"
+        ],
+        "lineColor": ["ffe600"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Soft backgrounds, the weave untouched.",
+      "description": "Changes only what the weave sits on. The lightest way to make a set feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated backgrounds, loud on purpose.",
+      "description": "The loud counterpart to Pastel Wall, strong enough that the avatar holds its own against a busy page.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient under the weave.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in, so fewer bands fill the frame.",
+      "description": "Uses scale rather than color. Fewer, larger bands read better at the size a comment thread gives an avatar.",
+      "options": {
+        "scale": 1.5
+      }
+    }
+  ]
+}

@@ -16,6 +16,7 @@ import {
   flushPendingCustomStyles,
 } from '@theme/utils/avatar/style';
 import { track, styleLabel } from '@theme/utils/track';
+import type { StylePreset } from '@theme/config/presets';
 
 export default defineStore('playground', () => {
   const data = useData<ThemeOptions>();
@@ -104,12 +105,36 @@ export default defineStore('playground', () => {
     return result;
   });
 
-  function resetOptions() {
+  function clearOptions() {
     for (const key of Object.keys(avatarStyleOptions.value)) {
       delete avatarStyleOptions.value[key];
     }
+  }
+
+  function resetOptions() {
+    clearOptions();
 
     seed.value = 'Felix';
+  }
+
+  /**
+   * Replaces the current options with a preset's, keeping the seed.
+   *
+   * Deliberately not a merge. A preset describes a complete look, and
+   * whatever is already set can contradict it: a pinned hair color survives
+   * the preset that was supposed to change it, a probability of 0 keeps a
+   * component the preset colors, and the result belongs to neither. The seed
+   * is the exception, because it picks the person rather than the look.
+   */
+  function applyPreset(preset: StylePreset) {
+    clearOptions();
+
+    Object.assign(avatarStyleOptions.value, clonePlain(preset.options));
+
+    track('Playground: Preset Applied', {
+      style: styleLabel(avatarStyleName.value),
+      preset: preset.id,
+    });
   }
 
   function resetOption(key: string) {
@@ -164,6 +189,7 @@ export default defineStore('playground', () => {
     removeCustomStyle,
     resetOptions,
     resetOption,
+    applyPreset,
     isOptionSet,
   };
 });

@@ -1,0 +1,89 @@
+{
+  "presets": [
+    {
+      "id": "warm-system",
+      "name": "Warm System",
+      "summary": "Reds, oranges and golds only.",
+      "description": "The style ships fourteen planet colors evenly spaced around the wheel. This keeps the warm half, so a set of these reads as one system rather than a sample chart.",
+      "options": {
+        "planetColor": ["e27a8c", "e37f64", "d88a40", "c1982a", "d67cb2"]
+      }
+    },
+    {
+      "id": "cool-system",
+      "name": "Cool System",
+      "summary": "Greens, teals and blues only.",
+      "description": "The other half of the same wheel. Useful next to Warm System when two groups of avatars need to be told apart at a glance.",
+      "options": {
+        "planetColor": [
+          "74b160",
+          "39b789",
+          "00b6af",
+          "00b1cf",
+          "47a7e7",
+          "7a9bef"
+        ]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "A monochrome sky and a grey planet.",
+      "description": "Strips the color from a style that is mostly color. What is left is the composition: a disc, a moon and a field of stars.",
+      "options": {
+        "backgroundColor": ["16181d"],
+        "planetColor": ["8c8c90", "6e6e72", "aeaeb2"],
+        "moonColor": ["d8d8dc"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One indigo for sky, planet and moon.",
+      "description": "Three steps of the same hue. The most restrained this style gets, and the easiest to place next to an existing brand color.",
+      "options": {
+        "backgroundColor": ["141833"],
+        "planetColor": ["4a55a8"],
+        "moonColor": ["9aa2d2"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty planets against a deep sky.",
+      "description": "The style's planets are fully saturated. These are not, which turns them from marbles into something more like photographs.",
+      "options": {
+        "planetColor": ["9c6b58", "7c9082", "8e9aaf", "a5a58d", "b98b73"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Neon planets on black.",
+      "description": "The other direction: colors past anything the style ships, on the darkest of its own skies so they read as lit from within.",
+      "options": {
+        "backgroundColor": ["0a0b0f"],
+        "planetColor": ["ff2e88", "00e5ff", "ffe600", "7cff00", "b400ff"]
+      }
+    },
+    {
+      "id": "daylight",
+      "name": "Daylight",
+      "summary": "A pale sky instead of deep space.",
+      "description": "The one preset that abandons the night. A light sky turns the planet into a flat disc and the stars vanish into it, which is a different picture rather than a lit version of the same one.",
+      "options": {
+        "backgroundColor": ["e6ecf5", "eef1f7"],
+        "moonColor": ["8c93a3"]
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in, so the planet fills the frame.",
+      "description": "Uses scale rather than color. At avatar size the stars turn to noise, and cropping in trades them for a planet you can actually see.",
+      "options": {
+        "scale": 1.5
+      }
+    }
+  ]
+}

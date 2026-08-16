@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { nextTick } from 'vue';
 import { storeToRefs } from 'pinia';
 import { kebabCase } from 'change-case';
 import { RotateCcw } from '@lucide/vue';
 import PlaygroundOptions from './PlaygroundOptions.vue';
 import PlaygroundPreviewPanel from './PlaygroundPreviewPanel.vue';
 import useStore from '@theme/stores/playground';
+import { loadStylePreset } from '@theme/config/presets';
 import { track, styleLabel } from '@theme/utils/track';
 import Button from 'primevue/button';
 
@@ -16,8 +18,12 @@ function onReset() {
   store.resetOptions();
 }
 
-// ?style= query param overrides persisted style (used by "Open in Playground" links)
-const styleParam = new URL(window.location.href).searchParams.get('style');
+// ?style= query param overrides persisted style (used by "Open in Playground"
+// links). ?preset= additionally loads one of that style's presets, which is how
+// a card in the style-page gallery hands its options over.
+const params = new URL(window.location.href).searchParams;
+const styleParam = params.get('style');
+const presetParam = params.get('preset');
 
 if (styleParam) {
   const styleName = kebabCase(styleParam);
@@ -25,6 +31,25 @@ if (styleParam) {
   if (store.availableAvatarStyles.includes(styleName)) {
     store.avatarStyleName = styleName;
     store.resetOptions();
+
+    if (presetParam) {
+      // The store clears the options whenever the style changes, and that
+      // watcher runs on the next tick, so applying the preset any earlier
+      // would be undone again. The preset file is fetched on demand, which
+      // lands even later, so both waits are covered.
+      // A failed chunk fetch leaves the playground on the plain style, which
+      // is the same place an unknown `?preset=` lands. Swallowed rather than
+      // left to reject, since nothing here can retry it.
+      void loadStylePreset(styleName, presetParam)
+        .then(async (preset) => {
+          await nextTick();
+
+          if (preset) {
+            store.applyPreset(preset);
+          }
+        })
+        .catch(() => undefined);
+    }
   }
 
   history.replaceState(null, '', window.location.pathname);

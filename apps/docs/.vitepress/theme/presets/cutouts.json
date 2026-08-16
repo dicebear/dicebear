@@ -1,0 +1,167 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No brows, no torn cheeks.",
+      "description": "Two optional components off. The style is a paper collage, and with fewer scraps on the face the cut shapes of the head and eyes carry it.",
+      "options": {
+        "browsProbability": 0,
+        "cheeksProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Torn brown paper on tan.",
+      "description": "The cheeks are switched off here rather than recolored: the style's only cheek scrap is printed pink, and no color option reaches it.",
+      "options": {
+        "backgroundColor": ["ede2ce"],
+        "paperFaceColor": ["c9a678", "b08d5f", "d9bd94"],
+        "paperBackColor": ["8f6d43", "6d5031"],
+        "paperHairColor": ["4a3018", "3a2916", "5c4223"],
+        "paperMouthColor": ["7a5c37"],
+        "cheeksProbability": 0
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Newsprint, no hue anywhere.",
+      "description": "Paper cut from a black and white page. The drop shadow under each scrap does the work that color usually does, so the layers still read apart.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "paperFaceColor": ["c1c1c7", "a1a1aa", "d4d4d8"],
+        "paperBackColor": ["71717a", "52525b"],
+        "paperHairColor": ["27272a", "3f3f46", "18181b"],
+        "paperMouthColor": ["52525b"],
+        "cheeksProbability": 0
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Two papers, blue and cream.",
+      "description": "One color for the face, one for everything behind and on top of it. The head shapes and the cut of the features are all that separates two avatars.",
+      "options": {
+        "backgroundColor": ["e6ecef"],
+        "paperFaceColor": ["9ec9e8"],
+        "paperBackColor": ["37718e"],
+        "paperHairColor": ["1d3d52"],
+        "paperMouthColor": ["37718e"],
+        "cheeksProbability": 0
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Faded sugar paper.",
+      "description": "The style cuts from saturated stock. This is the same collage in paper that has been sitting in the sun, which suits a page where many of them appear together. The mouth scrap moves with the rest: the style cuts it from four reds, and one of those against a faded face is all you would see.",
+      "options": {
+        "backgroundColor": ["ece7dd"],
+        "paperFaceColor": [
+          "c2a878",
+          "bd9080",
+          "8fa3ad",
+          "9aa88f",
+          "b09aa8",
+          "a8998c"
+        ],
+        "paperBackColor": ["6f7a72", "7a6b63", "6b7280", "7c6b78"],
+        "paperHairColor": ["4a4a42", "3f4642", "4a4250", "52483f"],
+        "cheeksProbability": 0,
+        "paperMouthColor": ["8f6b63", "7c6b58", "96736b", "6b6259"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Fluorescent card, quiet ground.",
+      "description": "Only the face scraps go loud. The hair stays dark so the collage keeps a top and a bottom instead of turning into one bright field.",
+      "options": {
+        "backgroundColor": ["f6f1e7"],
+        "paperFaceColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Colored ground under the collage.",
+      "description": "The five grounds the style ships are all near-white. These are pale but present, which gives the paper something to sit on.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Six grounds, loud under the paper.",
+      "description": "The scraps are mid-toned and each carries a drop shadow, so they hold their edge against a saturated ground.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Dark table, pale paper.",
+      "description": "For dark interfaces. The face palette lightens so the collage still separates from the ground, and the hair keeps its dark stock.",
+      "options": {
+        "backgroundColor": ["17171b"],
+        "paperFaceColor": ["e8c98a", "e8a08a", "a8cbe8", "b9d8ae", "f0c4d0"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient under the paper.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. Both stops stay light, so the shadows under the scraps keep their contrast.",
+      "options": {
+        "backgroundColor": ["ffd5a8", "ffb0c4"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "Hair, brows and cheeks on everyone.",
+      "description": "All three optional components turned up. The style ships seven haircuts and four brow shapes that most seeds never reach.",
+      "options": {
+        "hairProbability": 100,
+        "browsProbability": 100,
+        "cheeksProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "The collage scaled up in the frame.",
+      "description": "The style leaves a wide margin around the head. This crops in until the paper nearly touches the edge, which is what you want at 24 or 32 pixels.",
+      "options": {
+        "scale": 1.25
+      }
+    }
+  ]
+}

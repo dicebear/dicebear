@@ -1,0 +1,161 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No head fitting, no chest panel.",
+      "description": "Both of those components are optional already. Off, what is left is the chassis itself, and the face is the only thing that varies.",
+      "options": {
+        "topProbability": 0,
+        "chestProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown across every face of the cube.",
+      "description": "The chest panel skips its button variant here. Those buttons are painted red in the artwork rather than taking a color option, and one red dot undoes a monochrome set.",
+      "options": {
+        "backgroundColor": ["e7d5b8"],
+        "bodyColor": ["b39572", "9c7d5c", "c7ab8a"],
+        "accentColor": ["4a3826", "6b5138"],
+        "screenColor": ["2a1d12"],
+        "glowColor": ["d9b98c", "e8d3ae"],
+        "chestVariant": ["vents", "screen", "heart", "dial", "slot"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Steel, with the screen still darker than the shell.",
+      "description": "The style shades every cube face separately, so a set of greys keeps all its depth. Same exclusion as Sepia for the red buttons.",
+      "options": {
+        "backgroundColor": ["e4e4e7"],
+        "bodyColor": ["d4d4d8", "a1a1aa", "e4e4e7"],
+        "accentColor": ["3f3f46", "52525b"],
+        "screenColor": ["18181b"],
+        "glowColor": ["fafafa", "d4d4d8"],
+        "chestVariant": ["vents", "screen", "heart", "dial", "slot"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One teal shell, one lime screen.",
+      "description": "Two colors and their shading. Only the eyes, mouth and head fitting change from avatar to avatar, which makes a set read as one production run.",
+      "options": {
+        "backgroundColor": ["0d3b3f"],
+        "bodyColor": ["3fa8a0"],
+        "accentColor": ["10403f"],
+        "screenColor": ["07211f"],
+        "glowColor": ["bef264"],
+        "chestVariant": ["vents", "screen", "dial", "slot"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "A dusty chassis palette.",
+      "description": "The style's shell colors are candy-bright. These are the same idea in tones that hold still, for a list where a dozen bots appear at once. The red button panel is excluded, since one saturated dot is enough to break a quiet set.",
+      "options": {
+        "chestVariant": ["vents", "screen", "heart", "dial", "slot"],
+        "backgroundColor": ["ddd8cd"],
+        "bodyColor": [
+          "a8a396",
+          "8c9b8f",
+          "9a8f80",
+          "8896a3",
+          "a0919b",
+          "b0a58c"
+        ],
+        "glowColor": ["c8b98f", "9fb0a6", "b09a9a"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Neon indicator lights, quiet shell.",
+      "description": "Only the lit parts go loud. Bright shell and bright glow together cancel each other out, so the chassis stays pale and the screen carries the color.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "bodyColor": ["e9ecef", "ced4da"],
+        "accentColor": ["23262b"],
+        "screenColor": ["07070a"],
+        "glowColor": ["ff2e88", "00e5ff", "7cff00", "ffe600", "b400ff"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Soft ground, the style's own chassis.",
+      "description": "Six backgrounds instead of the five the style ships, all of them light enough that the dark screen stays the darkest thing in the frame.",
+      "options": {
+        "backgroundColor": [
+          "b6e3f4",
+          "c0aede",
+          "d1d4f9",
+          "ffd5dc",
+          "ffdfbf",
+          "d9f2d9"
+        ]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated ground behind a pastel bot.",
+      "description": "The chassis colors are soft, so a loud background pushes them forward instead of competing with them.",
+      "options": {
+        "backgroundColor": [
+          "ff2e63",
+          "00c2a8",
+          "ffb300",
+          "3d5afe",
+          "8e24aa",
+          "00e676"
+        ]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Dark room, lit screen.",
+      "description": "For dark interfaces. The chassis keeps its light metal so the bot does not disappear into the ground, and the screen glow becomes the brightest thing on the tile.",
+      "options": {
+        "backgroundColor": ["141418"],
+        "bodyColor": ["e9ecef", "aeb8c2", "b6a6f5", "74c0fc"],
+        "screenColor": ["07070a"],
+        "glowColor": ["3bc9db", "69db7c", "ffd43b", "e599f7"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the bot.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffd5a8", "ff9db4"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 45
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Head and torso, feet cropped away.",
+      "description": "The full bot is small at avatar sizes and most of its identity is in the face. This crops to the top two thirds and keeps whatever is mounted on the head.",
+      "options": {
+        "scale": 1.2
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    }
+  ]
+}
