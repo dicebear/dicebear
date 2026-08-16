@@ -104,8 +104,8 @@ the address is enough:
 https://www.dicebear.com/how-to-use/http-api/index.md
 ```
 
-Each page also links to its Markdown version from the header, so you do not
-have to edit the address yourself.
+Each page also links to its Markdown version from the header, so you do not have
+to edit the address yourself.
 
 Option names are what assistants invent most often, and the API answers that
 question directly, without a page to parse:
