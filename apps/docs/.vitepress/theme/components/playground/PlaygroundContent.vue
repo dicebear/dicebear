@@ -5,6 +5,8 @@ import { kebabCase } from 'change-case';
 import { RotateCcw } from '@lucide/vue';
 import PlaygroundOptions from './PlaygroundOptions.vue';
 import PlaygroundPreviewPanel from './PlaygroundPreviewPanel.vue';
+import PlaygroundButtonExport from './PlaygroundButtonExport.vue';
+import PlaygroundButtonImport from './PlaygroundButtonImport.vue';
 import useStore from '@theme/stores/playground';
 import { loadStylePreset } from '@theme/config/presets';
 import { track, styleLabel } from '@theme/utils/track';
@@ -64,6 +66,8 @@ if (styleParam) {
       </aside>
       <main class="pg-main">
         <div class="pg-main-actions">
+          <PlaygroundButtonExport :seed="seed" />
+          <PlaygroundButtonImport />
           <Button
             label="Reset"
             severity="secondary"
@@ -126,11 +130,21 @@ if (styleParam) {
 
   &-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
     gap: 4px;
 
+    /* The muted color below outranks PrimeVue's own hover color, and the
+       underline it falls back on is off, so the hover has to be stated here.
+       Reset keeps its red through the !important in .pg-field-reset. The
+       fade comes from PrimeVue's own transition, which already covers color. */
     :deep(.p-button-link) {
       color: var(--ui-c-text-muted);
+    }
+
+    :deep(.p-button-link:hover),
+    :deep(.p-button-link:focus-visible) {
+      color: var(--vp-c-text-1);
     }
 
     :deep(.p-button-link:hover .p-button-label) {

@@ -8,6 +8,7 @@ export function loadHljs(): Promise<Hljs> {
       { default: core },
       { default: javascript },
       { default: xml },
+      { default: json },
       { default: php },
       { default: python },
       { default: rust },
@@ -17,6 +18,7 @@ export function loadHljs(): Promise<Hljs> {
       import('highlight.js/lib/core'),
       import('highlight.js/lib/languages/javascript'),
       import('highlight.js/lib/languages/xml'),
+      import('highlight.js/lib/languages/json'),
       import('highlight.js/lib/languages/php'),
       import('highlight.js/lib/languages/python'),
       import('highlight.js/lib/languages/rust'),
@@ -27,6 +29,7 @@ export function loadHljs(): Promise<Hljs> {
     for (const [name, language] of [
       ['js', javascript],
       ['html', xml],
+      ['json', json],
       ['php', php],
       ['python', python],
       ['rust', rust],

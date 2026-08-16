@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { computed, watch } from 'vue';
-import { useLocalStorage, watchDebounced } from '@vueuse/core';
+import { computed, nextTick, watch } from 'vue';
+import { useSessionStorage, watchDebounced } from '@vueuse/core';
 import { useIDBKeyval } from '@vueuse/integrations/useIDBKeyval';
 import type {
   CustomStyleEntry,
@@ -17,21 +17,40 @@ import {
 } from '@theme/utils/avatar/style';
 import { track, styleLabel } from '@theme/utils/track';
 import type { StylePreset } from '@theme/config/presets';
+import type { PlaygroundConfig } from '@theme/utils/playgroundConfig';
+
+const STYLE_KEY = 'dicebear-playground-style';
+const OPTIONS_KEY = 'dicebear-playground-options';
+const SEED_KEY = 'dicebear-playground-seed';
 
 export default defineStore('playground', () => {
   const data = useData<ThemeOptions>();
 
   const availableAvatarStyles = Object.keys(data.theme.value.avatarStyles);
 
-  const avatarStyleName = useLocalStorage<PlaygroundStoreStyle>(
-    'dicebear-playground-style',
+  // What the reader is looking at only has to survive a reload and a trip into
+  // the docs and back, so it ends with the tab. Keeping a look past that is
+  // what Export is for, and it hands them a file they own. The uploaded style
+  // definitions below are the exception and stay: they are a good deal of work
+  // to hand in again, and losing them would take the picker entry with them.
+  const avatarStyleName = useSessionStorage<PlaygroundStoreStyle>(
+    STYLE_KEY,
     availableAvatarStyles[0],
   );
-  const avatarStyleOptions = useLocalStorage<PlaygroundStoreOptions>(
-    'dicebear-playground-options',
+  const avatarStyleOptions = useSessionStorage<PlaygroundStoreOptions>(
+    OPTIONS_KEY,
     {},
   );
-  const seed = useLocalStorage<string>('dicebear-playground-seed', 'Felix');
+  const seed = useSessionStorage<string>(SEED_KEY, 'Felix');
+
+  // The same three keys used to live in localStorage. Nothing reads them any
+  // more, so left alone they would sit on the reader's disk for good, seed
+  // included.
+  if (typeof localStorage !== 'undefined') {
+    for (const key of [STYLE_KEY, OPTIONS_KEY, SEED_KEY]) {
+      localStorage.removeItem(key);
+    }
+  }
 
   const { data: customStyles, isFinished: customStylesReady } = useIDBKeyval<
     Record<string, CustomStyleEntry>
@@ -131,9 +150,47 @@ export default defineStore('playground', () => {
 
     Object.assign(avatarStyleOptions.value, clonePlain(preset.options));
 
+    syncOptionSnapshot();
+
     track('Playground: Preset Applied', {
       style: styleLabel(avatarStyleName.value),
       preset: preset.id,
+    });
+  }
+
+  /**
+   * Loads an exported configuration onto the given style. Replaces what is set
+   * instead of merging into it, for the reason applyPreset gives, and the seed
+   * is part of the file rather than the exception it is there.
+   *
+   * The style comes in as an argument rather than out of the config, because
+   * the caller had to resolve it to validate the options against it. A file
+   * that names no style targets whatever was selected at that point, and the
+   * reader is free to pick another one while the definition is still loading.
+   */
+  async function applyConfig(config: PlaygroundConfig, styleName: string) {
+    const { seed: importedSeed, ...options } = config.options;
+    const nextSeed =
+      typeof importedSeed === 'string' ? importedSeed : seed.value;
+
+    if (styleName !== avatarStyleName.value) {
+      avatarStyleName.value = styleName;
+
+      // Switching the style clears the options through a watcher that runs on
+      // the next tick, so anything written before that is dropped again.
+      await nextTick();
+    }
+
+    clearOptions();
+
+    Object.assign(avatarStyleOptions.value, clonePlain(options));
+
+    seed.value = nextSeed;
+
+    syncOptionSnapshot();
+
+    track('Playground: Options Imported', {
+      style: styleLabel(avatarStyleName.value),
     });
   }
 
@@ -160,6 +217,13 @@ export default defineStore('playground', () => {
     avatarStyleOptions.value,
   );
 
+  // Presets and imports write a batch of keys in one go and report themselves.
+  // Moving the snapshot with them keeps the diff above a record of what the
+  // reader tuned by hand.
+  function syncOptionSnapshot() {
+    optionSnapshot = clonePlain(avatarStyleOptions.value);
+  }
+
   watchDebounced(
     avatarStyleOptions,
     (val) => {
@@ -184,12 +248,14 @@ export default defineStore('playground', () => {
     avatarStyleOptionsWithoutDefaults,
     seed,
     customStyles,
+    customStylesReady,
     isCustomStyle,
     addCustomStyle,
     removeCustomStyle,
     resetOptions,
     resetOption,
     applyPreset,
+    applyConfig,
     isOptionSet,
   };
 });
