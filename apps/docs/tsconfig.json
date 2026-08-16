@@ -16,6 +16,6 @@
     },
     "skipLibCheck": true
   },
-  "include": ["env.d.ts", ".vitepress/**/*"],
+  "include": ["env.d.ts", ".vitepress/**/*", "scripts/**/*"],
   "exclude": [".vitepress/cache", ".vitepress/dist"]
 }

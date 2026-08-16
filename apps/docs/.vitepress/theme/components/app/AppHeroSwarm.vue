@@ -56,7 +56,7 @@ const tiles: Tile[] = [
 ];
 
 // The swarm sits in the LCP area, so its avatars are pre-generated as
-// same-origin static files (scripts/generate-hero-avatars.mjs) instead of
+// same-origin static files (scripts/generate-hero-avatars.ts) instead of
 // being fetched from api.dicebear.com, since an external origin costs extra
 // DNS/TLS round trips before the largest above-the-fold images can paint.
 function url(tile: Tile): string {

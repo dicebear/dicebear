@@ -10,7 +10,7 @@ const props = defineProps<{
 
 // Every style has its own row, searched against its own palette. Order matters:
 // the initials spell DICEBEAR, which `initial-face` prints outright. Generated
-// by scripts/generate-preview-seeds.mjs, which documents the scoring.
+// by scripts/generate-preview-seeds.ts, which documents the scoring.
 const seeds = computed(() => getPreviewRowSeeds(props.styleName));
 
 const playgroundUrl = computed(

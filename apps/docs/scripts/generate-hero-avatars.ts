@@ -7,7 +7,7 @@
  * The output is committed. Re-run after upgrading @dicebear/styles or
  * when changing the tiles in AppHeroSwarm.vue:
  *
- *   node scripts/generate-hero-avatars.mjs
+ *   node scripts/generate-hero-avatars.ts
  */
 import { Avatar, Style } from '@dicebear/core';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';

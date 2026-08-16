@@ -36,7 +36,7 @@
  * The output is committed. Re-run after upgrading @dicebear/styles or after
  * adding a style:
  *
- *   node scripts/generate-preview-seeds.mjs
+ *   node scripts/generate-preview-seeds.ts
  */
 import { Avatar, Style } from '@dicebear/core';
 import { createRequire } from 'node:module';
@@ -47,7 +47,9 @@ import path from 'node:path';
 const require = createRequire(import.meta.url);
 
 /** sRGB hex to CIE Lab, D65, the space CIEDE2000 is defined in. */
-function hexToLab(hex) {
+type Lab = [number, number, number];
+
+function hexToLab(hex: string): Lab {
   const int = parseInt(hex.replace('#', '').slice(0, 6).padEnd(6, '0'), 16);
   const channels = [(int >> 16) & 255, (int >> 8) & 255, int & 255].map((c) => {
     const v = c / 255;
@@ -58,7 +60,9 @@ function hexToLab(hex) {
     (0.4124564 * r + 0.3575761 * g + 0.1804375 * b) / 0.95047,
     0.2126729 * r + 0.7151522 * g + 0.072175 * b,
     (0.0193339 * r + 0.119192 * g + 0.9503041 * b) / 1.08883,
-  ].map((t) => (t > (6 / 29) ** 3 ? Math.cbrt(t) : t / (3 * (6 / 29) ** 2) + 4 / 29));
+  ].map((t) =>
+    t > (6 / 29) ** 3 ? Math.cbrt(t) : t / (3 * (6 / 29) ** 2) + 4 / 29,
+  );
 
   return [116 * xyz[1] - 16, 500 * (xyz[0] - xyz[1]), 200 * (xyz[1] - xyz[2])];
 }
@@ -69,7 +73,7 @@ function hexToLab(hex) {
  * comparison this makes most often: whether two backgrounds a viewer would call
  * "both gray" are actually far enough apart to sit side by side.
  */
-function deltaE00([l1, a1, b1], [l2, a2, b2]) {
+function deltaE00([l1, a1, b1]: Lab, [l2, a2, b2]: Lab): number {
   const rad = Math.PI / 180;
   const c1 = Math.hypot(a1, b1);
   const c2 = Math.hypot(a2, b2);
@@ -80,7 +84,7 @@ function deltaE00([l1, a1, b1], [l2, a2, b2]) {
   const cp1 = Math.hypot(ap1, b1);
   const cp2 = Math.hypot(ap2, b2);
 
-  const hp = (b, ap) => {
+  const hp = (b: number, ap: number) => {
     if (b === 0 && ap === 0) return 0;
     const angle = Math.atan2(b, ap) / rad;
     return angle >= 0 ? angle : angle + 360;
@@ -115,7 +119,8 @@ function deltaE00([l1, a1, b1], [l2, a2, b2]) {
     0.32 * Math.cos((3 * meanH + 6) * rad) -
     0.2 * Math.cos((4 * meanH - 63) * rad);
 
-  const sL = 1 + (0.015 * (meanL - 50) ** 2) / Math.sqrt(20 + (meanL - 50) ** 2);
+  const sL =
+    1 + (0.015 * (meanL - 50) ** 2) / Math.sqrt(20 + (meanL - 50) ** 2);
   const sC = 1 + 0.045 * meanCp;
   const sH = 1 + 0.015 * meanCp * t;
   const rt =
@@ -136,15 +141,16 @@ function deltaE00([l1, a1, b1], [l2, a2, b2]) {
  * gradient. Averaging in Lab gives the impression the tile leaves from across
  * the row, which is the level this compares at.
  */
-function meanLab(value) {
+function meanLab(value: unknown): Lab | null {
   const hexes = (Array.isArray(value) ? value : [value]).filter(
     (v) => typeof v === 'string' && /^#?[0-9a-fA-F]{3,8}$/.test(v),
   );
   if (hexes.length === 0) return null;
   const labs = hexes.map(hexToLab);
-  return [0, 1, 2].map(
-    (i) => labs.reduce((sum, lab) => sum + lab[i], 0) / labs.length,
-  );
+  const mean = (i: 0 | 1 | 2) =>
+    labs.reduce((sum, lab) => sum + lab[i], 0) / labs.length;
+
+  return [mean(0), mean(1), mean(2)];
 }
 const definitionsDir = path.dirname(
   require.resolve('@dicebear/styles/initials.json'),
@@ -222,13 +228,210 @@ const RESERVED = await reservedNames();
  * because a style goes by that name.
  */
 const POOLS = {
-  D: ['Dahlia', 'Dalia', 'Dana', 'Dante', 'Daphne', 'Dara', 'Darius', 'Davi', 'Dax', 'Delia', 'Deniz', 'Denver', 'Devon', 'Diana', 'Dilan', 'Dilara', 'Dima', 'Dina', 'Dion', 'Dita', 'Dora', 'Doria', 'Dorian', 'Dov', 'Drew', 'Dries', 'Duncan'],
-  I: ['Ida', 'Idris', 'Iker', 'Ilan', 'Ilaria', 'Ilias', 'Ilona', 'Ilse', 'Ilya', 'Imani', 'Ina', 'Inaya', 'Indira', 'Ines', 'Ingrid', 'Iona', 'Irene', 'Isaac', 'Isabel', 'Isla', 'Ismael', 'Iva', 'Ivan', 'Ivy', 'Izumi'],
-  C: ['Cai', 'Caleb', 'Calla', 'Callum', 'Camila', 'Carla', 'Carmen', 'Caspar', 'Casper', 'Cato', 'Cecile', 'Cedric', 'Celia', 'Celine', 'Cesar', 'Chiara', 'Chloe', 'Cian', 'Ciara', 'Ciro', 'Clara', 'Colin', 'Cora', 'Cosima', 'Curtis', 'Cyrus'],
-  E: ['Edda', 'Eden', 'Edgar', 'Edith', 'Efe', 'Elba', 'Elena', 'Eli', 'Elias', 'Elif', 'Elin', 'Elio', 'Elise', 'Ella', 'Eloise', 'Elsa', 'Emery', 'Emil', 'Enid', 'Enzo', 'Erik', 'Esme', 'Ethan', 'Eva', 'Evelyn', 'Evren', 'Ewan', 'Ezra'],
-  B: ['Baris', 'Basil', 'Baxter', 'Bea', 'Beau', 'Bela', 'Bella', 'Ben', 'Bente', 'Berta', 'Bianca', 'Bilal', 'Blake', 'Bo', 'Bodhi', 'Bodie', 'Bodil', 'Boris', 'Bram', 'Brea', 'Brenda', 'Britt', 'Brody', 'Bruno', 'Byron'],
-  A: ['Aden', 'Adele', 'Adil', 'Agnes', 'Aiden', 'Aisha', 'Alba', 'Alec', 'Alia', 'Alma', 'Amara', 'Amina', 'Amir', 'Ana', 'Anders', 'Andre', 'Anika', 'Anja', 'Anouk', 'Anton', 'Arden', 'Ari', 'Aria', 'Arlo', 'Asher', 'Astrid', 'Ava', 'Axel', 'Ayla'],
-  R: ['Rafa', 'Rafael', 'Rania', 'Raul', 'Raven', 'Ravi', 'Reese', 'Regina', 'Remy', 'Renzo', 'Reza', 'Rhea', 'Rhys', 'Rida', 'Riley', 'Rina', 'Rio', 'Rita', 'Robin', 'Rocco', 'Roman', 'Ronan', 'Rosa', 'Rosie', 'Roshan', 'Rowan', 'Ruben', 'Ruby', 'Rune', 'Ruth'],
+  D: [
+    'Dahlia',
+    'Dalia',
+    'Dana',
+    'Dante',
+    'Daphne',
+    'Dara',
+    'Darius',
+    'Davi',
+    'Dax',
+    'Delia',
+    'Deniz',
+    'Denver',
+    'Devon',
+    'Diana',
+    'Dilan',
+    'Dilara',
+    'Dima',
+    'Dina',
+    'Dion',
+    'Dita',
+    'Dora',
+    'Doria',
+    'Dorian',
+    'Dov',
+    'Drew',
+    'Dries',
+    'Duncan',
+  ],
+  I: [
+    'Ida',
+    'Idris',
+    'Iker',
+    'Ilan',
+    'Ilaria',
+    'Ilias',
+    'Ilona',
+    'Ilse',
+    'Ilya',
+    'Imani',
+    'Ina',
+    'Inaya',
+    'Indira',
+    'Ines',
+    'Ingrid',
+    'Iona',
+    'Irene',
+    'Isaac',
+    'Isabel',
+    'Isla',
+    'Ismael',
+    'Iva',
+    'Ivan',
+    'Ivy',
+    'Izumi',
+  ],
+  C: [
+    'Cai',
+    'Caleb',
+    'Calla',
+    'Callum',
+    'Camila',
+    'Carla',
+    'Carmen',
+    'Caspar',
+    'Casper',
+    'Cato',
+    'Cecile',
+    'Cedric',
+    'Celia',
+    'Celine',
+    'Cesar',
+    'Chiara',
+    'Chloe',
+    'Cian',
+    'Ciara',
+    'Ciro',
+    'Clara',
+    'Colin',
+    'Cora',
+    'Cosima',
+    'Curtis',
+    'Cyrus',
+  ],
+  E: [
+    'Edda',
+    'Eden',
+    'Edgar',
+    'Edith',
+    'Efe',
+    'Elba',
+    'Elena',
+    'Eli',
+    'Elias',
+    'Elif',
+    'Elin',
+    'Elio',
+    'Elise',
+    'Ella',
+    'Eloise',
+    'Elsa',
+    'Emery',
+    'Emil',
+    'Enid',
+    'Enzo',
+    'Erik',
+    'Esme',
+    'Ethan',
+    'Eva',
+    'Evelyn',
+    'Evren',
+    'Ewan',
+    'Ezra',
+  ],
+  B: [
+    'Baris',
+    'Basil',
+    'Baxter',
+    'Bea',
+    'Beau',
+    'Bela',
+    'Bella',
+    'Ben',
+    'Bente',
+    'Berta',
+    'Bianca',
+    'Bilal',
+    'Blake',
+    'Bo',
+    'Bodhi',
+    'Bodie',
+    'Bodil',
+    'Boris',
+    'Bram',
+    'Brea',
+    'Brenda',
+    'Britt',
+    'Brody',
+    'Bruno',
+    'Byron',
+  ],
+  A: [
+    'Aden',
+    'Adele',
+    'Adil',
+    'Agnes',
+    'Aiden',
+    'Aisha',
+    'Alba',
+    'Alec',
+    'Alia',
+    'Alma',
+    'Amara',
+    'Amina',
+    'Amir',
+    'Ana',
+    'Anders',
+    'Andre',
+    'Anika',
+    'Anja',
+    'Anouk',
+    'Anton',
+    'Arden',
+    'Ari',
+    'Aria',
+    'Arlo',
+    'Asher',
+    'Astrid',
+    'Ava',
+    'Axel',
+    'Ayla',
+  ],
+  R: [
+    'Rafa',
+    'Rafael',
+    'Rania',
+    'Raul',
+    'Raven',
+    'Ravi',
+    'Reese',
+    'Regina',
+    'Remy',
+    'Renzo',
+    'Reza',
+    'Rhea',
+    'Rhys',
+    'Rida',
+    'Riley',
+    'Rina',
+    'Rio',
+    'Rita',
+    'Robin',
+    'Rocco',
+    'Roman',
+    'Ronan',
+    'Rosa',
+    'Rosie',
+    'Roshan',
+    'Rowan',
+    'Ruben',
+    'Ruby',
+    'Rune',
+    'Ruth',
+  ],
 };
 
 const usable = Object.fromEntries(
@@ -238,13 +441,34 @@ const usable = Object.fromEntries(
   ]),
 );
 
+/**
+ * Seeds a human picked for one slot of one style-page row. The score below
+ * compares shapes and colors; it cannot tell that a face is a poor
+ * advertisement for the style it is selling. When a row is right by every
+ * measure here and still wrong on the page, the slot is pinned and the search
+ * keeps the other seven.
+ *
+ * Pinning rather than banning on purpose: dropping a name sends the beam down a
+ * different path and rewrites the whole row, which trades one weak tile for
+ * seven unreviewed ones.
+ *
+ * Keys are zero-based slots in the eight-avatar row.
+ */
+const PINNED: Record<string, Record<number, string>> = {
+  // The search picked Ilya, whose bald head and two hollow pupil-only eyes
+  // read as a skull. Not what a style page should open with.
+  cutouts: { 1: 'Imani' },
+};
+
 const allNames = [...new Set(Object.values(usable).flat())];
-const nameIndex = new Map(allNames.map((name, i) => [name, i]));
+const nameIndex = new Map(
+  allNames.map((name, i): [string, number] => [name, i]),
+);
 const prefix = allNames.map((name) => name.slice(0, 2).toUpperCase());
-const poolIds = Object.fromEntries(
+const poolIds: Record<string, number[]> = Object.fromEntries(
   Object.entries(usable).map(([letter, names]) => [
     letter,
-    names.map((name) => nameIndex.get(name)),
+    names.map((name) => nameIndex.get(name)!),
   ]),
 );
 
@@ -276,9 +500,9 @@ const files = (await readdir(definitionsDir))
   .filter((file) => file.endsWith('.min.json'))
   .sort();
 
-const rows = {};
-const cards = {};
-const ogTiles = {};
+const rows: Record<string, string[]> = {};
+const cards: Record<string, string[]> = {};
+const ogTiles: Record<string, string[]> = {};
 const report = [];
 
 for (const file of files) {
@@ -303,18 +527,20 @@ for (const file of files) {
   ].sort();
   const colorKeys = optionKeys.filter((key) => /Color$/.test(key));
 
-  const intern = (values) => {
-    const seen = new Map();
+  const intern = (values: unknown[]) => {
+    const seen = new Map<string, number>();
     return values.map((value) => {
       const key = JSON.stringify(value);
       if (!seen.has(key)) seen.set(key, seen.size);
-      return seen.get(key);
+      return seen.get(key)!;
     });
   };
 
   const shape = intern(
     resolved.map((options) =>
-      optionKeys.filter((key) => !/color/i.test(key)).map((key) => options[key]),
+      optionKeys
+        .filter((key) => !/color/i.test(key))
+        .map((key) => options[key]),
     ),
   );
   const palette = intern(
@@ -336,8 +562,10 @@ for (const file of files) {
   // make a constant look variable and then penalize two bare faces for matching.
   const NO_COLOR = -1;
 
+  type Column = { ids: number[]; distance: Float64Array; size: number };
+
   const perColor = colorKeys
-    .map((key) => {
+    .map((key): Column | null => {
       const values = resolved.map((options) => options[key]);
       const labels = values.map((value) =>
         value === undefined ? undefined : JSON.stringify(value),
@@ -351,7 +579,7 @@ for (const file of files) {
       const size = drawn.length;
       const index = new Map(drawn.map((label, i) => [label, i]));
       const ids = labels.map((label) =>
-        label === undefined ? NO_COLOR : index.get(label),
+        label === undefined ? NO_COLOR : index.get(label)!,
       );
 
       const distance = new Float64Array(size * size);
@@ -359,7 +587,8 @@ for (const file of files) {
         for (let j = i + 1; j < size; j++) {
           // A value carrying no parseable color (a transparent background) is
           // treated as far from everything, since it does read as different.
-          const d = labs[i] && labs[j] ? deltaE00(labs[i], labs[j]) : 100;
+          const [left, right] = [labs[i], labs[j]];
+          const d = left && right ? deltaE00(left, right) : 100;
           distance[i * size + j] = d;
           distance[j * size + i] = d;
         }
@@ -367,16 +596,17 @@ for (const file of files) {
 
       return { ids, distance, size };
     })
-    .filter(Boolean);
+    .filter((column): column is Column => column !== null);
 
-  const distinct = (column, ids) => new Set(ids.map((id) => column[id])).size;
+  const distinct = (column: number[], ids: number[]) =>
+    new Set(ids.map((id) => column[id])).size;
 
   /**
    * How far apart two avatars sit in one color. An avatar that does not draw
    * the component at all cannot repeat it, so those pairs score as far apart
    * rather than as a match.
    */
-  function gap(column, a, b) {
+  function gap(column: Column, a: number, b: number) {
     const left = column.ids[a];
     const right = column.ids[b];
 
@@ -389,7 +619,7 @@ for (const file of files) {
    * Drives the beam. Everything here is cheap to recompute as a row grows, so
    * the expensive whole-row measure is left to {@link finalScore}.
    */
-  function score(ids) {
+  function score(ids: number[]) {
     let value =
       WEIGHT.shape * distinct(shape, ids) +
       WEIGHT.palette * distinct(palette, ids);
@@ -419,7 +649,7 @@ for (const file of files) {
    * and scoring that would rank every row identically while hiding the styles
    * where the repeat was avoidable.
    */
-  function finalScore(ids) {
+  function finalScore(ids: number[]) {
     let value = score(ids);
 
     for (const column of perColor) {
@@ -443,8 +673,8 @@ for (const file of files) {
    * the two sit one click apart, so a shared avatar reads as the page not having
    * loaded rather than as a second look at the style.
    */
-  function searchRow(word, taken = new Set()) {
-    let beam = [[]];
+  function searchRow(word: string, taken: Set<number> = new Set()) {
+    let beam: number[][] = [[]];
 
     for (const letter of word) {
       const candidates = [];
@@ -476,12 +706,12 @@ for (const file of files) {
    * position against every candidate until no swap helps. On rows this short the
    * two together land on the same answer a wider search would.
    */
-  function improveRow(size, taken) {
+  function improveRow(size: number, taken: Set<number>) {
     const pool = allNames.map((_, id) => id).filter((id) => !taken.has(id));
-    const ids = [];
+    const ids: number[] = [];
 
     while (ids.length < size) {
-      let bestId = null;
+      let bestId: number | null = null;
       let bestValue = -Infinity;
 
       for (const id of pool) {
@@ -493,6 +723,8 @@ for (const file of files) {
           bestId = id;
         }
       }
+
+      if (bestId === null) break;
 
       ids.push(bestId);
     }
@@ -530,7 +762,48 @@ for (const file of files) {
     return ids;
   }
 
-  const best = searchRow(ROW_WORD);
+  /** Replaces pinned slots, then re-checks what the search guarantees. */
+  function applyPins(ids: number[]) {
+    const pins = PINNED[styleName] ?? {};
+    const result = [...ids];
+
+    for (const [key, name] of Object.entries(pins)) {
+      const slot = Number(key);
+      const id = nameIndex.get(name);
+
+      if (id === undefined) {
+        throw new Error(
+          `PINNED gives ${styleName} the name "${name}", which no pool offers.`,
+        );
+      }
+
+      if (!name.startsWith(ROW_WORD[slot])) {
+        throw new Error(
+          `PINNED puts "${name}" in ${styleName} slot ${slot}, which spells ` +
+            `"${ROW_WORD[slot]}".`,
+        );
+      }
+
+      result[slot] = id;
+    }
+
+    for (const [i, id] of result.entries()) {
+      const clash = result.findIndex(
+        (other, j) => j !== i && (other === id || prefix[other] === prefix[id]),
+      );
+
+      if (clash !== -1) {
+        throw new Error(
+          `${styleName} would show "${allNames[id]}" next to ` +
+            `"${allNames[result[clash]]}", which share their first two letters.`,
+        );
+      }
+    }
+
+    return result;
+  }
+
+  const best = applyPins(searchRow(ROW_WORD));
   const card = searchRow(CARD_WORD, new Set(best));
   const og = improveRow(OG_TILES, new Set([...best, ...card]));
 
@@ -541,7 +814,7 @@ for (const file of files) {
   // How close a row comes to putting two same-looking tiles side by side, and
   // how much of each palette it reaches. Measured on the finished rows rather
   // than trusted from the score, since the score trades these off.
-  const measure = (ids) => {
+  const measure = (ids: number[]) => {
     let neighbors = Infinity;
     for (const column of perColor) {
       for (let i = 1; i < ids.length; i++) {
@@ -570,7 +843,9 @@ for (const file of files) {
   });
 }
 
-const table = (entries) =>
+type ReportEntry = (typeof report)[number];
+
+const table = (entries: Record<string, string[]>) =>
   Object.entries(entries)
     .map(
       ([styleName, seeds]) =>
@@ -582,7 +857,7 @@ const table = (entries) =>
 
 await writeFile(
   outFile,
-  `// Generated by scripts/generate-preview-seeds.mjs. Do not edit by hand.
+  `// Generated by scripts/generate-preview-seeds.ts. Do not edit by hand.
 //
 // Three rows per avatar style, each searched against that style's own palette so
 // no two avatars in a row look alike: the eight a style page opens with, the
@@ -634,7 +909,7 @@ function lookUp(
 
   if (!seeds) {
     throw new Error(
-      \`Avatar style "\${styleName}" has no \${label}. Run node scripts/generate-preview-seeds.mjs.\`,
+      \`Avatar style "\${styleName}" has no \${label}. Run node scripts/generate-preview-seeds.ts.\`,
     );
   }
 
@@ -651,15 +926,19 @@ console.log(
 );
 
 for (const [label, size, pick] of [
-  ['preview rows', ROW_WORD.length, (entry) => entry.row],
-  ['card rows', CARD_WORD.length, (entry) => entry.card],
-  ['social card rows', OG_TILES, (entry) => entry.og],
-]) {
-  const measured = report.map((entry) => ({ ...pick(entry), styleName: entry.styleName }));
+  ['preview rows', ROW_WORD.length, (entry: ReportEntry) => entry.row],
+  ['card rows', CARD_WORD.length, (entry: ReportEntry) => entry.card],
+  ['social card rows', OG_TILES, (entry: ReportEntry) => entry.og],
+] as const) {
+  const measured = report.map((entry) => ({
+    ...pick(entry),
+    styleName: entry.styleName,
+  }));
   const repeated = measured.filter((entry) => entry.shapes < size);
   // Below this two tiles read as the same color, whatever the hex values say.
   const tooClose = measured.filter(
-    (entry) => entry.neighbors !== null && entry.neighbors < THRESHOLD.sameColor,
+    (entry): entry is typeof entry & { neighbors: number } =>
+      entry.neighbors !== null && entry.neighbors < THRESHOLD.sameColor,
   );
   const shortOfPalette = measured.filter((entry) => entry.unused > 0);
 
