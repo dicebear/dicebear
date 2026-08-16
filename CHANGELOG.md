@@ -18,6 +18,16 @@ and this project adheres to
   parity fixtures and the guide on accessing all available options cover the new
   property.
 
+### Changed
+
+- **Styles:** Bumped `@dicebear/styles` to `10.5.0` for the CLI, the docs, and
+  the editor. The release adds `cutouts`, `line-face` and `patchwork`, which
+  take the collection from 52 to 55 styles, and exposes the dark color nine
+  existing styles draw with as a color group: `inkColor` on seven of them,
+  `outlineColor` on `lorelei`, and `strokeColor` on `toon-head`. The CLI was
+  still on `^10.4.0`, a range that never matched the prerelease, so it had been
+  shipping 52 definitions while the docs and the editor were already on 55.
+
 ### Fixed
 
 - **Editor:** Shuffle drew every color on its own and ignored the `contrastTo`
