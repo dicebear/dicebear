@@ -43,19 +43,26 @@ const DiceBearPreset = definePreset(Aura, {
     },
     colorScheme: {
       light: {
+        // The greys of the surrounding VitePress environment all lean a
+        // touch blue (border #c2c2c4, divider #e2e2e3, text #3c3c43 — B just
+        // above R/G). Tailwind `zinc` carries the same subtle cool cast, so
+        // everything PrimeVue derives from the surface ramp (toggle tracks,
+        // muted icons, shadows) blends in; a warm ramp like `stone` sticks
+        // out next to those greys. zinc-50/100 are indistinguishable from
+        // --vp-c-bg (#fafaf9) / --vp-c-bg-soft (#f5f5f4).
         surface: {
           0: '#ffffff',
-          50: '{stone.50}',
-          100: '{stone.100}',
-          200: '{stone.200}',
-          300: '{stone.300}',
-          400: '{stone.400}',
-          500: '{stone.500}',
-          600: '{stone.600}',
-          700: '{stone.700}',
-          800: '{stone.800}',
-          900: '{stone.900}',
-          950: '{stone.950}',
+          50: '{zinc.50}',
+          100: '{zinc.100}',
+          200: '{zinc.200}',
+          300: '{zinc.300}',
+          400: '{zinc.400}',
+          500: '{zinc.500}',
+          600: '{zinc.600}',
+          700: '{zinc.700}',
+          800: '{zinc.800}',
+          900: '{zinc.900}',
+          950: '{zinc.950}',
         },
         content: {
           background: 'var(--vp-c-bg-elv)',
@@ -66,33 +73,41 @@ const DiceBearPreset = definePreset(Aura, {
         },
         formField: {
           // Same fix as the dark block below: Aura's light form-field border
-          // defaults to {surface.300} (#d6d3d1, a warm stone). Pin it to the
-          // shared --pg-border token (#e2e2e3) so inputs/selects match the
-          // slider tracks and content borders instead of reading warm.
+          // defaults to {surface.300} (#d4d4d8), a shade darker than the
+          // app's hairlines. Pin it to the shared --pg-border token
+          // (#e2e2e3) so inputs/selects match the slider tracks and content
+          // borders exactly.
           borderColor: 'var(--pg-border)',
           // Placeholders + form-field icons (select chevron, input icons,
-          // number +/- buttons) all default to {surface.400} (#78716c, a warm
-          // stone) — browner and darker than the app's neutral grays. These
-          // are muted *foreground* colors, so pin them to the shared
-          // subtle-text token instead of a surface step.
+          // number +/- buttons) all default to {surface.400}. These are
+          // muted *foreground* colors, so pin them to the shared subtle-text
+          // token instead of a surface step.
           placeholderColor: 'var(--ui-c-text-subtle)',
           iconColor: 'var(--ui-c-text-subtle)',
         },
       },
       dark: {
+        // Steps 700–950 are the docs' own dark background scale, so PrimeVue
+        // panels sit exactly on the VitePress surfaces. The lighter steps
+        // continue that ladder with `zinc` — the same slight blue tint that
+        // runs through the whole dark palette (bg #1a1a1e, border #3c3f44
+        // etc.), where a warm grey like `stone` would clash. They sit one
+        // family step darker than their name (50 = zinc-100, …) so the ramp
+        // meets the background scale at 600 (zinc-700, #3f3f46) → 700
+        // (#2c2c32) without a jump.
         surface: {
           0: '#ffffff',
-          50: '#f5f5f4',
-          100: '#e7e5e4',
-          200: '#d6d3d1',
-          300: '#a8a29e',
-          400: '#78716c',
-          500: '#57534e',
-          600: '#3f3f46',
-          700: '#2c2c32',
-          800: '#242429',
-          900: '#1a1a1e',
-          950: '#111115',
+          50: '{zinc.100}',
+          100: '{zinc.200}',
+          200: '{zinc.300}',
+          300: '{zinc.400}',
+          400: '{zinc.500}',
+          500: '{zinc.600}',
+          600: '{zinc.700}',
+          700: '#2c2c32', // --vp-c-bg-elv
+          800: '#242429', // --vp-c-bg-soft
+          900: '#1a1a1e', // --vp-c-bg
+          950: '#111115', // --vp-c-bg-alt
         },
         content: {
           background: 'var(--vp-c-bg-soft)',
@@ -104,14 +119,14 @@ const DiceBearPreset = definePreset(Aura, {
         formField: {
           background: 'var(--vp-c-bg-soft)',
           // Aura's resting form-field border defaults to {surface.600}
-          // (#3f3f46, a cool zinc step) — the one control token not on a
-          // VitePress gray. Inputs/selects therefore read colder than the
-          // cards, slider tracks and dividers around them (all #3c3f44).
-          // Pull it onto the shared --pg-border token so every border matches.
+          // (#3f3f46) — a near miss to the app border #3c3f44, so
+          // inputs/selects read subtly off next to the cards, slider tracks
+          // and dividers around them. Pull it onto the shared --pg-border
+          // token so every border matches.
           borderColor: 'var(--pg-border)',
           hoverBorderColor: 'var(--vp-c-gray-1)',
-          // Match the light block: pull placeholder + icon colors off the
-          // warm {surface.400} stone onto the app's subtle-text token.
+          // Match the light block: pin placeholder + icon colors to the
+          // app's subtle-text token instead of a surface step.
           placeholderColor: 'var(--ui-c-text-subtle)',
           iconColor: 'var(--ui-c-text-subtle)',
         },
@@ -136,17 +151,18 @@ const DiceBearPreset = definePreset(Aura, {
             secondary: {
               borderColor: 'var(--vp-c-border)',
               color: 'var(--vp-c-text-1)',
-              // Aura's hover background is `surface.50` (#fafaf9) — identical
-              // to VitePress's `--vp-c-bg` in light mode, so the hover state
-              // is invisible against the page. `bg-elv` is pure white and
-              // semantically right for an "elevated on hover" effect.
+              // Aura's hover background is `surface.50` (#fafafa) —
+              // indistinguishable from VitePress's `--vp-c-bg` (#fafaf9) in
+              // light mode, so the hover state is invisible against the
+              // page. `bg-elv` is pure white and semantically right for an
+              // "elevated on hover" effect.
               hoverBackground: 'var(--vp-c-bg-elv)',
               activeBackground: 'var(--vp-c-bg-soft)',
             },
           },
           root: {
             // Filled secondary defaults to ~surface-100 which blends with
-            // VitePress's --vp-c-bg-soft (also surface-100). Lift to bg-elv
+            // VitePress's --vp-c-bg-soft (same grey to the eye). Lift to bg-elv
             // (#ffffff) so filled buttons sit a step above the page surface,
             // matching the card-like "elevated" presence the design calls for.
             secondary: {
@@ -277,8 +293,8 @@ const DiceBearPreset = definePreset(Aura, {
     inputnumber: {
       colorScheme: {
         // The +/- button color is independent of formField.iconColor and
-        // still resolves to {surface.400} (#78716c, warm stone). Pull it onto
-        // the same subtle-text token as the other form-field affordances.
+        // resolves to a surface step. Pull it onto the same subtle-text
+        // token as the other form-field affordances.
         light: {
           button: {
             color: 'var(--ui-c-text-subtle)',
