@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.6.0] - 2026-08-16
+
 ### Added
 
 - **Core:** Color fields in `OptionsDescriptor` now carry `notEqualTo`, the list
@@ -466,7 +468,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.5.0...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.6.0...HEAD
+[10.6.0]: https://github.com/dicebear/dicebear/compare/v10.5.0...v10.6.0
 [10.5.0]: https://github.com/dicebear/dicebear/compare/v10.4.0...v10.5.0
 [10.4.0]: https://github.com/dicebear/dicebear/compare/v10.4.0-rc.2...v10.4.0
 [10.4.0-rc.2]:

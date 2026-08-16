@@ -14,8 +14,8 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@dicebear/converter": "10.5.0",
-    "@dicebear/core": "10.5.0",
+    "@dicebear/converter": "10.6.0",
+    "@dicebear/core": "10.6.0",
     "@dicebear/styles": "^10.5.0",
     "@fontsource-variable/inter": "^5.2.8",
     "@lucide/vue": "^1.7.0",
