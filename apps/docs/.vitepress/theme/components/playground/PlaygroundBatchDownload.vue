@@ -9,7 +9,7 @@ import JSZip from 'jszip';
 import { Avatar } from '@dicebear/core';
 import { UiAvatar, UiConfetti, UiLicenseAlert } from '@theme/components/ui';
 import useStore from '@theme/stores/playground';
-import { loadAvatarStyle } from '@theme/utils/avatar/style';
+import { clonePlain, loadAvatarStyle } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
 
 const SEED_CAP = 500;
@@ -143,7 +143,9 @@ async function generate() {
 
     const zip = new JSZip();
     const used = new Set<string>();
-    const baseOptions = { ...store.avatarStyleOptionsWithoutDefaults };
+    // The options object is deep-reactive; nested arrays are proxies, and the
+    // structuredClone inside Avatar refuses those.
+    const baseOptions = clonePlain(store.avatarStyleOptionsWithoutDefaults);
 
     for (const seed of seeds.value) {
       if (aborted) return;
