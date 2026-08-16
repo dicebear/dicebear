@@ -22,6 +22,7 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
   critters: () => import('@dicebear/styles/critters.json'),
   croodles: () => import('@dicebear/styles/croodles.json'),
   'croodles-neutral': () => import('@dicebear/styles/croodles-neutral.json'),
+  cutouts: () => import('@dicebear/styles/cutouts.json'),
   disco: () => import('@dicebear/styles/disco.json'),
   dylan: () => import('@dicebear/styles/dylan.json'),
   'fun-emoji': () => import('@dicebear/styles/fun-emoji.json'),
@@ -32,6 +33,7 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
   'initial-face': () => import('@dicebear/styles/initial-face.json'),
   initials: () => import('@dicebear/styles/initials.json'),
   landscape: () => import('@dicebear/styles/landscape.json'),
+  'line-face': () => import('@dicebear/styles/line-face.json'),
   loops: () => import('@dicebear/styles/loops.json'),
   lorelei: () => import('@dicebear/styles/lorelei.json'),
   'lorelei-neutral': () => import('@dicebear/styles/lorelei-neutral.json'),
@@ -42,6 +44,7 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
   'notionists-neutral': () =>
     import('@dicebear/styles/notionists-neutral.json'),
   'open-peeps': () => import('@dicebear/styles/open-peeps.json'),
+  patchwork: () => import('@dicebear/styles/patchwork.json'),
   personas: () => import('@dicebear/styles/personas.json'),
   'pixel-art': () => import('@dicebear/styles/pixel-art.json'),
   'pixel-art-neutral': () => import('@dicebear/styles/pixel-art-neutral.json'),
@@ -122,6 +125,8 @@ export async function loadAvatarStyleDefinition(
   return raw as StyleDefinition;
 }
 
+const pendingStyles = new Map<string, Promise<Style>>();
+
 export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
   const cached = styleCache.get(avatarStyle);
 
@@ -160,16 +165,35 @@ export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
     throw new Error(`Avatar style "${avatarStyle}" not found.`);
   }
 
-  const def = await loader();
-  const raw = def.default as object;
+  // A grid of avatars asks for the same style once per tile, all in the same
+  // tick and all before the first import resolves. Sharing the in-flight
+  // promise keeps that to one `new Style()`, which costs a few milliseconds
+  // per call on the larger definitions.
+  const inFlight = pendingStyles.get(name);
 
-  definitionRawCache.set(name, raw);
+  if (inFlight) {
+    return inFlight;
+  }
 
-  const style = new Style(raw);
+  const promise = loader()
+    .then((def) => {
+      const raw = def.default as object;
 
-  styleCache.set(name, style);
+      definitionRawCache.set(name, raw);
 
-  return style;
+      const style = new Style(raw);
+
+      styleCache.set(name, style);
+
+      return style;
+    })
+    .finally(() => {
+      pendingStyles.delete(name);
+    });
+
+  pendingStyles.set(name, promise);
+
+  return promise;
 }
 
 function scanForVariable(obj: unknown, variableName: string): boolean {
