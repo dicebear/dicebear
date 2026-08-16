@@ -11,25 +11,10 @@ sidebar: false
 
 <script setup lang="ts">
 import StyleList from "@theme/components/styles/StyleList.vue";
-import { UiContainer, UiHeadline, UiDescription } from "@theme/components/ui";
+import { UiContainer } from "@theme/components/ui";
 </script>
 
 <UiContainer class="styles-page">
-  <div class="styles-hero">
-    <UiHeadline tag="h1" class="styles-title">
-      <strong>Styles</strong> Overview
-    </UiHeadline>
-    <UiDescription>
-      Browse our avatar library, from abstract patterns to hand-drawn character illustrations. Some styles come from independent artists, others we designed ourselves. All of them are ready to use as profile pictures in your projects.
-    </UiDescription>
-  </div>
-
+  <h1 class="sr-only">Avatar Styles</h1>
   <StyleList />
 </UiContainer>
-
-<style>
-.styles-page .styles-hero {
-  text-align: center;
-  padding: 80px 0 48px;
-}
-</style>

@@ -530,3 +530,20 @@ img[src^='https://api.dicebear.com/']:not(.next, .prev) {
     transparent 100%
   );
 }
+
+/* ----------------------------------------------------------------
+ * Screen-reader-only text. Keeps a page's h1 in the document
+ * outline on tool pages (playground, styles overview) that show
+ * no visible heading.
+ * ---------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
