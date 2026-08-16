@@ -95,5 +95,18 @@
   "potVariant": "Pot",
   "screenColor": "Screen Color",
   "shapeColor": "Shape Color",
-  "shoesColor": "Shoes Color"
+  "shoesColor": "Shoes Color",
+  "lipsColor": "Lips Color",
+  "scleraColor": "Eye White Color",
+  "teethColor": "Teeth Color",
+  "throatColor": "Throat Color",
+  "tongueColor": "Tongue Color",
+  "uvulaColor": "Uvula Color",
+  "paperFaceColor": "Face Paper Color",
+  "paperBackColor": "Back Paper Color",
+  "paperHairColor": "Hair Paper Color",
+  "paperMouthColor": "Mouth Paper Color",
+  "outlineColor": "Outline Color",
+  "paperColor": "Paper Color",
+  "strokeColor": "Stroke Color"
 }

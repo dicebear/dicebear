@@ -95,5 +95,18 @@
   "potVariant": "Topf",
   "screenColor": "Bildschirmfarbe",
   "shapeColor": "Formfarbe",
-  "shoesColor": "Schuhfarbe"
+  "shoesColor": "Schuhfarbe",
+  "lipsColor": "Lippenfarbe",
+  "scleraColor": "Augenweiß-Farbe",
+  "teethColor": "Zahnfarbe",
+  "throatColor": "Rachenfarbe",
+  "tongueColor": "Zungenfarbe",
+  "uvulaColor": "Zäpfchenfarbe",
+  "paperFaceColor": "Papierfarbe Gesicht",
+  "paperBackColor": "Papierfarbe Hintergrund",
+  "paperHairColor": "Papierfarbe Haare",
+  "paperMouthColor": "Papierfarbe Mund",
+  "outlineColor": "Umrissfarbe",
+  "paperColor": "Papierfarbe",
+  "strokeColor": "Strichfarbe"
 }

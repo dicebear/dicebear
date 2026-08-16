@@ -15,8 +15,10 @@ import clayDef from '@dicebear/styles/clay.json';
 import crittersDef from '@dicebear/styles/critters.json';
 import croodlesDef from '@dicebear/styles/croodles.json';
 import croodlesNeutralDef from '@dicebear/styles/croodles-neutral.json';
+import cutoutsDef from '@dicebear/styles/cutouts.json';
 import dylanDef from '@dicebear/styles/dylan.json';
 import funEmojiDef from '@dicebear/styles/fun-emoji.json';
+import lineFaceDef from '@dicebear/styles/line-face.json';
 import loreleiDef from '@dicebear/styles/lorelei.json';
 import loreleiNeutralDef from '@dicebear/styles/lorelei-neutral.json';
 import micahDef from '@dicebear/styles/micah.json';
@@ -58,8 +60,10 @@ const availableStyles: ConfigStyleCollection = {
   critters: createStyle(crittersDef),
   croodles: createStyle(croodlesDef),
   croodlesNeutral: createStyle(croodlesNeutralDef),
+  cutouts: createStyle(cutoutsDef),
   dylan: createStyle(dylanDef),
   funEmoji: createStyle(funEmojiDef),
+  lineFace: createStyle(lineFaceDef),
   lorelei: createStyle(loreleiDef),
   loreleiNeutral: createStyle(loreleiNeutralDef),
   micah: createStyle(micahDef),

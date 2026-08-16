@@ -95,5 +95,18 @@
   "potVariant": "Vaso",
   "screenColor": "Cor da Tela",
   "shapeColor": "Cor da Forma",
-  "shoesColor": "Cor dos Sapatos"
+  "shoesColor": "Cor dos Sapatos",
+  "lipsColor": "Cor dos Lábios",
+  "scleraColor": "Cor do Branco dos Olhos",
+  "teethColor": "Cor dos Dentes",
+  "throatColor": "Cor da Garganta",
+  "tongueColor": "Cor da Língua",
+  "uvulaColor": "Cor da Úvula",
+  "paperFaceColor": "Cor do Papel do Rosto",
+  "paperBackColor": "Cor do Papel de Fundo",
+  "paperHairColor": "Cor do Papel do Cabelo",
+  "paperMouthColor": "Cor do Papel da Boca",
+  "outlineColor": "Cor do Contorno",
+  "paperColor": "Cor do Papel",
+  "strokeColor": "Cor do Traço"
 }
