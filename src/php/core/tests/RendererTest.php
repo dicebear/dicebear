@@ -114,6 +114,54 @@ class RendererTest extends TestCase
         $this->assertStringContainsString('<g id="outer"><g id="inner"><rect/></g></g>', $svg);
     }
 
+    public function testDropsWrappersWhoseChildrenAllRenderToNothing(): void
+    {
+        $style = new Style([
+            'canvas' => [
+                'width' => 100, 'height' => 100,
+                'elements' => [
+                    ['type' => 'element', 'name' => 'g', 'attributes' => ['mask' => 'url(#mask)'], 'children' => [
+                        ['type' => 'element', 'name' => 'g', 'children' => [
+                            ['type' => 'component', 'name' => 'eyes'],
+                        ]],
+                    ]],
+                    ['type' => 'element', 'name' => 'rect'],
+                ],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50, 'height' => 50, 'probability' => 0,
+                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]]],
+                ],
+            ],
+        ]);
+        $svg = (new Avatar($style, ['seed' => 'test']))->toString();
+        $this->assertStringNotContainsString('mask=', $svg);
+        $this->assertStringContainsString('<rect/>', $svg);
+    }
+
+    public function testKeepsAnEmptyWrapperThatCarriesAnId(): void
+    {
+        $style = new Style([
+            'canvas' => [
+                'width' => 100, 'height' => 100,
+                'elements' => [
+                    ['type' => 'element', 'name' => 'g', 'attributes' => ['id' => 'placeholder'], 'children' => [
+                        ['type' => 'component', 'name' => 'eyes'],
+                    ]],
+                ],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50, 'height' => 50, 'probability' => 0,
+                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]]],
+                ],
+            ],
+        ]);
+        $svg = (new Avatar($style, ['seed' => 'test']))->toString();
+        $this->assertStringContainsString('<g id="placeholder"/>', $svg);
+    }
+
     // text rendering
 
     public function testTextContent(): void

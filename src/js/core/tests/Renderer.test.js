@@ -154,6 +154,68 @@ describe('Renderer', () => {
 
       assert.ok(svg.includes('<g id="outer"><g id="inner"><rect/></g></g>'));
     });
+
+    it('should drop wrappers whose children all render to nothing', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'g',
+              attributes: { mask: 'url(#mask)' },
+              children: [
+                { type: 'element', name: 'g', children: [{ type: 'component', name: 'eyes' }] },
+              ],
+            },
+            { type: 'element', name: 'rect' },
+          ],
+        },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            probability: 0,
+            variants: { open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] } },
+          },
+        },
+      });
+
+      const svg = new Avatar(style, { seed: 'test' }).toString();
+
+      assert.ok(!svg.includes('mask='), 'expected the empty wrappers to be dropped');
+      assert.ok(svg.includes('<rect/>'));
+    });
+
+    it('should keep an empty wrapper that carries an id', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'g',
+              attributes: { id: 'placeholder' },
+              children: [{ type: 'component', name: 'eyes' }],
+            },
+          ],
+        },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            probability: 0,
+            variants: { open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] } },
+          },
+        },
+      });
+
+      const svg = new Avatar(style, { seed: 'test' }).toString();
+
+      assert.ok(svg.includes('<g id="placeholder"/>'));
+    });
   });
 
   describe('text rendering', () => {

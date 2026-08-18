@@ -265,11 +265,23 @@ impl<'a> Renderer<'a> {
         let attrs = self.render_attributes(element.attributes())?;
         let children = self.render_elements(element.children())?;
 
-        Ok(if children.is_empty() {
-            format!("<{name}{attrs}/>")
-        } else {
-            format!("<{name}{attrs}>{children}</{name}>")
-        })
+        if children.is_empty() {
+            // A wrapper whose children all rendered to nothing, because an
+            // optional component came up empty, has no content left to group.
+            // It draws nothing either way, but a masked group without content
+            // has an empty bounding box, and strict SVG parsers reject the
+            // whole document over it. Wrappers that carry an id stay, so
+            // references keep resolving.
+            let has_id = element.attributes().and_then(|a| a.get("id")).is_some();
+
+            if !element.children().is_empty() && !has_id {
+                return Ok(String::new());
+            }
+
+            return Ok(format!("<{name}{attrs}/>"));
+        }
+
+        Ok(format!("<{name}{attrs}>{children}</{name}>"))
     }
 
     fn render_text_element(&mut self, element: &Element) -> String {

@@ -263,6 +263,15 @@ func (r *renderer) renderSvgElement(el *style.Element) (string, error) {
 	}
 
 	if children == "" {
+		// A wrapper whose children all rendered to nothing, because an optional
+		// component came up empty, has no content left to group. It draws
+		// nothing either way, but a masked group without content has an empty
+		// bounding box, and strict SVG parsers reject the whole document over
+		// it. Wrappers that carry an id stay, so references keep resolving.
+		if _, hasID := el.Attributes.Get("id"); len(el.Children) > 0 && !hasID {
+			return "", nil
+		}
+
 		return "<" + name + attrs + "/>", nil
 	}
 	return "<" + name + attrs + ">" + children + "</" + name + ">", nil

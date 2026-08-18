@@ -236,6 +236,74 @@ def test_nested_elements() -> None:
     assert '<g id="outer"><g id="inner"><rect/></g></g>' in svg
 
 
+_EYES_COMPONENT = {
+    "eyes": {
+        "width": 50,
+        "height": 50,
+        "probability": 0,
+        "variants": {
+            "open": {
+                "elements": [
+                    {"type": "element", "name": "circle", "attributes": {"r": "5"}}
+                ]
+            }
+        },
+    }
+}
+
+
+def test_drops_wrappers_whose_children_all_render_to_nothing() -> None:
+    style = Style(
+        {
+            "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                    {
+                        "type": "element",
+                        "name": "g",
+                        "attributes": {"mask": "url(#mask)"},
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "g",
+                                "children": [{"type": "component", "name": "eyes"}],
+                            }
+                        ],
+                    },
+                    {"type": "element", "name": "rect"},
+                ],
+            },
+            "components": _EYES_COMPONENT,
+        }
+    )
+    svg = Avatar(style, {"seed": "test"}).to_string()
+    assert "mask=" not in svg
+    assert "<rect/>" in svg
+
+
+def test_keeps_an_empty_wrapper_that_carries_an_id() -> None:
+    style = Style(
+        {
+            "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                    {
+                        "type": "element",
+                        "name": "g",
+                        "attributes": {"id": "placeholder"},
+                        "children": [{"type": "component", "name": "eyes"}],
+                    }
+                ],
+            },
+            "components": _EYES_COMPONENT,
+        }
+    )
+    svg = Avatar(style, {"seed": "test"}).to_string()
+    assert '<g id="placeholder"/>' in svg
+
+
 # ---------------------------------------------------------------------------
 # text rendering
 # ---------------------------------------------------------------------------

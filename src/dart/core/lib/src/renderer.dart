@@ -301,6 +301,15 @@ class Renderer {
     final children = _renderElements(element.children);
 
     if (children.isEmpty) {
+      // A wrapper whose children all rendered to nothing, because an optional
+      // component came up empty, has no content left to group. It draws
+      // nothing either way, but a masked group without content has an empty
+      // bounding box, and strict SVG parsers reject the whole document over
+      // it. Wrappers that carry an id stay, so references keep resolving.
+      if (element.children.isNotEmpty && element.attributes?['id'] == null) {
+        return '';
+      }
+
       return '<$name$attrs/>';
     }
 

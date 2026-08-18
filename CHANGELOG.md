@@ -8,6 +8,20 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **Core (all languages):** Avatars no longer carry empty wrapper elements. An
+  optional component that came up empty left its wrapper behind, and in
+  `notionists` that wrapper sits inside a mask. A masked group without content
+  has no bounding box, and AndroidSVG takes the mask size from that box, so the
+  whole file fails to render. Gallery apps on Android showed such avatars as
+  corrupted while browsers drew them fine. Every file reported as broken has
+  such a wrapper, and the working ones from the same download do not. A wrapper
+  is now left out when nothing inside it renders, unless it carries an id that
+  something may point at. `bottts-neutral`, `clay`, `critters`, `notionists`,
+  and `squircles` were affected, `bottts-neutral` in about half of all seeds.
+  The rendered image does not change.
+
 ## [10.6.0] - 2026-08-16
 
 ### Added

@@ -271,6 +271,19 @@ class Renderer:
         children = self._render_elements(element.children())
 
         if len(children) == 0:
+            # A wrapper whose children all rendered to nothing, because an
+            # optional component came up empty, has no content left to group.
+            # It draws nothing either way, but a masked group without content
+            # has an empty bounding box, and strict SVG parsers reject the
+            # whole document over it. Wrappers that carry an id stay, so
+            # references keep resolving.
+            own_attributes = element.attributes()
+
+            if len(element.children()) > 0 and (
+                own_attributes is None or "id" not in own_attributes
+            ):
+                return ""
+
             return f"<{name}{attrs_str}/>"
 
         return f"<{name}{attrs_str}>{children}</{name}>"
