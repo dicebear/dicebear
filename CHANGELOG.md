@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.6.1] - 2026-08-18
+
 ### Fixed
 
 - **Core (all languages):** Avatars no longer carry empty wrapper elements. An
@@ -482,7 +484,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.6.0...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.6.1...HEAD
+[10.6.1]: https://github.com/dicebear/dicebear/compare/v10.6.0...v10.6.1
 [10.6.0]: https://github.com/dicebear/dicebear/compare/v10.5.0...v10.6.0
 [10.5.0]: https://github.com/dicebear/dicebear/compare/v10.4.0...v10.5.0
 [10.4.0]: https://github.com/dicebear/dicebear/compare/v10.4.0-rc.2...v10.4.0
