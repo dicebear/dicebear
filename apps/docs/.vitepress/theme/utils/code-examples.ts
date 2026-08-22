@@ -8,6 +8,7 @@ export interface CodeExamples {
   rust: string;
   go: string;
   dart: string;
+  csharp: string;
   cli: string;
 }
 
@@ -181,6 +182,43 @@ export function formatDartValue(value: unknown, depth = 0): string {
   return String(value);
 }
 
+export function formatCSharpValue(value: unknown, depth = 0): string {
+  const indent = '    '.repeat(depth);
+  const outerIndent = depth > 0 ? '    '.repeat(depth - 1) : '';
+
+  if (value === null || value === undefined) return 'null';
+  if (typeof value === 'boolean') return value ? 'true' : 'false';
+  if (typeof value === 'number') return String(value);
+  if (typeof value === 'string')
+    return `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
+
+  if (Array.isArray(value)) {
+    if (value.length === 0) return 'new JsonArray()';
+
+    // A JsonArray takes its items as constructor arguments, so a flat list of
+    // colors or variant names stays on one line.
+    return `new JsonArray(${value.map((v) => formatCSharpValue(v, depth)).join(', ')})`;
+  }
+
+  if (typeof value === 'object') {
+    const entries = Object.entries(value as Record<string, unknown>);
+    if (entries.length === 0) return 'new JsonObject()';
+
+    if (depth === 0) {
+      return `new JsonObject { ${entries.map(([k, v]) => `["${k.replace(/"/g, '\\"')}"] = ${formatCSharpValue(v)}`).join(', ')} }`;
+    }
+
+    const items = entries.map(
+      ([k, v]) =>
+        `${indent}["${k.replace(/"/g, '\\"')}"] = ${formatCSharpValue(v, depth + 1)}`,
+    );
+
+    return `new JsonObject\n${outerIndent}{\n${items.join(',\n')},\n${outerIndent}}`;
+  }
+
+  return String(value);
+}
+
 /**
  * The body of a map literal: one `key: value` line per option at the given
  * indent, wrapped in the newlines that separate it from the braces. Values are
@@ -211,7 +249,7 @@ function optionLines(
 }
 
 /**
- * The eight snippets shown next to an option: one call per library, plus the
+ * The nine snippets shown next to an option: one call per library, plus the
  * HTTP-API URL and the CLI invocation. Takes a whole option set, because the
  * options table passes one entry and a preset card passes a dozen.
  */
@@ -261,7 +299,21 @@ export function generateCodeExamples(
     true,
   )}});`;
 
+  // C# puts the opening brace of an object initializer on its own line, so an
+  // empty option set collapses to the plain constructor instead of a pair of
+  // braces around nothing.
+  const csharpBody = optionLines(
+    options,
+    '    ',
+    (key, value) => `["${key}"] = ${formatCSharpValue(value)}`,
+    true,
+  );
+
+  const csharp = csharpBody
+    ? `new Avatar(style, new JsonObject\n{${csharpBody}});`
+    : 'new Avatar(style, new JsonObject());';
+
   const cli = getAvatarApiCommand(styleName, options);
 
-  return { httpApi, js, php, python, rust, go, dart, cli };
+  return { httpApi, js, php, python, rust, go, dart, csharp, cli };
 }

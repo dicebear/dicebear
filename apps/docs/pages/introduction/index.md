@@ -4,7 +4,7 @@ description: >
   DiceBear is a free, open source avatar library and avatar API. Generate
   deterministic SVG profile pictures and user placeholder images via JavaScript
   library, PHP library, Python library, Rust library, Go library, Dart library,
-  HTTP API, or CLI.
+  C# library, HTTP API, or CLI.
 ---
 
 <script setup>
@@ -69,6 +69,14 @@ const highlights = [
     link: '/how-to-use/dart-library/',
   },
   {
+    icon: Hexagon,
+    title: 'C# Library',
+    description:
+      'Generate avatars in .NET, Godot and Unity projects. Identical API to the JS library: same seed, same result.',
+    color: '#512bd4',
+    link: '/how-to-use/csharp-library/',
+  },
+  {
     icon: Terminal,
     title: 'CLI',
     description:
@@ -107,7 +115,8 @@ DiceBear is available through the [JavaScript library](/how-to-use/js-library/),
 [Python library](/how-to-use/python-library/),
 [Rust library](/how-to-use/rust-library/),
 [Go library](/how-to-use/go-library/),
-[Dart library](/how-to-use/dart-library/), [HTTP API](/how-to-use/http-api/),
+[Dart library](/how-to-use/dart-library/),
+[C# library](/how-to-use/csharp-library/), [HTTP API](/how-to-use/http-api/),
 [CLI](/how-to-use/cli/),
 [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
 [Editor](https://editor.dicebear.com) and [Playground](/playground/), so you can
@@ -140,8 +149,9 @@ DiceBear is built with privacy in mind. When using the
 [JavaScript library](/how-to-use/js-library/),
 [PHP library](/how-to-use/php-library/),
 [Python library](/how-to-use/python-library/),
-[Rust library](/how-to-use/rust-library/), [Go library](/how-to-use/go-library/)
-or [Dart library](/how-to-use/dart-library/), avatars are generated entirely on
+[Rust library](/how-to-use/rust-library/),
+[Go library](/how-to-use/go-library/), [Dart library](/how-to-use/dart-library/)
+or [C# library](/how-to-use/csharp-library/), avatars are generated entirely on
 your infrastructure. No personal data ever leaves your systems. For teams that
 require full control over data retention and infrastructure, DiceBear can be
 [self-hosted](/guides/host-the-http-api-yourself/), so there is no dependency on

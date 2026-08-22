@@ -190,8 +190,8 @@ void main() {
   });
 
   test('toJson does not HTML-escape the embedded SVG', () {
-    // The JS/PHP/Rust ports emit the literal "<svg ...>" in the JSON
-    // envelope; Dart's jsonEncode never HTML-escapes, but pin it anyway.
+    // The other ports emit the literal "<svg ...>" in the JSON envelope;
+    // Dart's jsonEncode never HTML-escapes, but pin it anyway.
     final avatar = Avatar(Style(_minimalStyle), {'seed': 'x'});
 
     expect(jsonEncode(avatar.toJson()), contains('"svg":"<svg '));

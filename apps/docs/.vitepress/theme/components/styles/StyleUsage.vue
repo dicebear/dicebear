@@ -37,6 +37,7 @@ const shortLabels: Record<string, string> = {
   'rust-library': 'Rust',
   'go-library': 'Go',
   'dart-library': 'Dart',
+  'csharp-library': 'C#',
   cli: 'CLI',
 };
 
@@ -47,6 +48,7 @@ const installIntros: Record<string, string> = {
   'rust-library': 'First add the required crates via Cargo:',
   'go-library': 'First add the required modules with go get:',
   'dart-library': 'First add the required packages with dart pub:',
+  'csharp-library': 'First add the required package with the dotnet CLI:',
   cli: 'First install the CLI package via npm:',
 };
 

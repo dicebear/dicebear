@@ -81,6 +81,23 @@ if (existsSync(pubspecPath)) {
   }
 }
 
+// The C# core is not an npm workspace either; bump the <Version> property in
+// its csproj so the NuGet package ships on the same version as the other ports.
+// The project file carries exactly one, so no anchoring is needed.
+const csprojPath = join(ROOT, "src/csharp/core/DiceBear.Core.csproj");
+if (existsSync(csprojPath)) {
+  const raw = readFileSync(csprojPath, "utf-8");
+  const updated = raw.replace(
+    /<Version>[^<]*<\/Version>/,
+    `<Version>${version}</Version>`,
+  );
+
+  if (updated !== raw) {
+    writeFileSync(csprojPath, updated);
+    console.log(`  DiceBear.Core (csharp): → ${version}`);
+  }
+}
+
 // The Go core (src/go/core) needs no file bump: a Go module's version lives
 // entirely in the Git tag, which the module proxy reads directly. The tag
 // created below (e.g. v10.2.0) is mirrored to the standalone dicebear-go repo by

@@ -142,3 +142,60 @@ jobs:
         if: steps.pub-version.outputs.exists == 'false'
         working-directory: src/dart/core
         run: dart pub publish --force
+
+  publish-nuget:
+    needs: test
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read # actions/checkout
+      id-token: write # Trusted Publishing to NuGet.org (OIDC, no stored token)
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # Trusted publishing (OIDC, no stored token). Configure on nuget.org: a
+      # trusted publishing policy for package DiceBear.Core, repository
+      # dicebear/dicebear and this workflow. Like pub.dev and crates.io, NuGet
+      # publishes straight from the monorepo subdirectory — no split repository.
+      - name: Pack
+        working-directory: src/csharp/core
+        run: dotnet pack --configuration Release --output ../../../dist-nuget
+
+      # The first release is published manually (nuget.org's trusted-publishing
+      # settings only exist once the package does), so skip cleanly when the
+      # csproj version is already live. This also makes re-runs of the workflow
+      # safe.
+      - name: Check whether this version is already on NuGet
+        id: nuget-version
+        run: |
+          VERSION=$(sed -n 's/.*<Version>\(.*\)<\/Version>.*/\1/p' \
+            src/csharp/core/DiceBear.Core.csproj)
+          if curl -fsSL https://api.nuget.org/v3-flatcontainer/dicebear.core/index.json \
+            | jq -e --arg v "$VERSION" '.versions[] | select(. == $v)' \
+            > /dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Authenticate to NuGet.org
+        if: steps.nuget-version.outputs.exists == 'false'
+        id: login
+        uses: NuGet/login@v1
+        with:
+          # The NuGet.org account that created the trusted publishing policy,
+          # not the organization that owns the package. Passing the owner fails
+          # the token exchange with a 401.
+          user: FlorianKoerner
+
+      - name: Publish to NuGet
+        if: steps.nuget-version.outputs.exists == 'false'
+        run: |
+          dotnet nuget push "dist-nuget/*.nupkg" \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"

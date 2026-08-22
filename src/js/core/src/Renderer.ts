@@ -555,7 +555,7 @@ export class Renderer {
       case 'initial': {
         // charAt(0) would return a lone surrogate (ill-formed XML) for
         // supplementary-plane initials; take the full first code point
-        // instead, like the PHP/Python/Rust/Go/Dart ports.
+        // instead, like the other ports.
         const first = this.#initials().codePointAt(0);
         return first !== undefined ? String.fromCodePoint(first) : '';
       }

@@ -14,6 +14,7 @@ export function loadHljs(): Promise<Hljs> {
       { default: rust },
       { default: go },
       { default: dart },
+      { default: csharp },
     ] = await Promise.all([
       import('highlight.js/lib/core'),
       import('highlight.js/lib/languages/javascript'),
@@ -24,6 +25,7 @@ export function loadHljs(): Promise<Hljs> {
       import('highlight.js/lib/languages/rust'),
       import('highlight.js/lib/languages/go'),
       import('highlight.js/lib/languages/dart'),
+      import('highlight.js/lib/languages/csharp'),
     ]);
 
     for (const [name, language] of [
@@ -35,6 +37,7 @@ export function loadHljs(): Promise<Hljs> {
       ['rust', rust],
       ['go', go],
       ['dart', dart],
+      ['csharp', csharp],
     ] as const) {
       core.registerLanguage(name, language);
     }

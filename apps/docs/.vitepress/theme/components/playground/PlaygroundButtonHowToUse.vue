@@ -12,6 +12,7 @@ import {
   formatPythonValue,
   formatGoValue,
   formatDartValue,
+  formatCSharpValue,
 } from '@theme/utils/code-examples';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
@@ -248,6 +249,36 @@ final avatar = Avatar(style, ${dartOptions});
 final svg = avatar.svg;`;
 });
 
+const exampleCSharp = computed(() => {
+  const csharpOptions = formatCSharpValue(options.value, 1);
+
+  if (store.isCustomStyle) {
+    return `using System.Text.Json.Nodes;
+using DiceBear;
+
+// Your custom style definition (raw JSON)
+var style = Style.Parse(File.ReadAllText("./my-style.json"));
+var avatar = new Avatar(style, ${csharpOptions});
+
+var svg = avatar.ToSvg();`;
+  }
+
+  // The .NET styles package exposes each style as a PascalCase property
+  // (e.g. "big-ears" → BigEars).
+  const styleConst = store.avatarStyleName
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+
+  return `using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(Styles.${styleConst});
+var avatar = new Avatar(style, ${csharpOptions});
+
+var svg = avatar.ToSvg();`;
+});
+
 const exampleCli = computed(() =>
   getAvatarApiCommand(
     store.isCustomStyle ? './my-style.json' : store.avatarStyleName,
@@ -275,6 +306,7 @@ const exampleCli = computed(() =>
             <Tab value="rust-library">Rust</Tab>
             <Tab value="go-library">Go</Tab>
             <Tab value="dart-library">Dart</Tab>
+            <Tab value="csharp-library">C#</Tab>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
@@ -419,6 +451,28 @@ const exampleCli = computed(() =>
                 </p>
                 <p>
                   See <a href="/how-to-use/dart-library">Dart</a> docs for more
+                  information.
+                </p>
+              </div>
+            </TabPanel>
+            <TabPanel value="csharp-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First add the required packages with the dotnet CLI:</p>
+                <UiCode
+                  :code="
+                    store.isCustomStyle
+                      ? 'dotnet add package DiceBear.Core'
+                      : 'dotnet add package DiceBear.Core\ndotnet add package DiceBear.Styles'
+                  "
+                />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="exampleCSharp" lang="csharp" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
+                </p>
+                <p>
+                  See <a href="/how-to-use/csharp-library">C#</a> docs for more
                   information.
                 </p>
               </div>

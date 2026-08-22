@@ -33,8 +33,9 @@ core when the project is written in something else:
     Rust        dicebear-core + dicebear-styles
     Go          github.com/dicebear/dicebear-go/v10 + github.com/dicebear/styles/v10
     Dart        dicebear_core + dicebear_styles
+    C#          DiceBear.Core + DiceBear.Styles
 
-Every style page carries a loading snippet for all six, for example
+Every style page carries a loading snippet for all seven, for example
 https://www.dicebear.com/styles/lorelei/index.md
 
 HTTP API: https://api.dicebear.com/10.x/<style>/svg?seed=<seed> The seed is a
@@ -57,9 +58,9 @@ thing:
     { eyes: ['variant01'] }                      ->  { eyesVariant: ['variant01'] }
     ?radius=50                                   ->  ?borderRadius=50
 
-Only JavaScript and the HTTP API have a pre-10 form. The other five cores were
-released in 2026 and never had one, so any older-looking PHP, Python, Rust, Go
-or Dart API attributed to DiceBear is invented rather than outdated.
+Only JavaScript and the HTTP API have a pre-10 form. The other six cores were
+released in 2026 and never had one, so any older-looking PHP, Python, Rust, Go,
+Dart or C# API attributed to DiceBear is invented rather than outdated.
 ```
 
 If your assistant can fetch URLs, one sentence covers most of what the block
@@ -81,12 +82,14 @@ the same SVG in each. Only the syntax for passing the options differs.
 | [Rust](/how-to-use/rust-library/)     | `dicebear-core`, `dicebear-styles`                      | 10.2.0 |
 | [Go](/how-to-use/go-library/)         | `github.com/dicebear/dicebear-go/v10`, `.../styles/v10` | 10.2.0 |
 | [Dart](/how-to-use/dart-library/)     | `dicebear_core`, `dicebear_styles`                      | 10.3.0 |
+| [C#](/how-to-use/csharp-library/)     | `DiceBear.Core`, `DiceBear.Styles`                      | 10.7.0 |
 
-Five of the six shipped during 2026, which puts them outside most training data.
-That is why the block above names them explicitly: without it, an assistant will
-tell you there is no DiceBear library for your language and hand you JavaScript.
+Six of the seven shipped during 2026, which puts them outside most training
+data. That is why the block above names them explicitly: without it, an
+assistant will tell you there is no DiceBear library for your language and hand
+you JavaScript.
 
-Each [style page](/styles/) carries the loading snippet for all six languages,
+Each [style page](/styles/) carries the loading snippet for all seven languages,
 so one page covers whichever you are working in.
 
 ## Machine-readable sources

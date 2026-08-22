@@ -2,10 +2,11 @@
 
 Thanks for your interest in contributing to DiceBear.
 
-This is the main monorepo: the JavaScript, PHP, Python, Rust, Go, and Dart core
-libraries, the CLI, the docs site, and the editor all live here. Repositories
-covering the JSON Schema, the avatar style definitions, the HTTP API, and the
-Figma exporter are separate and each have their own `CONTRIBUTING.md`:
+This is the main monorepo: the JavaScript, PHP, Python, Rust, Go, Dart, and C#
+core libraries, the CLI, the docs site, and the editor all live here.
+Repositories covering the JSON Schema, the avatar style definitions, the HTTP
+API, and the Figma exporter are separate and each have their own
+`CONTRIBUTING.md`:
 
 - [`dicebear/schema`](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md):
   JSON Schema for definitions and options
@@ -54,6 +55,9 @@ instructions below only cover this monorepo.
 - For Dart work: Dart SDK 3.4+ (CI runs on 3.4 and stable); test with
   `dart test` and check with `dart format --output=none --set-exit-if-changed .`
   and `dart analyze --fatal-infos` inside `src/dart/core/`
+- For C# work: the .NET SDK 8.0+ (CI runs on 8.0); build and test with
+  `dotnet test` inside `src/csharp/core/`. Warnings are errors, so the build
+  fails on an unused variable or a missing XML doc comment.
 
 ## Local setup
 
@@ -99,7 +103,8 @@ src/
 ├── python/          # Python port (PyPI package `dicebear-core`)
 ├── rust/            # Rust port (crates.io crate `dicebear-core`)
 ├── go/              # Go port (module `github.com/dicebear/dicebear-go/v10`)
-└── dart/            # Dart port (pub.dev package `dicebear_core`)
+├── dart/            # Dart port (pub.dev package `dicebear_core`)
+└── csharp/          # C# port (NuGet package `DiceBear.Core`)
 apps/
 ├── docs/            # VitePress documentation site (dicebear.com), including the Playground
 └── editor/          # The in-browser editor (editor.dicebear.com)
@@ -198,6 +203,31 @@ root `CHANGELOG.md` there before `dart pub publish [--dry-run]`. This follows
 the same pattern as the generated `LICENSE` copies in the styles and schema
 repositories. Maintain the root changelog only.
 
+### C# core (`src/csharp/core/`)
+
+```sh
+cd src/csharp/core
+dotnet build DiceBear.Core.csproj
+dotnet test tests/DiceBear.Core.Tests.csproj
+dotnet format DiceBear.Core.csproj --verify-no-changes
+```
+
+There is no solution file, so the project is named explicitly. The library
+multi-targets `netstandard2.0` and `net8.0`, so it also runs in Godot 4.2+ with
+.NET, in Unity, and on .NET Framework. The test project targets `net8.0` only,
+which is why building the library on its own is a separate step: a net8.0 test
+project pulls in only the net8.0 build of what it references.
+
+The C# core reads the two draft-07 schemas from the `DiceBear.Schema` package
+(the NuGet counterpart of `@dicebear/schema` / `dicebear/schema`) as a runtime
+dependency, validated with `JsonSchema.Net`. Nothing is vendored.
+
+Two generated tables live in `src/csharp/core/src/Utils/`. `Color.cs` carries
+the shared 256-entry sRGB linearization table, and `Uppercase.cs` carries the
+full JavaScript uppercase mapping, which the initials feature needs because the
+invariant culture only applies simple case mappings. Both files document how to
+regenerate them.
+
 ### Cross-language parity
 
 Every port must produce output **byte-identical** to the reference JavaScript
@@ -216,6 +246,8 @@ each side consumes it:
   `go test ./...` in `src/go/core/`.
 - Dart side: the tests under `test/parity/`, run via `dart test` in
   `src/dart/core/`.
+- C# side: `tests/PrimitiveParityTests.cs`, `tests/AvatarParityTests.cs` and
+  `tests/ValidationParityTests.cs`, run via `dotnet test` in `src/csharp/core/`.
 
 The fixtures cover `Fnv1a` (hash + hex), `Mulberry32` (chained sequences), every
 `Prng` method, number-to-string formatting (`numbers.json`, the `formatNumber`
@@ -243,7 +275,7 @@ fixtures from the JS reference and commit the diff:
 npm run fixtures:parity
 ```
 
-The PHP, Python, Rust, Go, and Dart suites will then fail loudly until those
+The PHP, Python, Rust, Go, Dart, and C# suites will then fail loudly until those
 sides are brought back in sync. That is the intended signal. If you only intend
 to touch one language, expect to update both before your PR can be merged.
 
@@ -293,6 +325,10 @@ npm run build --workspace @dicebear/editor
 - Dart code is formatted with `dart format` and analyzed with
   `dart analyze --fatal-infos` (lints from `analysis_options.yaml`); run both in
   `src/dart/core/` before you open a PR.
+- C# code is formatted with `dotnet format` and builds with warnings as errors;
+  run both against `DiceBear.Core.csproj` and `tests/DiceBear.Core.Tests.csproj`
+  in `src/csharp/core/` before you open a PR. The four-space indent comes from
+  the `[*.cs]` section of the repository `.editorconfig`.
 
 ## Releasing (maintainers only)
 
@@ -312,9 +348,9 @@ or `10.2.0-alpha.1`). The script will:
 1. Update `version` in every `package.json` across the workspace
 2. Update internal workspace dependency references
 3. Update `version` in `src/python/core/pyproject.toml`,
-   `src/rust/core/Cargo.toml`, and `src/dart/core/pubspec.yaml` (the Python,
-   Rust, and Dart cores are not npm workspaces, so they are bumped explicitly to
-   stay in lockstep)
+   `src/rust/core/Cargo.toml`, `src/dart/core/pubspec.yaml`, and
+   `src/csharp/core/DiceBear.Core.csproj` (the Python, Rust, Dart, and C# cores
+   are not npm workspaces, so they are bumped explicitly to stay in lockstep)
 4. Sync `package-lock.json`
 5. Create a Git commit and tag (e.g. `v10.1.0`)
 
@@ -347,13 +383,16 @@ workflow, which:
    (the `publish-pub` job): likewise no token; pub.dev verifies the `v<version>`
    tag against the pubspec version and publishes `src/dart/core` straight from
    the monorepo
+8. Publishes the C# core `DiceBear.Core` to NuGet via trusted publishing (the
+   `publish-nuget` job): likewise no token; `dotnet pack` and
+   `dotnet nuget push` upload `src/csharp/core` in one step
 
 The PHP port is the exception: Composer/Packagist consumes one Git repository
 per package rather than a monorepo subdirectory, so `split-php-core.yml` mirrors
 `src/php/core` (tags included) to the standalone
 [`dicebear/dicebear-php`](https://github.com/dicebear/dicebear-php) repository,
-and Packagist publishes `dicebear/core` from that mirror. All five ports ride
-the same version the monorepo tagged.
+and Packagist publishes `dicebear/core` from that mirror. All six ports ride the
+same version the monorepo tagged.
 
 ## Licensing
 

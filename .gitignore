@@ -9,3 +9,6 @@ node_modules
 
 # Local environment files
 .env*.local
+
+# NuGet packages the CI jobs pack into before publishing
+dist-nuget

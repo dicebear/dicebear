@@ -15,8 +15,7 @@ import (
 
 // Range is a closed numeric range. Min == Max is a fixed value. Step quantizes
 // the range to multiples of Step starting at Min; a nil or non-positive step
-// means continuous. It mirrors the Range type the JS, PHP, Python, Rust and
-// Dart ports share.
+// means continuous. It mirrors the Range type every port shares.
 type Range struct {
 	Min  float64  `json:"min"`
 	Max  float64  `json:"max"`

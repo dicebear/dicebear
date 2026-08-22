@@ -353,8 +353,8 @@ func TestDataURIEncodesSVG(t *testing.T) {
 }
 
 func TestJSONDoesNotHTMLEscapeSVG(t *testing.T) {
-	// JS/PHP/Rust emit the literal "<svg ...>" in the JSON envelope; Go's default
-	// json.Marshal would escape < > & to < > &. JSON() must not.
+	// The other ports emit the literal "<svg ...>" in the JSON envelope; Go's
+	// default json.Marshal would escape < > & to < > &. JSON() must not.
 	style := mustStyle(t, minimalStyle)
 	avatar, err := NewAvatar(style, map[string]any{"seed": "x"})
 	if err != nil {

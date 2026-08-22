@@ -7,7 +7,7 @@ import (
 )
 
 // Builds attribution strings and embedded RDF/Dublin Core metadata from a
-// style's meta block. Mirrors the JS, PHP, Python, Rust and Dart ports,
+// style's meta block. Mirrors every other port,
 // including the nullish creator fallback and the empty-string-as-absent
 // treatment.
 

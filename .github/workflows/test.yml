@@ -92,6 +92,10 @@ jobs:
           go-version: '1.25'
       - name: Use Dart
         uses: dart-lang/setup-dart@v1
+      - name: Use .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
       - name: Install JS dependencies
         if: ${{ !cancelled() }}
@@ -130,6 +134,16 @@ jobs:
         if: ${{ !cancelled() }}
         working-directory: src/dart/core
         run: dart format --output=none --set-exit-if-changed .
+      # There is no solution file, so the two projects are named one by one:
+      # `dotnet format` refuses to guess when a directory holds more than one
+      # workspace. Both read the repository .editorconfig, whose [*.cs] section
+      # sets the four-space indent .NET expects.
+      - name: dotnet format
+        if: ${{ !cancelled() }}
+        working-directory: src/csharp/core
+        run: |
+          dotnet format DiceBear.Core.csproj --verify-no-changes
+          dotnet format tests/DiceBear.Core.Tests.csproj --verify-no-changes
 
   test-php:
     runs-on: ubuntu-latest
@@ -264,3 +278,30 @@ jobs:
       - name: Validate the publishable archive
         working-directory: src/dart/core
         run: dart pub publish --dry-run
+
+  test-csharp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          # Lower bound = the highest framework the library targets; keep in
+          # sync with TargetFrameworks in DiceBear.Core.csproj.
+          dotnet-version: '8.0.x'
+      - name: Build
+        # The library multi-targets netstandard2.0 and net8.0, and warnings are
+        # errors. Building it on its own covers both targets, which the test run
+        # does not: a net8.0 test project pulls in only the net8.0 build of what
+        # it references.
+        working-directory: src/csharp/core
+        run: dotnet build DiceBear.Core.csproj --configuration Release
+      - name: Run tests
+        working-directory: src/csharp/core
+        run: dotnet test tests/DiceBear.Core.Tests.csproj --configuration Release
+      - name: Validate the publishable package
+        working-directory: src/csharp/core
+        run: |
+          dotnet pack DiceBear.Core.csproj --configuration Release \
+            --no-build --output ../../../dist-nuget

@@ -8,12 +8,11 @@ namespace DiceBear\Utils;
  * Formats a number for SVG output, rounded to at most 5 decimal places.
  *
  * Rounding to a fixed precision keeps the output bounded and identical across
- * the JS, PHP, Python, Rust, Go, and Dart ports: every value becomes a
- * multiple of 1e-5 in the SVG coordinate range, which has no exponential form,
- * so the result is built from integer arithmetic — sidestepping PHP's
- * `precision`-based float cast, which would otherwise diverge from the JS
- * reference for small/large values. Five decimals is far below sub-pixel
- * precision for any realistic canvas.
+ * every port: every value becomes a multiple of 1e-5 in the SVG coordinate
+ * range, which has no exponential form, so the result is built from integer
+ * arithmetic — sidestepping PHP's `precision`-based float cast, which would
+ * otherwise diverge from the JS reference for small/large values. Five decimals
+ * is far below sub-pixel precision for any realistic canvas.
  *
  * @internal
  */

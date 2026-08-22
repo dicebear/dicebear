@@ -111,8 +111,8 @@ def test_to_data_uri_returns_data_uri() -> None:
 
 def test_to_data_uri_encodes_like_encodeuricomponent() -> None:
     # Independent of the implementation's quote() call: assert the actual
-    # encodeURIComponent semantics the JS/PHP ports also produce, so a
-    # regression (e.g. to quote_plus, or a wrong safe set) fails here.
+    # encodeURIComponent semantics every port produces, so a regression
+    # (e.g. to quote_plus, or a wrong safe set) fails here.
     style = Style(_minimal_style_data())
     avatar = Avatar(style, {"seed": "test"})
     svg = avatar.to_string()

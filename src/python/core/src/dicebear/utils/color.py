@@ -61,7 +61,7 @@ class Color:
             lum = Color.luminance(color)
             return (max(lum, ref_lum) + 0.05) / (min(lum, ref_lum) + 0.05)
 
-        # Stable sort by descending ratio, matching JS/PHP comparator parity:
+        # Stable sort by descending ratio, matching the reference's comparator:
         # equal ratios keep their original (already code-point-sorted) order.
         return sorted(candidates, key=ratio, reverse=True)
 

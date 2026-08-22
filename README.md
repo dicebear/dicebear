@@ -21,11 +21,11 @@ individual features like hair or glasses.
 [Documentation](https://www.dicebear.com/introduction) |
 [Editor](https://editor.dicebear.com)
 
-## One library, six languages
+## One library, seven languages
 
-DiceBear 10 ships as native libraries for JavaScript, PHP, Python, Rust, Go, and
-Dart. Every port passes a shared test suite that requires byte-identical SVG
-output to the JavaScript reference. Generate an avatar in the browser,
+DiceBear 10 ships as native libraries for JavaScript, PHP, Python, Rust, Go,
+Dart, and C#. Every port passes a shared test suite that requires byte-identical
+SVG output to the JavaScript reference. Generate an avatar in the browser,
 regenerate it later in a Go or PHP backend, and you get the same bytes.
 
 | Language                | Package                                                                 | Install                                      |
@@ -36,6 +36,7 @@ regenerate it later in a Go or PHP backend, and you get the same bytes.
 | Rust                    | [`dicebear-core`](https://crates.io/crates/dicebear-core)               | `cargo add dicebear-core`                    |
 | Go                      | [`dicebear-go`](https://pkg.go.dev/github.com/dicebear/dicebear-go/v10) | `go get github.com/dicebear/dicebear-go/v10` |
 | Dart                    | [`dicebear_core`](https://pub.dev/packages/dicebear_core)               | `dart pub add dicebear_core`                 |
+| C#                      | [`DiceBear.Core`](https://www.nuget.org/packages/DiceBear.Core)         | `dotnet add package DiceBear.Core`           |
 
 In JavaScript it looks like this; the
 [documentation](https://www.dicebear.com/introduction) has the equivalent for

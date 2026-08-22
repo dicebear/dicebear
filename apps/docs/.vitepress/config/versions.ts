@@ -23,6 +23,21 @@ async function readFile(...segments: string[]): Promise<string> {
 }
 
 /**
+ * Pulls the version out of an MSBuild project file. The csproj is XML, so the
+ * line-anchored pattern the other manifests use does not apply, and the file
+ * carries exactly one `<Version>` element.
+ */
+function csprojVersion(source: string, file: string): string {
+  const match = source.match(/<Version>([^<]+)<\/Version>/);
+
+  if (!match) {
+    throw new Error(`No version found in ${file}.`);
+  }
+
+  return match[1];
+}
+
+/**
  * Pulls the package's own version out of a manifest, without a parser for the
  * respective format.
  *
@@ -114,6 +129,16 @@ export const libraryVersions: readonly LibraryVersion[] = [
       'pubspec.yaml',
     ),
     docs: '/how-to-use/dart-library/',
+  },
+  {
+    label: 'C#',
+    pkg: 'DiceBear.Core',
+    stylesPkg: 'DiceBear.Styles',
+    version: csprojVersion(
+      await readFile('csharp', 'core', 'DiceBear.Core.csproj'),
+      'DiceBear.Core.csproj',
+    ),
+    docs: '/how-to-use/csharp-library/',
   },
   {
     label: 'CLI',

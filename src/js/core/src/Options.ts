@@ -191,9 +191,8 @@ export class Options<D = unknown> {
    * or `undefined`) into the internal {@link Range} struct. A bare number `n`
    * — or a single-element array `[n]` — becomes `{ min: n, max: n }` (a fixed
    * value). An array's smaller/larger element is taken as min/max. An empty
-   * array is treated as unset so the resolver applies the option's default
-   * (rather than yielding `NaN` from a missing bound). Matches the PHP,
-   * Python, Rust, Go, and Dart ports.
+   * array is treated as unset so the resolver applies the option's default,
+   * rather than yielding `NaN` from a missing bound. Matches every other port.
    */
   #toRange(value: number | readonly number[] | undefined): Range | undefined {
     if (value === undefined) {

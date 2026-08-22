@@ -11,8 +11,8 @@ import (
 
 // Cross-language avatar parity. Renders each shared fixture case and asserts the
 // SVG matches byte-for-byte the output committed under
-// <repo>/tests/fixtures/parity/avatars/, the same fixtures the JS, PHP,
-// Python, Rust and Dart suites render against.
+// <repo>/tests/fixtures/parity/avatars/, the same fixtures every other port
+// renders against.
 
 func TestAvatarParity(t *testing.T) {
 	styleNames := fixtureStyleNames(t)
@@ -57,8 +57,8 @@ func TestAvatarParity(t *testing.T) {
 				}
 			}
 
-			// Deep-equal (order-independent), like the JS/PHP/Python/Rust/Dart
-			// suites. Decode with UseNumber so a JSON integer (1) and float
+			// Deep-equal (order-independent), like the other ports' suites.
+			// Decode with UseNumber so a JSON integer (1) and float
 			// (1.0) compare unequal — this pins whole-number options as JSON
 			// integers, the same guarantee the Rust suite makes.
 			gotJSON, err := json.Marshal(avatar.ResolvedOptions())

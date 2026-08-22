@@ -2,7 +2,7 @@
 title: Load All Avatar Styles from @dicebear/styles
 description: >
   Learn how to load every avatar style shipped with @dicebear/styles at once in
-  Node.js, PHP, Python, Rust, Go and Dart.
+  Node.js, PHP, Python, Rust, Go, Dart and C#.
 ---
 
 # How to load all avatar styles from `@dicebear/styles`?
@@ -16,11 +16,12 @@ PyPI, [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
 crates.io,
 [`github.com/dicebear/styles/v10`](https://pkg.go.dev/github.com/dicebear/styles/v10)
 as a Go module and [`dicebear_styles`](https://pub.dev/packages/dicebear_styles)
-on pub.dev. Most projects only need one or two styles, but sometimes (for a
-style picker, a gallery page, or a batch job) you want to load all of them at
-once.
+on pub.dev, and
+[`DiceBear.Styles`](https://www.nuget.org/packages/DiceBear.Styles) on NuGet.
+Most projects only need one or two styles, but sometimes (for a style picker, a
+gallery page, or a batch job) you want to load all of them at once.
 
-This guide shows how to do that in Node.js, PHP, Python, Rust, Go and Dart.
+This guide shows how to do that in Node.js, PHP, Python, Rust, Go, Dart and C#.
 
 ## Node.js
 
@@ -190,3 +191,31 @@ final parsed = {
 
 final avatar = Avatar(parsed['lorelei']!, {'seed': 'Alice'});
 ```
+
+## C#
+
+The `DiceBear.Styles` package embeds every style in the assembly. Like the Go
+module there is no per-style opt-in, so the whole set is available once the
+package is added.
+
+```sh
+dotnet add package DiceBear.Core
+dotnet add package DiceBear.Styles
+```
+
+`Styles.All()` lists every embedded style and `Styles.Get(name)` returns its raw
+JSON definition.
+
+```csharp
+using System.Text.Json.Nodes;
+using DiceBear;
+
+var parsed = Styles
+    .All()
+    .ToDictionary(name => name, name => Style.Parse(Styles.Get(name)!));
+
+var avatar = new Avatar(parsed["lorelei"], new JsonObject { ["seed"] = "Alice" });
+```
+
+Parsing all 55 definitions up front costs time and memory. If you only need a
+handful, reach for the properties instead: `Style.Parse(Styles.Lorelei)`.

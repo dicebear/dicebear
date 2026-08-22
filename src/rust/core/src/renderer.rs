@@ -65,7 +65,7 @@ impl<'a> Renderer<'a> {
         };
 
         // Resolve size before title and the root attributes so the resolver memo
-        // records the keys in the same order as the JS/PHP/Python ports — the
+        // records the keys in the same order as the other ports — the
         // JSON envelope emits the resolved options in first-recorded order.
         let size = resolver.size();
 

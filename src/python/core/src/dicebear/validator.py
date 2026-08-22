@@ -21,8 +21,8 @@ def _validator(filename: str) -> Draft7Validator:
 
     The two draft-07 schemas (``definition.json`` / ``options.json``) ship as
     the ``dicebear-schema`` package — the Python counterpart of the
-    ``@dicebear/schema`` (npm) / ``dicebear/schema`` (Composer) packages the
-    JS/PHP ports pin — and are read via :func:`importlib.resources.files`.
+    ``@dicebear/schema`` (npm) package — and are read via
+    :func:`importlib.resources.files`.
     """
     if filename not in _validators:
         raw = files("dicebear_schema").joinpath(filename).read_text("utf-8")

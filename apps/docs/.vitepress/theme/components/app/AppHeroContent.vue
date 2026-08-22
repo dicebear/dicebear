@@ -22,8 +22,8 @@ const { theme } = useData<ThemeOptions>();
         >{{ theme.styleCount }}&nbsp;avatar&nbsp;styles</a
       >, from hand-drawn characters to abstract patterns. Generate deterministic
       profile pictures via API, JS&nbsp;library, PHP&nbsp;library,
-      Python&nbsp;library, Rust&nbsp;library, Go&nbsp;library, Dart&nbsp;library
-      &amp; CLI.
+      Python&nbsp;library, Rust&nbsp;library, Go&nbsp;library,
+      Dart&nbsp;library, C#&nbsp;library &amp; CLI.
     </p>
 
     <div class="app-hero-actions">

@@ -2,17 +2,17 @@
 title: Core Options
 description: >
   The options every DiceBear core understands, shared across the JavaScript,
-  PHP, Python, Rust, Go, and Dart libraries and the HTTP API: seed, flip,
+  PHP, Python, Rust, Go, Dart, and C# libraries and the HTTP API: seed, flip,
   rotate, scale, size, background, and the per-component and per-color options.
 ---
 
 # Core options
 
 These options are the same across every DiceBear core: the JavaScript, PHP,
-Python, Rust, Go, and Dart libraries, and the [HTTP API](/how-to-use/http-api/).
-Only the way you pass them differs from one language to the next, so each
-library page shows that in its own syntax. The names, types, defaults, and
-behavior below do not change.
+Python, Rust, Go, Dart, and C# libraries, and the
+[HTTP API](/how-to-use/http-api/). Only the way you pass them differs from one
+language to the next, so each library page shows that in its own syntax. The
+names, types, defaults, and behavior below do not change.
 
 They apply to every avatar style. Where the type lists `[min, max]`, you may
 pass either a fixed value or a two-element tuple. The PRNG samples a value from

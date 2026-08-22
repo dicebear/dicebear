@@ -242,7 +242,7 @@ func asNumberArray(value any) []float64 {
 
 // toRange normalizes a range option (bare number, [n], [min, max], or absent)
 // into a *prng.Range. A bare number becomes a fixed min == max; an empty array
-// is treated as unset. Matches the JS, PHP, Python, Rust and Dart ports.
+// is treated as unset. Matches every other port.
 func toRange(value any) *prng.Range {
 	switch v := value.(type) {
 	case float64:

@@ -152,7 +152,7 @@ export default defineConfig<ThemeOptions>({
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Any',
         url: siteUrl('/'),
-        description: `Privacy-focused, open source SVG avatar library with ${styleCount} styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, and CLI for generating deterministic profile pictures and user placeholder images.`,
+        description: `Privacy-focused, open source SVG avatar library with ${styleCount} styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, C# library, and CLI for generating deterministic profile pictures and user placeholder images.`,
         offers: {
           '@type': 'Offer',
           price: '0',

@@ -276,6 +276,27 @@ String getPlaceholderAvatar(String userId) {
 }
 ```
 
+## With the C# library
+
+Use the C# library for server-side rendering without an additional HTTP request.
+For full installation and API details, see the
+[C# library documentation](/how-to-use/csharp-library/).
+
+```csharp
+using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(Styles.Thumbs);
+
+string GetPlaceholderAvatar(string userId) =>
+    new Avatar(style, new JsonObject
+    {
+        ["seed"] = userId,
+        ["size"] = 48,
+        ["borderRadius"] = 50,
+    }).ToSvg();
+```
+
 ## Choosing a style
 
 Different styles suit different use cases. Click a style to see all available
@@ -315,6 +336,11 @@ dicebear.NewAvatar(style, map[string]any{"seed": userID, "size": 48, "borderRadi
 ```dart
 // Dart library
 Avatar(style, {'seed': userId, 'size': 48, 'borderRadius': 50});
+```
+
+```csharp
+// C# library
+new Avatar(style, new JsonObject { ["seed"] = userId, ["size"] = 48, ["borderRadius"] = 50 });
 ```
 
 ```

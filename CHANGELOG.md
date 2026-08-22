@@ -8,6 +8,27 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Core:** A C# port, published to NuGet as `DiceBear.Core`. It renders SVG
+  byte-identical to the JavaScript reference and the PHP, Python, Rust, Go, and
+  Dart ports, and runs the shared parity fixtures to prove it. The package
+  targets `netstandard2.0` and `net8.0`, which covers .NET 8 and newer, .NET
+  Framework 4.6.1 and newer, Unity, and Godot 4.2+ with .NET. Godot was the
+  reason it exists: its two scripting languages are GDScript and C#, and until
+  now a Godot game could only reach DiceBear over the network. The schemas come
+  from the new `DiceBear.Schema` package and are validated with JsonSchema.Net.
+
+  Two things needed extra care to keep the output identical. The invariant
+  culture only applies simple case mappings, so `ß` would stay `ß` where the
+  reference writes `SS`, and the port carries the full JavaScript uppercase
+  table instead. `Math.Round` rounds halves to even, so the number formatter
+  compares the fractional part against 0.5 the way `Math.round` does.
+
+  The docs gained a C# library page, and the style pages, the playground and the
+  guides all carry C# snippets now. The style definitions come from the new
+  `DiceBear.Styles` package.
+
 ## [10.6.1] - 2026-08-18
 
 ### Fixed

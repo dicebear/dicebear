@@ -16,7 +16,8 @@ higher). In other environments you may be interested in the
 [Python Library](/how-to-use/python-library/), the
 [Rust Library](/how-to-use/rust-library/), the
 [Go Library](/how-to-use/go-library/), the
-[Dart Library](/how-to-use/dart-library/), the [HTTP API](/how-to-use/http-api/)
+[Dart Library](/how-to-use/dart-library/),
+[C# Library](/how-to-use/csharp-library/), the [HTTP API](/how-to-use/http-api/)
 or the [CLI](/how-to-use/cli/).
 
 The library is a pure

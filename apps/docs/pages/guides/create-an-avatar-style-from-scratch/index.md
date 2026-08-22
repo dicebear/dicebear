@@ -415,6 +415,18 @@ final avatar = Avatar(style, {'seed': 'test'});
 print(avatar.svg);
 ```
 
+### With the C# Library
+
+```csharp
+using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(File.ReadAllText("./my-style.json"));
+
+var avatar = new Avatar(style, new JsonObject { ["seed"] = "test" });
+Console.WriteLine(avatar.ToSvg());
+```
+
 ## Next steps
 
 - See the [Definition Schema Reference](/specification/definition-schema/) for

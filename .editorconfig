@@ -10,6 +10,13 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
+# The .NET convention, and what `dotnet format` enforces. The other ports whose
+# formatters disagree with the two-space default (rustfmt, gofmt, ruff) bring
+# their own config; C# reads this file, so the exception is spelled out here.
+[*.cs]
+indent_size = 4
+tab_width = 4
+
 [*.yml]
 indent_size = 2
 tab_width = 2

@@ -552,14 +552,15 @@ ship two files (both JSON Schema **draft-07**):
 
 Install via your package manager:
 
-| Ecosystem | Install                             |
-| --------- | ----------------------------------- |
-| npm       | `npm install @dicebear/schema`      |
-| Composer  | `composer require dicebear/schema`  |
-| PyPI      | `pip install dicebear-schema`       |
-| Cargo     | `cargo add dicebear-schema`         |
-| Go        | `go get github.com/dicebear/schema` |
-| pub.dev   | `dart pub add dicebear_schema`      |
+| Ecosystem | Install                              |
+| --------- | ------------------------------------ |
+| npm       | `npm install @dicebear/schema`       |
+| Composer  | `composer require dicebear/schema`   |
+| PyPI      | `pip install dicebear-schema`        |
+| Cargo     | `cargo add dicebear-schema`          |
+| Go        | `go get github.com/dicebear/schema`  |
+| pub.dev   | `dart pub add dicebear_schema`       |
+| NuGet     | `dotnet add package DiceBear.Schema` |
 
 Or reference the schema directly from a CDN, handy for the `$schema` field of
 your style definition so editors like VS Code provide autocomplete and inline
@@ -577,5 +578,6 @@ Packagist, [`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on
 PyPI, [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
 crates.io,
 [`github.com/dicebear/styles/v10`](https://pkg.go.dev/github.com/dicebear/styles/v10)
-as a Go module and [`dicebear_styles`](https://pub.dev/packages/dicebear_styles)
-on pub.dev.
+as a Go module, [`dicebear_styles`](https://pub.dev/packages/dicebear_styles) on
+pub.dev and [`DiceBear.Styles`](https://www.nuget.org/packages/DiceBear.Styles)
+on NuGet.

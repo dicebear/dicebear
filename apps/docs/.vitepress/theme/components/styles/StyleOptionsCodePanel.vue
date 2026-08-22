@@ -53,6 +53,12 @@ const tabs = computed<Tab[]>(() => {
     lang: 'dart',
     code: examples.value.dart,
   });
+  list.push({
+    key: 'csharp',
+    label: 'C#',
+    lang: 'csharp',
+    code: examples.value.csharp,
+  });
   list.push({ key: 'cli', label: 'CLI', code: examples.value.cli });
   return list;
 });

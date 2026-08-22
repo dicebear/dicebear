@@ -95,6 +95,18 @@ final gravatarImage = 'https://www.gravatar.com/avatar/$emailHash?d=$defaultImag
 // https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
 ```
 
+<!-- prettier-ignore -->
+```csharp [C#]
+var emailHash = Uri.EscapeDataString("00000000000000000000000000000000");
+var defaultImage = Uri.EscapeDataString(
+    "https://api.dicebear.com/10.x/lorelei/svg" // [!code --]
+    "https://api.dicebear.com/10.x/lorelei/png" // [!code ++]
+);
+
+var gravatarImage = $"https://www.gravatar.com/avatar/{emailHash}?d={defaultImage}";
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+```
+
 :::
 
 Usually we set options in the query string, such as the seed. Since a query
@@ -176,6 +188,19 @@ final defaultImage = Uri.encodeComponent(
 );
 
 final gravatarImage = 'https://www.gravatar.com/avatar/$emailHash?d=$defaultImage';
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+```
+
+<!-- prettier-ignore -->
+```csharp [C#]
+var emailHash = Uri.EscapeDataString("00000000000000000000000000000000");
+var options = $"seed={emailHash}";
+var defaultImage = Uri.EscapeDataString(
+    $"https://api.dicebear.com/10.x/lorelei/png?{options}" // [!code --]
+    $"https://api.dicebear.com/10.x/lorelei/png/{Uri.EscapeDataString(options)}" // [!code ++]
+);
+
+var gravatarImage = $"https://www.gravatar.com/avatar/{emailHash}?d={defaultImage}";
 // https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 

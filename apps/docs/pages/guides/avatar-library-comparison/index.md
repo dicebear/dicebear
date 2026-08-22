@@ -54,9 +54,10 @@ Multiavatar has real charm: one illustrated, multicultural character style,
 available in JavaScript, PHP, and Python. If that single look is what you want,
 it is a solid choice.
 
-DiceBear covers the same languages and adds Rust, Go, and Dart, plus a larger
-set of styles and more output formats. It is the better fit for variety, while
-Multiavatar is the one to reach for when you love that specific character look.
+DiceBear covers the same languages and adds Rust, Go, Dart, and C#, plus a
+larger set of styles and more output formats. It is the better fit for variety,
+while Multiavatar is the one to reach for when you love that specific character
+look.
 
 ## DiceBear vs. Jdenticon
 
@@ -80,4 +81,5 @@ you will ever need, Jdenticon is hard to beat, especially on .NET.
 You can try any DiceBear style in the [playground](/playground/), or start with
 the [JavaScript](/how-to-use/js-library/), [PHP](/how-to-use/php-library/),
 [Python](/how-to-use/python-library/), [Rust](/how-to-use/rust-library/),
-[Go](/how-to-use/go-library/), or [Dart](/how-to-use/dart-library/) library.
+[Go](/how-to-use/go-library/), [Dart](/how-to-use/dart-library/), or
+[C#](/how-to-use/csharp-library/) library.

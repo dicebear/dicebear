@@ -84,6 +84,17 @@ final descriptor = OptionsDescriptor(style);
 print(jsonEncode(descriptor.toJson()));
 ```
 
+## C#
+
+```csharp
+using DiceBear;
+
+var style = Style.Parse(Styles.Micah);
+var descriptor = new OptionsDescriptor(style).ToJson();
+
+Console.WriteLine(descriptor.ToJsonString());
+```
+
 ## Field descriptor types
 
 The `toJSON()` method returns a map of option names to field descriptors. Each

@@ -113,7 +113,8 @@ Congratulations! You can now use your avatar style with the
 [Python Library](/how-to-use/python-library/), the
 [Rust Library](/how-to-use/rust-library/), the
 [Go Library](/how-to-use/go-library/), the
-[Dart Library](/how-to-use/dart-library/), or the [CLI](/how-to-use/cli/).
+[Dart Library](/how-to-use/dart-library/),
+[C# Library](/how-to-use/csharp-library/), or the [CLI](/how-to-use/cli/).
 
 ### With the JS Library
 
@@ -203,6 +204,21 @@ final style = Style.parse(File('./your-style.json').readAsStringSync());
 final avatar = Avatar(style, {
   'seed': 'dicebear',
   // ... other options
+});
+```
+
+### With the C# Library
+
+```csharp
+using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(File.ReadAllText("./your-style.json"));
+
+var avatar = new Avatar(style, new JsonObject
+{
+    ["seed"] = "dicebear",
+    // ... other options
 });
 ```
 

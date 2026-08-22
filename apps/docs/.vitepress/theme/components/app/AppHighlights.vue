@@ -71,13 +71,14 @@ const highlights = [
     color: '#22c55e',
   },
   {
-    // One box for the language libraries (JS / PHP / Python / Rust / Go / Dart).
+    // One box for the language libraries (JS / PHP / Python / Rust / Go /
+    // Dart / C#).
     // Generic Library icon with no language logos, so the named languages stay
     // pure nominative use with no trademark/logo-modification questions.
     icon: Library,
     title: 'Official Libraries',
     description:
-      'JavaScript, PHP, Python, Rust, Go, and Dart share one identical API across every language. The same seed gives the same result, and no data leaves your servers.',
+      'JavaScript, PHP, Python, Rust, Go, Dart, and C# share one identical API across every language. The same seed gives the same result, and no data leaves your servers.',
     color: '#f59e0b',
   },
   {

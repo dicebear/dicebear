@@ -5,10 +5,10 @@ import Button from 'primevue/button';
 import Select from 'primevue/select';
 import { UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
-import { formatDartValue } from '@theme/utils/code-examples';
+import { formatCSharpValue, formatDartValue } from '@theme/utils/code-examples';
 
 type CodeExample =
-  'api' | 'js' | 'php' | 'python' | 'rust' | 'go' | 'dart' | 'cli';
+  'api' | 'js' | 'php' | 'python' | 'rust' | 'go' | 'dart' | 'csharp' | 'cli';
 
 const props = defineProps<{
   seed: string;
@@ -25,6 +25,7 @@ const exampleOptions: { label: string; value: CodeExample }[] = [
   { label: 'Rust Library', value: 'rust' },
   { label: 'Go Library', value: 'go' },
   { label: 'Dart Library', value: 'dart' },
+  { label: 'C# Library', value: 'csharp' },
   { label: 'CLI', value: 'cli' },
 ];
 
@@ -118,6 +119,26 @@ final avatar = Avatar(style, {
 });`,
 );
 
+const csharpExample = computed(() => {
+  // The .NET styles package exposes each style as a PascalCase property
+  // (e.g. "big-ears" → BigEars).
+  const styleConst = props.style
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+
+  // formatCSharpValue quotes the seed and escapes the backslashes and double
+  // quotes a C# string literal cannot carry raw.
+  return `using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(Styles.${styleConst});
+var avatar = new Avatar(style, new JsonObject
+{
+    ["seed"] = ${formatCSharpValue(props.seed)},
+});`;
+});
+
 const cliExample = computed(
   () => `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`,
 );
@@ -187,6 +208,13 @@ const playgroundLink = '/playground/';
           scroll-to-bottom
           class="app-seed-demo-code-block"
           :class="{ active: activeExample === 'dart' }"
+        />
+        <UiCode
+          :code="csharpExample"
+          lang="csharp"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeExample === 'csharp' }"
         />
         <UiCode
           :code="cliExample"

@@ -1,10 +1,9 @@
 /// Runtime validation of style definitions against the shared draft-07 JSON
 /// Schema, which ships as the pure-data `dicebear_schema` package.
 ///
-/// The compiled validator matches the Ajv/opis/jsonschema-rs/santhosh-tekuri
-/// validators used by the other language ports: every port must accept and
-/// reject the same inputs (pinned by the `validation.json` parity fixture);
-/// only the error message text is language-specific.
+/// The compiled validator matches the ones the other ports use: every port must
+/// accept and reject the same inputs (pinned by the `validation.json` parity
+/// fixture); only the error message text is language-specific.
 library;
 
 import 'package:dicebear_schema/dicebear_schema.dart' as dicebear_schema;

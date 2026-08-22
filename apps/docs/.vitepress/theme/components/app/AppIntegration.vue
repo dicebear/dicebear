@@ -70,6 +70,11 @@ import 'package:dicebear_styles/lorelei.dart';
 
 final style = Style.parse(lorelei);
 final svg = Avatar(style, {'seed': 'Felix'}).svg;`,
+  csharp: `using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(Styles.Lorelei);
+var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
   api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Felix`,
   cli: `npx dicebear lorelei --seed "Felix" --format svg`,
 };
@@ -100,8 +105,8 @@ final svg = Avatar(style, {'seed': 'Felix'}).svg;`,
               <h3 class="app-integration-title">Libraries</h3>
               <p class="app-integration-description">
                 Run DiceBear entirely in your own code, so no data leaves your
-                servers. JavaScript, PHP, Python, Rust, Go, and Dart share one
-                identical API.
+                servers. JavaScript, PHP, Python, Rust, Go, Dart, and C# share
+                one identical API.
               </p>
             </div>
 
@@ -113,6 +118,7 @@ final svg = Avatar(style, {'seed': 'Felix'}).svg;`,
                 <Tab value="rust">Rust</Tab>
                 <Tab value="go">Go</Tab>
                 <Tab value="dart">Dart</Tab>
+                <Tab value="csharp">C#</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel value="js" class="app-integration-tabpanel">
@@ -220,6 +226,24 @@ final svg = Avatar(style, {'seed': 'Felix'}).svg;`,
                     class="app-integration-link"
                   >
                     Dart Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="csharp" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.csharp"
+                    lang="csharp"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/csharp-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    C# Documentation
                     <ArrowRight :size="18" />
                   </Button>
                 </TabPanel>

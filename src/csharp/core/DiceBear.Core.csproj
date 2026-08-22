@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The compile items are listed explicitly because tests/ sits next to src/
+    under the same project directory, mirroring the PHP port's layout. The
+    default **/*.cs glob would pull the test suite into the package.
+  -->
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>DiceBear.Core</AssemblyName>
+    <RootNamespace>DiceBear</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>DiceBear.Core</PackageId>
+    <Version>10.6.1</Version>
+    <Authors>Florian Körner</Authors>
+    <Description>Unique avatars from dozens of styles. Deterministic, customizable, vector-based.</Description>
+    <PackageTags>avatar;identicon;avataaars;bottts;dicebear;svg</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://www.dicebear.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dicebear/dicebear</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="src/**/*.cs" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <!--
+      PackageLicenseExpression records the SPDX id, which is what nuget.org
+      renders and filters on, but it puts no text in the package. The LICENSE
+      file is packed alongside it, so the notice travels with the artifact the
+      way it does in the npm, PyPI, crates.io and pub.dev packages. The header
+      in the source file does not: comments do not survive into the assembly.
+    -->
+    <None Include="LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      The shared draft-07 JSON Schemas (style definition format and avatar
+      options), shipped as a pure-data package.
+    -->
+    <PackageReference Include="DiceBear.Schema" Version="1.4.0" />
+    <!--
+      Runtime validation against those schemas, matching the validators the
+      other ports use.
+    -->
+    <PackageReference Include="JsonSchema.Net" Version="[9.4.0,10.0.0)" />
+    <!--
+      System.Text.Json is deliberately not referenced here. JsonSchema.Net
+      already pins a floor for it, and naming a second one only produces a
+      downgrade error every time that floor moves. The API this port needs
+      (JsonNode, DeepClone) has been there since 8.0.
+    -->
+  </ItemGroup>
+
+</Project>

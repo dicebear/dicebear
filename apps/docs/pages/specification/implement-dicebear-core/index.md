@@ -13,8 +13,9 @@ A correct implementation produces **byte-identical SVGs** to the
 [PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core),
 [Python](https://github.com/dicebear/dicebear/tree/10.x/src/python/core),
 [Rust](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core),
-[Go](https://github.com/dicebear/dicebear/tree/10.x/src/go/core) and
-[Dart](https://github.com/dicebear/dicebear/tree/10.x/src/dart/core) reference
+[Go](https://github.com/dicebear/dicebear/tree/10.x/src/go/core),
+[Dart](https://github.com/dicebear/dicebear/tree/10.x/src/dart/core) and
+[C#](https://github.com/dicebear/dicebear/tree/10.x/src/csharp/core) reference
 implementations for the same seed and style definition.
 
 ## Architecture overview
@@ -751,9 +752,9 @@ matches the first letter for every input the regex produces.
 The DiceBear repository ships a language-neutral parity test suite at
 [`tests/fixtures/parity/`](https://github.com/dicebear/dicebear/tree/10.x/tests/fixtures/parity).
 It is the canonical way to verify a new implementation: the JavaScript, PHP,
-Python, Rust, Go, and Dart reference implementations all consume the same JSON
-fixtures and assert the same outputs, so any port that reads these fixtures gets
-the same coverage for free.
+Python, Rust, Go, Dart, and C# reference implementations all consume the same
+JSON fixtures and assert the same outputs, so any port that reads these fixtures
+gets the same coverage for free.
 
 The fixture tree contains:
 
@@ -866,3 +867,4 @@ with multiple components and color constraints.
 | Rust       | `dicebear-core`                       | [src/rust/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core/src)     |
 | Go         | `github.com/dicebear/dicebear-go/v10` | [src/go/core/](https://github.com/dicebear/dicebear/tree/10.x/src/go/core)                 |
 | Dart       | `dicebear_core`                       | [src/dart/core/lib/](https://github.com/dicebear/dicebear/tree/10.x/src/dart/core/lib)     |
+| C#         | `DiceBear.Core`                       | [src/csharp/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/csharp/core/src) |

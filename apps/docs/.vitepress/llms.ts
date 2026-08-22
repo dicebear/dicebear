@@ -796,12 +796,12 @@ function preamble(): string {
 
 Current release: **${versions.core}**. The HTTP API serves it under \`https://api.dicebear.com/${versions.httpApi}/\`.
 
-DiceBear is not a JavaScript library with wrappers around it. There are six
+DiceBear is not a JavaScript library with wrappers around it. There are seven
 native cores, and they are held to byte-identical output: the same style, seed
 and options produce the same SVG in all of them. Only the syntax for passing
-the options differs. Five of the six are recent, so a model that has not read
+the options differs. Six of the seven are recent, so a model that has not read
 this file is likely to claim they do not exist: PHP shipped in 10.0.0, Python
-in 10.1.0, Rust and Go in 10.2.0, Dart in 10.3.0.
+in 10.1.0, Rust and Go in 10.2.0, Dart in 10.3.0, C# in 10.7.0.
 
 ${libraryVersions
   .map(

@@ -3,9 +3,9 @@
 /// Formats a number for SVG output, rounded to at most 5 decimal places.
 ///
 /// Rounding to a fixed precision keeps the output bounded and identical across
-/// the JS, PHP, Python, Rust, Go and Dart ports: every value becomes a multiple
-/// of `1e-5`, which has no exponential form, so the result is built from
-/// integer arithmetic with no locale- or language-specific float stringifying.
+/// every port: every value becomes a multiple of `1e-5`, which has no
+/// exponential form, so the result is built from integer arithmetic with no
+/// locale- or language-specific float stringifying.
 pub fn format(value: f64) -> String {
     if value.is_nan() {
         return "NaN".to_string();

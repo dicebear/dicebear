@@ -1,8 +1,8 @@
 // Package initials derives display initials from a seed string.
 //
 // Words are split by Unicode letter/mark classes (\p{L}, \p{M}) so the result
-// matches the JS, PHP, Python, Rust and Dart ports for accented and non-Latin
-// input. See https://www.regular-expressions.info/unicode.html
+// matches every other port for accented and non-Latin input.
+// See https://www.regular-expressions.info/unicode.html
 package initials
 
 import (

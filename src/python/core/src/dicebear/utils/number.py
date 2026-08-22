@@ -1,11 +1,11 @@
 """Formats a number for SVG output, rounded to at most 5 decimal places.
 
 Rounding to a fixed precision keeps the output bounded and identical across
-the JS, PHP, Python, Rust, Go, and Dart ports: every value becomes a multiple
-of 1e-5 in the SVG coordinate range, which has no exponential form, so the
-result is built from integer arithmetic — sidestepping Python's ``repr``
-(which would emit ``"1e-05"`` and diverge from the JS reference). Five
-decimals is far below sub-pixel precision for any realistic canvas.
+every port: every value becomes a multiple of 1e-5 in the SVG coordinate range,
+which has no exponential form, so the result is built from integer arithmetic —
+sidestepping Python's ``repr`` (which would emit ``"1e-05"`` and diverge from
+the JS reference). Five decimals is far below sub-pixel precision for any
+realistic canvas.
 """
 
 from __future__ import annotations

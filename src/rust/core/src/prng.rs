@@ -188,8 +188,8 @@ pub(crate) fn unique_by_code_point<T: Display>(items: &[T]) -> Vec<&T> {
 }
 
 /// Cross-language parity: asserts the PRNG primitives produce exactly the values
-/// in the shared fixtures under `<repo>/tests/fixtures/parity/`, the same the
-/// JS, PHP, Python, Go and Dart suites run against.
+/// in the shared fixtures under `<repo>/tests/fixtures/parity/`, the same ones
+/// every other port runs against.
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;

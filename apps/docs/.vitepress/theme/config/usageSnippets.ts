@@ -10,8 +10,9 @@
  * model reading the same style page see the same code.
  *
  * The per-style constants (`dicebear_styles::LORELEI`, `styles.Lorelei`,
- * `lorelei`) follow the case conventions the styles packages use when they
- * generate them, so deriving the spelling here is safe for any style name.
+ * `lorelei`, `Styles.Lorelei`) follow the case conventions the styles packages
+ * use when they generate them, so deriving the spelling here is safe for any
+ * style name.
  */
 import {
   camelCase,
@@ -79,6 +80,10 @@ export function usageSnippets(
         ? 'map[string]any{\n\t// ... options\n}'
         : `map[string]any{"seed": "${seed}"}`,
     dart: seed === undefined ? '{\n  // ... options\n}' : `{'seed': '${seed}'}`,
+    csharp:
+      seed === undefined
+        ? 'new JsonObject\n{\n    // ... options\n}'
+        : `new JsonObject { ["seed"] = "${seed}" }`,
   };
 
   return [
@@ -182,6 +187,21 @@ final avatar = Avatar(style, ${arg.dart});
 
 final svg = avatar.svg;`,
       docs: '/how-to-use/dart-library/',
+    },
+    {
+      id: 'csharp-library',
+      label: 'C#',
+      lang: 'csharp',
+      install:
+        'dotnet add package DiceBear.Core\ndotnet add package DiceBear.Styles',
+      code: `using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(Styles.${pascalCase(styleName)});
+var avatar = new Avatar(style, ${arg.csharp});
+
+var svg = avatar.ToSvg();`,
+      docs: '/how-to-use/csharp-library/',
     },
     {
       id: 'cli',

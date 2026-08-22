@@ -24,7 +24,7 @@ workflow there is not the usual "edit a JSON file" loop.
 
 ## Core library, CLI, documentation, editor
 
-The JavaScript, PHP, Python, Rust, Go and Dart cores, the CLI, the VitePress
+The JavaScript, PHP, Python, Rust, Go, Dart and C# cores, the CLI, the VitePress
 documentation (including the Playground), and the standalone editor all live in
 the main [`dicebear/dicebear`](https://github.com/dicebear/dicebear) monorepo.
 See:
@@ -33,7 +33,7 @@ See:
   in `dicebear/dicebear`
 
 It covers the monorepo layout, per-package workflow, cross-language parity tests
-across the JavaScript, PHP, Python, Rust, Go and Dart cores, and the release
+across the JavaScript, PHP, Python, Rust, Go, Dart and C# cores, and the release
 process.
 
 ## JSON Schema

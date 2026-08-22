@@ -1,11 +1,10 @@
 // Package dicebear is the Go implementation of the DiceBear avatar library. It
 // generates deterministic SVG avatars from a style definition and a seed string.
 //
-// DiceBear is available for multiple languages (JavaScript, PHP, Python, Rust,
-// Go and Dart). All implementations share the same key-based PRNG and
-// rendering pipeline, producing byte-identical SVG output for the same seed,
-// style, and options — verified against the cross-language parity fixtures
-// under tests/fixtures/parity in the monorepo.
+// DiceBear is available for multiple languages. All implementations share the
+// same key-based PRNG and rendering pipeline, producing byte-identical SVG
+// output for the same seed, style, and options — verified against the
+// cross-language parity fixtures under tests/fixtures/parity in the monorepo.
 //
 // This package is a thin public façade: [Avatar], [Style], [OptionsDescriptor]
 // and the typed errors ([ValidationError], [CircularColorReferenceError]). The

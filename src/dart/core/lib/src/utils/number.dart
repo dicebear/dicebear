@@ -25,12 +25,11 @@ double roundHalfUp(double value) {
 
 /// Formats a number for SVG output, rounded to at most 5 decimal places.
 ///
-/// Rounding to a fixed precision keeps the output bounded and identical
-/// across the JS, PHP, Python, Rust, Go and Dart ports: every value becomes
-/// a multiple of 1e-5, which has no exponential form, so the result is built
-/// from integer arithmetic with no language-specific float stringifying.
-/// `double.toString()` must never be used here — Dart renders integral
-/// doubles as `1.0` where JavaScript prints `1`.
+/// Rounding to a fixed precision keeps the output bounded and identical across
+/// every port: every value becomes a multiple of 1e-5, which has no exponential
+/// form, so the result is built from integer arithmetic with no
+/// language-specific float stringifying. `double.toString()` must never be used
+/// here — Dart renders integral doubles as `1.0` where JavaScript prints `1`.
 String formatNumber(double value) {
   if (value.isNaN) {
     return 'NaN';
