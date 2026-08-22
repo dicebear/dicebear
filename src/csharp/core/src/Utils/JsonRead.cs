@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
 namespace DiceBear.Internal
@@ -43,6 +45,34 @@ namespace DiceBear.Internal
 
         internal static bool? Bool(JsonNode? node) =>
             node is JsonValue value && value.TryGetValue<bool>(out var result) ? result : (bool?)null;
+
+        /// <summary>
+        /// Reads an array of render-tree nodes into <see cref="Element"/>
+        /// views, or an empty list when the key holds no array. Entries that
+        /// are not objects are dropped, a case the schema rules out before the
+        /// definition reaches the engine.
+        /// </summary>
+        internal static IReadOnlyList<Element> Elements(JsonNode? node, string key)
+        {
+            var array = Arr(node, key);
+
+            if (array is null)
+            {
+                return Array.Empty<Element>();
+            }
+
+            var result = new List<Element>(array.Count);
+
+            foreach (var item in array)
+            {
+                if (item is JsonObject obj)
+                {
+                    result.Add(new Element(obj));
+                }
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Reads a <c>{ min, max, step? }</c> object into a

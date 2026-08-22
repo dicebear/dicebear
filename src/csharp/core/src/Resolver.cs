@@ -43,21 +43,27 @@ namespace DiceBear.Internal
         /// </summary>
         internal string Seed() => _options.Seed() ?? string.Empty;
 
-        internal double? Size() => Memo<double?>("size", () => _options.Size());
+        internal double? Size() => Memo("size", this, static self => self._options.Size());
 
         internal bool IdRandomization() =>
-            Memo("idRandomization", () => _options.IdRandomization() ?? false);
+            Memo("idRandomization", this, static self => self._options.IdRandomization() ?? false);
 
-        internal string? Title() => Memo<string?>("title", () => _options.Title());
+        internal string? Title() => Memo("title", this, static self => self._options.Title());
 
         internal string Flip() =>
-            Memo("flip", () => _prng.Pick("flip", _options.Flip()) ?? "none");
+            Memo("flip", this, static self => self._prng.Pick("flip", self._options.Flip()) ?? "none");
 
         internal string FontFamily() =>
-            Memo("fontFamily", () => _prng.Pick("fontFamily", _options.FontFamily()) ?? "system-ui");
+            Memo(
+                "fontFamily",
+                this,
+                static self => self._prng.Pick("fontFamily", self._options.FontFamily()) ?? "system-ui");
 
         internal double FontWeight() =>
-            Memo("fontWeight", () => _prng.Pick("fontWeight", _options.FontWeight()) ?? 400.0);
+            Memo(
+                "fontWeight",
+                this,
+                static self => self._prng.Pick("fontWeight", self._options.FontWeight()) ?? 400.0);
 
         internal double Scale() => MemoFloat("scale", _options.Scale(), 1.0);
 
@@ -78,22 +84,14 @@ namespace DiceBear.Internal
         /// <see cref="VariantWeights"/>). Only variants that exist in the style
         /// definition are considered.
         /// </remarks>
-        internal string? Variant(string name) => Memo<string?>(name + "Variant", () =>
-        {
-            if (!_style.Components().TryGetValue(name, out var component) || !IsVisible(name, component))
-            {
-                return null;
-            }
-
-            return _prng.WeightedPick(name + "Variant", VariantWeights(component));
-        });
+        internal string? Variant(string name) =>
+            Memo(name + "Variant", (self: this, name), static state => state.self.ResolveVariant(state.name));
 
         internal IReadOnlyList<string> Color(string name) =>
-            Memo(name + "Color", () => ResolveColor(name));
+            Memo(name + "Color", (self: this, name), static state => state.self.ResolveColor(state.name));
 
         internal string ColorFill(string name) =>
-            Memo(name + "ColorFill", () =>
-                _prng.Pick(name + "ColorFill", _options.ColorFill(name)) ?? "solid");
+            Memo(name + "ColorFill", (self: this, name), static state => state.self.ResolveColorFill(state.name));
 
         internal double ColorAngle(string name) =>
             MemoFloat(name + "ColorAngle", _options.ColorAngle(name), 0.0);
@@ -159,6 +157,19 @@ namespace DiceBear.Internal
 
         private bool IsVisible(string name, Component component) =>
             _prng.Bool(name + "Probability", Probability(component));
+
+        /// <summary>
+        /// The body behind <see cref="Variant"/>, run once per component name.
+        /// </summary>
+        private string? ResolveVariant(string name)
+        {
+            if (!_style.Components().TryGetValue(name, out var component) || !IsVisible(name, component))
+            {
+                return null;
+            }
+
+            return _prng.WeightedPick(name + "Variant", VariantWeights(component));
+        }
 
         /// <summary>
         /// Builds the name to weight map the PRNG draws a variant from.
@@ -429,6 +440,12 @@ namespace DiceBear.Internal
         }
 
         /// <summary>
+        /// The body behind <see cref="ColorFill"/>, run once per color name.
+        /// </summary>
+        private string ResolveColorFill(string name) =>
+            _prng.Pick(name + "ColorFill", _options.ColorFill(name)) ?? "solid";
+
+        /// <summary>
         /// Applies <c>{name}ColorOrder</c> to the candidate list.
         /// </summary>
         /// <remarks>
@@ -480,17 +497,42 @@ namespace DiceBear.Internal
         private static IReadOnlyList<string> Take(IReadOnlyList<string> values, int count) =>
             values.Take(Math.Max(count, 0)).ToList();
 
-        private double MemoFloat(string key, NumberRange? range, double fallback) =>
-            Memo(key, () => range.HasValue ? _prng.Float(key, range.Value) : fallback);
+        private double MemoFloat(string key, NumberRange? range, double fallback)
+        {
+            if (_result.TryGetValue(key, out var existing))
+            {
+                return (double)existing!;
+            }
 
-        private T Memo<T>(string key, Func<T> compute)
+            var value = range.HasValue ? _prng.Float(key, range.Value) : fallback;
+
+            _result.Set(key, value);
+
+            return value;
+        }
+
+        /// <summary>
+        /// Returns the value recorded under <paramref name="key"/>, computing
+        /// and recording it on first use.
+        /// </summary>
+        /// <remarks>
+        /// Everything <paramref name="compute"/> needs arrives through
+        /// <paramref name="state"/> instead of a captured variable, which lets
+        /// every caller pass a static lambda the compiler allocates once for
+        /// the whole program. Two properties of the map are observable and
+        /// have to hold: keys keep the order they were first recorded in,
+        /// because the JSON envelope emits the resolved options in that order,
+        /// and a recorded <see langword="null"/> counts as a hit rather than a
+        /// miss.
+        /// </remarks>
+        private T Memo<TState, T>(string key, TState state, Func<TState, T> compute)
         {
             if (_result.TryGetValue(key, out var existing))
             {
                 return (T)existing!;
             }
 
-            var value = compute();
+            var value = compute(state);
 
             _result.Set(key, value);
 

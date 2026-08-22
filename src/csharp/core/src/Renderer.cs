@@ -520,11 +520,14 @@ namespace DiceBear.Internal
                 }
 
                 var userTransform = JsonRead.Str(userAttributes, "transform");
-                var allParts = string.IsNullOrEmpty(userTransform)
-                    ? transforms
-                    : new List<string> { userTransform! }.Concat(transforms).ToList();
+                var transform = string.Join(" ", transforms);
 
-                merged.Set("transform", JsonValue.Create(string.Join(" ", allParts)));
+                if (!string.IsNullOrEmpty(userTransform))
+                {
+                    transform = userTransform + " " + transform;
+                }
+
+                merged.Set("transform", JsonValue.Create(transform));
                 mergedAttributes = merged;
             }
 

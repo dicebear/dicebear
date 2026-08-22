@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
@@ -32,31 +31,6 @@ namespace DiceBear.Internal
         /// Returns the top-level elements rendered onto the canvas, lazily
         /// wrapped as <see cref="Element"/> instances on first access.
         /// </summary>
-        internal IReadOnlyList<Element> Elements()
-        {
-            if (_elements is not null)
-            {
-                return _elements;
-            }
-
-            var array = JsonRead.Arr(_data, "elements");
-
-            if (array is null)
-            {
-                return _elements = Array.Empty<Element>();
-            }
-
-            var result = new List<Element>(array.Count);
-
-            foreach (var element in array)
-            {
-                if (element is JsonObject obj)
-                {
-                    result.Add(new Element(obj));
-                }
-            }
-
-            return _elements = result;
-        }
+        internal IReadOnlyList<Element> Elements() => _elements ??= JsonRead.Elements(_data, "elements");
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
@@ -49,31 +48,6 @@ namespace DiceBear.Internal
         /// Returns the element's children, lazily wrapped as
         /// <see cref="Element"/> instances on first access.
         /// </summary>
-        internal IReadOnlyList<Element> Children()
-        {
-            if (_children is not null)
-            {
-                return _children;
-            }
-
-            var array = JsonRead.Arr(_data, "children");
-
-            if (array is null)
-            {
-                return _children = Array.Empty<Element>();
-            }
-
-            var result = new List<Element>(array.Count);
-
-            foreach (var child in array)
-            {
-                if (child is JsonObject obj)
-                {
-                    result.Add(new Element(obj));
-                }
-            }
-
-            return _children = result;
-        }
+        internal IReadOnlyList<Element> Children() => _children ??= JsonRead.Elements(_data, "children");
     }
 }
