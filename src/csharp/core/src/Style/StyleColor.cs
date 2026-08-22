@@ -6,8 +6,8 @@ namespace DiceBear.Internal
 {
     /// <summary>
     /// Read-only view over an entry in a style definition's <c>colors</c>
-    /// block. Named <c>StyleColor</c> to keep it apart from the public
-    /// <see cref="DiceBear.Color"/> helpers.
+    /// block. Named <c>StyleColor</c> to keep it apart from the
+    /// <see cref="DiceBear.Internal.Color"/> helpers.
     /// </summary>
     internal sealed class StyleColor
     {

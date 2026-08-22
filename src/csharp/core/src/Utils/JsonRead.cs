@@ -6,11 +6,14 @@ namespace DiceBear.Internal
     /// Typed reads over the parsed style definition and options.
     /// </summary>
     /// <remarks>
-    /// Both documents reach the engine as <see cref="JsonNode"/> trees that
-    /// have been through a JSON round-trip, so every leaf is backed by a
-    /// <c>JsonElement</c> and the <c>TryGetValue</c> calls below take the same
-    /// path whether the caller handed in parsed JSON or built the object by
-    /// hand. A read that does not match the requested type returns
+    /// Both documents reach the engine as <see cref="JsonNode"/> trees whose
+    /// number leaves have been rebuilt from their own JSON text, so every
+    /// number is backed by a <c>JsonElement</c> and the <c>TryGetValue</c>
+    /// calls below take the same path whether the caller handed in parsed JSON
+    /// or built the object by hand. Strings and booleans already read alike
+    /// either way and are copied as they stand, which is what keeps an
+    /// unpaired surrogate intact. A read that does not match the requested
+    /// type returns
     /// <see langword="null"/> rather than throwing: the schema validator has
     /// already rejected the shapes that matter, and the views mirror the
     /// reference's optional-property reads.

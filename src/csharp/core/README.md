@@ -62,9 +62,6 @@ var bob = new Avatar(style, new JsonObject { ["seed"] = "Bob" });
 Godot 4 renders SVG through `Image.LoadSvgFromString`, so an avatar becomes a
 texture without any extra dependency.
 
-Godot 4 renders SVG through `Image.LoadSvgFromString`, so an avatar becomes a
-texture without any extra dependency.
-
 ```csharp
 using Godot;
 using System.Text.Json.Nodes;

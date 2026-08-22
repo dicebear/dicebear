@@ -39,14 +39,14 @@ namespace DiceBear.Internal
                 return "-Infinity";
             }
 
-            var scaled = (long)RoundHalfUp(value * 100000.0);
-            var sign = string.Empty;
+            var rounded = RoundHalfUp(value * 100000.0);
+            var sign = rounded < 0 ? "-" : string.Empty;
 
-            if (scaled < 0)
-            {
-                sign = "-";
-                scaled = -scaled;
-            }
+            // The sign comes off the double, so the magnitude never has to
+            // survive a negation. Negating long.MinValue leaves it negative,
+            // which would put a second minus in front of the fraction. The
+            // Rust port takes the magnitude the same way.
+            var scaled = (ulong)Math.Abs(rounded);
 
             var integerPart = scaled / 100000;
             var fraction = (scaled % 100000)
@@ -127,10 +127,38 @@ namespace DiceBear.Internal
         /// <c>encodeURIComponent</c>: every UTF-8 byte is escaped except the
         /// unreserved set A-Za-z0-9 and -_.!~*'().
         /// </summary>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> contains an unpaired surrogate.
+        /// </exception>
         internal static string EncodeUriComponent(string value)
         {
             const string Unreserved = "-_.!~*'()";
             const string Hex = "0123456789ABCDEF";
+
+            // encodeURIComponent throws URIError on a lone surrogate because
+            // there is no UTF-8 encoding for it. .NET would quietly substitute
+            // U+FFFD instead and hand back a URI for markup the reference
+            // refuses to encode, so the check comes first. The Dart port
+            // guards the same call for the same reason.
+            for (var i = 0; i < value.Length; i++)
+            {
+                if (!char.IsSurrogate(value[i]))
+                {
+                    continue;
+                }
+
+                if (char.IsHighSurrogate(value[i]) && i + 1 < value.Length && char.IsLowSurrogate(value[i + 1]))
+                {
+                    i++;
+
+                    continue;
+                }
+
+                throw new ArgumentException(
+                    "Cannot percent-encode an unpaired surrogate at index "
+                        + i.ToString(CultureInfo.InvariantCulture) + ".",
+                    nameof(value));
+            }
 
             var bytes = Encoding.UTF8.GetBytes(value);
             var builder = new StringBuilder(bytes.Length);

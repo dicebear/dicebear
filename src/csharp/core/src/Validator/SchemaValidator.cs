@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Json.Schema;
@@ -20,11 +21,18 @@ namespace DiceBear.Internal
     /// </remarks>
     internal static class SchemaValidator
     {
+        /// <summary>
+        /// The ECMA-262 <c>\s</c> set spelled out, as the body of a character
+        /// class: the WhiteSpace and LineTerminator code points of the spec.
+        /// </summary>
+        private const string EcmaWhitespace =
+            @"\t\n\v\f\r\u0020\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff";
+
         private static readonly Lazy<JsonSchema> DefinitionSchema =
-            new Lazy<JsonSchema>(() => JsonSchema.FromText(DiceBear.Schema.Definition));
+            new Lazy<JsonSchema>(() => Compile(DiceBear.Schema.Definition));
 
         private static readonly Lazy<JsonSchema> OptionsSchema =
-            new Lazy<JsonSchema>(() => JsonSchema.FromText(DiceBear.Schema.Options));
+            new Lazy<JsonSchema>(() => Compile(DiceBear.Schema.Options));
 
         private static readonly EvaluationOptions Options = new EvaluationOptions
         {
@@ -147,5 +155,248 @@ namespace DiceBear.Internal
         /// </summary>
         private static string PointerSegment(string key) =>
             key.Replace("~", "~0").Replace("/", "~1");
+
+        /// <summary>
+        /// Parses one of the shared schemas, brings its regular expressions in
+        /// line with ECMA-262, and compiles the result.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// JsonSchema.Net hands every <c>pattern</c> to
+        /// <c>System.Text.RegularExpressions</c> with
+        /// <c>RegexOptions.ECMAScript</c>, and that flag does not make the .NET
+        /// engine an ECMA-262 engine. Two of the leftover differences flip
+        /// accept and reject decisions on the schemas this port ships with, so
+        /// both are translated away before the schema text is compiled.
+        /// </para>
+        /// <para>
+        /// The first is <c>$</c>. .NET matches it at the end of the input or
+        /// right before a single trailing newline, whatever options are set.
+        /// ECMA-262 without the <c>m</c> flag matches only at the end of the
+        /// input, and that is what the Ajv-compiled validators of the JS
+        /// reference do. Untranslated, every anchored pattern here would accept
+        /// a value with a trailing newline that the other ports reject, and
+        /// that value would go on to be rendered into the SVG.
+        /// </para>
+        /// <para>
+        /// The second is <c>\s</c>. <c>RegexOptions.ECMAScript</c> narrows it
+        /// to the six ASCII space characters, while ECMA-262 also counts the
+        /// no-break space, the Unicode space separators, the line and paragraph
+        /// separators and the byte order mark. <c>definition.json</c> filters
+        /// <c>javascript:</c> and <c>url(</c> payloads out of attribute values
+        /// with <c>\s</c>, so the narrow class leaves those filters easy to
+        /// walk around.
+        /// </para>
+        /// <para>
+        /// <see cref="EvaluationOptions"/> carries no setting for either of
+        /// them, which is why the rewrite happens on the schema instead.
+        /// </para>
+        /// </remarks>
+        private static JsonSchema Compile(string text)
+        {
+            var schema = JsonNode.Parse(text)
+                ?? throw new InvalidOperationException("The schema is empty");
+
+            RewritePatterns(schema);
+
+            return JsonSchema.FromText(schema.ToJsonString());
+        }
+
+        /// <summary>
+        /// Walks a parsed schema and replaces every <c>pattern</c> value and
+        /// every <c>patternProperties</c> key with its rewritten form.
+        /// </summary>
+        private static void RewritePatterns(JsonNode? node)
+        {
+            switch (node)
+            {
+                case JsonArray array:
+                    foreach (var item in array)
+                    {
+                        RewritePatterns(item);
+                    }
+
+                    break;
+
+                case JsonObject obj:
+                    // Walking a snapshot keeps the loop valid while entries of
+                    // `obj` are being replaced.
+                    foreach (var entry in new List<KeyValuePair<string, JsonNode?>>(obj))
+                    {
+                        var key = entry.Key;
+                        var value = entry.Value;
+
+                        if (key == "pattern"
+                            && value is JsonValue pattern
+                            && pattern.TryGetValue<string>(out var source))
+                        {
+                            obj[key] = JsonValue.Create(RewritePattern(source));
+                        }
+                        else if (key == "patternProperties" && value is JsonObject patterned)
+                        {
+                            obj[key] = RewritePatternProperties(patterned);
+                        }
+                        else if (IsSchemaMap(key) && value is JsonObject named)
+                        {
+                            // Only the values are schemas here. A member called
+                            // `pattern` is a property name, not a keyword.
+                            foreach (var member in named)
+                            {
+                                RewritePatterns(member.Value);
+                            }
+                        }
+                        else if (!HoldsInstanceData(key))
+                        {
+                            RewritePatterns(value);
+                        }
+                    }
+
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Whether <paramref name="key"/> maps names to subschemas rather than
+        /// being a subschema itself.
+        /// </summary>
+        private static bool IsSchemaMap(string key) =>
+            key == "properties"
+            || key == "definitions"
+            || key == "$defs"
+            || key == "dependencies"
+            || key == "dependentSchemas";
+
+        /// <summary>
+        /// Whether <paramref name="key"/> holds instance values instead of
+        /// subschemas. A <c>pattern</c> nested under one of these is data and
+        /// has to come through the walk untouched.
+        /// </summary>
+        private static bool HoldsInstanceData(string key) =>
+            key == "const" || key == "enum" || key == "default" || key == "examples";
+
+        /// <summary>
+        /// Rebuilds a <c>patternProperties</c> map with its keys rewritten.
+        /// </summary>
+        private static JsonObject RewritePatternProperties(JsonObject map)
+        {
+            var rewritten = new JsonObject();
+
+            foreach (var entry in map)
+            {
+                // Cloning detaches the subschema, which a node has to be before
+                // it can go into another object.
+                var subSchema = entry.Value?.DeepClone();
+
+                RewritePatterns(subSchema);
+
+                rewritten[RewritePattern(entry.Key)] = subSchema;
+            }
+
+            return rewritten;
+        }
+
+        /// <summary>
+        /// Rewrites one ECMA-262 regular expression into the form the .NET
+        /// engine reads the same way. <see cref="Compile"/> covers what
+        /// diverges and why it matters.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// The pattern uses something this rewriter cannot translate without
+        /// guessing. The schemas ship with the port, so that is a bug in the
+        /// port rather than anything a caller can provoke.
+        /// </exception>
+        private static string RewritePattern(string pattern)
+        {
+            var rewritten = new StringBuilder(pattern.Length);
+            var inClass = false;
+
+            for (var i = 0; i < pattern.Length; i++)
+            {
+                var current = pattern[i];
+
+                if (current == '\\')
+                {
+                    if (i + 1 == pattern.Length)
+                    {
+                        throw Untranslatable(pattern, "it ends on a lone backslash");
+                    }
+
+                    // From here `i` points at the escaped character, so the
+                    // backslash itself is at `i - 1`.
+                    i++;
+
+                    var escaped = pattern[i];
+
+                    if (escaped == 'S')
+                    {
+                        // Outside a character class this could become
+                        // `[^...]`, but inside one there is no way to spell
+                        // the negation, so it is refused either way.
+                        throw Untranslatable(pattern, @"\S has no safe expansion");
+                    }
+
+                    if (escaped != 's')
+                    {
+                        // Every other escape reads the same in both engines,
+                        // `\\` and `\$` included.
+                        rewritten.Append(current).Append(escaped);
+                        continue;
+                    }
+
+                    if (!inClass)
+                    {
+                        rewritten.Append('[').Append(EcmaWhitespace).Append(']');
+                        continue;
+                    }
+
+                    // A hyphen touching the expansion would read one of its code
+                    // points as a range endpoint. Refuse instead of working out
+                    // which of the two meanings was intended.
+                    if ((i - 2 >= 0 && pattern[i - 2] == '-')
+                        || (i + 1 < pattern.Length && pattern[i + 1] == '-'))
+                    {
+                        throw Untranslatable(
+                            pattern,
+                            @"\s sits next to a hyphen inside a character class");
+                    }
+
+                    rewritten.Append(EcmaWhitespace);
+                    continue;
+                }
+
+                if (current == '[' && !inClass)
+                {
+                    inClass = true;
+                }
+                else if (current == ']' && inClass)
+                {
+                    inClass = false;
+                }
+                else if (current == '$' && !inClass)
+                {
+                    // `\z` is the .NET spelling of the anchor ECMA-262 gives
+                    // `$` while the `m` flag is off. Inside a class `$` is a
+                    // literal and stays one.
+                    rewritten.Append(@"\z");
+                    continue;
+                }
+
+                rewritten.Append(current);
+            }
+
+            if (inClass)
+            {
+                throw Untranslatable(pattern, "a character class is left open");
+            }
+
+            return rewritten.ToString();
+        }
+
+        /// <summary>
+        /// Builds the failure for a pattern the rewriter refuses to translate.
+        /// </summary>
+        private static InvalidOperationException Untranslatable(string pattern, string reason) =>
+            new InvalidOperationException(
+                "The schema pattern '" + pattern + "' cannot be translated because " + reason + ".");
     }
 }

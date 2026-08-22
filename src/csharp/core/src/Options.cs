@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace DiceBear.Internal
@@ -29,6 +30,165 @@ namespace DiceBear.Internal
     }
 
     /// <summary>
+    /// Copies a validated document into the form the typed accessors read.
+    /// </summary>
+    /// <remarks>
+    /// The copy is what the reference gets from <c>structuredClone</c>: once
+    /// construction is done, changing the object the caller passed in cannot
+    /// change a rendered avatar. Numbers are rebuilt from their JSON text on
+    /// the way, because a hand-built C# <c>int</c> does not read back as a
+    /// <c>double</c> and would drop out of the accessors. After the copy, a
+    /// hand-built <c>128</c> and a parsed <c>128</c> read the same.
+    ///
+    /// Serializing the document and parsing it back does both jobs in one
+    /// line, and that is what this class replaces. The round-trip encodes to
+    /// UTF-8, so an unpaired surrogate in a seed or a title comes back as
+    /// U+FFFD and the seed then drives a different PRNG stream than the
+    /// reference. It also left the nesting limit to a serializer default,
+    /// which <see cref="MaxDepth"/> states as a number of its own.
+    /// </remarks>
+    internal static class JsonSnapshot
+    {
+        /// <summary>
+        /// How many levels of objects and arrays a document may nest before
+        /// the port turns it down. Levels are counted the way the JSON reader
+        /// counts them, so only objects and arrays add to the depth.
+        /// </summary>
+        /// <remarks>
+        /// The reference sets no limit of its own and renders a thousand
+        /// nested elements before the JavaScript stack runs out. This port
+        /// names a number instead, and two things pin it here. The validator
+        /// hands the document to the schema library through a serializer that
+        /// reads 64 levels of its own, and that library evaluates the document
+        /// with recursion at a cost of several kilobytes of stack per level,
+        /// so a document two or three times deeper ends the process on a one
+        /// megabyte thread rather than coming back as an error a caller can
+        /// catch. 64 levels is around five times what the
+        /// deepest style definition uses.
+        /// </remarks>
+        internal const int MaxDepth = 64;
+
+        /// <summary>
+        /// What the callers report when a document nests too deep. Both entry
+        /// points read the wording from here, so they say the same thing.
+        /// </summary>
+        internal static readonly string DepthMessage =
+            $"nesting is deeper than the {MaxDepth} levels this port reads";
+
+        /// <summary>
+        /// Returns whether <paramref name="node"/> nests deeper than
+        /// <see cref="MaxDepth"/>.
+        /// </summary>
+        /// <remarks>
+        /// Callers ask before anything else walks the document, so input that
+        /// would run the validator out of stack is turned down first. Only
+        /// objects and arrays count toward the depth, the way the JSON reader
+        /// counts it.
+        /// </remarks>
+        internal static bool ExceedsMaxDepth(JsonNode? node) => ExceedsMaxDepth(node, 1);
+
+        /// <summary>
+        /// Returns the copy as an object, or an empty object when the document
+        /// has no object at its root. Check
+        /// <see cref="ExceedsMaxDepth(JsonNode?)"/> first, since the copy
+        /// follows the document's nesting.
+        /// </summary>
+        internal static JsonObject Of(JsonNode? node) => Copy(node) as JsonObject ?? new JsonObject();
+
+        private static bool ExceedsMaxDepth(JsonNode? node, int depth)
+        {
+            if (node is JsonObject obj)
+            {
+                if (depth > MaxDepth)
+                {
+                    return true;
+                }
+
+                foreach (var entry in obj)
+                {
+                    if (ExceedsMaxDepth(entry.Value, depth + 1))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            if (node is JsonArray array)
+            {
+                if (depth > MaxDepth)
+                {
+                    return true;
+                }
+
+                foreach (var item in array)
+                {
+                    if (ExceedsMaxDepth(item, depth + 1))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Copies one node, rebuilding numbers from their JSON text and taking
+        /// everything else as it stands.
+        /// </summary>
+        private static JsonNode? Copy(JsonNode? node)
+        {
+            if (node is JsonObject obj)
+            {
+                var result = new JsonObject();
+
+                foreach (var entry in obj)
+                {
+                    result[entry.Key] = Copy(entry.Value);
+                }
+
+                return result;
+            }
+
+            if (node is JsonArray array)
+            {
+                var items = new JsonArray();
+
+                foreach (var item in array)
+                {
+                    items.Add(Copy(item));
+                }
+
+                return items;
+            }
+
+            if (node is JsonValue value && value.GetValueKind() == JsonValueKind.Number)
+            {
+                return Number(value);
+            }
+
+            return node?.DeepClone();
+        }
+
+        /// <summary>
+        /// Rebuilds a number from its own JSON text, which keeps the digits the
+        /// caller wrote and makes the value read as a number whatever it was
+        /// built from.
+        /// </summary>
+        private static JsonNode Number(JsonValue value)
+        {
+            using (var document = JsonDocument.Parse(value.ToJsonString()))
+            {
+                return JsonValue.Create(document.RootElement.Clone())!;
+            }
+        }
+    }
+
+    /// <summary>
     /// Validates the raw user-supplied options and exposes them through typed
     /// accessors.
     /// </summary>
@@ -51,14 +211,32 @@ namespace DiceBear.Internal
         {
             var input = data ?? new JsonObject();
 
-            OptionsValidator.Validate(input);
+            if (JsonSnapshot.ExceedsMaxDepth(input))
+            {
+                throw new OptionsValidationException(new[]
+                {
+                    new ValidationErrorDetail(message: JsonSnapshot.DepthMessage),
+                });
+            }
 
-            // The round-trip is both the deep clone the reference gets from
-            // structuredClone and a normalization step: whether the caller
-            // parsed JSON or built the object by hand, every leaf ends up
-            // backed by a JsonElement, so a C# int and the JSON 128 behave the
-            // same from here on.
-            _data = JsonNode.Parse(input.ToJsonString()) as JsonObject ?? new JsonObject();
+            try
+            {
+                OptionsValidator.Validate(input);
+            }
+            catch (JsonException exception)
+            {
+                // The validator reads the options through a serializer, which
+                // turns some documents down on its own: one nested past its
+                // limit, or a string that came in as JSON text carrying an
+                // unpaired surrogate. Either way it leaves here as this port's
+                // own error.
+                throw new OptionsValidationException(new[]
+                {
+                    new ValidationErrorDetail(message: exception.Message),
+                });
+            }
+
+            _data = JsonSnapshot.Of(input);
         }
 
         internal string? Seed() => JsonRead.Str(_data, "seed");

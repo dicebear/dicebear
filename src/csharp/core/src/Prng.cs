@@ -144,12 +144,26 @@ namespace DiceBear.Internal
         /// <c>range.Step</c> is accepted for symmetry with
         /// <see cref="Float"/> but ignored — integers already step by 1.
         /// </summary>
-        internal int Integer(string key, NumberRange range)
+        /// <remarks>
+        /// The reference returns a plain number, so the result is only bounded
+        /// by the range the caller passes. <c>long</c> is the widest integer
+        /// the ports agree on, and the clamp keeps the conversion total: a
+        /// double outside the target range converts to an unspecified value on
+        /// .NET Framework, where it comes back as <c>long.MinValue</c> and
+        /// turns a large count into a negative one.
+        /// </remarks>
+        internal long Integer(string key, NumberRange range)
         {
             var min = Math.Min(range.Min, range.Max);
             var max = Math.Max(range.Min, range.Max);
+            var value = Math.Floor(GetValue(key) * (max - min + 1.0)) + min;
 
-            return (int)(Math.Floor(GetValue(key) * (max - min + 1.0)) + min);
+            if (value >= long.MaxValue)
+            {
+                return long.MaxValue;
+            }
+
+            return value <= long.MinValue ? long.MinValue : (long)value;
         }
 
         /// <summary>

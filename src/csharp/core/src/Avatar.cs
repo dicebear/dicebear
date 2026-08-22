@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using DiceBear.Internal;
@@ -16,16 +15,6 @@ namespace DiceBear
     /// </remarks>
     public sealed class Avatar
     {
-        /// <summary>
-        /// Neither the reference nor this port escapes the HTML-sensitive
-        /// characters inside the embedded SVG markup, so the JSON envelope uses
-        /// the relaxed encoder rather than the default one.
-        /// </summary>
-        private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        };
-
         private readonly string _svg;
         private readonly OrderedMap<object?> _resolvedOptions;
 
@@ -39,6 +28,9 @@ namespace DiceBear
         /// </exception>
         /// <exception cref="CircularColorReferenceException">
         /// A color in the style definition references itself.
+        /// </exception>
+        /// <exception cref="CircularComponentReferenceException">
+        /// A component in the style definition references itself.
         /// </exception>
         public Avatar(Style style, JsonObject? options = null)
         {
@@ -75,7 +67,18 @@ namespace DiceBear
                 });
             }
 
-            return new Avatar(style, node as JsonObject);
+            if (node is not JsonObject options)
+            {
+                // The constructor reads a null argument as "no options", which
+                // is what its default parameter means. JSON text always carries
+                // a value, so `null`, `[]` and `5` are inputs the schema
+                // rejects rather than an absent argument.
+                OptionsValidator.Validate(node);
+
+                options = new JsonObject();
+            }
+
+            return new Avatar(style, options);
         }
 
         /// <summary>
@@ -133,7 +136,7 @@ namespace DiceBear
                 ["options"] = ResolvedOptions(),
             };
 
-            return envelope.ToJsonString(JsonOptions);
+            return JsonWrite.Node(envelope);
         }
 
         private static JsonNode? ToJsonNode(object? value)

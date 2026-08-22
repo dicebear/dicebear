@@ -40,10 +40,12 @@ namespace DiceBear.Internal
                 var codePoint = isPair ? char.ConvertToUtf32(value, i) : value[i];
 
                 // A code point the table does not name uppercases to itself,
-                // which is what the reference does too.
+                // which is what the reference does too. An unpaired surrogate
+                // goes back verbatim rather than through ConvertFromUtf32,
+                // which rejects the surrogate range.
                 builder.Append(Mappings.TryGetValue(codePoint, out var mapped)
                     ? mapped
-                    : char.ConvertFromUtf32(codePoint));
+                    : isPair ? char.ConvertFromUtf32(codePoint) : value[i].ToString());
 
                 i += isPair ? 2 : 1;
             }

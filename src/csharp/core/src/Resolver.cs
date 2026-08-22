@@ -365,7 +365,7 @@ namespace DiceBear.Internal
             var hasStyleColor = _style.Colors().TryGetValue(name, out var styleColor);
             var source = userColors ?? (hasStyleColor ? styleColor.Values() : Array.Empty<string>());
 
-            var candidates = source.Select(DiceBear.Color.ToHex).ToList();
+            var candidates = source.Select(DiceBear.Internal.Color.ToHex).ToList();
             var isFixed = ColorOrder(name) == ColorOrderFixed;
             var verbatim = userColors is not null && isFixed;
             var fill = ColorFill(name);
@@ -399,7 +399,7 @@ namespace DiceBear.Internal
 
                     if (reference.Count > 0)
                     {
-                        candidates = DiceBear.Color.SortByContrast(candidates, reference[0]).ToList();
+                        candidates = DiceBear.Internal.Color.SortByContrast(candidates, reference[0]).ToList();
                     }
                 }
 
@@ -412,7 +412,7 @@ namespace DiceBear.Internal
                         excluded.AddRange(Color(reference));
                     }
 
-                    candidates = DiceBear.Color.FilterNotEqualTo(candidates, excluded).ToList();
+                    candidates = DiceBear.Internal.Color.FilterNotEqualTo(candidates, excluded).ToList();
                 }
             }
             finally
@@ -464,7 +464,17 @@ namespace DiceBear.Internal
         {
             var range = _options.ColorFillStops(name);
 
-            return range.HasValue ? _prng.Integer(name + "ColorFillStops", range.Value) : fallback;
+            if (!range.HasValue)
+            {
+                return fallback;
+            }
+
+            var stops = _prng.Integer(name + "ColorFillStops", range.Value);
+
+            // The count only ever feeds Take, which cannot hand back more
+            // entries than the palette holds, so clamping to int range says
+            // the same thing as the reference's unbounded number.
+            return stops > int.MaxValue ? int.MaxValue : stops < 0 ? 0 : (int)stops;
         }
 
         private static IReadOnlyList<string> Take(IReadOnlyList<string> values, int count) =>

@@ -8,6 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **Core (C#):** Validation and rendering now agree with the other cores in
+  several places where 10.7.0-rc.1 did not. Schema patterns are rewritten before
+  they are compiled, because .NET reads `$` as matching before a trailing
+  newline and narrows `\s` to ASCII, which let a trailing newline through every
+  anchored pattern and let non-ASCII whitespace past the `javascript:` and
+  `url()` filters. A seed or title holding an unpaired surrogate keeps it
+  instead of becoming U+FFFD, which used to produce a different avatar. The JSON
+  envelope writes supplementary-plane characters literally. `Avatar.FromJson`
+  rejects JSON that is not an object. A component that references itself raises
+  `CircularComponentReferenceException` instead of overflowing the stack.
+
+  The color helpers are no longer public. `DiceBear.Color` collided with
+  `Godot.Color`, `UnityEngine.Color` and `System.Drawing.Color`, so a file with
+  `using DiceBear;` stopped compiling. This is a breaking change for anyone on
+  10.7.0-rc.1 who called them.
+
 ## [10.7.0-rc.1] - 2026-08-22
 
 ### Added

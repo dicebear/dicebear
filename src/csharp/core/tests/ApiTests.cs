@@ -397,6 +397,446 @@ public class ApiTests
     }
 
     /// <summary>
+    /// The reference reads strings as UTF-16 code units, so an unpaired
+    /// surrogate in a seed is a seed like any other and picks its own avatar.
+    /// Anything that encodes the options to UTF-8 on the way in replaces the
+    /// surrogate with U+FFFD, which is a different seed and a different
+    /// avatar. The options here are built by hand for the same reason:
+    /// <see cref="JsonSerializer"/> would encode the surrogate away before the
+    /// port ever saw it.
+    /// </summary>
+    [Fact]
+    public void KeepsAnUnpairedSurrogateInTheSeed()
+    {
+        var style = Style.Parse(MinimalStyle);
+
+        var lone = new Avatar(style, new JsonObject { ["seed"] = "a\uD800b" }).ToSvg();
+        var replaced = new Avatar(style, new JsonObject { ["seed"] = "a�b" }).ToSvg();
+
+        Assert.NotEqual(replaced, lone);
+    }
+
+    [Fact]
+    public void KeepsAnUnpairedSurrogateInTheTitle()
+    {
+        var svg = new Avatar(
+            Style.Parse(MinimalStyle),
+            new JsonObject { ["seed"] = "x", ["title"] = "broken \uD800 title" }).ToSvg();
+
+        // The reference renders the code unit the caller passed in.
+        Assert.Contains("<title>broken \uD800 title</title>", svg, StringComparison.Ordinal);
+        Assert.DoesNotContain("�", svg, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void KeepsAnUnpairedSurrogateInTheDefinition()
+    {
+        var definition = JsonNode.Parse(MinimalStyle)!.AsObject();
+
+        definition["meta"] = new JsonObject
+        {
+            ["license"] = new JsonObject
+            {
+                ["name"] = "CC \uD800 BY",
+                ["url"] = "https://example.com",
+            },
+        };
+
+        var svg = new Avatar(new Style(definition), Options(("seed", "x"))).ToSvg();
+
+        Assert.Contains("CC \uD800 BY", svg, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// The reference reads a lone surrogate written as an escape in JSON text
+    /// and renders it. The .NET reader refuses to hand that string over at
+    /// all, so the port cannot take the text either. What it must not do is
+    /// let the reader's own exception out in place of its own.
+    /// </summary>
+    [Fact]
+    public void RejectsJsonTextCarryingAnUnpairedSurrogate()
+    {
+        Assert.Throws<OptionsValidationException>(
+            () => Avatar.FromJson(Style.Parse(MinimalStyle), """{"seed":"a\ud800b"}"""));
+
+        Assert.Throws<StyleValidationException>(() => Style.Parse("""
+            {
+              "canvas": { "width": 100, "height": 100, "elements": [] },
+              "meta": { "license": { "name": "CC \ud800 BY", "url": "https://example.com" } }
+            }
+            """));
+    }
+
+    /// <summary>
+    /// A hand-built <c>128</c> reaches the port as a C# <c>int</c>, which does
+    /// not read back as a <c>double</c> on its own. It has to end up as the
+    /// same number, and the same JSON integer, as the <c>128</c> a caller
+    /// parsed from text.
+    /// </summary>
+    [Fact]
+    public void ReadsHandBuiltNumbersLikeParsedOnes()
+    {
+        var style = Style.Parse(MinimalStyle);
+
+        var handBuilt = new Avatar(
+            style,
+            new JsonObject { ["seed"] = "x", ["size"] = 128, ["scale"] = 2 });
+        var parsed = new Avatar(
+            style,
+            JsonNode.Parse("""{"seed":"x","size":128,"scale":2}""")!.AsObject());
+
+        Assert.Equal(parsed.ToSvg(), handBuilt.ToSvg());
+        Assert.Equal(parsed.ToJson(), handBuilt.ToJson());
+        Assert.Contains("\"size\":128", handBuilt.ToJson(), StringComparison.Ordinal);
+        Assert.Contains("\"scale\":2", handBuilt.ToJson(), StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// The deepest definition the port reads, and the first one it turns down.
+    /// One nested element costs two levels, an object and its
+    /// <c>children</c> array, on top of the three the canvas already spends.
+    /// </summary>
+    [Fact]
+    public void ReadsADefinitionUpToTheNestingLimit()
+    {
+        var text = NestedElements((JsonSnapshot.MaxDepth - 3) / 2);
+
+        Assert.Null(Record.Exception(() => new Avatar(Style.Parse(text), Options(("seed", "x")))));
+        Assert.Null(Record.Exception(() => new Avatar(new Style(Parse(text)), Options(("seed", "x")))));
+    }
+
+    [Fact]
+    public void RejectsADefinitionPastTheNestingLimit()
+    {
+        var text = NestedElements(((JsonSnapshot.MaxDepth - 3) / 2) + 1);
+
+        // A caller who reads the text with a limit of their own hands in a node
+        // the port still has to turn down as one of its own errors, rather than
+        // as whatever the JSON reader throws.
+        var exception = Assert.Throws<StyleValidationException>(() => new Style(Parse(text)));
+
+        Assert.Contains("nesting", exception.Message, StringComparison.Ordinal);
+        Assert.DoesNotContain("schema", exception.Message, StringComparison.Ordinal);
+        Assert.Throws<StyleValidationException>(() => Style.Parse(text));
+    }
+
+    [Fact]
+    public void RejectsOptionsPastTheNestingLimit()
+    {
+        var options = new JsonObject();
+        JsonObject leaf = options;
+
+        for (var i = 0; i < JsonSnapshot.MaxDepth; i++)
+        {
+            var next = new JsonObject();
+            leaf["nested"] = next;
+            leaf = next;
+        }
+
+        Assert.Throws<OptionsValidationException>(
+            () => new Avatar(Style.Parse(MinimalStyle), options));
+    }
+
+    /// <summary>
+    /// A definition whose canvas draws <paramref name="count"/> groups nested
+    /// inside one another.
+    /// </summary>
+    private static string NestedElements(int count)
+    {
+        var text = new StringBuilder("""{"canvas":{"width":100,"height":100,"elements":[""");
+
+        for (var i = 0; i < count; i++)
+        {
+            text.Append("""{"type":"element","name":"g","children":[""");
+        }
+
+        for (var i = 0; i < count; i++)
+        {
+            text.Append("]}");
+        }
+
+        return text.Append("]}}").ToString();
+    }
+
+    /// <summary>
+    /// Reads JSON text the way a caller who raised the reader's nesting limit
+    /// would, so the port's own check is what a test sees.
+    /// </summary>
+    private static JsonNode Parse(string json) => JsonNode.Parse(
+        json,
+        documentOptions: new JsonDocumentOptions { MaxDepth = JsonSnapshot.MaxDepth * 4 })!;
+
+    /// <summary>
+    /// Most patterns in the two schemas end on <c>$</c>, which ECMA-262 pins to
+    /// the end of the input. The .NET regex engine reads it more loosely, so
+    /// this is where the port could start taking values the other ports turn
+    /// away. A trailing newline has to be as invalid as a trailing space.
+    /// </summary>
+    [Theory]
+    [InlineData("#ff0000\n")]
+    [InlineData("#ff0000\r\n")]
+    [InlineData("#ff0000\n\n")]
+    [InlineData("#ff0000 ")]
+    public void RejectsABackgroundColorWithTrailingWhitespace(string color) =>
+        Assert.Throws<OptionsValidationException>(() => new Avatar(
+            Style.Parse(MinimalStyle),
+            Options(("backgroundColor", new[] { color }))));
+
+    [Fact]
+    public void RejectsAFontFamilyWithATrailingNewline() =>
+        Assert.Throws<OptionsValidationException>(() => new Avatar(
+            Style.Parse(MinimalStyle),
+            Options(("fontFamily", new[] { "Arial\n" }))));
+
+    /// <summary>
+    /// The option name itself is matched against <c>patternProperties</c>. A
+    /// name that misses every pattern falls through to
+    /// <c>additionalProperties: false</c>, so a trailing newline must not buy
+    /// it a match.
+    /// </summary>
+    [Fact]
+    public void RejectsAnOptionNameWithATrailingNewline() =>
+        Assert.Throws<OptionsValidationException>(() => new Avatar(
+            Style.Parse(MinimalStyle),
+            new JsonObject { ["backgroundColor\n"] = new JsonArray("#ff0000") }));
+
+    [Fact]
+    public void RejectsAColorValueWithATrailingNewline()
+    {
+        var definition = new JsonObject
+        {
+            ["canvas"] = new JsonObject
+            {
+                ["width"] = 100,
+                ["height"] = 100,
+                ["elements"] = new JsonArray(),
+            },
+            ["colors"] = new JsonObject
+            {
+                ["brand"] = new JsonObject { ["values"] = new JsonArray("#00ff00\n") },
+            },
+        };
+
+        Assert.Throws<StyleValidationException>(() => new Style(definition));
+    }
+
+    [Fact]
+    public void RejectsAComponentNameWithATrailingNewline()
+    {
+        var definition = new JsonObject
+        {
+            ["canvas"] = new JsonObject
+            {
+                ["width"] = 100,
+                ["height"] = 100,
+                ["elements"] = new JsonArray(),
+            },
+            ["components"] = new JsonObject
+            {
+                ["eyes\n"] = new JsonObject
+                {
+                    ["width"] = 100,
+                    ["height"] = 100,
+                    ["variants"] = new JsonObject
+                    {
+                        ["a"] = new JsonObject { ["elements"] = new JsonArray() },
+                    },
+                },
+            },
+        };
+
+        Assert.Throws<StyleValidationException>(() => new Style(definition));
+    }
+
+    [Fact]
+    public void RejectsAnHrefWithATrailingNewline() =>
+        Assert.Throws<StyleValidationException>(
+            () => new Style(StyleWithAttribute("href", "#a\n")));
+
+    [Fact]
+    public void AcceptsAnHrefWithoutOne() =>
+        Assert.Null(Record.Exception(() => new Style(StyleWithAttribute("href", "#a"))));
+
+    /// <summary>
+    /// <c>definition.json</c> keeps <c>javascript:</c> out of attribute values
+    /// with <c>\s*</c> in front of the colon. ECMA-262 counts a good deal more
+    /// than the ASCII spaces as <c>\s</c>, and every one of those has to close
+    /// the filter here too, or the payload reaches the rendered SVG.
+    /// </summary>
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData("\u00a0")]
+    [InlineData("\u1680")]
+    [InlineData("\u2000")]
+    [InlineData("\u200a")]
+    [InlineData("\u2028")]
+    [InlineData("\u2029")]
+    [InlineData("\u202f")]
+    [InlineData("\u205f")]
+    [InlineData("\u3000")]
+    [InlineData("\ufeff")]
+    public void RejectsAScriptUrlBehindAnyEcmaWhitespace(string separator) =>
+        Assert.Throws<StyleValidationException>(() => new Style(
+            StyleWithAttribute("fill", "javascript" + separator + ":alert(1)")));
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\u00a0")]
+    [InlineData("\u3000")]
+    public void RejectsARemoteUrlBehindAnyEcmaWhitespace(string separator) =>
+        Assert.Throws<StyleValidationException>(() => new Style(
+            StyleWithAttribute("fill", "url" + separator + "(" + separator + "https://evil")));
+
+    /// <summary>
+    /// U+0085 is a line terminator in several other standards and not one in
+    /// ECMA-262, so <c>\s</c> leaves it out and the value stays valid. The JS
+    /// reference takes the same input.
+    /// </summary>
+    [Fact]
+    public void AcceptsNextLineWhichEcmaWhitespaceLeavesOut() =>
+        Assert.Null(Record.Exception(() => new Style(
+            StyleWithAttribute("fill", "javascript\u0085:alert(1)"))));
+
+    /// <summary>
+    /// The same filter has to keep letting local paint server references
+    /// through, whitespace and all.
+    /// </summary>
+    [Theory]
+    [InlineData("url(#local)")]
+    [InlineData("url( #local)")]
+    [InlineData("url ( #local)")]
+    public void AcceptsALocalPaintServerReference(string fill) =>
+        Assert.Null(Record.Exception(() => new Style(StyleWithAttribute("fill", fill))));
+
+    [Theory]
+    [InlineData("#ff0000")]
+    [InlineData("ff0000")]
+    public void AcceptsAWellFormedBackgroundColor(string color) =>
+        Assert.Null(Record.Exception(() => new Avatar(
+            Style.Parse(MinimalStyle),
+            Options(("backgroundColor", new[] { color })))));
+
+    [Fact]
+    public void AcceptsAFontFamilyListAndAPatternNamedOption() =>
+        Assert.Null(Record.Exception(() => new Avatar(
+            Style.Parse(MinimalStyle),
+            Options(
+                ("fontFamily", new[] { "Foo Bar, Baz" }),
+                ("eyesColor", new[] { "#ff0000" })))));
+
+    /// <summary>
+    /// A definition whose canvas draws a single element carrying one
+    /// attribute, which is the shape the attribute filter cases need.
+    /// </summary>
+    private static JsonObject StyleWithAttribute(string name, string value) => new JsonObject
+    {
+        ["canvas"] = new JsonObject
+        {
+            ["width"] = 100,
+            ["height"] = 100,
+            ["elements"] = new JsonArray(
+                new JsonObject
+                {
+                    ["type"] = "element",
+                    ["name"] = "rect",
+                    ["attributes"] = new JsonObject { [name] = value },
+                }),
+        },
+    };
+
+    [Theory]
+    [InlineData("[]")]
+    [InlineData("5")]
+    [InlineData("\"x\"")]
+    [InlineData("null")]
+    [InlineData("true")]
+    public void RejectsOptionsJsonThatIsNotAnObject(string json) =>
+        Assert.Throws<OptionsValidationException>(() => Avatar.FromJson(Style.Parse(MinimalStyle), json));
+
+    [Fact]
+    public void KeepsSupplementaryPlaneCharactersLiteralInTheJsonEnvelope()
+    {
+        // The reference's JSON.stringify writes them as they stand, so a
+        // seed or title carrying an emoji has to come out the same here.
+        var avatar = new Avatar(Style.Parse(MinimalStyle), Options(("seed", "x"), ("title", "hi \U0001F600")));
+
+        Assert.Contains("\"title\":\"hi \U0001F600\"", avatar.ToJson(), StringComparison.Ordinal);
+        Assert.DoesNotContain("\\ud83d", avatar.ToJson(), StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void EscapesAnUnpairedSurrogateInTheJsonEnvelope()
+    {
+        var options = new JsonObject { ["seed"] = "x", ["title"] = "broken \ud800 title" };
+        var avatar = new Avatar(Style.Parse(MinimalStyle), options);
+
+        Assert.Contains("\"title\":\"broken \\ud800 title\"", avatar.ToJson(), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void RejectsADataUriForMarkupWithAnUnpairedSurrogate()
+    {
+        // encodeURIComponent throws URIError on this in the reference. Every
+        // port refuses it rather than substituting a replacement character.
+        var options = new JsonObject { ["seed"] = "x", ["title"] = "broken \ud800 title" };
+        var avatar = new Avatar(Style.Parse(MinimalStyle), options);
+
+        Assert.Throws<ArgumentException>(() => avatar.ToDataUri());
+    }
+
+    [Fact]
+    public void RejectsAComponentThatReferencesItself()
+    {
+        var style = Style.Parse("""
+            {
+              "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [{ "type": "component", "name": "face" }]
+              },
+              "components": {
+                "face": {
+                  "width": 100,
+                  "height": 100,
+                  "variants": {
+                    "v0": { "elements": [{ "type": "component", "name": "face" }] }
+                  }
+                }
+              }
+            }
+            """);
+
+        var exception = Assert.Throws<CircularComponentReferenceException>(
+            () => new Avatar(style, Options(("seed", "x"))));
+
+        Assert.Equal(new[] { "face", "face" }, exception.Chain);
+    }
+
+    [Theory]
+    [InlineData("#f")]
+    [InlineData("")]
+    [InlineData("#zzzzzz")]
+    public void ReadsAMalformedColorAsBlackInsteadOfThrowing(string color)
+    {
+        // The reference yields NaN here rather than raising, so the helpers
+        // stay total. 0 is the fallback the other typed ports take.
+        Assert.Equal(0.0, Color.Luminance(color));
+        Assert.Equal(new[] { "#000", color }, Color.SortByContrast(new[] { "#000", color }, "#fff"));
+    }
+
+    [Fact]
+    public void FormatsANumberTooLargeToScaleWithoutASecondSign()
+    {
+        // The scaled integer saturates well before this, and negating the
+        // minimum would leave the sign on both halves of the output.
+        Assert.DoesNotContain("--", Num.Format(-1e19), StringComparison.Ordinal);
+        Assert.DoesNotContain(".-", Num.Format(-1e19), StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// Builds an options object from key and value pairs, so the tests read
     /// like the documented usage.
     /// </summary>

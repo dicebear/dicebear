@@ -18,10 +18,26 @@ namespace DiceBear.Internal
     /// </remarks>
     internal sealed class Renderer
     {
-        private static readonly Regex IdPattern = new Regex("\\bid=\"([^\"]+)\"", RegexOptions.CultureInvariant);
+        /// <summary>
+        /// The reference matches <c>/\bid="([^"]+)"/g</c>, where JavaScript's
+        /// <c>\b</c> counts only <c>[A-Za-z0-9_]</c> as a word character.
+        /// .NET's <c>\b</c> is Unicode-aware, so it would find no boundary in
+        /// something like <c>caféid="x"</c> and skip an id the reference
+        /// rewrites. The lookbehind spells the ASCII set out instead.
+        /// </summary>
+        private static readonly Regex IdPattern =
+            new Regex("(?<![A-Za-z0-9_])id=\"([^\"]+)\"", RegexOptions.CultureInvariant);
 
         private readonly Style _style;
         private readonly Resolver _resolver;
+
+        /// <summary>
+        /// The components the renderer is currently inside, innermost last.
+        /// The set answers the membership test and the list keeps the order
+        /// for the error message.
+        /// </summary>
+        private readonly HashSet<string> _componentPath = new HashSet<string>(StringComparer.Ordinal);
+        private readonly List<string> _componentChain = new List<string>();
         private readonly OrderedMap<string> _defs = new OrderedMap<string>();
 
         private string? _cachedSeedHash;
@@ -467,7 +483,22 @@ namespace DiceBear.Internal
 
             if (!_defs.ContainsKey(id))
             {
+                if (!_componentPath.Add(componentName))
+                {
+                    _componentChain.Add(componentName);
+
+                    throw new CircularComponentReferenceException(_componentChain.ToArray());
+                }
+
+                _componentChain.Add(componentName);
+
+                // The entry only lands in _defs once the body is complete, so
+                // a component that reaches itself would recurse forever. The
+                // path set breaks the cycle before the stack runs out.
                 var body = RenderElements(variant.Elements());
+
+                _componentChain.RemoveAt(_componentChain.Count - 1);
+                _componentPath.Remove(componentName);
 
                 _defs.Set(id, $"<g id=\"{id}\">{body}</g>");
             }

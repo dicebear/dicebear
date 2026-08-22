@@ -3,18 +3,32 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace DiceBear
+namespace DiceBear.Internal
 {
     /// <summary>
     /// Color helpers used by the renderer and the option resolver.
     /// </summary>
-    public static class Color
+    /// <remarks>
+    /// The other ports export these so a consumer can reproduce the engine's
+    /// color math, and each of them puts the helpers behind a boundary the
+    /// consumer names: a named export in JavaScript, the <c>color</c> package
+    /// in Go, the <c>color</c> module in Rust. C# offers no equivalent,
+    /// because <c>using DiceBear;</c> imports every type in the namespace at
+    /// once. A public <c>Color</c> would land in the consumer's file unasked
+    /// and turn every bare <c>Color</c> into CS0104 against
+    /// <c>Godot.Color</c>, <c>UnityEngine.Color</c> or
+    /// <c>System.Drawing.Color</c>, in exactly the runtimes this package
+    /// targets. So the helpers stay internal here. That costs the port a
+    /// public helper the other cores offer, which is worth revisiting under a
+    /// name that does not collide if anyone asks for it.
+    /// </remarks>
+    internal static class Color
     {
         /// <summary>
         /// Normalizes any hex format to 6- or 8-digit lowercase with a
         /// <c>#</c> prefix.
         /// </summary>
-        public static string ToHex(string hex)
+        internal static string ToHex(string hex)
         {
             var h = hex.StartsWith("#", StringComparison.Ordinal) ? hex.Substring(1) : hex;
 
@@ -37,7 +51,7 @@ namespace DiceBear
         /// Like <see cref="ToHex"/>, but strips the alpha channel and always
         /// returns 6-digit hex.
         /// </summary>
-        public static string ToRgbHex(string hex)
+        internal static string ToRgbHex(string hex)
         {
             var h = ToHex(hex);
 
@@ -48,7 +62,7 @@ namespace DiceBear
         /// Parses a hex color into its 8-bit red, green and blue channel
         /// values.
         /// </summary>
-        public static (int Red, int Green, int Blue) ParseHex(string hex)
+        internal static (int Red, int Green, int Blue) ParseHex(string hex)
         {
             var h = ToHex(hex).Substring(1);
 
@@ -64,7 +78,7 @@ namespace DiceBear
         /// <remarks>
         /// See https://www.w3.org/WAI/GL/wiki/Relative_luminance
         /// </remarks>
-        public static double Luminance(string hex)
+        internal static double Luminance(string hex)
         {
             var (red, green, blue) = ParseHex(hex);
 
@@ -80,7 +94,7 @@ namespace DiceBear
         /// <remarks>
         /// See https://www.w3.org/WAI/GL/wiki/Contrast_ratio
         /// </remarks>
-        public static IReadOnlyList<string> SortByContrast(
+        internal static IReadOnlyList<string> SortByContrast(
             IReadOnlyList<string> candidates,
             string refColor)
         {
@@ -107,7 +121,7 @@ namespace DiceBear
         /// Returns a new list with the excluded colors removed. Falls back to
         /// the original candidates when filtering would empty the list.
         /// </summary>
-        public static IReadOnlyList<string> FilterNotEqualTo(
+        internal static IReadOnlyList<string> FilterNotEqualTo(
             IReadOnlyList<string> candidates,
             IReadOnlyList<string> excluded)
         {
@@ -117,8 +131,27 @@ namespace DiceBear
             return filtered.Count > 0 ? filtered : candidates.ToList();
         }
 
+        /// <summary>
+        /// Reads one 8-bit channel out of a normalized hex body, falling back
+        /// to 0 for anything that is not two hex digits.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="ToHex"/> passes a body through untouched unless it is 3
+        /// or 4 digits long, so a value the options schema would have rejected
+        /// can still reach this with a short or non-hex body. The reference
+        /// yields <c>NaN</c> there. .NET has no NaN for an integer channel, so
+        /// this takes the same 0 the Go, Rust and PHP ports take rather than
+        /// throwing out of a helper the reference lets return.
+        /// </remarks>
         private static int ParseChannel(string hex, int offset) =>
-            int.Parse(hex.Substring(offset, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            offset + 2 <= hex.Length
+            && int.TryParse(
+                hex.Substring(offset, 2),
+                NumberStyles.HexNumber,
+                CultureInfo.InvariantCulture,
+                out var channel)
+                ? channel
+                : 0;
 
         /// <summary>
         /// Converts an 8-bit sRGB channel value into linear-light space.

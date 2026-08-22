@@ -27,17 +27,40 @@ namespace DiceBear
         /// Validates and wraps a style definition.
         /// </summary>
         /// <exception cref="StyleValidationException">
-        /// The definition violates the style definition schema, or an
-        /// <c>extends</c> alias points at something that cannot be aliased.
+        /// The definition violates the style definition schema, an
+        /// <c>extends</c> alias points at something that cannot be aliased, or
+        /// the definition nests deeper than this port reads.
         /// </exception>
         public Style(JsonNode? definition)
         {
-            StyleValidator.Validate(definition);
+            // Before the validator, which walks the definition with recursion
+            // and would run out of stack rather than report anything.
+            if (JsonSnapshot.ExceedsMaxDepth(definition))
+            {
+                throw new StyleValidationException(new[]
+                {
+                    new ValidationErrorDetail(message: JsonSnapshot.DepthMessage),
+                });
+            }
 
-            // The round-trip both deep-copies the input and normalizes every
-            // leaf to a JsonElement, so the accessors read the same way whether
-            // the caller parsed JSON or assembled the definition by hand.
-            _data = JsonNode.Parse(definition!.ToJsonString()) as JsonObject ?? new JsonObject();
+            try
+            {
+                StyleValidator.Validate(definition);
+            }
+            catch (System.Text.Json.JsonException exception)
+            {
+                // The validator reads the definition through a serializer,
+                // which turns some documents down on its own: one nested past
+                // its limit, or a string that came in as JSON text carrying an
+                // unpaired surrogate. Either way it leaves here as this port's
+                // own error.
+                throw new StyleValidationException(new[]
+                {
+                    new ValidationErrorDetail(message: exception.Message),
+                });
+            }
+
+            _data = JsonSnapshot.Of(definition);
 
             ValidateAliases();
         }
@@ -46,7 +69,8 @@ namespace DiceBear
         /// Parses and validates a style definition from its JSON text.
         /// </summary>
         /// <exception cref="StyleValidationException">
-        /// The text is not valid JSON, or the definition violates the schema.
+        /// The text is not valid JSON, the definition violates the schema, or
+        /// it nests deeper than this port reads.
         /// </exception>
         public static Style Parse(string json)
         {
@@ -54,7 +78,15 @@ namespace DiceBear
 
             try
             {
-                node = JsonNode.Parse(json);
+                // The reader carries a nesting limit of its own, so hand it the
+                // port's number and both ways into a Style stop in the same
+                // place.
+                node = JsonNode.Parse(
+                    json,
+                    documentOptions: new System.Text.Json.JsonDocumentOptions
+                    {
+                        MaxDepth = JsonSnapshot.MaxDepth,
+                    });
             }
             catch (System.Text.Json.JsonException exception)
             {
