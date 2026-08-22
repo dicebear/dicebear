@@ -283,6 +283,13 @@ The PHP, Python, Rust, Go, Dart, and C# suites will then fail loudly until those
 sides are brought back in sync. That is the intended signal. If you only intend
 to touch one language, expect to update both before your PR can be merged.
 
+The script has a second input: it vendors the five real style definitions from
+the sibling `styles` repo. If those moved since the last sync it stops without
+writing anything, because the avatar fixtures render against them and a styles
+bump would otherwise ride along inside an unrelated diff. When the styles update
+is the point, re-run it as `npm run fixtures:parity -- --update-styles` and
+commit that bump on its own.
+
 When porting DiceBear to another language, run these fixtures against your
 implementation to prove it conforms. See
 [Implement DiceBear Core](https://www.dicebear.com/specification/implement-dicebear-core/)

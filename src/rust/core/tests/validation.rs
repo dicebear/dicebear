@@ -110,3 +110,82 @@ fn validation_parity() {
         }
     }
 }
+
+fn attribute_style(fill: &str) -> Result<Style, Error> {
+    Style::from_value(json!({
+        "canvas": { "width": 100, "height": 100, "elements": [] },
+        "attributes": { "fill": fill },
+    }))
+}
+
+/// The injection filter in `definition.json` separates its tokens with the
+/// whitespace class the schema spells out, and that class holds the five ASCII
+/// whitespace characters and nothing else. A payload split by one of them has
+/// to be rejected, or it would land verbatim in the rendered SVG. Every other
+/// code point reads as part of the token, so the filter never sees a match.
+#[test]
+fn the_injection_filter_skips_ascii_whitespace_only() {
+    let skipped = ['\u{0009}', '\u{000a}', '\u{000c}', '\u{000d}', '\u{0020}'];
+    let not_skipped = [
+        '\u{000b}', '\u{0085}', '\u{00a0}', '\u{1680}', '\u{2000}', '\u{2028}', '\u{2029}',
+        '\u{202f}', '\u{205f}', '\u{3000}', '\u{feff}', '\u{200b}',
+    ];
+
+    assert!(attribute_style("javascript:alert(1)").is_err());
+    assert!(attribute_style("url(https://evil.example)").is_err());
+
+    for separator in skipped {
+        let code = separator as u32;
+
+        assert!(
+            attribute_style(&format!("javascript{separator}:alert(1)")).is_err(),
+            "a javascript: payload split by U+{code:04X} must be rejected"
+        );
+        assert!(
+            attribute_style(&format!("url{separator}({separator}https://evil.example)")).is_err(),
+            "a url( payload split by U+{code:04X} must be rejected"
+        );
+        assert!(
+            attribute_style(&format!("url({separator}#local)")).is_ok(),
+            "a local reference behind U+{code:04X} must stay valid"
+        );
+    }
+
+    for separator in not_skipped {
+        let code = separator as u32;
+
+        assert!(
+            attribute_style(&format!("javascript{separator}:alert(1)")).is_ok(),
+            "U+{code:04X} does not end the javascript token, so the value is valid"
+        );
+        assert!(
+            attribute_style(&format!("url{separator}({separator}https://evil.example)")).is_ok(),
+            "U+{code:04X} does not end the url token, so the value is valid"
+        );
+        assert!(
+            attribute_style(&format!("url({separator}#local)")).is_err(),
+            "U+{code:04X} behind `url(` is not skipped, so the reference is rejected"
+        );
+    }
+}
+
+/// Local paint server references are what the `url(` filter deliberately lets
+/// through, with or without whitespace around the parenthesis.
+#[test]
+fn local_url_references_stay_valid() {
+    assert!(attribute_style("url(#local)").is_ok());
+    assert!(attribute_style("url( #local)").is_ok());
+    assert!(attribute_style("url\t(\t#local)").is_ok());
+}
+
+/// The anchored patterns in `options.json` end where the input ends, so a color
+/// with a trailing newline is not valid.
+#[test]
+fn a_trailing_newline_fails_an_anchored_pattern() {
+    let style = Style::from_str(MINIMAL_STYLE).unwrap();
+
+    assert!(Avatar::new(&style, json!({ "backgroundColor": ["#ff0000"] })).is_ok());
+    assert!(Avatar::new(&style, json!({ "backgroundColor": ["ff0000"] })).is_ok());
+    assert!(Avatar::new(&style, json!({ "backgroundColor": ["#ff0000\n"] })).is_err());
+    assert!(Avatar::new(&style, json!({ "fontFamily": ["Foo Bar, Baz"] })).is_ok());
+}

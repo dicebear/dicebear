@@ -33,16 +33,28 @@ const definitionsDir = join(
 
 const STYLE_NAMES = ['initials', 'thumbs', 'glass', 'notionists', 'shape-grid'];
 
-// JSON.stringify leaves U+2028/U+2029 (line/paragraph separators) and BMP
-// private-use code points literal; editors flag those as unusual line
-// terminators or invisible glyphs. Rewrite them as \uXXXX so the committed
-// fixtures hold no such characters. Built from char codes so this source file
-// stays clean too.
+// JSON.stringify leaves BMP private-use code points and every space that is
+// not U+0020 literal. Editors flag those as unusual line terminators or
+// invisible glyphs, and a reviewer cannot tell them apart from an ordinary
+// space. Rewrite them as \uXXXX so the committed fixtures hold no such
+// characters. The whitespace set matters for the injection-filter cases, which
+// turn on exactly which code points a port's `\s` covers. Built from char codes
+// so this source file stays clean too.
+const INVISIBLE = new Set([
+  0x0085, 0x00a0, 0x1680, 0x2028, 0x2029, 0x202f, 0x205f, 0x2060, 0x3000,
+  0xfeff,
+]);
+
 function escapeInvisible(json) {
   let out = '';
   for (const ch of json) {
     const cp = ch.codePointAt(0);
-    if (cp === 0x2028 || cp === 0x2029 || (cp >= 0xe000 && cp <= 0xf8ff)) {
+    const invisible =
+      INVISIBLE.has(cp) ||
+      (cp >= 0x2000 && cp <= 0x200f) ||
+      (cp >= 0xe000 && cp <= 0xf8ff);
+
+    if (invisible) {
       out += String.fromCharCode(0x5c) + 'u' + cp.toString(16).padStart(4, '0');
     } else {
       out += ch;
@@ -51,25 +63,72 @@ function escapeInvisible(json) {
   return out;
 }
 
+function serialize(data) {
+  return escapeInvisible(JSON.stringify(data, null, 2)) + '\n';
+}
+
 function writeJson(relPath, data) {
   const filePath = join(import.meta.dirname, relPath);
   mkdirSync(dirname(filePath), { recursive: true });
-  writeFileSync(filePath, escapeInvisible(JSON.stringify(data, null, 2)) + '\n');
+  writeFileSync(filePath, serialize(data));
   console.log('  wrote', relPath);
+}
+
+function readExisting(relPath) {
+  try {
+    return readFileSync(join(import.meta.dirname, relPath), 'utf8');
+  } catch {
+    return null;
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Vendor style definitions
 // ---------------------------------------------------------------------------
 
+// This script has two inputs, and only one of them is the JS core. The style
+// definitions come from the sibling styles repo's working tree, so a run that
+// was meant to refresh a validation case also picks up whatever happened there
+// since the last sync, re-renders every avatar against it, and buries the
+// intended change in the diff. The vendored copies are therefore compared
+// first, and a drift stops the run before anything is written. Pass
+// --update-styles when the style update is the point.
+const updateStyles = process.argv.includes('--update-styles');
+
 console.log('Copying style definitions…');
 const styles = {};
+const drifted = [];
+
 for (const name of STYLE_NAMES) {
   const raw = JSON.parse(
     readFileSync(join(definitionsDir, `${name}.min.json`), 'utf8'),
   );
   styles[name] = raw;
-  writeJson(join('styles', `${name}.json`), raw);
+
+  const relPath = join('styles', `${name}.json`);
+  const committed = readExisting(relPath);
+
+  // A name newly added to STYLE_NAMES has no committed copy yet, and vendoring
+  // it is the point of adding it. Only a copy that exists and no longer matches
+  // is drift.
+  if (!updateStyles && committed !== null && committed !== serialize(raw)) {
+    drifted.push(name);
+  }
+}
+
+if (drifted.length > 0) {
+  console.error(
+    `\nThe vendored style definitions moved: ${drifted.join(', ')}.\n` +
+      'Nothing was written. The avatar fixtures render against these, so a\n' +
+      'run that absorbs them mixes a styles update into whatever you meant to\n' +
+      'regenerate. Check out the styles version the fixtures were built from,\n' +
+      'or re-run with --update-styles and commit the styles bump on its own.',
+  );
+  process.exit(1);
+}
+
+for (const name of STYLE_NAMES) {
+  writeJson(join('styles', `${name}.json`), styles[name]);
 }
 
 // A synthetic style with tagged variants. The vendored styles carry no tags
@@ -586,6 +645,21 @@ console.log('Generating validation.json…');
 
 const minimalStyle = { canvas: { width: 100, height: 100, elements: [] } };
 
+// A canvas holding one element, so a single attribute value can carry the
+// string under test into both the validator and the rendered SVG.
+function attributeStyle(attributes) {
+  return {
+    canvas: {
+      width: 100,
+      height: 100,
+      elements: [{ type: 'element', name: 'rect', attributes }],
+    },
+  };
+}
+
+const fillStyle = (fill) => attributeStyle({ fill });
+const hrefStyle = (href) => attributeStyle({ href });
+
 const styleValidationCases = [
   { id: 'minimal', definition: minimalStyle },
   {
@@ -645,6 +719,83 @@ const styleValidationCases = [
       },
     },
   },
+
+  // An anchored pattern must match to the end of the input. A regex engine
+  // whose `$` also matches before a trailing newline accepts these, and the
+  // value then reaches the rendered SVG.
+  {
+    id: 'hex-color-trailing-newline',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      colors: { brand: { values: ['#00ff00\n'] } },
+    },
+  },
+  {
+    id: 'component-name-trailing-newline',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: {
+        'eyes\n': { width: 100, height: 100, variants: { a: { elements: [] } } },
+      },
+    },
+  },
+  { id: 'href-trailing-newline', definition: hrefStyle('#a\n') },
+  { id: 'href-plain', definition: hrefStyle('#a') },
+
+  // The `javascript:` and `url()` filters put `\s*` between the keyword and
+  // what follows, so which code points a port's `\s` covers decides whether a
+  // payload is blocked. The set below is ECMA-262's, which is what the
+  // reference uses. Note U+0085 is deliberately absent from it, so the
+  // reference accepts that one and every port has to accept it too.
+  ...[
+    ['space', '\u0020'],
+    ['tab', '\u0009'],
+    ['line-feed', '\u000a'],
+    ['carriage-return', '\u000d'],
+    ['vertical-tab', '\u000b'],
+    ['form-feed', '\u000c'],
+    ['no-break-space', '\u00a0'],
+    ['next-line', '\u0085'],
+    ['ogham-space', '\u1680'],
+    ['en-quad', '\u2000'],
+    ['em-space', '\u2003'],
+    ['line-separator', '\u2028'],
+    ['paragraph-separator', '\u2029'],
+    ['narrow-no-break-space', '\u202f'],
+    ['medium-mathematical-space', '\u205f'],
+    ['ideographic-space', '\u3000'],
+    ['zero-width-no-break-space', '\ufeff'],
+  ].flatMap(([name, sep]) => [
+    {
+      id: `script-url-behind-${name}`,
+      definition: fillStyle(`javascript${sep}:alert(1)`),
+    },
+    {
+      id: `remote-url-behind-${name}`,
+      definition: fillStyle(`url${sep}(${sep}https://evil.example`),
+    },
+    // Only a separator inside the parenthesis reaches the trailing negated
+    // class, which is what tells a local reference from an external one. The
+    // two cases above stop at the parenthesis and never get there.
+    {
+      id: `remote-url-behind-inner-${name}`,
+      definition: fillStyle(`url(${sep}https://evil.example`),
+    },
+    {
+      id: `local-url-behind-inner-${name}`,
+      definition: fillStyle(`url(${sep}#local)`),
+    },
+  ]),
+  { id: 'script-url-plain', definition: fillStyle('javascript:alert(1)') },
+
+  // A local paint-server reference is the reason the `url()` filter looks past
+  // the parenthesis at all, so it has to keep working behind the same spaces.
+  { id: 'local-url-plain', definition: fillStyle('url(#local)') },
+  { id: 'local-url-behind-space', definition: fillStyle('url(\u0020#local)') },
+  {
+    id: 'local-url-behind-no-break-space',
+    definition: fillStyle('url\u00a0(\u00a0#local)'),
+  },
 ];
 
 const optionsValidationCases = [
@@ -673,6 +824,32 @@ const optionsValidationCases = [
   { id: 'tags-invalid-uppercase', options: { tags: ['Bad:X'] } },
   { id: 'tags-invalid-three-segment', options: { tags: ['a:b:c'] } },
   { id: 'tags-invalid-double-negation', options: { tags: ['!!a'] } },
+
+  // The same end-of-input rule as the style cases above, on the options side.
+  // A trailing newline must fail the anchor, and the two-character and
+  // trailing-space forms pin that nothing broader got rejected along with it.
+  {
+    id: 'background-color-trailing-newline',
+    options: { backgroundColor: ['#ff0000\n'] },
+  },
+  {
+    id: 'background-color-trailing-crlf',
+    options: { backgroundColor: ['#ff0000\r\n'] },
+  },
+  {
+    id: 'background-color-trailing-space',
+    options: { backgroundColor: ['#ff0000 '] },
+  },
+  { id: 'font-family-trailing-newline', options: { fontFamily: ['Arial\n'] } },
+  { id: 'tag-filter-trailing-newline', options: { tags: ['tone:warm\n'] } },
+
+  // An option name is matched by `patternProperties`, and the root schema sets
+  // `additionalProperties: false`, so a name that slips past the anchor turns
+  // an unknown option into an accepted one.
+  {
+    id: 'option-name-trailing-newline',
+    options: { 'backgroundColor\n': ['#ff0000'] },
+  },
 ];
 
 // A style whose canvas uses color `a`, so resolving it walks the (circular)

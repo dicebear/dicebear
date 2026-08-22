@@ -659,46 +659,66 @@ public class ApiTests
 
     /// <summary>
     /// <c>definition.json</c> keeps <c>javascript:</c> out of attribute values
-    /// with <c>\s*</c> in front of the colon. ECMA-262 counts a good deal more
-    /// than the ASCII spaces as <c>\s</c>, and every one of those has to close
-    /// the filter here too, or the payload reaches the rendered SVG.
+    /// with a whitespace class in front of the colon, and that class holds the
+    /// five ASCII whitespace characters and nothing else. Every one of them has
+    /// to close the filter here too, or the payload reaches the rendered SVG.
     /// </summary>
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("\t")]
-    [InlineData("\u00a0")]
-    [InlineData("\u1680")]
-    [InlineData("\u2000")]
-    [InlineData("\u200a")]
-    [InlineData("\u2028")]
-    [InlineData("\u2029")]
-    [InlineData("\u202f")]
-    [InlineData("\u205f")]
-    [InlineData("\u3000")]
-    [InlineData("\ufeff")]
-    public void RejectsAScriptUrlBehindAnyEcmaWhitespace(string separator) =>
+    [InlineData("\n")]
+    [InlineData("\f")]
+    [InlineData("\r")]
+    public void RejectsAScriptUrlBehindAsciiWhitespace(string separator) =>
         Assert.Throws<StyleValidationException>(() => new Style(
             StyleWithAttribute("fill", "javascript" + separator + ":alert(1)")));
 
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
-    [InlineData("\u00a0")]
-    [InlineData("\u3000")]
-    public void RejectsARemoteUrlBehindAnyEcmaWhitespace(string separator) =>
+    [InlineData("\t")]
+    [InlineData("\n")]
+    [InlineData("\f")]
+    [InlineData("\r")]
+    public void RejectsARemoteUrlBehindAsciiWhitespace(string separator) =>
         Assert.Throws<StyleValidationException>(() => new Style(
             StyleWithAttribute("fill", "url" + separator + "(" + separator + "https://evil")));
 
     /// <summary>
-    /// U+0085 is a line terminator in several other standards and not one in
-    /// ECMA-262, so <c>\s</c> leaves it out and the value stays valid. The JS
-    /// reference takes the same input.
+    /// Every other code point reads as part of the token, so the filter finds
+    /// no match and the value stays valid. The JS reference takes the same
+    /// input.
     /// </summary>
-    [Fact]
-    public void AcceptsNextLineWhichEcmaWhitespaceLeavesOut() =>
+    [Theory]
+    [InlineData("\u000b")]
+    [InlineData("\u0085")]
+    [InlineData("\u00a0")]
+    [InlineData("\u1680")]
+    [InlineData("\u2000")]
+    [InlineData("\u2028")]
+    [InlineData("\u202f")]
+    [InlineData("\u3000")]
+    [InlineData("\ufeff")]
+    [InlineData("\u200b")]
+    public void AcceptsAScriptUrlSplitByWhatTheFilterDoesNotRead(string separator) =>
         Assert.Null(Record.Exception(() => new Style(
-            StyleWithAttribute("fill", "javascript\u0085:alert(1)"))));
+            StyleWithAttribute("fill", "javascript" + separator + ":alert(1)"))));
+
+    /// <summary>
+    /// Behind <c>url(</c> those same code points are not skipped either, and
+    /// there it costs the value its exemption: what follows the parenthesis is
+    /// no longer the <c>#</c> of a local reference, so the filter matches.
+    /// </summary>
+    [Theory]
+    [InlineData("\u000b")]
+    [InlineData("\u0085")]
+    [InlineData("\u00a0")]
+    [InlineData("\u3000")]
+    [InlineData("\ufeff")]
+    public void RejectsALocalReferenceBehindWhatTheFilterDoesNotRead(string separator) =>
+        Assert.Throws<StyleValidationException>(() => new Style(
+            StyleWithAttribute("fill", "url(" + separator + "#local)")));
 
     /// <summary>
     /// The same filter has to keep letting local paint server references

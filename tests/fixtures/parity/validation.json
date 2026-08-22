@@ -149,6 +149,1452 @@
         }
       },
       "valid": false
+    },
+    {
+      "id": "hex-color-trailing-newline",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        },
+        "colors": {
+          "brand": {
+            "values": [
+              "#00ff00\n"
+            ]
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "component-name-trailing-newline",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        },
+        "components": {
+          "eyes\n": {
+            "width": 100,
+            "height": 100,
+            "variants": {
+              "a": {
+                "elements": []
+              }
+            }
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "href-trailing-newline",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "href": "#a\n"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "href-plain",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "href": "#a"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "script-url-behind-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript :alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url ( https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-inner-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url( https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url( #local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "script-url-behind-tab",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\t:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-tab",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\t(\thttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-inner-tab",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\thttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-tab",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\t#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "script-url-behind-line-feed",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\n:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-line-feed",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\n(\nhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-inner-line-feed",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\nhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-line-feed",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\n#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "script-url-behind-carriage-return",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\r:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-carriage-return",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\r(\rhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-inner-carriage-return",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\rhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-carriage-return",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\r#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "script-url-behind-vertical-tab",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u000b:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-vertical-tab",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u000b(\u000bhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-vertical-tab",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u000bhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-vertical-tab",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u000b#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-form-feed",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\f:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-form-feed",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\f(\fhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "remote-url-behind-inner-form-feed",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\fhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-form-feed",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\f#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "script-url-behind-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u00a0:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u00a0(\u00a0https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u00a0https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u00a0#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-next-line",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u0085:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-next-line",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u0085(\u0085https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-next-line",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u0085https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-next-line",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u0085#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-ogham-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u1680:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-ogham-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u1680(\u1680https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-ogham-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u1680https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-ogham-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u1680#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-en-quad",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u2000:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-en-quad",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u2000(\u2000https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-en-quad",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u2000https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-en-quad",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u2000#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-em-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u2003:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-em-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u2003(\u2003https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-em-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u2003https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-em-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u2003#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-line-separator",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u2028:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-line-separator",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u2028(\u2028https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-line-separator",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u2028https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-line-separator",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u2028#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-paragraph-separator",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u2029:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-paragraph-separator",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u2029(\u2029https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-paragraph-separator",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u2029https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-paragraph-separator",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u2029#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-narrow-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u202f:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-narrow-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u202f(\u202fhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-narrow-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u202fhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-narrow-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u202f#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-medium-mathematical-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u205f:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-medium-mathematical-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u205f(\u205fhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-medium-mathematical-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u205fhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-medium-mathematical-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u205f#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-ideographic-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\u3000:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-ideographic-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u3000(\u3000https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-ideographic-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u3000https://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-ideographic-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\u3000#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-behind-zero-width-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript\ufeff:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-zero-width-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\ufeff(\ufeffhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "remote-url-behind-inner-zero-width-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\ufeffhttps://evil.example"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-behind-inner-zero-width-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(\ufeff#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "script-url-plain",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "javascript:alert(1)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "local-url-plain",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url(#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "local-url-behind-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url( #local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "local-url-behind-no-break-space",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": "url\u00a0(\u00a0#local)"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
     }
   ],
   "options": [
@@ -336,6 +1782,60 @@
       "options": {
         "tags": [
           "!!a"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "background-color-trailing-newline",
+      "options": {
+        "backgroundColor": [
+          "#ff0000\n"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "background-color-trailing-crlf",
+      "options": {
+        "backgroundColor": [
+          "#ff0000\r\n"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "background-color-trailing-space",
+      "options": {
+        "backgroundColor": [
+          "#ff0000 "
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "font-family-trailing-newline",
+      "options": {
+        "fontFamily": [
+          "Arial\n"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "tag-filter-trailing-newline",
+      "options": {
+        "tags": [
+          "tone:warm\n"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "option-name-trailing-newline",
+      "options": {
+        "backgroundColor\n": [
+          "#ff0000"
         ]
       },
       "valid": false
