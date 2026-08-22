@@ -529,7 +529,13 @@ impl<'a> Renderer<'a> {
 /// document. Uses process randomness intentionally — a PRNG-derived suffix
 /// would produce the same ID for the same seed.
 fn randomize_ids(svg: &str) -> String {
-    static ID_DECL: LazyLock<Regex> = LazyLock::new(|| Regex::new(r#"\bid="([^"]+)""#).unwrap());
+    // `(?-u:\b)` is the ASCII word boundary. JavaScript counts only
+    // [A-Za-z0-9_] as word characters, so the reference collects an `id="` that
+    // follows a letter such as `é`, while the Unicode-aware boundary of the
+    // `regex` crate skips it. The suffixed id sets have to be identical, so the
+    // narrower boundary wins.
+    static ID_DECL: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"(?-u:\b)id="([^"]+)""#).unwrap());
 
     let random = RandomState::new().build_hasher().finish();
     let suffix = format!("{:06x}", (random as u32) & 0x00ff_ffff);

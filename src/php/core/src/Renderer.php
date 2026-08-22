@@ -236,6 +236,11 @@ class Renderer
         $suffix = str_pad(dechex(random_int(0, 0xffffff)), 6, '0', STR_PAD_LEFT);
         $ids = [];
 
+        // The missing `u` modifier is deliberate. Without it PCRE reads `\b`
+        // as an ASCII boundary, which is how JavaScript reads it, so the same
+        // ids are collected here and in the reference. Under `/u` the boundary
+        // turns Unicode aware, `Caféid="x"` stops matching, and the rendered
+        // markup drifts away from the other implementations.
         if (preg_match_all('/\bid="([^"]+)"/', $svg, $matches)) {
             $ids = array_unique($matches[1]);
         }

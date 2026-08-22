@@ -17,7 +17,10 @@ from .utils.license import License
 from .utils.number import Number
 from .utils.xml import Xml
 
-_ID_PATTERN = re.compile(r'\bid="([^"]+)"')
+# JavaScript counts only [A-Za-z0-9_] as word characters, Python's `\b`
+# is Unicode-aware. The lookbehind spells out the reference set so that an
+# id preceded by a letter such as `é` is collected here too.
+_ID_PATTERN = re.compile(r'(?<![A-Za-z0-9_])id="([^"]+)"')
 
 
 class Renderer:
