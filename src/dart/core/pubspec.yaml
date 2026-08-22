@@ -2,7 +2,7 @@ name: dicebear_core
 description: >-
   Unique avatars from dozens of styles — deterministic, customizable,
   vector-based.
-version: 10.6.1
+version: 10.7.0-rc.1
 repository: https://github.com/dicebear/dicebear
 homepage: https://www.dicebear.com
 topics:

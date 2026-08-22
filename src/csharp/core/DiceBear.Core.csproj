@@ -19,7 +19,7 @@
 
   <PropertyGroup>
     <PackageId>DiceBear.Core</PackageId>
-    <Version>10.6.1</Version>
+    <Version>10.7.0-rc.1</Version>
     <Authors>Florian Körner</Authors>
     <Description>Unique avatars from dozens of styles. Deterministic, customizable, vector-based.</Description>
     <PackageTags>avatar;identicon;avataaars;bottts;dicebear;svg</PackageTags>
