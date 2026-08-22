@@ -13,7 +13,7 @@ import StylePresets from "@theme/components/styles/StylePresets.vue";
 # Rings presets
 
 Every preset here is an ordinary set of render options. Nothing needs to be
-installed, and the same values work in all six libraries and as HTTP-API query
+installed, and the same values work in all seven libraries and as HTTP-API query
 parameters. Pick one to read its code, or open it in the playground and change
 whatever you like.
 

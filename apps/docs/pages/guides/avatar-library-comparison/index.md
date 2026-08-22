@@ -13,14 +13,14 @@ import DocsComparisonTable from '@theme/components/docs/DocsComparisonTable.vue'
 # Avatar library comparison
 
 DiceBear is an open source avatar library with [%STYLE_COUNT% styles](/styles/),
-a [free HTTP API](/how-to-use/http-api/), and libraries for six languages. Each
-style has a [deep set of options](/guides/access-all-available-options/): you
-can recolor the avatar, swap individual features, control the background, and
-weight how likely each variant is, so two avatars from the same style can look
-completely different. This page compares it with the avatar libraries developers
-most often weigh against it, to help you choose the right one for your project.
-All of them are good at what they do, and the best choice depends on your stack
-and the look you are after.
+a [free HTTP API](/how-to-use/http-api/), and libraries for seven languages.
+Each style has a [deep set of options](/guides/access-all-available-options/):
+you can recolor the avatar, swap individual features, control the background,
+and weight how likely each variant is, so two avatars from the same style can
+look completely different. This page compares it with the avatar libraries
+developers most often weigh against it, to help you choose the right one for
+your project. All of them are good at what they do, and the best choice depends
+on your stack and the look you are after.
 
 <DocsComparisonTable />
 
@@ -62,12 +62,12 @@ look.
 ## DiceBear vs. Jdenticon
 
 Jdenticon is a focused, dependency-free library that does geometric identicons
-really well. It runs in JavaScript, C#, and PHP, exports SVG and PNG, and is an
-excellent fit for .NET projects that just need identicons.
+really well. It runs in JavaScript, C#, and PHP, exports SVG and PNG, and has a
+small API because identicons are all it does.
 
 DiceBear also has an [Identicon style](/styles/identicon/) if that is the look
 you want, along with many other styles and the HTTP API. When identicons are all
-you will ever need, Jdenticon is hard to beat, especially on .NET.
+you will ever need, Jdenticon is hard to beat.
 
 ## Which avatar library should you choose?
 
@@ -76,7 +76,7 @@ you will ever need, Jdenticon is hard to beat, especially on .NET.
 - Choose Boring Avatars for its gradient styles in a React app.
 - Choose Avvvatars for a tiny two-style placeholder in React.
 - Choose Multiavatar for its illustrated multicultural character look.
-- Choose Jdenticon for geometric identicons, especially on .NET.
+- Choose Jdenticon for geometric identicons when that is all the project needs.
 
 You can try any DiceBear style in the [playground](/playground/), or start with
 the [JavaScript](/how-to-use/js-library/), [PHP](/how-to-use/php-library/),

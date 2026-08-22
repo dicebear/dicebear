@@ -16,7 +16,7 @@ A star costs nothing and makes the project easier to find for the next person
 looking for an avatar library.
 
 - [dicebear/dicebear](https://github.com/dicebear/dicebear): the core libraries
-  for six languages, the CLI, this documentation site, and the editor
+  for seven languages, the CLI, this documentation site, and the editor
 - [dicebear/styles](https://github.com/dicebear/styles): the avatar style
   definitions
 - [dicebear/api](https://github.com/dicebear/api): the self-hostable HTTP API

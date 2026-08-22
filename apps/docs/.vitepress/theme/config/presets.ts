@@ -2,7 +2,7 @@
  * Ready-made option sets per avatar style, shown as a gallery on the style
  * pages. A preset is nothing but a bag of regular render options, so it works
  * in every library and as HTTP-API query parameters without the definition
- * format or any of the six cores knowing that presets exist.
+ * format or any of the seven cores knowing that presets exist.
  *
  * The files live in theme/presets/<style>.json and are picked up by the glob
  * below, so adding a style means adding one file and nothing else.

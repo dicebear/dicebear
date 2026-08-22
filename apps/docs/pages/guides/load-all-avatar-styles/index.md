@@ -217,5 +217,6 @@ var parsed = Styles
 var avatar = new Avatar(parsed["lorelei"], new JsonObject { ["seed"] = "Alice" });
 ```
 
-Parsing all 55 definitions up front costs time and memory. If you only need a
-handful, reach for the properties instead: `Style.Parse(Styles.Lorelei)`.
+Parsing all %STYLE_COUNT% definitions up front costs time and memory. If you
+only need a handful, reach for the properties instead:
+`Style.Parse(Styles.Lorelei)`.

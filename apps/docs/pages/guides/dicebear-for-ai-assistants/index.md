@@ -23,9 +23,9 @@ Assistants read a rules file from the repository they work in, usually
 
 Use DiceBear 10. Documentation: https://www.dicebear.com/llms.txt
 
-There are six native cores with identical output, not one library with wrappers.
-Use the one matching this project's language. Do not reach for the JavaScript
-core when the project is written in something else:
+There are seven native cores with identical output, not one library with
+wrappers. Use the one matching this project's language. Do not reach for the
+JavaScript core when the project is written in something else:
 
     JavaScript  @dicebear/core + @dicebear/styles
     PHP         dicebear/core + dicebear/styles
@@ -43,7 +43,7 @@ query parameter, not a path segment. Options are query parameters too; array
 values are separated by commas.
 
 Options named after a component end in Variant: eyesVariant, not eyes. This
-holds in all six cores and in the HTTP API. Look up the options of a style at
+holds in all seven cores and in the HTTP API. Look up the options of a style at
 https://api.dicebear.com/10.x/<style>/options.json
 
 Write these forms, not the ones on the left. The left column is pre-10 and the
@@ -68,9 +68,9 @@ says:
 
 > Read https://www.dicebear.com/llms.txt before you write DiceBear code.
 
-## Six libraries, identical output
+## Seven libraries, identical output
 
-DiceBear is not a JavaScript library with wrappers around it. Six native cores
+DiceBear is not a JavaScript library with wrappers around it. Seven native cores
 are held to byte-identical output, so the same style, seed and options produce
 the same SVG in each. Only the syntax for passing the options differs.
 

@@ -816,7 +816,7 @@ looks correct. Write \`${versions.httpApi}\` for new code.
 
 The pre-v10 JavaScript API no longer exists: \`createAvatar()\`,
 \`@dicebear/collection\` and individual style packages such as
-\`@dicebear/lorelei\` were all removed in 10.0.0. The other five cores have no
+\`@dicebear/lorelei\` were all removed in 10.0.0. The other six cores have no
 pre-v10 form at all, so any older-looking API attributed to them is invented.
 In every core, an option named after a component ends in \`Variant\`
 (\`eyesVariant\`, not \`eyes\`). The outdated patterns are listed at
@@ -955,7 +955,7 @@ ${preamble()}
 
 This file holds every documentation page. The prose comes first, then a compact
 list of the ${styleCount} avatar styles, then one section per style with its
-license, its loading snippet in all six languages, and its full option table.
+license, its loading snippet in all seven languages, and its full option table.
 
 ${documents.map(section).join('\n\n')}
 

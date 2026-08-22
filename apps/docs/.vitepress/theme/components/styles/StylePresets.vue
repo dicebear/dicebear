@@ -2,8 +2,8 @@
 /**
  * The preset gallery of a style page. Presets are plain option sets kept in
  * theme/presets/<style>.json. No definition or core feature backs them, so
- * whatever a card shows can be pasted into any of the six libraries or sent as
- * HTTP-API query parameters.
+ * whatever a card shows can be pasted into any of the seven libraries or sent
+ * as HTTP-API query parameters.
  *
  * The section is built to hold a lot of presets without taking over the page,
  * which already carries a long option table. Tiles stay small and wordless

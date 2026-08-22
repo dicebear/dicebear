@@ -76,7 +76,7 @@ with Figma or from scratch.
 
 ## This repository
 
-This monorepo contains the six core libraries, the CLI, the SVG-to-raster
+This monorepo contains the seven core libraries, the CLI, the SVG-to-raster
 converter, the documentation site ([dicebear.com](https://www.dicebear.com)),
 and the editor. Related projects live in their own repositories:
 
