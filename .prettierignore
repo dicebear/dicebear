@@ -11,8 +11,8 @@ tests
 **/dist/
 **/target/
 **/vendor/
-**/bin/
-**/obj/
+src/csharp/**/bin/
+src/csharp/**/obj/
 **/.dart_tool/
 **/.pytest_cache/
 apps/docs/.vitepress/cache/

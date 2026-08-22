@@ -55,9 +55,11 @@ instructions below only cover this monorepo.
 - For Dart work: Dart SDK 3.4+ (CI runs on 3.4 and stable); test with
   `dart test` and check with `dart format --output=none --set-exit-if-changed .`
   and `dart analyze --fatal-infos` inside `src/dart/core/`
-- For C# work: the .NET SDK 8.0+ (CI runs on 8.0); build and test with
-  `dotnet test` inside `src/csharp/core/`. Warnings are errors, so the build
-  fails on an unused variable or a missing XML doc comment.
+- For C# work: the .NET SDK 8.0+ (CI runs on 8.0). Build with
+  `dotnet build DiceBear.Core.csproj` and test with
+  `dotnet test tests/DiceBear.Core.Tests.csproj` inside `src/csharp/core/`.
+  Warnings are errors, so the build fails on an unused variable or a missing XML
+  doc comment.
 
 ## Local setup
 
@@ -210,6 +212,7 @@ cd src/csharp/core
 dotnet build DiceBear.Core.csproj
 dotnet test tests/DiceBear.Core.Tests.csproj
 dotnet format DiceBear.Core.csproj --verify-no-changes
+dotnet format tests/DiceBear.Core.Tests.csproj --verify-no-changes
 ```
 
 There is no solution file, so the project is named explicitly. The library
@@ -247,7 +250,8 @@ each side consumes it:
 - Dart side: the tests under `test/parity/`, run via `dart test` in
   `src/dart/core/`.
 - C# side: `tests/PrimitiveParityTests.cs`, `tests/AvatarParityTests.cs` and
-  `tests/ValidationParityTests.cs`, run via `dotnet test` in `src/csharp/core/`.
+  `tests/ValidationParityTests.cs`, run via
+  `dotnet test tests/DiceBear.Core.Tests.csproj` in `src/csharp/core/`.
 
 The fixtures cover `Fnv1a` (hash + hex), `Mulberry32` (chained sequences), every
 `Prng` method, number-to-string formatting (`numbers.json`, the `formatNumber`
@@ -325,8 +329,8 @@ npm run build --workspace @dicebear/editor
 - Dart code is formatted with `dart format` and analyzed with
   `dart analyze --fatal-infos` (lints from `analysis_options.yaml`); run both in
   `src/dart/core/` before you open a PR.
-- C# code is formatted with `dotnet format` and builds with warnings as errors;
-  run both against `DiceBear.Core.csproj` and `tests/DiceBear.Core.Tests.csproj`
+- C# code is formatted with `dotnet format` and builds with warnings as errors.
+  Run both against `DiceBear.Core.csproj` and `tests/DiceBear.Core.Tests.csproj`
   in `src/csharp/core/` before you open a PR. The four-space indent comes from
   the `[*.cs]` section of the repository `.editorconfig`.
 
@@ -384,7 +388,7 @@ workflow, which:
    tag against the pubspec version and publishes `src/dart/core` straight from
    the monorepo
 8. Publishes the C# core `DiceBear.Core` to NuGet via trusted publishing (the
-   `publish-nuget` job): likewise no token; `dotnet pack` and
+   `publish-nuget` job): likewise no token. `dotnet pack` and
    `dotnet nuget push` upload `src/csharp/core` in one step
 
 The PHP port is the exception: Composer/Packagist consumes one Git repository
