@@ -508,7 +508,8 @@ See the
   removed in favor of `@dicebear/styles`.
 
 [Unreleased]: https://github.com/dicebear/dicebear/compare/v10.7.0-rc.1...HEAD
-[10.7.0-rc.1]: https://github.com/dicebear/dicebear/compare/v10.6.1...v10.7.0-rc.1
+[10.7.0-rc.1]:
+  https://github.com/dicebear/dicebear/compare/v10.6.1...v10.7.0-rc.1
 [10.6.1]: https://github.com/dicebear/dicebear/compare/v10.6.0...v10.6.1
 [10.6.0]: https://github.com/dicebear/dicebear/compare/v10.5.0...v10.6.0
 [10.5.0]: https://github.com/dicebear/dicebear/compare/v10.4.0...v10.5.0

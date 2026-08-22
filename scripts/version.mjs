@@ -114,6 +114,10 @@ if (existsSync(changelogPath)) {
 
   if (updated !== null) {
     writeFileSync(changelogPath, updated);
+    // The compare-link line the promotion appends runs past Prettier's print
+    // width as soon as a version carries a prerelease suffix, which fails the
+    // format job on the release commit. Reflow the file before it is staged.
+    execSync("npx prettier --write CHANGELOG.md", { cwd: ROOT, stdio: "inherit" });
     console.log(`\nCHANGELOG.md: Unreleased → ${version} (${date})`);
   } else {
     console.log("\nCHANGELOG.md: nothing to promote (skipped)");
