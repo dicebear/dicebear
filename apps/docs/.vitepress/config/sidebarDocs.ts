@@ -91,6 +91,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/use-the-library-with-flutter/',
       },
       {
+        text: 'Godot <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/guides/use-the-library-with-godot/',
+      },
+      {
         text: 'Next.js',
         link: '/guides/use-the-library-with-next-js/',
       },
@@ -109,6 +113,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: 'Svelte',
         link: '/guides/use-the-library-with-svelte/',
+      },
+      {
+        text: 'Unity <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/guides/use-the-library-with-unity/',
       },
       {
         text: 'Vue',

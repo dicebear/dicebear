@@ -1,18 +1,22 @@
 ---
 title: C# Avatar Library
 description: >
-  Use the DiceBear C# library to generate SVG profile pictures in .NET, Godot
-  and Unity. Targets netstandard2.0 and net8.0 with an API identical to the
-  JavaScript library.
+  Use the DiceBear C# library to generate SVG profile pictures in .NET. Targets
+  netstandard2.0 and net8.0 with an API identical to the JavaScript library.
 ---
 
 # C# avatar library
 
 The C# library provides an API identical to the
 [JavaScript library](/how-to-use/js-library/). It targets `netstandard2.0` and
-`net8.0`, so it runs on .NET 8 and newer, on .NET Framework 4.6.1 and newer, in
-Godot 4.2+ with .NET, and in Unity. The same seed and style definition produce
-SVGs byte-identical to the JavaScript reference.
+`net8.0`, so it runs on .NET 8 and newer and on .NET Framework 4.6.1 and newer.
+The same seed and style definition produce SVGs byte-identical to the JavaScript
+reference.
+
+Game engines have their own guides. [Godot](/guides/use-the-library-with-godot/)
+runs the library on a .NET build, and
+[Unity](/guides/use-the-library-with-unity/) needs a NuGet client and an SVG
+renderer before it can.
 
 ## Installation
 
@@ -26,8 +30,8 @@ dotnet add package DiceBear.Styles
 
 The styles package embeds every style in the assembly. Like the Go module there
 is no per-style opt-in, so a project that ships it carries the whole collection.
-Where that matters, such as a game export, skip the package and load the one
-definition you need from a file.
+Where that matters, skip the package and load the one definition you need from a
+file.
 
 ## Usage
 
@@ -213,50 +217,6 @@ Dynamic component and color options also work the same way. See
 all available patterns.
 
 ## Examples
-
-### Rendering in Godot
-
-Godot 4 renders SVG through `Image.LoadSvgFromString`, so an avatar becomes a
-texture without any extra dependency:
-
-```csharp
-using Godot;
-using System.Text.Json.Nodes;
-using DiceBear;
-
-public partial class AvatarSprite : Sprite2D
-{
-    public override void _Ready()
-    {
-        var style = Style.Parse(Styles.Lorelei);
-
-        var svg = new Avatar(style, new JsonObject
-        {
-            ["seed"] = "John",
-            ["size"] = 128,
-        }).ToSvg();
-
-        var image = new Image();
-        image.LoadSvgFromString(svg);
-
-        Texture = ImageTexture.CreateFromImage(image);
-    }
-}
-```
-
-To keep the export small, skip `DiceBear.Styles` and add only the definitions
-you ship as project assets. `FileAccess` reads them in an exported game as well:
-
-```csharp
-using var file = FileAccess.Open(
-    "res://avatars/lorelei.json",
-    FileAccess.ModeFlags.Read);
-
-var style = Style.Parse(file.GetAsText());
-```
-
-This needs a .NET build of Godot. The standard build runs GDScript only, and
-there the [HTTP API](/how-to-use/http-api/) is the way to go.
 
 ### Rendering in ASP.NET Core
 
