@@ -26,12 +26,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Remove all languages except English due GDPR reasons, because we can't translate the legal pages.
-      - name: Cleanup languages
-        run: find apps/editor/src/messages -type f ! -name 'en.json' -exec rm -f {} +
-
+      # Only English is bundled, for GDPR reasons: the legal pages linked below
+      # are not translated, so an interface in another language would promise a
+      # translation that is not there.
       - name: Build editor
         env:
+          VITE_LOCALES: en
           VITE_PRIVACY_POLICY_URL: ${{ vars.VITE_PRIVACY_POLICY_URL }}
           VITE_COOKIE_POLICY_URL: ${{ vars.VITE_COOKIE_POLICY_URL }}
           VITE_LEGAL_NOTICE_URL: ${{ vars.VITE_LEGAL_NOTICE_URL }}

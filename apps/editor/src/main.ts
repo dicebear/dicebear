@@ -13,6 +13,15 @@ import Aura from '@primeuix/themes/aura';
 
 const Theme = definePreset(Aura, {});
 
+// The build decides which languages ship (see VITE_LOCALES in vite.config), so
+// the browser's language is only taken when the bundle carries it. vue-i18n
+// would fall back to English on its own, but the locale is also written into
+// <html lang>, and a page whose text is English should not claim otherwise.
+const browserLocale = navigator.language.split('-')[0];
+const locale = Object.keys(messages ?? {}).includes(browserLocale)
+  ? browserLocale
+  : 'en';
+
 const AsyncApp = defineAsyncComponent({
   loader: () => import('./App.vue'),
   loadingComponent: Loader,
@@ -24,7 +33,7 @@ app.use(createPinia());
 app.use(
   createI18n({
     legacy: false,
-    locale: navigator.language.split('-')[0],
+    locale,
     fallbackLocale: 'en',
     messages,
   }),
