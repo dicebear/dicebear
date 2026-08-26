@@ -1,9 +1,12 @@
 import type { DefaultTheme } from 'vitepress';
 
 // NOTE: VitePress renders sidebar item `text` with `v-html`, so inline markup is
-// allowed — we use it to attach small status badges (styled via
-// `.vp-sidebar-badge` in theme/styles/main.scss). Groups are intentionally NOT
-// collapsible (no `collapsed` key), so every section stays expanded.
+// allowed, and we use it to attach small status badges (styled via
+// `.vp-sidebar-badge` in theme/styles/main.scss). A "New" badge marks what a
+// 10.x minor added. Anything that shipped with 10.0.0 is as old as v10 itself
+// and carries none, which is why the PHP library has no badge while the ports
+// that followed it do. Groups are intentionally NOT collapsible (no `collapsed`
+// key), so every section stays expanded.
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'Introduction',
@@ -30,10 +33,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
           { text: 'Converter', link: '/how-to-use/js-library/converter/' },
         ],
       },
-      {
-        text: 'PHP Library <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/how-to-use/php-library/',
-      },
+      { text: 'PHP Library', link: '/how-to-use/php-library/' },
       {
         text: 'Python Library <span class="vp-sidebar-badge is-new">New</span>',
         link: '/how-to-use/python-library/',

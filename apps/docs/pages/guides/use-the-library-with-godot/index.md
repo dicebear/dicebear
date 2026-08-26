@@ -66,7 +66,8 @@ For the full API and the options each style accepts, see the
 
 The `size` option sets the `width` and `height` of the SVG, and Godot rasterizes
 at that resolution. Without it the avatar carries only a `viewBox`, and Godot
-falls back to those dimensions, 980 × 980 for most styles.
+falls back to those dimensions. Every style brings its own, so pass `size`
+instead of relying on them.
 
 The second argument of `LoadSvgFromString` scales on top of that. Passing `4.0`
 to a 128 px avatar gives you a 512 px texture:

@@ -1,0 +1,120 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Three steps of warm brown.",
+      "description": "The style keeps a light, a mid and a deep tone and hands them out down the pile. A monochrome set moves all three at once and leaves the arrangement alone.",
+      "options": {
+        "backgroundColor": ["f0e7d9"],
+        "stoneLightColor": ["e3d2b4"],
+        "stoneMidColor": ["b08e66"],
+        "stoneDeepColor": ["6b4a2e"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Three steps of grey.",
+      "description": "The same three step ladder without any hue. Useful for a print stylesheet or anywhere color would carry meaning it should not.",
+      "options": {
+        "backgroundColor": ["efeff1"],
+        "stoneLightColor": ["dcdce0"],
+        "stoneMidColor": ["a0a0a6"],
+        "stoneDeepColor": ["4a4a50"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "Three steps of one indigo.",
+      "description": "Background and all three stones take the same hue at four lightnesses, which is as close to a single color as a pile of stones can get and still read as stacked.",
+      "options": {
+        "backgroundColor": ["eaecf7"],
+        "stoneLightColor": ["c8cdea"],
+        "stoneMidColor": ["7d86c0"],
+        "stoneDeepColor": ["343c78"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty stones instead of the shipped eight.",
+      "description": "The shipped tones are already quiet. These go one step further toward grey, which suits a page where the avatar should not be the loudest thing on it.",
+      "options": {
+        "backgroundColor": ["ece9e3"],
+        "stoneLightColor": ["ddd8cc", "e0dcd2", "d8dcd6", "e2dad6"],
+        "stoneMidColor": ["a5a58d", "b98b73", "8e9aaf", "9c8a94"],
+        "stoneDeepColor": ["5b5b4a", "6b4f40", "4c5461", "574a52"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Stones past anything the style ships.",
+      "description": "The same lever the other way. The ground goes near black so the pile reads as lit rather than printed, and the deep tone has to come up with it: the shipped one is dark enough to lose the bottom stone against the ground.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "stoneLightColor": ["7cff00", "00e5ff", "ffe600"],
+        "stoneMidColor": ["ff2e88", "b400ff", "ff6a00"],
+        "stoneDeepColor": ["c72a8c", "2a8cc7", "c77a2a"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Colored grounds instead of the paper whites.",
+      "description": "The style ships four near white backgrounds that barely differ. Five pale colors make the ground a choice rather than a default.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated grounds behind the pile.",
+      "description": "Loud enough that the avatar holds its own against a busy page. The light stones are what carry the silhouette against it.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the pile.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "stencil",
+      "name": "Stencil",
+      "summary": "One ground for everyone, only the pile varies.",
+      "description": "Every avatar gets the same near black ground, so nothing distinguishes them but the arrangement. That turns a set from a group of pictures into an icon sheet.",
+      "options": {
+        "backgroundColor": ["16161c"]
+      }
+    },
+    {
+      "id": "tower",
+      "name": "Tower",
+      "summary": "Only the tall piles.",
+      "description": "Four of the eleven layouts stack four stones or more. Kept on their own, every avatar is a column, and the width of each stone becomes the thing that separates one from the next.",
+      "options": {
+        "pilesVariant": ["tower", "five", "four", "fourLean"]
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in, so the pile fills the frame.",
+      "description": "Uses scale rather than color. The bottom stone runs past the edge, which reads better at the size a comment thread gives an avatar.",
+      "options": {
+        "scale": 1.3
+      }
+    }
+  ]
+}

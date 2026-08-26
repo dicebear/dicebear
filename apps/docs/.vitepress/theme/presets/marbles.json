@@ -1,0 +1,163 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No nose on anyone.",
+      "description": "The nose is the style's one optional piece and it appears on three of four seeds. Without it the face is eyes and a mouth, which is closer to how the smaller drawing styles handle a face at avatar size.",
+      "options": {
+        "noseProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown marble.",
+      "description": "The sphere is shaded by three blurred ellipses rather than a gradient definition, so a monochrome set has to move all of them together: the second color, the pale tint and the ground.",
+      "options": {
+        "backgroundColor": ["f1e7d8"],
+        "sphereColor": ["b98f6c"],
+        "blendColor": ["8a6244"],
+        "tintColor": ["e6d3ba"],
+        "inkColor": ["2f2016"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "The same marble without hue.",
+      "description": "The face is one ink weight on a shaded ball, and both survive losing color. Useful for a print stylesheet or anywhere color would carry meaning it should not.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "sphereColor": ["b6b6b9"],
+        "blendColor": ["7c7c80"],
+        "tintColor": ["dcdce0"],
+        "inkColor": ["1a1a1e"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One indigo at three lightnesses.",
+      "description": "Sphere, blend and tint take the same hue at three steps, which is as close to a single color as the shading allows. The style requires the blend to differ from the sphere, so the two cannot collapse into one.",
+      "options": {
+        "backgroundColor": ["e6e8f5"],
+        "sphereColor": ["8e97d6"],
+        "blendColor": ["5a63a8"],
+        "tintColor": ["cfd4ee"],
+        "inkColor": ["1d2040"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty marbles instead of the candy palette.",
+      "description": "The style ships fifteen spheres at full saturation. These are the same marbles in tones that hold still, which suits a list where a dozen appear at once.",
+      "options": {
+        "backgroundColor": ["ece8e0"],
+        "sphereColor": [
+          "a5a58d",
+          "b98b73",
+          "8e9aaf",
+          "9c8a94",
+          "8fa38f",
+          "b0a58c"
+        ],
+        "blendColor": [
+          "8a8a72",
+          "9c7460",
+          "737f94",
+          "82707c",
+          "7d8f7d",
+          "978c76"
+        ],
+        "tintColor": ["ddd8cc", "e4d5c8", "d3d8e2", "ded3d8"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Marbles past anything the style ships.",
+      "description": "The same lever the other way. The ground goes near black and the ink with it goes pale, because the hair and the antennae are drawn outside the sphere where a dark line would disappear.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "sphereColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ],
+        "blendColor": [
+          "b400ff",
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00"
+        ],
+        "tintColor": ["ffd6f0", "d6fbff", "eaffd6"],
+        "inkColor": ["f4f4f6"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Pale grounds instead of the one paper white.",
+      "description": "The style ships a single background. Five pale ones turn a set from a sheet of specimens into something that belongs to whatever page it sits on.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated ground, pale ink over it.",
+      "description": "Loud enough that the avatar holds its own against a busy page. The ink goes near white, since the hair reaches past the sphere and onto the ground.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"],
+        "inkColor": ["f8f8fa"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black ground, pale ink.",
+      "description": "For dark interfaces. The marbles are bright already, so only the ink has to move, and it moves because the hair is drawn outside the sphere.",
+      "options": {
+        "backgroundColor": ["16161a"],
+        "inkColor": ["f4f4f6"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the marble.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "A nose on everyone.",
+      "description": "The nose is a two variant component at three quarters probability. Turned all the way up, every face gets the extra mark and the set reads as one drawing rather than two.",
+      "options": {
+        "noseProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in as far as the tops allow.",
+      "description": "Uses scale rather than color. This one stops at 1.1 where the other styles go further, because the hair and the antenna are drawn above the sphere and reach the top of the frame. Anything tighter cuts them off mid stroke.",
+      "options": {
+        "scale": 1.1
+      }
+    }
+  ]
+}

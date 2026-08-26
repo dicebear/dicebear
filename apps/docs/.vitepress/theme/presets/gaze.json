@@ -1,0 +1,141 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "Warm brown bodies on cream.",
+      "description": "The eyes are not painted, they take whichever of two inks holds up against the body. Move the bodies into brown and the eyes follow on their own.",
+      "options": {
+        "backgroundColor": ["efe3d2"],
+        "bodyColor": ["d5b28c", "c49a70", "e0c6a8", "b3835c"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "The same bodies without hue.",
+      "description": "Nothing here but a silhouette and a pair of eyes, so losing color costs the style very little. Useful for a print stylesheet or a chart where color already means something.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "bodyColor": ["c9c9cd", "aeaeb4", "dcdce0", "94949a"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One mint body for everyone.",
+      "description": "A single body color across a whole set, so the silhouette, the eyes and how far apart they sit are all that separates two avatars.",
+      "options": {
+        "backgroundColor": ["e2f5ef"],
+        "bodyColor": ["7ad0b4"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty bodies instead of the pastels.",
+      "description": "The shipped palette is six bright pastels. These are the same bodies in tones that hold still, which suits a sidebar where a dozen appear at once.",
+      "options": {
+        "backgroundColor": ["e8e4dc"],
+        "bodyColor": [
+          "a5a58d",
+          "b98b73",
+          "8e9aaf",
+          "9c8a94",
+          "8fa38f",
+          "b0a58c"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Bodies past anything the style ships.",
+      "description": "The same lever the other way, on a near black ground. The ink flips to the dark of the two by itself, because the neon bodies are the lighter side of every pairing.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "bodyColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Pale ground behind the body.",
+      "description": "Gaze ships no background of its own and renders transparent. A pale ground gives the shape an edge to sit against without touching the artwork.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated ground behind the body.",
+      "description": "Louder than Pastel Wall. The bodies are pale, so they keep their edge on top of it.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black ground, bodies unchanged.",
+      "description": "For dark interfaces. The shipped bodies are pastel already, so nothing else has to move for the shape to stay visible.",
+      "options": {
+        "backgroundColor": ["16161a"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the body.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "geometric",
+      "name": "Geometric",
+      "summary": "Only the straight edged silhouettes.",
+      "description": "Seven of the eleven shapes are plain polygons and the other four are drawn by hand. Keeping the polygons gives a set one consistent edge treatment, which reads more like a system of icons than a family of creatures.",
+      "options": {
+        "shapeVariant": [
+          "circle",
+          "square",
+          "triangle",
+          "pentagon",
+          "hexagon",
+          "octagon",
+          "diamond"
+        ]
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed, so the eyes wander and blink while the body hops. It respects prefers-reduced-motion.",
+      "options": {
+        "tags": ["animation"]
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in, so the body runs past the edge.",
+      "description": "Uses scale rather than color. Cropping in leaves the eyes and little else, which reads better at the size a comment thread gives an avatar.",
+      "options": {
+        "scale": 1.3
+      }
+    }
+  ]
+}

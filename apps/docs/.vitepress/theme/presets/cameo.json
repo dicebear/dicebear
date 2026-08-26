@@ -1,0 +1,142 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No bun and no ponytail.",
+      "description": "The knot is the only optional piece, and the only one that breaks the outline of the head. Without it every avatar is a closed shape, which is the quieter half of what the style can do.",
+      "options": {
+        "knotProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown, ground included.",
+      "description": "Hair, face and mouth are all the same body color under a translucent overlay, so one hue redraws the whole portrait and the overlay supplies the second tone.",
+      "options": {
+        "backgroundColor": ["efe3d2"],
+        "bodyColor": ["8a6244", "a2795a", "6f4c33", "b98f6c"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "The same portrait without hue.",
+      "description": "Flat shapes separated by one translucent overlay, which is the kind of drawing that survives losing color. Useful for a print stylesheet or anywhere color would carry meaning it should not.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "bodyColor": ["8a8a90", "6c6c72", "a4a4aa", "58585e"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One plum for everyone.",
+      "description": "A single body color across a whole set, so nothing but the head shape, the hair and the mouth separates two avatars. The overlay still splits each of them into a light and a dark half.",
+      "options": {
+        "backgroundColor": ["f0e7f2"],
+        "bodyColor": ["9b5f86"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty tones instead of the candy palette.",
+      "description": "The style ships twelve bodies at full saturation. These are the same portraits in tones that hold still, which suits a list where a dozen appear at once.",
+      "options": {
+        "backgroundColor": ["e8e4dc"],
+        "bodyColor": [
+          "a5a58d",
+          "b98b73",
+          "8e9aaf",
+          "9c8a94",
+          "8fa38f",
+          "b0a58c"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Bodies past anything the style ships.",
+      "description": "The same lever the other way. The ground stays near black so the head is the only lit thing on the tile.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "bodyColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Pale ground behind the head.",
+      "description": "Cameo ships no background of its own and renders transparent. A pale ground gives the portrait an edge to sit against without touching the artwork.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated ground behind the head.",
+      "description": "Louder than Pastel Wall and pushed toward the primaries, strong enough that the avatar holds its own against a busy page.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black ground, bodies unchanged.",
+      "description": "For dark interfaces. The shipped bodies are bright enough that nothing else has to move for the portrait to stay visible.",
+      "options": {
+        "backgroundColor": ["16161a"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the head.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top, so the light comes from either side across a set.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "etched",
+      "name": "Etched",
+      "summary": "The dark overlay every time.",
+      "description": "The style keeps one overlay slot and fills it with a translucent black or a translucent white, so a seed decides whether the hair sits darker or lighter than the face. Pinning it to black makes the hair read as hair in every avatar.",
+      "options": {
+        "shadeColor": ["00000057"]
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "A bun or a ponytail on everyone.",
+      "description": "The knot is on for roughly half of the seeds by default. Turned all the way up it becomes the piece that carries most of the variation, since it is the only one drawn outside the head.",
+      "options": {
+        "knotProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in, so the head runs past the edge.",
+      "description": "Uses scale rather than color. Cropping in turns the portrait from a complete picture into a detail of a larger one, which reads better at small sizes.",
+      "options": {
+        "scale": 1.3
+      }
+    }
+  ]
+}

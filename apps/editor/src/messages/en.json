@@ -108,5 +108,28 @@
   "paperMouthColor": "Mouth Paper Color",
   "outlineColor": "Outline Color",
   "paperColor": "Paper Color",
-  "strokeColor": "Stroke Color"
+  "strokeColor": "Stroke Color",
+  "shapeVariant": "Shape",
+  "knotVariant": "Knot",
+  "shadeColor": "Shade Color",
+  "spacingVariant": "Spacing",
+  "glintColor": "Glint Color",
+  "blendVariant": "Blend",
+  "sphereColor": "Sphere Color",
+  "blendColor": "Blend Color",
+  "tintColor": "Tint Color",
+  "shouldersVariant": "Shoulders",
+  "headsVariant": "Head",
+  "topsVariant": "Top",
+  "styles": {
+    "cameo": {
+      "bodyColor": "Color"
+    },
+    "croodles": {
+      "topVariant": "Hair"
+    },
+    "marbles": {
+      "bloomColor": "Highlight Color"
+    }
+  }
 }

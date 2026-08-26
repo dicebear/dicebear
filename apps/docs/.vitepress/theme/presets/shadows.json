@@ -1,0 +1,120 @@
+{
+  "presets": [
+    {
+      "id": "bare",
+      "name": "Bare",
+      "summary": "No hats and no hair.",
+      "description": "The top is the style's one optional piece and it appears on three of four seeds. Without it a set is seven shoulder lines against five head shapes, which is the plainest thing the style draws.",
+      "options": {
+        "topsProbability": 0
+      }
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown on cream.",
+      "description": "The whole bust is a single fill, so a monochrome set here is two colors and nothing else: the ink and the ground behind it.",
+      "options": {
+        "backgroundColor": ["efe3d2"],
+        "inkColor": ["6f4c33", "8a6244", "573a26", "7d5a3f"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "The same bust without hue.",
+      "description": "A filled silhouette is the kind of drawing that loses nothing without color. Useful for a print stylesheet or anywhere color would carry meaning it should not.",
+      "options": {
+        "backgroundColor": ["ececee"],
+        "inkColor": ["3a3a3f", "55555b", "26262a", "6a6a71"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One indigo on its own pale tint.",
+      "description": "Ink and ground take the same hue at two lightnesses, which is the smallest palette the style can be given.",
+      "options": {
+        "backgroundColor": ["e2e5f2"],
+        "inkColor": ["3b4380"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty inks instead of the shipped eleven.",
+      "description": "The shipped inks are already restrained. These go one step further toward grey, which suits a comment thread where a dozen busts appear in a column.",
+      "options": {
+        "backgroundColor": ["ebe8e2"],
+        "inkColor": ["6b705c", "7d6a5f", "5f6a72", "6f6470", "63705f", "776f5e"]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Silhouettes past anything the style ships.",
+      "description": "The same lever the other way, on a near black ground. A filled shape at this saturation stops reading as a person and starts reading as a sign, which is the point.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "inkColor": ["ff2e88", "00e5ff", "7cff00", "ffe600", "ff6a00", "b400ff"]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Softer grounds, the ink untouched.",
+      "description": "Changes only what the bust sits on. The lightest way to make a set of avatars feel like it belongs together.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated grounds behind a dark bust.",
+      "description": "Louder than the shipped set and pushed toward the primaries. The inks are dark enough to hold their edge on top of it.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "night-shift",
+      "name": "Night Shift",
+      "summary": "Near black ground, pale bust.",
+      "description": "For dark interfaces. The silhouette and the ground trade places, so the shape is what the light lands on.",
+      "options": {
+        "backgroundColor": ["16161a"],
+        "inkColor": ["e6e2dd", "d8dfe6", "e6dde2", "dee6d8"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the bust.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "full-cast",
+      "name": "Full Cast",
+      "summary": "A hat or a hairstyle on everyone.",
+      "description": "Thirteen tops, all of them merged into the head rather than laid on top of it. At full probability they carry most of what separates one avatar from the next.",
+      "options": {
+        "topsProbability": 100
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in, so the shoulders run past the edge.",
+      "description": "Uses scale rather than color. Cropping in leaves the head and the top, which is where the style puts its variation anyway.",
+      "options": {
+        "scale": 1.2
+      }
+    }
+  ]
+}

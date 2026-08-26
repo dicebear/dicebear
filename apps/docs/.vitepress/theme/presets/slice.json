@@ -1,0 +1,124 @@
+{
+  "presets": [
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "summary": "One warm brown, cut into bands.",
+      "description": "Each band carries a different amount of white over the body color, so a single hue already covers the whole tile. Swapping that hue for brown moves the entire ramp with it.",
+      "options": {
+        "backgroundColor": ["efe6d9"],
+        "bodyColor": ["6f4c33", "8a6244", "a2795a", "5a3c28"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "The ramp without hue.",
+      "description": "The style is a lightness ramp before it is a color, which is exactly the kind of drawing that survives losing hue. Useful for a print stylesheet.",
+      "options": {
+        "backgroundColor": ["eeeef0"],
+        "bodyColor": ["4a4a50", "63636a", "37373c", "757580"]
+      }
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "summary": "One indigo for everyone.",
+      "description": "A single body color across a whole set, so nothing but the silhouette, the cuts and the tilt separates two avatars. The bands still give each one its own ramp.",
+      "options": {
+        "backgroundColor": ["e8eaf4"],
+        "bodyColor": ["4a54a8"]
+      }
+    },
+    {
+      "id": "muted",
+      "name": "Muted",
+      "summary": "Dusty bodies instead of the shipped twelve.",
+      "description": "The shipped palette is a full hue circle at one saturation. These are the same shapes in tones that hold still, which suits a list where a dozen appear at once.",
+      "options": {
+        "backgroundColor": ["ebe7df"],
+        "bodyColor": [
+          "6b705c",
+          "9c6b58",
+          "5f6a72",
+          "7c6a72",
+          "63705f",
+          "8a7a5e"
+        ]
+      }
+    },
+    {
+      "id": "electric",
+      "name": "Electric",
+      "summary": "Bodies past anything the style ships.",
+      "description": "The same lever the other way. The ground goes near black so the top band, which is the palest one, reads as lit rather than printed.",
+      "options": {
+        "backgroundColor": ["0f0f12"],
+        "bodyColor": [
+          "ff2e88",
+          "00e5ff",
+          "7cff00",
+          "ffe600",
+          "ff6a00",
+          "b400ff"
+        ]
+      }
+    },
+    {
+      "id": "pastel-wall",
+      "name": "Pastel Wall",
+      "summary": "Colored grounds instead of the paper whites.",
+      "description": "The style ships five near white backgrounds that barely differ. Five pale colors make the ground a choice rather than a default.",
+      "options": {
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "bold-pop",
+      "name": "Bold Pop",
+      "summary": "Saturated grounds behind the bands.",
+      "description": "Loud enough that the avatar holds its own against a busy page. The palest bands are the ones that have to work here, and they do.",
+      "options": {
+        "backgroundColor": ["ff5d8f", "ffb703", "43aa8b", "4d96ff", "b57bff"]
+      }
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "summary": "A warm gradient behind the bands.",
+      "description": "Shows the gradient background options: two colors, a linear fill and a fixed angle. The seed still decides which of the two ends up on top.",
+      "options": {
+        "backgroundColor": ["ffd9b0", "ffa8bf"],
+        "backgroundColorFill": "linear",
+        "backgroundColorAngle": 135
+      }
+    },
+    {
+      "id": "stencil",
+      "name": "Stencil",
+      "summary": "One ground for everyone, only the shape varies.",
+      "description": "Every avatar gets the same near black ground, so nothing distinguishes them but the cut. That turns a set from a group of pictures into an icon sheet.",
+      "options": {
+        "backgroundColor": ["16161c"]
+      }
+    },
+    {
+      "id": "shattered",
+      "name": "Shattered",
+      "summary": "Only the widest offsets.",
+      "description": "Four of the sixteen cut patterns push the bands as far sideways as the style goes. Kept on their own, the silhouette stops being readable as one shape, which is the far end of what the style is for.",
+      "options": {
+        "cutsVariant": ["triDeep", "quadDeep", "fiveDeep", "sixDeep"]
+      }
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "summary": "Scaled in, so the bands run past the edge.",
+      "description": "Uses scale rather than color. Cropping in turns the composition from a complete picture into a detail of a larger one, which reads better at small sizes.",
+      "options": {
+        "scale": 1.4
+      }
+    }
+  ]
+}

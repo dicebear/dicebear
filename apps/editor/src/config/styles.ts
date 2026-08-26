@@ -11,6 +11,7 @@ import bigEarsNeutralDef from '@dicebear/styles/big-ears-neutral.json';
 import bigSmileDef from '@dicebear/styles/big-smile.json';
 import botttsDef from '@dicebear/styles/bottts.json';
 import botttsNeutralDef from '@dicebear/styles/bottts-neutral.json';
+import cameoDef from '@dicebear/styles/cameo.json';
 import clayDef from '@dicebear/styles/clay.json';
 import crittersDef from '@dicebear/styles/critters.json';
 import croodlesDef from '@dicebear/styles/croodles.json';
@@ -18,9 +19,11 @@ import croodlesNeutralDef from '@dicebear/styles/croodles-neutral.json';
 import cutoutsDef from '@dicebear/styles/cutouts.json';
 import dylanDef from '@dicebear/styles/dylan.json';
 import funEmojiDef from '@dicebear/styles/fun-emoji.json';
+import gazeDef from '@dicebear/styles/gaze.json';
 import lineFaceDef from '@dicebear/styles/line-face.json';
 import loreleiDef from '@dicebear/styles/lorelei.json';
 import loreleiNeutralDef from '@dicebear/styles/lorelei-neutral.json';
+import marblesDef from '@dicebear/styles/marbles.json';
 import micahDef from '@dicebear/styles/micah.json';
 import mininavsDef from '@dicebear/styles/miniavs.json';
 import moodsDef from '@dicebear/styles/moods.json';
@@ -31,6 +34,7 @@ import personasDef from '@dicebear/styles/personas.json';
 import pixelArtDef from '@dicebear/styles/pixel-art.json';
 import pixelArtNeutralDef from '@dicebear/styles/pixel-art-neutral.json';
 import pixelbotDef from '@dicebear/styles/pixelbot.json';
+import shadowsDef from '@dicebear/styles/shadows.json';
 import sproutsDef from '@dicebear/styles/sprouts.json';
 import thumbsDef from '@dicebear/styles/thumbs.json';
 import toonHeadDef from '@dicebear/styles/toon-head.json';
@@ -56,6 +60,7 @@ const availableStyles: ConfigStyleCollection = {
   bigSmile: createStyle(bigSmileDef),
   bottts: createStyle(botttsDef),
   botttsNeutral: createStyle(botttsNeutralDef),
+  cameo: createStyle(cameoDef),
   clay: createStyle(clayDef),
   critters: createStyle(crittersDef),
   croodles: createStyle(croodlesDef),
@@ -63,9 +68,11 @@ const availableStyles: ConfigStyleCollection = {
   cutouts: createStyle(cutoutsDef),
   dylan: createStyle(dylanDef),
   funEmoji: createStyle(funEmojiDef),
+  gaze: createStyle(gazeDef),
   lineFace: createStyle(lineFaceDef),
   lorelei: createStyle(loreleiDef),
   loreleiNeutral: createStyle(loreleiNeutralDef),
+  marbles: createStyle(marblesDef),
   micah: createStyle(micahDef),
   miniavs: createStyle(mininavsDef),
   moods: createStyle(moodsDef),
@@ -76,6 +83,7 @@ const availableStyles: ConfigStyleCollection = {
   pixelArt: createStyle(pixelArtDef),
   pixelArtNeutral: createStyle(pixelArtNeutralDef),
   pixelbot: createStyle(pixelbotDef),
+  shadows: createStyle(shadowsDef),
   sprouts: createStyle(sproutsDef),
   thumbs: createStyle(thumbsDef),
   toonHead: createStyle(toonHeadDef),

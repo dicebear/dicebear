@@ -108,5 +108,28 @@
   "paperMouthColor": "Cor do Papel da Boca",
   "outlineColor": "Cor do Contorno",
   "paperColor": "Cor do Papel",
-  "strokeColor": "Cor do Traço"
+  "strokeColor": "Cor do Traço",
+  "shapeVariant": "Forma",
+  "knotVariant": "Coque",
+  "shadeColor": "Cor do Sombreado",
+  "spacingVariant": "Espaçamento",
+  "glintColor": "Cor do Brilho",
+  "blendVariant": "Mistura",
+  "sphereColor": "Cor da Esfera",
+  "blendColor": "Cor da Mistura",
+  "tintColor": "Cor do Tom",
+  "shouldersVariant": "Ombros",
+  "headsVariant": "Cabeça",
+  "topsVariant": "Topo da Cabeça",
+  "styles": {
+    "cameo": {
+      "bodyColor": "Cor"
+    },
+    "croodles": {
+      "topVariant": "Cabelo"
+    },
+    "marbles": {
+      "bloomColor": "Cor do Brilho"
+    }
+  }
 }

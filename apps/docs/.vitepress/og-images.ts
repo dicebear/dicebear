@@ -87,10 +87,10 @@ const RULE_Y = CREDIT_BASELINE - 40;
 
 /**
  * What shows through a transparent avatar. No avatar is ever given a
- * `backgroundColor`: 38 of the 55 styles declare their own `colors.background`
- * palette (every `-neutral` variant, every v10 addition except glyphs, and a
- * handful of older ones), and overriding it would replace a color the artist
- * chose. The other 17 render transparent and sit on this.
+ * `backgroundColor`: 42 of the 61 styles declare their own `colors.background`
+ * palette (every `-neutral` variant, every v10 addition except glyphs, cameo
+ * and gaze, and a handful of older ones), and overriding it would replace a
+ * color the artist chose. The other 19 render transparent and sit on this.
  *
  * sky-100 rather than white, because white artwork disappears against a white
  * tile: `lorelei` loses its face and shows only hair and outlines, and

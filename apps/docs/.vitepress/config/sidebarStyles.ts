@@ -2,31 +2,31 @@ import { capitalCase } from 'change-case';
 import type { DefaultTheme } from 'vitepress';
 import avatarStyles from './avatarStyles.ts';
 
-// Avatar styles to flag with a "New" badge in the sidebar: everything that
-// shipped during v10, from the v10.0.0 styles to the voxel styles in v10.4.0.
-// Update this set when new styles ship. The badge markup is rendered via
-// v-html (see `.vp-sidebar-badge` in theme/styles/main.scss).
+// Avatar styles to flag with a "New" badge in the sidebar: the ones a 10.x
+// minor added. The six that shipped with 10.0.0 are as old as v10 itself and
+// carry no badge. Update this set when new styles ship. The badge markup is
+// rendered via v-html (see `.vp-sidebar-badge` in theme/styles/main.scss).
 const NEW_STYLES = new Set<string>([
   'blobs',
+  'cameo',
   'clay',
   'constellation',
   'critters',
   'cutouts',
-  'disco',
-  'glyphs',
-  'initial-face',
+  'gaze',
   'landscape',
   'line-face',
   'loops',
+  'marbles',
   'moods',
   'patchwork',
   'pixelbot',
   'planets',
-  'shape-grid',
+  'shadows',
+  'slice',
   'sprouts',
   'squircles',
-  'stripes',
-  'triangles',
+  'stack',
   'voxel-art',
   'voxel-bot',
   'waves',

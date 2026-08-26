@@ -108,5 +108,31 @@
   "paperMouthColor": "Papierfarbe Mund",
   "outlineColor": "Umrissfarbe",
   "paperColor": "Papierfarbe",
-  "strokeColor": "Strichfarbe"
+  "strokeColor": "Strichfarbe",
+  "shapeVariant": "Form",
+  "knotVariant": "Knoten",
+  "shadeColor": "Schattierungsfarbe",
+  "spacingVariant": "Abstand",
+  "glintColor": "Glanzfarbe",
+  "blendVariant": "Verlauf",
+  "sphereColor": "Kugelfarbe",
+  "blendColor": "Verlaufsfarbe",
+  "tintColor": "Tönungsfarbe",
+  "shouldersVariant": "Schultern",
+  "headsVariant": "Kopf",
+  "topsVariant": "Oberkopf",
+  "styles": {
+    "bottts": {
+      "topVariant": "Kopfaufsatz"
+    },
+    "cameo": {
+      "bodyColor": "Farbe"
+    },
+    "croodles": {
+      "topVariant": "Haare"
+    },
+    "marbles": {
+      "bloomColor": "Glanzfarbe"
+    }
+  }
 }

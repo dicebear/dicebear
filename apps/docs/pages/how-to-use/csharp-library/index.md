@@ -13,10 +13,10 @@ The C# library provides an API identical to the
 The same seed and style definition produce SVGs byte-identical to the JavaScript
 reference.
 
-Game engines have their own guides. [Godot](/guides/use-the-library-with-godot/)
-runs the library on a .NET build, and
-[Unity](/guides/use-the-library-with-unity/) needs a NuGet client and an SVG
-renderer before it can.
+Game engines have their own guides. In
+[Godot](/guides/use-the-library-with-godot/) the library runs only on a .NET
+build of the engine. [Unity](/guides/use-the-library-with-unity/) ships neither
+a NuGet client nor a runtime SVG renderer, so you have to add both yourself.
 
 ## Installation
 

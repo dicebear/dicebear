@@ -112,16 +112,22 @@ const animatedStyles = computed(() =>
   }
 
   &-grid {
-    display: grid;
-    /* Six columns so the 18 animated styles fill three even rows. Revisit the
-       count when a new animated style ships. */
-    grid-template-columns: repeat(6, 1fr);
-    gap: 24px;
-    justify-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Five tiles per row, set by capping the width rather than by a column
+       count, so a row that does not fill up centers its tiles instead of
+       leaving a hole on the right. 900px is 5 x 116px of tile plus 4 x 80px
+       of gap. Five divides the animated styles more evenly than six does,
+       but nothing breaks at another count. */
+    max-width: 900px;
+    margin: 0 auto;
+    gap: 24px 80px;
   }
 
   &-item {
     display: flex;
+    flex: 0 0 auto;
     flex-direction: column;
     align-items: center;
     gap: 12px;
@@ -188,8 +194,9 @@ const animatedStyles = computed(() =>
 @media (max-width: 768px) {
   .app-animated-styles {
     &-grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      /* Three 88px tiles and two 32px gaps. */
+      max-width: 328px;
+      gap: 16px 32px;
     }
 
     &-avatar {
@@ -208,7 +215,7 @@ const animatedStyles = computed(() =>
 @media (max-width: 480px) {
   .app-animated-styles {
     &-grid {
-      grid-template-columns: repeat(2, 1fr);
+      max-width: 208px;
     }
   }
 }

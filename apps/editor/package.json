@@ -7,14 +7,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check build-only",
+    "build": "npm run validate:messages && run-p type-check build-only",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit"
+    "type-check": "vue-tsc --noEmit",
+    "validate:messages": "node scripts/validate-messages.mjs"
   },
   "dependencies": {
     "@dicebear/core": "10.7.0-rc.1",
-    "@dicebear/styles": "^10.5.0",
+    "@dicebear/styles": "^10.6.0",
     "@primeuix/themes": "^2.0.3",
     "@vueuse/core": "^14.2.0",
     "change-case": "^5.4.4",

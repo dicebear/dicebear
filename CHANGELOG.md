@@ -8,6 +8,28 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Styles:** Bumped `@dicebear/styles` to `10.6.0` for the CLI, the docs, and
+  the editor. The release adds `cameo`, `gaze`, `marbles`, `shadows`, `slice`,
+  and `stack`, which take the collection from 55 to 61 styles. `gaze` is
+  animated, which takes that count from 18 to 19. Each of the six has a style
+  page with its own preview row and a preset gallery, and the four the docs list
+  under Characters are in the editor too.
+
+- **Editor:** Option labels can now differ per style. They are one flat map per
+  language, because an option key almost always means the same thing wherever it
+  appears. German was the exception: it gave the head and the piece sitting on
+  top of it the same word, "Kopf", in `bottts` and `croodles`, which put two
+  identical tabs in one strip, while English and Portuguese already told the two
+  apart. A style that needs a different word now overrides that one label under
+  `styles.<styleName>` in the message file, and only the language that deviates
+  carries an override. `marbles` and `cameo` took one too, for a highlight that
+  German and Portuguese called a flower and for a body color on a style that
+  draws no body. `npm run validate:messages` now fails the build on a missing
+  label, on two keys resolving to the same word inside one style, and on an
+  override whose key or style is gone.
+
 ### Fixed
 
 - **Core (C#):** Validation and rendering now agree with the other cores in
