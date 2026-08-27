@@ -5,7 +5,7 @@ Thanks for your interest in contributing to DiceBear.
 This is the main monorepo: the JavaScript, PHP, Python, Rust, Go, Dart, and C#
 core libraries, the CLI, the docs site, and the editor all live here.
 Repositories covering the JSON Schema, the avatar style definitions, the HTTP
-API, and the Figma exporter are separate and each have their own
+API, and DiceBear Studio (the Figma plugin) are separate and each have their own
 `CONTRIBUTING.md`:
 
 - [`dicebear/schema`](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md):
@@ -14,8 +14,8 @@ API, and the Figma exporter are separate and each have their own
   Official avatar style definitions
 - [`dicebear/api`](https://github.com/dicebear/api/blob/main/CONTRIBUTING.md):
   Self-hostable HTTP API
-- [`dicebear/exporter-plugin-for-figma`](https://github.com/dicebear/exporter-plugin-for-figma/blob/main/CONTRIBUTING.md):
-  Figma plugin
+- [`dicebear/studio`](https://github.com/dicebear/studio/blob/main/CONTRIBUTING.md):
+  DiceBear Studio (Figma plugin)
 
 If your contribution belongs to one of those repos, read its file first. The
 instructions below only cover this monorepo.

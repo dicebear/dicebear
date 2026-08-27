@@ -85,8 +85,8 @@ and the editor. Related projects live in their own repositories:
 - [`dicebear/schema`](https://github.com/dicebear/schema): the JSON Schema
   behind definitions and options
 - [`dicebear/api`](https://github.com/dicebear/api): the self-hostable HTTP API
-- [`dicebear/exporter-plugin-for-figma`](https://github.com/dicebear/exporter-plugin-for-figma):
-  the Figma plugin for style authors
+- [`dicebear/studio`](https://github.com/dicebear/studio): DiceBear Studio, the
+  Figma plugin for style authors
 
 Contributions are welcome; [CONTRIBUTING.md](./CONTRIBUTING.md) explains the
 setup and where each kind of change belongs.

@@ -2,7 +2,7 @@
 title: Create an Avatar Style with Figma
 description: >
   Step-by-step guide to creating a custom DiceBear avatar style using the
-  DiceBear Figma Exporter plugin.
+  DiceBear Studio plugin for Figma.
 ---
 
 # Create an avatar style with Figma
@@ -70,7 +70,7 @@ one instance from each component group into the frame.
 ## Step 6
 
 Search now for the
-[DiceBear Exporter](https://www.figma.com/community/plugin/1005765655729342787)
+[DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787)
 plugin. Make sure you have selected the frame and start the plugin.
 
 A dialog will open where you can make all kinds of settings. For example the

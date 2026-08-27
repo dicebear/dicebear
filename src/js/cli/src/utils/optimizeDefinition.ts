@@ -34,7 +34,7 @@ const RENDER_CHECK_SEEDS = [
 /**
  * The svgo plugins applied to every element tree.
  *
- * This mirrors what the DiceBear Exporter for Figma already runs on export, so
+ * This mirrors what DiceBear Studio for Figma already runs on export, so
  * a hand-authored definition ends up in the same shape as a generated one.
  * `cleanupNumericValues` is the exporter's custom variant, which keeps
  * normalized 0..1 attributes usable at low precision. Several plugins are

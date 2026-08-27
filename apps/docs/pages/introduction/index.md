@@ -118,7 +118,7 @@ DiceBear is available through the [JavaScript library](/how-to-use/js-library/),
 [Dart library](/how-to-use/dart-library/),
 [C# library](/how-to-use/csharp-library/), [HTTP API](/how-to-use/http-api/),
 [CLI](/how-to-use/cli/),
-[Figma plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
+[Figma plugin](https://www.figma.com/community/plugin/1005765655729342787),
 [Editor](https://editor.dicebear.com) and [Playground](/playground/), so you can
 integrate it into most projects. The [Avatar API](/how-to-use/http-api/)
 provides URL-based integration without installing anything.
