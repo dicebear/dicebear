@@ -41,29 +41,42 @@ defineProps<{
   background-position: center;
 }
 
-.ui-demo-frame-action {
+/* The same chrome for the built-in link and for whatever the `actions` slot
+   brings, which is why the slotted twin is listed alongside every rule. */
+.ui-demo-frame-action,
+:slotted(.ui-demo-frame-action) {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   padding: 4px 10px;
+  border: 0;
   border-radius: var(--vp-radius-chrome);
+  background: none;
+  font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   line-height: 1;
   color: var(--ui-c-text-muted);
   text-decoration: none;
+  cursor: pointer;
   transition:
     color var(--duration-fast) var(--ease-smooth),
     background-color var(--duration-fast) var(--ease-smooth);
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: var(--vp-c-brand-1);
     background: var(--vp-c-brand-soft);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
   }
 }
 
 @media (max-width: 640px) {
-  .ui-demo-frame-action-label {
+  .ui-demo-frame-action-label,
+  :slotted(.ui-demo-frame-action-label) {
     display: none;
   }
 }

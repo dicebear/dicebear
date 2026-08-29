@@ -18,12 +18,12 @@ const steps = [
   {
     title: 'Export with Plugin',
     description:
-      'Use the DiceBear Figma plugin to configure options and export your style as a ready-to-use package.',
+      'Use the DiceBear Studio plugin to configure options and export your style. It also imports an existing style back into Figma.',
   },
   {
-    title: 'Build & Use',
+    title: 'Use It',
     description:
-      'Run npm install and npm run build. Your custom style is ready to generate avatars.',
+      'The export is a single JSON definition file that every DiceBear library reads right away.',
   },
 ];
 </script>

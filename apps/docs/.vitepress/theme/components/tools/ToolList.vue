@@ -63,9 +63,9 @@ const tools: Tool[] = [
     slug: 'figma-plugin',
     href: 'https://www.figma.com/community/plugin/1005765655729342787',
     external: true,
-    name: 'Figma Plugin',
+    name: 'DiceBear Studio',
     description:
-      'Export DiceBear avatar styles directly from Figma, keeping your design source in sync with what ships in production.',
+      'Export an avatar style straight out of Figma, or import a definition file and edit an existing style in Figma.',
     icon: Paintbrush,
     iconBg: 'linear-gradient(135deg, #0ea5e9, #6366f1)',
   },

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { kebabCase } from 'change-case';
+import { Download } from '@lucide/vue';
 import { getPreviewRowSeeds } from '@theme/config/previewRowSeeds';
+import { useDefinitionDownload } from '@theme/composables/useDefinitionDownload';
 import { UiAvatar, UiDemoFrame } from '../ui';
 
 const props = defineProps<{
@@ -16,10 +18,28 @@ const seeds = computed(() => getPreviewRowSeeds(props.styleName));
 const playgroundUrl = computed(
   () => `/playground?style=${kebabCase(props.styleName)}`,
 );
+
+const {
+  url: definitionUrl,
+  download,
+  pending,
+} = useDefinitionDownload(() => props.styleName);
 </script>
 
 <template>
   <UiDemoFrame :playground-url="playgroundUrl">
+    <template #actions>
+      <button
+        v-if="definitionUrl"
+        class="ui-demo-frame-action"
+        :disabled="pending"
+        title="Download the style definition"
+        @click="download"
+      >
+        <Download :size="14" />
+        <span class="ui-demo-frame-action-label">Definition</span>
+      </button>
+    </template>
     <div class="style-preview">
       <UiAvatar
         v-for="seed in seeds"

@@ -2,9 +2,11 @@
 import { computed } from 'vue';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
+import { Download } from '@lucide/vue';
 import { UiCard, UiCopyButton } from '../ui';
 import { kebabCase } from 'change-case';
 import { safeHttpUrl } from '@theme/utils/url';
+import { useDefinitionDownload } from '@theme/composables/useDefinitionDownload';
 import StylePopularity from './StylePopularity.vue';
 
 const { theme } = useData<ThemeOptions>();
@@ -24,6 +26,8 @@ const exampleHttpApiUrl = computed(() => {
 interface UrlRow {
   label: string;
   url: string;
+  /** The definition is a file to keep, so its row offers a save as well. */
+  downloadable?: boolean;
 }
 
 interface SourceRow {
@@ -36,7 +40,11 @@ const urlRows = computed<UrlRow[]>(() => {
   const rows: UrlRow[] = [{ label: 'HTTP-API', url: exampleHttpApiUrl.value }];
 
   if (style.value.definitionUrl) {
-    rows.push({ label: 'Definition', url: style.value.definitionUrl });
+    rows.push({
+      label: 'Definition',
+      url: style.value.definitionUrl,
+      downloadable: true,
+    });
   }
 
   return rows;
@@ -53,6 +61,8 @@ function linkOrText(
 
   return { label, text, href: safeHttpUrl(url) };
 }
+
+const { download, pending } = useDefinitionDownload(() => props.styleName);
 
 const sourceRows = computed<SourceRow[]>(() => {
   const meta = style.value.meta;
@@ -83,9 +93,29 @@ const sourceRows = computed<SourceRow[]>(() => {
             class="ui-copy-button style-info-copy"
             :text="row.url"
           />
+          <button
+            v-if="row.downloadable"
+            class="ui-copy-button style-info-copy"
+            :disabled="pending"
+            title="Download"
+            @click="download"
+          >
+            <Download :size="14" />
+          </button>
         </dd>
       </div>
     </dl>
+    <p class="style-info-note">
+      Import the definition into Figma with
+      <a
+        href="https://www.figma.com/community/plugin/1005765655729342787"
+        target="_blank"
+        rel="noopener noreferrer"
+        >DiceBear Studio</a
+      >
+      to change this style. See the
+      <a href="/guides/edit-an-avatar-style-with-figma/">guide</a>.
+    </p>
   </UiCard>
 
   <UiCard
@@ -162,6 +192,15 @@ const sourceRows = computed<SourceRow[]>(() => {
   white-space: nowrap;
   font-family: var(--vp-font-family-mono);
   font-size: 13px;
+}
+
+.style-info-note {
+  margin: 0;
+  padding: 10px var(--ui-card-padding) 12px;
+  border-top: 1px solid var(--ui-card-border-color);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ui-c-text-muted);
 }
 
 /* The button chrome comes from the global .ui-copy-button class; this row

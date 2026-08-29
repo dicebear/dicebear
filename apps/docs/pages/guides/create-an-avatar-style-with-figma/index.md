@@ -11,6 +11,15 @@ Our [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787)
 is the easiest way to create an avatar style for DiceBear. The following
 tutorial requires basic knowledge about [Figma](https://www.figma.com/).
 
+::: tip
+
+You do not have to start with an empty canvas. The plugin also imports a
+definition file, so you can take an existing style into Figma and change it
+there. See
+[Edit an avatar style with Figma](/guides/edit-an-avatar-style-with-figma/).
+
+:::
+
 ## Step 1
 
 If you want DiceBear to dynamically change colors in your avatar, you have to

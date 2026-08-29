@@ -132,6 +132,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/create-an-avatar-style-with-figma/',
       },
       {
+        text: 'Edit a Style <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/guides/edit-an-avatar-style-with-figma/',
+      },
+      {
         text: 'From Scratch',
         link: '/guides/create-an-avatar-style-from-scratch/',
       },
