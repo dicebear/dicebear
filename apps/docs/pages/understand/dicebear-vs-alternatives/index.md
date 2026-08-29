@@ -14,13 +14,13 @@ import DocsComparisonTable from '@theme/components/docs/DocsComparisonTable.vue'
 
 DiceBear is an open source avatar library with [%STYLE_COUNT% styles](/styles/),
 a [free HTTP API](/integrations/http-api/), and libraries for seven languages.
-Each style has a [deep set of options](/customize/style-options/):
-you can recolor the avatar, swap individual features, control the background,
-and weight how likely each variant is, so two avatars from the same style can
-look completely different. This page compares it with the avatar libraries
-developers most often weigh against it, to help you choose the right one for
-your project. All of them are good at what they do, and the best choice depends
-on your stack and the look you are after.
+Each style has a [deep set of options](/customize/style-options/): you can
+recolor the avatar, swap individual features, control the background, and weight
+how likely each variant is, so two avatars from the same style can look
+completely different. This page compares it with the avatar libraries developers
+most often weigh against it, to help you choose the right one for your project.
+All of them are good at what they do, and the best choice depends on your stack
+and the look you are after.
 
 <DocsComparisonTable />
 

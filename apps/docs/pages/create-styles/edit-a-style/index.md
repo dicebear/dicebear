@@ -121,5 +121,5 @@ Try it with the [CLI](/integrations/cli/):
 dicebear ./critters.json ./test-output --count 10
 ```
 
-[Step 8 of the Figma guide](/create-styles/with-figma/#step-8)
-shows how to use your definition with each of our libraries.
+[Step 8 of the Figma guide](/create-styles/with-figma/#step-8) shows how to use
+your definition with each of our libraries.

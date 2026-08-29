@@ -8,11 +8,11 @@ description: >
 
 # Python avatar library
 
-Generate avatars right in your Python code (3.10 or higher), with no
-external service involved. The API mirrors the
+Generate avatars right in your Python code (3.10 or higher), with no external
+service involved. The API mirrors the
 [JavaScript library](/integrations/javascript/), and the output is
-byte-identical: the same seed and style produce the same SVG in every
-DiceBear library.
+byte-identical: the same seed and style produce the same SVG in every DiceBear
+library.
 
 ## Installation
 
@@ -50,9 +50,9 @@ page of each [avatar style](/styles/).
 
 :::info
 
-The avatar styles come from many creators, and each creator chooses the
-license for their own style. The [license overview](/licenses/) lists them
-all in one place.
+The avatar styles come from many creators, and each creator chooses the license
+for their own style. The [license overview](/licenses/) lists them all in one
+place.
 
 :::
 
@@ -158,8 +158,8 @@ data_uri = avatar.to_data_uri()
 ## Core options
 
 These options are the same across every DiceBear core. See
-[Core options](/customize/options/) for the full reference. Here are the
-options in Python syntax:
+[Core options](/customize/options/) for the full reference. Here are the options
+in Python syntax:
 
 ```python
 avatar = Avatar(style, {

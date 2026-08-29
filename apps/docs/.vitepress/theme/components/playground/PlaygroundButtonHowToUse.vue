@@ -332,8 +332,8 @@ const exampleCli = computed(() =>
                   >.
                 </Message>
                 <p>
-                  See <a href="/integrations/http-api">HTTP-API</a> docs for more
-                  information.
+                  See <a href="/integrations/http-api">HTTP-API</a> docs for
+                  more information.
                 </p>
               </div>
             </TabPanel>
@@ -390,8 +390,8 @@ const exampleCli = computed(() =>
                   style definition.
                 </p>
                 <p>
-                  See <a href="/integrations/python">Python</a> docs for
-                  more information.
+                  See <a href="/integrations/python">Python</a> docs for more
+                  information.
                 </p>
               </div>
             </TabPanel>

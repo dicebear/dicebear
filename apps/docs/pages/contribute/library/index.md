@@ -16,8 +16,8 @@ Pick the one that matches what you want to work on.
 New avatar styles and fixes to existing styles live in
 [`dicebear/styles`](https://github.com/dicebear/styles). Most styles are
 authored in Figma and exported with the
-[DiceBear Studio](/create-styles/with-figma/) plugin, so the
-workflow there is not the usual "edit a JSON file" loop.
+[DiceBear Studio](/create-styles/with-figma/) plugin, so the workflow there is
+not the usual "edit a JSON file" loop.
 
 - [`CONTRIBUTING.md`](https://github.com/dicebear/styles/blob/main/CONTRIBUTING.md)
   in `dicebear/styles`

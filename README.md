@@ -39,8 +39,8 @@ regenerate it later in a Go or PHP backend, and you get the same bytes.
 | C#                      | [`DiceBear.Core`](https://www.nuget.org/packages/DiceBear.Core)         | `dotnet add package DiceBear.Core`           |
 
 In JavaScript it looks like this; the
-[documentation](https://www.dicebear.com/start/what-is-dicebear/) has the equivalent for
-each language:
+[documentation](https://www.dicebear.com/start/what-is-dicebear/) has the
+equivalent for each language:
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -63,14 +63,14 @@ with Figma or from scratch.
 
 ## Without writing code
 
-- The [HTTP API](https://www.dicebear.com/integrations/http-api/) returns avatars
-  from a plain URL, free and without an account:
+- The [HTTP API](https://www.dicebear.com/integrations/http-api/) returns
+  avatars from a plain URL, free and without an account:
   `https://api.dicebear.com/10.x/lorelei/svg?seed=Felix`. For full control and
   privacy you can
   [host it yourself](https://www.dicebear.com/recipes/self-host-the-http-api/)
   with a single Docker container.
-- The [CLI](https://www.dicebear.com/integrations/cli/) generates avatar files in
-  bulk: `npx dicebear lorelei --count 10`.
+- The [CLI](https://www.dicebear.com/integrations/cli/) generates avatar files
+  in bulk: `npx dicebear lorelei --count 10`.
 - The [editor](https://editor.dicebear.com) lets you assemble a single avatar by
   hand and export it.
 

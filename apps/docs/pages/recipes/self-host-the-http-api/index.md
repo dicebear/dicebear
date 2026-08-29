@@ -7,10 +7,10 @@ description: >
 
 # Self-hosted avatar API: host DiceBear yourself
 
-The public HTTP API is free and needs no signup, and for most projects that
-is all you ever use. Hosting it yourself becomes interesting when you want
-avatar requests to stay on your own infrastructure, be it for data control,
-for your own rate limits, or because your app runs in a closed network.
+The public HTTP API is free and needs no signup, and for most projects that is
+all you ever use. Hosting it yourself becomes interesting when you want avatar
+requests to stay on your own infrastructure, be it for data control, for your
+own rate limits, or because your app runs in a closed network.
 
 You can find the source code for the HTTP API on
 [GitHub](https://github.com/dicebear/api). The code is written in TypeScript and
@@ -66,8 +66,8 @@ http://localhost:3000/10.x/<styleName>/options.json
 ```
 
 - `definition.json` returns the raw
-  [style definition](/create-styles/from-scratch/), the same
-  JSON that is shipped with the style package. Enable it with `DEFINITION=1`.
+  [style definition](/create-styles/from-scratch/), the same JSON that is
+  shipped with the style package. Enable it with `DEFINITION=1`.
 - `options.json` returns a descriptor of all options the style accepts: field
   types, allowed enum values, and value ranges. Options listed in
   `EXCLUDED_OPTIONS` are omitted, so the response always matches what your

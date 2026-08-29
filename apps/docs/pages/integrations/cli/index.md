@@ -52,9 +52,9 @@ The avatar will be saved as `lorelei-0.svg` in the `./avatars` directory.
 
 :::info
 
-The avatar styles come from many creators, and each creator chooses the
-license for their own style. The [license overview](/licenses/) lists them
-all in one place.
+The avatar styles come from many creators, and each creator chooses the license
+for their own style. The [license overview](/licenses/) lists them all in one
+place.
 
 :::
 
@@ -294,12 +294,11 @@ dicebear ./my-style.json ./avatars --count 20 --format png
 
 ### Compressing a definition file
 
-Definition files exported from the
-[Figma plugin](/create-styles/with-figma/) are already
-compressed on export. A definition you wrote or edited by hand is not, and its
-path data usually has a lot of room left. `--optimize` runs the same
-[svgo](https://github.com/svg/svgo) pass over every element tree in the file and
-rewrites it in place:
+Definition files exported from the [Figma plugin](/create-styles/with-figma/)
+are already compressed on export. A definition you wrote or edited by hand is
+not, and its path data usually has a lot of room left. `--optimize` runs the
+same [svgo](https://github.com/svg/svgo) pass over every element tree in the
+file and rewrites it in place:
 
 ```
 dicebear ./my-style.json --optimize

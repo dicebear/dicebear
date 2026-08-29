@@ -7,10 +7,10 @@ description: >
 
 # DiceBear as Gravatar default avatar
 
-Gravatar shows a default image for everyone without a Gravatar account, and
-you can point it at the DiceBear HTTP API, so those people get a friendly
-generated avatar instead of the gray silhouette. Gravatar sets a few
-conditions for default images:
+Gravatar shows a default image for everyone without a Gravatar account, and you
+can point it at the DiceBear HTTP API, so those people get a friendly generated
+avatar instead of the gray silhouette. Gravatar sets a few conditions for
+default images:
 
 > 1. ✅ MUST be publicly available (e.g. cannot be on an intranet, on a local
 >    development machine, behind HTTP Auth or some other firewall etc). Default
@@ -112,9 +112,9 @@ var gravatarImage = $"https://www.gravatar.com/avatar/{emailHash}?d={defaultImag
 :::
 
 Usually we set options in the query string, such as the seed. Since a query
-string is not allowed by Gravatar, the [HTTP-API](/integrations/http-api/) allows
-you to specify the options in the path. Just replace the question mark with a
-slash and encode the options.
+string is not allowed by Gravatar, the [HTTP-API](/integrations/http-api/)
+allows you to specify the options in the path. Just replace the question mark
+with a slash and encode the options.
 
 ::: code-group
 

@@ -24,9 +24,9 @@ write any code, the [Editor](https://editor.dicebear.com) lets you browse styles
 and adjust options visually.
 
 Once you know which options you want, pass them as
-[query parameters in the HTTP API](/integrations/http-api/#options) or as options
-in the [JS library](/integrations/javascript/) and the other libraries. The
-Avataaars style, for example, lets you turn facial hair off with
+[query parameters in the HTTP API](/integrations/http-api/#options) or as
+options in the [JS library](/integrations/javascript/) and the other libraries.
+The Avataaars style, for example, lets you turn facial hair off with
 `facialHairProbability=0`:
 
 ```
@@ -48,10 +48,9 @@ per-feature options described above.
 
 An upcoming release tags the character styles' variants with descriptive labels
 such as `hairLength:long` or `headwear:headscarf`. The
-[`tags`](/customize/tags/) option keeps only the variants you
-choose, which will often be the quickest way to lean on the features that read
-as more masculine or feminine. For example, keep long hair and leave out facial
-hair:
+[`tags`](/customize/tags/) option keeps only the variants you choose, which will
+often be the quickest way to lean on the features that read as more masculine or
+feminine. For example, keep long hair and leave out facial hair:
 
 ```js
 const avatar = new Avatar(style, {
@@ -68,8 +67,8 @@ https://api.dicebear.com/10.x/adventurer/svg?seed=Casey&tags=hairLength:long,!fa
 
 Tags and the per-feature options work together, so you can combine a tag filter
 with options such as `facialHairProbability`. See
-[Filter variants with tags](/customize/tags/) for how the
-filter behaves and which tags are already available.
+[Filter variants with tags](/customize/tags/) for how the filter behaves and
+which tags are already available.
 
 ## Share and reuse option sets
 

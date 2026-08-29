@@ -113,10 +113,9 @@ const avatar = new Avatar(style, {
 
 ## Custom styles
 
-Tags are not limited to this list. A
-[custom style](/create-styles/with-figma/) can reuse these
-categories, add its own values, or define entirely different ones. The only rule
-is the grammar: a tag is `category` or `category:value`, and each segment is
-camelCase (for example `mouthExpression:smug` or `species:robot`). There is no
-fixed vocabulary a style has to follow, so pick the categories that describe
-your artwork.
+Tags are not limited to this list. A [custom style](/create-styles/with-figma/)
+can reuse these categories, add its own values, or define entirely different
+ones. The only rule is the grammar: a tag is `category` or `category:value`, and
+each segment is camelCase (for example `mouthExpression:smug` or
+`species:robot`). There is no fixed vocabulary a style has to follow, so pick
+the categories that describe your artwork.

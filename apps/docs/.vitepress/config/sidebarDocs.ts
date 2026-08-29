@@ -99,9 +99,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         text: 'Tags <span class="vp-sidebar-badge is-new">New</span>',
         link: '/customize/tags/',
         collapsed: true,
-        items: [
-          { text: 'Tag reference', link: '/customize/tags/reference/' },
-        ],
+        items: [{ text: 'Tag reference', link: '/customize/tags/reference/' }],
       },
       { text: 'Gender', link: '/customize/gender/' },
     ],

@@ -8,16 +8,16 @@ description: >
 # C# avatar library
 
 Generate avatars in C#, from web backends to games. The library targets
-`netstandard2.0` and `net8.0`, so it runs on .NET 8 and newer and on
-.NET Framework 4.6.1 and newer. The API mirrors the
+`netstandard2.0` and `net8.0`, so it runs on .NET 8 and newer and on .NET
+Framework 4.6.1 and newer. The API mirrors the
 [JavaScript library](/integrations/javascript/), and the output is
-byte-identical: the same seed and style produce the same SVG in every
-DiceBear library.
+byte-identical: the same seed and style produce the same SVG in every DiceBear
+library.
 
-Game engines have their own guides. In
-[Godot](/integrations/csharp/godot/) the library runs only on a .NET
-build of the engine. [Unity](/integrations/csharp/unity/) ships neither
-a NuGet client nor a runtime SVG renderer, so you have to add both yourself.
+Game engines have their own guides. In [Godot](/integrations/csharp/godot/) the
+library runs only on a .NET build of the engine.
+[Unity](/integrations/csharp/unity/) ships neither a NuGet client nor a runtime
+SVG renderer, so you have to add both yourself.
 
 ## Installation
 
@@ -63,9 +63,9 @@ page of each [avatar style](/styles/).
 
 :::info
 
-The avatar styles come from many creators, and each creator chooses the
-license for their own style. The [license overview](/licenses/) lists them
-all in one place.
+The avatar styles come from many creators, and each creator chooses the license
+for their own style. The [license overview](/licenses/) lists them all in one
+place.
 
 :::
 
@@ -189,8 +189,8 @@ each with the failing JSON pointer and the schema keyword that rejected it.
 ## Core options
 
 These options are the same across every DiceBear core. See
-[Core options](/customize/options/) for the full reference. Here are the
-options in C# syntax:
+[Core options](/customize/options/) for the full reference. Here are the options
+in C# syntax:
 
 ```csharp
 var avatar = new Avatar(style, new JsonObject

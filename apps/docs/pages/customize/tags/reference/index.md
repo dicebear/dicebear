@@ -8,11 +8,10 @@ description: >
 
 # How DiceBear tags variants
 
-DiceBear's own styles share one set of tags, so the
-[`tags`](/customize/tags/) filter behaves the same from one
-style to the next. Today only one category ships: the `animation` tag of the
-animated styles. The character categories further down arrive with an upcoming
-release.
+DiceBear's own styles share one set of tags, so the [`tags`](/customize/tags/)
+filter behaves the same from one style to the next. Today only one category
+ships: the `animation` tag of the animated styles. The character categories
+further down arrive with an upcoming release.
 
 DiceBear tags each variant by looking at how it renders, not at its name. Names
 are not always reliable. A hair variant called `long04` can turn out short once
@@ -30,8 +29,8 @@ A few principles keep the tags consistent:
   visible hat.
 - Variant tags only add information, they never remove a variant on their own.
   To leave something out at render time, use the `!` form of the
-  [`tags` option](/customize/tags/). Disallowing lives in the
-  filter, not in the data.
+  [`tags` option](/customize/tags/). Disallowing lives in the filter, not in the
+  data.
 
 The tag grammar is `category` or `category:value`, each segment camelCase and
 alphanumeric. A variant holds at most 32 tags.
@@ -162,7 +161,6 @@ The `accessory` category covers worn extras.
 ## Custom styles
 
 This set is what DiceBear's own styles use, not a rule every style has to
-follow. A [custom style](/create-styles/with-figma/) can reuse
-these categories, add its own values, or define entirely different ones. As long
-as the grammar holds, you are free to describe your artwork in whatever way fits
-it best.
+follow. A [custom style](/create-styles/with-figma/) can reuse these categories,
+add its own values, or define entirely different ones. As long as the grammar
+holds, you are free to describe your artwork in whatever way fits it best.

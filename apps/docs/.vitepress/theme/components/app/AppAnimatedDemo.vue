@@ -143,9 +143,7 @@ const svg = new Avatar(style, {
 
         <p class="app-animated-demo-note">
           For a random speed per avatar, filter variants with
-          <a href="/customize/tags/"
-            ><code>tags=animation</code></a
-          >
+          <a href="/customize/tags/"><code>tags=animation</code></a>
           instead.
         </p>
       </div>

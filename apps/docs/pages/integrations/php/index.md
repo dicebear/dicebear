@@ -10,8 +10,8 @@ description: >
 Generate avatars on your own server, in plain PHP (8.2 or higher), with no
 external service involved. The API mirrors the
 [JavaScript library](/integrations/javascript/), and the output is
-byte-identical: the same seed and style produce the same SVG in every
-DiceBear library.
+byte-identical: the same seed and style produce the same SVG in every DiceBear
+library.
 
 ## Installation
 
@@ -47,9 +47,9 @@ page of each [avatar style](/styles/).
 
 :::info
 
-The avatar styles come from many creators, and each creator chooses the
-license for their own style. The [license overview](/licenses/) lists them
-all in one place.
+The avatar styles come from many creators, and each creator chooses the license
+for their own style. The [license overview](/licenses/) lists them all in one
+place.
 
 :::
 
@@ -157,8 +157,8 @@ $dataUri = $avatar->toDataUri();
 ## Core options
 
 These options are the same across every DiceBear core. See
-[Core options](/customize/options/) for the full reference. Here are the
-options in PHP syntax:
+[Core options](/customize/options/) for the full reference. Here are the options
+in PHP syntax:
 
 ```php
 $avatar = new Avatar($style, [

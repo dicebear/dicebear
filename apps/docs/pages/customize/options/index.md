@@ -18,21 +18,21 @@ They apply to every avatar style. Where the type lists `[min, max]`, you may
 pass either a fixed value or a two-element tuple. The PRNG samples a value from
 the tuple's range.
 
-| Option            | Type                                             | Default       | Description                                                                                                                                |
-| ----------------- | ------------------------------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `seed`            | `string`                                         | `''`          | Seed for deterministic generation                                                                                                          |
-| `flip`            | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`      | Flip the avatar (accepts an array of values to randomize)                                                                                  |
-| `rotate`          | `number \| [min, max]`                           | `0`           | Rotation in degrees (−360 to 360)                                                                                                          |
-| `scale`           | `number \| [min, max]`                           | `1`           | Uniform scale factor around the canvas center (0 to 10; `1` is original size)                                                              |
-| `borderRadius`    | `number \| [min, max]`                           | `0`           | Border radius in percent of the canvas (0 to 50; `50` makes a circle)                                                                      |
-| `size`            | `integer`                                        | _unset_       | Output size in pixels (1 to 4096); when unset the SVG scales to its container                                                              |
-| `translateX`      | `number \| [min, max]`                           | `0`           | Horizontal translation in percent of the canvas width (−1000 to 1000)                                                                      |
-| `translateY`      | `number \| [min, max]`                           | `0`           | Vertical translation in percent of the canvas height (−1000 to 1000)                                                                       |
-| `idRandomization` | `boolean`                                        | `false`       | Suffix every SVG `id` with a random, non-deterministic value (avoids `url(#…)` collisions when several avatars share a page)               |
-| `title`           | `string`                                         | _unset_       | Accessible title; when set, the SVG becomes `role="img"` with `<title>`                                                                    |
-| `fontFamily`      | `string \| string[]`                             | `'system-ui'` | Font family for text-based styles (CSS-style font stack, no quotes)                                                                        |
-| `fontWeight`      | `integer \| integer[]`                           | `400`         | Font weight for text-based styles (1 to 1000)                                                                                              |
-| `tags`            | `string \| string[]`                             | _unset_       | Keep only variants matching these [tags](/customize/tags/) (`category` or `category:value`, prefix with `!` to disallow) |
+| Option            | Type                                             | Default       | Description                                                                                                                  |
+| ----------------- | ------------------------------------------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `seed`            | `string`                                         | `''`          | Seed for deterministic generation                                                                                            |
+| `flip`            | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`      | Flip the avatar (accepts an array of values to randomize)                                                                    |
+| `rotate`          | `number \| [min, max]`                           | `0`           | Rotation in degrees (−360 to 360)                                                                                            |
+| `scale`           | `number \| [min, max]`                           | `1`           | Uniform scale factor around the canvas center (0 to 10; `1` is original size)                                                |
+| `borderRadius`    | `number \| [min, max]`                           | `0`           | Border radius in percent of the canvas (0 to 50; `50` makes a circle)                                                        |
+| `size`            | `integer`                                        | _unset_       | Output size in pixels (1 to 4096); when unset the SVG scales to its container                                                |
+| `translateX`      | `number \| [min, max]`                           | `0`           | Horizontal translation in percent of the canvas width (−1000 to 1000)                                                        |
+| `translateY`      | `number \| [min, max]`                           | `0`           | Vertical translation in percent of the canvas height (−1000 to 1000)                                                         |
+| `idRandomization` | `boolean`                                        | `false`       | Suffix every SVG `id` with a random, non-deterministic value (avoids `url(#…)` collisions when several avatars share a page) |
+| `title`           | `string`                                         | _unset_       | Accessible title; when set, the SVG becomes `role="img"` with `<title>`                                                      |
+| `fontFamily`      | `string \| string[]`                             | `'system-ui'` | Font family for text-based styles (CSS-style font stack, no quotes)                                                          |
+| `fontWeight`      | `integer \| integer[]`                           | `400`         | Font weight for text-based styles (1 to 1000)                                                                                |
+| `tags`            | `string \| string[]`                             | _unset_       | Keep only variants matching these [tags](/customize/tags/) (`category` or `category:value`, prefix with `!` to disallow)     |
 
 ## Background options
 
@@ -94,5 +94,5 @@ the traits you want, across every component at once. A tag is `category` or
 `category:value`, such as `animation` or `hairLength:long`. Within one category
 the values combine with "or", different categories combine with "and", a bare
 category requires the trait, and a leading `!` disallows. See
-[Filter variants with tags](/customize/tags/) for the full
-rules and the categories DiceBear's styles use.
+[Filter variants with tags](/customize/tags/) for the full rules and the
+categories DiceBear's styles use.

@@ -20,21 +20,21 @@ You don't need to install anything. Every DiceBear avatar has a URL, and any
 
 Two things in that URL shape the avatar: the style, here `lorelei`, and the
 `seed`. The style sets the look, the seed picks a unique avatar within it, and
-the same seed always returns the same result. `Alice` gets the same face
-today, tomorrow, and on every device. Type something into the field below,
-watch four styles react, and click a tile to see its URL:
+the same seed always returns the same result. `Alice` gets the same face today,
+tomorrow, and on every device. Type something into the field below, watch four
+styles react, and click a tile to see its URL:
 
 <DocsSeedDemo />
 
-That's the whole idea. Use a username or user ID as the seed and every person
-in your app gets a stable avatar, without uploads and without storing images.
+That's the whole idea. Use a username or user ID as the seed and every person in
+your app gets a stable avatar, without uploads and without storing images.
 
 ## Pick a style
 
-The four styles above are a taste of %STYLE_COUNT%, drawn by different
-artists, from minimal geometric marks to fully illustrated characters and
-robots. No other avatar library offers a collection like it, and switching is
-one word in the URL:
+The four styles above are a taste of %STYLE_COUNT%, drawn by different artists,
+from minimal geometric marks to fully illustrated characters and robots. No
+other avatar library offers a collection like it, and switching is one word in
+the URL:
 
 ```html
 <img src="https://api.dicebear.com/10.x/bottts/svg?seed=Alice" alt="avatar" />
@@ -46,9 +46,9 @@ project.
 
 ## Make it yours
 
-Styles come with options. Some are shared by all of them, like background
-color, flip, and scale, and most styles add their own on top, like hair, eyes,
-or accessories. Options ride along in the URL as query parameters:
+Styles come with options. Some are shared by all of them, like background color,
+flip, and scale, and most styles add their own on top, like hair, eyes, or
+accessories. Options ride along in the URL as query parameters:
 
 ```html
 <img
@@ -58,13 +58,13 @@ or accessories. Options ride along in the URL as query parameters:
 ```
 
 You'll find each style's options on its page in the gallery. Or skip the
-reading: the [Playground](/playground/) lets you click a configuration
-together and copy the finished URL.
+reading: the [Playground](/playground/) lets you click a configuration together
+and copy the finished URL.
 
 ## Generate avatars in your own code
 
-If you'd rather create avatars locally, without a request to the API, use one
-of the libraries. In JavaScript:
+If you'd rather create avatars locally, without a request to the API, use one of
+the libraries. In JavaScript:
 
 ```
 npm install @dicebear/core @dicebear/styles
@@ -88,8 +88,8 @@ questions.
 
 ## Where to next?
 
-- Want motion? %ANIMATED_STYLE_COUNT% styles [animate](/animated-avatars/)
-  with plain CSS and play in a normal `<img>` tag.
+- Want motion? %ANIMATED_STYLE_COUNT% styles [animate](/animated-avatars/) with
+  plain CSS and play in a normal `<img>` tag.
 - Read up on [options](/customize/options/) like size, background, and flip.
 - Building with a framework? There are guides for
   [React](/integrations/javascript/react/),

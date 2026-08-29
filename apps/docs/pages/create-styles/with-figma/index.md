@@ -15,8 +15,7 @@ tutorial requires basic knowledge about [Figma](https://www.figma.com/).
 
 You do not have to start with an empty canvas. The plugin also imports a
 definition file, so you can take an existing style into Figma and change it
-there. See
-[Edit an avatar style with Figma](/create-styles/edit-a-style/).
+there. See [Edit an avatar style with Figma](/create-styles/edit-a-style/).
 
 :::
 
@@ -117,13 +116,11 @@ This generates 10 sample avatars in the `./test-output` directory.
 ## Step 8
 
 Congratulations! You can now use your avatar style with the
-[JS Library](/integrations/javascript/), the
-[PHP Library](/integrations/php/), the
-[Python Library](/integrations/python/), the
-[Rust Library](/integrations/rust/), the
-[Go Library](/integrations/go/), the
-[Dart Library](/integrations/dart/),
-[C# Library](/integrations/csharp/), or the [CLI](/integrations/cli/).
+[JS Library](/integrations/javascript/), the [PHP Library](/integrations/php/),
+the [Python Library](/integrations/python/), the
+[Rust Library](/integrations/rust/), the [Go Library](/integrations/go/), the
+[Dart Library](/integrations/dart/), [C# Library](/integrations/csharp/), or the
+[CLI](/integrations/cli/).
 
 ### With the JS Library
 

@@ -77,9 +77,9 @@ If the seed contains spaces or other special characters, URL-encode it first.
 
 :::info
 
-The avatar styles come from many creators, and each creator chooses the
-license for their own style. The [license overview](/licenses/) lists them
-all in one place.
+The avatar styles come from many creators, and each creator chooses the license
+for their own style. The [license overview](/licenses/) lists them all in one
+place.
 
 :::
 
@@ -185,8 +185,8 @@ use the [Pixel Art](/styles/pixel-art/) avatar style.
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John&hairVariant=short01,short02,short03,short04,short05" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane&hairVariant=long01,long02,long03,long04,long05" />
 
-The [`tags`](/customize/tags/) filter is an array too.
-Separate the tags with a comma and prefix a tag with `!` to exclude it:
+The [`tags`](/customize/tags/) filter is an array too. Separate the tags with a
+comma and prefix a tag with `!` to exclude it:
 
 ```
 https://api.dicebear.com/10.x/planets/svg?seed=John&tags=animation
@@ -241,8 +241,8 @@ Please upgrade to the latest version. See the
 
 ::: info
 
-You can [host the API yourself](/recipes/self-host-the-http-api/) to keep
-using discontinued versions after their End of Life.
+You can [host the API yourself](/recipes/self-host-the-http-api/) to keep using
+discontinued versions after their End of Life.
 
 :::
 

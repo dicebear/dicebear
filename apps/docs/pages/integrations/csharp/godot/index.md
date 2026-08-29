@@ -10,8 +10,8 @@ description: >
 Godot renders SVG through `Image.LoadSvgFromString`, so an avatar becomes a
 texture without any extra dependency. Where the SVG comes from depends on which
 build you run. A .NET build can generate it in the game with the
-[C# library](/integrations/csharp/), and any build can fetch a finished
-avatar from the [HTTP API](/integrations/http-api/) with `HTTPRequest`.
+[C# library](/integrations/csharp/), and any build can fetch a finished avatar
+from the [HTTP API](/integrations/http-api/) with `HTTPRequest`.
 
 The C# library keeps everything local, so it works offline and sends no
 requests. The HTTP API needs no packages and is the only option in the standard

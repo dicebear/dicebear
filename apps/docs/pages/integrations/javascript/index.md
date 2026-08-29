@@ -9,12 +9,11 @@ description: >
 # JavaScript avatar library
 
 Generate avatars right where you need them: in the browser, in
-[Node.js](https://nodejs.org/en/) (version 22 or higher), or at build time.
-The library is written in [TypeScript](https://www.typescriptlang.org/), and
-it renders the same avatar for the same seed as every other DiceBear
-integration, so you can start here and change your mind later. Working in a
-different language? [Pick your integration](/start/pick-your-integration/)
-lists them all.
+[Node.js](https://nodejs.org/en/) (version 22 or higher), or at build time. The
+library is written in [TypeScript](https://www.typescriptlang.org/), and it
+renders the same avatar for the same seed as every other DiceBear integration,
+so you can start here and change your mind later. Working in a different
+language? [Pick your integration](/start/pick-your-integration/) lists them all.
 
 ## Installation
 
@@ -28,9 +27,10 @@ npm install @dicebear/core @dicebear/styles
 ::: tip
 
 Both packages are pure
-[ESM](https://developer.mozilla.org/en-US/Web/JavaScript/Guide/Modules). If
-your tooling complains about `require()`, [Sindre Sorhus](https://github.com/sindresorhus)
-wrote a helpful [guide to ESM packages](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+[ESM](https://developer.mozilla.org/en-US/Web/JavaScript/Guide/Modules). If your
+tooling complains about `require()`,
+[Sindre Sorhus](https://github.com/sindresorhus) wrote a helpful
+[guide to ESM packages](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 
 :::
 
@@ -68,9 +68,9 @@ for [Angular](/integrations/javascript/angular/),
 
 :::info
 
-The avatar styles come from many creators, and each creator chooses the
-license for their own style. The [license overview](/licenses/) lists them
-all in one place.
+The avatar styles come from many creators, and each creator chooses the license
+for their own style. The [license overview](/licenses/) lists them all in one
+place.
 
 :::
 
@@ -127,8 +127,8 @@ const avatar2 = new Avatar(style, { seed: 'Bob' });
 ### `OptionsDescriptor`
 
 Describes all valid options for a given style. Useful for building UIs or
-validating user input. See
-[Access Style Options](/customize/style-options/) for details.
+validating user input. See [Access Style Options](/customize/style-options/) for
+details.
 
 ## Methods
 

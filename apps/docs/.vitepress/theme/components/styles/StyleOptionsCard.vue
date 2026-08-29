@@ -517,8 +517,8 @@ function onExamplesToggle(event: MouseEvent) {
             <div v-if="excludeHttpApi" class="style-options-card-message">
               <Message severity="warn" :closable="false">
                 This option is not supported by our public
-                <a href="/integrations/http-api/">HTTP-API</a>. You can enable it
-                by
+                <a href="/integrations/http-api/">HTTP-API</a>. You can enable
+                it by
                 <a href="/recipes/self-host-the-http-api/"
                   >hosting your own instance</a
                 >.

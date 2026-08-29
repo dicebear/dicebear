@@ -24,8 +24,8 @@ looking for an avatar library.
 ## Contribute
 
 Bug reports and pull requests are welcome in all repositories.
-[Contribute to the library](/contribute/library/) explains where
-each kind of change belongs and how to set the projects up locally.
+[Contribute to the library](/contribute/library/) explains where each kind of
+change belongs and how to set the projects up locally.
 
 New avatar styles are the contribution users notice most. There are guides for
 [creating a style with Figma](/create-styles/with-figma/) and

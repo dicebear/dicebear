@@ -74,15 +74,15 @@ DiceBear is not a JavaScript library with wrappers around it. Seven native cores
 are held to byte-identical output, so the same style, seed and options produce
 the same SVG in each. Only the syntax for passing the options differs.
 
-| Library                               | Packages                                                | Since  |
-| ------------------------------------- | ------------------------------------------------------- | ------ |
+| Library                                 | Packages                                                | Since  |
+| --------------------------------------- | ------------------------------------------------------- | ------ |
 | [JavaScript](/integrations/javascript/) | `@dicebear/core`, `@dicebear/styles`                    | 10.0.0 |
-| [PHP](/integrations/php/)       | `dicebear/core`, `dicebear/styles`                      | 10.0.0 |
-| [Python](/integrations/python/) | `dicebear-core`, `dicebear-styles`                      | 10.1.0 |
-| [Rust](/integrations/rust/)     | `dicebear-core`, `dicebear-styles`                      | 10.2.0 |
-| [Go](/integrations/go/)         | `github.com/dicebear/dicebear-go/v10`, `.../styles/v10` | 10.2.0 |
-| [Dart](/integrations/dart/)     | `dicebear_core`, `dicebear_styles`                      | 10.3.0 |
-| [C#](/integrations/csharp/)     | `DiceBear.Core`, `DiceBear.Styles`                      | 10.7.0 |
+| [PHP](/integrations/php/)               | `dicebear/core`, `dicebear/styles`                      | 10.0.0 |
+| [Python](/integrations/python/)         | `dicebear-core`, `dicebear-styles`                      | 10.1.0 |
+| [Rust](/integrations/rust/)             | `dicebear-core`, `dicebear-styles`                      | 10.2.0 |
+| [Go](/integrations/go/)                 | `github.com/dicebear/dicebear-go/v10`, `.../styles/v10` | 10.2.0 |
+| [Dart](/integrations/dart/)             | `dicebear_core`, `dicebear_styles`                      | 10.3.0 |
+| [C#](/integrations/csharp/)             | `DiceBear.Core`, `DiceBear.Styles`                      | 10.7.0 |
 
 Six of the seven shipped during 2026, which puts them outside most training
 data. That is why the block above names them explicitly: without it, an
@@ -152,8 +152,8 @@ Every option named after a component gained a `Variant` suffix, so `eyes` became
 `@dicebear/styles` as JSON definitions, and `createAvatar()` was replaced by the
 `Style` and `Avatar` classes. The
 [changelog](https://github.com/dicebear/dicebear/blob/10.x/CHANGELOG.md) has the
-full list, and the [JavaScript library page](/integrations/javascript/) documents
-the current classes.
+full list, and the [JavaScript library page](/integrations/javascript/)
+documents the current classes.
 
 :::
 
