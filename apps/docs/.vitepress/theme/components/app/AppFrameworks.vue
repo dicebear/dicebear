@@ -18,19 +18,19 @@ const frameworks = [
   {
     name: 'React',
     icon: siReact.path,
-    href: '/guides/use-the-library-with-react/',
+    href: '/integrations/javascript/react/',
     color: `#${siReact.hex}`,
   },
   {
     name: 'Vue',
     icon: siVuedotjs.path,
-    href: '/guides/use-the-library-with-vue/',
+    href: '/integrations/javascript/vue/',
     color: `#${siVuedotjs.hex}`,
   },
   {
     name: 'Angular',
     icon: siAngular.path,
-    href: '/guides/use-the-library-with-angular/',
+    href: '/integrations/javascript/angular/',
     // Angular forbids its former (red) logo; black/white are its default
     // variations. simple-icons already ships the current shield shape.
     color: 'var(--logo-monochrome)',
@@ -38,7 +38,7 @@ const frameworks = [
   {
     name: 'Svelte',
     icon: siSvelte.path,
-    href: '/guides/use-the-library-with-svelte/',
+    href: '/integrations/javascript/svelte/',
     color: `#${siSvelte.hex}`,
   },
 ];

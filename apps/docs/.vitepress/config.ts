@@ -433,8 +433,9 @@ export default defineConfig<ThemeOptions>({
       },
       {
         text: 'Docs',
-        link: '/introduction/',
-        activeMatch: '^/(introduction|how-to-use|guides|specification)',
+        link: '/start/',
+        activeMatch:
+          '^/(start|integrations|customize|recipes|understand|create-styles|contribute)',
       },
       {
         text: 'About',
@@ -449,11 +450,14 @@ export default defineConfig<ThemeOptions>({
         'https://github.com/dicebear/dicebear/edit/10.x/apps/docs/pages/:path',
     },
     sidebar: {
-      '/introduction/': sidebarDocs,
+      '/start/': sidebarDocs,
       '/styles/': sidebarStyles,
-      '/how-to-use/': sidebarDocs,
-      '/guides/': sidebarDocs,
-      '/specification/': sidebarDocs,
+      '/integrations/': sidebarDocs,
+      '/customize/': sidebarDocs,
+      '/recipes/': sidebarDocs,
+      '/understand/': sidebarDocs,
+      '/create-styles/': sidebarDocs,
+      '/contribute/': sidebarDocs,
     },
   },
   sitemap: {

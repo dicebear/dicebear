@@ -114,7 +114,7 @@ const sourceRows = computed<SourceRow[]>(() => {
         >DiceBear Studio</a
       >
       to change this style. See the
-      <a href="/guides/edit-an-avatar-style-with-figma/">guide</a>.
+      <a href="/create-styles/edit-a-style/">guide</a>.
     </p>
   </UiCard>
 

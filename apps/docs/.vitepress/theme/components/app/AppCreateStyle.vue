@@ -66,7 +66,7 @@ const steps = [
           <div class="app-create-style-actions">
             <Button
               as="a"
-              href="/guides/create-an-avatar-style-with-figma/"
+              href="/create-styles/with-figma/"
               size="large"
               severity="contrast"
             >

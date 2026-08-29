@@ -450,12 +450,16 @@ img[src^='https://api.dicebear.com/']:not(.next, .prev) {
   background-color: var(--vp-c-brand-1);
 }
 
-.VPSidebarItem.is-link.is-active > .item {
+/* The tint lives on a pseudo-element behind the row: `.item` is a fixed
+   100%-width flex row, so widening it with margin/padding shifts the row
+   (and the caret) instead of just the tint. */
+.VPSidebarItem.is-link.is-active > .item::before {
+  content: '';
+  position: absolute;
+  inset: 0 -8px;
+  z-index: -1;
   background: var(--vp-c-brand-soft);
   border-radius: var(--vp-radius-chrome);
-  /* widen the tint without shifting the label (net-zero inline box) */
-  margin-inline: -8px;
-  padding-inline: 8px;
 }
 
 .VPSidebarItem.is-link.is-active > .item .text {

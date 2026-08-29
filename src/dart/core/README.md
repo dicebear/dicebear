@@ -11,7 +11,7 @@ PRNG and rendering pipeline, producing identical SVG output for the same seed,
 style, and options, regardless of the language used.
 
 [Playground](https://www.dicebear.com/playground) |
-[Documentation](https://www.dicebear.com/how-to-use/dart-library/)
+[Documentation](https://www.dicebear.com/integrations/dart/)
 
 ## Installation
 

@@ -91,7 +91,7 @@ export function usageSnippets(
       id: 'http-api',
       label: 'HTTP API',
       code: httpApiUrl(styleName, options),
-      docs: '/how-to-use/http-api/',
+      docs: '/integrations/http-api/',
     },
     {
       id: 'js-library',
@@ -105,7 +105,7 @@ const style = new Style(definition);
 const avatar = new Avatar(style, ${arg.js});
 
 const svg = avatar.toString();`,
-      docs: '/how-to-use/js-library/',
+      docs: '/integrations/javascript/',
     },
     {
       id: 'php-library',
@@ -124,7 +124,7 @@ $style = Style::fromJson(file_get_contents($basePath . '/src/${file}.json'));
 $avatar = new Avatar($style, ${arg.php});
 
 $svg = (string) $avatar;`,
-      docs: '/how-to-use/php-library/',
+      docs: '/integrations/php/',
     },
     {
       id: 'python-library',
@@ -142,7 +142,7 @@ style = Style.from_json(
 avatar = Avatar(style, ${arg.python})
 
 svg = avatar.to_string()`,
-      docs: '/how-to-use/python-library/',
+      docs: '/integrations/python/',
     },
     {
       id: 'rust-library',
@@ -156,7 +156,7 @@ let style = Style::from_str(dicebear_styles::${constantCase(styleName)})?;
 let avatar = Avatar::new(&style, ${arg.rust})?;
 
 let svg = avatar.to_svg();`,
-      docs: '/how-to-use/rust-library/',
+      docs: '/integrations/rust/',
     },
     {
       id: 'go-library',
@@ -172,7 +172,7 @@ style, _ := dicebear.NewStyle([]byte(styles.${pascalCase(styleName)}))
 avatar, _ := dicebear.NewAvatar(style, ${arg.go})
 
 svg := avatar.SVG()`,
-      docs: '/how-to-use/go-library/',
+      docs: '/integrations/go/',
     },
     {
       id: 'dart-library',
@@ -186,7 +186,7 @@ final style = Style.parse(${camelCase(styleName)});
 final avatar = Avatar(style, ${arg.dart});
 
 final svg = avatar.svg;`,
-      docs: '/how-to-use/dart-library/',
+      docs: '/integrations/dart/',
     },
     {
       id: 'csharp-library',
@@ -201,14 +201,14 @@ var style = Style.Parse(Styles.${pascalCase(styleName)});
 var avatar = new Avatar(style, ${arg.csharp});
 
 var svg = avatar.ToSvg();`,
-      docs: '/how-to-use/csharp-library/',
+      docs: '/integrations/csharp/',
     },
     {
       id: 'cli',
       label: 'CLI',
       install: 'npm install --global dicebear',
       code: `dicebear ${file}`,
-      docs: '/how-to-use/cli/',
+      docs: '/integrations/cli/',
     },
   ];
 }

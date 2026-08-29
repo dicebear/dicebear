@@ -18,7 +18,7 @@ Avatars are customizable through style options: colors, backgrounds, rotation,
 individual features like hair or glasses.
 
 [Playground](https://www.dicebear.com/playground) |
-[Documentation](https://www.dicebear.com/introduction) |
+[Documentation](https://www.dicebear.com/start/what-is-dicebear/) |
 [Editor](https://editor.dicebear.com)
 
 ## One library, seven languages
@@ -39,7 +39,7 @@ regenerate it later in a Go or PHP backend, and you get the same bytes.
 | C#                      | [`DiceBear.Core`](https://www.nuget.org/packages/DiceBear.Core)         | `dotnet add package DiceBear.Core`           |
 
 In JavaScript it looks like this; the
-[documentation](https://www.dicebear.com/introduction) has the equivalent for
+[documentation](https://www.dicebear.com/start/what-is-dicebear/) has the equivalent for
 each language:
 
 ```js
@@ -58,18 +58,18 @@ avatar.toDataUri(); // data:image/svg+xml;charset=utf-8,...
 The 61 avatar styles are plain JSON definitions from the
 [`dicebear/styles`](https://github.com/dicebear/styles) repository, available as
 a package for each language. You can also
-[create your own style](https://www.dicebear.com/guides/create-an-avatar-style-with-figma/),
+[create your own style](https://www.dicebear.com/create-styles/with-figma/),
 with Figma or from scratch.
 
 ## Without writing code
 
-- The [HTTP API](https://www.dicebear.com/how-to-use/http-api/) returns avatars
+- The [HTTP API](https://www.dicebear.com/integrations/http-api/) returns avatars
   from a plain URL, free and without an account:
   `https://api.dicebear.com/10.x/lorelei/svg?seed=Felix`. For full control and
   privacy you can
-  [host it yourself](https://www.dicebear.com/guides/host-the-http-api-yourself/)
+  [host it yourself](https://www.dicebear.com/recipes/self-host-the-http-api/)
   with a single Docker container.
-- The [CLI](https://www.dicebear.com/how-to-use/cli/) generates avatar files in
+- The [CLI](https://www.dicebear.com/integrations/cli/) generates avatar files in
   bulk: `npx dicebear lorelei --count 10`.
 - The [editor](https://editor.dicebear.com) lets you assemble a single avatar by
   hand and export it.

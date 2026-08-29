@@ -28,9 +28,9 @@ instructions below only cover this monorepo.
 - New avatar styles: contribute them to
   [`dicebear/styles`](https://github.com/dicebear/styles), not here. The
   walkthrough is in
-  [Create an avatar style with Figma](https://www.dicebear.com/guides/create-an-avatar-style-with-figma/)
+  [Create an avatar style with Figma](https://www.dicebear.com/create-styles/with-figma/)
   or
-  [Create an avatar style from scratch](https://www.dicebear.com/guides/create-an-avatar-style-from-scratch/).
+  [Create an avatar style from scratch](https://www.dicebear.com/create-styles/from-scratch/).
 - Larger changes (new public API, rendering behavior, breaking changes): open an
   issue first so we can agree on scope before you spend time on it.
 - Security issues go privately to <contact@dicebear.com>; never file a public
@@ -269,7 +269,7 @@ Float determinism is part of the parity contract: `pow` is not correctly rounded
 ships as a precomputed 256-entry table in every port, and languages that fuse
 multiply-add into FMA instructions (e.g. Go on arm64) must force intermediate
 rounding. The details live in the
-[Implement DiceBear Core](https://www.dicebear.com/specification/implement-dicebear-core/)
+[Implement DiceBear Core](https://www.dicebear.com/create-styles/implement-dicebear-core/)
 spec.
 
 If your change affects rendering or the PRNG in `@dicebear/core`, regenerate the
@@ -292,7 +292,7 @@ commit that bump on its own.
 
 When porting DiceBear to another language, run these fixtures against your
 implementation to prove it conforms. See
-[Implement DiceBear Core](https://www.dicebear.com/specification/implement-dicebear-core/)
+[Implement DiceBear Core](https://www.dicebear.com/create-styles/implement-dicebear-core/)
 for the full spec.
 
 ## Documentation changes (`apps/docs/`)

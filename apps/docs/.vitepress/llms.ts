@@ -69,14 +69,17 @@ const EXAMPLE_SEED = 'John';
  * route; `Other` catches the rest.
  */
 const SECTIONS: readonly { title: string; prefixes: readonly string[] }[] = [
-  { title: 'Getting started', prefixes: ['/introduction/'] },
-  { title: 'Libraries and API', prefixes: ['/how-to-use/'] },
-  { title: 'Guides', prefixes: ['/guides/'] },
-  { title: 'Specification', prefixes: ['/specification/'] },
+  { title: 'Getting started', prefixes: ['/start/'] },
+  { title: 'Integrations', prefixes: ['/integrations/'] },
+  { title: 'Customize', prefixes: ['/customize/'] },
+  { title: 'Recipes', prefixes: ['/recipes/'] },
+  { title: 'Understand', prefixes: ['/understand/'] },
+  { title: 'Create styles', prefixes: ['/create-styles/'] },
+  { title: 'Contribute', prefixes: ['/contribute/'] },
 ];
 
 export interface LlmsPage {
-  /** Site route with a trailing slash, e.g. `/how-to-use/http-api/`. */
+  /** Site route with a trailing slash, e.g. `/integrations/http-api/`. */
   readonly route: string;
   /** Path of the source file relative to the pages directory. */
   readonly relativePath: string;
@@ -568,7 +571,7 @@ API. The ones built from a component name (\`<component>Variant\`,
 \`<component>Probability\`) or from a color group (\`<group>Color\`,
 \`<group>ColorFill\`, \`<group>ColorFillStops\`, \`<group>ColorAngle\`,
 \`<group>ColorOrder\`) belong to this style; the rest are
-[core options](${siteUrl('/guides/core-options/')}) that every style accepts.
+[core options](${siteUrl('/customize/options/')}) that every style accepts.
 
 | Option | Type | Values |
 | --- | --- | --- |
@@ -684,7 +687,7 @@ The summaries on this page are meant as orientation, not as legal advice. The
 linked license texts are the authoritative source.`;
 }
 
-/** The route a source file is served under, e.g. `/how-to-use/cli/`. */
+/** The route a source file is served under, e.g. `/integrations/cli/`. */
 function routeFor(relativePath: string): string {
   const withoutExtension = relativePath
     .replace(/\\/g, '/')
@@ -820,7 +823,7 @@ The pre-v10 JavaScript API no longer exists: \`createAvatar()\`,
 pre-v10 form at all, so any older-looking API attributed to them is invented.
 In every core, an option named after a component ends in \`Variant\`
 (\`eyesVariant\`, not \`eyes\`). The outdated patterns are listed at
-${siteUrl('/guides/dicebear-for-ai-assistants/')}.`;
+${siteUrl('/start/for-ai-assistants/')}.`;
 }
 
 /** The `llms.txt` index: the preamble plus a link list, grouped by section. */

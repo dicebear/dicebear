@@ -40,7 +40,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
             </Button>
             <Button
               as="a"
-              href="/guides/contribute-to-the-library/"
+              href="/contribute/library/"
               severity="secondary"
               variant="outlined"
               class="app-open-source-cards-action-btn"

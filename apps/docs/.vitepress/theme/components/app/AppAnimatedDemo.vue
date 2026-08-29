@@ -120,7 +120,7 @@ const svg = new Avatar(style, {
               <div class="app-animated-demo-links">
                 <Button
                   as="a"
-                  href="/how-to-use/http-api/"
+                  href="/integrations/http-api/"
                   severity="secondary"
                   variant="outlined"
                 >
@@ -143,7 +143,7 @@ const svg = new Avatar(style, {
 
         <p class="app-animated-demo-note">
           For a random speed per avatar, filter variants with
-          <a href="/guides/filter-variants-with-tags/"
+          <a href="/customize/tags/"
             ><code>tags=animation</code></a
           >
           instead.

@@ -7,7 +7,7 @@ Converts DiceBear avatars (or any SVG) to raster formats: PNG, JPEG, WebP and
 AVIF. Works in Node.js and modern browsers.
 
 [Playground](https://www.dicebear.com/playground) |
-[Documentation](https://www.dicebear.com/introduction)
+[Documentation](https://www.dicebear.com/start/what-is-dicebear/)
 
 ## Installation
 

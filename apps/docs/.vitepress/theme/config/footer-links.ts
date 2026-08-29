@@ -26,10 +26,10 @@ export const toolLinks: FooterLink[] = [
 ];
 
 export const resourceLinks: FooterLink[] = [
-  { label: 'Documentation', href: '/introduction/' },
-  { label: 'JS Library', href: '/how-to-use/js-library/' },
-  { label: 'HTTP API', href: '/how-to-use/http-api/' },
-  { label: 'CLI', href: '/how-to-use/cli/' },
+  { label: 'Documentation', href: '/start/what-is-dicebear/' },
+  { label: 'JS Library', href: '/integrations/javascript/' },
+  { label: 'HTTP API', href: '/integrations/http-api/' },
+  { label: 'CLI', href: '/integrations/cli/' },
   { label: 'Statistics', href: '/stats/' },
   { label: 'Support DiceBear', href: '/support/' },
 ];

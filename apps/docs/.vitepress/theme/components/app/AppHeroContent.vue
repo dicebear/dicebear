@@ -39,7 +39,7 @@ const { theme } = useData<ThemeOptions>();
       </Button>
       <Button
         as="a"
-        href="/introduction/"
+        href="/start/what-is-dicebear/"
         size="large"
         severity="secondary"
         variant="outlined"

@@ -327,12 +327,12 @@ const exampleCli = computed(() =>
                   Some options you selected are not supported by our public
                   HTTP-API and have been omitted from the URL. You can enable
                   them by
-                  <a href="/guides/host-the-http-api-yourself/"
+                  <a href="/recipes/self-host-the-http-api/"
                     >hosting your own instance</a
                   >.
                 </Message>
                 <p>
-                  See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
+                  See <a href="/integrations/http-api">HTTP-API</a> docs for more
                   information.
                 </p>
               </div>
@@ -350,7 +350,7 @@ const exampleCli = computed(() =>
                 <p>Then you can create this avatar as follows:</p>
                 <UiCode :code="exampleJsLibrary" lang="js" />
                 <p>
-                  See <a href="/how-to-use/js-library">JS</a> docs for more
+                  See <a href="/integrations/javascript">JS</a> docs for more
                   information.
                 </p>
               </div>
@@ -390,7 +390,7 @@ const exampleCli = computed(() =>
                   style definition.
                 </p>
                 <p>
-                  See <a href="/how-to-use/python-library">Python</a> docs for
+                  See <a href="/integrations/python">Python</a> docs for
                   more information.
                 </p>
               </div>
@@ -406,7 +406,7 @@ const exampleCli = computed(() =>
                   style definition.
                 </p>
                 <p>
-                  See <a href="/how-to-use/rust-library">Rust</a> docs for more
+                  See <a href="/integrations/rust">Rust</a> docs for more
                   information.
                 </p>
               </div>
@@ -428,7 +428,7 @@ const exampleCli = computed(() =>
                   style definition.
                 </p>
                 <p>
-                  See <a href="/how-to-use/go-library">Go</a> docs for more
+                  See <a href="/integrations/go">Go</a> docs for more
                   information.
                 </p>
               </div>
@@ -450,7 +450,7 @@ const exampleCli = computed(() =>
                   style definition.
                 </p>
                 <p>
-                  See <a href="/how-to-use/dart-library">Dart</a> docs for more
+                  See <a href="/integrations/dart">Dart</a> docs for more
                   information.
                 </p>
               </div>
@@ -472,7 +472,7 @@ const exampleCli = computed(() =>
                   style definition.
                 </p>
                 <p>
-                  See <a href="/how-to-use/csharp-library">C#</a> docs for more
+                  See <a href="/integrations/csharp">C#</a> docs for more
                   information.
                 </p>
               </div>
@@ -488,7 +488,7 @@ const exampleCli = computed(() =>
                   style definition.
                 </p>
                 <p>
-                  See <a href="/how-to-use/cli">CLI</a> docs for more
+                  See <a href="/integrations/cli">CLI</a> docs for more
                   information.
                 </p>
               </div>

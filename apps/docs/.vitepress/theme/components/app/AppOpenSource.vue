@@ -118,7 +118,7 @@ const scatteredAvatars = computed(() => {
         </Button>
         <Button
           as="a"
-          href="/guides/contribute-to-the-library/"
+          href="/contribute/library/"
           size="large"
           severity="secondary"
           variant="outlined"

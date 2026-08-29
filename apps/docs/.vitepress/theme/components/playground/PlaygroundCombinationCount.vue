@@ -12,7 +12,7 @@ const count = useCombinationCount();
     </p>
     <p class="pg-combo-hint">
       Changes as you restrict variants, tags, colors, or probabilities.
-      <a href="/guides/how-many-unique-avatars/">Learn more →</a>
+      <a href="/understand/how-many-unique-avatars/">Learn more →</a>
     </p>
   </div>
 </template>

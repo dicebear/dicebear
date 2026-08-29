@@ -443,9 +443,9 @@ const onSeedFocus = (e: FocusEvent) => {
                 <strong>Title</strong> and
                 <strong>Randomize element IDs</strong>
                 are not supported by our public
-                <a href="/how-to-use/http-api/">HTTP-API</a>. You can enable
+                <a href="/integrations/http-api/">HTTP-API</a>. You can enable
                 them by
-                <a href="/guides/host-the-http-api-yourself/"
+                <a href="/recipes/self-host-the-http-api/"
                   >hosting your own instance</a
                 >.
               </p>

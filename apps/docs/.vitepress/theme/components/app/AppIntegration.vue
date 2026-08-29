@@ -130,7 +130,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
                   />
                   <Button
                     as="a"
-                    href="/how-to-use/js-library/"
+                    href="/integrations/javascript/"
                     severity="secondary"
                     variant="outlined"
                     class="app-integration-link"
@@ -148,7 +148,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
                   />
                   <Button
                     as="a"
-                    href="/how-to-use/php-library/"
+                    href="/integrations/php/"
                     severity="secondary"
                     variant="outlined"
                     class="app-integration-link"
@@ -166,7 +166,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
                   />
                   <Button
                     as="a"
-                    href="/how-to-use/python-library/"
+                    href="/integrations/python/"
                     severity="secondary"
                     variant="outlined"
                     class="app-integration-link"
@@ -184,7 +184,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
                   />
                   <Button
                     as="a"
-                    href="/how-to-use/rust-library/"
+                    href="/integrations/rust/"
                     severity="secondary"
                     variant="outlined"
                     class="app-integration-link"
@@ -202,7 +202,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
                   />
                   <Button
                     as="a"
-                    href="/how-to-use/go-library/"
+                    href="/integrations/go/"
                     severity="secondary"
                     variant="outlined"
                     class="app-integration-link"
@@ -220,7 +220,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
                   />
                   <Button
                     as="a"
-                    href="/how-to-use/dart-library/"
+                    href="/integrations/dart/"
                     severity="secondary"
                     variant="outlined"
                     class="app-integration-link"
@@ -238,7 +238,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
                   />
                   <Button
                     as="a"
-                    href="/how-to-use/csharp-library/"
+                    href="/integrations/csharp/"
                     severity="secondary"
                     variant="outlined"
                     class="app-integration-link"
@@ -272,7 +272,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
 
             <Button
               as="a"
-              href="/how-to-use/http-api/"
+              href="/integrations/http-api/"
               severity="secondary"
               variant="outlined"
               class="app-integration-link"
@@ -300,7 +300,7 @@ var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
 
             <Button
               as="a"
-              href="/how-to-use/cli/"
+              href="/integrations/cli/"
               severity="secondary"
               variant="outlined"
               class="app-integration-link"

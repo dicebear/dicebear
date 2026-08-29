@@ -84,14 +84,14 @@ export const libraryVersions: readonly LibraryVersion[] = [
     pkg: '@dicebear/core',
     stylesPkg: '@dicebear/styles',
     version: coreVersion,
-    docs: '/how-to-use/js-library/',
+    docs: '/integrations/javascript/',
   },
   {
     label: 'PHP',
     pkg: 'dicebear/core',
     stylesPkg: 'dicebear/styles',
     version: `^${majorVersion}.0`,
-    docs: '/how-to-use/php-library/',
+    docs: '/integrations/php/',
   },
   {
     label: 'Python',
@@ -101,7 +101,7 @@ export const libraryVersions: readonly LibraryVersion[] = [
       await readFile('python', 'core', 'pyproject.toml'),
       'pyproject.toml',
     ),
-    docs: '/how-to-use/python-library/',
+    docs: '/integrations/python/',
   },
   {
     label: 'Rust',
@@ -111,14 +111,14 @@ export const libraryVersions: readonly LibraryVersion[] = [
       await readFile('rust', 'core', 'Cargo.toml'),
       'Cargo.toml',
     ),
-    docs: '/how-to-use/rust-library/',
+    docs: '/integrations/rust/',
   },
   {
     label: 'Go',
     pkg: `github.com/dicebear/dicebear-go/v${majorVersion}`,
     stylesPkg: `github.com/dicebear/styles/v${majorVersion}`,
     version: `v${majorVersion}`,
-    docs: '/how-to-use/go-library/',
+    docs: '/integrations/go/',
   },
   {
     label: 'Dart',
@@ -128,7 +128,7 @@ export const libraryVersions: readonly LibraryVersion[] = [
       await readFile('dart', 'core', 'pubspec.yaml'),
       'pubspec.yaml',
     ),
-    docs: '/how-to-use/dart-library/',
+    docs: '/integrations/dart/',
   },
   {
     label: 'C#',
@@ -138,19 +138,19 @@ export const libraryVersions: readonly LibraryVersion[] = [
       await readFile('csharp', 'core', 'DiceBear.Core.csproj'),
       'DiceBear.Core.csproj',
     ),
-    docs: '/how-to-use/csharp-library/',
+    docs: '/integrations/csharp/',
   },
   {
     label: 'CLI',
     pkg: 'dicebear',
     version: await packageJsonVersion('js', 'cli'),
-    docs: '/how-to-use/cli/',
+    docs: '/integrations/cli/',
   },
   {
     label: 'Converter',
     pkg: '@dicebear/converter',
     version: await packageJsonVersion('js', 'converter'),
-    docs: '/how-to-use/js-library/converter/',
+    docs: '/integrations/javascript/converter/',
   },
 ];
 

@@ -3,8 +3,8 @@
  * The trail above a page title, e.g. Styles / Lorelei / Presets.
  *
  * The hierarchy comes from the sidebar, not from the URL, because the two
- * disagree: `/guides/avatar-library-comparison/` sits under the "Introduction"
- * group, and `/introduction/` is a leaf inside it rather than a section of its
+ * disagree: `/understand/dicebear-vs-alternatives/` sits under the "Introduction"
+ * group, and `/start/what-is-dicebear/` is a leaf inside it rather than a section of its
  * own. Reading the path would put both pages in the wrong place.
  *
  * Labels come from the sidebar for the same reason a frontmatter title cannot

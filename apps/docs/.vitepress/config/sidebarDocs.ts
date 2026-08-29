@@ -5,208 +5,165 @@ import type { DefaultTheme } from 'vitepress';
 // `.vp-sidebar-badge` in theme/styles/main.scss). A "New" badge marks what a
 // 10.x minor added. Anything that shipped with 10.0.0 is as old as v10 itself
 // and carries none, which is why the PHP library has no badge while the ports
-// that followed it do. Groups are intentionally NOT collapsible (no `collapsed`
-// key), so every section stays expanded.
+// that followed it do.
+//
+// Top-level groups always stay expanded (no `collapsed` key, so VitePress
+// renders them without a toggle). Nested levels such as the framework guides
+// start closed (`collapsed: true`) to keep the tree scannable; VitePress
+// expands a collapsed level automatically when it contains the active page,
+// so nobody has to dig for where they are.
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
-    text: 'Introduction',
+    text: 'Start',
     items: [
-      { text: 'What is DiceBear?', link: '/introduction/' },
+      { text: 'Your first avatar', link: '/start/' },
+      { text: 'What is DiceBear?', link: '/start/what-is-dicebear/' },
       {
-        text: 'DiceBear vs. Alternatives',
-        link: '/guides/avatar-library-comparison/',
+        text: 'Pick your integration',
+        link: '/start/pick-your-integration/',
       },
       {
-        text: 'For AI Assistants <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/guides/dicebear-for-ai-assistants/',
+        text: 'For AI assistants <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/start/for-ai-assistants/',
       },
     ],
   },
   {
-    text: 'How to use',
+    text: 'Integrations',
     items: [
+      { text: 'HTTP API', link: '/integrations/http-api/' },
       {
-        text: 'JS Library',
-        link: '/how-to-use/js-library/',
+        text: 'JavaScript',
+        link: '/integrations/javascript/',
+        collapsed: true,
         items: [
-          { text: 'Core', link: '/how-to-use/js-library/' },
-          { text: 'Converter', link: '/how-to-use/js-library/converter/' },
+          {
+            text: 'Converter',
+            link: '/integrations/javascript/converter/',
+          },
+          { text: 'React', link: '/integrations/javascript/react/' },
+          {
+            text: 'React Native',
+            link: '/integrations/javascript/react-native/',
+          },
+          { text: 'Vue', link: '/integrations/javascript/vue/' },
+          { text: 'Svelte', link: '/integrations/javascript/svelte/' },
+          { text: 'Angular', link: '/integrations/javascript/angular/' },
+          { text: 'Next.js', link: '/integrations/javascript/next-js/' },
+          { text: 'Nuxt', link: '/integrations/javascript/nuxt/' },
         ],
       },
-      { text: 'PHP Library', link: '/how-to-use/php-library/' },
+      { text: 'PHP', link: '/integrations/php/' },
       {
-        text: 'Python Library <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/how-to-use/python-library/',
+        text: 'Python <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/integrations/python/',
       },
       {
-        text: 'Rust Library <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/how-to-use/rust-library/',
+        text: 'Rust <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/integrations/rust/',
       },
       {
-        text: 'Go Library <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/how-to-use/go-library/',
+        text: 'Go <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/integrations/go/',
       },
       {
-        text: 'Dart Library <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/how-to-use/dart-library/',
+        text: 'Dart <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/integrations/dart/',
+        collapsed: true,
+        items: [{ text: 'Flutter', link: '/integrations/dart/flutter/' }],
       },
       {
-        text: 'C# Library <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/how-to-use/csharp-library/',
+        text: 'C# <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/integrations/csharp/',
+        collapsed: true,
+        items: [
+          {
+            text: 'Unity <span class="vp-sidebar-badge is-new">New</span>',
+            link: '/integrations/csharp/unity/',
+          },
+          {
+            text: 'Godot <span class="vp-sidebar-badge is-new">New</span>',
+            link: '/integrations/csharp/godot/',
+          },
+        ],
       },
-      { text: 'HTTP-API', link: '/how-to-use/http-api/' },
-      { text: 'CLI', link: '/how-to-use/cli/' },
+      { text: 'CLI', link: '/integrations/cli/' },
     ],
   },
   {
-    text: 'Customization',
+    text: 'Customize',
     items: [
-      {
-        text: 'Options',
-        link: '/guides/core-options/',
-      },
+      { text: 'Options', link: '/customize/options/' },
+      { text: 'Style options', link: '/customize/style-options/' },
       {
         text: 'Tags <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/guides/filter-variants-with-tags/',
+        link: '/customize/tags/',
+        collapsed: true,
+        items: [
+          { text: 'Tag reference', link: '/customize/tags/reference/' },
+        ],
+      },
+      { text: 'Gender', link: '/customize/gender/' },
+    ],
+  },
+  {
+    text: 'Recipes',
+    items: [
+      { text: 'Avatar placeholder', link: '/recipes/avatar-placeholder/' },
+      {
+        text: 'Gravatar default image',
+        link: '/recipes/gravatar-default-image/',
       },
       {
-        text: 'Tag Reference',
-        link: '/guides/how-dicebear-tags-variants/',
+        text: 'Self-host the HTTP API',
+        link: '/recipes/self-host-the-http-api/',
+      },
+      { text: 'Load all styles', link: '/recipes/load-all-styles/' },
+    ],
+  },
+  {
+    text: 'Understand',
+    items: [
+      {
+        text: 'How avatars are made',
+        link: '/understand/how-avatars-are-made/',
       },
       {
-        text: 'Gender',
-        link: '/guides/how-do-i-set-a-gender/',
+        text: 'How many unique avatars?',
+        link: '/understand/how-many-unique-avatars/',
+      },
+      {
+        text: 'DiceBear vs. alternatives',
+        link: '/understand/dicebear-vs-alternatives/',
       },
     ],
   },
   {
-    text: 'Frameworks',
+    text: 'Create styles',
     items: [
+      { text: 'Create with Figma', link: '/create-styles/with-figma/' },
       {
-        text: 'Angular',
-        link: '/guides/use-the-library-with-angular/',
+        text: 'Edit a style <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/create-styles/edit-a-style/',
       },
+      { text: 'From scratch', link: '/create-styles/from-scratch/' },
       {
-        text: 'Flutter',
-        link: '/guides/use-the-library-with-flutter/',
-      },
-      {
-        text: 'Godot <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/guides/use-the-library-with-godot/',
-      },
-      {
-        text: 'Next.js',
-        link: '/guides/use-the-library-with-next-js/',
-      },
-      {
-        text: 'Nuxt',
-        link: '/guides/use-the-library-with-nuxt/',
-      },
-      {
-        text: 'React',
-        link: '/guides/use-the-library-with-react/',
-      },
-      {
-        text: 'React Native',
-        link: '/guides/use-the-library-with-react-native/',
-      },
-      {
-        text: 'Svelte',
-        link: '/guides/use-the-library-with-svelte/',
-      },
-      {
-        text: 'Unity <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/guides/use-the-library-with-unity/',
-      },
-      {
-        text: 'Vue',
-        link: '/guides/use-the-library-with-vue/',
-      },
-    ],
-  },
-  {
-    text: 'Custom Styles',
-    items: [
-      {
-        text: 'With Figma',
-        link: '/guides/create-an-avatar-style-with-figma/',
-      },
-      {
-        text: 'Edit a Style <span class="vp-sidebar-badge is-new">New</span>',
-        link: '/guides/edit-an-avatar-style-with-figma/',
-      },
-      {
-        text: 'From Scratch',
-        link: '/guides/create-an-avatar-style-from-scratch/',
-      },
-    ],
-  },
-  {
-    text: 'Specification',
-    items: [
-      {
-        text: 'Definition Schema',
-        link: '/specification/definition-schema/',
+        text: 'Definition schema',
+        link: '/create-styles/definition-schema/',
       },
       {
         text: 'Implement DiceBear Core',
-        link: '/specification/implement-dicebear-core/',
+        link: '/create-styles/implement-dicebear-core/',
       },
     ],
   },
   {
-    text: 'Use Cases',
+    text: 'Contribute',
     items: [
-      {
-        text: 'Avatar Placeholder',
-        link: '/guides/use-as-avatar-placeholder/',
-      },
-      {
-        text: 'Gravatar Default Image',
-        link: '/guides/use-the-http-api-as-gravatar-default-image/',
-      },
-      {
-        text: 'Self-host the HTTP-API',
-        link: '/guides/host-the-http-api-yourself/',
-      },
-    ],
-  },
-  {
-    text: 'Advanced',
-    items: [
-      {
-        text: 'Access Style Options',
-        link: '/guides/access-all-available-options/',
-      },
-      {
-        text: 'Load All Avatar Styles',
-        link: '/guides/load-all-avatar-styles/',
-      },
-      {
-        text: 'Unique Avatar Count',
-        link: '/guides/how-many-unique-avatars/',
-      },
-    ],
-  },
-  {
-    text: 'Contributing',
-    items: [
-      {
-        text: 'Documentation',
-        link: '/guides/contribute-to-the-documentation/',
-      },
-      {
-        text: 'Editor',
-        link: '/guides/contribute-to-the-editor/',
-      },
-      {
-        text: 'API',
-        link: '/guides/contribute-to-the-api/',
-      },
-      {
-        text: 'Library',
-        link: '/guides/contribute-to-the-library/',
-      },
+      { text: 'Library', link: '/contribute/library/' },
+      { text: 'HTTP API', link: '/contribute/http-api/' },
+      { text: 'Documentation', link: '/contribute/documentation/' },
+      { text: 'Editor', link: '/contribute/editor/' },
     ],
   },
 ];

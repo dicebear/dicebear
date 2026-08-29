@@ -7,7 +7,7 @@ Command-line interface for the DiceBear avatar library. Generates avatars from
 any built-in or custom style and saves them as SVG, PNG, JPEG, WebP or AVIF.
 
 [Playground](https://www.dicebear.com/playground) |
-[Documentation](https://www.dicebear.com/how-to-use/cli/)
+[Documentation](https://www.dicebear.com/integrations/cli/)
 
 ## Installation
 
