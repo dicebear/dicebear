@@ -58,6 +58,7 @@ class Renderer:
         self._cached_seed_hash: str | None = None
         self._cached_initials: str | None = None
         self._cached_animation_hash: str | None = None
+        self._cached_random_suffix: str | None = None
         self._keyframes_css: list[str] = []
         self._animation_css: list[str] = []
         self._keyframes_by_content: dict[str, str] = {}
@@ -232,13 +233,26 @@ class Renderer:
 
         return f'<rect width="{width}" height="{height}" fill="{fill}"/>'
 
-    def _randomize_ids(self, svg: str) -> str:
-        """Suffix every ``id`` declaration and reference with a random hex string.
+    def _random_suffix(self) -> str:
+        """Return the hex string that separates this render from every other
+        one under ``idRandomization``, drawn once and cached.
 
-        Uses ``random`` intentionally — a PRNG-derived suffix would produce the
-        same ID for the same seed.
+        Uses ``random`` intentionally — a PRNG-derived value would repeat for
+        the same seed.
         """
-        suffix = format(random.randint(0, 0xFFFFFF), "06x")
+        if self._cached_random_suffix is None:
+            self._cached_random_suffix = format(random.randint(0, 0xFFFFFF), "06x")
+
+        return self._cached_random_suffix
+
+    def _randomize_ids(self, svg: str) -> str:
+        """Suffix every ``id`` declaration and reference with the render's
+        random suffix.
+
+        The animation class and keyframe names carry the same suffix through
+        :meth:`_animation_hash`.
+        """
+        suffix = self._random_suffix()
 
         ids = list(dict.fromkeys(_ID_PATTERN.findall(svg)))
 
@@ -557,6 +571,13 @@ class Renderer:
         select each other's rules, while identical renders sharing identical
         rules is harmless deduplication. ``True`` adds no name suffix, so
         enabling all animations hashes as before.
+
+        Everything else about an avatar stays out of the hash, so two renders
+        of the same style and seed that differ in any other option would share
+        their names with different rule bodies. ``idRandomization`` is the way
+        out of that collision, and it reaches the animation names through this
+        input rather than through the id rewrite, which only knows
+        ``id``/``url(#…)``/``href``.
         """
         if self._cached_animation_hash is None:
             selection = self._resolver.animation()
@@ -564,6 +585,9 @@ class Renderer:
                 ":" + ",".join(sorted(set(selection)))
                 if isinstance(selection, list)
                 else ""
+            )
+            random_suffix = (
+                ":" + self._random_suffix() if self._resolver.id_randomization() else ""
             )
             source_name = self._style.meta().source().name() or ""
             self._cached_animation_hash = Fnv1a.hex(
@@ -573,6 +597,7 @@ class Renderer:
                 + ":"
                 + Number.format(self._resolver.animation_speed())
                 + names
+                + random_suffix
             )
 
         return self._cached_animation_hash

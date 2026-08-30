@@ -1,5 +1,5 @@
 {
-  "$id": "https://cdn.hopjs.net/npm/@dicebear/styles@10.6.0/dist/initials.min.json",
+  "$id": "https://cdn.hopjs.net/npm/@dicebear/styles@11.0.0/dist/initials.min.json",
   "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@1.4.0/dist/definition.min.json",
   "meta": {
     "license": {
@@ -28,17 +28,17 @@
   },
   "components": {
     "initials": {
-      "height": 100,
       "width": 100,
+      "height": 100,
       "variants": {
         "alt": {
-          "weight": 0,
           "elements": [
             {
               "name": "letters",
               "type": "component"
             }
-          ]
+          ],
+          "weight": 0
         },
         "default": {
           "elements": [
@@ -73,48 +73,10 @@
       }
     },
     "letters": {
-      "height": 100,
       "width": 100,
+      "height": 100,
       "variants": {
-        "single": {
-          "weight": 0,
-          "elements": [
-            {
-              "name": "text",
-              "type": "element",
-              "attributes": {
-                "x": "50%",
-                "y": "50%",
-                "font-family": {
-                  "type": "variable",
-                  "name": "fontFamily"
-                },
-                "font-weight": {
-                  "type": "variable",
-                  "name": "fontWeight"
-                },
-                "font-size": "50",
-                "fill": {
-                  "type": "color",
-                  "name": "text"
-                },
-                "text-anchor": "middle",
-                "dy": "17.8"
-              },
-              "children": [
-                {
-                  "type": "text",
-                  "value": {
-                    "type": "variable",
-                    "name": "initial"
-                  }
-                }
-              ]
-            }
-          ]
-        },
         "double": {
-          "weight": 1,
           "elements": [
             {
               "name": "text",
@@ -148,7 +110,45 @@
                 }
               ]
             }
-          ]
+          ],
+          "weight": 1
+        },
+        "single": {
+          "elements": [
+            {
+              "name": "text",
+              "type": "element",
+              "attributes": {
+                "x": "50%",
+                "y": "50%",
+                "font-family": {
+                  "type": "variable",
+                  "name": "fontFamily"
+                },
+                "font-weight": {
+                  "type": "variable",
+                  "name": "fontWeight"
+                },
+                "font-size": "50",
+                "fill": {
+                  "type": "color",
+                  "name": "text"
+                },
+                "text-anchor": "middle",
+                "dy": "17.8"
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "value": {
+                    "type": "variable",
+                    "name": "initial"
+                  }
+                }
+              ]
+            }
+          ],
+          "weight": 0
         }
       }
     }

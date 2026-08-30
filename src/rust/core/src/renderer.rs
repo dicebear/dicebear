@@ -39,6 +39,7 @@ pub struct Renderer<'a> {
     cached_seed_hash: Option<String>,
     cached_initials: Option<String>,
     cached_animation_hash: Option<String>,
+    cached_random_suffix: Option<String>,
     keyframes_css: Vec<String>,
     animation_css: Vec<String>,
     keyframes_by_content: HashMap<String, String>,
@@ -55,6 +56,7 @@ impl<'a> Renderer<'a> {
             cached_seed_hash: None,
             cached_initials: None,
             cached_animation_hash: None,
+            cached_random_suffix: None,
             keyframes_css: Vec::new(),
             animation_css: Vec::new(),
             keyframes_by_content: HashMap::new(),
@@ -138,7 +140,9 @@ impl<'a> Renderer<'a> {
         );
 
         Ok(if resolver.id_randomization() {
-            randomize_ids(&svg)
+            let suffix = self.random_suffix();
+
+            randomize_ids(&svg, &suffix)
         } else {
             svg
         })
@@ -553,6 +557,19 @@ impl<'a> Renderer<'a> {
             .clone()
     }
 
+    /// Returns the hex string that separates this render from every other one
+    /// under `idRandomization`, drawn once and cached. Uses process randomness
+    /// intentionally — a PRNG-derived value would repeat for the same seed.
+    fn random_suffix(&mut self) -> String {
+        self.cached_random_suffix
+            .get_or_insert_with(|| {
+                let random = RandomState::new().build_hasher().finish();
+
+                format!("{:06x}", (random as u32) & 0x00ff_ffff)
+            })
+            .clone()
+    }
+
     /// Returns the FNV-1a hex hash namespacing the animation class and
     /// keyframe names, cached after the first call. Extends the
     /// [`Self::hash_seed`] input with the animation speed and, for a by-name
@@ -561,7 +578,20 @@ impl<'a> Renderer<'a> {
     /// each other's rules, while identical renders sharing identical rules is
     /// harmless deduplication. `true` adds no name suffix, so enabling all
     /// animations hashes as before.
+    ///
+    /// Everything else about an avatar stays out of the hash, so two renders
+    /// of the same style and seed that differ in any other option would share
+    /// their names with different rule bodies. `idRandomization` is the way
+    /// out of that collision, and it reaches the animation names through this
+    /// input rather than through the id rewrite, which only knows
+    /// `id`/`url(#…)`/`href`.
     fn animation_hash(&mut self) -> String {
+        let random = if self.resolver.id_randomization() {
+            format!(":{}", self.random_suffix())
+        } else {
+            String::new()
+        };
+
         self.cached_animation_hash
             .get_or_insert_with(|| {
                 let source_name = self
@@ -580,11 +610,12 @@ impl<'a> Renderer<'a> {
                 };
 
                 fnv1a::hex(&format!(
-                    "{}:{}:{}{}",
+                    "{}:{}:{}{}{}",
                     source_name,
                     self.resolver.seed(),
                     number::format(self.resolver.animation_speed()),
-                    names
+                    names,
+                    random
                 ))
             })
             .clone()
@@ -908,11 +939,11 @@ fn direction_css(direction: Option<&str>) -> &'static str {
     }
 }
 
-/// Suffixes every `id` declaration and reference with a random hex string so
-/// that multiple instances of the same avatar do not collide in a shared
-/// document. Uses process randomness intentionally — a PRNG-derived suffix
-/// would produce the same ID for the same seed.
-fn randomize_ids(svg: &str) -> String {
+/// Suffixes every `id` declaration and reference with the render's random
+/// suffix so that multiple instances of the same avatar do not collide in a
+/// shared document. The animation class and keyframe names carry the same
+/// suffix through [`Renderer::animation_hash`].
+fn randomize_ids(svg: &str, suffix: &str) -> String {
     // `(?-u:\b)` is the ASCII word boundary. JavaScript counts only
     // [A-Za-z0-9_] as word characters, so the reference collects an `id="` that
     // follows a letter such as `é`, while the Unicode-aware boundary of the
@@ -920,9 +951,6 @@ fn randomize_ids(svg: &str) -> String {
     // narrower boundary wins.
     static ID_DECL: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"(?-u:\b)id="([^"]+)""#).unwrap());
-
-    let random = RandomState::new().build_hasher().finish();
-    let suffix = format!("{:06x}", (random as u32) & 0x00ff_ffff);
 
     let mut seen = HashSet::new();
     let mut ids: Vec<String> = Vec::new();

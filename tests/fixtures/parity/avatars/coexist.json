@@ -364,6 +364,7 @@
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "animation": true,
+      "idRandomization": false,
       "animationSpeed": 1,
       "animationVariant": "none",
       "animationRotate": 0,
@@ -375,8 +376,7 @@
       "rotate": 0,
       "translateX": 0,
       "translateY": 0,
-      "borderRadius": 0,
-      "idRandomization": false
+      "borderRadius": 0
     }
   },
   {
@@ -391,6 +391,7 @@
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "animation": true,
+      "idRandomization": false,
       "animationSpeed": 1,
       "animationVariant": "medium",
       "animationRotate": 0,
@@ -402,8 +403,7 @@
       "rotate": 0,
       "translateX": 0,
       "translateY": 0,
-      "borderRadius": 0,
-      "idRandomization": false
+      "borderRadius": 0
     }
   }
 ]

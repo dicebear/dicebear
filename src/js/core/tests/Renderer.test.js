@@ -1700,17 +1700,28 @@ describe('Renderer', () => {
       assert.ok(!svg.includes('<style>'));
     });
 
-    it('should leave animation classes alone under idRandomization', () => {
-      const svg = new Avatar(new Style(squash), {
-        animation: true,
-        idRandomization: true,
-      }).toString();
+    it('should namespace animation classes under idRandomization', () => {
+      const options = { animation: true, idRandomization: true };
+      const svg = new Avatar(new Style(squash), options).toString();
       const hash = hashOf(svg);
 
       // The class attribute and the CSS rule still reference the same names.
       assert.ok(svg.includes(`<g class="dba-${hash}-0">`));
       assert.ok(svg.includes(`.dba-${hash}-0{`));
       assert.ok(svg.includes(`@keyframes dbk-${hash}-0{`));
+
+      // Two renders of the same avatar must not select each other's rules.
+      const other = new Avatar(new Style(squash), options).toString();
+
+      assert.notEqual(hashOf(other), hash);
+
+      // Without the option the names stay stable for the same input.
+      const stable = { animation: true };
+
+      assert.equal(
+        hashOf(new Avatar(new Style(squash), stable).toString()),
+        hashOf(new Avatar(new Style(squash), stable).toString()),
+      );
     });
   });
 });

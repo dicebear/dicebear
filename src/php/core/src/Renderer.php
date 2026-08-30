@@ -59,6 +59,7 @@ class Renderer
     private ?string $cachedSeedHash = null;
     private ?string $cachedInitials = null;
     private ?string $cachedAnimationHash = null;
+    private ?string $cachedRandomSuffix = null;
     /** @var list<string> */
     private array $keyframesCss = [];
     /** @var list<string> */
@@ -267,14 +268,29 @@ class Renderer
     }
 
     /**
-     * Suffixes every `id` declaration and reference with a random hex string
-     * so that multiple instances of the same avatar do not collide in a
-     * shared document. Uses `random_int()` intentionally — a PRNG-derived
-     * suffix would produce the same ID for the same seed.
+     * Returns the hex string that separates this render from every other one
+     * under `idRandomization`, drawn once and cached. Uses `random_int()`
+     * intentionally — a PRNG-derived value would repeat for the same seed.
+     */
+    private function randomSuffix(): string
+    {
+        return $this->cachedRandomSuffix ??= str_pad(
+            dechex(random_int(0, 0xffffff)),
+            6,
+            '0',
+            STR_PAD_LEFT
+        );
+    }
+
+    /**
+     * Suffixes every `id` declaration and reference with the render's random
+     * suffix so that multiple instances of the same avatar do not collide in
+     * a shared document. The animation class and keyframe names carry the
+     * same suffix through {@see animationHash}.
      */
     private function randomizeIds(string $svg): string
     {
-        $suffix = str_pad(dechex(random_int(0, 0xffffff)), 6, '0', STR_PAD_LEFT);
+        $suffix = $this->randomSuffix();
         $ids = [];
 
         // The missing `u` modifier is deliberate. Without it PCRE reads `\b`
@@ -662,6 +678,13 @@ class Renderer
      * other's rules, while identical renders sharing identical rules is
      * harmless deduplication. `true` adds no name suffix, so enabling all
      * animations hashes as before.
+     *
+     * Everything else about an avatar stays out of the hash, so two renders
+     * of the same style and seed that differ in any other option would share
+     * their names with different rule bodies. `idRandomization` is the way
+     * out of that collision, and it reaches the animation names through this
+     * input rather than through the id rewrite, which only knows
+     * `id`/`url(#…)`/`href`.
      */
     private function animationHash(): string
     {
@@ -678,11 +701,14 @@ class Renderer
             $names = ':' . implode(',', $distinct);
         }
 
+        $random = $this->resolver->idRandomization() ? ':' . $this->randomSuffix() : '';
+
         return $this->cachedAnimationHash = Fnv1a::hex(
             ($this->style->meta()->source()->name() ?? '')
             . ':' . $this->resolver->seed()
             . ':' . Number::format($this->resolver->animationSpeed())
             . $names
+            . $random
         );
     }
 
