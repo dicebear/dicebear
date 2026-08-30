@@ -2203,7 +2203,7 @@
       "options": {
         "animation": []
       },
-      "valid": false
+      "valid": true
     },
     {
       "id": "animation-name-mixed-list",

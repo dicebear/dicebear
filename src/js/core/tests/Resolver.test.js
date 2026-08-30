@@ -1377,7 +1377,6 @@ describe('Resolver', () => {
 
     it('should reject out-of-range values at validation', () => {
       assert.throws(() => new Options({ animation: 'Yes' }));
-      assert.throws(() => new Options({ animation: [] }));
       assert.throws(() => new Options({ animation: ['blink', 'Bad'] }));
       assert.throws(() => new Options({ animationSpeed: 0 }));
       assert.throws(() => new Options({ animationSpeed: 20 }));
@@ -1393,6 +1392,13 @@ describe('Resolver', () => {
         makeResolver(style, { seed: 'x', animation: ['sway', 'blink'] })
           .animation(),
         ['sway', 'blink'],
+      );
+    });
+
+    it('should resolve an empty name list as an empty selection', () => {
+      assert.deepEqual(
+        makeResolver(style, { seed: 'x', animation: [] }).animation(),
+        [],
       );
     });
   });
