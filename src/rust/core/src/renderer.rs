@@ -290,7 +290,8 @@ impl<'a> Renderer<'a> {
             return Ok(String::new());
         }
 
-        let attrs = self.render_attributes(element.attributes())?;
+        let stripped = self.attributes_without_animated_opacity(element);
+        let attrs = self.render_attributes(stripped.as_ref().or(element.attributes()))?;
         let children = self.render_elements(element.children())?;
 
         if children.is_empty() {
@@ -350,7 +351,8 @@ impl<'a> Renderer<'a> {
         }
 
         let transforms = self.build_transforms(component);
-        let user_attributes = element.attributes();
+        let stripped = self.attributes_without_animated_opacity(element);
+        let user_attributes = stripped.as_ref().or(element.attributes());
 
         let merged = if transforms.is_empty() {
             user_attributes.cloned()
@@ -596,6 +598,9 @@ impl<'a> Renderer<'a> {
     /// Wrapper nesting is block 0 outermost, and within a block the canonical
     /// track order (translate before rotate before scale, opacity innermost) —
     /// the composition contract the Figma plugin maps onto node transforms.
+    ///
+    /// The element's own `opacity` rides on the innermost opacity wrapper as
+    /// the resting value the keyframes then override.
     fn apply_animations(&mut self, markup: String, element: &Element) -> String {
         if markup.is_empty() {
             return markup;
@@ -617,6 +622,7 @@ impl<'a> Renderer<'a> {
         }
 
         let mut classes: Vec<String> = Vec::new();
+        let mut opacity_wrapper: Option<usize> = None;
 
         for animation in animations {
             // `true` plays every timeline. A name selection plays only the
@@ -628,6 +634,10 @@ impl<'a> Renderer<'a> {
 
             for track in TRACK_ORDER {
                 if let Some(track_data) = animation.tracks().get(track) {
+                    if track == "opacity" {
+                        opacity_wrapper = Some(classes.len());
+                    }
+
                     classes.push(self.build_animation_css(
                         animation,
                         track,
@@ -637,13 +647,77 @@ impl<'a> Renderer<'a> {
             }
         }
 
+        let resting_opacity = match element.attributes().and_then(|a| a.get("opacity")) {
+            Some(value) if opacity_wrapper.is_some() => {
+                let mut only: IndexMap<String, DynValue> = IndexMap::new();
+                only.insert("opacity".to_string(), value.clone());
+
+                // The value comes from the same validated definition as every
+                // other attribute, so a render error here is impossible.
+                self.render_attributes(Some(&only)).unwrap_or_default()
+            }
+            _ => String::new(),
+        };
+
         let mut result = markup;
 
-        for class in classes.iter().rev() {
-            result = format!("<g class=\"{class}\">{result}</g>");
+        for (index, class) in classes.iter().enumerate().rev() {
+            let opacity = if Some(index) == opacity_wrapper {
+                resting_opacity.as_str()
+            } else {
+                ""
+            };
+
+            result = format!("<g class=\"{class}\"{opacity}>{result}</g>");
         }
 
         result
+    }
+
+    /// Strips the `opacity` attribute an animated opacity track takes over.
+    ///
+    /// A track writes the opacity the author means, not a factor on top of the
+    /// element's own value: an element hidden with `opacity="0"` is a resting
+    /// state the animation replaces, the way a CSS animation on the element
+    /// itself would. The attribute therefore moves to the animating wrapper
+    /// (see [`Self::apply_animations`]), where the keyframes override it. With
+    /// the animation off no wrapper exists and the attribute stays where it is.
+    ///
+    /// Returns `None` when nothing is stripped, so the caller keeps using the
+    /// element's own list.
+    fn attributes_without_animated_opacity(
+        &mut self,
+        element: &Element,
+    ) -> Option<IndexMap<String, DynValue>> {
+        let attributes = element.attributes()?;
+
+        // The element check comes first: only styles that carry declarative
+        // animations may touch the `animation` option, so the resolved-options
+        // snapshot of every other avatar stays free of it.
+        if !attributes.contains_key("opacity") || element.animations().is_empty() {
+            return None;
+        }
+
+        let selection = self.resolver.animation();
+
+        if selection.off() {
+            return None;
+        }
+
+        for animation in element.animations() {
+            if !selection.matches(animation.name()) {
+                continue;
+            }
+
+            if animation.tracks().contains_key("opacity") {
+                let mut rest = attributes.clone();
+                rest.shift_remove("opacity");
+
+                return Some(rest);
+            }
+        }
+
+        None
     }
 
     /// Generates the `@keyframes` block (deduplicated by content, so identical

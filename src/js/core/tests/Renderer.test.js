@@ -1237,6 +1237,51 @@ describe('Renderer', () => {
       );
     });
 
+    it('should hand a hidden element its opacity back while animating', () => {
+      // The element's own opacity is the resting state an opacity track
+      // replaces, not a factor it is multiplied with, so a layer hidden with
+      // `opacity="0"` can be brought in by its animation.
+      const reveal = {
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'rect',
+              attributes: { opacity: '0' },
+              animations: [
+                {
+                  name: 'reveal',
+                  duration: 4,
+                  easing: 'hold',
+                  tracks: {
+                    opacity: {
+                      keyframes: [
+                        { at: 0, value: 0 },
+                        { at: 50, value: 1 },
+                        { at: 100, value: 0 },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const style = new Style(reveal);
+      const animated = new Avatar(style, { animation: true }).toString();
+      const hash = hashOf(animated);
+
+      assert.ok(animated.includes(`<g class="dba-${hash}-0" opacity="0"><rect/></g>`));
+
+      // With the animation off nothing wraps the element, so its own opacity
+      // keeps it hidden.
+      assert.ok(new Avatar(style).toString().includes('<rect opacity="0"/>'));
+    });
+
     it('should wrap each track in its own group, outermost first', () => {
       const svg = new Avatar(new Style(squash), { animation: true }).toString();
       const hash = hashOf(svg);

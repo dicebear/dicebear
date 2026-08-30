@@ -333,7 +333,9 @@ class Renderer {
       return '';
     }
 
-    final attrs = _renderAttributes(element.attributes);
+    final attrs = _renderAttributes(
+      _attributesWithoutAnimatedOpacity(element.attributes, element),
+    );
     final children = _renderElements(element.children);
 
     if (children.isEmpty) {
@@ -405,7 +407,8 @@ class Renderer {
     }
 
     final transforms = _buildTransforms(component);
-    final userAttributes = element.attributes;
+    final userAttributes =
+        _attributesWithoutAnimatedOpacity(element.attributes, element);
     Map<String, Object?>? mergedAttributes = userAttributes;
 
     if (transforms.isNotEmpty) {
@@ -631,6 +634,9 @@ class Renderer {
   /// Wrapper nesting is block 0 outermost, and within a block the canonical
   /// track order (translate before rotate before scale, opacity innermost) —
   /// the composition contract the Figma plugin maps onto node transforms.
+  ///
+  /// The element's own `opacity` rides on the innermost opacity wrapper as the
+  /// resting value the keyframes then override.
   String _applyAnimations(String markup, ElementNode element) {
     if (markup.isEmpty) {
       return markup;
@@ -652,6 +658,7 @@ class Renderer {
     }
 
     final classes = <String>[];
+    var opacityWrapper = -1;
 
     for (final entry in animations) {
       final animation = entry as Map<String, Object?>;
@@ -669,6 +676,10 @@ class Renderer {
         final trackData = tracks[track] as Map<String, Object?>?;
 
         if (trackData != null) {
+          if (track == 'opacity') {
+            opacityWrapper = classes.length;
+          }
+
           classes.add(_buildAnimationCss(
             animation,
             track,
@@ -678,13 +689,67 @@ class Renderer {
       }
     }
 
+    final restingOpacity = element.attributes?['opacity'];
     var result = markup;
 
     for (var i = classes.length - 1; i >= 0; i--) {
-      result = '<g class="${classes[i]}">$result</g>';
+      final opacity = i == opacityWrapper && restingOpacity != null
+          ? _renderAttributes({'opacity': restingOpacity})
+          : '';
+
+      result = '<g class="${classes[i]}"$opacity>$result</g>';
     }
 
     return result;
+  }
+
+  /// Strips the `opacity` attribute an animated opacity track takes over.
+  ///
+  /// A track writes the opacity the author means, not a factor on top of the
+  /// element's own value: an element hidden with `opacity="0"` is a resting
+  /// state the animation replaces, the way a CSS animation on the element
+  /// itself would. The attribute therefore moves to the animating wrapper,
+  /// where the keyframes override it. With the animation off no wrapper
+  /// exists and the attribute stays where it is.
+  Map<String, Object?>? _attributesWithoutAnimatedOpacity(
+    Map<String, Object?>? attributes,
+    ElementNode element,
+  ) {
+    if (attributes == null || attributes['opacity'] == null) {
+      return attributes;
+    }
+
+    // The element check comes first: only styles that carry declarative
+    // animations may touch the `animation` option, so the resolved-options
+    // snapshot of every other avatar stays free of it.
+    if (element.animations.isEmpty) {
+      return attributes;
+    }
+
+    final selection = _resolver.animation();
+
+    if (selection.off) {
+      return attributes;
+    }
+
+    for (final entry in element.animations) {
+      final animation = entry as Map<String, Object?>;
+
+      if (!selection.matches(animation['name'] as String?)) {
+        continue;
+      }
+
+      final tracks = animation['tracks'] as Map<String, Object?>;
+
+      if (tracks['opacity'] != null) {
+        final rest = {...attributes};
+        rest.remove('opacity');
+
+        return rest;
+      }
+    }
+
+    return attributes;
   }
 
   /// Generates the `@keyframes` block (deduplicated by content, so identical

@@ -299,7 +299,9 @@ class Renderer:
 
             return ""
 
-        attrs_str = self._render_attributes(element.attributes())
+        attrs_str = self._render_attributes(
+            self._attributes_without_animated_opacity(element.attributes(), element)
+        )
         children = self._render_elements(element.children())
 
         if len(children) == 0:
@@ -363,7 +365,9 @@ class Renderer:
             self._defs[id_] = f'<g id="{id_}">{body}</g>'
 
         transforms = self._build_transforms(component)
-        user_attributes = element.attributes()
+        user_attributes = self._attributes_without_animated_opacity(
+            element.attributes(), element
+        )
         merged_attributes: dict[str, Any] | None = user_attributes
 
         if len(transforms) > 0:
@@ -573,6 +577,65 @@ class Renderer:
 
         return self._cached_animation_hash
 
+    def _active_animations(self, element: Element) -> list[dict[str, Any]]:
+        """Return the animation blocks of an element that the ``animation``
+        option selects.
+
+        The element check comes first: only styles that carry declarative
+        animations may touch the option, so the resolved-options snapshot of
+        every other avatar stays free of it.
+        """
+        animations = element.animations()
+
+        if len(animations) == 0:
+            return animations
+
+        selection = self._resolver.animation()
+
+        # ``True`` plays every timeline. A name list plays only the timelines
+        # carrying one of those names, so unnamed timelines stay static then.
+        if selection is True:
+            return animations
+
+        if selection is False:
+            return []
+
+        return [
+            animation
+            for animation in animations
+            if (name := animation.get("name")) is not None and name in selection
+        ]
+
+    def _attributes_without_animated_opacity(
+        self, attributes: dict[str, Any] | None, element: Element
+    ) -> dict[str, Any] | None:
+        """Strip the ``opacity`` attribute an animated opacity track takes over.
+
+        A track writes the opacity the author means, not a factor on top of the
+        element's own value: an element hidden with ``opacity="0"`` is a resting
+        state the animation replaces, the way a CSS animation on the element
+        itself would. The attribute therefore moves to the animating wrapper,
+        where the keyframes override it. With the animation off no wrapper
+        exists and the attribute stays where it is.
+        """
+        # The element check comes first: only styles that carry declarative
+        # animations may touch the `animation` option, so the resolved-options
+        # snapshot of every other avatar stays free of it.
+        if (
+            attributes is None
+            or attributes.get("opacity") is None
+            or len(element.animations()) == 0
+        ):
+            return attributes
+
+        if not any(
+            animation["tracks"].get("opacity") is not None
+            for animation in self._active_animations(element)
+        ):
+            return attributes
+
+        return {key: value for key, value in attributes.items() if key != "opacity"}
+
     def _apply_animations(self, markup: str, element: Element) -> str:
         """Wrap an element's rendered markup in one ``<g class="…">`` per
         animation track and queue the matching CSS.
@@ -584,37 +647,20 @@ class Renderer:
         Wrapper nesting is block 0 outermost, and within a block the canonical
         track order (translate before rotate before scale, opacity innermost) —
         the composition contract the Figma plugin maps onto node transforms.
+
+        The element's own ``opacity`` rides on the innermost opacity wrapper as
+        the resting value the keyframes then override.
         """
         if len(markup) == 0:
             return markup
 
-        animations = element.animations()
-
-        # The element check comes first: only styles that carry declarative
-        # animations may touch the `animation` option, so the resolved-options
-        # snapshot of every other avatar stays free of it.
-        if len(animations) == 0:
-            return markup
-
-        selection = self._resolver.animation()
-
-        # ``True`` plays every timeline. A name list plays only the timelines
-        # carrying one of those names, so unnamed timelines stay static then.
-        if selection is True:
-            active = animations
-        elif selection is False:
-            active = []
-        else:
-            active = [
-                animation
-                for animation in animations
-                if (name := animation.get("name")) is not None and name in selection
-            ]
+        active = self._active_animations(element)
 
         if len(active) == 0:
             return markup
 
         classes: list[str] = []
+        opacity_wrapper = -1
 
         for animation in active:
             tracks = animation["tracks"]
@@ -623,16 +669,29 @@ class Renderer:
                 track_data = tracks.get(track)
 
                 if track_data is not None:
+                    if track == "opacity":
+                        opacity_wrapper = len(classes)
+
                     classes.append(
                         self._build_animation_css(
                             animation, track, track_data["keyframes"]
                         )
                     )
 
+        own_attributes = element.attributes()
+        resting_opacity = (
+            own_attributes.get("opacity") if own_attributes is not None else None
+        )
         result = markup
 
-        for class_name in reversed(classes):
-            result = f'<g class="{class_name}">{result}</g>'
+        for index in range(len(classes) - 1, -1, -1):
+            opacity = (
+                self._render_attributes({"opacity": resting_opacity})
+                if index == opacity_wrapper and resting_opacity is not None
+                else ""
+            )
+
+            result = f'<g class="{classes[index]}"{opacity}>{result}</g>'
 
         return result
 

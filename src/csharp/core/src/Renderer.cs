@@ -430,7 +430,7 @@ namespace DiceBear.Internal
                 return string.Empty;
             }
 
-            var attrs = RenderAttributes(element.Attributes());
+            var attrs = RenderAttributes(AttributesWithoutAnimatedOpacity(element));
             var children = RenderElements(element.Children());
 
             if (children.Length == 0)
@@ -530,15 +530,16 @@ namespace DiceBear.Internal
 
             var transforms = BuildTransforms(component);
             var userAttributes = element.Attributes();
-            IEnumerable<KeyValuePair<string, JsonNode?>>? mergedAttributes = userAttributes;
+            var ownAttributes = AttributesWithoutAnimatedOpacity(element);
+            IEnumerable<KeyValuePair<string, JsonNode?>>? mergedAttributes = ownAttributes;
 
             if (transforms.Count > 0)
             {
                 var merged = new OrderedMap<JsonNode?>();
 
-                if (userAttributes is not null)
+                if (ownAttributes is not null)
                 {
-                    foreach (var entry in userAttributes)
+                    foreach (var entry in ownAttributes)
                     {
                         merged.Set(entry.Key, entry.Value);
                     }
@@ -806,6 +807,7 @@ namespace DiceBear.Internal
             }
 
             var classes = new List<string>();
+            var opacityWrapper = -1;
 
             foreach (var node in animations)
             {
@@ -828,19 +830,91 @@ namespace DiceBear.Internal
                     if (tracks[track] is JsonObject trackData
                         && trackData["keyframes"] is JsonArray keyframes)
                     {
+                        if (track == "opacity")
+                        {
+                            opacityWrapper = classes.Count;
+                        }
+
                         classes.Add(BuildAnimationCss(animation, track, keyframes));
                     }
                 }
+            }
+
+            var restingOpacity = string.Empty;
+
+            if (opacityWrapper >= 0 && element.Attributes()?["opacity"] is JsonNode opacityValue)
+            {
+                restingOpacity = RenderAttributes(
+                    new[] { new KeyValuePair<string, JsonNode?>("opacity", opacityValue) });
             }
 
             var result = markup;
 
             for (var i = classes.Count - 1; i >= 0; i--)
             {
-                result = $"<g class=\"{classes[i]}\">{result}</g>";
+                var opacity = i == opacityWrapper ? restingOpacity : string.Empty;
+
+                result = $"<g class=\"{classes[i]}\"{opacity}>{result}</g>";
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Strips the <c>opacity</c> attribute an animated opacity track takes
+        /// over.
+        /// </summary>
+        /// <remarks>
+        /// A track writes the opacity the author means, not a factor on top of
+        /// the element's own value: an element hidden with <c>opacity="0"</c>
+        /// is a resting state the animation replaces, the way a CSS animation
+        /// on the element itself would. The attribute therefore moves to the
+        /// animating wrapper, where the keyframes override it. With the
+        /// animation off no wrapper exists and the attribute stays where it is.
+        /// </remarks>
+        private IEnumerable<KeyValuePair<string, JsonNode?>>? AttributesWithoutAnimatedOpacity(
+            Element element)
+        {
+            var attributes = element.Attributes();
+            var animations = element.Animations();
+
+            // The element check comes first: only styles that carry
+            // declarative animations may touch the `animation` option, so the
+            // resolved-options snapshot of every other avatar stays free of it.
+            if (attributes?["opacity"] is null || animations is null || animations.Count == 0)
+            {
+                return attributes;
+            }
+
+            var selection = _resolver.Animation();
+
+            if (selection.Off)
+            {
+                return attributes;
+            }
+
+            foreach (var node in animations)
+            {
+                if (node is not JsonObject animation
+                    || JsonRead.Obj(animation, "tracks") is not JsonObject tracks)
+                {
+                    continue;
+                }
+
+                if (!selection.Matches(JsonRead.Str(animation, "name")))
+                {
+                    continue;
+                }
+
+                if (tracks["opacity"] is not null)
+                {
+                    return attributes
+                        .Where(entry => entry.Key != "opacity")
+                        .ToList();
+                }
+            }
+
+            return attributes;
         }
 
         /// <summary>
