@@ -15,7 +15,7 @@ import '../error/validation_error.dart';
 /// consumer's environment into validation error output. Keep the version in
 /// sync with the `dicebear_schema` dependency in `pubspec.yaml`.
 const String schemaBaseUrl =
-    'https://cdn.hopjs.net/npm/@dicebear/schema@1.2.0/dist/';
+    'https://cdn.hopjs.net/npm/@dicebear/schema@1.6.1/dist/';
 
 /// Compiles a draft-07 schema from its raw JSON [raw], registered under
 /// [schemaBaseUrl] + [name].
