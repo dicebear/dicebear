@@ -15,14 +15,41 @@ const props = defineProps<{
 const store = useStore();
 
 const animationKey = 'animation';
+const speedKey = 'animationSpeed';
+
+// `false` and an empty list both mean "off", so an imported configuration
+// carrying either leaves the toggle down. The speed rides along with the
+// switch: it has no meaning on its own and would otherwise linger in the
+// emitted options after the animations are turned off again.
+function turnOff() {
+  delete store.avatarStyleOptions[animationKey];
+  delete store.avatarStyleOptions[speedKey];
+}
+
+// The reset next to the toggle clears the speed with it, for the same reason.
+function resetAnimation() {
+  store.resetOption(animationKey);
+
+  if (store.isOptionSet(speedKey)) {
+    store.resetOption(speedKey);
+  }
+}
 
 const animation = computed({
-  get: () => store.avatarStyleOptions[animationKey] !== undefined,
+  get: () => {
+    const value = store.avatarStyleOptions[animationKey];
+
+    if (value === undefined || value === false) {
+      return false;
+    }
+
+    return !Array.isArray(value) || value.length > 0;
+  },
   set: (val: boolean) => {
     if (val) {
       store.avatarStyleOptions[animationKey] = true;
     } else {
-      delete store.avatarStyleOptions[animationKey];
+      turnOff();
     }
   },
 });
@@ -57,7 +84,7 @@ function toggleName(name: string, checked: boolean) {
   if (next.length === props.names.length) {
     store.avatarStyleOptions[animationKey] = true;
   } else if (next.length === 0) {
-    delete store.avatarStyleOptions[animationKey];
+    turnOff();
   } else {
     store.avatarStyleOptions[animationKey] = next;
   }
@@ -72,7 +99,7 @@ function toggleName(name: string, checked: boolean) {
         <span>Play animations</span>
         <PlaygroundFieldReset
           v-if="store.isOptionSet(animationKey)"
-          @click="store.resetOption(animationKey)"
+          @click="resetAnimation()"
         />
       </div>
       <p class="pg-help">

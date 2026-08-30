@@ -34,7 +34,7 @@ the tuple's range.
 | `fontWeight`      | `integer \| integer[]`                           | `400`         | Font weight for text-based styles (1 to 1000)                                                                                                                                                                     |
 | `tags`            | `string \| string[]`                             | _unset_       | Keep only variants matching these [tags](/customize/tags/) (`category` or `category:value`, prefix with `!` to disallow)                                                                                          |
 | `animation`       | `boolean \| name \| name[]`                      | `false`       | Play the style's built-in animations: `true` plays all of them, a name or list of names (such as `"blink"`) only those. Off by default, so SVG and raster output stay static. Styles without animations ignore it |
-| `animationSpeed`  | `number \| [min, max]`                           | `1`           | Playback speed multiplier for animations (0.1 to 10; `2` plays twice as fast). Only meaningful with `animation: true`                                                                                             |
+| `animationSpeed`  | `number \| [min, max]`                           | `1`           | Playback speed multiplier for animations (0.1 to 10, `2` plays twice as fast). Only meaningful once `animation` is on                                                                                             |
 
 ## Background options
 
