@@ -726,7 +726,10 @@ export class Renderer {
     attributes: StyleDefinitionAttributes | undefined,
     element: Element,
   ): StyleDefinitionAttributes | undefined {
-    if (attributes?.opacity === undefined || element.animations().length === 0) {
+    if (
+      attributes?.opacity === undefined ||
+      element.animations().length === 0
+    ) {
       return attributes;
     }
 
