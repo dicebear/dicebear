@@ -17,7 +17,7 @@ environment:
 dependencies:
   # The shared draft-07 JSON Schemas (style definition format and avatar
   # options), shipped as a pure-data package.
-  dicebear_schema: ^1.5.1
+  dicebear_schema: ^1.6.0-rc.1
   # Runtime validation of style definitions and options against those schemas,
   # matching the Ajv/opis/jsonschema-rs/santhosh-tekuri validators used by the
   # other language ports.
