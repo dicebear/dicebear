@@ -121,24 +121,6 @@
     "min": 0,
     "max": 100
   },
-  "animationVariant": {
-    "type": "enum",
-    "values": [
-      "fast",
-      "fastest",
-      "medium",
-      "none",
-      "slow",
-      "slowest"
-    ],
-    "list": true,
-    "weighted": true
-  },
-  "animationProbability": {
-    "type": "number",
-    "min": 0,
-    "max": 100
-  },
   "backgroundColor": {
     "type": "color",
     "list": true
@@ -266,12 +248,17 @@
       "fixed"
     ]
   },
-  "tags": {
-    "type": "enum",
+  "animation": {
+    "type": "animation",
     "values": [
-      "animation"
-    ],
-    "list": true,
-    "open": true
+      "blink",
+      "glance",
+      "sway"
+    ]
+  },
+  "animationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
   }
 }

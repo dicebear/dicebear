@@ -59,6 +59,7 @@ class Renderer {
   String? _cachedSeedHash;
   String? _cachedInitials;
   String? _cachedAnimationHash;
+  String? _cachedRandomSuffix;
   final List<String> _keyframesCss = [];
   final List<String> _animationCss = [];
   final Map<String, String> _keyframesByContent = {};
@@ -249,18 +250,25 @@ class Renderer {
         'fill="${escapeXml(_resolveColorReference('background'))}"/>';
   }
 
-  /// Suffixes every `id` declaration and reference with a random hex string
-  /// so that multiple instances of the same avatar do not collide in a shared
-  /// document. Process randomness ([math.Random], the JS `Math.random()`) is
-  /// intentional — a PRNG-derived suffix would produce the same ID for the
-  /// same seed.
-  String _randomizeIds(String svg) {
+  /// Returns the hex string that separates this render from every other one
+  /// under `idRandomization`, drawn once and cached. Process randomness
+  /// ([math.Random], the JS `Math.random()`) is intentional — a PRNG-derived
+  /// value would repeat for the same seed.
+  String _randomSuffix() {
     // floor(random * 0xffffff) yields 0..0xfffffe (exclusive upper bound),
     // matching the JS reference rather than a masked 0..0xffffff.
-    final suffix = (_random.nextDouble() * 0xffffff)
+    return _cachedRandomSuffix ??= (_random.nextDouble() * 0xffffff)
         .floor()
         .toRadixString(16)
         .padLeft(6, '0');
+  }
+
+  /// Suffixes every `id` declaration and reference with the render's random
+  /// suffix so that multiple instances of the same avatar do not collide in a
+  /// shared document. The animation class and keyframe names carry the same
+  /// suffix through [_animationHash].
+  String _randomizeIds(String svg) {
+    final suffix = _randomSuffix();
 
     // A Dart Set keeps insertion order, like the JS Set the reference fills.
     final ids = <String>{
@@ -615,14 +623,28 @@ class Renderer {
   /// on one page must not select each other's rules, while identical renders
   /// sharing identical rules is harmless deduplication. `true` adds no name
   /// suffix, so enabling all animations hashes as before.
+  ///
+  /// Everything else about an avatar stays out of the hash, so two renders of
+  /// the same style and seed that differ in any other option would share their
+  /// names with different rule bodies. `idRandomization` is the way out of
+  /// that collision, and it reaches the animation names through this input
+  /// rather than through the id rewrite, which only knows
+  /// `id`/`url(#…)`/`href`.
   String _animationHash() {
+    final cached = _cachedAnimationHash;
+
+    if (cached != null) {
+      return cached;
+    }
+
     final names = _resolver.animation().names;
     final suffix =
         names == null ? '' : ':${(names.toSet().toList()..sort()).join(',')}';
+    final random = _resolver.idRandomization() ? ':${_randomSuffix()}' : '';
 
-    return _cachedAnimationHash ??= fnv1aHex(
+    return _cachedAnimationHash = fnv1aHex(
       '${_style.meta.source().name() ?? ''}:${_resolver.seed()}:'
-      '${formatNumber(_resolver.animationSpeed())}$suffix',
+      '${formatNumber(_resolver.animationSpeed())}$suffix$random',
     );
   }
 

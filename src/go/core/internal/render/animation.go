@@ -109,13 +109,13 @@ func (r *renderer) applyAnimations(markup string, el *style.Element) string {
 
 	restingOpacity := ""
 	if opacityWrapper >= 0 {
-		if _, ok := el.Attributes.Get("opacity"); ok {
-			only := el.Attributes.Only("opacity")
-			// The value comes from the same validated definition as every
-			// other attribute, so a render error here is impossible.
-			if attrs, err := r.renderAttributes(&only); err == nil {
-				restingOpacity = attrs
-			}
+		// Only is empty when the element carries no opacity, and an empty list
+		// renders to an empty string. The value comes from the same validated
+		// definition as every other attribute, so a render error here is
+		// impossible.
+		only := el.Attributes.Only("opacity")
+		if attrs, err := r.renderAttributes(&only); err == nil {
+			restingOpacity = attrs
 		}
 	}
 
@@ -353,6 +353,12 @@ func (r *renderer) registerAnimationStyle() {
 // or selections inlined on one page must not select each other's rules, while
 // identical renders sharing identical rules is harmless deduplication. true
 // adds no name suffix, so enabling all animations hashes as before.
+//
+// Everything else about an avatar stays out of the hash, so two renders of the
+// same style and seed that differ in any other option would share their names
+// with different rule bodies. idRandomization is the way out of that collision,
+// and it reaches the animation names through this input rather than through the
+// id rewrite, which only knows id/url(#…)/href.
 func (r *renderer) animationHash() string {
 	if r.cachedAnimationHash == nil {
 		suffix := ""
@@ -369,11 +375,16 @@ func (r *renderer) animationHash() string {
 			suffix = ":" + strings.Join(unique, ",")
 		}
 
+		random := ""
+		if r.resolver.idRandomization() {
+			random = ":" + r.randomSuffix()
+		}
+
 		sourceName := ""
 		if meta := r.style.Meta(); meta != nil && meta.Source.Name != nil {
 			sourceName = *meta.Source.Name
 		}
-		v := prng.Hex(sourceName + ":" + r.resolver.seed() + ":" + num.Format(r.resolver.animationSpeed()) + suffix)
+		v := prng.Hex(sourceName + ":" + r.resolver.seed() + ":" + num.Format(r.resolver.animationSpeed()) + suffix + random)
 		r.cachedAnimationHash = &v
 	}
 	return *r.cachedAnimationHash

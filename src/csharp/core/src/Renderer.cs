@@ -63,6 +63,7 @@ namespace DiceBear.Internal
         private string? _cachedSeedHash;
         private string? _cachedInitials;
         private string? _cachedAnimationHash;
+        private string? _cachedRandomSuffix;
         private int _keyframesCounter;
         private int _animationClassCounter;
 
@@ -290,17 +291,28 @@ namespace DiceBear.Internal
         }
 
         /// <summary>
-        /// Suffixes every <c>id</c> declaration and reference with a random hex
-        /// string so that multiple instances of the same avatar do not collide
-        /// in a shared document.
+        /// Returns the hex string that separates this render from every other
+        /// one under <c>idRandomization</c>, drawn once and cached.
         /// </summary>
         /// <remarks>
         /// Uses a general-purpose random source intentionally — a PRNG-derived
-        /// suffix would produce the same ID for the same seed.
+        /// value would repeat for the same seed.
         /// </remarks>
-        private static string RandomizeIds(string svg)
+        private string RandomSuffix() => _cachedRandomSuffix ??=
+            NextRandom(0xffffff).ToString("x", CultureInfo.InvariantCulture).PadLeft(6, '0');
+
+        /// <summary>
+        /// Suffixes every <c>id</c> declaration and reference with the render's
+        /// random suffix so that multiple instances of the same avatar do not
+        /// collide in a shared document.
+        /// </summary>
+        /// <remarks>
+        /// The animation class and keyframe names carry the same suffix through
+        /// <see cref="AnimationHash"/>.
+        /// </remarks>
+        private string RandomizeIds(string svg)
         {
-            var suffix = NextRandom(0xffffff).ToString("x", CultureInfo.InvariantCulture).PadLeft(6, '0');
+            var suffix = RandomSuffix();
             var ids = new List<string>();
             var seen = new HashSet<string>(StringComparer.Ordinal);
 
@@ -1142,19 +1154,34 @@ namespace DiceBear.Internal
         /// must not select each other's rules, while identical renders sharing
         /// identical rules is harmless deduplication. <c>true</c> adds no name
         /// suffix, so enabling all animations hashes as before.
+        /// <para>
+        /// Everything else about an avatar stays out of the hash, so two
+        /// renders of the same style and seed that differ in any other option
+        /// would share their names with different rule bodies.
+        /// <c>idRandomization</c> is the way out of that collision, and it
+        /// reaches the animation names through this input rather than through
+        /// the id rewrite, which only knows <c>id</c>/<c>url(#…)</c>/<c>href</c>.
+        /// </para>
         /// </remarks>
         private string AnimationHash()
         {
-            var names = _resolver.Animation().Names;
-            var suffix = names is null
-                ? string.Empty
-                : ":" + string.Join(
-                    ",",
-                    names.Distinct().OrderBy(name => name, StringComparer.Ordinal));
+            if (_cachedAnimationHash is null)
+            {
+                var names = _resolver.Animation().Names;
+                var suffix = names is null
+                    ? string.Empty
+                    : ":" + string.Join(
+                        ",",
+                        names.Distinct().OrderBy(name => name, StringComparer.Ordinal));
 
-            return _cachedAnimationHash ??= Fnv1a.Hex(
-                (_style.MetaBlock().Source().Name() ?? string.Empty) + ":" + _resolver.Seed()
-                + ":" + Num.Format(_resolver.AnimationSpeed()) + suffix);
+                var random = _resolver.IdRandomization() ? ":" + RandomSuffix() : string.Empty;
+
+                _cachedAnimationHash = Fnv1a.Hex(
+                    (_style.MetaBlock().Source().Name() ?? string.Empty) + ":" + _resolver.Seed()
+                    + ":" + Num.Format(_resolver.AnimationSpeed()) + suffix + random);
+            }
+
+            return _cachedAnimationHash;
         }
 
         /// <summary>

@@ -63,6 +63,7 @@ export class Renderer {
   #cachedSeedHash?: string;
   #cachedInitials?: string;
   #cachedAnimationHash?: string;
+  #cachedRandomSuffix?: string;
   #keyframesCss: string[] = [];
   #animationCss: string[] = [];
   #keyframesByContent = new Map<string, string>();
@@ -255,15 +256,24 @@ export class Renderer {
   }
 
   /**
-   * Suffixes every `id` declaration and reference with a random hex string
-   * so that multiple instances of the same avatar do not collide in a shared
-   * document. Uses `Math.random()` intentionally — a PRNG-derived suffix
-   * would produce the same ID for the same seed.
+   * Returns the hex string that separates this render from every other one
+   * under `idRandomization`, drawn once and cached. Uses `Math.random()`
+   * intentionally — a PRNG-derived value would repeat for the same seed.
+   */
+  #randomSuffix(): string {
+    return (this.#cachedRandomSuffix ??= Math.floor(Math.random() * 0xffffff)
+      .toString(16)
+      .padStart(6, '0'));
+  }
+
+  /**
+   * Suffixes every `id` declaration and reference with the render's random
+   * suffix so that multiple instances of the same avatar do not collide in a
+   * shared document. The animation class and keyframe names carry the same
+   * suffix through {@link #animationHash}.
    */
   #randomizeIds(svg: string): string {
-    const suffix = Math.floor(Math.random() * 0xffffff)
-      .toString(16)
-      .padStart(6, '0');
+    const suffix = this.#randomSuffix();
     const ids = new Set<string>();
 
     for (const match of svg.matchAll(/\bid="([^"]+)"/g)) {
@@ -647,11 +657,20 @@ export class Renderer {
    * inlined on one page must not select each other's rules, while identical
    * renders sharing identical rules is harmless deduplication. `true` adds
    * no name suffix, so enabling all animations hashes as before.
+   *
+   * Everything else about an avatar stays out of the hash, so two renders of
+   * the same style and seed that differ in any other option would share their
+   * names with different rule bodies. `idRandomization` is the way out of that
+   * collision, and it reaches the animation names through this input rather
+   * than through the id rewrite, which only knows `id`/`url(#…)`/`href`.
    */
   #animationHash(): string {
     const selection = this.#resolver.animation();
     const names = Array.isArray(selection)
       ? ':' + [...new Set(selection)].sort().join(',')
+      : '';
+    const random = this.#resolver.idRandomization()
+      ? ':' + this.#randomSuffix()
       : '';
 
     return (this.#cachedAnimationHash ??= Fnv1a.hex(
@@ -660,7 +679,8 @@ export class Renderer {
         this.#resolver.seed() +
         ':' +
         Number.format(this.#resolver.animationSpeed()) +
-        names,
+        names +
+        random,
     ));
   }
 
