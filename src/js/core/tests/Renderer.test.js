@@ -1228,6 +1228,15 @@ describe('Renderer', () => {
       assert.ok(!withAnimations.includes('dba-'));
     });
 
+    it('should render statically for an empty name selection', () => {
+      // The HTTP API turns `?animation=` into an empty list, which has to
+      // mean the same as leaving the option out.
+      assert.equal(
+        new Avatar(new Style(squash), { animation: [] }).toString(),
+        new Avatar(new Style(squash)).toString(),
+      );
+    });
+
     it('should wrap each track in its own group, outermost first', () => {
       const svg = new Avatar(new Style(squash), { animation: true }).toString();
       const hash = hashOf(svg);
