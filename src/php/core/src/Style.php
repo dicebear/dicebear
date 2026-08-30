@@ -195,7 +195,7 @@ class Style
     /**
      * Verifies that every animation track lists its keyframes in strictly
      * ascending `at` order. The schema cannot express ordering between array
-     * items; step jumps are expressed with the `hold` easing rather than
+     * items. Step jumps are expressed with the `hold` easing rather than
      * duplicate positions.
      */
     private function validateAnimations(): void
@@ -261,7 +261,7 @@ class Style
 
     /**
      * Returns whether any element in the definition carries declarative
-     * animations. Computed once and cached; consumed by the options
+     * animations. Computed once and cached. Consumed by the options
      * descriptor to advertise the `animation` options only where they have an
      * effect.
      */
@@ -284,7 +284,7 @@ class Style
 
     /**
      * Returns the sorted distinct names of the definition's animation
-     * timelines. Computed once and cached; consumed by the options descriptor
+     * timelines. Computed once and cached. Consumed by the options descriptor
      * so tooling can offer the by-name form of the `animation` option. Sorted
      * so every port reports the same order regardless of how it walks the
      * definition.

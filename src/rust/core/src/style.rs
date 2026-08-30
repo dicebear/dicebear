@@ -128,14 +128,14 @@ impl Style {
     }
 
     /// Whether any element in the definition carries declarative animations.
-    /// Computed at construction; consumed by the options descriptor to
+    /// Computed at construction. Consumed by the options descriptor to
     /// advertise the `animation` options only where they have an effect.
     pub(crate) fn has_animations(&self) -> bool {
         self.has_animations
     }
 
     /// The sorted distinct names of the definition's animation timelines.
-    /// Computed at construction; consumed by the options descriptor so
+    /// Computed at construction. Consumed by the options descriptor so
     /// tooling can offer the by-name form of the `animation` option. Sorted
     /// so every port reports the same order regardless of how it walks the
     /// definition.
@@ -178,7 +178,7 @@ fn validate_aliases(components: Option<&IndexMap<String, RawComponent>>) -> Resu
 
 /// Verifies that every animation track lists its keyframes in strictly
 /// ascending `at` order — an ordering between array items the JSON Schema
-/// cannot express; step jumps are expressed with the `hold` easing rather
+/// cannot express. Step jumps are expressed with the `hold` easing rather
 /// than duplicate positions.
 fn validate_animations(def: &Definition) -> Result<(), Error> {
     let mut errors: Vec<String> = Vec::new();

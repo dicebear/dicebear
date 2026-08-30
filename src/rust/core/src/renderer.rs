@@ -21,7 +21,7 @@ use crate::style::{
 use crate::utils::{initials, license, number, xml};
 
 /// The canonical track order, outermost wrapper to innermost. It mirrors the
-/// usual translate → rotate → scale transform composition; every port must
+/// usual translate → rotate → scale transform composition. Every port must
 /// wrap in this exact order for the outputs to stay byte-identical.
 const TRACK_ORDER: [&str; 6] = [
     "translateX",
@@ -754,7 +754,7 @@ impl<'a> Renderer<'a> {
         let direction = direction_css(animation.direction());
         let fill = animation.fill();
 
-        // Only rotate and scale pivot around a point; translation and opacity
+        // Only rotate and scale pivot around a point. Translation and opacity
         // need no origin, so their rules skip the transform-box prefix.
         let origin_css = if track == "rotate" || track == "scaleX" || track == "scaleY" {
             let (x, y) = animation.origin();
@@ -777,7 +777,7 @@ impl<'a> Renderer<'a> {
         self.animation_class_counter += 1;
 
         // The name comes last in the shorthand so it can never be mistaken for
-        // a keyword; all seven tokens are always emitted so every port
+        // a keyword. All seven tokens are always emitted so every port
         // serializes the same string.
         self.animation_css.push(format!(
             ".{class_name}{{{origin_css}animation:{duration}s {} {delay}s {iterations} {direction} {fill} {keyframes_name}}}",
@@ -811,7 +811,7 @@ impl<'a> Renderer<'a> {
 /// with copies of the nearest keyframe so the resting value holds outside the
 /// keyframed span, matching Figma's hold semantics. A keyframe's easing shapes
 /// the segment to the next keyframe and is emitted only when it differs from
-/// the block default (the rule's timing function covers the rest); the last
+/// the block default (the rule's timing function covers the rest). The last
 /// keyframe has no following segment, so its easing is never emitted.
 fn keyframes_body(
     track: &str,
@@ -873,7 +873,7 @@ fn track_declaration(track: &str, value: f64) -> String {
     }
 }
 
-/// Serializes an easing to its CSS form. `hold` renders as `step-end`; the
+/// Serializes an easing to its CSS form. `hold` renders as `step-end`. The
 /// absent default is `linear`.
 fn easing_css(easing: Option<&Easing>) -> String {
     match easing {
@@ -898,7 +898,7 @@ fn easing_css(easing: Option<&Easing>) -> String {
 }
 
 /// Maps a definition direction to its CSS keyword (`alternateReverse` is the
-/// only one whose spellings differ); the absent default is `normal`.
+/// only one whose spellings differ). The absent default is `normal`.
 fn direction_css(direction: Option<&str>) -> &'static str {
     match direction {
         Some("reverse") => "reverse",

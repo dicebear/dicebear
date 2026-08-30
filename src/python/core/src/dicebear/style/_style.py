@@ -113,7 +113,7 @@ class Style:
         """Return whether any element in the definition carries declarative
         animations.
 
-        Computed once and cached; consumed by the options descriptor to
+        Computed once and cached. Consumed by the options descriptor to
         advertise the ``animation`` options only where they have an effect.
         """
         if self._has_animations is None:
@@ -134,7 +134,7 @@ class Style:
         """Return the sorted distinct names of the definition's animation
         timelines.
 
-        Computed once and cached; consumed by the options descriptor so
+        Computed once and cached. Consumed by the options descriptor so
         tooling can offer the by-name form of the ``animation`` option. Sorted
         so every port reports the same order regardless of how it walks the
         definition.
@@ -201,7 +201,7 @@ class Style:
         """Verify every animation track lists its keyframes in strictly
         ascending ``at`` order.
 
-        The schema cannot express ordering between array items; step jumps are
+        The schema cannot express ordering between array items. Step jumps are
         expressed with the ``hold`` easing rather than duplicate positions.
         """
         errors: list[ErrorDetail] = []

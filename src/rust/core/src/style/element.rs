@@ -51,7 +51,7 @@ pub(crate) struct Animation {
 
 impl Animation {
     /// The optional name grouping this timeline under a user-selectable
-    /// animation. Several timelines may share one name; a timeline without
+    /// animation. Several timelines may share one name. A timeline without
     /// one only plays when the `animation` option enables all animations.
     pub(crate) fn name(&self) -> Option<&str> {
         self.name.as_deref()

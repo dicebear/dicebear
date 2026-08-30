@@ -33,8 +33,8 @@ for (const file of fs.readdirSync(definitionsDir)) {
 
   avatarStyles[name] = {
     definitionUrl: style.id(),
-    // The string probe covers styles still on the deprecated CSS convention;
-    // it goes away once every animated style carries declarative animations.
+    // The string probe covers styles still on the deprecated CSS convention.
+    // It goes away once every animated style carries declarative animations.
     animated: style.hasAnimations() || rawDefinition.includes('@keyframes'),
     meta: {
       title: meta.source().name(),

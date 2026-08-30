@@ -269,7 +269,7 @@ namespace DiceBear
         /// <summary>
         /// Verifies that every animation track lists its keyframes in strictly
         /// ascending <c>at</c> order. The schema cannot express ordering
-        /// between array items; step jumps are expressed with the <c>hold</c>
+        /// between array items. Step jumps are expressed with the <c>hold</c>
         /// easing rather than duplicate positions.
         /// </summary>
         private void ValidateAnimations()
@@ -386,7 +386,7 @@ namespace DiceBear
 
         /// <summary>
         /// Returns whether any element in the definition carries declarative
-        /// animations. Computed once and cached; consumed by the options
+        /// animations. Computed once and cached. Consumed by the options
         /// descriptor to advertise the <c>animation</c> options only where
         /// they have an effect.
         /// </summary>
@@ -412,7 +412,7 @@ namespace DiceBear
 
         /// <summary>
         /// Returns the sorted distinct names of the definition's animation
-        /// timelines. Computed once and cached; consumed by the options
+        /// timelines. Computed once and cached. Consumed by the options
         /// descriptor so tooling can offer the by-name form of the
         /// <c>animation</c> option. Sorted so every port reports the same
         /// order regardless of how it walks the definition.

@@ -1659,7 +1659,7 @@ describe('Renderer', () => {
       });
       const svg = new Avatar(style, { animation: true }).toString();
 
-      // One def holds the wrapped rect; both <use> tags share it, so the
+      // One def holds the wrapped rect. Both <use> tags share it, so the
       // wrapper class and its CSS exist exactly once.
       assert.equal(svg.match(/<use /g).length, 2);
       assert.equal(svg.match(/class="dba-/g).length, 1);

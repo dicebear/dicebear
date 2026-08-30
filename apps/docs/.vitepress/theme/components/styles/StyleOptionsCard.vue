@@ -110,7 +110,7 @@ const badges = computed<BadgeConfig[]>(() => {
 
     case 'animation': {
       // The option takes `true`/`false` or a subset of the style's animation
-      // names; the names themselves are listed in the card body.
+      // names. The names themselves are listed in the card body.
       const bool = style('boolean');
       const result: BadgeConfig[] = [{ label: 'boolean', ...bool }];
       if (fieldValues.value.length > 0)

@@ -77,7 +77,7 @@ func (r *resolver) idRandomization() bool {
 
 // animation is deliberately PRNG-free — whether and what animates must not
 // depend on the seed. The snapshot records the raw normalized value (the
-// boolean switch, or the name list in user order); the returned selection is
+// boolean switch, or the name list in user order). The returned selection is
 // the interpreted view the renderer works with: true plays every timeline, a
 // name list only the timelines carrying one of those names.
 func (r *resolver) animation() animationSelection {

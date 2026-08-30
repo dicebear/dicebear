@@ -124,7 +124,7 @@ class OptionsDescriptor {
       result['animation'] = {
         'type': 'animation',
         // The style's animation timeline names. The option takes
-        // `true`/`false` or a subset of these values; an empty list means
+        // `true`/`false` or a subset of these values. An empty list means
         // every timeline is unnamed and only the boolean form has an effect.
         'values': _style.animationNames,
       };

@@ -23,7 +23,7 @@ from .utils.xml import Xml
 _ID_PATTERN = re.compile(r'(?<![A-Za-z0-9_])id="([^"]+)"')
 
 # The canonical track order, outermost wrapper to innermost. It mirrors the
-# usual translate → rotate → scale transform composition; every port must wrap
+# usual translate → rotate → scale transform composition. Every port must wrap
 # in this exact order for the outputs to stay byte-identical.
 _TRACK_ORDER = ("translateX", "translateY", "rotate", "scaleX", "scaleY", "opacity")
 
@@ -727,7 +727,7 @@ class Renderer:
         direction = _DIRECTION_CSS[animation.get("direction", "normal")]
         fill = animation.get("fill", "none")
 
-        # Only rotate and scale pivot around a point; translation and opacity
+        # Only rotate and scale pivot around a point. Translation and opacity
         # need no origin, so their rules skip the transform-box prefix.
         origin_css = ""
 
@@ -743,7 +743,7 @@ class Renderer:
         self._animation_class_counter += 1
 
         # The name comes last in the shorthand so it can never be mistaken for
-        # a keyword; all seven tokens are always emitted so every port
+        # a keyword. All seven tokens are always emitted so every port
         # serializes the same string.
         self._animation_css.append(
             f".{class_name}{{{origin_css}animation:{duration}s "
@@ -765,7 +765,7 @@ class Renderer:
         value holds outside the keyframed span, matching Figma's hold
         semantics. A keyframe's easing shapes the segment to the next keyframe
         and is emitted only when it differs from the block default (the rule's
-        timing function covers the rest); the last keyframe has no following
+        timing function covers the rest). The last keyframe has no following
         segment, so its easing is never emitted.
         """
         kf_list: list[dict[str, Any]] = list(keyframes)

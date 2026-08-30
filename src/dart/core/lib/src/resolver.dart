@@ -58,7 +58,7 @@ class Resolver {
   /// The animation selection. Deliberately without PRNG involvement — whether
   /// and what animates must not depend on the seed. The raw normalized value
   /// (the boolean, or the name list in user order) is what the memo records,
-  /// so the [resolved] snapshot keeps the user's shape; consumers work with
+  /// so the [resolved] snapshot keeps the user's shape. Consumers work with
   /// the [AnimationSelection] accessors.
   AnimationSelection animation() => AnimationSelection.from(
         _memo<Object>('animation', () => _options.animation() ?? false),

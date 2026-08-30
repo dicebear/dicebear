@@ -40,7 +40,7 @@ namespace DiceBear.Internal
 
         /// <summary>
         /// Whether a timeline carrying the given name plays. <c>true</c>
-        /// plays every timeline; a name selection plays only named timelines
+        /// plays every timeline. A name selection plays only named timelines
         /// carrying one of the selected names.
         /// </summary>
         internal bool Matches(string? name)

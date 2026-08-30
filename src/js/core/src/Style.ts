@@ -172,7 +172,7 @@ export class Style<D = unknown> {
   /**
    * Verifies that every animation track lists its keyframes in strictly
    * ascending `at` order. The schema cannot express ordering between array
-   * items; step jumps are expressed with the `hold` easing rather than
+   * items. Step jumps are expressed with the `hold` easing rather than
    * duplicate positions.
    */
   #validateAnimations(): void {
@@ -243,7 +243,7 @@ export class Style<D = unknown> {
 
   /**
    * Returns whether any element in the definition carries declarative
-   * animations. Computed once and cached; consumed by the options
+   * animations. Computed once and cached. Consumed by the options
    * descriptor to advertise the `animation` options only where they have an
    * effect.
    */
@@ -265,7 +265,7 @@ export class Style<D = unknown> {
 
   /**
    * Returns the sorted distinct names of the definition's animation
-   * timelines. Computed once and cached; consumed by the options descriptor
+   * timelines. Computed once and cached. Consumed by the options descriptor
    * so tooling can offer the by-name form of the `animation` option. Sorted
    * so every port reports the same order regardless of how it walks the
    * definition.
