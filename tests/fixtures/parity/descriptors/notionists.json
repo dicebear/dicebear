@@ -384,6 +384,64 @@
     "min": 0,
     "max": 100
   },
+  "inkColor": {
+    "type": "color",
+    "list": true
+  },
+  "inkColorFill": {
+    "type": "enum",
+    "values": [
+      "solid",
+      "linear",
+      "radial"
+    ],
+    "list": true
+  },
+  "inkColorFillStops": {
+    "type": "range",
+    "min": 2
+  },
+  "inkColorAngle": {
+    "type": "range",
+    "min": -360,
+    "max": 360
+  },
+  "inkColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
+  "paperColor": {
+    "type": "color",
+    "list": true
+  },
+  "paperColorFill": {
+    "type": "enum",
+    "values": [
+      "solid",
+      "linear",
+      "radial"
+    ],
+    "list": true
+  },
+  "paperColorFillStops": {
+    "type": "range",
+    "min": 2
+  },
+  "paperColorAngle": {
+    "type": "range",
+    "min": -360,
+    "max": 360
+  },
+  "paperColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
   "backgroundColor": {
     "type": "color",
     "list": true
