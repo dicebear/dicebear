@@ -339,7 +339,9 @@ export class Renderer {
       return '';
     }
 
-    const attrs = this.#renderAttributes(element.attributes());
+    const attrs = this.#renderAttributes(
+      this.#attributesWithoutAnimatedOpacity(element.attributes(), element),
+    );
     const children = this.#renderElements(element.children());
 
     if (children.length === 0) {
@@ -419,7 +421,10 @@ export class Renderer {
     }
 
     const transforms = this.#buildTransforms(component);
-    const userAttributes = element.attributes();
+    const userAttributes = this.#attributesWithoutAnimatedOpacity(
+      element.attributes(),
+      element,
+    );
     let mergedAttributes: StyleDefinitionAttributes | undefined =
       userAttributes;
 
@@ -660,6 +665,65 @@ export class Renderer {
   }
 
   /**
+   * Returns the animation blocks of an element that the `animation` option
+   * selects. The element check comes first: only styles that carry declarative
+   * animations may touch the option, so the resolved-options snapshot of every
+   * other avatar stays free of it.
+   */
+  #activeAnimations(element: Element): readonly StyleDefinitionAnimation[] {
+    const animations = element.animations();
+
+    if (animations.length === 0) {
+      return animations;
+    }
+
+    const selection = this.#resolver.animation();
+
+    // `true` plays every timeline. A name array plays only the timelines
+    // carrying one of those names, so unnamed timelines stay static then.
+    return selection === true
+      ? animations
+      : selection === false
+        ? []
+        : animations.filter(
+            (animation) =>
+              animation.name !== undefined &&
+              selection.includes(animation.name),
+          );
+  }
+
+  /**
+   * Strips the `opacity` attribute an animated opacity track takes over.
+   *
+   * A track writes the opacity the author means, not a factor on top of the
+   * element's own value: an element hidden with `opacity="0"` is a resting
+   * state the animation replaces, the way a CSS animation on the element
+   * itself would. The attribute therefore moves to the animating wrapper (see
+   * {@link #applyAnimations}), where the keyframes override it. With the
+   * animation off no wrapper exists and the attribute stays where it is.
+   */
+  #attributesWithoutAnimatedOpacity(
+    attributes: StyleDefinitionAttributes | undefined,
+    element: Element,
+  ): StyleDefinitionAttributes | undefined {
+    if (attributes?.opacity === undefined || element.animations().length === 0) {
+      return attributes;
+    }
+
+    const active = this.#activeAnimations(element);
+
+    if (!active.some((animation) => animation.tracks.opacity !== undefined)) {
+      return attributes;
+    }
+
+    const rest = { ...attributes };
+
+    delete rest.opacity;
+
+    return rest;
+  }
+
+  /**
    * Wraps an element's rendered markup in one `<g class="…">` per animation
    * track and queues the matching CSS. A no-op when the `animation` option is
    * off, the element carries no animations, or its markup rendered to nothing
@@ -668,47 +732,33 @@ export class Renderer {
    * Wrapper nesting is block 0 outermost, and within a block the canonical
    * track order (translate before rotate before scale, opacity innermost) —
    * the composition contract the Figma plugin maps onto node transforms.
+   *
+   * The element's own `opacity` rides on the innermost opacity wrapper as the
+   * resting value the keyframes then override.
    */
   #applyAnimations(markup: string, element: Element): string {
     if (markup.length === 0) {
       return markup;
     }
 
-    const animations = element.animations();
-
-    // The element check comes first: only styles that carry declarative
-    // animations may touch the `animation` option, so the resolved-options
-    // snapshot of every other avatar stays free of it.
-    if (animations.length === 0) {
-      return markup;
-    }
-
-    const selection = this.#resolver.animation();
-
-    // `true` plays every timeline. A name array plays only the timelines
-    // carrying one of those names, so unnamed timelines stay static then.
-    const active =
-      selection === true
-        ? animations
-        : selection === false
-          ? []
-          : animations.filter(
-              (animation) =>
-                animation.name !== undefined &&
-                selection.includes(animation.name),
-            );
+    const active = this.#activeAnimations(element);
 
     if (active.length === 0) {
       return markup;
     }
 
     const classes: string[] = [];
+    let opacityWrapper = -1;
 
     for (const animation of active) {
       for (const track of Renderer.#trackOrder) {
         const trackData = animation.tracks[track];
 
         if (trackData !== undefined) {
+          if (track === 'opacity') {
+            opacityWrapper = classes.length;
+          }
+
           classes.push(
             this.#buildAnimationCss(animation, track, trackData.keyframes),
           );
@@ -716,10 +766,16 @@ export class Renderer {
       }
     }
 
+    const restingOpacity = element.attributes()?.opacity;
     let result = markup;
 
     for (let i = classes.length - 1; i >= 0; i--) {
-      result = `<g class="${classes[i]}">${result}</g>`;
+      const opacity =
+        i === opacityWrapper && restingOpacity !== undefined
+          ? this.#renderAttributes({ opacity: restingOpacity })
+          : '';
+
+      result = `<g class="${classes[i]}"${opacity}>${result}</g>`;
     }
 
     return result;

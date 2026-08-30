@@ -351,7 +351,9 @@ class Renderer
             return '';
         }
 
-        $attrs = $this->renderAttributes($element->attributes());
+        $attrs = $this->renderAttributes(
+            $this->attributesWithoutAnimatedOpacity($element->attributes(), $element),
+        );
         $children = $this->renderElements($element->children());
 
         if (strlen($children) === 0) {
@@ -432,7 +434,7 @@ class Renderer
         }
 
         $transforms = $this->buildTransforms($component);
-        $userAttributes = $element->attributes();
+        $userAttributes = $this->attributesWithoutAnimatedOpacity($element->attributes(), $element);
         $mergedAttributes = $userAttributes;
 
         if (count($transforms) > 0) {
@@ -685,6 +687,74 @@ class Renderer
     }
 
     /**
+     * Returns the animation blocks of an element that the `animation` option
+     * selects. The element check comes first: only styles that carry
+     * declarative animations may touch the option, so the resolved-options
+     * snapshot of every other avatar stays free of it.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function activeAnimations(Element $element): array
+    {
+        $animations = $element->animations();
+
+        if (count($animations) === 0) {
+            return $animations;
+        }
+
+        $selection = $this->resolver->animation();
+
+        // `true` plays every timeline. A name list plays only the timelines
+        // carrying one of those names, so unnamed timelines stay static then.
+        if ($selection === true) {
+            return $animations;
+        }
+
+        if ($selection === false) {
+            return [];
+        }
+
+        return array_values(array_filter(
+            $animations,
+            static fn(array $animation) => isset($animation['name'])
+                && in_array($animation['name'], $selection, true),
+        ));
+    }
+
+    /**
+     * Strips the `opacity` attribute an animated opacity track takes over.
+     *
+     * A track writes the opacity the author means, not a factor on top of the
+     * element's own value: an element hidden with `opacity="0"` is a resting
+     * state the animation replaces, the way a CSS animation on the element
+     * itself would. The attribute therefore moves to the animating wrapper,
+     * where the keyframes override it. With the animation off no wrapper
+     * exists and the attribute stays where it is.
+     *
+     * @param array<string, mixed>|null $attributes
+     * @return array<string, mixed>|null
+     */
+    private function attributesWithoutAnimatedOpacity(?array $attributes, Element $element): ?array
+    {
+        // The element check comes first: only styles that carry declarative
+        // animations may touch the `animation` option, so the resolved-options
+        // snapshot of every other avatar stays free of it.
+        if (!isset($attributes['opacity']) || count($element->animations()) === 0) {
+            return $attributes;
+        }
+
+        foreach ($this->activeAnimations($element) as $animation) {
+            if (isset($animation['tracks']['opacity'])) {
+                unset($attributes['opacity']);
+
+                return $attributes;
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      * Wraps an element's rendered markup in one `<g class="…">` per animation
      * track and queues the matching CSS. A no-op when the `animation` option
      * is off, the element carries no animations, or its markup rendered to
@@ -693,6 +763,10 @@ class Renderer
      * Wrapper nesting is block 0 outermost, and within a block the canonical
      * track order (translate before rotate before scale, opacity innermost) —
      * the composition contract the Figma plugin maps onto node transforms.
+     *
+     * The element's own `opacity` rides on the innermost opacity wrapper as
+     * the resting value the keyframes then override.
+     *
      */
     private function applyAnimations(string $markup, Element $element): string
     {
@@ -700,51 +774,39 @@ class Renderer
             return $markup;
         }
 
-        $animations = $element->animations();
-
-        // The element check comes first: only styles that carry declarative
-        // animations may touch the `animation` option, so the resolved-options
-        // snapshot of every other avatar stays free of it.
-        if (count($animations) === 0) {
-            return $markup;
-        }
-
-        $selection = $this->resolver->animation();
-
-        // `true` plays every timeline. A name list plays only the timelines
-        // carrying one of those names, so unnamed timelines stay static then.
-        if ($selection === true) {
-            $active = $animations;
-        } elseif ($selection === false) {
-            $active = [];
-        } else {
-            $active = array_values(array_filter(
-                $animations,
-                static fn(array $animation) => isset($animation['name'])
-                    && in_array($animation['name'], $selection, true),
-            ));
-        }
+        $active = $this->activeAnimations($element);
 
         if (count($active) === 0) {
             return $markup;
         }
 
         $classes = [];
+        $opacityWrapper = -1;
 
         foreach ($active as $animation) {
             foreach (self::TRACK_ORDER as $track) {
                 $trackData = $animation['tracks'][$track] ?? null;
 
                 if ($trackData !== null) {
+                    if ($track === 'opacity') {
+                        $opacityWrapper = count($classes);
+                    }
+
                     $classes[] = $this->buildAnimationCss($animation, $track, $trackData['keyframes']);
                 }
             }
         }
 
+        $ownAttributes = $element->attributes();
+        $restingOpacity = $ownAttributes['opacity'] ?? null;
         $result = $markup;
 
         for ($i = count($classes) - 1; $i >= 0; $i--) {
-            $result = "<g class=\"{$classes[$i]}\">{$result}</g>";
+            $opacity = $i === $opacityWrapper && $restingOpacity !== null
+                ? $this->renderAttributes(['opacity' => $restingOpacity])
+                : '';
+
+            $result = "<g class=\"{$classes[$i]}\"{$opacity}>{$result}</g>";
         }
 
         return $result;

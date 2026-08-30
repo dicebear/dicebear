@@ -266,7 +266,7 @@ func (r *renderer) renderSvgElement(el *style.Element) (string, error) {
 		return "", nil
 	}
 
-	attrs, err := r.renderAttributes(&el.Attributes)
+	attrs, err := r.renderAttributes(r.attributesWithoutAnimatedOpacity(el))
 	if err != nil {
 		return "", err
 	}
@@ -330,14 +330,16 @@ func (r *renderer) renderComponentElement(el *style.Element) (string, error) {
 
 	transforms := r.buildTransforms(comp)
 
+	own := r.attributesWithoutAnimatedOpacity(el)
+
 	var merged *style.AttrList
 	if len(transforms) == 0 {
-		if !el.Attributes.IsEmpty() {
-			merged = &el.Attributes
+		if !own.IsEmpty() {
+			merged = own
 		}
 	} else {
 		userTransform := ""
-		if v, ok := el.Attributes.Get("transform"); ok && !v.IsRef() && v.Str() != "" {
+		if v, ok := own.Get("transform"); ok && !v.IsRef() && v.Str() != "" {
 			userTransform = v.Str()
 		}
 
@@ -348,7 +350,7 @@ func (r *renderer) renderComponentElement(el *style.Element) (string, error) {
 			allParts = transforms
 		}
 
-		m := el.Attributes.WithTransform(strings.Join(allParts, " "))
+		m := own.WithTransform(strings.Join(allParts, " "))
 		merged = &m
 	}
 

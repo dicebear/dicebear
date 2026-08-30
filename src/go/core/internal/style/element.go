@@ -138,6 +138,29 @@ func (a *AttrList) Get(key string) (DynValue, bool) {
 	return DynValue{}, false
 }
 
+// Without returns a copy of the attribute list with key removed, keeping the
+// order of the remaining attributes.
+func (a AttrList) Without(key string) AttrList {
+	out := AttrList{entries: make([]Attr, 0, len(a.entries))}
+	for _, e := range a.entries {
+		if e.Key != key {
+			out.entries = append(out.entries, e)
+		}
+	}
+	return out
+}
+
+// Only returns a list holding just the attribute for key, or an empty list
+// when the attribute is absent.
+func (a AttrList) Only(key string) AttrList {
+	for _, e := range a.entries {
+		if e.Key == key {
+			return AttrList{entries: []Attr{e}}
+		}
+	}
+	return AttrList{}
+}
+
 // WithTransform returns a copy of the attribute list with the transform
 // attribute set, updating it in place if it already exists (keeping its
 // position) or appending it — matching the JS object spread.

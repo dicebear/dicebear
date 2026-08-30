@@ -64,6 +64,9 @@ func (s animationSelection) matches(name string) bool {
 // Wrapper nesting is block 0 outermost, and within a block the canonical
 // track order (translate before rotate before scale, opacity innermost) — the
 // composition contract the Figma plugin maps onto node transforms.
+//
+// The element's own opacity rides on the innermost opacity wrapper as the
+// resting value the keyframes then override.
 func (r *renderer) applyAnimations(markup string, el *style.Element) string {
 	if markup == "" {
 		return markup
@@ -82,6 +85,7 @@ func (r *renderer) applyAnimations(markup string, el *style.Element) string {
 	}
 
 	var classes []string
+	opacityWrapper := -1
 	for i := range el.Animations {
 		animation := &el.Animations[i]
 
@@ -95,17 +99,74 @@ func (r *renderer) applyAnimations(markup string, el *style.Element) string {
 
 		for _, track := range animationTrackOrder {
 			if trackData, ok := animation.Tracks[track]; ok {
+				if track == "opacity" {
+					opacityWrapper = len(classes)
+				}
 				classes = append(classes, r.buildAnimationCss(animation, track, trackData.Keyframes))
+			}
+		}
+	}
+
+	restingOpacity := ""
+	if opacityWrapper >= 0 {
+		if _, ok := el.Attributes.Get("opacity"); ok {
+			only := el.Attributes.Only("opacity")
+			// The value comes from the same validated definition as every
+			// other attribute, so a render error here is impossible.
+			if attrs, err := r.renderAttributes(&only); err == nil {
+				restingOpacity = attrs
 			}
 		}
 	}
 
 	result := markup
 	for i := len(classes) - 1; i >= 0; i-- {
-		result = `<g class="` + classes[i] + `">` + result + "</g>"
+		opacity := ""
+		if i == opacityWrapper {
+			opacity = restingOpacity
+		}
+		result = `<g class="` + classes[i] + `"` + opacity + `>` + result + "</g>"
 	}
 
 	return result
+}
+
+// attributesWithoutAnimatedOpacity strips the opacity attribute an animated
+// opacity track takes over.
+//
+// A track writes the opacity the author means, not a factor on top of the
+// element's own value: an element hidden with opacity="0" is a resting state
+// the animation replaces, the way a CSS animation on the element itself would.
+// The attribute therefore moves to the animating wrapper, where the keyframes
+// override it. With the animation off no wrapper exists and the attribute
+// stays where it is.
+func (r *renderer) attributesWithoutAnimatedOpacity(el *style.Element) *style.AttrList {
+	attributes := &el.Attributes
+
+	// The element check comes first: only styles that carry declarative
+	// animations may touch the `animation` option, so the resolved-options
+	// snapshot of every other avatar stays free of it.
+	if _, ok := attributes.Get("opacity"); !ok || len(el.Animations) == 0 {
+		return attributes
+	}
+
+	selection := r.resolver.animation()
+	if selection.off() {
+		return attributes
+	}
+
+	for i := range el.Animations {
+		animation := &el.Animations[i]
+		if !selection.matches(animation.Name) {
+			continue
+		}
+		if _, ok := animation.Tracks["opacity"]; ok {
+			out := attributes.Without("opacity")
+			return &out
+		}
+	}
+
+	return attributes
 }
 
 // buildAnimationCss generates the @keyframes block (deduplicated by content,

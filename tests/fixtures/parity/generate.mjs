@@ -521,6 +521,38 @@ styles.declarative = {
         name: 'orbRight',
         attributes: { transform: 'translate(60, 0)' },
       },
+      // A layer hidden with its own opacity that its animation brings in: the
+      // attribute is the resting state the track replaces, so it moves to the
+      // animating wrapper instead of dimming the keyframes.
+      {
+        type: 'element',
+        name: 'rect',
+        attributes: {
+          x: '5',
+          y: '5',
+          width: '12',
+          height: '12',
+          fill: '#dd4477',
+          opacity: '0',
+        },
+        animations: [
+          {
+            name: 'reveal',
+            duration: 6,
+            easing: 'hold',
+            tracks: {
+              opacity: {
+                keyframes: [
+                  { at: 0, value: 0 },
+                  { at: 40, value: 1 },
+                  { at: 70, value: 0 },
+                  { at: 100, value: 0 },
+                ],
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   components: {
