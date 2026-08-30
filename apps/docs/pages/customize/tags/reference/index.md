@@ -1,17 +1,16 @@
 ---
 title: How DiceBear Tags Variants
 description: >
-  How DiceBear assigns variant tags to its own styles: the animation tags that
-  ship today, and the planned standard set for the character styles covering
-  mood, hair length, headwear, facial hair, eyewear, and accessory.
+  How DiceBear assigns variant tags to its own styles: the planned standard set
+  for the character styles covering mood, hair length, headwear, facial hair,
+  eyewear, and accessory.
 ---
 
 # How DiceBear tags variants
 
 DiceBear's own styles share one set of tags, so the [`tags`](/customize/tags/)
-filter behaves the same from one style to the next. Today only one category
-ships: the `animation` tag of the animated styles. The character categories
-further down arrive with an upcoming release.
+filter behaves the same from one style to the next. The categories below
+arrive with an upcoming release.
 
 DiceBear tags each variant by looking at how it renders, not at its name. Names
 are not always reliable. A hair variant called `long04` can turn out short once
@@ -34,21 +33,6 @@ A few principles keep the tags consistent:
 
 The tag grammar is `category` or `category:value`, each segment camelCase and
 alphanumeric. A variant holds at most 32 tags.
-
-## Animation
-
-The `animation` category covers the animation component of animated styles. It
-is a bare category without values: every animated variant carries the plain
-`animation` tag, and the static default variant carries no tag, so the animation
-stays off until you ask for it.
-
-- `['animation']` turns the animation on, at a random speed per seed.
-- `['!animation']` keeps the avatar static. A disallow wins, so it also
-  overrides an `animation` in the same list.
-
-The speed steps are variants, not traits, so they carry no value tags. To pin a
-speed, set the `animationVariant` option (e.g. `animationVariant: 'slow'`),
-which is more specific than the filter and always wins.
 
 ## Planned categories
 

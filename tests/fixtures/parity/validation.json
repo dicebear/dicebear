@@ -1595,6 +1595,333 @@
         }
       },
       "valid": true
+    },
+    {
+      "id": "animation-minimal",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "duration": 1,
+                  "tracks": {
+                    "opacity": {
+                      "keyframes": [
+                        {
+                          "at": 0,
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-named",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "name": "blink",
+                  "duration": 1,
+                  "tracks": {
+                    "opacity": {
+                      "keyframes": [
+                        {
+                          "at": 0,
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-name-bad-pattern",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "name": "Has-Dash",
+                  "duration": 1,
+                  "tracks": {
+                    "opacity": {
+                      "keyframes": [
+                        {
+                          "at": 0,
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-unknown-track",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "duration": 1,
+                  "tracks": {
+                    "skewX": {
+                      "keyframes": [
+                        {
+                          "at": 0,
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-at-out-of-range",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "duration": 1,
+                  "tracks": {
+                    "opacity": {
+                      "keyframes": [
+                        {
+                          "at": 101,
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-missing-duration",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "tracks": {
+                    "opacity": {
+                      "keyframes": [
+                        {
+                          "at": 0,
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-empty-tracks",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "duration": 1,
+                  "tracks": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-empty-array",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": []
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-descending-keyframes",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "duration": 1,
+                  "tracks": {
+                    "opacity": {
+                      "keyframes": [
+                        {
+                          "at": 50,
+                          "value": 1
+                        },
+                        {
+                          "at": 20,
+                          "value": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-duplicate-keyframes",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "animations": [
+                {
+                  "duration": 1,
+                  "tracks": {
+                    "opacity": {
+                      "keyframes": [
+                        {
+                          "at": 50,
+                          "value": 1
+                        },
+                        {
+                          "at": 50,
+                          "value": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-on-style-element",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "style",
+              "animations": [
+                {
+                  "duration": 1,
+                  "tracks": {
+                    "opacity": {
+                      "keyframes": [
+                        {
+                          "at": 0,
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
     }
   ],
   "options": [
@@ -1836,6 +2163,113 @@
       "options": {
         "backgroundColor\n": [
           "#ff0000"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-bool",
+      "options": {
+        "animation": true
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-string",
+      "options": {
+        "animation": "yes"
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-name-list",
+      "options": {
+        "animation": [
+          "look",
+          "blink"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-name-uppercase",
+      "options": {
+        "animation": "Blink"
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-name-empty-list",
+      "options": {
+        "animation": []
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-name-mixed-list",
+      "options": {
+        "animation": [
+          "blink",
+          "Bad"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-speed-valid",
+      "options": {
+        "animationSpeed": 2
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-speed-min",
+      "options": {
+        "animationSpeed": 0.1
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-speed-zero",
+      "options": {
+        "animationSpeed": 0
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-speed-too-large",
+      "options": {
+        "animationSpeed": 20
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-speed-range",
+      "options": {
+        "animationSpeed": [
+          0.5,
+          2
+        ]
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-speed-range-out-of-bounds",
+      "options": {
+        "animationSpeed": [
+          0,
+          2
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-speed-range-excess",
+      "options": {
+        "animationSpeed": [
+          0.5,
+          2,
+          4
         ]
       },
       "valid": false

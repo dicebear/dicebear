@@ -10,11 +10,12 @@ import (
 // definition. The same node type covers SVG elements, text, and component
 // references — Type discriminates between them.
 type Element struct {
-	Type       string    `json:"type"`
-	Name       *string   `json:"name"`
-	Value      *DynValue `json:"value"`
-	Attributes AttrList  `json:"attributes"`
-	Children   []Element `json:"children"`
+	Type       string      `json:"type"`
+	Name       *string     `json:"name"`
+	Value      *DynValue   `json:"value"`
+	Attributes AttrList    `json:"attributes"`
+	Animations []Animation `json:"animations"`
+	Children   []Element   `json:"children"`
 }
 
 // DynValue is an attribute or element value: a literal string, or a typed

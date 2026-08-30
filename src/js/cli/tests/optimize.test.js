@@ -112,6 +112,71 @@ describe('dicebear --optimize', () => {
     assert.equal(fs.readFileSync(file, 'utf-8'), once);
   });
 
+  it('carries declarative animations through the round-trip', () => {
+    const file = fixture('identicon');
+    const definition = read(file);
+
+    const pulse = [
+      {
+        duration: 3,
+        easing: 'easeInOut',
+        tracks: {
+          opacity: {
+            keyframes: [
+              { at: 0, value: 1 },
+              { at: 50, value: 0.3 },
+              { at: 100, value: 1 },
+            ],
+          },
+        },
+      },
+    ];
+
+    definition.canvas.elements.push({
+      name: 'g',
+      type: 'element',
+      animations: pulse,
+      children: [
+        // Two identical animated sibling paths: without the sibling-index
+        // prefix on the carrier attribute, mergePaths would fuse them into
+        // one element and halve the animation.
+        {
+          name: 'path',
+          type: 'element',
+          attributes: { d: 'M0 0h4v4H0z' },
+          animations: pulse,
+        },
+        {
+          name: 'path',
+          type: 'element',
+          attributes: { d: 'M0 0h4v4H0z' },
+          animations: pulse,
+        },
+      ],
+    });
+
+    fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
+
+    assert.equal(runCli([file, '--optimize']).status, 0);
+
+    const after = read(file);
+    const found = [];
+
+    walk(after, (element) => {
+      if (element.animations) {
+        found.push(element.animations);
+      }
+
+      assert.equal(element.attributes?.['data-dbanim'], undefined);
+    });
+
+    assert.equal(found.length, 3);
+
+    for (const animations of found) {
+      assert.deepEqual(animations, pulse);
+    }
+  });
+
   it('keeps the animation hooks of an animated style intact', () => {
     // The published @dicebear/styles may not ship an animated style yet, so
     // build the animation shape by hand: a childless marker group that only

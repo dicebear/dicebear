@@ -36,6 +36,15 @@ pub(crate) struct ComponentData {
     variants: IndexMap<String, ComponentVariant>,
 }
 
+impl ComponentData {
+    /// The variants of a base component, before alias resolution. Consumed by
+    /// the definition-level walks in `Style` (animation validation and
+    /// detection).
+    pub(crate) fn variants(&self) -> &IndexMap<String, ComponentVariant> {
+        &self.variants
+    }
+}
+
 pub(crate) struct Component {
     name: String,
     source_name: String,

@@ -27,6 +27,11 @@ export interface DefinitionElement {
   name?: string;
   value?: DefinitionElementValue;
   attributes?: Record<string, DefinitionAttributeValue>;
+  /**
+   * Declarative animation timelines. Opaque to the optimizer — the data is
+   * carried through the SVG round-trip untouched, never rewritten.
+   */
+  animations?: unknown[];
   children?: DefinitionElement[];
 }
 

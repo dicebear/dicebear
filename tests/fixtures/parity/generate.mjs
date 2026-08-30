@@ -248,6 +248,303 @@ styles.animated = {
 };
 writeJson(join('styles', 'animated.json'), styles.animated);
 
+// The 10.x transition shape: a style carrying BOTH the deprecated animation
+// component (`tags: 'animation'` / `animationVariant`) and declarative
+// `animations` on an element. Migrated styles ship exactly this coexistence
+// through 10.x, so the two mechanisms' independence is pinned: each option
+// drives only its own mechanism, and enabling both stacks them.
+styles.coexist = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      {
+        type: 'element',
+        name: 'g',
+        attributes: { class: 'dbco-face' },
+        animations: [
+          {
+            duration: 2,
+            tracks: {
+              translateY: {
+                keyframes: [
+                  { at: 0, value: 0 },
+                  { at: 50, value: -4 },
+                  { at: 100, value: 0 },
+                ],
+              },
+            },
+          },
+        ],
+        children: [tagRect('#123123')],
+      },
+      { type: 'component', name: 'animation' },
+    ],
+  },
+  components: {
+    animation: {
+      width: 100,
+      height: 100,
+      variants: {
+        none: { elements: [] },
+        medium: {
+          elements: [
+            { name: 'g', type: 'element', attributes: { class: 'dbco-medium' } },
+            {
+              name: 'style',
+              type: 'element',
+              children: [
+                {
+                  type: 'text',
+                  value:
+                    'svg:has(.dbco-medium){--dbco-p:running}' +
+                    '@media (prefers-reduced-motion: no-preference){' +
+                    '@keyframes dbcoBob{50%{transform:translateY(-2px)}}' +
+                    '.dbco-face{animation:dbcoBob 3s ease-in-out infinite;' +
+                    'animation-play-state:var(--dbco-p,paused)}}',
+                },
+              ],
+            },
+          ],
+          weight: 0,
+          tags: ['animation'],
+        },
+      },
+    },
+  },
+};
+writeJson(join('styles', 'coexist.json'), styles.coexist);
+
+// A synthetic style with declarative animations, pinning the renderer's CSS
+// generation for every port: canonical wrapper order across all six tracks,
+// endpoint padding, per-keyframe easings against a block default, keyframe
+// dedup by content (within the canvas, and between a canvas element and a
+// shared component def), multi-block elements with negative delays, finite
+// runs with direction and fill, non-center origins, animated component
+// references, and an alias referencing an internally animated variant twice.
+// The `animated` style above stays untouched — it pins the deprecated
+// convention's contract.
+//
+// The pulse block is attached to a canvas element AND to an element inside
+// the shared `orb` def: identical keyframes must collapse into one
+// `@keyframes` block.
+// Named so the by-name selection cases can pin that one name switches both
+// the canvas element and the def-internal element it shares keyframes with.
+const pulseBlock = {
+  name: 'pulse',
+  duration: 3,
+  tracks: {
+    opacity: {
+      keyframes: [
+        { at: 0, value: 1 },
+        { at: 50, value: 0.3 },
+        { at: 100, value: 1 },
+      ],
+    },
+  },
+};
+
+styles.declarative = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      // Two blocks on one element: a slow travel with a negative delay (the
+      // lava-lane shape) plus a squash pivoting at the bottom edge.
+      {
+        type: 'element',
+        name: 'g',
+        animations: [
+          {
+            name: 'travel',
+            duration: 58,
+            delay: -7,
+            easing: 'easeInOut',
+            tracks: {
+              translateY: {
+                keyframes: [
+                  { at: 0, value: 0 },
+                  { at: 50, value: -60 },
+                  { at: 100, value: 0 },
+                ],
+              },
+            },
+          },
+          {
+            name: 'squash',
+            duration: 29,
+            delay: -3.5,
+            origin: { x: 50, y: 100 },
+            tracks: {
+              scaleX: {
+                keyframes: [
+                  { at: 0, value: 1 },
+                  { at: 50, value: 1.06 },
+                  { at: 100, value: 1 },
+                ],
+              },
+              scaleY: {
+                keyframes: [
+                  { at: 0, value: 1 },
+                  { at: 50, value: 0.94 },
+                  { at: 100, value: 1 },
+                ],
+              },
+            },
+          },
+        ],
+        children: [
+          {
+            type: 'element',
+            name: 'rect',
+            attributes: {
+              x: '35',
+              y: '60',
+              width: '30',
+              height: '30',
+              fill: '#334455',
+            },
+          },
+        ],
+      },
+      // All six tracks on one element, with a bezier block default, endpoint
+      // padding (the translateX span starts at 20% and ends at 80%), a hold
+      // segment, named per-keyframe easings, and a second finite block.
+      {
+        type: 'element',
+        name: 'circle',
+        attributes: { cx: '50', cy: '30', r: '10', fill: '#996633' },
+        animations: [
+          {
+            duration: 2,
+            easing: { x1: 0.34, y1: 1.56, x2: 0.64, y2: 1 },
+            origin: { x: 25, y: 75 },
+            tracks: {
+              translateX: {
+                keyframes: [
+                  { at: 20, value: 0 },
+                  { at: 60, value: 12, easing: 'hold' },
+                  { at: 80, value: 4 },
+                ],
+              },
+              translateY: {
+                keyframes: [
+                  { at: 0, value: 0 },
+                  { at: 100, value: -6 },
+                ],
+              },
+              rotate: {
+                keyframes: [
+                  { at: 0, value: 0 },
+                  { at: 50, value: 180, easing: 'easeIn' },
+                  { at: 100, value: 360 },
+                ],
+              },
+              scaleX: {
+                keyframes: [
+                  { at: 0, value: 1 },
+                  { at: 100, value: 1.2 },
+                ],
+              },
+              scaleY: {
+                keyframes: [
+                  { at: 0, value: 1 },
+                  { at: 100, value: 0.8 },
+                ],
+              },
+              opacity: {
+                keyframes: [
+                  { at: 0, value: 1 },
+                  { at: 35, value: 0.4, easing: 'linear' },
+                  { at: 100, value: 1 },
+                ],
+              },
+            },
+          },
+          // The six-track block above stays unnamed on purpose: a by-name
+          // selection must leave it static.
+          {
+            name: 'tilt',
+            duration: 1.5,
+            iterations: 3,
+            direction: 'alternate',
+            fill: 'forwards',
+            easing: 'ease',
+            tracks: {
+              rotate: {
+                keyframes: [
+                  { at: 0, value: 0 },
+                  { at: 100, value: -15 },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      // Shares the pulse with the def-internal element below: one @keyframes.
+      {
+        type: 'element',
+        name: 'rect',
+        attributes: {
+          x: '5',
+          y: '5',
+          width: '10',
+          height: '10',
+          fill: '#aa3366',
+        },
+        animations: [pulseBlock],
+      },
+      // A component reference carrying its own animation wraps the <use>.
+      {
+        type: 'component',
+        name: 'orb',
+        animations: [
+          {
+            name: 'drift',
+            duration: 4,
+            direction: 'alternateReverse',
+            tracks: {
+              translateX: {
+                keyframes: [
+                  { at: 0, value: -8 },
+                  { at: 100, value: 8 },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      // The alias renders a second <use> of the same def; the def-internal
+      // animation exists once and animates both instances.
+      {
+        type: 'component',
+        name: 'orbRight',
+        attributes: { transform: 'translate(60, 0)' },
+      },
+    ],
+  },
+  components: {
+    orb: {
+      width: 20,
+      height: 20,
+      variants: {
+        a: {
+          elements: [
+            {
+              type: 'element',
+              name: 'circle',
+              attributes: { cx: '10', cy: '10', r: '8', fill: '#00aa88' },
+              animations: [pulseBlock],
+            },
+          ],
+        },
+      },
+    },
+    orbRight: { extends: 'orb' },
+  },
+};
+writeJson(join('styles', 'declarative.json'), styles.declarative);
+
 // ---------------------------------------------------------------------------
 // Fnv1a fixtures
 // ---------------------------------------------------------------------------
@@ -660,6 +957,17 @@ function attributeStyle(attributes) {
 const fillStyle = (fill) => attributeStyle({ fill });
 const hrefStyle = (href) => attributeStyle({ href });
 
+// A canvas holding one animated group, for the animation validation cases.
+function animatedStyle(animations) {
+  return {
+    canvas: {
+      width: 100,
+      height: 100,
+      elements: [{ type: 'element', name: 'g', animations }],
+    },
+  };
+}
+
 const styleValidationCases = [
   { id: 'minimal', definition: minimalStyle },
   {
@@ -796,6 +1104,125 @@ const styleValidationCases = [
     id: 'local-url-behind-no-break-space',
     definition: fillStyle('url\u00a0(\u00a0#local)'),
   },
+
+  // Declarative animations. The descending and duplicate keyframe cases are
+  // rejected by the cores' load-time order check, not by the schema \u2014 draft-07
+  // cannot express ordering between array items \u2014 so they pin that every port
+  // implements the check.
+  {
+    id: 'animation-minimal',
+    definition: animatedStyle([
+      {
+        duration: 1,
+        tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+      },
+    ]),
+  },
+  {
+    id: 'animation-named',
+    definition: animatedStyle([
+      {
+        name: 'blink',
+        duration: 1,
+        tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+      },
+    ]),
+  },
+  {
+    id: 'animation-name-bad-pattern',
+    definition: animatedStyle([
+      {
+        name: 'Has-Dash',
+        duration: 1,
+        tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+      },
+    ]),
+  },
+  {
+    id: 'animation-unknown-track',
+    definition: animatedStyle([
+      {
+        duration: 1,
+        tracks: { skewX: { keyframes: [{ at: 0, value: 1 }] } },
+      },
+    ]),
+  },
+  {
+    id: 'animation-at-out-of-range',
+    definition: animatedStyle([
+      {
+        duration: 1,
+        tracks: { opacity: { keyframes: [{ at: 101, value: 1 }] } },
+      },
+    ]),
+  },
+  {
+    id: 'animation-missing-duration',
+    definition: animatedStyle([
+      { tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } } },
+    ]),
+  },
+  {
+    id: 'animation-empty-tracks',
+    definition: animatedStyle([{ duration: 1, tracks: {} }]),
+  },
+  {
+    id: 'animation-empty-array',
+    definition: animatedStyle([]),
+  },
+  {
+    id: 'animation-descending-keyframes',
+    definition: animatedStyle([
+      {
+        duration: 1,
+        tracks: {
+          opacity: {
+            keyframes: [
+              { at: 50, value: 1 },
+              { at: 20, value: 0 },
+            ],
+          },
+        },
+      },
+    ]),
+  },
+  {
+    id: 'animation-duplicate-keyframes',
+    definition: animatedStyle([
+      {
+        duration: 1,
+        tracks: {
+          opacity: {
+            keyframes: [
+              { at: 50, value: 1 },
+              { at: 50, value: 0 },
+            ],
+          },
+        },
+      },
+    ]),
+  },
+  {
+    id: 'animation-on-style-element',
+    definition: {
+      canvas: {
+        width: 100,
+        height: 100,
+        elements: [
+          {
+            type: 'element',
+            name: 'style',
+            animations: [
+              {
+                duration: 1,
+                tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
 ];
 
 const optionsValidationCases = [
@@ -850,6 +1277,22 @@ const optionsValidationCases = [
     id: 'option-name-trailing-newline',
     options: { 'backgroundColor\n': ['#ff0000'] },
   },
+
+  // The animation options.
+  { id: 'animation-bool', options: { animation: true } },
+  // A bare string is a timeline name selection, so this is valid.
+  { id: 'animation-string', options: { animation: 'yes' } },
+  { id: 'animation-name-list', options: { animation: ['look', 'blink'] } },
+  { id: 'animation-name-uppercase', options: { animation: 'Blink' } },
+  { id: 'animation-name-empty-list', options: { animation: [] } },
+  { id: 'animation-name-mixed-list', options: { animation: ['blink', 'Bad'] } },
+  { id: 'animation-speed-valid', options: { animationSpeed: 2 } },
+  { id: 'animation-speed-min', options: { animationSpeed: 0.1 } },
+  { id: 'animation-speed-zero', options: { animationSpeed: 0 } },
+  { id: 'animation-speed-too-large', options: { animationSpeed: 20 } },
+  { id: 'animation-speed-range', options: { animationSpeed: [0.5, 2] } },
+  { id: 'animation-speed-range-out-of-bounds', options: { animationSpeed: [0, 2] } },
+  { id: 'animation-speed-range-excess', options: { animationSpeed: [0.5, 2, 4] } },
 ];
 
 // A style whose canvas uses color `a`, so resolving it walks the (circular)
@@ -1155,6 +1598,52 @@ const avatarFixtures = {
     { id: 'animation-bare-on-and-off', options: { seed: 'parity-1', tags: ['animation', '!animation'] } },
     // A bare include for a category no variant uses binds nothing.
     { id: 'animation-bare-unused', options: { seed: 'parity-1', tags: 'headwear' } },
+  ]),
+  declarative: avatarCases([
+    // The common cases above render this style with the option off, pinning
+    // that declarative animations leave the static output untouched.
+    { id: 'animation-on', options: { seed: 'parity-1', animation: true } },
+    {
+      id: 'animation-speed-fast',
+      options: { seed: 'parity-1', animation: true, animationSpeed: 2 },
+    },
+    {
+      id: 'animation-speed-slow',
+      options: { seed: 'parity-1', animation: true, animationSpeed: 0.5 },
+    },
+    // The range form draws a seeded speed via the keyed PRNG.
+    {
+      id: 'animation-speed-range',
+      options: { seed: 'parity-1', animation: true, animationSpeed: [0.5, 2] },
+    },
+    { id: 'animation-explicit-off', options: { seed: 'parity-1', animation: false } },
+    // By-name selections. `pulse` sits on a canvas element AND inside the
+    // shared orb def, so one name switches both while everything else stays
+    // static. The scalar form must resolve exactly like a one-element list.
+    { id: 'animation-name-scalar', options: { seed: 'parity-1', animation: 'pulse' } },
+    {
+      id: 'animation-name-list',
+      options: { seed: 'parity-1', animation: ['squash', 'tilt'] },
+    },
+    // The list order feeds the resolved options as given, while the class
+    // namespace hashes the sorted names: this render must byte-match
+    // `animation-name-list` except for the recorded option order.
+    {
+      id: 'animation-name-list-reversed',
+      options: { seed: 'parity-1', animation: ['tilt', 'squash'] },
+    },
+    // An unknown name matches nothing and renders the static output.
+    { id: 'animation-name-unknown', options: { seed: 'parity-1', animation: 'bounce' } },
+    // Names and speed both feed the class namespace hash.
+    {
+      id: 'animation-name-with-speed',
+      options: { seed: 'parity-1', animation: 'travel', animationSpeed: 2 },
+    },
+  ]),
+  coexist: avatarCases([
+    { id: 'legacy-on', options: { seed: 'parity-1', tags: 'animation' } },
+    { id: 'declarative-on', options: { seed: 'parity-1', animation: true } },
+    { id: 'both-on', options: { seed: 'parity-1', animation: true, tags: 'animation' } },
   ]),
 };
 

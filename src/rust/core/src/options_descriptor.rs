@@ -134,6 +134,20 @@ impl<'a> OptionsDescriptor<'a> {
             );
         }
 
+        // Only advertise the animation options when the style carries
+        // declarative animations — on a static style both are accepted but
+        // have no effect.
+        if self.style.has_animations() {
+            result.insert(
+                "animation".into(),
+                json!({ "type": "animation", "values": self.style.animation_names() }),
+            );
+            result.insert(
+                "animationSpeed".into(),
+                json!({ "type": "range", "min": 0.1, "max": 10 }),
+            );
+        }
+
         Value::Object(result)
     }
 }

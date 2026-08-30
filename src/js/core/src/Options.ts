@@ -77,6 +77,24 @@ export class Options<D = unknown> {
   }
 
   /**
+   * Returns the animation switch as given for booleans, and normalizes a
+   * single animation name to a one-element array.
+   */
+  animation(): boolean | readonly string[] | undefined {
+    const raw = this.#data.animation;
+
+    if (raw === undefined || typeof raw === 'boolean') {
+      return raw;
+    }
+
+    return this.#asArray(raw);
+  }
+
+  animationSpeed(): Range | undefined {
+    return this.#toRange(this.#data.animationSpeed);
+  }
+
+  /**
    * Returns the global `tags` filter as parsed tokens, or an empty array when
    * unset. Each raw token (`category` / `category:value`, optionally
    * `!`-prefixed to disallow) is decoded into `{ category, value?, negated }` so

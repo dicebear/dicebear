@@ -54,6 +54,22 @@ class Resolver:
             "idRandomization", lambda: self._options.id_randomization() or False
         )
 
+    def animation(self) -> bool | list[str]:
+        # Deliberately without PRNG involvement — whether and what animates
+        # must not depend on the seed. ``True`` plays every timeline, a name
+        # list only the timelines carrying one of those names. The memo keeps
+        # the raw option value (a boolean, or the list in user order), so it
+        # lands unchanged in the resolved() snapshot.
+        return self._memo("animation", self._resolve_animation)
+
+    def _resolve_animation(self) -> bool | list[str]:
+        raw = self._options.animation()
+
+        return False if raw is None else raw
+
+    def animation_speed(self) -> float:
+        return self._memo_float("animationSpeed", self._options.animation_speed(), 1.0)
+
     def title(self) -> str | None:
         return self._memo("title", self._options.title)
 

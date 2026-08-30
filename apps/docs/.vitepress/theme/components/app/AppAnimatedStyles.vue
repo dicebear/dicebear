@@ -64,7 +64,7 @@ const animatedStyles = computed(() =>
               :style-options="{
                 seed: style.seed,
                 size: 120,
-                animationVariant: 'medium',
+                animation: true,
               }"
               :alt="`Animated ${style.displayName} avatar`"
             />

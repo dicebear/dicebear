@@ -115,4 +115,14 @@ class OptionsDescriptor:
                 "open": True,
             }
 
+        # Only advertise the animation options when the style carries
+        # declarative animations — on a static style both are accepted but have
+        # no effect.
+        if self._style.has_animations():
+            result["animation"] = {
+                "type": "animation",
+                "values": list(self._style.animation_names()),
+            }
+            result["animationSpeed"] = {"type": "range", "min": 0.1, "max": 10}
+
         return result

@@ -48,6 +48,18 @@ namespace DiceBear.Internal
         internal bool IdRandomization() =>
             Memo("idRandomization", this, static self => self._options.IdRandomization() ?? false);
 
+        /// <summary>
+        /// The animation selection. Deliberately without PRNG involvement —
+        /// whether and what animates must not depend on the seed. The memo
+        /// keeps the raw option value (a boolean, or the name list as given)
+        /// for the resolved-options snapshot.
+        /// </summary>
+        internal AnimationSelection Animation() =>
+            AnimationSelection.From(
+                Memo("animation", this, static self => self._options.Animation() ?? (object)false));
+
+        internal double AnimationSpeed() => MemoFloat("animationSpeed", _options.AnimationSpeed(), 1.0);
+
         internal string? Title() => Memo("title", this, static self => self._options.Title());
 
         internal string Flip() =>

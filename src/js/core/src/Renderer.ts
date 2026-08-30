@@ -8,6 +8,10 @@ import type {
   StyleDefinitionAttributes,
   StyleDefinitionVariableReference,
   StyleDefinitionElementValue,
+  StyleDefinitionAnimation,
+  StyleDefinitionAnimationKeyframe,
+  StyleDefinitionAnimationTrackName,
+  StyleDefinitionEasing,
 } from './StyleDefinition.js';
 import type { StyleOptionsColorFillValue } from './StyleOptions.js';
 import { Fnv1a } from './Prng/Fnv1a.js';
@@ -23,11 +27,47 @@ import { Xml } from './Utils/Xml.js';
  * caches across method calls, so a fresh instance is required per avatar.
  */
 export class Renderer {
+  /**
+   * The canonical track order, outermost wrapper to innermost. It mirrors the
+   * usual translate → rotate → scale transform composition; every port must
+   * wrap in this exact order for the outputs to stay byte-identical.
+   */
+  static #trackOrder: readonly StyleDefinitionAnimationTrackName[] = [
+    'translateX',
+    'translateY',
+    'rotate',
+    'scaleX',
+    'scaleY',
+    'opacity',
+  ];
+
+  static #directionCss = {
+    normal: 'normal',
+    reverse: 'reverse',
+    alternate: 'alternate',
+    alternateReverse: 'alternate-reverse',
+  } as const;
+
+  static #easingKeywordCss = {
+    linear: 'linear',
+    ease: 'ease',
+    easeIn: 'ease-in',
+    easeOut: 'ease-out',
+    easeInOut: 'ease-in-out',
+    hold: 'step-end',
+  } as const;
+
   #style: Style;
   #resolver: Resolver;
   #defs = new Map<string, string>();
   #cachedSeedHash?: string;
   #cachedInitials?: string;
+  #cachedAnimationHash?: string;
+  #keyframesCss: string[] = [];
+  #animationCss: string[] = [];
+  #keyframesByContent = new Map<string, string>();
+  #keyframesCounter = 0;
+  #animationClassCounter = 0;
 
   constructor(style: Style, resolver: Resolver) {
     this.#style = style;
@@ -49,6 +89,8 @@ export class Renderer {
     body = this.#applyRotate(body, canvas);
     body = this.#applyTranslate(body, canvas);
     body = this.#applyBorderRadius(`${background}${body}`, canvas);
+
+    this.#registerAnimationStyle();
 
     const metadata = License.xml(this.#style.meta());
     const defs =
@@ -313,10 +355,10 @@ export class Renderer {
         return '';
       }
 
-      return `<${name}${attrs}/>`;
+      return this.#applyAnimations(`<${name}${attrs}/>`, element);
     }
 
-    return `<${name}${attrs}>${children}</${name}>`;
+    return this.#applyAnimations(`<${name}${attrs}>${children}</${name}>`, element);
   }
 
   /**
@@ -390,7 +432,7 @@ export class Renderer {
 
     const attrs = this.#renderAttributes(mergedAttributes);
 
-    return `<use${attrs} href="#${id}"/>`;
+    return this.#applyAnimations(`<use${attrs} href="#${id}"/>`, element);
   }
 
   /**
@@ -587,5 +629,246 @@ export class Renderer {
     return (this.#cachedSeedHash ??= Fnv1a.hex(
       (this.#style.meta().source().name() ?? '') + ':' + this.#resolver.seed(),
     ));
+  }
+
+  /**
+   * Returns the FNV-1a hex hash namespacing the animation class and keyframe
+   * names, cached after the first call. Extends the {@link #hashSeed} input
+   * with the animation speed and, for a by-name selection, the sorted names:
+   * two renders of the same avatar with different speeds or selections
+   * inlined on one page must not select each other's rules, while identical
+   * renders sharing identical rules is harmless deduplication. `true` adds
+   * no name suffix, so enabling all animations hashes as before.
+   */
+  #animationHash(): string {
+    const selection = this.#resolver.animation();
+    const names = Array.isArray(selection)
+      ? ':' + [...new Set(selection)].sort().join(',')
+      : '';
+
+    return (this.#cachedAnimationHash ??= Fnv1a.hex(
+      (this.#style.meta().source().name() ?? '') +
+        ':' +
+        this.#resolver.seed() +
+        ':' +
+        Number.format(this.#resolver.animationSpeed()) +
+        names,
+    ));
+  }
+
+  /**
+   * Wraps an element's rendered markup in one `<g class="…">` per animation
+   * track and queues the matching CSS. A no-op when the `animation` option is
+   * off, the element carries no animations, or its markup rendered to nothing
+   * (the empty-wrapper pruning then also prunes the animation).
+   *
+   * Wrapper nesting is block 0 outermost, and within a block the canonical
+   * track order (translate before rotate before scale, opacity innermost) —
+   * the composition contract the Figma plugin maps onto node transforms.
+   */
+  #applyAnimations(markup: string, element: Element): string {
+    if (markup.length === 0) {
+      return markup;
+    }
+
+    const animations = element.animations();
+
+    // The element check comes first: only styles that carry declarative
+    // animations may touch the `animation` option, so the resolved-options
+    // snapshot of every other avatar stays free of it.
+    if (animations.length === 0) {
+      return markup;
+    }
+
+    const selection = this.#resolver.animation();
+
+    // `true` plays every timeline. A name array plays only the timelines
+    // carrying one of those names, so unnamed timelines stay static then.
+    const active =
+      selection === true
+        ? animations
+        : selection === false
+          ? []
+          : animations.filter(
+              (animation) =>
+                animation.name !== undefined &&
+                selection.includes(animation.name),
+            );
+
+    if (active.length === 0) {
+      return markup;
+    }
+
+    const classes: string[] = [];
+
+    for (const animation of active) {
+      for (const track of Renderer.#trackOrder) {
+        const trackData = animation.tracks[track];
+
+        if (trackData !== undefined) {
+          classes.push(
+            this.#buildAnimationCss(animation, track, trackData.keyframes),
+          );
+        }
+      }
+    }
+
+    let result = markup;
+
+    for (let i = classes.length - 1; i >= 0; i--) {
+      result = `<g class="${classes[i]}">${result}</g>`;
+    }
+
+    return result;
+  }
+
+  /**
+   * Generates the `@keyframes` block (deduplicated by content, so identical
+   * tracks on many elements share one block) and the class rule for a single
+   * track, and returns the class name.
+   */
+  #buildAnimationCss(
+    animation: StyleDefinitionAnimation,
+    track: StyleDefinitionAnimationTrackName,
+    keyframes: readonly StyleDefinitionAnimationKeyframe[],
+  ): string {
+    const defaultEasing = animation.easing ?? 'linear';
+    const body = this.#keyframesBody(track, keyframes, defaultEasing);
+
+    let keyframesName = this.#keyframesByContent.get(body);
+
+    if (keyframesName === undefined) {
+      keyframesName = `dbk-${this.#animationHash()}-${this.#keyframesCounter++}`;
+
+      this.#keyframesByContent.set(body, keyframesName);
+      this.#keyframesCss.push(`@keyframes ${keyframesName}{${body}}`);
+    }
+
+    const speed = this.#resolver.animationSpeed();
+    const duration = Number.format(animation.duration / speed);
+    const delay = Number.format((animation.delay ?? 0) / speed);
+    const iterations =
+      animation.iterations === undefined || animation.iterations === 'infinite'
+        ? 'infinite'
+        : Number.format(animation.iterations);
+    const direction = Renderer.#directionCss[animation.direction ?? 'normal'];
+    const fill = animation.fill ?? 'none';
+
+    // Only rotate and scale pivot around a point; translation and opacity
+    // need no origin, so their rules skip the transform-box prefix.
+    const needsOrigin =
+      track === 'rotate' || track === 'scaleX' || track === 'scaleY';
+    const origin = animation.origin ?? { x: 50, y: 50 };
+    const originCss = needsOrigin
+      ? `transform-box:fill-box;transform-origin:${Number.format(origin.x)}% ${Number.format(origin.y)}%;`
+      : '';
+
+    const className = `dba-${this.#animationHash()}-${this.#animationClassCounter++}`;
+
+    // The name comes last in the shorthand so it can never be mistaken for a
+    // keyword; all seven tokens are always emitted so every port serializes
+    // the same string.
+    this.#animationCss.push(
+      `.${className}{${originCss}animation:${duration}s ${this.#easingCss(defaultEasing)} ${delay}s ${iterations} ${direction} ${fill} ${keyframesName}}`,
+    );
+
+    return className;
+  }
+
+  /**
+   * Serializes a track's keyframes to a `@keyframes` body. Endpoints are
+   * padded with copies of the nearest keyframe so the resting value holds
+   * outside the keyframed span, matching Figma's hold semantics. A keyframe's
+   * easing shapes the segment to the next keyframe and is emitted only when
+   * it differs from the block default (the rule's timing function covers the
+   * rest); the last keyframe has no following segment, so its easing is
+   * never emitted.
+   */
+  #keyframesBody(
+    track: StyleDefinitionAnimationTrackName,
+    keyframes: readonly StyleDefinitionAnimationKeyframe[],
+    defaultEasing: StyleDefinitionEasing,
+  ): string {
+    const list: StyleDefinitionAnimationKeyframe[] = [...keyframes];
+
+    if (list[0].at > 0) {
+      list.unshift({ at: 0, value: list[0].value });
+    }
+
+    const last = list[list.length - 1];
+
+    if (last.at < 100) {
+      list.push({ at: 100, value: last.value });
+    }
+
+    const defaultCss = this.#easingCss(defaultEasing);
+
+    return list
+      .map((keyframe, index) => {
+        const easingCss =
+          keyframe.easing !== undefined && index < list.length - 1
+            ? this.#easingCss(keyframe.easing)
+            : defaultCss;
+        const timing =
+          easingCss !== defaultCss
+            ? `;animation-timing-function:${easingCss}`
+            : '';
+
+        return `${Number.format(keyframe.at)}%{${this.#trackDeclaration(track, keyframe.value)}${timing}}`;
+      })
+      .join('');
+  }
+
+  /**
+   * Returns the CSS declaration animating one track at one keyframe value.
+   */
+  #trackDeclaration(
+    track: StyleDefinitionAnimationTrackName,
+    value: number,
+  ): string {
+    const v = Number.format(value);
+
+    switch (track) {
+      case 'translateX':
+        return `transform:translateX(${v}px)`;
+      case 'translateY':
+        return `transform:translateY(${v}px)`;
+      case 'rotate':
+        return `transform:rotate(${v}deg)`;
+      case 'scaleX':
+        return `transform:scaleX(${v})`;
+      case 'scaleY':
+        return `transform:scaleY(${v})`;
+      case 'opacity':
+        return `opacity:${v}`;
+    }
+  }
+
+  /**
+   * Serializes an easing to its CSS form. `hold` renders as `step-end`.
+   */
+  #easingCss(easing: StyleDefinitionEasing): string {
+    if (typeof easing === 'string') {
+      return Renderer.#easingKeywordCss[easing];
+    }
+
+    return `cubic-bezier(${Number.format(easing.x1)}, ${Number.format(easing.y1)}, ${Number.format(easing.x2)}, ${Number.format(easing.y2)})`;
+  }
+
+  /**
+   * Registers the accumulated animation CSS as a single `<style>` entry in
+   * the shared `<defs>` block, wrapped in a reduced-motion media query so
+   * users who prefer reduced motion get the static avatar. A no-op when no
+   * animation CSS was produced.
+   */
+  #registerAnimationStyle(): void {
+    if (this.#keyframesCss.length === 0) {
+      return;
+    }
+
+    this.#defs.set(
+      'animation-style',
+      `<style>@media (prefers-reduced-motion:no-preference){${this.#keyframesCss.join('')}${this.#animationCss.join('')}}</style>`,
+    );
   }
 }

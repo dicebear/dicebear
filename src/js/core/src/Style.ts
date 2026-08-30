@@ -4,6 +4,7 @@ import type {
   StyleDefinition,
   StyleDefinitionAttributes,
   StyleDefinitionComponent,
+  StyleDefinitionElement,
 } from './StyleDefinition.js';
 import { Meta } from './Style/Meta.js';
 import { Canvas } from './Style/Canvas.js';
@@ -23,6 +24,8 @@ export class Style<D = unknown> {
   #canvas?: Canvas;
   #components?: ReadonlyMap<string, Component>;
   #colors?: ReadonlyMap<string, Color>;
+  #hasAnimations?: boolean;
+  #animationNames?: readonly string[];
 
   constructor(data: D) {
     StyleValidator.validate(data);
@@ -30,6 +33,7 @@ export class Style<D = unknown> {
     this.#data = structuredClone(data) as StyleDefinition;
 
     this.#validateAliases();
+    this.#validateAnimations();
   }
 
   /**
@@ -163,6 +167,127 @@ export class Style<D = unknown> {
     data: StyleDefinitionComponent,
   ): data is Extract<StyleDefinitionComponent, { extends: string }> {
     return 'extends' in data;
+  }
+
+  /**
+   * Verifies that every animation track lists its keyframes in strictly
+   * ascending `at` order. The schema cannot express ordering between array
+   * items; step jumps are expressed with the `hold` easing rather than
+   * duplicate positions.
+   */
+  #validateAnimations(): void {
+    const errors: { instancePath: string; message: string }[] = [];
+
+    this.#visitElements((element, path) => {
+      element.animations?.forEach((animation, animationIndex) => {
+        for (const [trackName, track] of Object.entries(animation.tracks)) {
+          const keyframes = track.keyframes;
+
+          for (let i = 1; i < keyframes.length; i++) {
+            if (keyframes[i].at <= keyframes[i - 1].at) {
+              errors.push({
+                instancePath: `${path}/animations/${animationIndex}/tracks/${trackName}/keyframes/${i}/at`,
+                message: 'must be greater than the previous keyframe',
+              });
+            }
+          }
+        }
+      });
+    });
+
+    if (errors.length > 0) {
+      throw new StyleValidationError(errors);
+    }
+  }
+
+  /**
+   * Walks every element in the definition — the canvas tree and every
+   * component variant tree — and invokes `visit` with the element and its
+   * JSON pointer path.
+   */
+  #visitElements(
+    visit: (element: StyleDefinitionElement, path: string) => void,
+  ): void {
+    const walk = (
+      elements: readonly StyleDefinitionElement[],
+      path: string,
+    ): void => {
+      elements.forEach((element, index) => {
+        const elementPath = `${path}/${index}`;
+
+        visit(element, elementPath);
+
+        if (element.children) {
+          walk(element.children, `${elementPath}/children`);
+        }
+      });
+    };
+
+    walk(this.#data.canvas.elements, '/canvas/elements');
+
+    for (const [name, component] of Object.entries(
+      this.#data.components ?? {},
+    )) {
+      if (Style.#isAlias(component)) {
+        continue;
+      }
+
+      for (const [variantName, variant] of Object.entries(
+        component.variants,
+      )) {
+        walk(
+          variant.elements,
+          `/components/${name}/variants/${variantName}/elements`,
+        );
+      }
+    }
+  }
+
+  /**
+   * Returns whether any element in the definition carries declarative
+   * animations. Computed once and cached; consumed by the options
+   * descriptor to advertise the `animation` options only where they have an
+   * effect.
+   */
+  hasAnimations(): boolean {
+    if (this.#hasAnimations === undefined) {
+      let found = false;
+
+      this.#visitElements((element) => {
+        if (element.animations !== undefined && element.animations.length > 0) {
+          found = true;
+        }
+      });
+
+      this.#hasAnimations = found;
+    }
+
+    return this.#hasAnimations;
+  }
+
+  /**
+   * Returns the sorted distinct names of the definition's animation
+   * timelines. Computed once and cached; consumed by the options descriptor
+   * so tooling can offer the by-name form of the `animation` option. Sorted
+   * so every port reports the same order regardless of how it walks the
+   * definition.
+   */
+  animationNames(): readonly string[] {
+    if (this.#animationNames === undefined) {
+      const names = new Set<string>();
+
+      this.#visitElements((element) => {
+        for (const animation of element.animations ?? []) {
+          if (animation.name !== undefined) {
+            names.add(animation.name);
+          }
+        }
+      });
+
+      this.#animationNames = Array.from(names).sort();
+    }
+
+    return this.#animationNames;
   }
 
   /**

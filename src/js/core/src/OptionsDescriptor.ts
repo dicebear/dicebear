@@ -41,13 +41,22 @@ interface RangeField {
   readonly max?: number;
 }
 
+interface AnimationField {
+  readonly type: 'animation';
+  // The style's animation timeline names. The option takes `true`/`false` or
+  // a subset of these values; an empty list means every timeline is unnamed
+  // and only the boolean form has an effect.
+  readonly values: readonly string[];
+}
+
 export type FieldDescriptor =
   | StringField
   | NumberField
   | BooleanField
   | EnumField
   | ColorField
-  | RangeField;
+  | RangeField
+  | AnimationField;
 
 export type Descriptor = Record<string, FieldDescriptor>;
 
@@ -162,6 +171,16 @@ export class OptionsDescriptor {
         list: true,
         open: true,
       };
+    }
+
+    // Only advertise the animation options when the style carries declarative
+    // animations — on a static style both are accepted but have no effect.
+    if (this.#style.hasAnimations()) {
+      result.animation = {
+        type: 'animation',
+        values: this.#style.animationNames(),
+      };
+      result.animationSpeed = { type: 'range', min: 0.1, max: 10 };
     }
 
     return result;

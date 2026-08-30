@@ -5,7 +5,7 @@
 //! circular color reference encountered during resolution surfaces as an
 //! [`Error`] from [`Renderer::render`].
 
-use std::collections::HashSet;
+use std::collections::{BTreeSet, HashMap, HashSet};
 use std::hash::{BuildHasher, Hasher, RandomState};
 use std::sync::LazyLock;
 
@@ -15,8 +15,22 @@ use regex::Regex;
 use crate::error::Error;
 use crate::prng::fnv1a;
 use crate::resolver::Resolver;
-use crate::style::{Canvas, Component, DynValue, Element, Style};
+use crate::style::{
+    Animation, AnimationKeyframe, Canvas, Component, DynValue, Easing, Element, Style,
+};
 use crate::utils::{initials, license, number, xml};
+
+/// The canonical track order, outermost wrapper to innermost. It mirrors the
+/// usual translate → rotate → scale transform composition; every port must
+/// wrap in this exact order for the outputs to stay byte-identical.
+const TRACK_ORDER: [&str; 6] = [
+    "translateX",
+    "translateY",
+    "rotate",
+    "scaleX",
+    "scaleY",
+    "opacity",
+];
 
 pub struct Renderer<'a> {
     style: &'a Style,
@@ -24,6 +38,12 @@ pub struct Renderer<'a> {
     defs: IndexMap<String, String>,
     cached_seed_hash: Option<String>,
     cached_initials: Option<String>,
+    cached_animation_hash: Option<String>,
+    keyframes_css: Vec<String>,
+    animation_css: Vec<String>,
+    keyframes_by_content: HashMap<String, String>,
+    keyframes_counter: usize,
+    animation_class_counter: usize,
 }
 
 impl<'a> Renderer<'a> {
@@ -34,6 +54,12 @@ impl<'a> Renderer<'a> {
             defs: IndexMap::new(),
             cached_seed_hash: None,
             cached_initials: None,
+            cached_animation_hash: None,
+            keyframes_css: Vec::new(),
+            animation_css: Vec::new(),
+            keyframes_by_content: HashMap::new(),
+            keyframes_counter: 0,
+            animation_class_counter: 0,
         }
     }
 
@@ -53,6 +79,8 @@ impl<'a> Renderer<'a> {
         body = self.apply_rotate(body, canvas);
         body = self.apply_translate(body, canvas);
         body = self.apply_border_radius(format!("{background}{body}"), canvas);
+
+        self.register_animation_style();
 
         let metadata = license::xml(style.meta());
         let defs = if self.defs.is_empty() {
@@ -278,10 +306,10 @@ impl<'a> Renderer<'a> {
                 return Ok(String::new());
             }
 
-            return Ok(format!("<{name}{attrs}/>"));
+            return Ok(self.apply_animations(format!("<{name}{attrs}/>"), element));
         }
 
-        Ok(format!("<{name}{attrs}>{children}</{name}>"))
+        Ok(self.apply_animations(format!("<{name}{attrs}>{children}</{name}>"), element))
     }
 
     fn render_text_element(&mut self, element: &Element) -> String {
@@ -346,7 +374,7 @@ impl<'a> Renderer<'a> {
 
         let attrs = self.render_attributes(merged.as_ref())?;
 
-        Ok(format!("<use{attrs} href=\"#{id}\"/>"))
+        Ok(self.apply_animations(format!("<use{attrs} href=\"#{id}\"/>"), element))
     }
 
     /// The per-component `transform` fragments (translate, rotate, scale),
@@ -521,6 +549,288 @@ impl<'a> Renderer<'a> {
                 fnv1a::hex(&format!("{}:{}", source_name, self.resolver.seed()))
             })
             .clone()
+    }
+
+    /// Returns the FNV-1a hex hash namespacing the animation class and
+    /// keyframe names, cached after the first call. Extends the
+    /// [`Self::hash_seed`] input with the animation speed and, for a by-name
+    /// selection, the sorted names: two renders of the same avatar with
+    /// different speeds or selections inlined on one page must not select
+    /// each other's rules, while identical renders sharing identical rules is
+    /// harmless deduplication. `true` adds no name suffix, so enabling all
+    /// animations hashes as before.
+    fn animation_hash(&mut self) -> String {
+        self.cached_animation_hash
+            .get_or_insert_with(|| {
+                let source_name = self
+                    .style
+                    .meta()
+                    .and_then(|meta| meta.source().name())
+                    .unwrap_or("");
+                let selection = self.resolver.animation();
+                let names = match selection.names() {
+                    Some(names) => {
+                        let sorted: BTreeSet<&str> = names.iter().map(String::as_str).collect();
+
+                        format!(":{}", sorted.into_iter().collect::<Vec<_>>().join(","))
+                    }
+                    None => String::new(),
+                };
+
+                fnv1a::hex(&format!(
+                    "{}:{}:{}{}",
+                    source_name,
+                    self.resolver.seed(),
+                    number::format(self.resolver.animation_speed()),
+                    names
+                ))
+            })
+            .clone()
+    }
+
+    /// Wraps an element's rendered markup in one `<g class="…">` per animation
+    /// track and queues the matching CSS. A no-op when the `animation` option
+    /// is off, the element carries no animations, or its markup rendered to
+    /// nothing (the empty-wrapper pruning then also prunes the animation).
+    ///
+    /// Wrapper nesting is block 0 outermost, and within a block the canonical
+    /// track order (translate before rotate before scale, opacity innermost) —
+    /// the composition contract the Figma plugin maps onto node transforms.
+    fn apply_animations(&mut self, markup: String, element: &Element) -> String {
+        if markup.is_empty() {
+            return markup;
+        }
+
+        let animations = element.animations();
+
+        // The element check comes first: only styles that carry declarative
+        // animations may touch the `animation` option, so the resolved-options
+        // snapshot of every other avatar stays free of it.
+        if animations.is_empty() {
+            return markup;
+        }
+
+        let selection = self.resolver.animation();
+
+        if selection.off() {
+            return markup;
+        }
+
+        let mut classes: Vec<String> = Vec::new();
+
+        for animation in animations {
+            // `true` plays every timeline. A name selection plays only the
+            // timelines carrying one of those names, so unnamed timelines
+            // stay static then.
+            if !selection.matches(animation.name()) {
+                continue;
+            }
+
+            for track in TRACK_ORDER {
+                if let Some(track_data) = animation.tracks().get(track) {
+                    classes.push(self.build_animation_css(
+                        animation,
+                        track,
+                        track_data.keyframes(),
+                    ));
+                }
+            }
+        }
+
+        let mut result = markup;
+
+        for class in classes.iter().rev() {
+            result = format!("<g class=\"{class}\">{result}</g>");
+        }
+
+        result
+    }
+
+    /// Generates the `@keyframes` block (deduplicated by content, so identical
+    /// tracks on many elements share one block) and the class rule for a
+    /// single track, and returns the class name.
+    fn build_animation_css(
+        &mut self,
+        animation: &Animation,
+        track: &str,
+        keyframes: &[AnimationKeyframe],
+    ) -> String {
+        let body = keyframes_body(track, keyframes, animation.easing());
+
+        let keyframes_name = match self.keyframes_by_content.get(&body) {
+            Some(name) => name.clone(),
+            None => {
+                let name = format!("dbk-{}-{}", self.animation_hash(), self.keyframes_counter);
+
+                self.keyframes_counter += 1;
+                self.keyframes_css
+                    .push(format!("@keyframes {name}{{{body}}}"));
+                self.keyframes_by_content.insert(body, name.clone());
+                name
+            }
+        };
+
+        let speed = self.resolver.animation_speed();
+        let duration = number::format(animation.duration() / speed);
+        let delay = number::format(animation.delay() / speed);
+        let iterations = match animation.iterations() {
+            Some(count) => number::format(count),
+            None => "infinite".to_string(),
+        };
+        let direction = direction_css(animation.direction());
+        let fill = animation.fill();
+
+        // Only rotate and scale pivot around a point; translation and opacity
+        // need no origin, so their rules skip the transform-box prefix.
+        let origin_css = if track == "rotate" || track == "scaleX" || track == "scaleY" {
+            let (x, y) = animation.origin();
+
+            format!(
+                "transform-box:fill-box;transform-origin:{}% {}%;",
+                number::format(x),
+                number::format(y)
+            )
+        } else {
+            String::new()
+        };
+
+        let class_name = format!(
+            "dba-{}-{}",
+            self.animation_hash(),
+            self.animation_class_counter
+        );
+
+        self.animation_class_counter += 1;
+
+        // The name comes last in the shorthand so it can never be mistaken for
+        // a keyword; all seven tokens are always emitted so every port
+        // serializes the same string.
+        self.animation_css.push(format!(
+            ".{class_name}{{{origin_css}animation:{duration}s {} {delay}s {iterations} {direction} {fill} {keyframes_name}}}",
+            easing_css(animation.easing())
+        ));
+
+        class_name
+    }
+
+    /// Registers the accumulated animation CSS as a single `<style>` entry in
+    /// the shared `<defs>` block, wrapped in a reduced-motion media query so
+    /// users who prefer reduced motion get the static avatar. A no-op when no
+    /// animation CSS was produced.
+    fn register_animation_style(&mut self) {
+        if self.keyframes_css.is_empty() {
+            return;
+        }
+
+        self.defs.insert(
+            "animation-style".to_string(),
+            format!(
+                "<style>@media (prefers-reduced-motion:no-preference){{{}{}}}</style>",
+                self.keyframes_css.concat(),
+                self.animation_css.concat()
+            ),
+        );
+    }
+}
+
+/// Serializes a track's keyframes to a `@keyframes` body. Endpoints are padded
+/// with copies of the nearest keyframe so the resting value holds outside the
+/// keyframed span, matching Figma's hold semantics. A keyframe's easing shapes
+/// the segment to the next keyframe and is emitted only when it differs from
+/// the block default (the rule's timing function covers the rest); the last
+/// keyframe has no following segment, so its easing is never emitted.
+fn keyframes_body(
+    track: &str,
+    keyframes: &[AnimationKeyframe],
+    default_easing: Option<&Easing>,
+) -> String {
+    let mut list: Vec<(f64, f64, Option<&Easing>)> = keyframes
+        .iter()
+        .map(|keyframe| (keyframe.at(), keyframe.value(), keyframe.easing()))
+        .collect();
+
+    if let Some(&(at, value, _)) = list.first() {
+        if at > 0.0 {
+            list.insert(0, (0.0, value, None));
+        }
+    }
+
+    if let Some(&(at, value, _)) = list.last() {
+        if at < 100.0 {
+            list.push((100.0, value, None));
+        }
+    }
+
+    let default_css = easing_css(default_easing);
+    let mut body = String::new();
+
+    for (index, &(at, value, easing)) in list.iter().enumerate() {
+        let css = match easing {
+            Some(easing) if index < list.len() - 1 => easing_css(Some(easing)),
+            _ => default_css.clone(),
+        };
+        let timing = if css == default_css {
+            String::new()
+        } else {
+            format!(";animation-timing-function:{css}")
+        };
+
+        body.push_str(&format!(
+            "{}%{{{}{timing}}}",
+            number::format(at),
+            track_declaration(track, value)
+        ));
+    }
+
+    body
+}
+
+/// Returns the CSS declaration animating one track at one keyframe value.
+fn track_declaration(track: &str, value: f64) -> String {
+    let v = number::format(value);
+
+    match track {
+        "translateX" => format!("transform:translateX({v}px)"),
+        "translateY" => format!("transform:translateY({v}px)"),
+        "rotate" => format!("transform:rotate({v}deg)"),
+        "scaleX" => format!("transform:scaleX({v})"),
+        "scaleY" => format!("transform:scaleY({v})"),
+        _ => format!("opacity:{v}"),
+    }
+}
+
+/// Serializes an easing to its CSS form. `hold` renders as `step-end`; the
+/// absent default is `linear`.
+fn easing_css(easing: Option<&Easing>) -> String {
+    match easing {
+        Some(Easing::Keyword(keyword)) => match keyword.as_str() {
+            "ease" => "ease",
+            "easeIn" => "ease-in",
+            "easeOut" => "ease-out",
+            "easeInOut" => "ease-in-out",
+            "hold" => "step-end",
+            _ => "linear",
+        }
+        .to_string(),
+        Some(Easing::Bezier(bezier)) => format!(
+            "cubic-bezier({}, {}, {}, {})",
+            number::format(bezier.x1),
+            number::format(bezier.y1),
+            number::format(bezier.x2),
+            number::format(bezier.y2)
+        ),
+        None => "linear".to_string(),
+    }
+}
+
+/// Maps a definition direction to its CSS keyword (`alternateReverse` is the
+/// only one whose spellings differ); the absent default is `normal`.
+fn direction_css(direction: Option<&str>) -> &'static str {
+    match direction {
+        Some("reverse") => "reverse",
+        Some("alternate") => "alternate",
+        Some("alternateReverse") => "alternate-reverse",
+        _ => "normal",
     }
 }
 

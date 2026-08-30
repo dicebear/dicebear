@@ -31,14 +31,24 @@ const animatedStyles = computed(() =>
     .map(([slug]) => slug),
 );
 
-const speeds = ['none', 'slowest', 'slow', 'medium', 'fast', 'fastest'];
-const speed = ref('medium');
+const speeds = ['off', '0.5×', '0.75×', '1×', '1.5×', '2×'];
+const speed = ref('1×');
 const styleName = ref('planets');
 
-// "none" is the default, so the option is simply omitted in that case.
+const speedFactor = computed(() =>
+  speed.value === 'off' ? null : Number(speed.value.replace('×', '')),
+);
+
+// Static is the default, so the options are simply omitted in that case, and
+// a factor of 1 needs no `animationSpeed`.
 const demoOptions = computed(() => ({
   seed: DEMO_SEED,
-  ...(speed.value === 'none' ? {} : { animationVariant: speed.value }),
+  ...(speedFactor.value === null
+    ? {}
+    : {
+        animation: true,
+        ...(speedFactor.value === 1 ? {} : { animationSpeed: speedFactor.value }),
+      }),
 }));
 
 const apiUrl = computed(() =>
@@ -47,15 +57,20 @@ const apiUrl = computed(() =>
 
 const jsCode = computed(() => {
   const importName = camelCase(styleName.value);
-  const animationLine =
-    speed.value === 'none' ? '' : `\n  animationVariant: '${speed.value}',`;
+  const animationLines =
+    speedFactor.value === null
+      ? ''
+      : `\n  animation: true,` +
+        (speedFactor.value === 1
+          ? ''
+          : `\n  animationSpeed: ${speedFactor.value},`);
 
   return `import { Style, Avatar } from '@dicebear/core';
 import ${importName} from '@dicebear/styles/${styleName.value}.json' with { type: 'json' };
 
 const style = new Style(${importName});
 const svg = new Avatar(style, {
-  seed: '${DEMO_SEED}',${animationLine}
+  seed: '${DEMO_SEED}',${animationLines}
 }).toString();`;
 });
 </script>
@@ -69,9 +84,9 @@ const svg = new Avatar(style, {
     <UiContainer class="app-animated-demo-container">
       <UiSectionHeader
         class="app-animated-demo-header"
-        description="Animation is a regular variant option. Pick a speed from slowest to fastest, or leave it out for a static avatar."
+        description="Animation is one option away: switch it on and pace it with a free speed factor, or leave it out for a static avatar."
       >
-        <template #headline>One Option, <strong>Six Speeds</strong></template>
+        <template #headline>One Option, <strong>Any Speed</strong></template>
       </UiSectionHeader>
 
       <div class="app-animated-demo-window-wrapper">
@@ -142,9 +157,9 @@ const svg = new Avatar(style, {
         </UiWindow>
 
         <p class="app-animated-demo-note">
-          For a random speed per avatar, filter variants with
-          <a href="/customize/tags/"><code>tags=animation</code></a>
-          instead.
+          Every animation has a name. To play a single one, pass a list:
+          <a href="/customize/options/"><code>animation: ['blink']</code></a
+          >.
         </p>
       </div>
     </UiContainer>

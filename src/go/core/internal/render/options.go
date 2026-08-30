@@ -89,6 +89,29 @@ func (o *options) rotate() *prng.Range       { v, _ := o.get("rotate"); return t
 func (o *options) translateX() *prng.Range   { v, _ := o.get("translateX"); return toRange(v) }
 func (o *options) translateY() *prng.Range   { v, _ := o.get("translateY"); return toRange(v) }
 
+// animation returns the raw animation option in normalized form: the boolean
+// switch as given (bool), or the by-name selection as a []string in user order
+// (a bare name becomes a one-element list). The second return is false when
+// the option is unset.
+func (o *options) animation() (any, bool) {
+	v, ok := o.get("animation")
+	if !ok {
+		return nil, false
+	}
+	if b, ok := v.(bool); ok {
+		return b, true
+	}
+	if names := asStringArray(v); names != nil {
+		return names, true
+	}
+	return nil, false
+}
+
+func (o *options) animationSpeed() *prng.Range {
+	v, _ := o.get("animationSpeed")
+	return toRange(v)
+}
+
 // tags returns the global `tags` filter as parsed tokens, or an empty slice when
 // unset. Each raw token (`category` / `category:value`, optionally `!`-prefixed
 // to disallow) is decoded into a tagFilterToken so the resolver composes the

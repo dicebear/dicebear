@@ -19,15 +19,26 @@ import (
 // circular color reference encountered during resolution surfaces as an error
 // from render.
 type renderer struct {
-	style          *style.Style
-	resolver       *resolver
-	defs           *orderedDefs
-	cachedSeedHash *string
-	cachedInitials *string
+	style               *style.Style
+	resolver            *resolver
+	defs                *orderedDefs
+	cachedSeedHash      *string
+	cachedInitials      *string
+	cachedAnimationHash *string
+	keyframesCss        []string
+	animationCss        []string
+	keyframesByContent  map[string]string
+	keyframesCounter    int
+	animationCounter    int
 }
 
 func newRenderer(s *style.Style, res *resolver) *renderer {
-	return &renderer{style: s, resolver: res, defs: newOrderedDefs()}
+	return &renderer{
+		style:              s,
+		resolver:           res,
+		defs:               newOrderedDefs(),
+		keyframesByContent: map[string]string{},
+	}
 }
 
 // render builds the complete SVG document for the avatar.
@@ -50,6 +61,8 @@ func (r *renderer) render() (string, error) {
 	body = r.applyRotate(body, cv)
 	body = r.applyTranslate(body, cv)
 	body = r.applyBorderRadius(background+body, cv)
+
+	r.registerAnimationStyle()
 
 	metadata := licenseXML(r.style.Meta())
 
@@ -272,9 +285,9 @@ func (r *renderer) renderSvgElement(el *style.Element) (string, error) {
 			return "", nil
 		}
 
-		return "<" + name + attrs + "/>", nil
+		return r.applyAnimations("<"+name+attrs+"/>", el), nil
 	}
-	return "<" + name + attrs + ">" + children + "</" + name + ">", nil
+	return r.applyAnimations("<"+name+attrs+">"+children+"</"+name+">", el), nil
 }
 
 func (r *renderer) renderTextElement(el *style.Element) string {
@@ -344,7 +357,7 @@ func (r *renderer) renderComponentElement(el *style.Element) (string, error) {
 		return "", err
 	}
 
-	return "<use" + attrs + ` href="#` + id + `"/>`, nil
+	return r.applyAnimations("<use"+attrs+` href="#`+id+`"/>`, el), nil
 }
 
 // buildTransforms returns the per-component transform fragments (translate,

@@ -152,9 +152,9 @@
       "id": "animated",
       "name": "Animated",
       "summary": "Turns the style's built-in animation on.",
-      "description": "The style ships an animation component that is off by default. The `animation` tag switches it on and lets the seed pick a speed. It respects prefers-reduced-motion.",
+      "description": "The animation is off by default and `animation: true` switches it on. A list like `animation: ['lift']` plays just that one, and `animationSpeed` sets the pace. The motion respects prefers-reduced-motion.",
       "options": {
-        "tags": ["animation"]
+        "animation": true
       }
     }
   ]

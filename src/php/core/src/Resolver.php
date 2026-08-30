@@ -60,6 +60,20 @@ class Resolver
         return $this->memo('idRandomization', fn() => $this->options->idRandomization() ?? false);
     }
 
+    /** @return bool|list<string> */
+    public function animation(): bool|array
+    {
+        // Deliberately without PRNG involvement — whether and what animates
+        // must not depend on the seed. `true` plays every timeline, a name
+        // list only the timelines carrying one of those names.
+        return $this->memo('animation', fn() => $this->options->animation() ?? false);
+    }
+
+    public function animationSpeed(): float
+    {
+        return $this->memoFloat('animationSpeed', $this->options->animationSpeed(), 1.0);
+    }
+
     public function title(): ?string
     {
         return $this->memo('title', fn() => $this->options->title());

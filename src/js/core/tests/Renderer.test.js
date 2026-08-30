@@ -1168,4 +1168,495 @@ describe('Renderer', () => {
       assert.ok(svg.includes('&lt;script&gt;'));
     });
   });
+
+  describe('animations', () => {
+    // jelly's squash, reduced to two tracks. scaleX precedes scaleY in the
+    // canonical wrapper order, so class -0 is the outer wrapper.
+    const squash = {
+      canvas: {
+        width: 100,
+        height: 100,
+        elements: [
+          {
+            type: 'element',
+            name: 'g',
+            animations: [
+              {
+                duration: 5.4,
+                easing: 'easeOut',
+                origin: { x: 50, y: 100 },
+                tracks: {
+                  scaleX: {
+                    keyframes: [
+                      { at: 0, value: 1 },
+                      { at: 6, value: 1.07 },
+                      { at: 46, value: 1 },
+                    ],
+                  },
+                  scaleY: {
+                    keyframes: [
+                      { at: 0, value: 1 },
+                      { at: 6, value: 0.93 },
+                      { at: 46, value: 1 },
+                    ],
+                  },
+                },
+              },
+            ],
+            children: [{ type: 'element', name: 'rect' }],
+          },
+        ],
+      },
+    };
+
+    const hashOf = (svg) => {
+      const match = svg.match(/dba-([0-9a-f]+)-\d+/);
+
+      assert.ok(match, 'expected an animation class in the output');
+
+      return match[1];
+    };
+
+    it('should render statically without the animation option', () => {
+      const withAnimations = new Avatar(new Style(squash)).toString();
+      const stripped = structuredClone(squash);
+
+      delete stripped.canvas.elements[0].animations;
+
+      assert.equal(withAnimations, new Avatar(new Style(stripped)).toString());
+      assert.ok(!withAnimations.includes('@keyframes'));
+      assert.ok(!withAnimations.includes('dba-'));
+    });
+
+    it('should wrap each track in its own group, outermost first', () => {
+      const svg = new Avatar(new Style(squash), { animation: true }).toString();
+      const hash = hashOf(svg);
+
+      assert.ok(
+        svg.includes(
+          `<g class="dba-${hash}-0"><g class="dba-${hash}-1"><g><rect/></g></g></g>`,
+        ),
+      );
+    });
+
+    it('should emit padded keyframes and the full animation shorthand', () => {
+      const svg = new Avatar(new Style(squash), { animation: true }).toString();
+      const hash = hashOf(svg);
+
+      assert.ok(
+        svg.includes(
+          `@keyframes dbk-${hash}-0{0%{transform:scaleX(1)}6%{transform:scaleX(1.07)}46%{transform:scaleX(1)}100%{transform:scaleX(1)}}`,
+        ),
+      );
+      assert.ok(
+        svg.includes(
+          `.dba-${hash}-0{transform-box:fill-box;transform-origin:50% 100%;animation:5.4s ease-out 0s infinite normal none dbk-${hash}-0}`,
+        ),
+      );
+      assert.ok(
+        svg.includes('<style>@media (prefers-reduced-motion:no-preference){'),
+      );
+    });
+
+    it('should divide durations and delays by the animation speed', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'rect',
+              animations: [
+                {
+                  duration: 5,
+                  delay: -1,
+                  tracks: {
+                    translateY: { keyframes: [{ at: 0, value: 0 }] },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });
+      const svg = new Avatar(style, {
+        animation: true,
+        animationSpeed: 2,
+      }).toString();
+
+      assert.ok(svg.includes('animation:2.5s linear -0.5s infinite'));
+    });
+
+    it('should include the animation speed in the class namespace', () => {
+      const base = new Avatar(new Style(squash), { animation: true });
+      const fast = new Avatar(new Style(squash), {
+        animation: true,
+        animationSpeed: 2,
+      });
+
+      assert.notEqual(hashOf(base.toString()), hashOf(fast.toString()));
+    });
+
+    describe('named selection', () => {
+      // One named block per element plus an unnamed one, so every selection
+      // form has something to include and something to skip.
+      const named = {
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'rect',
+              animations: [
+                {
+                  name: 'sway',
+                  duration: 1,
+                  tracks: {
+                    rotate: {
+                      keyframes: [
+                        { at: 0, value: 0 },
+                        { at: 100, value: 4 },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+            {
+              type: 'element',
+              name: 'circle',
+              animations: [
+                {
+                  name: 'blink',
+                  duration: 2,
+                  tracks: {
+                    scaleY: {
+                      keyframes: [
+                        { at: 0, value: 1 },
+                        { at: 50, value: 0.1 },
+                      ],
+                    },
+                  },
+                },
+                {
+                  duration: 3,
+                  tracks: {
+                    opacity: {
+                      keyframes: [
+                        { at: 0, value: 1 },
+                        { at: 50, value: 0.5 },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      it('should render only the timelines carrying a selected name', () => {
+        const svg = new Avatar(new Style(named), {
+          animation: 'blink',
+        }).toString();
+
+        assert.equal(svg.match(/animation:/g).length, 1);
+        assert.ok(svg.includes('scaleY'));
+        assert.ok(!svg.includes('rotate('));
+        assert.ok(!svg.includes('opacity:'));
+        assert.ok(!svg.includes('<g class="dba-') || svg.includes('scaleY'));
+      });
+
+      it('should combine several selected names', () => {
+        const svg = new Avatar(new Style(named), {
+          animation: ['sway', 'blink'],
+        }).toString();
+
+        assert.equal(svg.match(/animation:/g).length, 2);
+        assert.ok(svg.includes('rotate('));
+        assert.ok(svg.includes('scaleY'));
+        assert.ok(!svg.includes('opacity:'));
+      });
+
+      it('should play unnamed timelines only with the boolean form', () => {
+        const svg = new Avatar(new Style(named), { animation: true }).toString();
+
+        assert.equal(svg.match(/animation:/g).length, 3);
+        assert.ok(svg.includes('opacity:'));
+      });
+
+      it('should stay static for a name the style does not carry', () => {
+        const selected = new Avatar(new Style(named), {
+          animation: 'bounce',
+        }).toString();
+        const off = new Avatar(new Style(named)).toString();
+
+        assert.equal(selected, off);
+      });
+
+      it('should record the normalized selection in the resolved options', () => {
+        assert.deepEqual(
+          new Avatar(new Style(named), { animation: 'blink' }).toJSON().options
+            .animation,
+          ['blink'],
+        );
+        assert.deepEqual(
+          new Avatar(new Style(named), { animation: ['sway', 'blink'] }).toJSON()
+            .options.animation,
+          ['sway', 'blink'],
+        );
+      });
+
+      it('should include the sorted selection in the class namespace', () => {
+        const all = new Avatar(new Style(named), { animation: true }).toString();
+        const one = new Avatar(new Style(named), {
+          animation: 'blink',
+        }).toString();
+        const both = new Avatar(new Style(named), {
+          animation: ['sway', 'blink'],
+        }).toString();
+        const bothReversed = new Avatar(new Style(named), {
+          animation: ['blink', 'sway'],
+        }).toString();
+        const hashOfNamed = (svg) => svg.match(/dba-([0-9a-f]+)-\d+/)[1];
+
+        assert.notEqual(hashOfNamed(all), hashOfNamed(one));
+        assert.notEqual(hashOfNamed(one), hashOfNamed(both));
+        assert.equal(hashOfNamed(both), hashOfNamed(bothReversed));
+      });
+    });
+
+    it('should deduplicate identical keyframes across elements', () => {
+      const track = {
+        keyframes: [
+          { at: 0, value: 0 },
+          { at: 100, value: 10 },
+        ],
+      };
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'rect',
+              animations: [{ duration: 1, tracks: { translateX: track } }],
+            },
+            {
+              type: 'element',
+              name: 'circle',
+              animations: [{ duration: 2, tracks: { translateX: track } }],
+            },
+          ],
+        },
+      });
+      const svg = new Avatar(style, { animation: true }).toString();
+
+      assert.equal(svg.match(/@keyframes/g).length, 1);
+      assert.equal(svg.match(/animation:/g).length, 2);
+    });
+
+    it('should emit per-keyframe easings only when they differ', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'rect',
+              animations: [
+                {
+                  duration: 1,
+                  easing: 'easeOut',
+                  tracks: {
+                    opacity: {
+                      keyframes: [
+                        { at: 0, value: 1, easing: 'hold' },
+                        {
+                          at: 50,
+                          value: 0.2,
+                          easing: { x1: 0.3, y1: 0, x2: 0.7, y2: 1 },
+                        },
+                        // easeOut matches the block default: not emitted.
+                        { at: 80, value: 0.5, easing: 'easeOut' },
+                        // The last keyframe has no segment: never emitted.
+                        { at: 100, value: 1, easing: 'hold' },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });
+      const svg = new Avatar(style, { animation: true }).toString();
+
+      assert.ok(
+        svg.includes('0%{opacity:1;animation-timing-function:step-end}'),
+      );
+      assert.ok(
+        svg.includes(
+          '50%{opacity:0.2;animation-timing-function:cubic-bezier(0.3, 0, 0.7, 1)}',
+        ),
+      );
+      assert.ok(svg.includes('80%{opacity:0.5}'));
+      assert.ok(svg.includes('100%{opacity:1}'));
+      assert.ok(!svg.includes('100%{opacity:1;'));
+    });
+
+    it('should serialize iterations, direction, and fill', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'rect',
+              animations: [
+                {
+                  duration: 1,
+                  iterations: 2,
+                  direction: 'alternateReverse',
+                  fill: 'forwards',
+                  tracks: { rotate: { keyframes: [{ at: 0, value: 0 }] } },
+                },
+              ],
+            },
+          ],
+        },
+      });
+      const svg = new Avatar(style, { animation: true }).toString();
+
+      assert.ok(svg.includes('animation:1s linear 0s 2 alternate-reverse forwards'));
+    });
+
+    it('should animate component references via a wrapped use', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'component',
+              name: 'shape',
+              animations: [
+                {
+                  duration: 1,
+                  tracks: { rotate: { keyframes: [{ at: 0, value: 0 }] } },
+                },
+              ],
+            },
+          ],
+        },
+        components: {
+          shape: {
+            width: 20,
+            height: 20,
+            variants: { a: { elements: [{ type: 'element', name: 'rect' }] } },
+          },
+        },
+      });
+      const svg = new Avatar(style, { animation: true }).toString();
+
+      assert.match(svg, /<g class="dba-[0-9a-f]+-0"><use href="#shape-a-[0-9a-f]+"\/><\/g>/);
+    });
+
+    it('should share one animated def between two references', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            { type: 'component', name: 'shape' },
+            { type: 'component', name: 'shapeRight' },
+          ],
+        },
+        components: {
+          shape: {
+            width: 20,
+            height: 20,
+            variants: {
+              a: {
+                elements: [
+                  {
+                    type: 'element',
+                    name: 'rect',
+                    animations: [
+                      {
+                        duration: 1,
+                        tracks: {
+                          translateY: { keyframes: [{ at: 0, value: 0 }] },
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+          shapeRight: { extends: 'shape' },
+        },
+      });
+      const svg = new Avatar(style, { animation: true }).toString();
+
+      // One def holds the wrapped rect; both <use> tags share it, so the
+      // wrapper class and its CSS exist exactly once.
+      assert.equal(svg.match(/<use /g).length, 2);
+      assert.equal(svg.match(/class="dba-/g).length, 1);
+      assert.equal(svg.match(/@keyframes/g).length, 1);
+    });
+
+    it('should prune animations together with empty wrappers', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'g',
+              animations: [
+                {
+                  duration: 1,
+                  tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+                },
+              ],
+              children: [{ type: 'component', name: 'maybe' }],
+            },
+          ],
+        },
+        components: {
+          maybe: {
+            width: 20,
+            height: 20,
+            probability: 0,
+            variants: { a: { elements: [{ type: 'element', name: 'rect' }] } },
+          },
+        },
+      });
+      const svg = new Avatar(style, { animation: true }).toString();
+
+      assert.ok(!svg.includes('dba-'));
+      assert.ok(!svg.includes('<style>'));
+    });
+
+    it('should leave animation classes alone under idRandomization', () => {
+      const svg = new Avatar(new Style(squash), {
+        animation: true,
+        idRandomization: true,
+      }).toString();
+      const hash = hashOf(svg);
+
+      // The class attribute and the CSS rule still reference the same names.
+      assert.ok(svg.includes(`<g class="dba-${hash}-0">`));
+      assert.ok(svg.includes(`.dba-${hash}-0{`));
+      assert.ok(svg.includes(`@keyframes dbk-${hash}-0{`));
+    });
+  });
 });

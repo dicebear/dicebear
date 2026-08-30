@@ -85,6 +85,21 @@ class Options {
 
   Range? translateY() => _toRange(_get('translateY'));
 
+  /// Returns the animation switch as given for booleans, and normalizes a
+  /// single animation name to a one-element list (a list of names passes
+  /// through in user order). `null` when unset.
+  Object? animation() {
+    final value = _get('animation');
+
+    if (value == null || value is bool) {
+      return value;
+    }
+
+    return _asStringArray(value);
+  }
+
+  Range? animationSpeed() => _toRange(_get('animationSpeed'));
+
   /// Returns the global `tags` filter as parsed tokens, or an empty list when
   /// unset. Each raw token (`category` / `category:value`, optionally
   /// `!`-prefixed to disallow) is decoded into a [TagFilterToken] so the

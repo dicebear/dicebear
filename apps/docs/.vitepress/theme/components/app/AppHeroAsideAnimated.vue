@@ -36,7 +36,8 @@ const tiles = [
         :style-options="{
           seed: tile.seed,
           size: 160,
-          animationVariant: 'fast',
+          animation: true,
+          animationSpeed: 1.1,
         }"
         :alt="`Animated ${tile.styleName} avatar`"
       />

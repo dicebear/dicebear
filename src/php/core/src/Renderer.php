@@ -22,12 +22,51 @@ use DiceBear\Utils\Xml;
  */
 class Renderer
 {
+    /**
+     * The canonical track order, outermost wrapper to innermost. It mirrors
+     * the usual translate → rotate → scale transform composition; every port
+     * must wrap in this exact order for the outputs to stay byte-identical.
+     */
+    private const TRACK_ORDER = [
+        'translateX',
+        'translateY',
+        'rotate',
+        'scaleX',
+        'scaleY',
+        'opacity',
+    ];
+
+    private const DIRECTION_CSS = [
+        'normal' => 'normal',
+        'reverse' => 'reverse',
+        'alternate' => 'alternate',
+        'alternateReverse' => 'alternate-reverse',
+    ];
+
+    private const EASING_KEYWORD_CSS = [
+        'linear' => 'linear',
+        'ease' => 'ease',
+        'easeIn' => 'ease-in',
+        'easeOut' => 'ease-out',
+        'easeInOut' => 'ease-in-out',
+        'hold' => 'step-end',
+    ];
+
     private Style $style;
     private Resolver $resolver;
     /** @var array<string, string> */
     private array $defs = [];
     private ?string $cachedSeedHash = null;
     private ?string $cachedInitials = null;
+    private ?string $cachedAnimationHash = null;
+    /** @var list<string> */
+    private array $keyframesCss = [];
+    /** @var list<string> */
+    private array $animationCss = [];
+    /** @var array<string, string> */
+    private array $keyframesByContent = [];
+    private int $keyframesCounter = 0;
+    private int $animationClassCounter = 0;
 
     public function __construct(Style $style, Resolver $resolver)
     {
@@ -51,6 +90,8 @@ class Renderer
         $body = $this->applyRotate($body, $canvas);
         $body = $this->applyTranslate($body, $canvas);
         $body = $this->applyBorderRadius($background . $body, $canvas);
+
+        $this->registerAnimationStyle();
 
         $metadata = License::xml($this->style->meta());
         $defs = count($this->defs) > 0
@@ -326,10 +367,10 @@ class Renderer
                 return '';
             }
 
-            return "<{$name}{$attrs}/>";
+            return $this->applyAnimations("<{$name}{$attrs}/>", $element);
         }
 
-        return "<{$name}{$attrs}>{$children}</{$name}>";
+        return $this->applyAnimations("<{$name}{$attrs}>{$children}</{$name}>", $element);
     }
 
     /**
@@ -406,7 +447,7 @@ class Renderer
 
         $attrs = $this->renderAttributes($mergedAttributes);
 
-        return "<use{$attrs} href=\"#{$id}\"/>";
+        return $this->applyAnimations("<use{$attrs} href=\"#{$id}\"/>", $element);
     }
 
     /**
@@ -608,5 +649,260 @@ class Renderer
         return $this->cachedSeedHash ??= Fnv1a::hex(
             ($this->style->meta()->source()->name() ?? '') . ':' . $this->resolver->seed()
         );
+    }
+
+    /**
+     * Returns the FNV-1a hex hash namespacing the animation class and
+     * keyframe names, cached after the first call. Extends the
+     * {@see hashSeed} input with the animation speed and, for a by-name
+     * selection, the sorted names: two renders of the same avatar with
+     * different speeds or selections inlined on one page must not select each
+     * other's rules, while identical renders sharing identical rules is
+     * harmless deduplication. `true` adds no name suffix, so enabling all
+     * animations hashes as before.
+     */
+    private function animationHash(): string
+    {
+        if ($this->cachedAnimationHash !== null) {
+            return $this->cachedAnimationHash;
+        }
+
+        $selection = $this->resolver->animation();
+        $names = '';
+
+        if (is_array($selection)) {
+            $distinct = array_values(array_unique($selection));
+            sort($distinct, SORT_STRING);
+            $names = ':' . implode(',', $distinct);
+        }
+
+        return $this->cachedAnimationHash = Fnv1a::hex(
+            ($this->style->meta()->source()->name() ?? '')
+            . ':' . $this->resolver->seed()
+            . ':' . Number::format($this->resolver->animationSpeed())
+            . $names
+        );
+    }
+
+    /**
+     * Wraps an element's rendered markup in one `<g class="…">` per animation
+     * track and queues the matching CSS. A no-op when the `animation` option
+     * is off, the element carries no animations, or its markup rendered to
+     * nothing (the empty-wrapper pruning then also prunes the animation).
+     *
+     * Wrapper nesting is block 0 outermost, and within a block the canonical
+     * track order (translate before rotate before scale, opacity innermost) —
+     * the composition contract the Figma plugin maps onto node transforms.
+     */
+    private function applyAnimations(string $markup, Element $element): string
+    {
+        if ($markup === '') {
+            return $markup;
+        }
+
+        $animations = $element->animations();
+
+        // The element check comes first: only styles that carry declarative
+        // animations may touch the `animation` option, so the resolved-options
+        // snapshot of every other avatar stays free of it.
+        if (count($animations) === 0) {
+            return $markup;
+        }
+
+        $selection = $this->resolver->animation();
+
+        // `true` plays every timeline. A name list plays only the timelines
+        // carrying one of those names, so unnamed timelines stay static then.
+        if ($selection === true) {
+            $active = $animations;
+        } elseif ($selection === false) {
+            $active = [];
+        } else {
+            $active = array_values(array_filter(
+                $animations,
+                static fn(array $animation) => isset($animation['name'])
+                    && in_array($animation['name'], $selection, true),
+            ));
+        }
+
+        if (count($active) === 0) {
+            return $markup;
+        }
+
+        $classes = [];
+
+        foreach ($active as $animation) {
+            foreach (self::TRACK_ORDER as $track) {
+                $trackData = $animation['tracks'][$track] ?? null;
+
+                if ($trackData !== null) {
+                    $classes[] = $this->buildAnimationCss($animation, $track, $trackData['keyframes']);
+                }
+            }
+        }
+
+        $result = $markup;
+
+        for ($i = count($classes) - 1; $i >= 0; $i--) {
+            $result = "<g class=\"{$classes[$i]}\">{$result}</g>";
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generates the `@keyframes` block (deduplicated by content, so identical
+     * tracks on many elements share one block) and the class rule for a
+     * single track, and returns the class name.
+     *
+     * @param array<string, mixed> $animation
+     * @param list<array<string, mixed>> $keyframes
+     */
+    private function buildAnimationCss(array $animation, string $track, array $keyframes): string
+    {
+        $defaultEasing = $animation['easing'] ?? 'linear';
+        $body = $this->keyframesBody($track, $keyframes, $defaultEasing);
+
+        $keyframesName = $this->keyframesByContent[$body] ?? null;
+
+        if ($keyframesName === null) {
+            $keyframesName = 'dbk-' . $this->animationHash() . '-' . $this->keyframesCounter++;
+
+            $this->keyframesByContent[$body] = $keyframesName;
+            $this->keyframesCss[] = "@keyframes {$keyframesName}{" . $body . '}';
+        }
+
+        $speed = $this->resolver->animationSpeed();
+        $duration = Number::format($animation['duration'] / $speed);
+        $delay = Number::format(($animation['delay'] ?? 0) / $speed);
+        $iterations = !isset($animation['iterations']) || $animation['iterations'] === 'infinite'
+            ? 'infinite'
+            : Number::format($animation['iterations']);
+        $direction = self::DIRECTION_CSS[$animation['direction'] ?? 'normal'];
+        $fill = $animation['fill'] ?? 'none';
+
+        // Only rotate and scale pivot around a point; translation and opacity
+        // need no origin, so their rules skip the transform-box prefix.
+        $needsOrigin = $track === 'rotate' || $track === 'scaleX' || $track === 'scaleY';
+        $originCss = '';
+
+        if ($needsOrigin) {
+            $origin = $animation['origin'] ?? ['x' => 50, 'y' => 50];
+            $originX = Number::format($origin['x']);
+            $originY = Number::format($origin['y']);
+            $originCss = "transform-box:fill-box;transform-origin:{$originX}% {$originY}%;";
+        }
+
+        $className = 'dba-' . $this->animationHash() . '-' . $this->animationClassCounter++;
+        $easing = $this->easingCss($defaultEasing);
+
+        // The name comes last in the shorthand so it can never be mistaken
+        // for a keyword; all seven tokens are always emitted so every port
+        // serializes the same string.
+        $this->animationCss[] = ".{$className}{"
+            . "{$originCss}animation:{$duration}s {$easing} {$delay}s {$iterations} {$direction} {$fill} {$keyframesName}"
+            . '}';
+
+        return $className;
+    }
+
+    /**
+     * Serializes a track's keyframes to a `@keyframes` body. Endpoints are
+     * padded with copies of the nearest keyframe so the resting value holds
+     * outside the keyframed span, matching Figma's hold semantics. A
+     * keyframe's easing shapes the segment to the next keyframe and is
+     * emitted only when it differs from the block default (the rule's timing
+     * function covers the rest); the last keyframe has no following segment,
+     * so its easing is never emitted.
+     *
+     * @param list<array<string, mixed>> $keyframes
+     * @param string|array<string, int|float> $defaultEasing
+     */
+    private function keyframesBody(string $track, array $keyframes, string|array $defaultEasing): string
+    {
+        $list = $keyframes;
+
+        if ($list[0]['at'] > 0) {
+            array_unshift($list, ['at' => 0, 'value' => $list[0]['value']]);
+        }
+
+        $last = $list[count($list) - 1];
+
+        if ($last['at'] < 100) {
+            $list[] = ['at' => 100, 'value' => $last['value']];
+        }
+
+        $defaultCss = $this->easingCss($defaultEasing);
+        $count = count($list);
+        $steps = [];
+
+        foreach ($list as $index => $keyframe) {
+            $easingCss = isset($keyframe['easing']) && $index < $count - 1
+                ? $this->easingCss($keyframe['easing'])
+                : $defaultCss;
+            $timing = $easingCss !== $defaultCss
+                ? ";animation-timing-function:{$easingCss}"
+                : '';
+            $at = Number::format($keyframe['at']);
+
+            $steps[] = "{$at}%{" . $this->trackDeclaration($track, $keyframe['value']) . $timing . '}';
+        }
+
+        return implode('', $steps);
+    }
+
+    /**
+     * Returns the CSS declaration animating one track at one keyframe value.
+     */
+    private function trackDeclaration(string $track, int|float $value): string
+    {
+        $v = Number::format($value);
+
+        // @phpstan-ignore match.unhandled
+        return match ($track) {
+            'translateX' => "transform:translateX({$v}px)",
+            'translateY' => "transform:translateY({$v}px)",
+            'rotate' => "transform:rotate({$v}deg)",
+            'scaleX' => "transform:scaleX({$v})",
+            'scaleY' => "transform:scaleY({$v})",
+            'opacity' => "opacity:{$v}",
+        };
+    }
+
+    /**
+     * Serializes an easing to its CSS form. `hold` renders as `step-end`.
+     *
+     * @param string|array<string, int|float> $easing
+     */
+    private function easingCss(string|array $easing): string
+    {
+        if (is_string($easing)) {
+            return self::EASING_KEYWORD_CSS[$easing];
+        }
+
+        $x1 = Number::format($easing['x1']);
+        $y1 = Number::format($easing['y1']);
+        $x2 = Number::format($easing['x2']);
+        $y2 = Number::format($easing['y2']);
+
+        return "cubic-bezier({$x1}, {$y1}, {$x2}, {$y2})";
+    }
+
+    /**
+     * Registers the accumulated animation CSS as a single `<style>` entry in
+     * the shared `<defs>` block, wrapped in a reduced-motion media query so
+     * users who prefer reduced motion get the static avatar. A no-op when no
+     * animation CSS was produced.
+     */
+    private function registerAnimationStyle(): void
+    {
+        if (count($this->keyframesCss) === 0) {
+            return;
+        }
+
+        $this->defs['animation-style'] = '<style>@media (prefers-reduced-motion:no-preference){'
+            . implode('', $this->keyframesCss)
+            . implode('', $this->animationCss)
+            . '}</style>';
     }
 }

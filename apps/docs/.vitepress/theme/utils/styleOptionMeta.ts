@@ -55,17 +55,10 @@ export function getOptionDescription(name: string): string | undefined {
  * Returns a curated display order for an option's values, or undefined when
  * the generic sort applies.
  *
- * `OptionsDescriptor` sorts variant names alphabetically, which scrambles the
- * animation speeds into `fast, fastest, medium, none, slow, slowest`. The docs
- * list them as a ramp instead, so motion increases from left to right and
- * `none` sits next to the slowest speed rather than the fastest. Values
- * outside the list keep their natural order at the end.
+ * `OptionsDescriptor` sorts variant names alphabetically. Values outside the
+ * list keep their natural order at the end.
  */
 export function getOptionValueOrder(name: string): string[] | undefined {
-  if (name === 'animationVariant') {
-    return ['none', 'slowest', 'slow', 'medium', 'fast', 'fastest'];
-  }
-
   // Default first: the alphabetical sort would lead with `fixed`.
   if (name.match(/ColorOrder$/)) {
     return ['random', 'fixed'];

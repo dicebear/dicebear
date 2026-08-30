@@ -63,9 +63,11 @@ will be missing in your export as well.
 
 ::: tip
 
-Animations live in a `<style>` element, and Figma has no place for CSS. An
-[animated style](/animated-avatars/) therefore arrives as a still avatar and
-stays still after the export.
+Declarative animations arrive as real Figma animations: the plugin writes them
+as keyframes on the imported layers, and an export carries edited keyframes
+back into the definition. This needs animation support in your Figma plan.
+Styles that still keep their animation as raw CSS in a `<style>` element arrive
+as a still avatar instead, since Figma has no place for CSS.
 
 :::
 

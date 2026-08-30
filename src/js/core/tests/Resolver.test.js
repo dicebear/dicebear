@@ -1337,4 +1337,63 @@ describe('Resolver', () => {
       assert.throws(() => new Options({ tags: ['Bad:X'] }));
     });
   });
+
+  describe('animation options', () => {
+    const style = new Style({
+      canvas: { width: 100, height: 100, elements: [] },
+    });
+
+    it('should default animation to false and speed to 1', () => {
+      const resolver = makeResolver(style);
+
+      assert.equal(resolver.animation(), false);
+      assert.equal(resolver.animationSpeed(), 1);
+    });
+
+    it('should pass through the configured values', () => {
+      const resolver = makeResolver(style, {
+        animation: true,
+        animationSpeed: 0.5,
+      });
+
+      assert.equal(resolver.animation(), true);
+      assert.equal(resolver.animationSpeed(), 0.5);
+    });
+
+    it('should pick a speed from a range, seeded', () => {
+      const resolver = makeResolver(style, {
+        seed: 'x',
+        animationSpeed: [0.5, 2],
+      });
+      const speed = resolver.animationSpeed();
+
+      assert.ok(speed >= 0.5 && speed <= 2);
+      assert.equal(
+        speed,
+        makeResolver(style, { seed: 'x', animationSpeed: [0.5, 2] })
+          .animationSpeed(),
+      );
+    });
+
+    it('should reject out-of-range values at validation', () => {
+      assert.throws(() => new Options({ animation: 'Yes' }));
+      assert.throws(() => new Options({ animation: [] }));
+      assert.throws(() => new Options({ animation: ['blink', 'Bad'] }));
+      assert.throws(() => new Options({ animationSpeed: 0 }));
+      assert.throws(() => new Options({ animationSpeed: 20 }));
+      assert.throws(() => new Options({ animationSpeed: [0, 2] }));
+    });
+
+    it('should resolve a name selection without PRNG involvement', () => {
+      assert.deepEqual(
+        makeResolver(style, { seed: 'x', animation: 'blink' }).animation(),
+        ['blink'],
+      );
+      assert.deepEqual(
+        makeResolver(style, { seed: 'x', animation: ['sway', 'blink'] })
+          .animation(),
+        ['sway', 'blink'],
+      );
+    });
+  });
 });

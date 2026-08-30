@@ -434,4 +434,118 @@ describe('Style', () => {
       assert.equal(style.colors(), style.colors());
     });
   });
+
+  describe('animations', () => {
+    const track = (keyframes) => ({
+      duration: 1,
+      tracks: { opacity: { keyframes } },
+    });
+
+    it('should report hasAnimations for canvas elements', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'g',
+              animations: [track([{ at: 0, value: 1 }])],
+            },
+          ],
+        },
+      });
+
+      assert.equal(style.hasAnimations(), true);
+    });
+
+    it('should report hasAnimations for nested variant elements', () => {
+      const style = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+        components: {
+          shape: {
+            width: 20,
+            height: 20,
+            variants: {
+              a: {
+                elements: [
+                  {
+                    type: 'element',
+                    name: 'g',
+                    children: [
+                      {
+                        type: 'element',
+                        name: 'rect',
+                        animations: [track([{ at: 0, value: 1 }])],
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        },
+      });
+
+      assert.equal(style.hasAnimations(), true);
+    });
+
+    it('should report no animations for static styles', () => {
+      const style = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+      });
+
+      assert.equal(style.hasAnimations(), false);
+    });
+
+    it('should reject keyframes out of order', () => {
+      assert.throws(
+        () =>
+          new Style({
+            canvas: {
+              width: 100,
+              height: 100,
+              elements: [
+                {
+                  type: 'element',
+                  name: 'g',
+                  animations: [
+                    track([
+                      { at: 50, value: 1 },
+                      { at: 20, value: 0 },
+                    ]),
+                  ],
+                },
+              ],
+            },
+          }),
+        /greater than the previous keyframe/,
+      );
+    });
+
+    it('should reject duplicate keyframe positions', () => {
+      assert.throws(
+        () =>
+          new Style({
+            canvas: {
+              width: 100,
+              height: 100,
+              elements: [
+                {
+                  type: 'element',
+                  name: 'g',
+                  animations: [
+                    track([
+                      { at: 50, value: 1 },
+                      { at: 50, value: 0 },
+                    ]),
+                  ],
+                },
+              ],
+            },
+          }),
+        /greater than the previous keyframe/,
+      );
+    });
+  });
 });

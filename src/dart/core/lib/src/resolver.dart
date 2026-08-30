@@ -2,6 +2,7 @@
 /// options, and a seeded PRNG, exposing them as memoized named accessors.
 library;
 
+import 'animation_selection.dart';
 import 'error/circular_color_reference_error.dart';
 import 'options.dart';
 import 'prng/prng.dart';
@@ -53,6 +54,18 @@ class Resolver {
 
   bool idRandomization() =>
       _memo('idRandomization', () => _options.idRandomization() ?? false);
+
+  /// The animation selection. Deliberately without PRNG involvement — whether
+  /// and what animates must not depend on the seed. The raw normalized value
+  /// (the boolean, or the name list in user order) is what the memo records,
+  /// so the [resolved] snapshot keeps the user's shape; consumers work with
+  /// the [AnimationSelection] accessors.
+  AnimationSelection animation() => AnimationSelection.from(
+        _memo<Object>('animation', () => _options.animation() ?? false),
+      );
+
+  double animationSpeed() =>
+      _memoFloat('animationSpeed', _options.animationSpeed(), 1);
 
   String? title() => _memo('title', () => _options.title());
 

@@ -36,12 +36,35 @@ namespace DiceBear.Internal
         /// The set answers the membership test and the list keeps the order
         /// for the error message.
         /// </summary>
+        /// <summary>
+        /// The canonical track order, outermost wrapper to innermost. It
+        /// mirrors the usual translate → rotate → scale transform composition;
+        /// every port must wrap in this exact order for the outputs to stay
+        /// byte-identical.
+        /// </summary>
+        private static readonly string[] TrackOrder =
+        {
+            "translateX",
+            "translateY",
+            "rotate",
+            "scaleX",
+            "scaleY",
+            "opacity",
+        };
+
         private readonly HashSet<string> _componentPath = new HashSet<string>(StringComparer.Ordinal);
         private readonly List<string> _componentChain = new List<string>();
         private readonly OrderedMap<string> _defs = new OrderedMap<string>();
+        private readonly List<string> _keyframesCss = new List<string>();
+        private readonly List<string> _animationCss = new List<string>();
+        private readonly Dictionary<string, string> _keyframesByContent =
+            new Dictionary<string, string>(StringComparer.Ordinal);
 
         private string? _cachedSeedHash;
         private string? _cachedInitials;
+        private string? _cachedAnimationHash;
+        private int _keyframesCounter;
+        private int _animationClassCounter;
 
         internal Renderer(Style style, Resolver resolver)
         {
@@ -66,6 +89,8 @@ namespace DiceBear.Internal
             body = ApplyRotate(body, canvas);
             body = ApplyTranslate(body, canvas);
             body = ApplyBorderRadius(background + body, canvas);
+
+            RegisterAnimationStyle();
 
             var metadata = License.Xml(_style.MetaBlock());
             var defs = _defs.Count > 0
@@ -421,10 +446,10 @@ namespace DiceBear.Internal
                     return string.Empty;
                 }
 
-                return $"<{name}{attrs}/>";
+                return ApplyAnimations($"<{name}{attrs}/>", element);
             }
 
-            return $"<{name}{attrs}>{children}</{name}>";
+            return ApplyAnimations($"<{name}{attrs}>{children}</{name}>", element);
         }
 
         /// <summary>
@@ -531,7 +556,7 @@ namespace DiceBear.Internal
                 mergedAttributes = merged;
             }
 
-            return $"<use{RenderAttributes(mergedAttributes)} href=\"#{id}\"/>";
+            return ApplyAnimations($"<use{RenderAttributes(mergedAttributes)} href=\"#{id}\"/>", element);
         }
 
         /// <summary>
@@ -741,6 +766,321 @@ namespace DiceBear.Internal
                 default:
                     return string.Empty;
             }
+        }
+
+        /// <summary>
+        /// Wraps an element's rendered markup in one <c>&lt;g class="…"&gt;</c>
+        /// per animation track and queues the matching CSS. A no-op when the
+        /// <c>animation</c> option is off, the element carries no animations,
+        /// or its markup rendered to nothing (the empty-wrapper pruning then
+        /// also prunes the animation).
+        /// </summary>
+        /// <remarks>
+        /// Wrapper nesting is block 0 outermost, and within a block the
+        /// canonical track order (translate before rotate before scale,
+        /// opacity innermost) — the composition contract the Figma plugin maps
+        /// onto node transforms.
+        /// </remarks>
+        private string ApplyAnimations(string markup, Element element)
+        {
+            if (markup.Length == 0)
+            {
+                return markup;
+            }
+
+            var animations = element.Animations();
+
+            // The element check comes first: only styles that carry
+            // declarative animations may touch the `animation` option, so the
+            // resolved-options snapshot of every other avatar stays free of it.
+            if (animations is null || animations.Count == 0)
+            {
+                return markup;
+            }
+
+            var selection = _resolver.Animation();
+
+            if (selection.Off)
+            {
+                return markup;
+            }
+
+            var classes = new List<string>();
+
+            foreach (var node in animations)
+            {
+                if (node is not JsonObject animation
+                    || JsonRead.Obj(animation, "tracks") is not JsonObject tracks)
+                {
+                    continue;
+                }
+
+                // `true` plays every timeline. A name selection plays only
+                // the timelines carrying one of those names, so unnamed
+                // timelines stay static then.
+                if (!selection.Matches(JsonRead.Str(animation, "name")))
+                {
+                    continue;
+                }
+
+                foreach (var track in TrackOrder)
+                {
+                    if (tracks[track] is JsonObject trackData
+                        && trackData["keyframes"] is JsonArray keyframes)
+                    {
+                        classes.Add(BuildAnimationCss(animation, track, keyframes));
+                    }
+                }
+            }
+
+            var result = markup;
+
+            for (var i = classes.Count - 1; i >= 0; i--)
+            {
+                result = $"<g class=\"{classes[i]}\">{result}</g>";
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Generates the <c>@keyframes</c> block (deduplicated by content, so
+        /// identical tracks on many elements share one block) and the class
+        /// rule for a single track, and returns the class name.
+        /// </summary>
+        private string BuildAnimationCss(JsonObject animation, string track, JsonArray keyframes)
+        {
+            var defaultEasing = animation["easing"];
+            var body = KeyframesBody(track, keyframes, defaultEasing);
+
+            if (!_keyframesByContent.TryGetValue(body, out var keyframesName))
+            {
+                keyframesName = $"dbk-{AnimationHash()}-{_keyframesCounter++}";
+
+                _keyframesByContent[body] = keyframesName;
+                _keyframesCss.Add($"@keyframes {keyframesName}{{{body}}}");
+            }
+
+            var speed = _resolver.AnimationSpeed();
+            var duration = Num.Format((JsonRead.Num(animation, "duration") ?? 0.0) / speed);
+            var delay = Num.Format((JsonRead.Num(animation, "delay") ?? 0.0) / speed);
+            var iterationsNum = JsonRead.Num(animation, "iterations");
+            var iterations = iterationsNum.HasValue ? Num.Format(iterationsNum.Value) : "infinite";
+            var direction = DirectionCss(JsonRead.Str(animation, "direction"));
+            var fill = JsonRead.Str(animation, "fill") ?? "none";
+
+            // Only rotate and scale pivot around a point; translation and
+            // opacity need no origin, so their rules skip the transform-box
+            // prefix.
+            var needsOrigin = track == "rotate" || track == "scaleX" || track == "scaleY";
+            var originCss = string.Empty;
+
+            if (needsOrigin)
+            {
+                var origin = JsonRead.Obj(animation, "origin");
+                var x = origin is null ? 50.0 : JsonRead.Num(origin, "x") ?? 50.0;
+                var y = origin is null ? 50.0 : JsonRead.Num(origin, "y") ?? 50.0;
+
+                originCss = $"transform-box:fill-box;transform-origin:{Num.Format(x)}% {Num.Format(y)}%;";
+            }
+
+            var className = $"dba-{AnimationHash()}-{_animationClassCounter++}";
+
+            // The name comes last in the shorthand so it can never be mistaken
+            // for a keyword; all seven tokens are always emitted so every port
+            // serializes the same string.
+            _animationCss.Add(
+                $".{className}{{{originCss}animation:{duration}s {EasingCss(defaultEasing)} {delay}s"
+                + $" {iterations} {direction} {fill} {keyframesName}}}");
+
+            return className;
+        }
+
+        /// <summary>
+        /// Serializes a track's keyframes to a <c>@keyframes</c> body.
+        /// Endpoints are padded with copies of the nearest keyframe so the
+        /// resting value holds outside the keyframed span, matching Figma's
+        /// hold semantics. A keyframe's easing shapes the segment to the next
+        /// keyframe and is emitted only when it differs from the block default
+        /// (the rule's timing function covers the rest); the last keyframe has
+        /// no following segment, so its easing is never emitted.
+        /// </summary>
+        private string KeyframesBody(string track, JsonArray keyframes, JsonNode? defaultEasing)
+        {
+            var list = new List<(double At, double Value, JsonNode? Easing)>();
+
+            foreach (var node in keyframes)
+            {
+                if (node is JsonObject keyframe)
+                {
+                    list.Add((
+                        JsonRead.Num(keyframe, "at") ?? 0.0,
+                        JsonRead.Num(keyframe, "value") ?? 0.0,
+                        keyframe["easing"]));
+                }
+            }
+
+            if (list.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            if (list[0].At > 0)
+            {
+                list.Insert(0, (0.0, list[0].Value, null));
+            }
+
+            var last = list[list.Count - 1];
+
+            if (last.At < 100)
+            {
+                list.Add((100.0, last.Value, null));
+            }
+
+            var defaultCss = EasingCss(defaultEasing);
+            var body = new StringBuilder();
+
+            for (var i = 0; i < list.Count; i++)
+            {
+                var (at, value, easing) = list[i];
+                var easingCss = easing is not null && i < list.Count - 1
+                    ? EasingCss(easing)
+                    : defaultCss;
+                var timing = easingCss != defaultCss
+                    ? ";animation-timing-function:" + easingCss
+                    : string.Empty;
+
+                body.Append(Num.Format(at)).Append("%{")
+                    .Append(TrackDeclaration(track, value)).Append(timing).Append('}');
+            }
+
+            return body.ToString();
+        }
+
+        /// <summary>
+        /// Returns the CSS declaration animating one track at one keyframe
+        /// value.
+        /// </summary>
+        private static string TrackDeclaration(string track, double value)
+        {
+            var v = Num.Format(value);
+
+            switch (track)
+            {
+                case "translateX":
+                    return $"transform:translateX({v}px)";
+                case "translateY":
+                    return $"transform:translateY({v}px)";
+                case "rotate":
+                    return $"transform:rotate({v}deg)";
+                case "scaleX":
+                    return $"transform:scaleX({v})";
+                case "scaleY":
+                    return $"transform:scaleY({v})";
+                default:
+                    return $"opacity:{v}";
+            }
+        }
+
+        /// <summary>
+        /// Serializes an easing to its CSS form. <c>hold</c> renders as
+        /// <c>step-end</c>; <see langword="null"/> is the <c>linear</c>
+        /// default.
+        /// </summary>
+        private static string EasingCss(JsonNode? easing)
+        {
+            var keyword = easing is null ? null : JsonRead.Str(easing);
+
+            if (keyword is not null)
+            {
+                switch (keyword)
+                {
+                    case "ease":
+                        return "ease";
+                    case "easeIn":
+                        return "ease-in";
+                    case "easeOut":
+                        return "ease-out";
+                    case "easeInOut":
+                        return "ease-in-out";
+                    case "hold":
+                        return "step-end";
+                    default:
+                        return "linear";
+                }
+            }
+
+            if (easing is JsonObject bezier)
+            {
+                return "cubic-bezier("
+                    + Num.Format(JsonRead.Num(bezier, "x1") ?? 0.0) + ", "
+                    + Num.Format(JsonRead.Num(bezier, "y1") ?? 0.0) + ", "
+                    + Num.Format(JsonRead.Num(bezier, "x2") ?? 0.0) + ", "
+                    + Num.Format(JsonRead.Num(bezier, "y2") ?? 0.0) + ")";
+            }
+
+            return "linear";
+        }
+
+        private static string DirectionCss(string? direction)
+        {
+            switch (direction)
+            {
+                case "reverse":
+                    return "reverse";
+                case "alternate":
+                    return "alternate";
+                case "alternateReverse":
+                    return "alternate-reverse";
+                default:
+                    return "normal";
+            }
+        }
+
+        /// <summary>
+        /// Registers the accumulated animation CSS as a single
+        /// <c>&lt;style&gt;</c> entry in the shared <c>&lt;defs&gt;</c> block,
+        /// wrapped in a reduced-motion media query so users who prefer reduced
+        /// motion get the static avatar. A no-op when no animation CSS was
+        /// produced.
+        /// </summary>
+        private void RegisterAnimationStyle()
+        {
+            if (_keyframesCss.Count == 0)
+            {
+                return;
+            }
+
+            _defs.Set(
+                "animation-style",
+                "<style>@media (prefers-reduced-motion:no-preference){"
+                + string.Concat(_keyframesCss) + string.Concat(_animationCss) + "}</style>");
+        }
+
+        /// <summary>
+        /// Returns the FNV-1a hex hash namespacing the animation class and
+        /// keyframe names, cached after the first call.
+        /// </summary>
+        /// <remarks>
+        /// Extends the <see cref="HashSeed"/> input with the animation speed
+        /// and, for a by-name selection, the sorted names: two renders of the
+        /// same avatar with different speeds or selections inlined on one page
+        /// must not select each other's rules, while identical renders sharing
+        /// identical rules is harmless deduplication. <c>true</c> adds no name
+        /// suffix, so enabling all animations hashes as before.
+        /// </remarks>
+        private string AnimationHash()
+        {
+            var names = _resolver.Animation().Names;
+            var suffix = names is null
+                ? string.Empty
+                : ":" + string.Join(
+                    ",",
+                    names.Distinct().OrderBy(name => name, StringComparer.Ordinal));
+
+            return _cachedAnimationHash ??= Fnv1a.Hex(
+                (_style.MetaBlock().Source().Name() ?? string.Empty) + ":" + _resolver.Seed()
+                + ":" + Num.Format(_resolver.AnimationSpeed()) + suffix);
         }
 
         /// <summary>

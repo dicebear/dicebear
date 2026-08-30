@@ -21,6 +21,34 @@ import 'utils/xml.dart';
 /// circular color reference encountered during resolution surfaces as a
 /// `CircularColorReferenceError` thrown from [render].
 class Renderer {
+  /// The canonical track order, outermost wrapper to innermost. It mirrors
+  /// the usual translate → rotate → scale transform composition; every port
+  /// must wrap in this exact order for the outputs to stay byte-identical.
+  static const List<String> _trackOrder = [
+    'translateX',
+    'translateY',
+    'rotate',
+    'scaleX',
+    'scaleY',
+    'opacity',
+  ];
+
+  static const Map<String, String> _directionCss = {
+    'normal': 'normal',
+    'reverse': 'reverse',
+    'alternate': 'alternate',
+    'alternateReverse': 'alternate-reverse',
+  };
+
+  static const Map<String, String> _easingKeywordCss = {
+    'linear': 'linear',
+    'ease': 'ease',
+    'easeIn': 'ease-in',
+    'easeOut': 'ease-out',
+    'easeInOut': 'ease-in-out',
+    'hold': 'step-end',
+  };
+
   final Style _style;
   final Resolver _resolver;
 
@@ -30,6 +58,12 @@ class Renderer {
   final Map<String, String> _defs = {};
   String? _cachedSeedHash;
   String? _cachedInitials;
+  String? _cachedAnimationHash;
+  final List<String> _keyframesCss = [];
+  final List<String> _animationCss = [];
+  final Map<String, String> _keyframesByContent = {};
+  int _keyframesCounter = 0;
+  int _animationClassCounter = 0;
 
   Renderer(Style style, Resolver resolver)
       : _style = style,
@@ -48,6 +82,8 @@ class Renderer {
     body = _applyRotate(body, canvas);
     body = _applyTranslate(body, canvas);
     body = _applyBorderRadius('$background$body', canvas);
+
+    _registerAnimationStyle();
 
     final metadata = licenseXml(_style.meta);
     final defs = _defs.isNotEmpty ? '<defs>${_defs.values.join()}</defs>' : '';
@@ -310,10 +346,10 @@ class Renderer {
         return '';
       }
 
-      return '<$name$attrs/>';
+      return _applyAnimations('<$name$attrs/>', element);
     }
 
-    return '<$name$attrs>$children</$name>';
+    return _applyAnimations('<$name$attrs>$children</$name>', element);
   }
 
   /// Renders a text element by escaping its resolved value.
@@ -387,7 +423,7 @@ class Renderer {
 
     final attrs = _renderAttributes(mergedAttributes);
 
-    return '<use$attrs href="#$id"/>';
+    return _applyAnimations('<use$attrs href="#$id"/>', element);
   }
 
   /// Returns the per-component SVG `transform` fragments derived from the
@@ -568,6 +604,251 @@ class Renderer {
   /// different styles from colliding when inlined on one page.
   String _hashSeed() => _cachedSeedHash ??=
       fnv1aHex('${_style.meta.source().name() ?? ''}:${_resolver.seed()}');
+
+  /// Returns the FNV-1a hex hash namespacing the animation class and keyframe
+  /// names, cached after the first call. Extends the [_hashSeed] input with
+  /// the animation speed and, for a by-name selection, the sorted names: two
+  /// renders of the same avatar with different speeds or selections inlined
+  /// on one page must not select each other's rules, while identical renders
+  /// sharing identical rules is harmless deduplication. `true` adds no name
+  /// suffix, so enabling all animations hashes as before.
+  String _animationHash() {
+    final names = _resolver.animation().names;
+    final suffix =
+        names == null ? '' : ':${(names.toSet().toList()..sort()).join(',')}';
+
+    return _cachedAnimationHash ??= fnv1aHex(
+      '${_style.meta.source().name() ?? ''}:${_resolver.seed()}:'
+      '${formatNumber(_resolver.animationSpeed())}$suffix',
+    );
+  }
+
+  /// Wraps an element's rendered markup in one `<g class="…">` per animation
+  /// track and queues the matching CSS. A no-op when the `animation` option
+  /// is off, the element carries no animations, or its markup rendered to
+  /// nothing (the empty-wrapper pruning then also prunes the animation).
+  ///
+  /// Wrapper nesting is block 0 outermost, and within a block the canonical
+  /// track order (translate before rotate before scale, opacity innermost) —
+  /// the composition contract the Figma plugin maps onto node transforms.
+  String _applyAnimations(String markup, ElementNode element) {
+    if (markup.isEmpty) {
+      return markup;
+    }
+
+    final animations = element.animations;
+
+    // The element check comes first: only styles that carry declarative
+    // animations may touch the `animation` option, so the resolved-options
+    // snapshot of every other avatar stays free of it.
+    if (animations.isEmpty) {
+      return markup;
+    }
+
+    final selection = _resolver.animation();
+
+    if (selection.off) {
+      return markup;
+    }
+
+    final classes = <String>[];
+
+    for (final entry in animations) {
+      final animation = entry as Map<String, Object?>;
+
+      // `true` plays every timeline. A name selection plays only the
+      // timelines carrying one of those names, so unnamed timelines stay
+      // static then.
+      if (!selection.matches(animation['name'] as String?)) {
+        continue;
+      }
+
+      final tracks = animation['tracks'] as Map<String, Object?>;
+
+      for (final track in _trackOrder) {
+        final trackData = tracks[track] as Map<String, Object?>?;
+
+        if (trackData != null) {
+          classes.add(_buildAnimationCss(
+            animation,
+            track,
+            trackData['keyframes'] as List<Object?>,
+          ));
+        }
+      }
+    }
+
+    var result = markup;
+
+    for (var i = classes.length - 1; i >= 0; i--) {
+      result = '<g class="${classes[i]}">$result</g>';
+    }
+
+    return result;
+  }
+
+  /// Generates the `@keyframes` block (deduplicated by content, so identical
+  /// tracks on many elements share one block) and the class rule for a single
+  /// track, and returns the class name.
+  String _buildAnimationCss(
+    Map<String, Object?> animation,
+    String track,
+    List<Object?> keyframes,
+  ) {
+    final defaultEasing = animation['easing'] ?? 'linear';
+    final body = _keyframesBody(track, keyframes, defaultEasing);
+
+    var keyframesName = _keyframesByContent[body];
+
+    if (keyframesName == null) {
+      keyframesName = 'dbk-${_animationHash()}-${_keyframesCounter++}';
+
+      _keyframesByContent[body] = keyframesName;
+      _keyframesCss.add('@keyframes $keyframesName{$body}');
+    }
+
+    final speed = _resolver.animationSpeed();
+    final duration = formatNumber((animation['duration'] as num) / speed);
+    final delay = formatNumber((animation['delay'] as num? ?? 0) / speed);
+    final rawIterations = animation['iterations'];
+    final iterations = rawIterations is num
+        ? formatNumber(rawIterations.toDouble())
+        : 'infinite';
+    final direction = _directionCss[animation['direction']] ?? 'normal';
+    final fill = animation['fill'] as String? ?? 'none';
+
+    // Only rotate and scale pivot around a point; translation and opacity
+    // need no origin, so their rules skip the transform-box prefix.
+    final needsOrigin =
+        track == 'rotate' || track == 'scaleX' || track == 'scaleY';
+    var originCss = '';
+
+    if (needsOrigin) {
+      final origin = animation['origin'] as Map<String, Object?>?;
+      final x = formatNumber((origin?['x'] as num? ?? 50).toDouble());
+      final y = formatNumber((origin?['y'] as num? ?? 50).toDouble());
+
+      originCss = 'transform-box:fill-box;transform-origin:$x% $y%;';
+    }
+
+    final className = 'dba-${_animationHash()}-${_animationClassCounter++}';
+
+    // The name comes last in the shorthand so it can never be mistaken for a
+    // keyword; all seven tokens are always emitted so every port serializes
+    // the same string.
+    _animationCss.add(
+      '.$className{${originCss}animation:${duration}s '
+      '${_easingCss(defaultEasing)} ${delay}s $iterations $direction $fill '
+      '$keyframesName}',
+    );
+
+    return className;
+  }
+
+  /// Serializes a track's keyframes to a `@keyframes` body. Endpoints are
+  /// padded with copies of the nearest keyframe so the resting value holds
+  /// outside the keyframed span, matching Figma's hold semantics. A
+  /// keyframe's easing shapes the segment to the next keyframe and is
+  /// emitted only when it differs from the block default (the rule's timing
+  /// function covers the rest); the last keyframe has no following segment,
+  /// so its easing is never emitted.
+  String _keyframesBody(
+    String track,
+    List<Object?> keyframes,
+    Object defaultEasing,
+  ) {
+    final list = <({double at, double value, Object? easing})>[];
+
+    for (final entry in keyframes) {
+      final keyframe = entry as Map<String, Object?>;
+
+      list.add((
+        at: (keyframe['at'] as num).toDouble(),
+        value: (keyframe['value'] as num).toDouble(),
+        easing: keyframe['easing'],
+      ));
+    }
+
+    if (list.first.at > 0) {
+      list.insert(0, (at: 0, value: list.first.value, easing: null));
+    }
+
+    final last = list.last;
+
+    if (last.at < 100) {
+      list.add((at: 100, value: last.value, easing: null));
+    }
+
+    final defaultCss = _easingCss(defaultEasing);
+    final body = StringBuffer();
+
+    for (var i = 0; i < list.length; i++) {
+      final keyframe = list[i];
+      final easing = keyframe.easing;
+      final easingCss = easing != null && i < list.length - 1
+          ? _easingCss(easing)
+          : defaultCss;
+      final timing = easingCss != defaultCss
+          ? ';animation-timing-function:$easingCss'
+          : '';
+
+      body.write(
+        '${formatNumber(keyframe.at)}%'
+        '{${_trackDeclaration(track, keyframe.value)}$timing}',
+      );
+    }
+
+    return body.toString();
+  }
+
+  /// Returns the CSS declaration animating one track at one keyframe value.
+  String _trackDeclaration(String track, double value) {
+    final v = formatNumber(value);
+
+    switch (track) {
+      case 'translateX':
+        return 'transform:translateX(${v}px)';
+      case 'translateY':
+        return 'transform:translateY(${v}px)';
+      case 'rotate':
+        return 'transform:rotate(${v}deg)';
+      case 'scaleX':
+        return 'transform:scaleX($v)';
+      case 'scaleY':
+        return 'transform:scaleY($v)';
+      default:
+        // `opacity` — the only remaining schema-valid track name.
+        return 'opacity:$v';
+    }
+  }
+
+  /// Serializes an easing to its CSS form. `hold` renders as `step-end`.
+  String _easingCss(Object easing) {
+    if (easing is String) {
+      return _easingKeywordCss[easing] ?? 'linear';
+    }
+
+    final bezier = easing as Map<String, Object?>;
+
+    return 'cubic-bezier(${formatNumber((bezier['x1'] as num).toDouble())}, '
+        '${formatNumber((bezier['y1'] as num).toDouble())}, '
+        '${formatNumber((bezier['x2'] as num).toDouble())}, '
+        '${formatNumber((bezier['y2'] as num).toDouble())})';
+  }
+
+  /// Registers the accumulated animation CSS as a single `<style>` entry in
+  /// the shared `<defs>` block, wrapped in a reduced-motion media query so
+  /// users who prefer reduced motion get the static avatar. A no-op when no
+  /// animation CSS was produced.
+  void _registerAnimationStyle() {
+    if (_keyframesCss.isEmpty) {
+      return;
+    }
+
+    _defs['animation-style'] =
+        '<style>@media (prefers-reduced-motion:no-preference)'
+        '{${_keyframesCss.join()}${_animationCss.join()}}</style>';
+  }
 }
 
 // Shared process-randomness source for _randomizeIds.

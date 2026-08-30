@@ -25,6 +25,7 @@ import InputNumber from 'primevue/inputnumber';
 import Button from 'primevue/button';
 import ToggleSwitch from 'primevue/toggleswitch';
 import { Shuffle } from '@lucide/vue';
+import PlaygroundAnimationSection from './PlaygroundAnimationSection.vue';
 import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
 import PlaygroundTagsSection from './PlaygroundTagsSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
@@ -80,6 +81,17 @@ const hasFontWeight = computed(() =>
     ? styleUsesVariable(avatarStyleName.value, 'fontWeight')
     : false,
 );
+
+// OptionsDescriptor advertises the `animation` field exactly for styles that
+// carry declarative animations, so the panel appears only where the toggle
+// has an effect.
+const hasAnimation = computed(() => 'animation' in descriptor.value);
+
+const animationNames = computed<string[]>(() => {
+  const field = descriptor.value.animation;
+
+  return field && 'values' in field ? [...field.values] : [];
+});
 
 // The `tags` filter only does something for styles whose variants carry tags;
 // OptionsDescriptor advertises the `tags` field (with the style's own tag
@@ -360,6 +372,14 @@ const onSeedFocus = (e: FocusEvent) => {
               :has-font-family="hasFontFamily"
               :has-font-weight="hasFontWeight"
             />
+          </AccordionContent>
+        </AccordionPanel>
+        <AccordionPanel v-if="hasAnimation" value="__animation">
+          <AccordionHeader>
+            <span class="pg-options-label">Animation</span>
+          </AccordionHeader>
+          <AccordionContent>
+            <PlaygroundAnimationSection :key="avatarStyleName" :names="animationNames" />
           </AccordionContent>
         </AccordionPanel>
         <AccordionPanel value="__transform">
