@@ -60,6 +60,17 @@ class Element
     }
 
     /**
+     * Returns the element's declarative animation timelines. Empty for
+     * elements without animations.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function animations(): array
+    {
+        return $this->data['animations'] ?? [];
+    }
+
+    /**
      * Returns the element's children, lazily wrapped as {@see Element}
      * instances on first access.
      *

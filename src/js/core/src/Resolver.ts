@@ -67,6 +67,17 @@ export class Resolver<D = unknown> {
     );
   }
 
+  animation(): boolean | readonly string[] {
+    // Deliberately without PRNG involvement — whether and what animates must
+    // not depend on the seed. `true` plays every timeline, a name array only
+    // the timelines carrying one of those names.
+    return this.#memo('animation', () => this.#options.animation() ?? false);
+  }
+
+  animationSpeed(): number {
+    return this.#memoFloat('animationSpeed', this.#options.animationSpeed(), 1);
+  }
+
   title(): string | undefined {
     return this.#memo('title', () => this.#options.title());
   }

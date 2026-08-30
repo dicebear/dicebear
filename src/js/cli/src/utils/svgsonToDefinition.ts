@@ -56,6 +56,21 @@ export function svgsonToDefinition(node: INode): DefinitionElement {
       : value;
   }
 
+  // The `data-dbanim` carrier attribute becomes the `animations` member
+  // again; the sibling-index prefix in front of the payload is dropped.
+  let animations: unknown[] | undefined;
+  const rawAnimations = attributes['data-dbanim'];
+
+  if (typeof rawAnimations === 'string') {
+    delete attributes['data-dbanim'];
+
+    animations = JSON.parse(
+      decodeURIComponent(
+        rawAnimations.slice(rawAnimations.indexOf(':') + 1),
+      ),
+    ) as unknown[];
+  }
+
   const children = (node.children ?? []).map(svgsonToDefinition);
 
   // `<use href="#component-X">` is a component reference, not an SVG element.
@@ -76,6 +91,10 @@ export function svgsonToDefinition(node: INode): DefinitionElement {
         result.attributes = attributes;
       }
 
+      if (animations) {
+        result.animations = animations;
+      }
+
       return result;
     }
   }
@@ -84,6 +103,10 @@ export function svgsonToDefinition(node: INode): DefinitionElement {
 
   if (Object.keys(attributes).length > 0) {
     result.attributes = attributes;
+  }
+
+  if (animations) {
+    result.animations = animations;
   }
 
   if (children.length > 0) {

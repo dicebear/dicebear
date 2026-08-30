@@ -95,6 +95,8 @@ export interface StyleOptionsBase {
   readonly translateX?: number | readonly [number, number];
   readonly translateY?: number | readonly [number, number];
   readonly tags?: string | readonly string[];
+  readonly animation?: boolean | string | readonly string[];
+  readonly animationSpeed?: number | readonly [number, number];
 }
 
 // Variant option accepts a single name, an array, or a name-to-weight record

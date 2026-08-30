@@ -52,11 +52,97 @@ export interface StyleDefinitionAttributes {
     | undefined;
 }
 
+export type StyleDefinitionEasingKeyword =
+  | 'linear'
+  | 'ease'
+  | 'easeIn'
+  | 'easeOut'
+  | 'easeInOut'
+  | 'hold';
+
+/**
+ * A cubic bezier easing given by its two control points. `x1`/`x2` stay
+ * within 0..1; `y1`/`y2` may leave that range for overshoot curves.
+ */
+export interface StyleDefinitionEasingBezier {
+  readonly x1: number;
+  readonly y1: number;
+  readonly x2: number;
+  readonly y2: number;
+}
+
+export type StyleDefinitionEasing =
+  StyleDefinitionEasingKeyword | StyleDefinitionEasingBezier;
+
+/**
+ * A keyframe on an animation timeline. `at` is a percentage of the
+ * animation's duration. `easing` shapes the segment from this keyframe to
+ * the next one and falls back to the animation's default easing.
+ */
+export interface StyleDefinitionAnimationKeyframe {
+  readonly at: number;
+  readonly value: number;
+  readonly easing?: StyleDefinitionEasing;
+}
+
+export interface StyleDefinitionAnimationTrack {
+  readonly keyframes: readonly StyleDefinitionAnimationKeyframe[];
+}
+
+export type StyleDefinitionAnimationTrackName =
+  | 'translateX'
+  | 'translateY'
+  | 'rotate'
+  | 'scaleX'
+  | 'scaleY'
+  | 'opacity';
+
+export type StyleDefinitionAnimationDirection =
+  | 'normal'
+  | 'reverse'
+  | 'alternate'
+  | 'alternateReverse';
+
+/**
+ * The transform origin for `rotate` and `scale` tracks, as a percentage of
+ * the element's bounding box.
+ */
+export interface StyleDefinitionAnimationOrigin {
+  readonly x: number;
+  readonly y: number;
+}
+
+/**
+ * One animation timeline for an element. Rendered to CSS only when the
+ * `animation` render option is enabled. Absent fields carry these defaults:
+ * `delay` 0, `iterations` `'infinite'`, `direction` `'normal'`, `fill`
+ * `'none'`, `easing` `'linear'`, `origin` center (50/50). The optional
+ * `name` groups the timeline under a user-selectable animation: the
+ * `animation` option accepts these names to play a subset, and a timeline
+ * without a name only plays when the option enables all animations.
+ */
+export interface StyleDefinitionAnimation {
+  readonly name?: string;
+  readonly duration: number;
+  readonly delay?: number;
+  readonly iterations?: 'infinite' | number;
+  readonly direction?: StyleDefinitionAnimationDirection;
+  readonly fill?: 'none' | 'forwards';
+  readonly easing?: StyleDefinitionEasing;
+  readonly origin?: StyleDefinitionAnimationOrigin;
+  readonly tracks: Readonly<
+    Partial<
+      Record<StyleDefinitionAnimationTrackName, StyleDefinitionAnimationTrack>
+    >
+  >;
+}
+
 export interface StyleDefinitionElement {
   readonly type: StyleDefinitionElementType;
   readonly name?: string;
   readonly value?: StyleDefinitionElementValue;
   readonly attributes?: StyleDefinitionAttributes;
+  readonly animations?: readonly StyleDefinitionAnimation[];
   readonly children?: readonly StyleDefinitionElement[];
 }
 

@@ -22,6 +22,8 @@ namespace DiceBear
         private Canvas? _canvas;
         private OrderedMap<Component>? _components;
         private OrderedMap<StyleColor>? _colors;
+        private bool? _hasAnimations;
+        private IReadOnlyList<string>? _animationNames;
 
         /// <summary>
         /// Validates and wraps a style definition.
@@ -63,6 +65,7 @@ namespace DiceBear
             _data = JsonSnapshot.Of(definition);
 
             ValidateAliases();
+            ValidateAnimations();
         }
 
         /// <summary>
@@ -261,6 +264,185 @@ namespace DiceBear
             {
                 throw new StyleValidationException(errors);
             }
+        }
+
+        /// <summary>
+        /// Verifies that every animation track lists its keyframes in strictly
+        /// ascending <c>at</c> order. The schema cannot express ordering
+        /// between array items; step jumps are expressed with the <c>hold</c>
+        /// easing rather than duplicate positions.
+        /// </summary>
+        private void ValidateAnimations()
+        {
+            var errors = new List<ValidationErrorDetail>();
+
+            VisitElements((element, path) =>
+            {
+                if (element["animations"] is not JsonArray animations)
+                {
+                    return;
+                }
+
+                for (var a = 0; a < animations.Count; a++)
+                {
+                    if (animations[a] is not JsonObject animation
+                        || JsonRead.Obj(animation, "tracks") is not JsonObject tracks)
+                    {
+                        continue;
+                    }
+
+                    foreach (var trackEntry in tracks)
+                    {
+                        if (trackEntry.Value is not JsonObject track
+                            || track["keyframes"] is not JsonArray keyframes)
+                        {
+                            continue;
+                        }
+
+                        for (var i = 1; i < keyframes.Count; i++)
+                        {
+                            var current = JsonRead.Num(keyframes[i] as JsonObject, "at");
+                            var previous = JsonRead.Num(keyframes[i - 1] as JsonObject, "at");
+
+                            if (current.HasValue && previous.HasValue && current.Value <= previous.Value)
+                            {
+                                errors.Add(new ValidationErrorDetail(
+                                    message: "must be greater than the previous keyframe",
+                                    instancePath: $"{path}/animations/{a}/tracks/{trackEntry.Key}/keyframes/{i}/at"));
+                            }
+                        }
+                    }
+                }
+            });
+
+            if (errors.Count > 0)
+            {
+                throw new StyleValidationException(errors);
+            }
+        }
+
+        /// <summary>
+        /// Walks every element in the definition — the canvas tree and every
+        /// component variant tree — and invokes <paramref name="visit"/> with
+        /// the element and its JSON pointer path.
+        /// </summary>
+        private void VisitElements(Action<JsonObject, string> visit)
+        {
+            void Walk(JsonArray? elements, string path)
+            {
+                if (elements is null)
+                {
+                    return;
+                }
+
+                for (var i = 0; i < elements.Count; i++)
+                {
+                    if (elements[i] is not JsonObject element)
+                    {
+                        continue;
+                    }
+
+                    var elementPath = path + "/" + i;
+
+                    visit(element, elementPath);
+                    Walk(element["children"] as JsonArray, elementPath + "/children");
+                }
+            }
+
+            Walk(JsonRead.Obj(_data, "canvas")?["elements"] as JsonArray, "/canvas/elements");
+
+            var components = JsonRead.Obj(_data, "components");
+
+            if (components is null)
+            {
+                return;
+            }
+
+            foreach (var entry in components)
+            {
+                if (entry.Value is not JsonObject component || IsAlias(component))
+                {
+                    continue;
+                }
+
+                var variants = JsonRead.Obj(component, "variants");
+
+                if (variants is null)
+                {
+                    continue;
+                }
+
+                foreach (var variantEntry in variants)
+                {
+                    if (variantEntry.Value is JsonObject variant)
+                    {
+                        Walk(
+                            variant["elements"] as JsonArray,
+                            $"/components/{entry.Key}/variants/{variantEntry.Key}/elements");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns whether any element in the definition carries declarative
+        /// animations. Computed once and cached; consumed by the options
+        /// descriptor to advertise the <c>animation</c> options only where
+        /// they have an effect.
+        /// </summary>
+        public bool HasAnimations()
+        {
+            if (_hasAnimations is null)
+            {
+                var found = false;
+
+                VisitElements((element, _) =>
+                {
+                    if (element["animations"] is JsonArray animations && animations.Count > 0)
+                    {
+                        found = true;
+                    }
+                });
+
+                _hasAnimations = found;
+            }
+
+            return _hasAnimations.Value;
+        }
+
+        /// <summary>
+        /// Returns the sorted distinct names of the definition's animation
+        /// timelines. Computed once and cached; consumed by the options
+        /// descriptor so tooling can offer the by-name form of the
+        /// <c>animation</c> option. Sorted so every port reports the same
+        /// order regardless of how it walks the definition.
+        /// </summary>
+        public IReadOnlyList<string> AnimationNames()
+        {
+            if (_animationNames is null)
+            {
+                var names = new SortedSet<string>(StringComparer.Ordinal);
+
+                VisitElements((element, _) =>
+                {
+                    if (element["animations"] is not JsonArray animations)
+                    {
+                        return;
+                    }
+
+                    foreach (var node in animations)
+                    {
+                        if (JsonRead.Str(node, "name") is string name)
+                        {
+                            names.Add(name);
+                        }
+                    }
+                });
+
+                _animationNames = new List<string>(names);
+            }
+
+            return _animationNames;
         }
     }
 }

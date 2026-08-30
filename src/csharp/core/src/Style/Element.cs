@@ -45,6 +45,12 @@ namespace DiceBear.Internal
         internal JsonObject? Attributes() => JsonRead.Obj(_data, "attributes");
 
         /// <summary>
+        /// Returns the element's declarative animation timelines, or
+        /// <see langword="null"/> for elements without animations.
+        /// </summary>
+        internal JsonArray? Animations() => _data["animations"] as JsonArray;
+
+        /// <summary>
         /// Returns the element's children, lazily wrapped as
         /// <see cref="Element"/> instances on first access.
         /// </summary>

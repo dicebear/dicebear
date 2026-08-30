@@ -86,6 +86,24 @@ class Options:
     def translate_y(self) -> Range | None:
         return self._to_range(self._data.get("translateY"))
 
+    def animation(self) -> bool | list[str] | None:
+        """Return the animation switch as given for booleans, and normalize a
+        single animation name to a one-element list.
+
+        The ``bool`` check must run before any list handling: ``bool`` is an
+        ``int`` subclass, and a bare string is itself iterable, so both would
+        otherwise slip into the wrong branch.
+        """
+        raw = self._data.get("animation")
+
+        if raw is None or isinstance(raw, bool):
+            return raw
+
+        return self._as_array(raw)
+
+    def animation_speed(self) -> Range | None:
+        return self._to_range(self._data.get("animationSpeed"))
+
     def tags(self) -> list[TagFilterToken]:
         """Return the global ``tags`` filter as parsed tokens, or an empty list
         when unset.

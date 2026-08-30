@@ -2,8 +2,8 @@
 title: Filter Avatar Variants with Tags
 description: >
   Variant tags describe how a variant looks or behaves. The tags option filters
-  the variant pool. Today that turns on the opt-in animation of the animated
-  styles, and an upcoming release adds traits like mood and hair length.
+  the variant pool. An upcoming release tags the character styles with traits
+  like mood and hair length, and custom styles can carry tags today.
 ---
 
 # Filter avatar variants with tags
@@ -21,12 +21,12 @@ avatar is generated. Pass the tags you want to keep:
 
 ```js
 import { Style, Avatar } from '@dicebear/core';
-import planets from '@dicebear/styles/planets.json' with { type: 'json' };
+import adventurer from '@dicebear/styles/adventurer.json' with { type: 'json' };
 
-const style = new Style(planets);
+const style = new Style(adventurer);
 const avatar = new Avatar(style, {
   seed: 'John',
-  tags: ['animation'],
+  tags: ['hairLength:long', 'mood:positive'],
 });
 ```
 
@@ -34,7 +34,7 @@ In the [HTTP API](/integrations/http-api/) the same filter is a comma-separated
 query parameter:
 
 ```
-https://api.dicebear.com/10.x/planets/svg?seed=John&tags=animation
+https://api.dicebear.com/10.x/adventurer/svg?seed=John&tags=hairLength:long,mood:positive
 ```
 
 ## How the filter works
@@ -55,9 +55,9 @@ A few rules tie the tokens together:
   and the rest of the avatar stays varied.
 - Different categories act as "and", and a disallow (`!`) always wins over an
   allow.
-- A per-component variant option is more specific and takes precedence. When you
-  set `animationVariant` directly, the `tags` filter is ignored for the
-  animation and applies only to the other components.
+- A per-component variant option is more specific and takes precedence. When
+  you pin a component's variant directly, the `tags` filter is ignored for that
+  component and applies only to the others.
 - Only an unknown category is ignored. An unknown value is not. Because no
   variant matches it, every variant tagged in that category drops out. A typo in
   `hairLenght:long` changes nothing, while a typo in `hairLength:lng` removes
@@ -74,42 +74,18 @@ nothing.
 
 ## The tags DiceBear offers
 
-::: warning Only the animation tag ships today
+::: warning Not shipped yet
 
-The character categories are not set on any style yet. A filter like
-`mood:positive` or `hairLength:long` has no effect for now.
+The character categories are not set on any official style yet, so a filter
+like `mood:positive` or `hairLength:long` has no effect for now.
 
 :::
 
-Right now, DiceBear's own styles carry tags in one place: the opt-in animation
-of the animated styles. An upcoming release adds a shared set for the character
-styles with mood, hair length, headwear, facial hair, eyewear, and accessory.
-Those definitions already live in
-[How DiceBear tags variants](/customize/tags/reference/).
-
-| Category    | Values                     | Found on                                   |
-| ----------- | -------------------------- | ------------------------------------------ |
-| `animation` | (bare category, no values) | the animation component of animated styles |
-
-The animation is off by default, and the filter controls it like this:
-
-| `tags`       | Result                                              |
-| ------------ | --------------------------------------------------- |
-| `animation`  | Turns the animation on, at a random speed per seed. |
-| `!animation` | Keeps the avatar static, which is also the default. |
-
-For a fixed speed, skip the filter and set the variant directly with the
-`animationVariant` option (e.g. `animationVariant: 'slow'`), which is more
-specific and always wins.
-
-```js
-// Turn on the opt-in animation of an animated style, at a random speed
-// per seed.
-const avatar = new Avatar(style, {
-  seed: 'Alex',
-  tags: ['animation'],
-});
-```
+An upcoming release adds a shared set for the character styles with mood, hair
+length, headwear, facial hair, eyewear, and accessory. The definitions already
+live in [How DiceBear tags variants](/customize/tags/reference/), so custom
+styles can adopt them today and stay compatible with the filter examples in
+the docs.
 
 ## Custom styles
 

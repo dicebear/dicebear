@@ -225,4 +225,90 @@ describe('OptionsDescriptor', () => {
       assert.notDeepEqual(a.seed, b.seed);
     });
   });
+
+  describe('animation options', () => {
+    it('should not advertise animation options for static styles', () => {
+      const descriptor = new OptionsDescriptor(
+        new Style({ canvas: { width: 100, height: 100, elements: [] } }),
+      ).toJSON();
+
+      assert.equal(descriptor.animation, undefined);
+      assert.equal(descriptor.animationSpeed, undefined);
+    });
+
+    it('should advertise animation options for animated styles', () => {
+      const descriptor = new OptionsDescriptor(
+        new Style({
+          canvas: {
+            width: 100,
+            height: 100,
+            elements: [
+              {
+                type: 'element',
+                name: 'g',
+                animations: [
+                  {
+                    duration: 1,
+                    tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+      ).toJSON();
+
+      assert.deepEqual(descriptor.animation, { type: 'animation', values: [] });
+      assert.deepEqual(descriptor.animationSpeed, {
+        type: 'range',
+        min: 0.1,
+        max: 10,
+      });
+    });
+
+    it('should list the sorted distinct animation names', () => {
+      const descriptor = new OptionsDescriptor(
+        new Style({
+          canvas: {
+            width: 100,
+            height: 100,
+            elements: [
+              {
+                type: 'element',
+                name: 'g',
+                animations: [
+                  {
+                    name: 'sway',
+                    duration: 1,
+                    tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+                  },
+                  {
+                    name: 'blink',
+                    duration: 2,
+                    tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+                  },
+                  {
+                    // A second block sharing a name must not repeat it, and
+                    // an unnamed block must not add an entry.
+                    name: 'blink',
+                    duration: 3,
+                    tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+                  },
+                  {
+                    duration: 4,
+                    tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+      ).toJSON();
+
+      assert.deepEqual(descriptor.animation, {
+        type: 'animation',
+        values: ['blink', 'sway'],
+      });
+    });
+  });
 });

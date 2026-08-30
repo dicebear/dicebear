@@ -108,6 +108,29 @@ class Options
     }
 
     /**
+     * Returns the animation switch as given for booleans, and normalizes a
+     * single animation name to a one-element list.
+     *
+     * @return bool|list<string>|null
+     */
+    public function animation(): bool|array|null
+    {
+        $raw = $this->data['animation'] ?? null;
+
+        if ($raw === null || is_bool($raw)) {
+            return $raw;
+        }
+
+        return $this->asArray($raw);
+    }
+
+    /** @return array{min: int|float, max: int|float}|null */
+    public function animationSpeed(): ?array
+    {
+        return $this->toRange($this->data['animationSpeed'] ?? null);
+    }
+
+    /**
      * Returns the global `tags` filter as parsed tokens, or an empty list when
      * unset. Each raw token (`category` / `category:value`, optionally
      * `!`-prefixed to disallow) is decoded into `['category' => …, 'value' => …,

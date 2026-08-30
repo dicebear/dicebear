@@ -26,6 +26,9 @@ class Style
     private ?array $components = null;
     /** @var array<string, Color>|null */
     private ?array $colors = null;
+    private ?bool $hasAnimations = null;
+    /** @var list<string>|null */
+    private ?array $animationNames = null;
 
     public function __construct(mixed $data)
     {
@@ -34,6 +37,7 @@ class Style
         $this->data = is_array($data) ? $data : json_decode(json_encode($data), true);
 
         $this->validateAliases();
+        $this->validateAnimations();
     }
 
     /**
@@ -186,6 +190,128 @@ class Style
     private static function isAlias(array $data): bool
     {
         return array_key_exists('extends', $data);
+    }
+
+    /**
+     * Verifies that every animation track lists its keyframes in strictly
+     * ascending `at` order. The schema cannot express ordering between array
+     * items; step jumps are expressed with the `hold` easing rather than
+     * duplicate positions.
+     */
+    private function validateAnimations(): void
+    {
+        $errors = [];
+
+        $this->visitElements(function (array $element, string $path) use (&$errors): void {
+            foreach ($element['animations'] ?? [] as $animationIndex => $animation) {
+                foreach ($animation['tracks'] as $trackName => $track) {
+                    $keyframes = $track['keyframes'];
+                    $count = count($keyframes);
+
+                    for ($i = 1; $i < $count; $i++) {
+                        if ($keyframes[$i]['at'] <= $keyframes[$i - 1]['at']) {
+                            $errors[] = [
+                                'instancePath' => "{$path}/animations/{$animationIndex}/tracks/{$trackName}/keyframes/{$i}/at",
+                                'message' => 'must be greater than the previous keyframe',
+                            ];
+                        }
+                    }
+                }
+            }
+        });
+
+        if (count($errors) > 0) {
+            throw new StyleValidationError($errors);
+        }
+    }
+
+    /**
+     * Walks every element in the definition — the canvas tree and every
+     * component variant tree — and invokes `$visit` with the element and its
+     * JSON pointer path.
+     *
+     * @param callable(array<string, mixed>, string): void $visit
+     */
+    private function visitElements(callable $visit): void
+    {
+        $walk = function (array $elements, string $path) use (&$walk, $visit): void {
+            foreach ($elements as $index => $element) {
+                $elementPath = "{$path}/{$index}";
+
+                $visit($element, $elementPath);
+
+                if (isset($element['children'])) {
+                    $walk($element['children'], "{$elementPath}/children");
+                }
+            }
+        };
+
+        $walk($this->data['canvas']['elements'], '/canvas/elements');
+
+        foreach ($this->data['components'] ?? [] as $name => $component) {
+            if (self::isAlias($component)) {
+                continue;
+            }
+
+            foreach ($component['variants'] as $variantName => $variant) {
+                $walk($variant['elements'], "/components/{$name}/variants/{$variantName}/elements");
+            }
+        }
+    }
+
+    /**
+     * Returns whether any element in the definition carries declarative
+     * animations. Computed once and cached; consumed by the options
+     * descriptor to advertise the `animation` options only where they have an
+     * effect.
+     */
+    public function hasAnimations(): bool
+    {
+        if ($this->hasAnimations === null) {
+            $found = false;
+
+            $this->visitElements(function (array $element) use (&$found): void {
+                if (count($element['animations'] ?? []) > 0) {
+                    $found = true;
+                }
+            });
+
+            $this->hasAnimations = $found;
+        }
+
+        return $this->hasAnimations;
+    }
+
+    /**
+     * Returns the sorted distinct names of the definition's animation
+     * timelines. Computed once and cached; consumed by the options descriptor
+     * so tooling can offer the by-name form of the `animation` option. Sorted
+     * so every port reports the same order regardless of how it walks the
+     * definition.
+     *
+     * @return list<string>
+     */
+    public function animationNames(): array
+    {
+        if ($this->animationNames === null) {
+            $names = [];
+
+            $this->visitElements(function (array $element) use (&$names): void {
+                foreach ($element['animations'] ?? [] as $animation) {
+                    $name = $animation['name'] ?? null;
+
+                    if ($name !== null && !in_array($name, $names, true)) {
+                        $names[] = $name;
+                    }
+                }
+            });
+
+            sort($names, SORT_STRING);
+
+            $this->animationNames = $names;
+        }
+
+        return $this->animationNames;
     }
 
     /**

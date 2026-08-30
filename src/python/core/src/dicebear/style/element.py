@@ -32,6 +32,12 @@ class Element:
         """Return the element's raw attribute map, or ``None`` when undefined."""
         return cast("dict[str, Any] | None", self._data.get("attributes"))
 
+    def animations(self) -> list[dict[str, Any]]:
+        """Return the element's declarative animation timelines. Empty for
+        elements without animations.
+        """
+        return cast("list[dict[str, Any]]", self._data.get("animations", []))
+
     def children(self) -> list[Element]:
         """Return the element's children, lazily wrapped on first access."""
         if self._children is None:

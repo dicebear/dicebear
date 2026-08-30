@@ -1,0 +1,89 @@
+{
+  "canvas": {
+    "width": 100,
+    "height": 100,
+    "elements": [
+      {
+        "type": "element",
+        "name": "g",
+        "attributes": {
+          "class": "dbco-face"
+        },
+        "animations": [
+          {
+            "duration": 2,
+            "tracks": {
+              "translateY": {
+                "keyframes": [
+                  {
+                    "at": 0,
+                    "value": 0
+                  },
+                  {
+                    "at": 50,
+                    "value": -4
+                  },
+                  {
+                    "at": 100,
+                    "value": 0
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "children": [
+          {
+            "type": "element",
+            "name": "rect",
+            "attributes": {
+              "width": "100",
+              "height": "100",
+              "fill": "#123123"
+            }
+          }
+        ]
+      },
+      {
+        "type": "component",
+        "name": "animation"
+      }
+    ]
+  },
+  "components": {
+    "animation": {
+      "width": 100,
+      "height": 100,
+      "variants": {
+        "none": {
+          "elements": []
+        },
+        "medium": {
+          "elements": [
+            {
+              "name": "g",
+              "type": "element",
+              "attributes": {
+                "class": "dbco-medium"
+              }
+            },
+            {
+              "name": "style",
+              "type": "element",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "svg:has(.dbco-medium){--dbco-p:running}@media (prefers-reduced-motion: no-preference){@keyframes dbcoBob{50%{transform:translateY(-2px)}}.dbco-face{animation:dbcoBob 3s ease-in-out infinite;animation-play-state:var(--dbco-p,paused)}}"
+                }
+              ]
+            }
+          ],
+          "weight": 0,
+          "tags": [
+            "animation"
+          ]
+        }
+      }
+    }
+  }
+}

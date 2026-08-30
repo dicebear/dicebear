@@ -13,10 +13,14 @@ import { colorRef, componentHref, variableRef } from './naming.js';
  *  - `{ type: 'color', name }` attribute values -> `url(#color-name)`
  *  - `{ type: 'variable', name }` values        -> `var(#variable-name)`
  *  - `{ type: 'component', name }` elements     -> `<use href="#component-name"/>`
+ *  - `animations` timelines                     -> a `data-dbanim` attribute
  *
  * {@link svgsonToDefinition} is the exact inverse.
  */
-export function definitionToSvgson(element: DefinitionElement): INode {
+export function definitionToSvgson(
+  element: DefinitionElement,
+  index = 0,
+): INode {
   const attributes: Record<string, string> = {};
 
   for (const [key, value] of Object.entries(element.attributes ?? {})) {
@@ -27,6 +31,15 @@ export function definitionToSvgson(element: DefinitionElement): INode {
     } else {
       attributes[key] = variableRef(value.name);
     }
+  }
+
+  if (element.animations !== undefined) {
+    // URI-encoded so svgo's numeric and transform rewrites can never touch the
+    // payload. The sibling index prefix keeps identically-animated sibling
+    // paths distinguishable, or `mergePaths` would fuse them into one element
+    // and silently halve the animation; the decoder strips it again.
+    attributes['data-dbanim'] =
+      `${index}:${encodeURIComponent(JSON.stringify(element.animations))}`;
   }
 
   const children = (element.children ?? []).map(definitionToSvgson);

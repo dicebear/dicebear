@@ -174,6 +174,24 @@ namespace DiceBear
                 };
             }
 
+            // Only advertise the animation options when the style carries
+            // declarative animations — on a static style both are accepted but
+            // have no effect.
+            if (_style.HasAnimations())
+            {
+                descriptor["animation"] = new JsonObject
+                {
+                    ["type"] = "animation",
+                    ["values"] = ToArray(_style.AnimationNames()),
+                };
+                descriptor["animationSpeed"] = new JsonObject
+                {
+                    ["type"] = "range",
+                    ["min"] = 0.1,
+                    ["max"] = 10,
+                };
+            }
+
             return descriptor;
         }
 

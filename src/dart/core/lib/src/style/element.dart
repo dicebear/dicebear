@@ -37,6 +37,11 @@ class ElementNode {
   Map<String, Object?>? get attributes =>
       _data['attributes'] as Map<String, Object?>?;
 
+  /// Returns the element's declarative animation timelines as raw definition
+  /// maps, in definition order. Empty for elements without animations.
+  List<Object?> get animations =>
+      _data['animations'] as List<Object?>? ?? const [];
+
   /// Returns the element's children, lazily wrapped as [ElementNode]
   /// instances on first access. Defaults to an empty list.
   List<ElementNode> get children => _children ??= List.unmodifiable(

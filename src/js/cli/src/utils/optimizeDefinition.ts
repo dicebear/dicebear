@@ -72,6 +72,7 @@ interface Fingerprint {
   components: string[];
   variables: string[];
   css: string[];
+  animations: string[];
 }
 
 function fingerprint(definition: Definition): Fingerprint {
@@ -81,6 +82,7 @@ function fingerprint(definition: Definition): Fingerprint {
     components: [],
     variables: [],
     css: [],
+    animations: [],
   };
 
   const collect = (elements: readonly DefinitionElement[]) => {
@@ -115,6 +117,10 @@ function fingerprint(definition: Definition): Fingerprint {
             result.css.push(child.value);
           }
         }
+      }
+
+      if (element.animations !== undefined) {
+        result.animations.push(JSON.stringify(element.animations));
       }
     });
   };

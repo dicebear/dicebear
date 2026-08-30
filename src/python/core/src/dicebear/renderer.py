@@ -22,6 +22,27 @@ from .utils.xml import Xml
 # id preceded by a letter such as `é` is collected here too.
 _ID_PATTERN = re.compile(r'(?<![A-Za-z0-9_])id="([^"]+)"')
 
+# The canonical track order, outermost wrapper to innermost. It mirrors the
+# usual translate → rotate → scale transform composition; every port must wrap
+# in this exact order for the outputs to stay byte-identical.
+_TRACK_ORDER = ("translateX", "translateY", "rotate", "scaleX", "scaleY", "opacity")
+
+_DIRECTION_CSS = {
+    "normal": "normal",
+    "reverse": "reverse",
+    "alternate": "alternate",
+    "alternateReverse": "alternate-reverse",
+}
+
+_EASING_KEYWORD_CSS = {
+    "linear": "linear",
+    "ease": "ease",
+    "easeIn": "ease-in",
+    "easeOut": "ease-out",
+    "easeInOut": "ease-in-out",
+    "hold": "step-end",
+}
+
 
 class Renderer:
     """Walks a style's element tree and turns it into the final SVG markup.
@@ -36,6 +57,12 @@ class Renderer:
         self._defs: dict[str, str] = {}
         self._cached_seed_hash: str | None = None
         self._cached_initials: str | None = None
+        self._cached_animation_hash: str | None = None
+        self._keyframes_css: list[str] = []
+        self._animation_css: list[str] = []
+        self._keyframes_by_content: dict[str, str] = {}
+        self._keyframes_counter = 0
+        self._animation_class_counter = 0
 
     def render(self) -> str:
         """Build the complete SVG document for the avatar."""
@@ -50,6 +77,8 @@ class Renderer:
         body = self._apply_rotate(body, canvas)
         body = self._apply_translate(body, canvas)
         body = self._apply_border_radius(background + body, canvas)
+
+        self._register_animation_style()
 
         metadata = License.xml(self._style.meta())
         defs = "<defs>" + "".join(self._defs.values()) + "</defs>" if self._defs else ""
@@ -287,9 +316,11 @@ class Renderer:
             ):
                 return ""
 
-            return f"<{name}{attrs_str}/>"
+            return self._apply_animations(f"<{name}{attrs_str}/>", element)
 
-        return f"<{name}{attrs_str}>{children}</{name}>"
+        return self._apply_animations(
+            f"<{name}{attrs_str}>{children}</{name}>", element
+        )
 
     def _render_text_element(self, element: Element) -> str:
         """Render a text element by escaping its resolved value."""
@@ -351,7 +382,7 @@ class Renderer:
 
         attrs_str = self._render_attributes(merged_attributes)
 
-        return f'<use{attrs_str} href="#{id_}"/>'
+        return self._apply_animations(f'<use{attrs_str} href="#{id_}"/>', element)
 
     def _build_transforms(self, component: Component) -> list[str]:
         """Return the per-component SVG ``transform`` fragments.
@@ -511,3 +542,252 @@ class Renderer:
             )
 
         return self._cached_seed_hash
+
+    def _animation_hash(self) -> str:
+        """Return the FNV-1a hex hash namespacing the animation class and
+        keyframe names, cached after the first call.
+
+        Extends the :meth:`_hash_seed` input with the animation speed and, for
+        a by-name selection, the sorted names: two renders of the same avatar
+        with different speeds or selections inlined on one page must not
+        select each other's rules, while identical renders sharing identical
+        rules is harmless deduplication. ``True`` adds no name suffix, so
+        enabling all animations hashes as before.
+        """
+        if self._cached_animation_hash is None:
+            selection = self._resolver.animation()
+            names = (
+                ":" + ",".join(sorted(set(selection)))
+                if isinstance(selection, list)
+                else ""
+            )
+            source_name = self._style.meta().source().name() or ""
+            self._cached_animation_hash = Fnv1a.hex(
+                source_name
+                + ":"
+                + self._resolver.seed()
+                + ":"
+                + Number.format(self._resolver.animation_speed())
+                + names
+            )
+
+        return self._cached_animation_hash
+
+    def _apply_animations(self, markup: str, element: Element) -> str:
+        """Wrap an element's rendered markup in one ``<g class="…">`` per
+        animation track and queue the matching CSS.
+
+        A no-op when the ``animation`` option is off, the element carries no
+        animations, or its markup rendered to nothing (the empty-wrapper
+        pruning then also prunes the animation).
+
+        Wrapper nesting is block 0 outermost, and within a block the canonical
+        track order (translate before rotate before scale, opacity innermost) —
+        the composition contract the Figma plugin maps onto node transforms.
+        """
+        if len(markup) == 0:
+            return markup
+
+        animations = element.animations()
+
+        # The element check comes first: only styles that carry declarative
+        # animations may touch the `animation` option, so the resolved-options
+        # snapshot of every other avatar stays free of it.
+        if len(animations) == 0:
+            return markup
+
+        selection = self._resolver.animation()
+
+        # ``True`` plays every timeline. A name list plays only the timelines
+        # carrying one of those names, so unnamed timelines stay static then.
+        if selection is True:
+            active = animations
+        elif selection is False:
+            active = []
+        else:
+            active = [
+                animation
+                for animation in animations
+                if (name := animation.get("name")) is not None and name in selection
+            ]
+
+        if len(active) == 0:
+            return markup
+
+        classes: list[str] = []
+
+        for animation in active:
+            tracks = animation["tracks"]
+
+            for track in _TRACK_ORDER:
+                track_data = tracks.get(track)
+
+                if track_data is not None:
+                    classes.append(
+                        self._build_animation_css(
+                            animation, track, track_data["keyframes"]
+                        )
+                    )
+
+        result = markup
+
+        for class_name in reversed(classes):
+            result = f'<g class="{class_name}">{result}</g>'
+
+        return result
+
+    def _build_animation_css(
+        self, animation: dict[str, Any], track: str, keyframes: list[dict[str, Any]]
+    ) -> str:
+        """Generate the ``@keyframes`` block (deduplicated by content, so
+        identical tracks on many elements share one block) and the class rule
+        for a single track, and return the class name.
+        """
+        default_easing = animation.get("easing", "linear")
+        body = self._keyframes_body(track, keyframes, default_easing)
+        keyframes_name = self._keyframes_by_content.get(body)
+
+        if keyframes_name is None:
+            keyframes_name = f"dbk-{self._animation_hash()}-{self._keyframes_counter}"
+            self._keyframes_counter += 1
+
+            self._keyframes_by_content[body] = keyframes_name
+            self._keyframes_css.append(
+                "@keyframes " + keyframes_name + "{" + body + "}"
+            )
+
+        speed = self._resolver.animation_speed()
+        duration = Number.format(animation["duration"] / speed)
+        delay = Number.format(animation.get("delay", 0) / speed)
+        raw_iterations = animation.get("iterations")
+        iterations = (
+            "infinite"
+            if raw_iterations is None or raw_iterations == "infinite"
+            else Number.format(raw_iterations)
+        )
+        direction = _DIRECTION_CSS[animation.get("direction", "normal")]
+        fill = animation.get("fill", "none")
+
+        # Only rotate and scale pivot around a point; translation and opacity
+        # need no origin, so their rules skip the transform-box prefix.
+        origin_css = ""
+
+        if track in ("rotate", "scaleX", "scaleY"):
+            origin = animation.get("origin", {"x": 50, "y": 50})
+            origin_x = Number.format(origin["x"])
+            origin_y = Number.format(origin["y"])
+            origin_css = (
+                f"transform-box:fill-box;transform-origin:{origin_x}% {origin_y}%;"
+            )
+
+        class_name = f"dba-{self._animation_hash()}-{self._animation_class_counter}"
+        self._animation_class_counter += 1
+
+        # The name comes last in the shorthand so it can never be mistaken for
+        # a keyword; all seven tokens are always emitted so every port
+        # serializes the same string.
+        self._animation_css.append(
+            f".{class_name}{{{origin_css}animation:{duration}s "
+            f"{self._easing_css(default_easing)} {delay}s {iterations} "
+            f"{direction} {fill} {keyframes_name}}}"
+        )
+
+        return class_name
+
+    def _keyframes_body(
+        self,
+        track: str,
+        keyframes: list[dict[str, Any]],
+        default_easing: str | dict[str, Any],
+    ) -> str:
+        """Serialize a track's keyframes to a ``@keyframes`` body.
+
+        Endpoints are padded with copies of the nearest keyframe so the resting
+        value holds outside the keyframed span, matching Figma's hold
+        semantics. A keyframe's easing shapes the segment to the next keyframe
+        and is emitted only when it differs from the block default (the rule's
+        timing function covers the rest); the last keyframe has no following
+        segment, so its easing is never emitted.
+        """
+        kf_list: list[dict[str, Any]] = list(keyframes)
+
+        if kf_list[0]["at"] > 0:
+            kf_list.insert(0, {"at": 0, "value": kf_list[0]["value"]})
+
+        last = kf_list[-1]
+
+        if last["at"] < 100:
+            kf_list.append({"at": 100, "value": last["value"]})
+
+        default_css = self._easing_css(default_easing)
+        steps: list[str] = []
+
+        for index, keyframe in enumerate(kf_list):
+            easing = keyframe.get("easing")
+            easing_css = (
+                self._easing_css(easing)
+                if easing is not None and index < len(kf_list) - 1
+                else default_css
+            )
+            timing = (
+                ";animation-timing-function:" + easing_css
+                if easing_css != default_css
+                else ""
+            )
+            declaration = self._track_declaration(track, keyframe["value"])
+
+            steps.append(
+                Number.format(keyframe["at"]) + "%{" + declaration + timing + "}"
+            )
+
+        return "".join(steps)
+
+    def _track_declaration(self, track: str, value: float) -> str:
+        """Return the CSS declaration animating one track at one keyframe value."""
+        v = Number.format(value)
+
+        if track == "translateX":
+            return f"transform:translateX({v}px)"
+
+        if track == "translateY":
+            return f"transform:translateY({v}px)"
+
+        if track == "rotate":
+            return f"transform:rotate({v}deg)"
+
+        if track == "scaleX":
+            return f"transform:scaleX({v})"
+
+        if track == "scaleY":
+            return f"transform:scaleY({v})"
+
+        return f"opacity:{v}"
+
+    def _easing_css(self, easing: str | dict[str, Any]) -> str:
+        """Serialize an easing to its CSS form. ``hold`` renders as ``step-end``."""
+        if isinstance(easing, str):
+            return _EASING_KEYWORD_CSS[easing]
+
+        x1 = Number.format(easing["x1"])
+        y1 = Number.format(easing["y1"])
+        x2 = Number.format(easing["x2"])
+        y2 = Number.format(easing["y2"])
+
+        return f"cubic-bezier({x1}, {y1}, {x2}, {y2})"
+
+    def _register_animation_style(self) -> None:
+        """Register the accumulated animation CSS as a single ``<style>`` entry
+        in the shared ``<defs>`` block, wrapped in a reduced-motion media query
+        so users who prefer reduced motion get the static avatar.
+
+        A no-op when no animation CSS was produced.
+        """
+        if len(self._keyframes_css) == 0:
+            return
+
+        self._defs["animation-style"] = (
+            "<style>@media (prefers-reduced-motion:no-preference){"
+            + "".join(self._keyframes_css)
+            + "".join(self._animation_css)
+            + "}</style>"
+        )

@@ -3,6 +3,7 @@ import type {
   StyleDefinitionElementValue,
   StyleDefinitionElementType,
   StyleDefinitionAttributes,
+  StyleDefinitionAnimation,
 } from '../StyleDefinition.js';
 
 /**
@@ -48,6 +49,14 @@ export class Element {
    */
   attributes(): StyleDefinitionAttributes | undefined {
     return this.#data.attributes;
+  }
+
+  /**
+   * Returns the element's declarative animation timelines. Empty for
+   * elements without animations.
+   */
+  animations(): readonly StyleDefinitionAnimation[] {
+    return this.#data.animations ?? [];
   }
 
   /**

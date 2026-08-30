@@ -99,6 +99,18 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 		result["tags"] = map[string]any{"type": "enum", "values": tags, "list": true, "open": true}
 	}
 
+	// Only advertise the animation options when the style carries declarative
+	// animations — on a static style both are accepted but have no effect. The
+	// values are the style's timeline names (possibly none); the option takes
+	// true/false or a subset of these names.
+	if d.style.HasAnimations() {
+		result["animation"] = map[string]any{
+			"type":   "animation",
+			"values": append([]string{}, d.style.AnimationNames()...),
+		}
+		result["animationSpeed"] = map[string]any{"type": "range", "min": 0.1, "max": 10}
+	}
+
 	return result
 }
 

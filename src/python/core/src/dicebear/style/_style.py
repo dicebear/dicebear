@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
+from collections.abc import Callable
 from typing import Any, cast
 
 from ..errors import ErrorDetail, StyleValidationError
@@ -30,8 +31,11 @@ class Style:
         self._canvas: Canvas | None = None
         self._components: dict[str, Component] | None = None
         self._colors: dict[str, Color] | None = None
+        self._has_animations: bool | None = None
+        self._animation_names: list[str] | None = None
 
         self._validate_aliases()
+        self._validate_animations()
 
     @classmethod
     def from_json(cls, raw: str) -> Style:
@@ -105,6 +109,51 @@ class Style:
 
         return self._colors
 
+    def has_animations(self) -> bool:
+        """Return whether any element in the definition carries declarative
+        animations.
+
+        Computed once and cached; consumed by the options descriptor to
+        advertise the ``animation`` options only where they have an effect.
+        """
+        if self._has_animations is None:
+            found = False
+
+            def visit(element: dict[str, Any], _path: str) -> None:
+                nonlocal found
+
+                if len(element.get("animations", [])) > 0:
+                    found = True
+
+            self._visit_elements(visit)
+            self._has_animations = found
+
+        return self._has_animations
+
+    def animation_names(self) -> list[str]:
+        """Return the sorted distinct names of the definition's animation
+        timelines.
+
+        Computed once and cached; consumed by the options descriptor so
+        tooling can offer the by-name form of the ``animation`` option. Sorted
+        so every port reports the same order regardless of how it walks the
+        definition.
+        """
+        if self._animation_names is None:
+            names: set[str] = set()
+
+            def visit(element: dict[str, Any], _path: str) -> None:
+                for animation in element.get("animations", []):
+                    name = animation.get("name")
+
+                    if name is not None:
+                        names.add(name)
+
+            self._visit_elements(visit)
+            self._animation_names = sorted(names)
+
+        return self._animation_names
+
     def _validate_aliases(self) -> None:
         """Verify every ``extends`` references an existing, non-alias component.
 
@@ -147,6 +196,64 @@ class Style:
 
         if len(errors) > 0:
             raise StyleValidationError(errors)
+
+    def _validate_animations(self) -> None:
+        """Verify every animation track lists its keyframes in strictly
+        ascending ``at`` order.
+
+        The schema cannot express ordering between array items; step jumps are
+        expressed with the ``hold`` easing rather than duplicate positions.
+        """
+        errors: list[ErrorDetail] = []
+
+        def visit(element: dict[str, Any], path: str) -> None:
+            for animation_index, animation in enumerate(element.get("animations", [])):
+                for track_name, track in animation["tracks"].items():
+                    keyframes = track["keyframes"]
+
+                    for i in range(1, len(keyframes)):
+                        if keyframes[i]["at"] <= keyframes[i - 1]["at"]:
+                            errors.append(
+                                {
+                                    "instancePath": (
+                                        f"{path}/animations/{animation_index}"
+                                        f"/tracks/{track_name}/keyframes/{i}/at"
+                                    ),
+                                    "message": (
+                                        "must be greater than the previous keyframe"
+                                    ),
+                                }
+                            )
+
+        self._visit_elements(visit)
+
+        if len(errors) > 0:
+            raise StyleValidationError(errors)
+
+    def _visit_elements(self, visit: Callable[[dict[str, Any], str], None]) -> None:
+        """Walk every element in the definition — the canvas tree and every
+        component variant tree — and invoke ``visit`` with the element and its
+        JSON pointer path.
+        """
+
+        def walk(elements: list[dict[str, Any]], path: str) -> None:
+            for index, element in enumerate(elements):
+                element_path = f"{path}/{index}"
+
+                visit(element, element_path)
+                walk(element.get("children", []), f"{element_path}/children")
+
+        walk(self._data["canvas"]["elements"], "/canvas/elements")
+
+        for name, component in self._data.get("components", {}).items():
+            if self._is_alias(component):
+                continue
+
+            for variant_name, variant in component["variants"].items():
+                walk(
+                    variant["elements"],
+                    f"/components/{name}/variants/{variant_name}/elements",
+                )
 
     @staticmethod
     def _is_alias(data: dict[str, Any]) -> bool:

@@ -137,6 +137,17 @@ class OptionsDescriptor
             ];
         }
 
+        // Only advertise the animation options when the style carries
+        // declarative animations — on a static style both are accepted but
+        // have no effect.
+        if ($this->style->hasAnimations()) {
+            $result['animation'] = [
+                'type' => 'animation',
+                'values' => $this->style->animationNames(),
+            ];
+            $result['animationSpeed'] = ['type' => 'range', 'min' => 0.1, 'max' => 10];
+        }
+
         return $result;
     }
 }

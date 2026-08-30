@@ -13,7 +13,7 @@ use std::collections::{HashMap, HashSet};
 use serde_json::Value;
 
 use crate::error::Error;
-use crate::options::{Options, COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM};
+use crate::options::{AnimationSelection, Options, COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM};
 use crate::prng::{cmp_utf16, unique_by_code_point, Prng, Range};
 use crate::style::{Color, Component, Style};
 use crate::utils::color;
@@ -69,6 +69,24 @@ impl<'a> Resolver<'a> {
         let value = self.options.id_randomization().unwrap_or(false);
         self.record("idRandomization", Value::from(value));
         value
+    }
+
+    pub fn animation(&self) -> AnimationSelection {
+        // Deliberately without PRNG involvement — whether and what animates
+        // must not depend on the seed. `true` plays every timeline, a name
+        // list only the timelines carrying one of those names. The recorded
+        // value keeps the raw shape (a boolean, or the name list in user
+        // order) for the resolved() snapshot.
+        let value = self
+            .options
+            .animation()
+            .unwrap_or(AnimationSelection::Flag(false));
+        self.record("animation", value.to_value());
+        value
+    }
+
+    pub fn animation_speed(&self) -> f64 {
+        self.float("animationSpeed", self.options.animation_speed(), 1.0)
     }
 
     pub fn title(&self) -> Option<String> {
