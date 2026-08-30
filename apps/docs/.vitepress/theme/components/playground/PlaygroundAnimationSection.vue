@@ -91,14 +91,16 @@ function toggleName(name: string, checked: boolean) {
           <Checkbox
             :model-value="isSelected(name)"
             :binary="true"
-            @update:model-value="(checked: boolean) => toggleName(name, checked)"
+            @update:model-value="
+              (checked: boolean) => toggleName(name, checked)
+            "
           />
           <span>{{ name }}</span>
         </label>
       </div>
       <p class="pg-help">
-        Pick which of the style's animations play. Unchecking all of them
-        turns animations off.
+        Pick which of the style's animations play. Unchecking all of them turns
+        animations off.
       </p>
     </div>
 

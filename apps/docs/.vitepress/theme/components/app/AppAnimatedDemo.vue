@@ -47,7 +47,9 @@ const demoOptions = computed(() => ({
     ? {}
     : {
         animation: true,
-        ...(speedFactor.value === 1 ? {} : { animationSpeed: speedFactor.value }),
+        ...(speedFactor.value === 1
+          ? {}
+          : { animationSpeed: speedFactor.value }),
       }),
 }));
 

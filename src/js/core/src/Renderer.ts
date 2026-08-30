@@ -358,7 +358,10 @@ export class Renderer {
       return this.#applyAnimations(`<${name}${attrs}/>`, element);
     }
 
-    return this.#applyAnimations(`<${name}${attrs}>${children}</${name}>`, element);
+    return this.#applyAnimations(
+      `<${name}${attrs}>${children}</${name}>`,
+      element,
+    );
   }
 
   /**
