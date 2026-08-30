@@ -514,7 +514,7 @@ styles.declarative = {
           },
         ],
       },
-      // The alias renders a second <use> of the same def; the def-internal
+      // The alias renders a second <use> of the same def. The def-internal
       // animation exists once and animates both instances.
       {
         type: 'component',

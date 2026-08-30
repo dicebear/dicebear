@@ -44,7 +44,7 @@ interface RangeField {
 interface AnimationField {
   readonly type: 'animation';
   // The style's animation timeline names. The option takes `true`/`false` or
-  // a subset of these values; an empty list means every timeline is unnamed
+  // a subset of these values. An empty list means every timeline is unnamed
   // and only the boolean form has an effect.
   readonly values: readonly string[];
 }

@@ -104,13 +104,13 @@ func (s *Style) Components() map[string]*Component { return s.components }
 func (s *Style) Colors() map[string]ColorDef { return s.colors }
 
 // HasAnimations reports whether any element in the definition carries
-// declarative animations. Computed once at load; consumed by the options
+// declarative animations. Computed once at load. Consumed by the options
 // descriptor to advertise the animation options only where they have an
 // effect.
 func (s *Style) HasAnimations() bool { return s.hasAnimations }
 
 // AnimationNames returns the sorted distinct names of the definition's
-// animation timelines, possibly empty. Computed once at load; consumed by the
+// animation timelines, possibly empty. Computed once at load. Consumed by the
 // options descriptor so tooling can offer the by-name form of the animation
 // option. Sorted so every port reports the same order regardless of how it
 // walks the definition. Callers must not mutate the returned slice.

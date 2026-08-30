@@ -38,8 +38,8 @@ namespace DiceBear.Internal
         /// </summary>
         /// <summary>
         /// The canonical track order, outermost wrapper to innermost. It
-        /// mirrors the usual translate → rotate → scale transform composition;
-        /// every port must wrap in this exact order for the outputs to stay
+        /// mirrors the usual translate → rotate → scale transform composition.
+        /// Every port must wrap in this exact order for the outputs to stay
         /// byte-identical.
         /// </summary>
         private static readonly string[] TrackOrder =
@@ -943,7 +943,7 @@ namespace DiceBear.Internal
             var direction = DirectionCss(JsonRead.Str(animation, "direction"));
             var fill = JsonRead.Str(animation, "fill") ?? "none";
 
-            // Only rotate and scale pivot around a point; translation and
+            // Only rotate and scale pivot around a point. Translation and
             // opacity need no origin, so their rules skip the transform-box
             // prefix.
             var needsOrigin = track == "rotate" || track == "scaleX" || track == "scaleY";
@@ -961,7 +961,7 @@ namespace DiceBear.Internal
             var className = $"dba-{AnimationHash()}-{_animationClassCounter++}";
 
             // The name comes last in the shorthand so it can never be mistaken
-            // for a keyword; all seven tokens are always emitted so every port
+            // for a keyword. All seven tokens are always emitted so every port
             // serializes the same string.
             _animationCss.Add(
                 $".{className}{{{originCss}animation:{duration}s {EasingCss(defaultEasing)} {delay}s"
@@ -976,7 +976,7 @@ namespace DiceBear.Internal
         /// resting value holds outside the keyframed span, matching Figma's
         /// hold semantics. A keyframe's easing shapes the segment to the next
         /// keyframe and is emitted only when it differs from the block default
-        /// (the rule's timing function covers the rest); the last keyframe has
+        /// (the rule's timing function covers the rest). The last keyframe has
         /// no following segment, so its easing is never emitted.
         /// </summary>
         private string KeyframesBody(string track, JsonArray keyframes, JsonNode? defaultEasing)
@@ -1058,7 +1058,7 @@ namespace DiceBear.Internal
 
         /// <summary>
         /// Serializes an easing to its CSS form. <c>hold</c> renders as
-        /// <c>step-end</c>; <see langword="null"/> is the <c>linear</c>
+        /// <c>step-end</c>. <see langword="null"/> is the <c>linear</c>
         /// default.
         /// </summary>
         private static string EasingCss(JsonNode? easing)

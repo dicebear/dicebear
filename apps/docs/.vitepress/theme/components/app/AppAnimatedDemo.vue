@@ -39,7 +39,7 @@ const speedFactor = computed(() =>
   speed.value === 'off' ? null : Number(speed.value.replace('×', '')),
 );
 
-// Static is the default, so the options are simply omitted in that case, and
+// Static is the default, so the options are omitted in that case, and
 // a factor of 1 needs no `animationSpeed`.
 const demoOptions = computed(() => ({
   seed: DEMO_SEED,
@@ -86,7 +86,7 @@ const svg = new Avatar(style, {
     <UiContainer class="app-animated-demo-container">
       <UiSectionHeader
         class="app-animated-demo-header"
-        description="Animation is one option away: switch it on and pace it with a free speed factor, or leave it out for a static avatar."
+        description="Switch the style's animations on, set the pace with a speed factor, or leave both options out for a static avatar."
       >
         <template #headline>One Option, <strong>Any Speed</strong></template>
       </UiSectionHeader>

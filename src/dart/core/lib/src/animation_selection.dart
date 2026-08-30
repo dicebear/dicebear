@@ -34,7 +34,7 @@ class AnimationSelection {
   }
 
   /// Whether a timeline carrying the given [name] plays. `true` plays every
-  /// timeline; a name selection plays only named timelines carrying one of
+  /// timeline. A name selection plays only named timelines carrying one of
   /// the selected names.
   bool matches(String? name) {
     if (_all) {

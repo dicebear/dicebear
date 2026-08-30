@@ -37,7 +37,7 @@ export function definitionToSvgson(
     // URI-encoded so svgo's numeric and transform rewrites can never touch the
     // payload. The sibling index prefix keeps identically-animated sibling
     // paths distinguishable, or `mergePaths` would fuse them into one element
-    // and silently halve the animation; the decoder strips it again.
+    // and silently halve the animation. The decoder strips it again.
     attributes['data-dbanim'] =
       `${index}:${encodeURIComponent(JSON.stringify(element.animations))}`;
   }

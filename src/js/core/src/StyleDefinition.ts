@@ -57,7 +57,7 @@ export type StyleDefinitionEasingKeyword =
 
 /**
  * A cubic bezier easing given by its two control points. `x1`/`x2` stay
- * within 0..1; `y1`/`y2` may leave that range for overshoot curves.
+ * within 0..1, while `y1`/`y2` may leave that range for overshoot curves.
  */
 export interface StyleDefinitionEasingBezier {
   readonly x1: number;

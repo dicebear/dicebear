@@ -101,7 +101,7 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 
 	// Only advertise the animation options when the style carries declarative
 	// animations — on a static style both are accepted but have no effect. The
-	// values are the style's timeline names (possibly none); the option takes
+	// values are the style's timeline names (possibly none). The option takes
 	// true/false or a subset of these names.
 	if d.style.HasAnimations() {
 		result["animation"] = map[string]any{

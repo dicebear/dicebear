@@ -22,7 +22,7 @@ import 'utils/xml.dart';
 /// `CircularColorReferenceError` thrown from [render].
 class Renderer {
   /// The canonical track order, outermost wrapper to innermost. It mirrors
-  /// the usual translate → rotate → scale transform composition; every port
+  /// the usual translate → rotate → scale transform composition. Every port
   /// must wrap in this exact order for the outputs to stay byte-identical.
   static const List<String> _trackOrder = [
     'translateX',
@@ -782,7 +782,7 @@ class Renderer {
     final direction = _directionCss[animation['direction']] ?? 'normal';
     final fill = animation['fill'] as String? ?? 'none';
 
-    // Only rotate and scale pivot around a point; translation and opacity
+    // Only rotate and scale pivot around a point. Translation and opacity
     // need no origin, so their rules skip the transform-box prefix.
     final needsOrigin =
         track == 'rotate' || track == 'scaleX' || track == 'scaleY';
@@ -799,7 +799,7 @@ class Renderer {
     final className = 'dba-${_animationHash()}-${_animationClassCounter++}';
 
     // The name comes last in the shorthand so it can never be mistaken for a
-    // keyword; all seven tokens are always emitted so every port serializes
+    // keyword. All seven tokens are always emitted so every port serializes
     // the same string.
     _animationCss.add(
       '.$className{${originCss}animation:${duration}s '
@@ -815,7 +815,7 @@ class Renderer {
   /// outside the keyframed span, matching Figma's hold semantics. A
   /// keyframe's easing shapes the segment to the next keyframe and is
   /// emitted only when it differs from the block default (the rule's timing
-  /// function covers the rest); the last keyframe has no following segment,
+  /// function covers the rest). The last keyframe has no following segment,
   /// so its easing is never emitted.
   String _keyframesBody(
     String track,

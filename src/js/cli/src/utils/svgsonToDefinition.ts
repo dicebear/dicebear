@@ -57,7 +57,7 @@ export function svgsonToDefinition(node: INode): DefinitionElement {
   }
 
   // The `data-dbanim` carrier attribute becomes the `animations` member
-  // again; the sibling-index prefix in front of the payload is dropped.
+  // again. The sibling-index prefix in front of the payload is dropped.
   let animations: unknown[] | undefined;
   const rawAnimations = attributes['data-dbanim'];
 

@@ -8,7 +8,7 @@ import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 
 const props = defineProps<{
   // The style's animation names from the options descriptor. Empty when
-  // every timeline is unnamed; the section then offers only the toggle.
+  // every timeline is unnamed. The section then offers only the toggle.
   names: string[];
 }>();
 

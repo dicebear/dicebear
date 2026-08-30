@@ -12,7 +12,7 @@ import (
 
 // animationTrackOrder is the canonical track order, outermost wrapper to
 // innermost. It mirrors the usual translate → rotate → scale transform
-// composition; every port must wrap in this exact order for the outputs to
+// composition. Every port must wrap in this exact order for the outputs to
 // stay byte-identical.
 var animationTrackOrder = [...]string{
 	"translateX",
@@ -38,7 +38,7 @@ type animationSelection struct {
 func (s animationSelection) off() bool { return !s.all && len(s.names) == 0 }
 
 // matches reports whether a timeline carrying the given name plays. true
-// plays every timeline; a name selection plays only named timelines carrying
+// plays every timeline. A name selection plays only named timelines carrying
 // one of the selected names (name is "" on an unnamed timeline).
 func (s animationSelection) matches(name string) bool {
 	if s.all {
@@ -92,7 +92,7 @@ func (r *renderer) applyAnimations(markup string, el *style.Element) string {
 		// true plays every timeline. A name selection plays only the
 		// timelines carrying one of those names, so unnamed timelines stay
 		// static then. A skipped timeline contributes neither wrappers nor
-		// CSS; if none remains, the markup passes through untouched.
+		// CSS. If none remains, the markup passes through untouched.
 		if !selection.matches(animation.Name) {
 			continue
 		}
@@ -206,7 +206,7 @@ func (r *renderer) buildAnimationCss(animation *style.Animation, track string, k
 		fill = "none"
 	}
 
-	// Only rotate and scale pivot around a point; translation and opacity
+	// Only rotate and scale pivot around a point. Translation and opacity
 	// need no origin, so their rules skip the transform-box prefix.
 	originCss := ""
 	if track == "rotate" || track == "scaleX" || track == "scaleY" {
@@ -221,7 +221,7 @@ func (r *renderer) buildAnimationCss(animation *style.Animation, track string, k
 	r.animationCounter++
 
 	// The name comes last in the shorthand so it can never be mistaken for a
-	// keyword; all seven tokens are always emitted so every port serializes
+	// keyword. All seven tokens are always emitted so every port serializes
 	// the same string.
 	r.animationCss = append(r.animationCss,
 		"."+className+"{"+originCss+"animation:"+duration+"s "+easingCss(animation.Easing)+" "+
@@ -235,7 +235,7 @@ func (r *renderer) buildAnimationCss(animation *style.Animation, track string, k
 // value holds outside the keyframed span, matching Figma's hold semantics. A
 // keyframe's easing shapes the segment to the next keyframe and is emitted
 // only when it differs from the block default (the rule's timing function
-// covers the rest); the last keyframe has no following segment, so its easing
+// covers the rest). The last keyframe has no following segment, so its easing
 // is never emitted.
 func (r *renderer) keyframesBody(track string, keyframes []style.AnimationKeyframe, defaultEasing *style.Easing) string {
 	list := make([]style.AnimationKeyframe, 0, len(keyframes)+2)
@@ -290,7 +290,7 @@ func trackDeclaration(track string, value float64) string {
 	}
 }
 
-// easingCss serializes an easing to its CSS form. hold renders as step-end;
+// easingCss serializes an easing to its CSS form. hold renders as step-end.
 // nil is the linear default.
 func easingCss(easing *style.Easing) string {
 	if easing == nil {

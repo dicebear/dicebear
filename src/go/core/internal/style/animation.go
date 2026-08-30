@@ -49,7 +49,7 @@ type AnimationIterations struct {
 	finite bool
 }
 
-// Finite returns the run count and whether it is finite; (0, false) means
+// Finite returns the run count and whether it is finite. (0, false) means
 // infinite.
 func (it AnimationIterations) Finite() (float64, bool) { return it.count, it.finite }
 
