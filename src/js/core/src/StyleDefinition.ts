@@ -53,12 +53,7 @@ export interface StyleDefinitionAttributes {
 }
 
 export type StyleDefinitionEasingKeyword =
-  | 'linear'
-  | 'ease'
-  | 'easeIn'
-  | 'easeOut'
-  | 'easeInOut'
-  | 'hold';
+  'linear' | 'ease' | 'easeIn' | 'easeOut' | 'easeInOut' | 'hold';
 
 /**
  * A cubic bezier easing given by its two control points. `x1`/`x2` stay
@@ -90,18 +85,10 @@ export interface StyleDefinitionAnimationTrack {
 }
 
 export type StyleDefinitionAnimationTrackName =
-  | 'translateX'
-  | 'translateY'
-  | 'rotate'
-  | 'scaleX'
-  | 'scaleY'
-  | 'opacity';
+  'translateX' | 'translateY' | 'rotate' | 'scaleX' | 'scaleY' | 'opacity';
 
 export type StyleDefinitionAnimationDirection =
-  | 'normal'
-  | 'reverse'
-  | 'alternate'
-  | 'alternateReverse';
+  'normal' | 'reverse' | 'alternate' | 'alternateReverse';
 
 /**
  * The transform origin for `rotate` and `scale` tracks, as a percentage of

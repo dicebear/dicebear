@@ -9,8 +9,8 @@ description: >
 # How DiceBear tags variants
 
 DiceBear's own styles share one set of tags, so the [`tags`](/customize/tags/)
-filter behaves the same from one style to the next. The categories below
-arrive with an upcoming release.
+filter behaves the same from one style to the next. The categories below arrive
+with an upcoming release.
 
 DiceBear tags each variant by looking at how it renders, not at its name. Names
 are not always reliable. A hair variant called `long04` can turn out short once

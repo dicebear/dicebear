@@ -55,8 +55,8 @@ A few rules tie the tokens together:
   and the rest of the avatar stays varied.
 - Different categories act as "and", and a disallow (`!`) always wins over an
   allow.
-- A per-component variant option is more specific and takes precedence. When
-  you pin a component's variant directly, the `tags` filter is ignored for that
+- A per-component variant option is more specific and takes precedence. When you
+  pin a component's variant directly, the `tags` filter is ignored for that
   component and applies only to the others.
 - Only an unknown category is ignored. An unknown value is not. Because no
   variant matches it, every variant tagged in that category drops out. A typo in
@@ -76,16 +76,16 @@ nothing.
 
 ::: warning Not shipped yet
 
-The character categories are not set on any official style yet, so a filter
-like `mood:positive` or `hairLength:long` has no effect for now.
+The character categories are not set on any official style yet, so a filter like
+`mood:positive` or `hairLength:long` has no effect for now.
 
 :::
 
 An upcoming release adds a shared set for the character styles with mood, hair
 length, headwear, facial hair, eyewear, and accessory. The definitions already
 live in [How DiceBear tags variants](/customize/tags/reference/), so custom
-styles can adopt them today and stay compatible with the filter examples in
-the docs.
+styles can adopt them today and stay compatible with the filter examples in the
+docs.
 
 ## Custom styles
 

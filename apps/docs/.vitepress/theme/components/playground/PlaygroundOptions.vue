@@ -379,7 +379,10 @@ const onSeedFocus = (e: FocusEvent) => {
             <span class="pg-options-label">Animation</span>
           </AccordionHeader>
           <AccordionContent>
-            <PlaygroundAnimationSection :key="avatarStyleName" :names="animationNames" />
+            <PlaygroundAnimationSection
+              :key="avatarStyleName"
+              :names="animationNames"
+            />
           </AccordionContent>
         </AccordionPanel>
         <AccordionPanel value="__transform">

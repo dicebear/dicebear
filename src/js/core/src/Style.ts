@@ -232,9 +232,7 @@ export class Style<D = unknown> {
         continue;
       }
 
-      for (const [variantName, variant] of Object.entries(
-        component.variants,
-      )) {
+      for (const [variantName, variant] of Object.entries(component.variants)) {
         walk(
           variant.elements,
           `/components/${name}/variants/${variantName}/elements`,

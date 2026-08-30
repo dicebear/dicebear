@@ -65,9 +65,7 @@ export function svgsonToDefinition(node: INode): DefinitionElement {
     delete attributes['data-dbanim'];
 
     animations = JSON.parse(
-      decodeURIComponent(
-        rawAnimations.slice(rawAnimations.indexOf(':') + 1),
-      ),
+      decodeURIComponent(rawAnimations.slice(rawAnimations.indexOf(':') + 1)),
     ) as unknown[];
   }
 
