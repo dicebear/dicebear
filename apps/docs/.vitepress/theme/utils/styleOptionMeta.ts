@@ -15,6 +15,10 @@ export function getOptionDescription(name: string): string | undefined {
     return 'Accessible title for the SVG element. Useful for screen readers.';
   if (name === 'tags')
     return 'Keep only variants that carry the given tags. Within a category the values combine with or, different categories combine with and, and a leading ! disallows a tag.';
+  if (name === 'animation')
+    return "Plays the style's built-in animations in the SVG output. Accepts true for all of them, or one or more animation names. Raster formats always show the resting state.";
+  if (name === 'animationSpeed')
+    return 'Speed factor for the animations. 1 plays them as authored, 2 twice as fast. As a range [min, max], the PRNG picks a value in between.';
   if (name.match(/Probability$/))
     return 'Probability that this component appears in the avatar.';
   if (name.match(/Variant$/))
