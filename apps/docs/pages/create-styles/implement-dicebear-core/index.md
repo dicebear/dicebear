@@ -38,6 +38,28 @@ The core is intentionally minimal. It takes a
 [style definition](/create-styles/definition-schema/) and user options, resolves
 randomizable values through a deterministic PRNG, and renders an SVG string.
 
+## Where to start
+
+Build the modules in the order the parity fixtures can check them, and let each
+fixture pass before moving on. The fixtures are described in
+[Testing your implementation](#testing-your-implementation).
+
+| Step | Build                                                  | Passes                                 | Read                                                                                         |
+| ---- | ------------------------------------------------------ | -------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 1    | `Fnv1a` and `Mulberry32`                               | `fnv1a.json`, `mulberry32.json`        | [PRNG contract](#prng-contract)                                                              |
+| 2    | The `Prng` methods and number formatting               | `prng.json`, `numbers.json`            | [Selection methods](#selection-methods), [Number formatting](#number-formatting)             |
+| 3    | `Style`: schema validation, aliases, animations        | `validation.json`                      | [Definition schema](/create-styles/definition-schema/), [Validation](#validation)            |
+| 4    | The `Color` helpers                                    | `colors.json`                          | [Color options](#color-options)                                                              |
+| 5    | `Initials`                                             | `initials.json`                        | [Initials extraction](#initials-extraction)                                                  |
+| 6    | `Options`, `Resolver`, `Renderer`, `OptionsDescriptor` | `avatars/*.json`, `descriptors/*.json` | [Options resolution](#options-resolution), [SVG rendering pipeline](#svg-rendering-pipeline) |
+
+Steps 1 to 5 are pure functions with small inputs, and most parity bugs sit
+there. Step 6 composes everything: start with the `initials` style, which has
+two components and one text element, and end with `declarative`, which exercises
+every animation feature. A port is complete when every fixture passes. The seven
+reference implementations are all structured along these lines, so any of them
+can serve as a map.
+
 ## PRNG contract
 
 The PRNG is the interoperability surface. If your PRNG produces the same outputs
@@ -292,29 +314,32 @@ renderer. Each resolution uses the PRNG with a specific key.
 
 ### Core options
 
-| Option            | PRNG key       | Resolution                                                                 |
-| ----------------- | -------------- | -------------------------------------------------------------------------- |
-| `seed`            | —              | Literal string; defaults to `''` if not provided. Not memoized.            |
-| `size`            | —              | Literal number; defaults to unset (renderer omits `width`/`height`).       |
-| `idRandomization` | —              | Boolean; defaults to `false`. Uses host RNG, not the DiceBear PRNG.        |
-| `title`           | —              | Literal string; defaults to unset (omits `<title>`, uses `aria-hidden`).   |
-| `flip`            | `flip`         | `pick` from `['none', 'horizontal', 'vertical', 'both']`, default `'none'` |
-| `rotate`          | `rotate`       | `float` from range, default `0`                                            |
-| `scale`           | `scale`        | `float` from range, default `1`                                            |
-| `borderRadius`    | `borderRadius` | `float` from range, default `0`                                            |
-| `translateX`      | `translateX`   | `float` from range, default `0`                                            |
-| `translateY`      | `translateY`   | `float` from range, default `0`                                            |
-| `fontFamily`      | `fontFamily`   | `pick` from array, default `'system-ui'`                                   |
-| `fontWeight`      | `fontWeight`   | `pick` from array, default `400`                                           |
+| Option            | PRNG key         | Resolution                                                                 |
+| ----------------- | ---------------- | -------------------------------------------------------------------------- |
+| `seed`            | —                | Literal string; defaults to `''` if not provided. Not memoized.            |
+| `size`            | —                | Literal number; defaults to unset (renderer omits `width`/`height`).       |
+| `idRandomization` | —                | Boolean; defaults to `false`. Uses host RNG, not the DiceBear PRNG.        |
+| `title`           | —                | Literal string; defaults to unset (omits `<title>`, uses `aria-hidden`).   |
+| `flip`            | `flip`           | `pick` from `['none', 'horizontal', 'vertical', 'both']`, default `'none'` |
+| `rotate`          | `rotate`         | `float` from range, default `0`                                            |
+| `scale`           | `scale`          | `float` from range, default `1`                                            |
+| `borderRadius`    | `borderRadius`   | `float` from range, default `0`                                            |
+| `translateX`      | `translateX`     | `float` from range, default `0`                                            |
+| `translateY`      | `translateY`     | `float` from range, default `0`                                            |
+| `fontFamily`      | `fontFamily`     | `pick` from array, default `'system-ui'`                                   |
+| `fontWeight`      | `fontWeight`     | `pick` from array, default `400`                                           |
+| `tags`            | —                | Parsed token list, empty when unset; no memo, never in `resolvedOptions`   |
+| `animation`       | —                | `false`, `true`, or a list of timeline names; a bare name becomes a list   |
+| `animationSpeed`  | `animationSpeed` | `float` from range, default `1`                                            |
 
 Options with no PRNG key are read directly from the user input. The rest sample
 from a user-supplied range/list under the given key, falling back to the listed
 default.
 
 The range options (`rotate`, `scale`, `borderRadius`, `translateX`,
-`translateY`, and the per-color `${name}ColorAngle` / `${name}ColorFillStops`)
-accept a number or an array, normalized to a `{ min, max }` range before
-`float`/`integer` sampling:
+`translateY`, `animationSpeed`, and the per-color `${name}ColorAngle` /
+`${name}ColorFillStops`) accept a number or an array, normalized to a
+`{ min, max }` range before `float`/`integer` sampling:
 
 - a bare number `n` → `{ min: n, max: n }` (a fixed value);
 - a single-element array `[n]` → `{ min: n, max: n }` (same as the bare number);
@@ -326,9 +351,19 @@ Note the edge cases: `[n]` is a fixed value (**not** the default), and `[]`
 falls back to the default (**not** a range with a missing bound). A fixed range
 where `min === max` always samples that exact value.
 
+`tags` is read directly and parsed into tokens (see
+[Tag filtering](#tag-filtering)). `animation` is the one core option with a memo
+but no PRNG draw: whether an avatar moves must not depend on the seed. Both
+animation options are read only while rendering an element that carries
+`animations` (see [Animation rendering](#animation-rendering)), so the
+`resolvedOptions` snapshot of a static style never contains them, while an
+animated style records `animation: false` even when the user left the option
+unset.
+
 ### Component options
 
-For each component (e.g. `eyes`) the user can supply exactly two options:
+For each component (e.g. `eyes`) the user can supply two options, and the global
+`tags` filter narrows the pool from the outside:
 
 | Option            | PRNG key          | Resolution                                                                                                     |
 | ----------------- | ----------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -342,8 +377,13 @@ returns `undefined`.
 array of names, or a `Record<string, number>` weight map. Normalize the first
 two to a map where each named variant has weight `1`. Then drop any keys that
 are not declared in the component's `variants` block, and feed the remaining map
-to `weightedPick`. When the user did not supply the option, build the map from
-the variants' own `weight` values (defaulting to `1`).
+to `weightedPick`. When the user did not supply the option, take every variant,
+or only the ones that survive the [tag filter](#tag-filtering) when `tags` has
+at least one token, and build the map from the variants' own `weight` values
+(defaulting to `1`). A user-set `${name}Variant` therefore bypasses the tag
+filter for that component. A variant with `weight: 0` is only ever drawn when
+the tag filter or the variant option leaves the pool with a zero total, in which
+case `weightedPick` falls back to `pick`.
 
 For **component aliases** (declared via `extends` in the definition), the user
 side is shared and only the PRNG side is independent. An alias does not expose
@@ -353,6 +393,57 @@ read from the source component's `${sourceName}Probability` and
 (`${aliasName}Probability`, `${aliasName}Variant`), so each alias rolls its
 visibility and variant independently while still being constrained by the same
 user-set weights.
+
+### Tag filtering
+
+A variant may carry a `tags` array of tokens `category` or `category:value`. The
+`tags` option carries the same tokens, each optionally prefixed with `!`. Parse
+every user token once per avatar into `{ category, value?, negated }` by
+stripping the leading `!` and splitting at the first `:`. Then sort the tokens
+into four groups:
+
+```
+allows        category -> [values]   positive `category:value` tokens
+bares         set of categories      positive `category` tokens
+disallows     [{category, value?}]   every negated token
+bareDisallows set of categories      negated `!category` tokens
+```
+
+Two lookups on a variant's tags drive the filter:
+
+```
+hasTag(category)        any tag equals `category` or starts with `category:`
+hasTag(category, value) any tag equals `category:value`
+```
+
+For a component, first decide which bare tokens bind: a bare category is
+`required` only when it is not in `bareDisallows` and at least one variant of
+this component has a tag in it. A bare token therefore turns on a category where
+the style uses it and leaves every other component untouched. Then keep a
+variant when all of these hold:
+
+1. For every `(category, values)` in `allows`, the variant has no tag in that
+   category, or has one of the allowed `category:value` tags. Values within a
+   category combine with "or", categories with "and".
+2. For every `required` category, the variant has a tag in it.
+3. No disallow matches: `!category:value` matches the exact tag, `!category`
+   matches any tag in the category. A disallow wins over any allow.
+
+The surviving variants keep their definition order, so the weighted map fed to
+`weightedPick` is built in that order. A `category:value` token whose value no
+variant carries drops every variant tagged in that category, while a category no
+variant uses has no effect. An empty pool means the component is not drawn.
+
+The options descriptor advertises `tags` only when at least one variant of the
+style carries a tag, as an open enum:
+
+```json
+"tags": { "type": "enum", "values": ["animation", "animation:slow"], "list": true, "open": true }
+```
+
+`values` is the sorted union of every tag across all variants, and `open` tells
+tooling that the option also accepts `!` disallows and bare categories outside
+that list.
 
 ### Per-component transforms (render-time)
 
@@ -568,6 +659,11 @@ Walk the `canvas.elements` array recursively:
   the component is visible, emit a `<use>` element pointing at a `<defs>` entry
   that holds the variant body (see below).
 
+An `element` or `component` node may also carry an `animations` array. When the
+`animation` option selects one of its timelines, the rendered markup (the
+element, or the `<use>` call site) is wrapped in animated `<g>` elements, see
+[Animation rendering](#animation-rendering).
+
 When an `element` has the name `defs`, the renderer **does not** emit a `<defs>`
 tag inline. Instead, each child is rendered and pushed into the shared `<defs>`
 block that the renderer accumulates over the whole walk (alongside generated
@@ -651,8 +747,8 @@ Its children, in this exact order:
 2. `<metadata>`: the Dublin Core / RDF block from `meta` (see below); omitted
    entirely if `meta` is empty.
 3. `<defs>`: the accumulated definitions (clip path, gradients, component
-   variant bodies). Always present in practice because the border-radius clip is
-   always registered.
+   variant bodies, and the animation `<style>` when any timeline played). Always
+   present in practice because the border-radius clip is always registered.
 4. `<title>`: only when the `title` option is set. Contents are escaped.
 5. The transformed body from the previous step.
 
@@ -700,9 +796,13 @@ The suffix **must be non-deterministic**: derive it from the host language's
 non-seeded RNG (`Math.random()` in JavaScript, `random_int()` in PHP,
 `random.randint()` in Python), not from the DiceBear PRNG. Two avatars rendered
 with the same seed would otherwise still collide on their IDs, defeating the
-purpose of the feature. Because the randomized output is non-deterministic, it
-is excluded from parity testing: the avatar fixtures use the default of
-`idRandomization: false`.
+purpose of the feature. Draw the suffix once per render and cache it: with this
+option on, the animation class and keyframes names need the same suffix, and
+since they are not `id` attributes the rewrite above never sees them. They pick
+it up through the [animation hash](#names-and-the-animation-hash) instead. With
+the option off, animations stay fully deterministic. Because the randomized
+output is non-deterministic, it is excluded from parity testing: the avatar
+fixtures use the default of `idRandomization: false`.
 
 ## Gradient rendering
 
@@ -724,6 +824,186 @@ When a gradient is needed:
    it.
 6. Gradient ID format: `{colorName}-color-{seedHash}` where `seedHash` is the
    FNV-1a hex hash of the seed (8 chars, zero-padded, lowercased).
+
+## Animation rendering
+
+A style definition may attach an `animations` array to any `element` or
+`component` node (schema 1.6.0 and later). Each entry is one timeline with a
+`duration` in seconds, a `tracks` map, and the optional fields `name`, `delay`,
+`iterations`, `direction`, `fill`, `easing`, and `origin`. The renderer turns
+the selected timelines into CSS: one `<g class="…">` wrapper per track around
+the node's markup, plus a single `<style>` element in `<defs>` that holds the
+`@keyframes` blocks and the class rules. With the `animation` option off (the
+default) nothing of this is emitted and the output is byte-identical to that of
+a renderer that does not know about animations. This is what keeps raster
+conversions and the HTTP API static.
+
+### Validation
+
+The JSON schema cannot order array items, so the style constructor checks that
+every track lists its keyframes in strictly ascending `at` order and rejects the
+definition otherwise. The JavaScript reference reports the offending keyframe
+under its JSON pointer path, for example
+`/canvas/elements/0/animations/0/tracks/rotate/keyframes/1/at` (or the
+`/components/{name}/variants/{variant}/elements/…` equivalent) with the message
+`must be greater than the previous keyframe`. Only the accept/reject outcome is
+part of the contract. A step jump is expressed with the `hold` easing, never
+with two keyframes at the same position.
+
+### Selecting timelines
+
+The resolver's `animation()` returns `false`, `true`, or a list of names:
+
+- `true` plays every timeline of every node.
+- A list plays only the timelines whose `name` is in the list. Unnamed timelines
+  stay static in this form, and a name the style does not know selects nothing.
+- `false` (the default) plays none.
+
+A bare name from the user is normalized to a one-element list, so it lands in
+`resolvedOptions` as `["pulse"]`, not `"pulse"`. No PRNG is involved. The memo
+is touched the first time the renderer meets a node that carries `animations`,
+regardless of whether the option is on. `animationSpeed` is only touched once a
+track is actually rendered.
+
+### Wrappers
+
+For a node with active timelines, collect one class name per track: timelines in
+definition order, and within a timeline the tracks in this canonical order,
+skipping absent ones:
+
+```
+translateX, translateY, rotate, scaleX, scaleY, opacity
+```
+
+Then wrap the rendered markup, first collected class outermost:
+
+```html
+<g class="dba-{hash}-0"><g class="dba-{hash}-1">…markup…</g></g>
+```
+
+Markup that rendered to the empty string is left alone: an `element` pruned for
+having no children takes its animations with it. For a `component` the wrappers
+go around the `<use>` call site, not around the variant body in `<defs>`, so two
+references to the same variant can animate differently.
+
+When the node has an `opacity` attribute and one of its active timelines has an
+`opacity` track, the attribute moves from the node to the innermost opacity
+wrapper. The keyframes then replace the resting value instead of multiplying
+with it, which is how a CSS animation on the element itself would behave. The
+attribute is rendered on the wrapper exactly like any other attribute (see the
+`reveal` timeline in the `declarative` fixture, whose `<rect opacity="0">`
+becomes `<g class="…" opacity="0"><rect …/></g>`). With the animation off the
+attribute stays where the author put it.
+
+### Names and the animation hash
+
+Class names are `dba-{animationHash}-{n}` and keyframes names are
+`dbk-{animationHash}-{m}`. `n` and `m` are separate zero-based counters in
+emission order. `animationHash` is the FNV-1a hex hash (8 characters, lowercase,
+zero-padded) of
+
+```
+{source.name or ''} + ':' + seed + ':' + formatNumber(animationSpeed)
+  [+ ':' + names]      // list form only: deduplicated, sorted by UTF-16 code units, joined with ','
+  [+ ':' + suffix]     // only when idRandomization is on: the same suffix the id rewrite uses
+```
+
+The first two parts equal the input of the component-id hash, so `true` with the
+default speed hashes as the seed hash does. Compute the hash once per render and
+cache it. Two renders of the same seed with different speeds or selections
+placed on one page must not pick up each other's rules, while identical renders
+sharing identical rules is harmless.
+
+### Keyframes body
+
+Pad the track's keyframes first: when the first keyframe has `at > 0`, prepend a
+copy with `at: 0`, and when the last one has `at < 100`, append a copy with
+`at: 100`. The resting value then holds outside the keyframed span. Each
+keyframe becomes `{at}%{{declaration}{timing}}` with `at` run through
+`formatNumber`, and the body is the concatenation without separators.
+
+| Track        | Declaration                   |
+| ------------ | ----------------------------- |
+| `translateX` | `transform:translateX({v}px)` |
+| `translateY` | `transform:translateY({v}px)` |
+| `rotate`     | `transform:rotate({v}deg)`    |
+| `scaleX`     | `transform:scaleX({v})`       |
+| `scaleY`     | `transform:scaleY({v})`       |
+| `opacity`    | `opacity:{v}`                 |
+
+`timing` is `;animation-timing-function:{easing}` and is emitted only when the
+keyframe carries its own `easing`, is not the last keyframe of the padded list
+(there is no following segment to shape), and its CSS form differs from the
+timeline's default easing. The default easing is the timeline's `easing`, or
+`linear` when unset.
+
+Easings serialize as follows: the keywords `linear` and `ease` stay as they are,
+`easeIn`, `easeOut`, and `easeInOut` become `ease-in`, `ease-out`, and
+`ease-in-out`, and `hold` becomes `step-end`. A bezier object becomes
+`cubic-bezier({x1}, {y1}, {x2}, {y2})` with each value through `formatNumber`
+and a comma plus space between them.
+
+Keyframes blocks are deduplicated by body: the first track that produces a given
+body registers `@keyframes dbk-{hash}-{m}{{body}}` and later tracks with the
+same body reuse that name. Class rules are never deduplicated.
+
+### Class rule
+
+Every track adds one rule to the class list:
+
+```
+.dba-{hash}-{n}{[transform-box:fill-box;transform-origin:{x}% {y}%;]animation:{duration}s {easing} {delay}s {iterations} {direction} {fill} dbk-{hash}-{m}}
+```
+
+- The `transform-box`/`transform-origin` prefix is present only for `rotate`,
+  `scaleX`, and `scaleY`. `origin` defaults to `{ x: 50, y: 50 }`, and both
+  values go through `formatNumber`.
+- `duration` is `formatNumber(duration / animationSpeed)`, `delay` is
+  `formatNumber((delay ?? 0) / animationSpeed)`. Negative delays are allowed and
+  start the timeline mid-way.
+- `iterations` is the literal `infinite` when the field is unset or
+  `'infinite'`, otherwise `formatNumber(iterations)`.
+- `direction` maps `alternateReverse` to `alternate-reverse`; the other three
+  keywords are emitted as written. Default `normal`.
+- `fill` is `none` or `forwards`, default `none`.
+- `easing` is the timeline's default easing in CSS form.
+
+All seven tokens of the shorthand are always emitted, and the keyframes name
+comes last so it can never be mistaken for a keyword.
+
+### The `<style>` entry
+
+After the body has been rendered and wrapped, and before `<defs>` is serialized,
+register the accumulated CSS as one more `<defs>` entry if at least one
+keyframes block exists:
+
+```
+<style>@media (prefers-reduced-motion:no-preference){{keyframes blocks in registration order}{class rules in emission order}}</style>
+```
+
+The map key is `animation-style`. An authored `<defs>` child may already use
+that id, so append `-` to the key until it is free rather than replacing the
+def. Because the entry is registered after the whole walk, it is the last child
+of `<defs>`. The media query gives users who prefer reduced motion the static
+avatar.
+
+A style may still ship the older mechanism next to the declarative one: a
+component with an authored `<style>` element, gated behind a tag. The `coexist`
+fixture pins that both render side by side in one avatar.
+
+### Options descriptor
+
+When any node in the definition (canvas tree or component variants) has a
+non-empty `animations` array, the descriptor gains two fields:
+
+```json
+"animation": { "type": "animation", "values": ["drift", "pulse"] },
+"animationSpeed": { "type": "range", "min": 0.1, "max": 10 }
+```
+
+`values` lists the distinct timeline names sorted by UTF-16 code units, and is
+an empty list when every timeline is unnamed. Static styles do not advertise
+either field, although the options are accepted (and ignored) everywhere.
 
 ## Initials extraction
 
@@ -756,44 +1036,44 @@ Python, Rust, Go, Dart, and C# reference implementations all consume the same
 JSON fixtures and assert the same outputs, so any port that reads these fixtures
 gets the same coverage for free.
 
-The fixture tree contains:
+The unit fixtures each pin one contract:
 
-- **`fnv1a.json`**: input strings with their expected 32-bit hash and 8-char hex
-  representation. Includes ASCII, the `seed:key` patterns produced by
-  `Prng.getValue()`, and Unicode (`„é"`, `„日本語"`, emoji, long strings).
-- **`mulberry32.json`**: seeds with the first 5 chained `{nextFloat, state}`
-  pairs each. Catches state-progression bugs, not just first-step bugs.
-- **`prng.json`**: every `Prng` method (`getValue`, `pick`, `weightedPick`,
-  `bool`, `float`, `integer`, `shuffle`) with `{seed, key, args, result}` test
-  cases, including order-independence checks for `pick` / `weightedPick` /
-  `shuffle`.
-- **`numbers.json`**: the number-to-string formatting contract (at most 5
-  decimal places, halves toward +Infinity), including negative half-way
-  boundaries and tiny values that collapse to `0`.
-- **`initials.json`**: seed-to-initials extraction, covering accents, quotes,
-  email `@`-stripping, CJK, and emoji.
-- **`colors.json`**: the `Color` helpers (`toHex`, `toRgbHex`, `parseHex`,
-  `luminance`, `sortByContrast`, `filterNotEqualTo`). The luminance entries pin
-  exact doubles (including values around the linearization threshold, see the
-  warning above), and the sort cases include a stability check.
-- **`validation.json`**: style definitions and options with their expected
-  accept/reject outcome (error _messages_ are language-specific and not part of
-  the contract), plus circular `contrastTo` chains with the expected resolution
-  path.
-- **`styles/{initials,thumbs,glass,notionists,shape-grid}.json`**: vendored
-  copies of five style definitions chosen to cover most rendering features
-  (text, components, color overrides, gradient fills, root SVG attributes).
-- **`avatars/{initials,thumbs,glass,notionists,shape-grid}.json`**:
-  `{id, options, svg, resolvedOptions}` cases per style, exercising seed, size,
-  scale, rotate, translate, border radius, flip, background gradients
-  (solid/linear/radial), `title` escaping, component variant overrides, and
-  style-specific options like `fontFamily` and `gestureVariant`. Select cases
-  also carry a `dataUri` field that pins the percent-encoding contract
-  (JavaScript's `encodeURIComponent`: every byte except `A-Za-z0-9-_.!~*'()` is
-  escaped).
-- **`descriptors/{initials,thumbs,glass,notionists,shape-grid}.json`**: the
-  `OptionsDescriptor` field map per style (types, ranges, sorted variant lists,
-  per-color fields).
+| Fixture           | Pins                                                                                                                                                                                                                                                                                                                                                                                      |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fnv1a.json`      | The 32-bit hash and its 8-char hex form for ASCII input, the `seed:key` patterns produced by `Prng.getValue()`, and Unicode (`„é"`, `„日本語"`, emoji, long strings)                                                                                                                                                                                                                      |
+| `mulberry32.json` | The first 5 chained `{nextFloat, state}` pairs per seed, so state progression is checked, not only the first step                                                                                                                                                                                                                                                                         |
+| `prng.json`       | Every `Prng` method (`getValue`, `pick`, `weightedPick`, `bool`, `float`, `integer`, `shuffle`) as `{seed, key, args, result}` cases, including order-independence checks for `pick`, `weightedPick`, and `shuffle`                                                                                                                                                                       |
+| `numbers.json`    | Number formatting: at most 5 decimal places, halves toward +Infinity, negative half-way boundaries, tiny values that collapse to `0`                                                                                                                                                                                                                                                      |
+| `initials.json`   | Seed-to-initials extraction with accents, quotes, email `@`-stripping, CJK, and emoji                                                                                                                                                                                                                                                                                                     |
+| `colors.json`     | The `Color` helpers (`toHex`, `toRgbHex`, `parseHex`, `luminance`, `sortByContrast`, `filterNotEqualTo`). The luminance entries pin exact doubles, including values around the linearization threshold (see the warning above), and the sort cases include a stability check                                                                                                              |
+| `validation.json` | Accept/reject outcomes for definitions and options (error _messages_ are language-specific and not part of the contract), circular `contrastTo` chains with their resolution path, tag tokens that break the grammar (uppercase segments, a third segment, a double `!`), and animation blocks with unordered or duplicate keyframes, unknown tracks, or an out-of-range `animationSpeed` |
+
+The remaining fixtures come in threes, one set per style. `styles/{name}.json`
+is a vendored copy of the definition. `avatars/{name}.json` holds
+`{id, options, svg, resolvedOptions}` cases. `descriptors/{name}.json` is the
+`OptionsDescriptor` field map: types, ranges, sorted variant lists, per-color
+fields, the `tags` enum where variants carry tags, and the `animation` fields
+where the style has timelines.
+
+Every avatar file opens with the same eleven cases: two seeds, size with scale
+and rotation, translate with border radius and flip, solid, linear, and radial
+backgrounds, fixed color order for user colors and for the palette, and `title`
+with and without characters that need escaping. Select cases also carry a
+`dataUri` field that pins the percent-encoding contract (JavaScript's
+`encodeURIComponent`: every byte except `A-Za-z0-9-_.!~*'()` is escaped). The
+cases after those are specific to the style:
+
+| Style         | Covers                                                                                                                                                                                                                                                                                                |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `initials`    | Text elements, `fontFamily` and `fontWeight`, a text color with `contrastTo`                                                                                                                                                                                                                          |
+| `thumbs`      | Four components with per-component transforms, `contrastTo` and `notEqualTo` chains, a user color override, root `attributes`                                                                                                                                                                         |
+| `glass`       | Component aliases via `extends`, an authored `defs` element, a probability of zero                                                                                                                                                                                                                    |
+| `notionists`  | Eleven components, `notEqualTo` between the ink and paper colors, `gestureVariant`                                                                                                                                                                                                                    |
+| `shape-grid`  | Sixteen aliases of one component, pinned variants, a probability of zero                                                                                                                                                                                                                              |
+| `tagged`      | Variants tagged in several categories next to one untagged component. Every token form of `tags`: allow, bare, `!` disallow, "or" within a category, "and" across categories, unknown category, unknown value, and the precedence of `${name}Variant`                                                 |
+| `animated`    | An opt-in animation component whose variants have `weight: 0` and are reachable only through the `tags` filter                                                                                                                                                                                        |
+| `declarative` | Every track type, keyword and bezier easings, custom origins, negative delays, finite iterations, named and unnamed timelines, an animated component reference. `animation` in every form (off, on, a name, a list, a reversed list, an unknown name) and `animationSpeed` as a factor and as a range |
+| `coexist`     | A declarative timeline next to a tag-gated `<style>` component, each on its own and both together                                                                                                                                                                                                     |
 
 ### How to use the fixtures
 
