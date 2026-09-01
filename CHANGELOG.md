@@ -8,6 +8,27 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Core:** All seven cores render the declarative animations of
+  `@dicebear/schema` 1.6. The new `animation` option is off by default, `true`
+  plays every timeline of a style, and a name or a list of names plays only
+  those. `animationSpeed` scales the pace, as a factor or as a range the seed
+  picks from. With the option off the SVG stays byte-identical to before, so
+  raster output and the HTTP API remain static. The CSS respects
+  `prefers-reduced-motion`, and the options descriptor lists both options only
+  for styles that carry animations.
+
+- **CLI:** `--optimize` rebuilds circles and ellipses that an editor exported as
+  paths, and keeps `animations` blocks intact.
+
+- **Docs:** The playground has an animation section, and the guide for
+  implementing a core covers the tag filter and the animation rendering.
+
+### Changed
+
+- **Editor:** Exports stay static, so the `animation` option is hidden.
+
 ## [10.7.0] - 2026-08-26
 
 ### Changed
