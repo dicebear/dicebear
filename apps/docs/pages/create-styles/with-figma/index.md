@@ -92,8 +92,9 @@ settings, you can export your avatar style.
 
 ::: tip
 
-Make sure you select version **10.x** in the export settings. This guide covers
-version 10.x.
+Make sure you select version **11.x** in the export settings. This guide covers
+version 11.x. An export for 10.x writes the same definition, but without
+animations, because the 10.x cores render every avatar static.
 
 ![You can find the version option in the "General" tab](/create-styles/with-figma/version-hint.png)
 
