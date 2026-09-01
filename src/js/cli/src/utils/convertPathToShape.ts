@@ -39,6 +39,20 @@ const TOKENS = /[a-zA-Z]|[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?/g;
 const ARGUMENTS: Record<string, number> = { C: 6, S: 4, A: 7 };
 
 /**
+ * Attributes that tie the rendering to the path's own start point and
+ * direction. Markers only render on a path, and a dash pattern begins where
+ * the path begins, while a circle's stroke begins at its three o'clock point.
+ */
+const PATH_BOUND_ATTRIBUTES = [
+  'marker-start',
+  'marker-mid',
+  'marker-end',
+  'stroke-dasharray',
+  'stroke-dashoffset',
+  'pathLength',
+];
+
+/**
  * Reads a single subpath made of arcs and cubics into absolute segments, which
  * are the two shapes a circle takes once it has been through a vector editor.
  * Returns null for everything else, including a straight edge, a second
@@ -72,7 +86,7 @@ function parsePath(d: string): { start: Point; segments: Segment[] } | null {
   while (index < tokens.length) {
     const token = tokens[index];
 
-    if (/[a-zA-Z]/.test(token)) {
+    if (/^[a-zA-Z]$/.test(token)) {
       // A close is only allowed as the last command, and a second move would
       // open a subpath this rule cannot express as one element.
       if (token === 'Z' || token === 'z') {
@@ -96,7 +110,8 @@ function parsePath(d: string): { start: Point; segments: Segment[] } | null {
     const upper = command.toUpperCase();
     const relative = command !== upper;
     const count = ARGUMENTS[upper];
-    const args = tokens.slice(index, index + count).map(Number);
+    const raw = tokens.slice(index, index + count);
+    const args = raw.map(Number);
 
     if (args.length < count || args.some((value) => !Number.isFinite(value))) {
       return null;
@@ -107,8 +122,14 @@ function parsePath(d: string): { start: Point; segments: Segment[] } | null {
     if (upper === 'A') {
       // Flags are single digits and may be written without a separator, which
       // this reader cannot tell apart from a coordinate. Bailing out keeps it
-      // from misreading `a7 7 0 110 0-14` as a radius of 110.
-      if (args[3] > 1 || args[4] > 1) {
+      // from misreading `a7 7 0 110 0-14` as a radius of 110, and the length
+      // check keeps a fused `00.5` from shifting the whole argument frame.
+      if (
+        raw[3].length !== 1 ||
+        raw[4].length !== 1 ||
+        args[3] > 1 ||
+        args[4] > 1
+      ) {
         return null;
       }
 
@@ -176,15 +197,15 @@ function angleBetween(ux: number, uy: number, vx: number, vy: number): number {
 }
 
 /**
- * Center and swept angle of one arc, from the endpoint parameterization the SVG
- * specification describes. Radii too small for the two end points are
- * scaled up the way a renderer would, so the result describes what the arc
- * actually draws.
+ * Center, swept angle and effective radii of one arc, from the endpoint
+ * parameterization the SVG specification describes. Radii too small for the
+ * two end points are scaled up the way a renderer would, so the result
+ * describes what the arc actually draws.
  */
 function arcCenter(
   from: Point,
   arc: Arc,
-): { cx: number; cy: number; delta: number } | null {
+): { cx: number; cy: number; rx: number; ry: number; delta: number } | null {
   if (arc.rx === 0 || arc.ry === 0) {
     return null;
   }
@@ -238,17 +259,23 @@ function arcCenter(
   return {
     cx: cos * cxp - sin * cyp + (from.x + arc.x) / 2,
     cy: sin * cxp + cos * cyp + (from.y + arc.y) / 2,
+    rx,
+    ry,
     delta,
   };
 }
 
 /**
- * True when the arcs draw one closed run around a common center.
+ * The shape one closed run of arcs draws around a common center, together with
+ * the middle point of every arc.
  *
- * Their centers are averaged rather than compared: a center computed from
+ * The centers are averaged rather than compared: a center computed from
  * rounded coordinates drifts by several thousandths on a chord that comes close
  * to the diameter, and whether the average really describes the path is settled
- * afterwards, by putting every point back on it.
+ * afterwards, by putting every point back on it. The endpoints alone cannot do
+ * that: on a two-arc circle they all lie on one chord, so only the middles pin
+ * the center in the other direction, and only they reveal an egg drawn around
+ * two centers.
  *
  * Rotated ellipses are left alone. Expressing one needs a transform, and the
  * path is already the shorter way to write it.
@@ -257,7 +284,7 @@ function fitFromArcs(
   start: Point,
   arcs: Arc[],
   tolerance: number,
-): Ellipse | null {
+): { shape: Ellipse; midpoints: Point[] } | null {
   if (arcs.length < 2) {
     return null;
   }
@@ -266,6 +293,7 @@ function fitFromArcs(
   let sumX = 0;
   let sumY = 0;
   let sumDelta = 0;
+  const midpoints: Point[] = [];
 
   for (const arc of arcs) {
     if (arc.rotation % 180 !== 0) {
@@ -284,6 +312,27 @@ function fitFromArcs(
     if (center === null) {
       return null;
     }
+
+    const phi = (arc.rotation * Math.PI) / 180;
+    const cos = Math.cos(phi);
+    const sin = Math.sin(phi);
+    const theta =
+      Math.atan2(
+        (-sin * (from.x - center.cx) + cos * (from.y - center.cy)) / center.ry,
+        (cos * (from.x - center.cx) + sin * (from.y - center.cy)) / center.rx,
+      ) +
+      center.delta / 2;
+
+    midpoints.push({
+      x:
+        center.cx +
+        cos * center.rx * Math.cos(theta) -
+        sin * center.ry * Math.sin(theta),
+      y:
+        center.cy +
+        sin * center.rx * Math.cos(theta) +
+        cos * center.ry * Math.sin(theta),
+    });
 
     sumX += center.cx;
     sumY += center.cy;
@@ -308,10 +357,13 @@ function fitFromArcs(
   }
 
   return {
-    cx: sumX / arcs.length,
-    cy: sumY / arcs.length,
-    rx: arcs.reduce((sum, arc) => sum + arc.rx, 0) / arcs.length,
-    ry: arcs.reduce((sum, arc) => sum + arc.ry, 0) / arcs.length,
+    shape: {
+      cx: sumX / arcs.length,
+      cy: sumY / arcs.length,
+      rx: arcs.reduce((sum, arc) => sum + arc.rx, 0) / arcs.length,
+      ry: arcs.reduce((sum, arc) => sum + arc.ry, 0) / arcs.length,
+    },
+    midpoints,
   };
 }
 
@@ -469,6 +521,9 @@ function rewrite(
  * Rectangles are deliberately not rebuilt. Their edges are straight lines that
  * survive an editor unchanged, so they carry none of the drift this rule exists
  * for, and a path is the shorter way to store them.
+ *
+ * DiceBear Studio for Figma carries the same rule in its exporter. Changes
+ * belong in both.
  */
 export function convertPathToShape(params: {
   floatPrecision: number;
@@ -488,6 +543,16 @@ export function convertPathToShape(params: {
       element: {
         enter: (node) => {
           if (node.name !== 'path' || typeof node.attributes.d !== 'string') {
+            return;
+          }
+
+          // Rewriting such a path would move its markers or its dash
+          // pattern, so it stays a path.
+          if (
+            PATH_BOUND_ATTRIBUTES.some(
+              (attribute) => node.attributes[attribute] !== undefined,
+            )
+          ) {
             return;
           }
 
@@ -551,22 +616,40 @@ function fitEllipse(
     // Points alone would allow a wider circle through the same two ends, so the
     // radius is held to the fit as well. Together they bound how far any part
     // of the shape can move. The relative share keeps a small radius from being
-    // rounded to a multiple of itself at a coarse precision.
+    // rounded to a multiple of itself at a coarse precision. The arc middles
+    // get twice the room of the radii: a center computed from rounded
+    // endpoints sits a few units of the last decimal beside the drawn shape
+    // on a near-diameter chord, and the middles carry that drift on top of
+    // the radius rounding.
     return shortestForm(
-      fitted,
+      fitted.shape,
       precision,
       (candidate) =>
         candidate.rx > 0 &&
         candidate.ry > 0 &&
-        withinRadius(candidate, fitted) &&
+        withinRadius(candidate, fitted.shape) &&
         nodes.every(
           (node) => ellipseDistance(candidate, node) <= pointTolerance,
+        ) &&
+        fitted.midpoints.every(
+          (point) => ellipseDistance(candidate, point) <= 2 * matchTolerance,
         ),
     );
   }
 
   if (
     !segments.every((segment): segment is Curve => segment.kind === 'curve')
+  ) {
+    return null;
+  }
+
+  const last = segments[segments.length - 1];
+
+  // The arcs close over fitFromArcs; a run of cubics has to end on its start
+  // as well, or an open arc of almost a full turn would come back closed.
+  if (
+    Math.abs(last.x - start.x) > matchTolerance ||
+    Math.abs(last.y - start.y) > matchTolerance
   ) {
     return null;
   }

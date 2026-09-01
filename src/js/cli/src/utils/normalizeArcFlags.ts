@@ -30,6 +30,9 @@ const ARGUMENTS: Record<string, number> = {
  * Only an exact match counts. On a chord a little shorter than the diameter the
  * two arcs sit on different centers, and a couple of thousandths in the chord
  * already move the middle of the arc by two tenths.
+ *
+ * DiceBear Studio for Figma carries the same rule in its exporter. Changes
+ * belong in both.
  */
 export function normalizeArcFlags(): CustomPlugin {
   return {
@@ -69,7 +72,7 @@ function pinHalfCircles(d: string): string | null {
   while (index < tokens.length) {
     const token = tokens[index][0];
 
-    if (/[a-zA-Z]/.test(token)) {
+    if (/^[a-zA-Z]$/.test(token)) {
       command = token;
       index += 1;
 
