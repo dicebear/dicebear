@@ -112,6 +112,137 @@ describe('dicebear --optimize', () => {
     assert.equal(fs.readFileSync(file, 'utf-8'), once);
   });
 
+  it('rebuilds a circle that came back from an editor as a path', () => {
+    const file = fixture('identicon');
+    const definition = read(file);
+
+    // The same circle, in the three spellings three consecutive trips through
+    // Figma produced for it, plus an ellipse in the same shape.
+    definition.canvas.elements.push(
+      ...[
+        'M10 20a7 7 0 1 0 0-14 7 7 0 0 0 0 14',
+        'M10 20a7.001 7.001 0 0 0 4.95-11.95A7 7 0 1 0 10 20',
+        'M10 20A7 7 0 1 0 8.635 6.135 7 7 0 0 0 10 20',
+        'M30 20a5 7 0 1 0 0-14 5 7 0 0 0 0 14',
+      ].map((d) => ({ name: 'path', type: 'element', attributes: { d } })),
+    );
+
+    fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
+
+    assert.equal(runCli([file, '--optimize']).status, 0);
+
+    const shapes = [];
+
+    walk(read(file), (element) => {
+      if (element.name === 'circle' || element.name === 'ellipse') {
+        shapes.push({ name: element.name, ...element.attributes });
+      }
+    });
+
+    assert.deepEqual(shapes, [
+      { name: 'circle', cx: '10', cy: '13', r: '7' },
+      { name: 'circle', cx: '10', cy: '13', r: '7' },
+      { name: 'circle', cx: '10', cy: '13', r: '7' },
+      { name: 'ellipse', cx: '30', cy: '13', rx: '5', ry: '7' },
+    ]);
+  });
+
+  it('rebuilds a circle that came back as bezier curves', () => {
+    const file = fixture('identicon');
+    const definition = read(file);
+
+    // Larger shapes come out of Figma as curves rather than arcs, because the
+    // arc fit svgo attempts on export runs out of room the wider the radius
+    // gets. Both of these are shipped marbles paths.
+    definition.canvas.elements.push(
+      ...[
+        'M50 92c19.882 0 36-16.118 36-36S69.882 20 50 20 14 36.118 14 56s16.118 36 36 36',
+        'M50 122c29.823 0 54-14.327 54-32S79.823 58 50 58-4 72.327-4 90s24.177 32 54 32',
+      ].map((d) => ({ name: 'path', type: 'element', attributes: { d } })),
+    );
+
+    fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
+
+    assert.equal(runCli([file, '--optimize']).status, 0);
+
+    const shapes = [];
+
+    walk(read(file), (element) => {
+      if (element.name === 'circle' || element.name === 'ellipse') {
+        shapes.push({ name: element.name, ...element.attributes });
+      }
+    });
+
+    assert.deepEqual(shapes, [
+      { name: 'circle', cx: '50', cy: '56', r: '36' },
+      { name: 'ellipse', cx: '50', cy: '90', rx: '54', ry: '32' },
+    ]);
+  });
+
+  it('pins the meaningless flag of a half circle', () => {
+    const file = fixture('identicon');
+    const definition = read(file);
+
+    definition.canvas.elements.push(
+      ...[
+        // Both arcs draw the same half circle whatever the flag says, so both
+        // come out as 0 and stop flipping between exports.
+        'M20 1H8a6 6 0 1 0 0 12h12a6 6 0 0 0 0-12',
+        // A chord just short of the diameter picks a different center, so this
+        // flag carries meaning and has to survive.
+        'M8 1a6 6 0 1 0 0 11.998',
+      ].map((d) => ({ name: 'path', type: 'element', attributes: { d } })),
+    );
+
+    fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
+
+    assert.equal(runCli([file, '--optimize']).status, 0);
+
+    const paths = [];
+
+    walk(read(file), (element) => {
+      if (element.name === 'path') {
+        paths.push(element.attributes.d);
+      }
+    });
+
+    assert.ok(paths.includes('M20 1H8a6 6 0 0 0 0 12h12a6 6 0 0 0 0-12'));
+    assert.ok(paths.some((d) => d.includes('0 1 0 0 11.998')));
+  });
+
+  it('leaves a path that is not a closed ellipse alone', () => {
+    const file = fixture('identicon');
+    const definition = read(file);
+
+    definition.canvas.elements.push(
+      ...[
+        // Two arcs running against each other, which draws a lens.
+        'M0 0a5 5 0 0 0 10 0 5 5 0 0 1-10 0',
+        // A half circle that is one part of a larger outline.
+        'M19 109.5v-48a34 34 0 1 1 68 0v48z',
+        // Radii that disagree by more than a rounding rest.
+        'M10 20a7 7 0 1 0 0-14 7.4 7.4 0 0 0 0 14',
+        // Four curves around a center, but with handles that are too short
+        // for a circle: this is a rounded blob and has to stay one.
+        'M50 10c22 0 40 18 40 40s-18 40-40 40-40-18-40-40 18-40 40-40z',
+        // Rectangles keep their straight edges through an editor, so they are
+        // not rebuilt either, rounded corners or not.
+        'M16.5 6h-5A1.5 1.5 0 0 0 10 7.5V11a1.5 1.5 0 0 0 1.5 1.5h5A1.5 1.5 0 0 0 18 11V7.5A1.5 1.5 0 0 0 16.5 6',
+        'M2-.01h1v1.02H2z',
+      ].map((d) => ({ name: 'path', type: 'element', attributes: { d } })),
+    );
+
+    fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
+
+    assert.equal(runCli([file, '--optimize']).status, 0);
+
+    walk(read(file), (element) => {
+      assert.notEqual(element.name, 'circle');
+      assert.notEqual(element.name, 'ellipse');
+      assert.notEqual(element.name, 'rect');
+    });
+  });
+
   it('carries declarative animations through the round-trip', () => {
     const file = fixture('identicon');
     const definition = read(file);

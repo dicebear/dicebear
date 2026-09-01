@@ -10,6 +10,8 @@ import {
   type DefinitionElement,
 } from './definition.js';
 import { cleanupNumericValues } from './cleanupNumericValues.js';
+import { convertPathToShape } from './convertPathToShape.js';
+import { normalizeArcFlags } from './normalizeArcFlags.js';
 import { definitionToSvgson } from './definitionToSvgson.js';
 import { svgsonToDefinition } from './svgsonToDefinition.js';
 
@@ -37,8 +39,10 @@ const RENDER_CHECK_SEEDS = [
  * This mirrors what DiceBear Studio for Figma already runs on export, so
  * a hand-authored definition ends up in the same shape as a generated one.
  * `cleanupNumericValues` is the exporter's custom variant, which keeps
- * normalized 0..1 attributes usable at low precision. Several plugins are
- * deliberately absent:
+ * normalized 0..1 attributes usable at low precision, and
+ * `convertPathToShape` undoes what an editor without primitives does to a
+ * circle, while `normalizeArcFlags` pins a flag that carries no meaning on a
+ * half circle and flips on every export. Several plugins are deliberately absent:
  *
  *  - `removeEmptyContainers` and `collapseGroups` would delete the childless
  *    marker groups the animation components are built on, and merge away the
@@ -53,6 +57,8 @@ const RENDER_CHECK_SEEDS = [
 function buildPlugins(precision: number): PluginConfig[] {
   return [
     { name: 'convertPathData', params: { floatPrecision: precision } },
+    convertPathToShape({ floatPrecision: precision }),
+    normalizeArcFlags(),
     { name: 'convertTransform', params: { floatPrecision: precision } },
     cleanupNumericValues({ floatPrecision: precision }),
     'convertShapeToPath',
