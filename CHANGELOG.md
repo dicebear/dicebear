@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-rc.1] - 2026-09-01
+
 ### Added
 
 - **Core:** All seven cores render the declarative animations of
@@ -570,7 +572,9 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.7.0...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.1...HEAD
+[11.0.0-rc.1]:
+  https://github.com/dicebear/dicebear/compare/v10.7.0...v11.0.0-rc.1
 [10.7.0]: https://github.com/dicebear/dicebear/compare/v10.7.0-rc.1...v10.7.0
 [10.7.0-rc.1]:
   https://github.com/dicebear/dicebear/compare/v10.6.1...v10.7.0-rc.1
