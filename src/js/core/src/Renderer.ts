@@ -948,8 +948,16 @@ export class Renderer {
       return;
     }
 
+    // An authored def may carry the id `animation-style`, so the CSS takes
+    // the next free key rather than replacing that def.
+    let key = 'animation-style';
+
+    while (this.#defs.has(key)) {
+      key += '-';
+    }
+
     this.#defs.set(
-      'animation-style',
+      key,
       `<style>@media (prefers-reduced-motion:no-preference){${this.#keyframesCss.join('')}${this.#animationCss.join('')}}</style>`,
     );
   }

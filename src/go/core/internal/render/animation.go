@@ -341,7 +341,14 @@ func (r *renderer) registerAnimationStyle() {
 		return
 	}
 
-	r.defs.set("animation-style",
+	// An authored def may carry the id "animation-style", so the CSS takes
+	// the next free key rather than replacing that def.
+	key := "animation-style"
+	for r.defs.has(key) {
+		key += "-"
+	}
+
+	r.defs.set(key,
 		"<style>@media (prefers-reduced-motion:no-preference){"+
 			strings.Join(r.keyframesCss, "")+strings.Join(r.animationCss, "")+"}</style>")
 }

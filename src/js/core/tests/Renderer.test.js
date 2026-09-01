@@ -1420,7 +1420,7 @@ describe('Renderer', () => {
         assert.ok(svg.includes('scaleY'));
         assert.ok(!svg.includes('rotate('));
         assert.ok(!svg.includes('opacity:'));
-        assert.ok(!svg.includes('<g class="dba-') || svg.includes('scaleY'));
+        assert.equal(svg.match(/<g class="dba-/g).length, 1);
       });
 
       it('should combine several selected names', () => {

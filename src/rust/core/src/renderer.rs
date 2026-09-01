@@ -565,7 +565,9 @@ impl<'a> Renderer<'a> {
             .get_or_insert_with(|| {
                 let random = RandomState::new().build_hasher().finish();
 
-                format!("{:06x}", (random as u32) & 0x00ff_ffff)
+                // % 0xffffff yields 0..0xfffffe, matching the exclusive upper
+                // bound of the JS reference's floor(random() * 0xffffff).
+                format!("{:06x}", (random as u32) % 0x00ff_ffff)
             })
             .clone()
     }
@@ -827,8 +829,16 @@ impl<'a> Renderer<'a> {
             return;
         }
 
+        // An authored def may carry the id `animation-style`, so the CSS
+        // takes the next free key rather than replacing that def.
+        let mut key = String::from("animation-style");
+
+        while self.defs.contains_key(&key) {
+            key.push('-');
+        }
+
         self.defs.insert(
-            "animation-style".to_string(),
+            key,
             format!(
                 "<style>@media (prefers-reduced-motion:no-preference){{{}{}}}</style>",
                 self.keyframes_css.concat(),

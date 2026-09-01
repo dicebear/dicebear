@@ -241,7 +241,9 @@ class Renderer:
         the same seed.
         """
         if self._cached_random_suffix is None:
-            self._cached_random_suffix = format(random.randint(0, 0xFFFFFF), "06x")
+            # randrange yields 0..0xFFFFFE, matching the exclusive upper bound
+            # of the JS reference's floor(random() * 0xffffff).
+            self._cached_random_suffix = format(random.randrange(0xFFFFFF), "06x")
 
         return self._cached_random_suffix
 
@@ -869,7 +871,14 @@ class Renderer:
         if len(self._keyframes_css) == 0:
             return
 
-        self._defs["animation-style"] = (
+        # An authored def may carry the id "animation-style", so the CSS
+        # takes the next free key rather than replacing that def.
+        key = "animation-style"
+
+        while key in self._defs:
+            key += "-"
+
+        self._defs[key] = (
             "<style>@media (prefers-reduced-motion:no-preference){"
             + "".join(self._keyframes_css)
             + "".join(self._animation_css)

@@ -274,8 +274,10 @@ class Renderer
      */
     private function randomSuffix(): string
     {
+        // 0..0xfffffe, matching the exclusive upper bound of the JS
+        // reference's floor(random() * 0xffffff).
         return $this->cachedRandomSuffix ??= str_pad(
-            dechex(random_int(0, 0xffffff)),
+            dechex(random_int(0, 0xfffffe)),
             6,
             '0',
             STR_PAD_LEFT
@@ -988,7 +990,15 @@ class Renderer
             return;
         }
 
-        $this->defs['animation-style'] = '<style>@media (prefers-reduced-motion:no-preference){'
+        // An authored def may carry the id `animation-style`, so the CSS
+        // takes the next free key rather than replacing that def.
+        $key = 'animation-style';
+
+        while (array_key_exists($key, $this->defs)) {
+            $key .= '-';
+        }
+
+        $this->defs[$key] = '<style>@media (prefers-reduced-motion:no-preference){'
             . implode('', $this->keyframesCss)
             . implode('', $this->animationCss)
             . '}</style>';

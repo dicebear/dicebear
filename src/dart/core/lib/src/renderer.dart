@@ -932,8 +932,15 @@ class Renderer {
       return;
     }
 
-    _defs['animation-style'] =
-        '<style>@media (prefers-reduced-motion:no-preference)'
+    // An authored def may carry the id `animation-style`, so the CSS takes
+    // the next free key rather than replacing that def.
+    var key = 'animation-style';
+
+    while (_defs.containsKey(key)) {
+      key += '-';
+    }
+
+    _defs[key] = '<style>@media (prefers-reduced-motion:no-preference)'
         '{${_keyframesCss.join()}${_animationCss.join()}}</style>';
   }
 }
