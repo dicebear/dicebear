@@ -117,7 +117,7 @@ func _ready() -> void:
 	request.request_completed.connect(_on_request_completed)
 
 	var query := "?seed=%s&size=128" % seed_value.uri_encode()
-	request.request("https://api.dicebear.com/10.x/lorelei/svg" + query)
+	request.request("https://api.dicebear.com/11.x/lorelei/svg" + query)
 
 func _on_request_completed(
 	result: int,

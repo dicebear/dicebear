@@ -60,8 +60,8 @@ print(descriptor.to_json())
 import (
 	"fmt"
 
-	dicebear "github.com/dicebear/dicebear-go/v10"
-	"github.com/dicebear/styles/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
 )
 
 style, _ := dicebear.NewStyle([]byte(styles.Micah))

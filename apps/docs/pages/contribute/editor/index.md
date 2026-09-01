@@ -14,5 +14,5 @@ The editor at [editor.dicebear.com](https://editor.dicebear.com) is a
 
 Setup and workflow instructions live in the monorepo's contribution guide:
 
-- [Editor changes section](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md#editor-changes-appseditor)
+- [Editor changes section](https://github.com/dicebear/dicebear/blob/11.x/CONTRIBUTING.md#editor-changes-appseditor)
   in `dicebear/dicebear/CONTRIBUTING.md`

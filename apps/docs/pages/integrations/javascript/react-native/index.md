@@ -57,7 +57,7 @@ import { Image, View } from 'react-native';
 
 export default function Avatar({ seed = 'Alice' }) {
   const avatar = useMemo(() => {
-    const url = new URL('https://api.dicebear.com/10.x/lorelei/png');
+    const url = new URL('https://api.dicebear.com/11.x/lorelei/png');
     url.searchParams.set('seed', seed);
     url.searchParams.set('size', '128');
     // ... other options

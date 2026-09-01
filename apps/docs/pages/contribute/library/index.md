@@ -29,7 +29,7 @@ documentation (including the Playground), and the standalone editor all live in
 the main [`dicebear/dicebear`](https://github.com/dicebear/dicebear) monorepo.
 See:
 
-- [`CONTRIBUTING.md`](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md)
+- [`CONTRIBUTING.md`](https://github.com/dicebear/dicebear/blob/11.x/CONTRIBUTING.md)
   in `dicebear/dicebear`
 
 It covers the monorepo layout, per-package workflow, cross-language parity tests

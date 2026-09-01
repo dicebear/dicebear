@@ -52,13 +52,13 @@ style. Style names are lowercase, with hyphens for multi-word styles, e.g.
 [avatar style](/styles/) is supported.
 
 ```
-https://api.dicebear.com/10.x/<styleName>/svg
+https://api.dicebear.com/11.x/<styleName>/svg
 ```
 
 ### A few examples
 
-<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg" />
-<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg" />
+<BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg" />
+<BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg" />
 
 ### Generate a consistent avatar from a user ID
 
@@ -68,10 +68,10 @@ image. That makes it a good default avatar for people who haven't uploaded a
 photo yet, since the picture stays the same across pages and sessions.
 
 ```
-https://api.dicebear.com/10.x/lorelei/svg?seed=user-8f3a2c
+https://api.dicebear.com/11.x/lorelei/svg?seed=user-8f3a2c
 ```
 
-<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?seed=user-8f3a2c" />
+<BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg?seed=user-8f3a2c" />
 
 If the seed contains spaces or other special characters, URL-encode it first.
 
@@ -90,7 +90,7 @@ version root. It returns the available style names as JSON, sorted
 alphabetically:
 
 ```
-https://api.dicebear.com/10.x
+https://api.dicebear.com/11.x
 ```
 
 ```json
@@ -112,8 +112,8 @@ Each style also exposes two metadata endpoints. They are handy for building
 tooling on top of the API, such as avatar editors:
 
 ```
-https://api.dicebear.com/10.x/<styleName>/definition.json
-https://api.dicebear.com/10.x/<styleName>/options.json
+https://api.dicebear.com/11.x/<styleName>/definition.json
+https://api.dicebear.com/11.x/<styleName>/options.json
 ```
 
 `definition.json` returns the raw style definition, the same JSON that is
@@ -157,8 +157,8 @@ All [core options](/customize/options/) (such as `seed`, `flip`, `rotate`,
 [query parameters](https://en.wikipedia.org/wiki/Query_string). Style-specific
 options are listed on each [avatar style page](/styles/). For example:
 
-<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John" />
-<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane" />
+<BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=John" />
+<BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=Jane" />
 
 :::tip
 
@@ -182,14 +182,14 @@ if you want to provide the PRNG with several hair styles in addition to the
 seed. Note that the avatar styles provide different options. In this example, we
 use the [Pixel Art](/styles/pixel-art/) avatar style.
 
-<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John&hairVariant=short01,short02,short03,short04,short05" />
-<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane&hairVariant=long01,long02,long03,long04,long05" />
+<BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=John&hairVariant=short01,short02,short03,short04,short05" />
+<BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=Jane&hairVariant=long01,long02,long03,long04,long05" />
 
 The [`tags`](/customize/tags/) filter is an array too. Separate the tags with a
 comma and prefix a tag with `!` to exclude it:
 
 ```
-https://api.dicebear.com/10.x/planets/svg?seed=John&tags=animation
+https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,!facialHair
 ```
 
 ### Enum options
@@ -197,8 +197,23 @@ https://api.dicebear.com/10.x/planets/svg?seed=John&tags=animation
 Enum values are passed as strings. For example, the `flip` option accepts
 `none`, `horizontal`, `vertical`, or `both`:
 
-<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?flip=horizontal" />
-<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?flip=none" />
+<BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg?flip=horizontal" />
+<BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg?flip=none" />
+
+### Animations
+
+Styles that carry [animations](/customize/options/) play them once you set
+`animation=true`. A name or a comma-separated list of names plays only those,
+and `animationSpeed` sets the pace. Only the SVG format moves. The raster
+formats render the resting state, with or without the option.
+
+```
+https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true
+https://api.dicebear.com/11.x/planets/svg?seed=John&animation=orbit&animationSpeed=2
+```
+
+The `11.x` line is the first one with animations. On `10.x` the option is
+accepted and ignored.
 
 ## File format
 
@@ -210,19 +225,20 @@ supports the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
 `greek`, `greek-ext`, `japanese`, `korean`, `latin`, `latin-ext`,
 `simplified-chinese`, `thai` and `vietnamese`.
 
-<BrowserPreview url="https://api.dicebear.com/10.x/bottts/svg" />
-<BrowserPreview url="https://api.dicebear.com/10.x/bottts/png" />
-<BrowserPreview url="https://api.dicebear.com/10.x/bottts/jpg" />
-<BrowserPreview url="https://api.dicebear.com/10.x/bottts/webp" />
-<BrowserPreview url="https://api.dicebear.com/10.x/bottts/avif" />
+<BrowserPreview url="https://api.dicebear.com/11.x/bottts/svg" />
+<BrowserPreview url="https://api.dicebear.com/11.x/bottts/png" />
+<BrowserPreview url="https://api.dicebear.com/11.x/bottts/jpg" />
+<BrowserPreview url="https://api.dicebear.com/11.x/bottts/webp" />
+<BrowserPreview url="https://api.dicebear.com/11.x/bottts/avif" />
 
 ## Versioning
 
-You can set the version in the URL. Just replace the `10.x` from the previous
+You can set the version in the URL. Just replace the `11.x` from the previous
 examples with the one you want.
 
 | Version | Status     | End of Life    |
 | ------- | ---------- | -------------- |
+| `11.x`  | **Active** | None           |
 | `10.x`  | **Active** | None           |
 | `9.x`   | **Active** | None           |
 | `8.x`   | Deprecated | April 30, 2028 |

@@ -58,8 +58,8 @@ use serde_json::json;
 let style = Style::from_str(dicebear_styles::LORELEI)?;
 let svg = Avatar::new(&style, json!({ "seed": "Felix" }))?.to_svg();`,
   go: `import (
-	dicebear "github.com/dicebear/dicebear-go/v10"
-	"github.com/dicebear/styles/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
 )
 
 style, _ := dicebear.NewStyle([]byte(styles.Lorelei))
@@ -75,7 +75,7 @@ using DiceBear;
 
 var style = Style.Parse(Styles.Lorelei);
 var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
-  api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Felix`,
+  api: `https://api.dicebear.com/11.x/lorelei/svg?seed=Felix`,
   cli: `npx dicebear lorelei --seed "Felix" --format svg`,
 };
 </script>

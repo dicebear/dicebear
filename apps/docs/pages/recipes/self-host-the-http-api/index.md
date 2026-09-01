@@ -61,8 +61,8 @@ per style. Both are disabled by default and can be enabled individually with an
 environment variable:
 
 ```
-http://localhost:3000/10.x/<styleName>/definition.json
-http://localhost:3000/10.x/<styleName>/options.json
+http://localhost:3000/11.x/<styleName>/definition.json
+http://localhost:3000/11.x/<styleName>/options.json
 ```
 
 - `definition.json` returns the raw

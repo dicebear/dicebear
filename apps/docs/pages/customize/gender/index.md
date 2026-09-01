@@ -30,7 +30,7 @@ The Avataaars style, for example, lets you turn facial hair off with
 `facialHairProbability=0`:
 
 ```
-https://api.dicebear.com/10.x/avataaars/svg?seed=Casey&facialHairProbability=0
+https://api.dicebear.com/11.x/avataaars/svg?seed=Casey&facialHairProbability=0
 ```
 
 The options differ from style to style, so check the style page for the one you
@@ -62,7 +62,7 @@ const avatar = new Avatar(style, {
 The same filter works as a query parameter in the HTTP API:
 
 ```
-https://api.dicebear.com/10.x/adventurer/svg?seed=Casey&tags=hairLength:long,!facialHair
+https://api.dicebear.com/11.x/adventurer/svg?seed=Casey&tags=hairLength:long,!facialHair
 ```
 
 Tags and the per-feature options work together, so you can combine a tag filter

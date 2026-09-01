@@ -15,5 +15,5 @@ corresponding source file.
 
 Setup and workflow instructions live in the monorepo's contribution guide:
 
-- [Documentation changes section](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md#documentation-changes-appsdocs)
+- [Documentation changes section](https://github.com/dicebear/dicebear/blob/11.x/CONTRIBUTING.md#documentation-changes-appsdocs)
   in `dicebear/dicebear/CONTRIBUTING.md`

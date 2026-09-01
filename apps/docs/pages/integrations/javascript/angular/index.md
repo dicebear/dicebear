@@ -83,7 +83,7 @@ export class AvatarComponent {
   seed = input('Alice');
 
   avatarUrl = computed(() => {
-    const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
+    const url = new URL('https://api.dicebear.com/11.x/lorelei/svg');
     url.searchParams.set('seed', this.seed());
     url.searchParams.set('size', '128');
     // ... other options
@@ -105,7 +105,7 @@ export class AvatarComponent implements OnChanges {
   avatarUrl: string = '';
 
   ngOnChanges() {
-    const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
+    const url = new URL('https://api.dicebear.com/11.x/lorelei/svg');
     url.searchParams.set('seed', this.seed);
     url.searchParams.set('size', '128');
     // ... other options

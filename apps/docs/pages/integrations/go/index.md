@@ -15,13 +15,13 @@ library.
 
 ## Installation
 
-You need two modules: the core library `github.com/dicebear/dicebear-go/v10` and
-the avatar style definitions `github.com/dicebear/styles/v10`. The module path
-carries the major version, so import it with the `/v10` suffix.
+You need two modules: the core library `github.com/dicebear/dicebear-go/v11` and
+the avatar style definitions `github.com/dicebear/styles/v11`. The module path
+carries the major version, so import it with the `/v11` suffix.
 
 ```sh
-go get github.com/dicebear/dicebear-go/v10
-go get github.com/dicebear/styles/v10
+go get github.com/dicebear/dicebear-go/v11
+go get github.com/dicebear/styles/v11
 ```
 
 ## Usage
@@ -36,8 +36,8 @@ package main
 import (
 	"fmt"
 
-	dicebear "github.com/dicebear/dicebear-go/v10"
-	"github.com/dicebear/styles/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
 )
 
 func main() {

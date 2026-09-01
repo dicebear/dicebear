@@ -14,7 +14,7 @@ official avatar style as a separate JSON file. It is distributed as
 Packagist, [`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on
 PyPI, [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
 crates.io,
-[`github.com/dicebear/styles/v10`](https://pkg.go.dev/github.com/dicebear/styles/v10)
+[`github.com/dicebear/styles/v11`](https://pkg.go.dev/github.com/dicebear/styles/v11)
 as a Go module and [`dicebear_styles`](https://pub.dev/packages/dicebear_styles)
 on pub.dev, and
 [`DiceBear.Styles`](https://www.nuget.org/packages/DiceBear.Styles) on NuGet.
@@ -136,13 +136,13 @@ let avatar = Avatar::new(&styles["lorelei"], json!({ "seed": "Alice" }))?;
 
 ## Go
 
-The `github.com/dicebear/styles/v10` module embeds every style. Unlike the Rust
+The `github.com/dicebear/styles/v11` module embeds every style. Unlike the Rust
 crate, there is no per-style opt-in, so the whole set is available once the
 module is added.
 
 ```sh
-go get github.com/dicebear/dicebear-go/v10
-go get github.com/dicebear/styles/v10
+go get github.com/dicebear/dicebear-go/v11
+go get github.com/dicebear/styles/v11
 ```
 
 `styles.All()` lists every embedded style and `styles.Get(name)` returns its raw
@@ -150,8 +150,8 @@ JSON definition.
 
 ```go
 import (
-	dicebear "github.com/dicebear/dicebear-go/v10"
-	"github.com/dicebear/styles/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
 )
 
 parsed := map[string]*dicebear.Style{}

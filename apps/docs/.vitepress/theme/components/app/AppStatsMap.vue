@@ -24,7 +24,7 @@ const rootRef = ref<HTMLDivElement>();
 const canvasRef = ref<HTMLCanvasElement>();
 const isVisible = useVisibility(rootRef, { once: false, threshold: 0.1 });
 
-const apiBase = 'https://api.dicebear.com/10.x';
+const apiBase = 'https://api.dicebear.com/11.x';
 const avatarStyles = [
   'thumbs',
   'shapes',

@@ -35,9 +35,11 @@ export const resourceLinks: FooterLink[] = [
 ];
 
 // Older major versions keep their docs on a subdomain of their own. This list
-// replaces the version dropdown that used to sit in the top nav.
+// replaces the version dropdown that used to sit in the top nav. 10.x has no
+// entry: it reads these docs too, since 11 only changed how animations are
+// switched on.
 export const versionLinks: FooterLink[] = [
-  { label: '10.x (current)', href: '/' },
+  { label: '11.x (current)', href: '/' },
   { label: '9.x', href: 'https://v9.dicebear.com', external: true },
 ];
 

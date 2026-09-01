@@ -19,7 +19,7 @@ const emit = defineEmits<{
 
 const mainAvatarLink = computed(
   () =>
-    `https://api.dicebear.com/10.x/${styleName.value}/svg?seed=${encodeURIComponent(seed.value)}`,
+    `https://api.dicebear.com/11.x/${styleName.value}/svg?seed=${encodeURIComponent(seed.value)}`,
 );
 </script>
 

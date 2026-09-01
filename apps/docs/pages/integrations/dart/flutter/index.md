@@ -75,7 +75,7 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = Uri.https('api.dicebear.com', '/10.x/lorelei/png', {
+    final url = Uri.https('api.dicebear.com', '/11.x/lorelei/png', {
       'seed': seed,
       'size': '128',
       // ... other options

@@ -67,7 +67,7 @@ export function getAvatarApiUrl(
     })
     .join('&');
 
-  return `https://api.dicebear.com/10.x/${kebabCase(avatarStyle)}/${format}${
+  return `https://api.dicebear.com/11.x/${kebabCase(avatarStyle)}/${format}${
     qs ? `?${qs}` : ''
   }`;
 }

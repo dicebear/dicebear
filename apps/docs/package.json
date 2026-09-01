@@ -16,7 +16,7 @@
   "dependencies": {
     "@dicebear/converter": "11.0.0-rc.1",
     "@dicebear/core": "11.0.0-rc.1",
-    "@dicebear/styles": "^10.6.0",
+    "@dicebear/styles": "^11.0.0-rc.1",
     "@fontsource-variable/inter": "^5.2.8",
     "@lucide/vue": "^1.7.0",
     "@primeuix/themes": "^2.0.3",

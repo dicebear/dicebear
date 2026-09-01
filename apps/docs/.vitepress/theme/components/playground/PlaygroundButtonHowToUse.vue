@@ -185,7 +185,7 @@ const exampleGo = computed(() => {
     return `import (
 	"os"
 
-	dicebear "github.com/dicebear/dicebear-go/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
 )
 
 // Your custom style definition
@@ -205,8 +205,8 @@ svg := avatar.SVG()`;
     .join('');
 
   return `import (
-	dicebear "github.com/dicebear/dicebear-go/v10"
-	"github.com/dicebear/styles/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
 )
 
 style, _ := dicebear.NewStyle([]byte(styles.${styleConst}))
@@ -417,8 +417,8 @@ const exampleCli = computed(() =>
                 <UiCode
                   :code="
                     store.isCustomStyle
-                      ? 'go get github.com/dicebear/dicebear-go/v10'
-                      : 'go get github.com/dicebear/dicebear-go/v10\ngo get github.com/dicebear/styles/v10'
+                      ? 'go get github.com/dicebear/dicebear-go/v11'
+                      : 'go get github.com/dicebear/dicebear-go/v11\ngo get github.com/dicebear/styles/v11'
                   "
                 />
                 <p>Then you can create this avatar as follows:</p>

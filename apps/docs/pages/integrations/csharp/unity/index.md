@@ -36,7 +36,7 @@ public class UserAvatar : MonoBehaviour
 
     private IEnumerator Start()
     {
-        var url = "https://api.dicebear.com/10.x/lorelei/png"
+        var url = "https://api.dicebear.com/11.x/lorelei/png"
             + "?seed=" + UnityWebRequest.EscapeURL(seed)
             + "&size=128";
 

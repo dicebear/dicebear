@@ -187,7 +187,7 @@ let avatar = Avatar::new(&style, json!({
 import (
 	"os"
 
-	dicebear "github.com/dicebear/dicebear-go/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
 )
 
 definition, _ := os.ReadFile("./your-style.json")

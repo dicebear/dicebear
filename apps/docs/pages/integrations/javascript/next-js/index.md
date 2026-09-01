@@ -150,7 +150,7 @@ The HTTP API needs no installation and works in both routers. Use a plain
 
 ```tsx
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
-  const src = `https://api.dicebear.com/10.x/lorelei/svg?seed=${encodeURIComponent(seed)}&size=128`;
+  const src = `https://api.dicebear.com/11.x/lorelei/svg?seed=${encodeURIComponent(seed)}&size=128`;
 
   return <img src={src} alt="Avatar" width={128} height={128} />;
 }
@@ -173,7 +173,7 @@ module.exports = {
 import Image from 'next/image';
 
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
-  const src = `https://api.dicebear.com/10.x/lorelei/png?seed=${encodeURIComponent(seed)}&size=128`;
+  const src = `https://api.dicebear.com/11.x/lorelei/png?seed=${encodeURIComponent(seed)}&size=128`;
 
   return <Image src={src} alt="Avatar" width={128} height={128} />;
 }

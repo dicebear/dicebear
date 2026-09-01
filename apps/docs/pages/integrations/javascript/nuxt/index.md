@@ -119,7 +119,7 @@ import { computed } from 'vue';
 const props = defineProps<{ seed?: string }>();
 
 const src = computed(() => {
-  const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
+  const url = new URL('https://api.dicebear.com/11.x/lorelei/svg');
   url.searchParams.set('seed', props.seed ?? 'Alice');
   url.searchParams.set('size', '128');
   return url.href;

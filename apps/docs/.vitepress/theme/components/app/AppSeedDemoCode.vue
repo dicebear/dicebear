@@ -31,7 +31,7 @@ const exampleOptions: { label: string; value: CodeExample }[] = [
 
 const apiExample = computed(
   () =>
-    `https://api.dicebear.com/10.x/${props.style}/svg?seed=${encodeURIComponent(props.seed)}`,
+    `https://api.dicebear.com/11.x/${props.style}/svg?seed=${encodeURIComponent(props.seed)}`,
 );
 
 const jsExample = computed(
@@ -96,8 +96,8 @@ const goExample = computed(() => {
     .join('');
 
   return `import (
-	dicebear "github.com/dicebear/dicebear-go/v10"
-	"github.com/dicebear/styles/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
 )
 
 style, _ := dicebear.NewStyle([]byte(styles.${styleConst}))

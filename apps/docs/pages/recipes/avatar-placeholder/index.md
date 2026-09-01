@@ -98,12 +98,12 @@ Use a stable identifier as the seed. A numeric user ID works well. For full
 options and rate limit details, see the
 [HTTP API documentation](/integrations/http-api/).
 
-<BrowserPreview url="https://api.dicebear.com/10.x/initials/svg?seed=JD" />
-<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=user-42" />
+<BrowserPreview url="https://api.dicebear.com/11.x/initials/svg?seed=JD" />
+<BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=user-42" />
 
 ```html
 <img
-  src="https://api.dicebear.com/10.x/initials/svg?seed=JD"
+  src="https://api.dicebear.com/11.x/initials/svg?seed=JD"
   alt="User avatar"
   width="48"
   height="48"
@@ -118,7 +118,7 @@ uploaded photo fails to load:
 ```html
 <img
   src="/uploads/user-123.jpg"
-  onerror="this.src='https://api.dicebear.com/10.x/pixel-art/svg?seed=123'; this.onerror=null;"
+  onerror="this.src='https://api.dicebear.com/11.x/pixel-art/svg?seed=123'; this.onerror=null;"
   alt="User avatar"
 />
 ```
@@ -130,10 +130,10 @@ same placeholder:
 
 ```js
 const userId = 'user-8f3a2c';
-const avatarUrl = `https://api.dicebear.com/10.x/thumbs/svg?seed=${encodeURIComponent(userId)}`;
+const avatarUrl = `https://api.dicebear.com/11.x/thumbs/svg?seed=${encodeURIComponent(userId)}`;
 ```
 
-<BrowserPreview url="https://api.dicebear.com/10.x/thumbs/svg?seed=user-8f3a2c" />
+<BrowserPreview url="https://api.dicebear.com/11.x/thumbs/svg?seed=user-8f3a2c" />
 
 ## With the JavaScript library
 
@@ -235,8 +235,8 @@ For full installation and API details, see the
 
 ```go
 import (
-	dicebear "github.com/dicebear/dicebear-go/v10"
-	"github.com/dicebear/styles/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
 )
 
 style, _ := dicebear.NewStyle([]byte(styles.Thumbs))
@@ -345,5 +345,5 @@ new Avatar(style, new JsonObject { ["seed"] = userId, ["size"] = 48, ["borderRad
 
 ```
 // HTTP API
-https://api.dicebear.com/10.x/thumbs/svg?seed=user-123&size=48&borderRadius=50
+https://api.dicebear.com/11.x/thumbs/svg?seed=user-123&size=48&borderRadius=50
 ```

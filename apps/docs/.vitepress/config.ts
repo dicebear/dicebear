@@ -447,7 +447,7 @@ export default defineConfig<ThemeOptions>({
     socialLinks: [],
     editLink: {
       pattern:
-        'https://github.com/dicebear/dicebear/edit/10.x/apps/docs/pages/:path',
+        'https://github.com/dicebear/dicebear/edit/11.x/apps/docs/pages/:path',
     },
     sidebar: {
       '/start/': sidebarDocs,

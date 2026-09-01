@@ -577,7 +577,7 @@ The vendored style definitions shipped by DiceBear live in a separate package:
 Packagist, [`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on
 PyPI, [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
 crates.io,
-[`github.com/dicebear/styles/v10`](https://pkg.go.dev/github.com/dicebear/styles/v10)
+[`github.com/dicebear/styles/v11`](https://pkg.go.dev/github.com/dicebear/styles/v11)
 as a Go module, [`dicebear_styles`](https://pub.dev/packages/dicebear_styles) on
 pub.dev and [`DiceBear.Styles`](https://www.nuget.org/packages/DiceBear.Styles)
 on NuGet.

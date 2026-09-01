@@ -30,20 +30,20 @@ Since Gravatar does not support SVG, we have to use the PNG endpoint.
 ```js [JavaScript]
 const emailHash = encodeURIComponent('00000000000000000000000000000000');
 const defaultImage = encodeURIComponent(
-  'https://api.dicebear.com/10.x/lorelei/svg' // [!code --]
-  'https://api.dicebear.com/10.x/lorelei/png' // [!code ++]
+  'https://api.dicebear.com/11.x/lorelei/svg' // [!code --]
+  'https://api.dicebear.com/11.x/lorelei/png' // [!code ++]
 );
 
 const gravatarImage = `https://www.gravatar.com/avatar/${emailHash}?d=${defaultImage}`;
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng
 ```
 
 <!-- prettier-ignore -->
 ```php [PHP]
 $emailHash = urlencode('00000000000000000000000000000000');
 $defaultImage = urlencode(
-  'https://api.dicebear.com/10.x/lorelei/svg' // [!code --]
-  'https://api.dicebear.com/10.x/lorelei/png' // [!code ++]
+  'https://api.dicebear.com/11.x/lorelei/svg' // [!code --]
+  'https://api.dicebear.com/11.x/lorelei/png' // [!code ++]
 );
 
 $gravatarImage = sprintf(
@@ -51,7 +51,7 @@ $gravatarImage = sprintf(
   $emailHash,
   $defaultImage
 );
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng
 ```
 
 <!-- prettier-ignore -->
@@ -60,12 +60,12 @@ import urllib.parse
 
 email_hash = urllib.parse.quote("00000000000000000000000000000000")
 default_image = urllib.parse.quote(
-    "https://api.dicebear.com/10.x/lorelei/svg"  # [!code --]
-    "https://api.dicebear.com/10.x/lorelei/png"  # [!code ++]
+    "https://api.dicebear.com/11.x/lorelei/svg"  # [!code --]
+    "https://api.dicebear.com/11.x/lorelei/png"  # [!code ++]
 )
 
 gravatar_image = f"https://www.gravatar.com/avatar/{email_hash}?d={default_image}"
-# https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+# https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng
 ```
 
 <!-- prettier-ignore -->
@@ -77,36 +77,36 @@ import (
 
 emailHash := url.QueryEscape("00000000000000000000000000000000")
 defaultImage := url.QueryEscape(
-	"https://api.dicebear.com/10.x/lorelei/svg", // [!code --]
-	"https://api.dicebear.com/10.x/lorelei/png", // [!code ++]
+	"https://api.dicebear.com/11.x/lorelei/svg", // [!code --]
+	"https://api.dicebear.com/11.x/lorelei/png", // [!code ++]
 )
 
 gravatarImage := fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=%s", emailHash, defaultImage)
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng
 ```
 
 <!-- prettier-ignore -->
 ```dart [Dart]
 final emailHash = Uri.encodeComponent('00000000000000000000000000000000');
 final defaultImage = Uri.encodeComponent(
-  'https://api.dicebear.com/10.x/lorelei/svg' // [!code --]
-  'https://api.dicebear.com/10.x/lorelei/png' // [!code ++]
+  'https://api.dicebear.com/11.x/lorelei/svg' // [!code --]
+  'https://api.dicebear.com/11.x/lorelei/png' // [!code ++]
 );
 
 final gravatarImage = 'https://www.gravatar.com/avatar/$emailHash?d=$defaultImage';
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng
 ```
 
 <!-- prettier-ignore -->
 ```csharp [C#]
 var emailHash = Uri.EscapeDataString("00000000000000000000000000000000");
 var defaultImage = Uri.EscapeDataString(
-    "https://api.dicebear.com/10.x/lorelei/svg" // [!code --]
-    "https://api.dicebear.com/10.x/lorelei/png" // [!code ++]
+    "https://api.dicebear.com/11.x/lorelei/svg" // [!code --]
+    "https://api.dicebear.com/11.x/lorelei/png" // [!code ++]
 );
 
 var gravatarImage = $"https://www.gravatar.com/avatar/{emailHash}?d={defaultImage}";
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng
 ```
 
 :::
@@ -122,12 +122,12 @@ with a slash and encode the options.
 const emailHash = encodeURIComponent('00000000000000000000000000000000');
 const options = `seed=${emailHash}`;
 const defaultImage = encodeURIComponent(
-  `https://api.dicebear.com/10.x/lorelei/png?${options}` // [!code --]
-  `https://api.dicebear.com/10.x/lorelei/png/${encodeURIComponent(options)}`, // [!code ++]
+  `https://api.dicebear.com/11.x/lorelei/png?${options}` // [!code --]
+  `https://api.dicebear.com/11.x/lorelei/png/${encodeURIComponent(options)}`, // [!code ++]
 );
 
 const gravatarImage = `https://www.gravatar.com/avatar/${emailHash}?d=${defaultImage}`;
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 <!-- prettier-ignore -->
@@ -135,8 +135,8 @@ const gravatarImage = `https://www.gravatar.com/avatar/${emailHash}?d=${defaultI
 $emailHash = urlencode('00000000000000000000000000000000');
 $options = sprintf('seed=%s', $emailHash);
 $defaultImage = urlencode(
-  'https://api.dicebear.com/10.x/lorelei/png?' . $options // [!code --]
-  'https://api.dicebear.com/10.x/lorelei/png/' . urlencode($options) // [!code ++]
+  'https://api.dicebear.com/11.x/lorelei/png?' . $options // [!code --]
+  'https://api.dicebear.com/11.x/lorelei/png/' . urlencode($options) // [!code ++]
 );
 
 $gravatarImage = sprintf(
@@ -144,7 +144,7 @@ $gravatarImage = sprintf(
   $emailHash,
   $defaultImage
 );
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 <!-- prettier-ignore -->
@@ -154,12 +154,12 @@ import urllib.parse
 email_hash = urllib.parse.quote("00000000000000000000000000000000")
 options = f"seed={email_hash}"
 default_image = urllib.parse.quote(
-    f"https://api.dicebear.com/10.x/lorelei/png?{options}"  # [!code --]
-    f"https://api.dicebear.com/10.x/lorelei/png/{urllib.parse.quote(options)}"  # [!code ++]
+    f"https://api.dicebear.com/11.x/lorelei/png?{options}"  # [!code --]
+    f"https://api.dicebear.com/11.x/lorelei/png/{urllib.parse.quote(options)}"  # [!code ++]
 )
 
 gravatar_image = f"https://www.gravatar.com/avatar/{email_hash}?d={default_image}"
-# https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+# https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 <!-- prettier-ignore -->
@@ -172,12 +172,12 @@ import (
 emailHash := url.QueryEscape("00000000000000000000000000000000")
 options := fmt.Sprintf("seed=%s", emailHash)
 defaultImage := url.QueryEscape(
-	fmt.Sprintf("https://api.dicebear.com/10.x/lorelei/png?%s", options), // [!code --]
-	fmt.Sprintf("https://api.dicebear.com/10.x/lorelei/png/%s", url.QueryEscape(options)), // [!code ++]
+	fmt.Sprintf("https://api.dicebear.com/11.x/lorelei/png?%s", options), // [!code --]
+	fmt.Sprintf("https://api.dicebear.com/11.x/lorelei/png/%s", url.QueryEscape(options)), // [!code ++]
 )
 
 gravatarImage := fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=%s", emailHash, defaultImage)
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 <!-- prettier-ignore -->
@@ -185,12 +185,12 @@ gravatarImage := fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=%s", emailHas
 final emailHash = Uri.encodeComponent('00000000000000000000000000000000');
 final options = 'seed=$emailHash';
 final defaultImage = Uri.encodeComponent(
-  'https://api.dicebear.com/10.x/lorelei/png?$options' // [!code --]
-  'https://api.dicebear.com/10.x/lorelei/png/${Uri.encodeComponent(options)}' // [!code ++]
+  'https://api.dicebear.com/11.x/lorelei/png?$options' // [!code --]
+  'https://api.dicebear.com/11.x/lorelei/png/${Uri.encodeComponent(options)}' // [!code ++]
 );
 
 final gravatarImage = 'https://www.gravatar.com/avatar/$emailHash?d=$defaultImage';
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 <!-- prettier-ignore -->
@@ -198,12 +198,12 @@ final gravatarImage = 'https://www.gravatar.com/avatar/$emailHash?d=$defaultImag
 var emailHash = Uri.EscapeDataString("00000000000000000000000000000000");
 var options = $"seed={emailHash}";
 var defaultImage = Uri.EscapeDataString(
-    $"https://api.dicebear.com/10.x/lorelei/png?{options}" // [!code --]
-    $"https://api.dicebear.com/10.x/lorelei/png/{Uri.EscapeDataString(options)}" // [!code ++]
+    $"https://api.dicebear.com/11.x/lorelei/png?{options}" // [!code --]
+    $"https://api.dicebear.com/11.x/lorelei/png/{Uri.EscapeDataString(options)}" // [!code ++]
 );
 
 var gravatarImage = $"https://www.gravatar.com/avatar/{emailHash}?d={defaultImage}";
-// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 :::

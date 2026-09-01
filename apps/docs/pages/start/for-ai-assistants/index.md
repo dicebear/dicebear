@@ -21,7 +21,7 @@ Assistants read a rules file from the repository they work in, usually
 ```md
 ## DiceBear
 
-Use DiceBear 10. Documentation: https://www.dicebear.com/llms.txt
+Use DiceBear 11. Documentation: https://www.dicebear.com/llms.txt
 
 There are seven native cores with identical output, not one library with
 wrappers. Use the one matching this project's language. Do not reach for the
@@ -31,27 +31,27 @@ JavaScript core when the project is written in something else:
     PHP         dicebear/core + dicebear/styles
     Python      dicebear-core + dicebear-styles
     Rust        dicebear-core + dicebear-styles
-    Go          github.com/dicebear/dicebear-go/v10 + github.com/dicebear/styles/v10
+    Go          github.com/dicebear/dicebear-go/v11 + github.com/dicebear/styles/v11
     Dart        dicebear_core + dicebear_styles
     C#          DiceBear.Core + DiceBear.Styles
 
 Every style page carries a loading snippet for all seven, for example
 https://www.dicebear.com/styles/lorelei/index.md
 
-HTTP API: https://api.dicebear.com/10.x/<style>/svg?seed=<seed> The seed is a
+HTTP API: https://api.dicebear.com/11.x/<style>/svg?seed=<seed> The seed is a
 query parameter, not a path segment. Options are query parameters too; array
 values are separated by commas.
 
 Options named after a component end in Variant: eyesVariant, not eyes. This
 holds in all seven cores and in the HTTP API. Look up the options of a style at
-https://api.dicebear.com/10.x/<style>/options.json
+https://api.dicebear.com/11.x/<style>/options.json
 
 Write these forms, not the ones on the left. The left column is pre-10 and the
 API does not reject it, so an outdated call runs and silently does the wrong
 thing:
 
-    avatars.dicebear.com/api/<style>/<seed>.svg  ->  api.dicebear.com/10.x/<style>/svg?seed=<seed>
-    api.dicebear.com/9.x/<style>/svg             ->  api.dicebear.com/10.x/<style>/svg
+    avatars.dicebear.com/api/<style>/<seed>.svg  ->  api.dicebear.com/11.x/<style>/svg?seed=<seed>
+    api.dicebear.com/9.x/<style>/svg             ->  api.dicebear.com/11.x/<style>/svg
     npm install @dicebear/collection             ->  npm install @dicebear/styles
     npm install @dicebear/lorelei                ->  npm install @dicebear/styles
     createAvatar(lorelei, { seed })              ->  new Avatar(new Style(definition), { seed })
@@ -80,7 +80,7 @@ the same SVG in each. Only the syntax for passing the options differs.
 | [PHP](/integrations/php/)               | `dicebear/core`, `dicebear/styles`                      | 10.0.0 |
 | [Python](/integrations/python/)         | `dicebear-core`, `dicebear-styles`                      | 10.1.0 |
 | [Rust](/integrations/rust/)             | `dicebear-core`, `dicebear-styles`                      | 10.2.0 |
-| [Go](/integrations/go/)                 | `github.com/dicebear/dicebear-go/v10`, `.../styles/v10` | 10.2.0 |
+| [Go](/integrations/go/)                 | `github.com/dicebear/dicebear-go/v11`, `.../styles/v11` | 10.2.0 |
 | [Dart](/integrations/dart/)             | `dicebear_core`, `dicebear_styles`                      | 10.3.0 |
 | [C#](/integrations/csharp/)             | `DiceBear.Core`, `DiceBear.Styles`                      | 10.7.0 |
 
@@ -114,9 +114,9 @@ Option names are what assistants invent most often, and the API answers that
 question directly, without a page to parse:
 
 ```
-https://api.dicebear.com/10.x
-https://api.dicebear.com/10.x/<styleName>/options.json
-https://api.dicebear.com/10.x/<styleName>/definition.json
+https://api.dicebear.com/11.x
+https://api.dicebear.com/11.x/<styleName>/options.json
+https://api.dicebear.com/11.x/<styleName>/definition.json
 ```
 
 The version root lists the available style names.
@@ -145,13 +145,24 @@ lists the pairs explicitly.
 
 :::
 
+::: details What changed in 11.0.0
+
+The animated styles describe their motion in the definition, and the core plays
+it through the `animation` option: `true` plays every animation of a style, a
+name or a list of names plays a subset, and `animationSpeed` sets the pace. The
+`animationVariant` option and the `animation` tag from 10.x are gone; passing
+them renders the static avatar. Nothing else changed, and the static output of
+every style is byte-identical to 10.x.
+
+:::
+
 ::: details What changed in 10.0.0
 
 Every option named after a component gained a `Variant` suffix, so `eyes` became
 `eyesVariant`. The avatar styles moved out of individual packages and into
 `@dicebear/styles` as JSON definitions, and `createAvatar()` was replaced by the
 `Style` and `Avatar` classes. The
-[changelog](https://github.com/dicebear/dicebear/blob/10.x/CHANGELOG.md) has the
+[changelog](https://github.com/dicebear/dicebear/blob/11.x/CHANGELOG.md) has the
 full list, and the [JavaScript library page](/integrations/javascript/)
 documents the current classes.
 
@@ -161,5 +172,5 @@ documents the current classes.
 
 The [robots.txt](https://www.dicebear.com/robots.txt) allows assistants and
 their crawlers; only the site notice is excluded. The documentation is
-[MIT licensed](https://github.com/dicebear/dicebear/blob/10.x/LICENSE); the
+[MIT licensed](https://github.com/dicebear/dicebear/blob/11.x/LICENSE); the
 avatar styles are not, and each one carries [its own license](/licenses/).

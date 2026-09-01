@@ -391,7 +391,7 @@ import (
 	"fmt"
 	"os"
 
-	dicebear "github.com/dicebear/dicebear-go/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
 )
 
 definition, _ := os.ReadFile("./my-style.json")

@@ -34,7 +34,7 @@ In the [HTTP API](/integrations/http-api/) the same filter is a comma-separated
 query parameter:
 
 ```
-https://api.dicebear.com/10.x/adventurer/svg?seed=John&tags=hairLength:long,mood:positive
+https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,mood:positive
 ```
 
 ## How the filter works

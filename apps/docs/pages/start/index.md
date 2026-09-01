@@ -15,7 +15,7 @@ You don't need to install anything. Every DiceBear avatar has a URL, and any
 `<img>` tag can show it:
 
 ```html
-<img src="https://api.dicebear.com/10.x/lorelei/svg?seed=Alice" alt="avatar" />
+<img src="https://api.dicebear.com/11.x/lorelei/svg?seed=Alice" alt="avatar" />
 ```
 
 Two things in that URL shape the avatar: the style, here `lorelei`, and the
@@ -37,7 +37,7 @@ other avatar library offers a collection like it, and switching is one word in
 the URL:
 
 ```html
-<img src="https://api.dicebear.com/10.x/bottts/svg?seed=Alice" alt="avatar" />
+<img src="https://api.dicebear.com/11.x/bottts/svg?seed=Alice" alt="avatar" />
 ```
 
 Take a stroll through the [style gallery](/styles/): every style has its own
@@ -52,7 +52,7 @@ accessories. Options ride along in the URL as query parameters:
 
 ```html
 <img
-  src="https://api.dicebear.com/10.x/lorelei/svg?seed=Alice&flip=true&backgroundColor=b6e3f4"
+  src="https://api.dicebear.com/11.x/lorelei/svg?seed=Alice&flip=true&backgroundColor=b6e3f4"
   alt="avatar"
 />
 ```

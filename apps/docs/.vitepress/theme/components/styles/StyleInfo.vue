@@ -20,7 +20,7 @@ const style = computed(() => {
 });
 
 const exampleHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/10.x/${kebabCase(props.styleName)}/svg`;
+  return `https://api.dicebear.com/11.x/${kebabCase(props.styleName)}/svg`;
 });
 
 interface UrlRow {

@@ -9,13 +9,13 @@ description: >
 
 This guide explains how to implement DiceBear Core in any programming language.
 A correct implementation produces **byte-identical SVGs** to the
-[JavaScript](https://github.com/dicebear/dicebear/tree/10.x/src/js/core),
-[PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core),
-[Python](https://github.com/dicebear/dicebear/tree/10.x/src/python/core),
-[Rust](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core),
-[Go](https://github.com/dicebear/dicebear/tree/10.x/src/go/core),
-[Dart](https://github.com/dicebear/dicebear/tree/10.x/src/dart/core) and
-[C#](https://github.com/dicebear/dicebear/tree/10.x/src/csharp/core) reference
+[JavaScript](https://github.com/dicebear/dicebear/tree/11.x/src/js/core),
+[PHP](https://github.com/dicebear/dicebear/tree/11.x/src/php/core),
+[Python](https://github.com/dicebear/dicebear/tree/11.x/src/python/core),
+[Rust](https://github.com/dicebear/dicebear/tree/11.x/src/rust/core),
+[Go](https://github.com/dicebear/dicebear/tree/11.x/src/go/core),
+[Dart](https://github.com/dicebear/dicebear/tree/11.x/src/dart/core) and
+[C#](https://github.com/dicebear/dicebear/tree/11.x/src/csharp/core) reference
 implementations for the same seed and style definition.
 
 ## Architecture overview
@@ -155,7 +155,7 @@ Key details:
   implement the 32-bit multiply manually: a naïve `uint32 * uint32` exceeds
   `2^63 - 1` and silently overflows. The PHP reference splits one operand into
   16-bit halves; see
-  [`Prng/Mulberry32.php::mul`](https://github.com/dicebear/dicebear/blob/10.x/src/php/core/src/Prng/Mulberry32.php).
+  [`Prng/Mulberry32.php::mul`](https://github.com/dicebear/dicebear/blob/11.x/src/php/core/src/Prng/Mulberry32.php).
 
 ### Key-based value generation
 
@@ -585,7 +585,7 @@ inputs, and a JavaScript build would even differ between browser engines.
 `linearize` has only 256 possible inputs, so every reference implementation
 embeds a precomputed lookup table with the 256 results instead. Copy it from any
 reference port (e.g.
-[`Color.ts`](https://github.com/dicebear/dicebear/blob/10.x/src/js/core/src/Utils/Color.ts)).
+[`Color.ts`](https://github.com/dicebear/dicebear/blob/11.x/src/js/core/src/Utils/Color.ts)).
 Decimal-literal parsing is correctly rounded in every mainstream language, so
 the table yields bit-identical doubles everywhere, and the remaining arithmetic
 (`+`, `×`, `÷`) is exactly specified by IEEE 754.
@@ -919,8 +919,8 @@ sharing identical rules is harmless.
 Pad the track's keyframes first: when the first keyframe has `at > 0`, prepend a
 copy with `at: 0`, and when the last one has `at < 100`, append a copy with
 `at: 100`. The resting value then holds outside the keyframed span. Each
-keyframe becomes `{at}%{{declaration}{timing}}` with `at` run through
-`formatNumber`, and the body is the concatenation without separators.
+keyframe becomes `{at}%{`, the declaration, the timing, and `}`, with `at` run
+through `formatNumber`, and the body is the concatenation without separators.
 
 | Track        | Declaration                   |
 | ------------ | ----------------------------- |
@@ -944,8 +944,8 @@ Easings serialize as follows: the keywords `linear` and `ease` stay as they are,
 and a comma plus space between them.
 
 Keyframes blocks are deduplicated by body: the first track that produces a given
-body registers `@keyframes dbk-{hash}-{m}{{body}}` and later tracks with the
-same body reuse that name. Class rules are never deduplicated.
+body registers `@keyframes dbk-{hash}-{m}` with that body in braces, and later
+tracks with the same body reuse that name. Class rules are never deduplicated.
 
 ### Class rule
 
@@ -978,7 +978,7 @@ register the accumulated CSS as one more `<defs>` entry if at least one
 keyframes block exists:
 
 ```
-<style>@media (prefers-reduced-motion:no-preference){{keyframes blocks in registration order}{class rules in emission order}}</style>
+<style>@media (prefers-reduced-motion:no-preference){<keyframes blocks in registration order><class rules in emission order>}</style>
 ```
 
 The map key is `animation-style`. An authored `<defs>` child may already use
@@ -1030,7 +1030,7 @@ matches the first letter for every input the regex produces.
 ## Testing your implementation
 
 The DiceBear repository ships a language-neutral parity test suite at
-[`tests/fixtures/parity/`](https://github.com/dicebear/dicebear/tree/10.x/tests/fixtures/parity).
+[`tests/fixtures/parity/`](https://github.com/dicebear/dicebear/tree/11.x/tests/fixtures/parity).
 It is the canonical way to verify a new implementation: the JavaScript, PHP,
 Python, Rust, Go, Dart, and C# reference implementations all consume the same
 JSON fixtures and assert the same outputs, so any port that reads these fixtures
@@ -1141,10 +1141,10 @@ with multiple components and color constraints.
 
 | Language   | Package                               | Source                                                                                     |
 | ---------- | ------------------------------------- | ------------------------------------------------------------------------------------------ |
-| JavaScript | `@dicebear/core`                      | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/js/core/src)         |
-| PHP        | `dicebear/core`                       | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/php/core/src)       |
-| Python     | `dicebear-core`                       | [src/python/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/python/core/src) |
-| Rust       | `dicebear-core`                       | [src/rust/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core/src)     |
-| Go         | `github.com/dicebear/dicebear-go/v10` | [src/go/core/](https://github.com/dicebear/dicebear/tree/10.x/src/go/core)                 |
-| Dart       | `dicebear_core`                       | [src/dart/core/lib/](https://github.com/dicebear/dicebear/tree/10.x/src/dart/core/lib)     |
-| C#         | `DiceBear.Core`                       | [src/csharp/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/csharp/core/src) |
+| JavaScript | `@dicebear/core`                      | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/11.x/src/js/core/src)         |
+| PHP        | `dicebear/core`                       | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/11.x/src/php/core/src)       |
+| Python     | `dicebear-core`                       | [src/python/core/src/](https://github.com/dicebear/dicebear/tree/11.x/src/python/core/src) |
+| Rust       | `dicebear-core`                       | [src/rust/core/src/](https://github.com/dicebear/dicebear/tree/11.x/src/rust/core/src)     |
+| Go         | `github.com/dicebear/dicebear-go/v11` | [src/go/core/](https://github.com/dicebear/dicebear/tree/11.x/src/go/core)                 |
+| Dart       | `dicebear_core`                       | [src/dart/core/lib/](https://github.com/dicebear/dicebear/tree/11.x/src/dart/core/lib)     |
+| C#         | `DiceBear.Core`                       | [src/csharp/core/src/](https://github.com/dicebear/dicebear/tree/11.x/src/csharp/core/src) |

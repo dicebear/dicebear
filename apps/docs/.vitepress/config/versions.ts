@@ -157,6 +157,6 @@ export const libraryVersions: readonly LibraryVersion[] = [
 export const versions = {
   core: coreVersion,
   major: majorVersion,
-  /** Version prefix of the HTTP API, e.g. `10.x`. */
+  /** Version prefix of the HTTP API, e.g. `11.x`. */
   httpApi: `${majorVersion}.x`,
 };
