@@ -1137,8 +1137,17 @@ namespace DiceBear.Internal
                 return;
             }
 
+            // An authored def may carry the id "animation-style", so the CSS
+            // takes the next free key rather than replacing that def.
+            var key = "animation-style";
+
+            while (_defs.ContainsKey(key))
+            {
+                key += "-";
+            }
+
             _defs.Set(
-                "animation-style",
+                key,
                 "<style>@media (prefers-reduced-motion:no-preference){"
                 + string.Concat(_keyframesCss) + string.Concat(_animationCss) + "}</style>");
         }
