@@ -56,19 +56,14 @@ export function updatePackageJson(raw, newVersion, workspaceNames) {
 const CHANGELOG_REPO_URL = "https://github.com/dicebear/dicebear";
 
 /**
- * Promotes the `## [Unreleased]` section of a Keep a Changelog file to a
- * released version: the existing entries are moved under a new
- * `## [<version>] - <date>` heading, a fresh empty `## [Unreleased]` is kept on
- * top, and the bottom link references are updated accordingly.
+ * A Go module path carries its major version as a suffix from v2 on, and the
+ * module proxy rejects a tag whose go.mod disagrees with it.
  *
- * @param {string} raw - Raw CHANGELOG.md content
- * @param {string} newVersion
- * @param {string} date - Release date in `YYYY-MM-DD` form
- * @returns {string | null} Updated changelog, or null if there is nothing to do
+ * @param {string} goModRaw - Raw go.mod content
+ * @param {string} version - The version about to be released
+ * @returns {string | null} The module path `version` requires, or null when
+ *   `goModRaw` already declares it
  */
-// A Go module path carries its major version as a suffix from v2 on, and the
-// module proxy rejects a tag whose go.mod disagrees with it. Returns the module
-// path `version` requires, or null when `goModRaw` already declares it.
 export function expectedGoModulePath(goModRaw, version) {
   const match = goModRaw.match(/^module\s+(\S+)/m);
 
@@ -84,6 +79,17 @@ export function expectedGoModulePath(goModRaw, version) {
   return current === expected ? null : expected;
 }
 
+/**
+ * Promotes the `## [Unreleased]` section of a Keep a Changelog file to a
+ * released version: the existing entries are moved under a new
+ * `## [<version>] - <date>` heading, a fresh empty `## [Unreleased]` is kept on
+ * top, and the bottom link references are updated accordingly.
+ *
+ * @param {string} raw - Raw CHANGELOG.md content
+ * @param {string} newVersion
+ * @param {string} date - Release date in `YYYY-MM-DD` form
+ * @returns {string | null} Updated changelog, or null if there is nothing to do
+ */
 export function updateChangelog(raw, newVersion, date) {
   const unreleasedHeading = /^## \[Unreleased\][^\n]*$/m;
 

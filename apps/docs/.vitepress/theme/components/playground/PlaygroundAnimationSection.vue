@@ -7,9 +7,9 @@ import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 import { animationPlays } from './animationState';
 
 const props = defineProps<{
-  // The style's animation names from the options descriptor. Empty when
+  // The style's animation names, as the loaded style reports them. Empty when
   // every timeline is unnamed.
-  names: string[];
+  names: readonly string[];
 }>();
 
 const store = useStore();

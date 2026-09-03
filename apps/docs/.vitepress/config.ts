@@ -11,7 +11,7 @@ import { generateBadges } from './badges.ts';
 import { prepareLlms } from './llms.ts';
 import { versions } from './config/versions.ts';
 import { SITE_ORIGIN, siteUrl } from './config/site.ts';
-import sidebarDocs from './config/sidebarDocs.ts';
+import sidebarDocs, { docsSections } from './config/sidebarDocs.ts';
 import sidebarStyles from './config/sidebarStyles.ts';
 import avatarStyles, {
   styleCount,
@@ -434,8 +434,7 @@ export default defineConfig<ThemeOptions>({
       {
         text: 'Docs',
         link: '/start/',
-        activeMatch:
-          '^/(start|integrations|customize|recipes|understand|create-styles|contribute)',
+        activeMatch: `^/(${docsSections.join('|')})`,
       },
       {
         text: 'About',
@@ -450,14 +449,10 @@ export default defineConfig<ThemeOptions>({
         'https://github.com/dicebear/dicebear/edit/11.x/apps/docs/pages/:path',
     },
     sidebar: {
-      '/start/': sidebarDocs,
       '/styles/': sidebarStyles,
-      '/integrations/': sidebarDocs,
-      '/customize/': sidebarDocs,
-      '/recipes/': sidebarDocs,
-      '/understand/': sidebarDocs,
-      '/create-styles/': sidebarDocs,
-      '/contribute/': sidebarDocs,
+      ...Object.fromEntries(
+        docsSections.map((section) => [`/${section}/`, sidebarDocs]),
+      ),
     },
   },
   sitemap: {

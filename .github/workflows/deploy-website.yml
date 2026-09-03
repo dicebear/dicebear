@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   test:
-    uses: dicebear/dicebear/.github/workflows/test.yml@10.x
+    uses: dicebear/dicebear/.github/workflows/test.yml@11.x
   deploy:
     needs: test
     environment: ${{ github.ref_name == '9.x' && 'website-v9' || 'website-latest' }}

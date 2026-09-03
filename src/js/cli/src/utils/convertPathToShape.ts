@@ -40,10 +40,13 @@ const ARGUMENTS: Record<string, number> = { C: 6, S: 4, A: 7 };
 
 /**
  * Attributes that tie the rendering to the path's own start point and
- * direction. Markers only render on a path, and a dash pattern begins where
- * the path begins, while a circle's stroke begins at its three o'clock point.
+ * direction, or to the element being a path at all. Markers only render on a
+ * path, and a dash pattern begins where the path begins, while a circle's
+ * stroke begins at its three o'clock point. An `id` may be the target of a
+ * `<textPath>` or `<mpath>` reference, and those need a path, not a shape.
  */
 const PATH_BOUND_ATTRIBUTES = [
+  'id',
   'marker-start',
   'marker-mid',
   'marker-end',
@@ -547,7 +550,7 @@ export function convertPathToShape(params: {
           }
 
           // Rewriting such a path would move its markers or its dash
-          // pattern, so it stays a path.
+          // pattern, or break a reference to it, so it stays a path.
           if (
             PATH_BOUND_ATTRIBUTES.some(
               (attribute) => node.attributes[attribute] !== undefined,

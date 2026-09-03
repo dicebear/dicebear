@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url';
 import { execSync } from 'node:child_process';
 
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import Components from 'unplugin-vue-components/vite';
@@ -15,34 +15,45 @@ const commitHash = (
 // VITE_LOCALES=en, because the legal pages it links to exist in English only
 // and an interface in another language would promise a translation that is not
 // there. Unset, every file in src/messages goes into the build.
-const locales = (process.env.VITE_LOCALES ?? '')
-  .split(',')
-  .map((locale) => locale.trim())
-  .filter(Boolean);
+function localesFrom(env: Record<string, string | undefined>): string[] {
+  return (env.VITE_LOCALES ?? '')
+    .split(',')
+    .map((locale) => locale.trim())
+    .filter(Boolean);
+}
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    Components({
-      resolvers: [PrimeVueResolver()],
-    }),
-    VueI18nPlugin({
-      include:
-        locales.length > 0
-          ? locales.map((locale) => `./src/messages/${locale}.json`)
-          : './src/messages/*.json',
-      strictMessage: false,
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+export default defineConfig(({ mode }) => {
+  // Vite does not copy `.env` files into `process.env` while the config runs,
+  // so read them the way the app code does, with the shell taking precedence.
+  const locales = localesFrom({
+    ...loadEnv(mode, process.cwd(), 'VITE_'),
+    ...process.env,
+  });
+
+  return {
+    plugins: [
+      vue(),
+      Components({
+        resolvers: [PrimeVueResolver()],
+      }),
+      VueI18nPlugin({
+        include:
+          locales.length > 0
+            ? locales.map((locale) => `./src/messages/${locale}.json`)
+            : './src/messages/*.json',
+        strictMessage: false,
+      }),
+    ],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
     },
-  },
-  define: {
-    __dicebearEditorVersion: JSON.stringify(
-      `${new Date().toISOString().split('T')[0]}-${commitHash}`,
-    ),
-  },
+    define: {
+      __dicebearEditorVersion: JSON.stringify(
+        `${new Date().toISOString().split('T')[0]}-${commitHash}`,
+      ),
+    },
+  };
 });

@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   test:
-    uses: dicebear/dicebear/.github/workflows/test.yml@10.x
+    uses: dicebear/dicebear/.github/workflows/test.yml@11.x
 
   publish:
     needs: test

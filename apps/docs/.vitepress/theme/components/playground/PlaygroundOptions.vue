@@ -62,7 +62,7 @@ const seed = defineModel<string>('seed', { required: true });
 const store = useStore();
 const { avatarStyleName } = storeToRefs(store);
 
-const { loadedStyle, descriptor, styleColors, preview } =
+const { loadedStyle, descriptor, animationNames, styleColors, preview } =
   useStyleOptions(avatarStyleName);
 
 provide(componentPreviewKey, preview);
@@ -98,13 +98,6 @@ function animationTag(name: string): string {
     ? plays
     : `${plays} · own`;
 }
-
-// Every animation name comes with a `${name}Animation` switch field.
-const animationNames = computed<string[]>(() =>
-  Object.keys(descriptor.value)
-    .filter((key) => key !== 'animation' && key.endsWith('Animation'))
-    .map((key) => key.slice(0, -'Animation'.length)),
-);
 
 // The `tags` filter only does something for styles whose variants carry tags;
 // OptionsDescriptor advertises the `tags` field (with the style's own tag

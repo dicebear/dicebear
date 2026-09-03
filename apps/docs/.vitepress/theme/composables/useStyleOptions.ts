@@ -10,6 +10,8 @@ export type StyleOptionsContext = {
   descriptor: ComputedRef<ReturnType<OptionsDescriptor['toJSON']>>;
   componentNames: ComputedRef<string[]>;
   colorNames: ComputedRef<string[]>;
+  /** Names of the style's declarative animations, sorted, empty when it has none. */
+  animationNames: ComputedRef<readonly string[]>;
   styleColors: ComputedRef<Record<string, string[]>>;
   preview: ComputedRef<ComponentPreview | null>;
 };
@@ -50,6 +52,10 @@ export function useStyleOptions(styleName: Ref<string>): StyleOptionsContext {
     return keys.includes('background') ? ['background', ...rest] : rest;
   });
 
+  const animationNames = computed<readonly string[]>(() =>
+    loadedStyle.value ? loadedStyle.value.animationNames() : [],
+  );
+
   const styleColors = computed<Record<string, string[]>>(() =>
     loadedStyle.value ? getStyleColorsMap(loadedStyle.value) : {},
   );
@@ -63,6 +69,7 @@ export function useStyleOptions(styleName: Ref<string>): StyleOptionsContext {
     descriptor,
     componentNames,
     colorNames,
+    animationNames,
     styleColors,
     preview,
   };

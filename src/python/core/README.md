@@ -34,7 +34,7 @@ definition = json.loads(
     files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
 )
 
-avatar = Avatar(Style(definition), {"seed": "John Doe", "size": 128})
+avatar = Avatar(Style(definition), {"seed": "John", "size": 128})
 
 avatar.to_string()  # SVG string
 avatar.to_data_uri()  # data:image/svg+xml;charset=utf-8,...

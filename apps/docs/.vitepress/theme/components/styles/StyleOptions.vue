@@ -79,6 +79,7 @@ const {
   descriptor,
   componentNames,
   colorNames,
+  animationNames,
   styleColors,
   preview,
 } = useStyleOptions(toRef(() => props.styleName));
@@ -176,7 +177,7 @@ function isColorOption(key: string, names: string[]): boolean {
 // speed and the delay.
 const globalAnimationKeys = ['animation', 'animationSpeed', 'animationDelay'];
 
-function isAnimationOption(key: string, names: string[]): boolean {
+function isAnimationOption(key: string, names: readonly string[]): boolean {
   return names.some(
     (name) =>
       key === `${name}Animation` ||
@@ -184,13 +185,6 @@ function isAnimationOption(key: string, names: string[]): boolean {
       key === `${name}AnimationDelay`,
   );
 }
-
-// Every animation name comes with a `${name}Animation` switch field.
-const animationNames = computed<string[]>(() =>
-  Object.keys(descriptor.value)
-    .filter((key) => key !== 'animation' && key.endsWith('Animation'))
-    .map((key) => key.slice(0, -'Animation'.length)),
-);
 
 function pick(
   source: Record<string, any>,

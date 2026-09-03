@@ -665,15 +665,20 @@ export class Renderer {
    * than through the id rewrite, which only knows `id`/`url(#…)`/`href`.
    */
   #animationHash(): string {
+    if (this.#cachedAnimationHash !== undefined) {
+      return this.#cachedAnimationHash;
+    }
+
     const random = this.#resolver.idRandomization()
       ? ':' + this.#randomSuffix()
       : '';
 
     // Every named timeline the style carries joins the hash with its state,
     // `off` or the factor and offset it plays at, so two renders that differ
-    // only in a per-name animation option never share their rules.
-    const states = [...this.#style.animationNames()]
-      .sort()
+    // only in a per-name animation option never share their rules. The style
+    // lists its names in byte order already.
+    const states = this.#style
+      .animationNames()
       .map((name) =>
         this.#resolver.animationPlays(name)
           ? `${name}:${Number.format(this.#resolver.animationSpeedFor(name))}:${Number.format(this.#resolver.animationDelayFor(name))}`
@@ -681,7 +686,7 @@ export class Renderer {
       );
     const named = states.length > 0 ? ':' + states.join(',') : '';
 
-    return (this.#cachedAnimationHash ??= Fnv1a.hex(
+    return (this.#cachedAnimationHash = Fnv1a.hex(
       (this.#style.meta().source().name() ?? '') +
         ':' +
         this.#resolver.seed() +

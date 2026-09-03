@@ -984,7 +984,7 @@ Every track adds one rule to the class list:
   delays are allowed and start the timeline mid-way.
 - `iterations` is the literal `infinite` when the field is unset or
   `'infinite'`, otherwise `formatNumber(iterations)`.
-- `direction` maps `alternateReverse` to `alternate-reverse`; the other three
+- `direction` maps `alternateReverse` to `alternate-reverse`. The other three
   keywords are emitted as written. Default `normal`.
 - `fill` is `none` or `forwards`, default `none`.
 - `easing` is the timeline's default easing in CSS form.
