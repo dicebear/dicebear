@@ -32,7 +32,7 @@ async function onClick() {
     }),
   );
 
-  const successful = copy(avatar.toString());
+  const successful = await copy(avatar.toString());
 
   if (successful) {
     track('Playground: Copy SVG', {
