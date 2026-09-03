@@ -618,11 +618,10 @@ class Renderer {
 
   /// Returns the FNV-1a hex hash namespacing the animation class and keyframe
   /// names, cached after the first call. Extends the [_hashSeed] input with
-  /// the animation speed and, for a by-name selection, the sorted names: two
-  /// renders of the same avatar with different speeds or selections inlined
-  /// on one page must not select each other's rules, while identical renders
-  /// sharing identical rules is harmless deduplication. `true` adds no name
-  /// suffix, so enabling all animations hashes as before.
+  /// the animation speed and the state of every named timeline the style
+  /// carries: two renders of the same avatar with different speeds or
+  /// switches inlined on one page must not select each other's rules, while
+  /// identical renders sharing identical rules is harmless deduplication.
   ///
   /// Everything else about an avatar stays out of the hash, so two renders of
   /// the same style and seed that differ in any other option would share their
@@ -637,14 +636,24 @@ class Renderer {
       return cached;
     }
 
-    final names = _resolver.animation().names;
-    final suffix =
-        names == null ? '' : ':${(names.toSet().toList()..sort()).join(',')}';
     final random = _resolver.idRandomization() ? ':${_randomSuffix()}' : '';
+
+    // Every named timeline the style carries joins the hash with its state,
+    // `off` or the factor it plays at, in code unit order (the order
+    // [Style.animationNames] keeps), so two renders that differ only in a
+    // `${name}Animation` or `${name}AnimationSpeed` option never share their
+    // rules. A style without named timelines adds no part.
+    final states = [
+      for (final name in _style.animationNames)
+        _resolver.animationPlays(name)
+            ? '$name:${formatNumber(_resolver.animationSpeedFor(name))}'
+            : '$name:off',
+    ];
+    final named = states.isEmpty ? '' : ':${states.join(',')}';
 
     return _cachedAnimationHash = fnv1aHex(
       '${_style.meta.source().name() ?? ''}:${_resolver.seed()}:'
-      '${formatNumber(_resolver.animationSpeed())}$suffix$random',
+      '${formatNumber(_resolver.animationSpeed())}$named$random',
     );
   }
 
@@ -664,34 +673,16 @@ class Renderer {
       return markup;
     }
 
-    final animations = element.animations;
+    final animations = _playingAnimations(element);
 
-    // The element check comes first: only styles that carry declarative
-    // animations may touch the `animation` option, so the resolved-options
-    // snapshot of every other avatar stays free of it.
     if (animations.isEmpty) {
-      return markup;
-    }
-
-    final selection = _resolver.animation();
-
-    if (selection.off) {
       return markup;
     }
 
     final classes = <String>[];
     var opacityWrapper = -1;
 
-    for (final entry in animations) {
-      final animation = entry as Map<String, Object?>;
-
-      // `true` plays every timeline. A name selection plays only the
-      // timelines carrying one of those names, so unnamed timelines stay
-      // static then.
-      if (!selection.matches(animation['name'] as String?)) {
-        continue;
-      }
-
+    for (final animation in animations) {
       final tracks = animation['tracks'] as Map<String, Object?>;
 
       for (final track in _trackOrder) {
@@ -725,6 +716,30 @@ class Renderer {
     return result;
   }
 
+  /// Returns the timelines of [element] that play. The element check comes
+  /// first: only styles that carry declarative animations may touch the
+  /// options, so the resolved-options snapshot of every other avatar stays
+  /// free of them. The global switch is read next so it lands in the
+  /// resolved options whenever a node carries animations, on or off. Named
+  /// timelines then follow their own switch when the user set one.
+  List<Map<String, Object?>> _playingAnimations(ElementNode element) {
+    final animations = element.animations;
+
+    if (animations.isEmpty) {
+      return const [];
+    }
+
+    _resolver.animation();
+
+    return [
+      for (final entry in animations)
+        if (_resolver.animationPlays(
+          (entry as Map<String, Object?>)['name'] as String?,
+        ))
+          entry,
+    ];
+  }
+
   /// Strips the `opacity` attribute an animated opacity track takes over.
   ///
   /// A track writes the opacity the author means, not a factor on top of the
@@ -741,26 +756,7 @@ class Renderer {
       return attributes;
     }
 
-    // The element check comes first: only styles that carry declarative
-    // animations may touch the `animation` option, so the resolved-options
-    // snapshot of every other avatar stays free of it.
-    if (element.animations.isEmpty) {
-      return attributes;
-    }
-
-    final selection = _resolver.animation();
-
-    if (selection.off) {
-      return attributes;
-    }
-
-    for (final entry in element.animations) {
-      final animation = entry as Map<String, Object?>;
-
-      if (!selection.matches(animation['name'] as String?)) {
-        continue;
-      }
-
+    for (final animation in _playingAnimations(element)) {
       final tracks = animation['tracks'] as Map<String, Object?>;
 
       if (tracks['opacity'] != null) {
@@ -794,7 +790,7 @@ class Renderer {
       _keyframesCss.add('@keyframes $keyframesName{$body}');
     }
 
-    final speed = _resolver.animationSpeed();
+    final speed = _resolver.animationSpeedFor(animation['name'] as String?);
     final duration = formatNumber((animation['duration'] as num) / speed);
     final delay = formatNumber((animation['delay'] as num? ?? 0) / speed);
     final rawIterations = animation['iterations'];

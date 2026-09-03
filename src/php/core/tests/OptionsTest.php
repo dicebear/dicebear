@@ -128,6 +128,43 @@ class OptionsTest extends TestCase
         $this->assertSame([], $options->fontWeight());
     }
 
+    // animation() / animationFor()
+
+    public function testAnimationIsABooleanSwitch(): void
+    {
+        $this->assertNull((new Options([]))->animation());
+        $this->assertTrue((new Options(['animation' => true]))->animation());
+        $this->assertNull((new Options(['animation' => true]))->animationFor('blink'));
+        $this->assertFalse((new Options(['blinkAnimation' => false]))->animationFor('blink'));
+    }
+
+    public function testAnimationRejectsTheNameForm(): void
+    {
+        $this->expectException(OptionsValidationError::class);
+        new Options(['animation' => 'blink']);
+    }
+
+    // animationSpeedFor()
+
+    public function testAnimationSpeedForReturnsNullWhenUnset(): void
+    {
+        $this->assertNull((new Options([]))->animationSpeedFor('blink'));
+        $this->assertNull((new Options(['animationSpeed' => 2]))->animationSpeedFor('blink'));
+    }
+
+    public function testAnimationSpeedForNormalizesLikeTheGlobalOption(): void
+    {
+        $this->assertSame(['min' => 2, 'max' => 2], (new Options(['blinkAnimationSpeed' => 2]))->animationSpeedFor('blink'));
+        $this->assertSame(['min' => 0.5, 'max' => 2], (new Options(['blinkAnimationSpeed' => [0.5, 2]]))->animationSpeedFor('blink'));
+        $this->assertNull((new Options(['blinkAnimationSpeed' => []]))->animationSpeedFor('blink'));
+    }
+
+    public function testAnimationSpeedForRejectsAnUppercaseName(): void
+    {
+        $this->expectException(OptionsValidationError::class);
+        new Options(['BlinkAnimationSpeed' => 2]);
+    }
+
     // componentVariant()
 
     public function testComponentVariantReturnsNullWhenUnset(): void

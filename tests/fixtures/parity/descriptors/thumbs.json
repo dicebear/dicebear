@@ -249,14 +249,33 @@
     ]
   },
   "animation": {
-    "type": "animation",
-    "values": [
-      "blink",
-      "glance",
-      "sway"
-    ]
+    "type": "boolean"
   },
   "animationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "blinkAnimation": {
+    "type": "boolean"
+  },
+  "blinkAnimationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "glanceAnimation": {
+    "type": "boolean"
+  },
+  "glanceAnimationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "swayAnimation": {
+    "type": "boolean"
+  },
+  "swayAnimationSpeed": {
     "type": "range",
     "min": 0.1,
     "max": 10

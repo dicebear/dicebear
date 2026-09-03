@@ -215,3 +215,90 @@ func TestColorOrderFixedKeepsDefaultTwoStopsForStylePalette(t *testing.T) {
 		t.Errorf("color(skin) = %v, want %v", got, want)
 	}
 }
+
+// The per-name animation speed tests mirror the describe('animation options',
+// ...) block of the JS reference suite (src/js/core/tests/Resolver.test.js).
+
+func TestAnimationSpeedForLetsTheSpecificOptionWinOverTheGlobalOne(t *testing.T) {
+	r := makeResolver(t, minimalStyleJSON, `{
+		"animationSpeed": 0.5,
+		"blinkAnimationSpeed": 2
+	}`)
+
+	if got := r.animationSpeedFor("blink"); got != 2 {
+		t.Errorf(`animationSpeedFor("blink") = %v, want 2`, got)
+	}
+	if got := r.animationSpeedFor("sway"); got != 0.5 {
+		t.Errorf(`animationSpeedFor("sway") = %v, want 0.5`, got)
+	}
+	if got := r.animationSpeedFor(""); got != 0.5 {
+		t.Errorf(`animationSpeedFor("") = %v, want 0.5`, got)
+	}
+
+	resolved := r.resolved()
+	if got := resolved["blinkAnimationSpeed"]; got != 2.0 {
+		t.Errorf("resolved blinkAnimationSpeed = %v, want 2", got)
+	}
+	if _, ok := resolved["swayAnimationSpeed"]; ok {
+		t.Error("swayAnimationSpeed should stay out of the resolved options")
+	}
+}
+
+func TestAnimationSpeedForDrawsASpecificRangeUnderItsOwnKey(t *testing.T) {
+	options := `{
+		"seed": "x",
+		"blinkAnimationSpeed": [0.5, 2],
+		"swayAnimationSpeed": [0.5, 2]
+	}`
+	r := makeResolver(t, minimalStyleJSON, options)
+	blink := r.animationSpeedFor("blink")
+
+	if blink < 0.5 || blink > 2 {
+		t.Errorf(`animationSpeedFor("blink") = %v, want a value within 0.5 to 2`, blink)
+	}
+	if sway := r.animationSpeedFor("sway"); sway == blink {
+		t.Errorf("blink and sway both resolved to %v, want distinct draws", blink)
+	}
+
+	global := makeResolver(t, minimalStyleJSON, `{"seed": "x", "animationSpeed": [0.5, 2]}`).animationSpeed()
+	if blink == global {
+		t.Errorf("blink = %v equals the global draw, want a draw under its own key", blink)
+	}
+
+	if again := makeResolver(t, minimalStyleJSON, options).animationSpeedFor("blink"); again != blink {
+		t.Errorf("second resolve = %v, want %v", again, blink)
+	}
+}
+
+func TestAnimationPlaysLetsANamedSwitchWinOverTheGlobalOne(t *testing.T) {
+	on := makeResolver(t, minimalStyleJSON, `{"animation": false, "blinkAnimation": true}`)
+
+	if !on.animationPlays("blink") {
+		t.Error(`animationPlays("blink") = false, want true`)
+	}
+	if on.animationPlays("sway") {
+		t.Error(`animationPlays("sway") = true, want false`)
+	}
+	if on.animationPlays("") {
+		t.Error(`animationPlays("") = true, want false`)
+	}
+	resolved := on.resolved()
+	if got := resolved["blinkAnimation"]; got != true {
+		t.Errorf("resolved blinkAnimation = %v, want true", got)
+	}
+	if _, ok := resolved["swayAnimation"]; ok {
+		t.Error("swayAnimation should stay out of the resolved options")
+	}
+
+	off := makeResolver(t, minimalStyleJSON, `{"animation": true, "blinkAnimation": false}`)
+
+	if off.animationPlays("blink") {
+		t.Error(`animationPlays("blink") = true, want false`)
+	}
+	if !off.animationPlays("sway") {
+		t.Error(`animationPlays("sway") = false, want true`)
+	}
+	if !off.animationPlays("") {
+		t.Error(`animationPlays("") = false, want true`)
+	}
+}

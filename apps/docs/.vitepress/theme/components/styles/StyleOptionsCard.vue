@@ -108,16 +108,6 @@ const badges = computed<BadgeConfig[]>(() => {
     case 'boolean':
       return [{ label: 'boolean', ...s }];
 
-    case 'animation': {
-      // The option takes `true`/`false` or a subset of the style's animation
-      // names. The names themselves are listed in the card body.
-      const bool = style('boolean');
-      const result: BadgeConfig[] = [{ label: 'boolean', ...bool }];
-      if (fieldValues.value.length > 0)
-        result.push({ label: 'name[]', color: bool.color, icon: List });
-      return result;
-    }
-
     case 'enum': {
       const result: BadgeConfig[] = [{ label: 'enum', ...s }];
       if (isList.value) result.push({ label: 'enum[]', ...s });
@@ -140,7 +130,6 @@ const badges = computed<BadgeConfig[]>(() => {
 const skipPreview = computed(
   () =>
     fieldType.value === 'boolean' ||
-    fieldType.value === 'animation' ||
     props.name === 'fontFamily' ||
     props.name === 'title',
 );
@@ -185,11 +174,6 @@ const sampleValues = computed(() => {
 // instead of an avatar preview per value.
 const isTags = computed(() => props.name === 'tags');
 
-// The animation option's selectable timeline names, shown as chips below the
-// description.
-const animationNames = computed(() =>
-  fieldType.value === 'animation' ? fieldValues.value : [],
-);
 const tagCategories = computed(() =>
   isTags.value ? groupTagsByCategory(fieldValues.value) : [],
 );
@@ -236,7 +220,7 @@ const codeExampleValue = computed(() => {
       : sampleValues.value[0];
   }
 
-  if (fieldType.value === 'boolean' || fieldType.value === 'animation') {
+  if (fieldType.value === 'boolean') {
     return true;
   }
 
@@ -419,15 +403,6 @@ function onExamplesToggle(event: MouseEvent) {
     <p class="style-options-card-description" v-if="descriptionWithHints">
       {{ descriptionWithHints }}
     </p>
-
-    <div v-if="animationNames.length > 0" class="style-options-card-tags-chips">
-      <code
-        v-for="animationName in animationNames"
-        :key="animationName"
-        class="style-options-card-tags-chip"
-        >{{ animationName }}</code
-      >
-    </div>
 
     <div
       v-if="contrastTo"

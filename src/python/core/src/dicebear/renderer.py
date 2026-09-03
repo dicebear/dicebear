@@ -567,12 +567,12 @@ class Renderer:
         """Return the FNV-1a hex hash namespacing the animation class and
         keyframe names, cached after the first call.
 
-        Extends the :meth:`_hash_seed` input with the animation speed and, for
-        a by-name selection, the sorted names: two renders of the same avatar
-        with different speeds or selections inlined on one page must not
-        select each other's rules, while identical renders sharing identical
-        rules is harmless deduplication. ``True`` adds no name suffix, so
-        enabling all animations hashes as before.
+        Extends the :meth:`_hash_seed` input with the animation speed and,
+        for every named timeline the style carries, its state: two renders of
+        the same avatar with different speeds or switches inlined on one page
+        must not select each other's rules, while identical renders sharing
+        identical rules is harmless deduplication. A style without named
+        timelines adds no state suffix.
 
         Everything else about an avatar stays out of the hash, so two renders
         of the same style and seed that differ in any other option would share
@@ -582,15 +582,23 @@ class Renderer:
         ``id``/``url(#…)``/``href``.
         """
         if self._cached_animation_hash is None:
-            selection = self._resolver.animation()
-            names = (
-                ":" + ",".join(sorted(set(selection)))
-                if isinstance(selection, list)
-                else ""
-            )
             random_suffix = (
                 ":" + self._random_suffix() if self._resolver.id_randomization() else ""
             )
+            # Every named timeline the style carries joins the hash with its
+            # state, ``off`` or the factor it plays at, so two renders that
+            # differ only in a ``{name}Animation`` or ``{name}AnimationSpeed``
+            # option never share their rules. The style's name list is already
+            # sorted by code point. Drawing these before the global factor
+            # keeps the resolved-options order the same across the
+            # implementations.
+            states = [
+                f"{name}:{Number.format(self._resolver.animation_speed_for(name))}"
+                if self._resolver.animation_plays(name)
+                else f"{name}:off"
+                for name in self._style.animation_names()
+            ]
+            named = ":" + ",".join(states) if len(states) > 0 else ""
             source_name = self._style.meta().source().name() or ""
             self._cached_animation_hash = Fnv1a.hex(
                 source_name
@@ -598,39 +606,33 @@ class Renderer:
                 + self._resolver.seed()
                 + ":"
                 + Number.format(self._resolver.animation_speed())
-                + names
+                + named
                 + random_suffix
             )
 
         return self._cached_animation_hash
 
     def _active_animations(self, element: Element) -> list[dict[str, Any]]:
-        """Return the animation blocks of an element that the ``animation``
-        option selects.
+        """Return the animation blocks of an element that play.
 
         The element check comes first: only styles that carry declarative
-        animations may touch the option, so the resolved-options snapshot of
-        every other avatar stays free of it.
+        animations may touch the options, so the resolved-options snapshot of
+        every other avatar stays free of them.
         """
         animations = element.animations()
 
         if len(animations) == 0:
             return animations
 
-        selection = self._resolver.animation()
-
-        # ``True`` plays every timeline. A name list plays only the timelines
-        # carrying one of those names, so unnamed timelines stay static then.
-        if selection is True:
-            return animations
-
-        if selection is False:
-            return []
+        # The global switch is read first so it lands in the resolved options
+        # whenever a node carries animations, on or off. Named timelines then
+        # follow their own switch when the user set one.
+        self._resolver.animation()
 
         return [
             animation
             for animation in animations
-            if (name := animation.get("name")) is not None and name in selection
+            if self._resolver.animation_plays(animation.get("name"))
         ]
 
     def _attributes_without_animated_opacity(
@@ -646,8 +648,8 @@ class Renderer:
         exists and the attribute stays where it is.
         """
         # The element check comes first: only styles that carry declarative
-        # animations may touch the `animation` option, so the resolved-options
-        # snapshot of every other avatar stays free of it.
+        # animations may touch the animation options, so the resolved-options
+        # snapshot of every other avatar stays free of them.
         if (
             attributes is None
             or attributes.get("opacity") is None
@@ -742,7 +744,7 @@ class Renderer:
                 "@keyframes " + keyframes_name + "{" + body + "}"
             )
 
-        speed = self._resolver.animation_speed()
+        speed = self._resolver.animation_speed_for(animation.get("name"))
         duration = Number.format(animation["duration"] / speed)
         delay = Number.format(animation.get("delay", 0) / speed)
         raw_iterations = animation.get("iterations")

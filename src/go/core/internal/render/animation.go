@@ -1,7 +1,6 @@
 package render
 
 import (
-	"sort"
 	"strconv"
 	"strings"
 
@@ -23,43 +22,34 @@ var animationTrackOrder = [...]string{
 	"opacity",
 }
 
-// animationSelection is the interpreted `animation` option: off, all
-// timelines, or a selection of timeline names. Built from the raw memoized
-// value, so the resolved-options snapshot keeps the user's shape (a boolean,
-// or the name list in the given order) while the renderer works with these
-// accessors. names is nil for the boolean forms — only a name list carries
-// the name suffix into the animation hash.
-type animationSelection struct {
-	all   bool
-	names []string
-}
-
-// off reports whether no timeline plays at all.
-func (s animationSelection) off() bool { return !s.all && len(s.names) == 0 }
-
-// matches reports whether a timeline carrying the given name plays. true
-// plays every timeline. A name selection plays only named timelines carrying
-// one of the selected names (name is "" on an unnamed timeline).
-func (s animationSelection) matches(name string) bool {
-	if s.all {
-		return true
+// playingAnimations returns the animation blocks of an element that play.
+// The element check comes first: only styles that carry declarative
+// animations may touch the options, so the resolved-options snapshot of every
+// other avatar stays free of them.
+func (r *renderer) playingAnimations(el *style.Element) []*style.Animation {
+	if len(el.Animations) == 0 {
+		return nil
 	}
-	if name == "" {
-		return false
-	}
-	for _, candidate := range s.names {
-		if candidate == name {
-			return true
+
+	// The global switch is read first so it lands in the resolved options
+	// whenever a node carries animations, on or off. Named timelines then
+	// follow their own switch when the user set one.
+	r.resolver.animation()
+
+	var playing []*style.Animation
+	for i := range el.Animations {
+		animation := &el.Animations[i]
+		if r.resolver.animationPlays(animation.Name) {
+			playing = append(playing, animation)
 		}
 	}
-	return false
+	return playing
 }
 
 // applyAnimations wraps an element's rendered markup in one <g class="…"> per
-// animation track and queues the matching CSS. A no-op when the animation
-// option is off, the element carries no animations, no timeline matches the
-// selection, or the markup rendered to nothing (the empty-wrapper pruning
-// then also prunes the animation).
+// animation track and queues the matching CSS. A no-op when the element
+// carries no animations, none of its timelines plays, or the markup rendered
+// to nothing (the empty-wrapper pruning then also prunes the animation).
 //
 // Wrapper nesting is block 0 outermost, and within a block the canonical
 // track order (translate before rotate before scale, opacity innermost) — the
@@ -72,31 +62,16 @@ func (r *renderer) applyAnimations(markup string, el *style.Element) string {
 		return markup
 	}
 
-	// The element check comes first: only styles that carry declarative
-	// animations may touch the `animation` option, so the resolved-options
-	// snapshot of every other avatar stays free of it.
-	if len(el.Animations) == 0 {
-		return markup
-	}
-
-	selection := r.resolver.animation()
-	if selection.off() {
+	// A skipped timeline contributes neither wrappers nor CSS. If none plays,
+	// the markup passes through untouched.
+	playing := r.playingAnimations(el)
+	if len(playing) == 0 {
 		return markup
 	}
 
 	var classes []string
 	opacityWrapper := -1
-	for i := range el.Animations {
-		animation := &el.Animations[i]
-
-		// true plays every timeline. A name selection plays only the
-		// timelines carrying one of those names, so unnamed timelines stay
-		// static then. A skipped timeline contributes neither wrappers nor
-		// CSS. If none remains, the markup passes through untouched.
-		if !selection.matches(animation.Name) {
-			continue
-		}
-
+	for _, animation := range playing {
 		for _, track := range animationTrackOrder {
 			if trackData, ok := animation.Tracks[track]; ok {
 				if track == "opacity" {
@@ -144,22 +119,13 @@ func (r *renderer) attributesWithoutAnimatedOpacity(el *style.Element) *style.At
 	attributes := &el.Attributes
 
 	// The element check comes first: only styles that carry declarative
-	// animations may touch the `animation` option, so the resolved-options
-	// snapshot of every other avatar stays free of it.
+	// animations may touch the options, so the resolved-options snapshot of
+	// every other avatar stays free of them.
 	if _, ok := attributes.Get("opacity"); !ok || len(el.Animations) == 0 {
 		return attributes
 	}
 
-	selection := r.resolver.animation()
-	if selection.off() {
-		return attributes
-	}
-
-	for i := range el.Animations {
-		animation := &el.Animations[i]
-		if !selection.matches(animation.Name) {
-			continue
-		}
+	for _, animation := range r.playingAnimations(el) {
 		if _, ok := animation.Tracks["opacity"]; ok {
 			out := attributes.Without("opacity")
 			return &out
@@ -184,7 +150,7 @@ func (r *renderer) buildAnimationCss(animation *style.Animation, track string, k
 		r.keyframesCss = append(r.keyframesCss, "@keyframes "+keyframesName+"{"+body+"}")
 	}
 
-	speed := r.resolver.animationSpeed()
+	speed := r.resolver.animationSpeedFor(animation.Name)
 	delaySeconds := 0.0
 	if animation.Delay != nil {
 		delaySeconds = *animation.Delay
@@ -355,11 +321,10 @@ func (r *renderer) registerAnimationStyle() {
 
 // animationHash returns the FNV-1a hex hash namespacing the animation class
 // and keyframe names, cached after the first call. Extends the hashSeed input
-// with the animation speed and, for a by-name selection, the deduplicated
-// names in byte order: two renders of the same avatar with different speeds
-// or selections inlined on one page must not select each other's rules, while
-// identical renders sharing identical rules is harmless deduplication. true
-// adds no name suffix, so enabling all animations hashes as before.
+// with the animation speed and the state of every named timeline the style
+// carries: two renders of the same avatar with different speeds or switches
+// inlined on one page must not select each other's rules, while identical
+// renders sharing identical rules is harmless deduplication.
 //
 // Everything else about an avatar stays out of the hash, so two renders of the
 // same style and seed that differ in any other option would share their names
@@ -368,30 +333,36 @@ func (r *renderer) registerAnimationStyle() {
 // id rewrite, which only knows id/url(#…)/href.
 func (r *renderer) animationHash() string {
 	if r.cachedAnimationHash == nil {
-		suffix := ""
-		if names := r.resolver.animation().names; names != nil {
-			seen := make(map[string]struct{}, len(names))
-			unique := make([]string, 0, len(names))
-			for _, name := range names {
-				if _, ok := seen[name]; !ok {
-					seen[name] = struct{}{}
-					unique = append(unique, name)
-				}
-			}
-			sort.Strings(unique)
-			suffix = ":" + strings.Join(unique, ",")
-		}
-
 		random := ""
 		if r.resolver.idRandomization() {
 			random = ":" + r.randomSuffix()
+		}
+
+		// Every named timeline the style carries joins the hash with its
+		// state, `off` or the factor it plays at, in code unit order
+		// (AnimationNames is already sorted that way), so two renders that
+		// differ only in a ${name}Animation or ${name}AnimationSpeed option
+		// never share their rules. The part is absent when the style has no
+		// named timelines.
+		names := r.style.AnimationNames()
+		states := make([]string, 0, len(names))
+		for _, name := range names {
+			if r.resolver.animationPlays(name) {
+				states = append(states, name+":"+num.Format(r.resolver.animationSpeedFor(name)))
+			} else {
+				states = append(states, name+":off")
+			}
+		}
+		named := ""
+		if len(states) > 0 {
+			named = ":" + strings.Join(states, ",")
 		}
 
 		sourceName := ""
 		if meta := r.style.Meta(); meta != nil && meta.Source.Name != nil {
 			sourceName = *meta.Source.Name
 		}
-		v := prng.Hex(sourceName + ":" + r.resolver.seed() + ":" + num.Format(r.resolver.animationSpeed()) + suffix + random)
+		v := prng.Hex(sourceName + ":" + r.resolver.seed() + ":" + num.Format(r.resolver.animationSpeed()) + named + random)
 		r.cachedAnimationHash = &v
 	}
 	return *r.cachedAnimationHash

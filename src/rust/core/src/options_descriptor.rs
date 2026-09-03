@@ -135,21 +135,26 @@ impl<'a> OptionsDescriptor<'a> {
         }
 
         // Only advertise the animation options when the style carries
-        // declarative animations — on a static style both are accepted but
+        // declarative animations. On a static style they are accepted but
         // have no effect.
         if self.style.has_animations() {
-            result.insert(
-                "animation".into(),
-                json!({ "type": "animation", "values": self.style.animation_names() }),
-            );
-            result.insert(
-                "animationSpeed".into(),
-                json!({ "type": "range", "min": 0.1, "max": 10 }),
-            );
+            result.insert("animation".into(), json!({ "type": "boolean" }));
+            result.insert("animationSpeed".into(), animation_speed_range());
+
+            // Every animation name gets its own switch and speed field, in
+            // the order of the name list.
+            for name in self.style.animation_names() {
+                result.insert(format!("{name}Animation"), json!({ "type": "boolean" }));
+                result.insert(format!("{name}AnimationSpeed"), animation_speed_range());
+            }
         }
 
         Value::Object(result)
     }
+}
+
+fn animation_speed_range() -> Value {
+    json!({ "type": "range", "min": 0.1, "max": 10 })
 }
 
 fn rotate_range() -> Value {

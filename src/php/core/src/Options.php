@@ -107,27 +107,35 @@ class Options
         return $this->toRange($this->data['translateY'] ?? null);
     }
 
-    /**
-     * Returns the animation switch as given for booleans, and normalizes a
-     * single animation name to a one-element list.
-     *
-     * @return bool|list<string>|null
-     */
-    public function animation(): bool|array|null
+    public function animation(): ?bool
     {
-        $raw = $this->data['animation'] ?? null;
+        return $this->data['animation'] ?? null;
+    }
 
-        if ($raw === null || is_bool($raw)) {
-            return $raw;
-        }
-
-        return $this->asArray($raw);
+    /**
+     * Returns the `${name}Animation` switch for one animation name, or
+     * `null` when unset.
+     */
+    public function animationFor(string $name): ?bool
+    {
+        return $this->dynamic($name . 'Animation');
     }
 
     /** @return array{min: int|float, max: int|float}|null */
     public function animationSpeed(): ?array
     {
         return $this->toRange($this->data['animationSpeed'] ?? null);
+    }
+
+    /**
+     * Returns the `${name}AnimationSpeed` option for one animation name as a
+     * range, or `null` when unset.
+     *
+     * @return array{min: int|float, max: int|float}|null
+     */
+    public function animationSpeedFor(string $name): ?array
+    {
+        return $this->toRange($this->dynamic($name . 'AnimationSpeed'));
     }
 
     /**

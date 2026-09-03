@@ -1312,12 +1312,12 @@ const optionsValidationCases = [
 
   // The animation options.
   { id: 'animation-bool', options: { animation: true } },
-  // A bare string is a timeline name selection, so this is valid.
   { id: 'animation-string', options: { animation: 'yes' } },
-  { id: 'animation-name-list', options: { animation: ['look', 'blink'] } },
-  { id: 'animation-name-uppercase', options: { animation: 'Blink' } },
-  { id: 'animation-name-empty-list', options: { animation: [] } },
-  { id: 'animation-name-mixed-list', options: { animation: ['blink', 'Bad'] } },
+  { id: 'animation-list', options: { animation: ['look', 'blink'] } },
+  // A switch per animation name: `${name}Animation` is a boolean.
+  { id: 'named-animation-off', options: { blinkAnimation: false } },
+  { id: 'named-animation-string', options: { blinkAnimation: 'yes' } },
+  { id: 'named-animation-uppercase', options: { BlinkAnimation: true } },
   { id: 'animation-speed-valid', options: { animationSpeed: 2 } },
   { id: 'animation-speed-min', options: { animationSpeed: 0.1 } },
   { id: 'animation-speed-zero', options: { animationSpeed: 0 } },
@@ -1325,6 +1325,13 @@ const optionsValidationCases = [
   { id: 'animation-speed-range', options: { animationSpeed: [0.5, 2] } },
   { id: 'animation-speed-range-out-of-bounds', options: { animationSpeed: [0, 2] } },
   { id: 'animation-speed-range-excess', options: { animationSpeed: [0.5, 2, 4] } },
+  // A speed per animation name: `${name}AnimationSpeed` takes the same values.
+  { id: 'named-animation-speed', options: { blinkAnimationSpeed: 2 } },
+  { id: 'named-animation-speed-range', options: { blinkAnimationSpeed: [0.5, 2] } },
+  { id: 'named-animation-speed-zero', options: { blinkAnimationSpeed: 0 } },
+  { id: 'named-animation-speed-range-excess', options: { blinkAnimationSpeed: [0.5, 2, 4] } },
+  { id: 'named-animation-speed-uppercase', options: { BlinkAnimationSpeed: 2 } },
+  { id: 'named-animation-speed-string', options: { blinkAnimationSpeed: 'fast' } },
 ];
 
 // A style whose canvas uses color `a`, so resolving it walks the (circular)
@@ -1649,27 +1656,69 @@ const avatarFixtures = {
       options: { seed: 'parity-1', animation: true, animationSpeed: [0.5, 2] },
     },
     { id: 'animation-explicit-off', options: { seed: 'parity-1', animation: false } },
-    // By-name selections. `pulse` sits on a canvas element AND inside the
-    // shared orb def, so one name switches both while everything else stays
-    // static. The scalar form must resolve exactly like a one-element list.
-    { id: 'animation-name-scalar', options: { seed: 'parity-1', animation: 'pulse' } },
+    // Switches by name. `pulse` sits on a canvas element AND inside the
+    // shared orb def, so one switch moves both while everything else stays
+    // static.
+    { id: 'named-on', options: { seed: 'parity-1', pulseAnimation: true } },
     {
-      id: 'animation-name-list',
-      options: { seed: 'parity-1', animation: ['squash', 'tilt'] },
+      id: 'named-on-two',
+      options: { seed: 'parity-1', squashAnimation: true, tiltAnimation: true },
     },
-    // The list order feeds the resolved options as given, while the class
-    // namespace hashes the sorted names: this render must byte-match
-    // `animation-name-list` except for the recorded option order.
+    // A named switch wins over the global one in both directions.
     {
-      id: 'animation-name-list-reversed',
-      options: { seed: 'parity-1', animation: ['tilt', 'squash'] },
+      id: 'named-off',
+      options: { seed: 'parity-1', animation: true, squashAnimation: false },
     },
-    // An unknown name matches nothing and renders the static output.
-    { id: 'animation-name-unknown', options: { seed: 'parity-1', animation: 'bounce' } },
-    // Names and speed both feed the class namespace hash.
+    // A name the style does not carry switches nothing: this render must
+    // byte-match `plain-seed`, and the option stays out of the resolved
+    // options.
+    { id: 'named-unknown', options: { seed: 'parity-1', bounceAnimation: true } },
+    // The switch state of every named timeline feeds the class namespace
+    // hash together with the speed.
     {
-      id: 'animation-name-with-speed',
-      options: { seed: 'parity-1', animation: 'travel', animationSpeed: 2 },
+      id: 'named-on-with-speed',
+      options: { seed: 'parity-1', travelAnimation: true, animationSpeed: 2 },
+    },
+    // A speed per animation name scales only that timeline. `tilt`, `travel`,
+    // and the unnamed timelines keep their authored pace.
+    {
+      id: 'named-speed',
+      options: { seed: 'parity-1', animation: true, pulseAnimationSpeed: 2, squashAnimationSpeed: 0.5 },
+    },
+    // The specific option wins over the global one for its timeline, and
+    // every other timeline follows the global factor.
+    {
+      id: 'named-speed-over-global',
+      options: { seed: 'parity-1', animation: true, animationSpeed: 0.5, pulseAnimationSpeed: 2 },
+    },
+    // A range draws under `{name}AnimationSpeed`, one value per name.
+    {
+      id: 'named-speed-range',
+      options: {
+        seed: 'parity-1',
+        animation: true,
+        pulseAnimationSpeed: [0.5, 2],
+        squashAnimationSpeed: [0.5, 2],
+      },
+    },
+    // A name the style does not carry is neither resolved nor hashed: this
+    // render must byte-match `animation-on`, and the option stays out of the
+    // resolved options.
+    {
+      id: 'named-speed-unknown',
+      options: { seed: 'parity-1', animation: true, bounceAnimationSpeed: 2 },
+    },
+    // A speed for a timeline that is switched off is never drawn: `squash`
+    // stays static, so its option reaches neither the resolved options nor
+    // the hash, while `pulse` plays at its own pace.
+    {
+      id: 'named-speed-with-switch',
+      options: {
+        seed: 'parity-1',
+        pulseAnimation: true,
+        pulseAnimationSpeed: 2,
+        squashAnimationSpeed: 0.5,
+      },
     },
   ]),
   coexist: avatarCases([

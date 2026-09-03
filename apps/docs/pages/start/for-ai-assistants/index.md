@@ -148,11 +148,12 @@ lists the pairs explicitly.
 ::: details What changed in 11.0.0
 
 The animated styles describe their motion in the definition, and the core plays
-it through the `animation` option: `true` plays every animation of a style, a
-name or a list of names plays a subset, and `animationSpeed` sets the pace. The
-`animationVariant` option and the `animation` tag from 10.x are gone; passing
-them renders the static avatar. Nothing else changed, and the static output of
-every style is byte-identical to 10.x.
+it through the `animation` option: `true` plays every animation of a style,
+`${name}Animation` switches one of them by name, and `animationSpeed` or
+`${name}AnimationSpeed` set the pace. The `animationVariant` option and the
+`animation` tag from 10.x are gone; passing them renders the static avatar.
+Nothing else changed, and the static output of every style is byte-identical to
+10.x.
 
 :::
 

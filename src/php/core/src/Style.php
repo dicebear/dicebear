@@ -285,8 +285,8 @@ class Style
     /**
      * Returns the sorted distinct names of the definition's animation
      * timelines. Computed once and cached. Consumed by the options descriptor
-     * so tooling can offer the by-name form of the `animation` option. Sorted
-     * so every port reports the same order regardless of how it walks the
+     * so tooling can offer a switch and a speed per animation name. Sorted so
+     * every port reports the same order regardless of how it walks the
      * definition.
      *
      * @return list<string>

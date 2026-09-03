@@ -13,7 +13,7 @@ use std::collections::{HashMap, HashSet};
 use serde_json::Value;
 
 use crate::error::Error;
-use crate::options::{AnimationSelection, Options, COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM};
+use crate::options::{Options, COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM};
 use crate::prng::{cmp_utf16, unique_by_code_point, Prng, Range};
 use crate::style::{Color, Component, Style};
 use crate::utils::color;
@@ -71,22 +71,50 @@ impl<'a> Resolver<'a> {
         value
     }
 
-    pub fn animation(&self) -> AnimationSelection {
-        // Deliberately without PRNG involvement — whether and what animates
-        // must not depend on the seed. `true` plays every timeline, a name
-        // list only the timelines carrying one of those names. The recorded
-        // value keeps the raw shape (a boolean, or the name list in user
-        // order) for the resolved() snapshot.
-        let value = self
-            .options
-            .animation()
-            .unwrap_or(AnimationSelection::Flag(false));
-        self.record("animation", value.to_value());
+    pub fn animation(&self) -> bool {
+        // Deliberately without PRNG involvement: whether an avatar animates
+        // must not depend on the seed.
+        let value = self.options.animation().unwrap_or(false);
+        self.record("animation", Value::from(value));
         value
+    }
+
+    /// Whether one timeline plays. A named timeline follows its
+    /// `${name}Animation` switch when the user set one, recorded under that
+    /// key, and the global `animation` switch otherwise. Unnamed timelines
+    /// always follow the global switch. No PRNG is involved.
+    pub fn animation_plays(&self, name: Option<&str>) -> bool {
+        let named = name.and_then(|name| self.options.animation_for(name).map(|flag| (name, flag)));
+
+        match named {
+            Some((name, flag)) => {
+                self.record(&format!("{name}Animation"), Value::from(flag));
+                flag
+            }
+            None => self.animation(),
+        }
     }
 
     pub fn animation_speed(&self) -> f64 {
         self.float("animationSpeed", self.options.animation_speed(), 1.0)
+    }
+
+    /// Returns the speed factor of one timeline. A named timeline plays at
+    /// its `${name}AnimationSpeed` option when the user set one, drawn under
+    /// that key, and at the global factor otherwise. Unnamed timelines always
+    /// follow the global factor. The option is drawn only when asked for, so
+    /// a static render leaves nothing in the resolved snapshot.
+    pub fn animation_speed_for(&self, name: Option<&str>) -> f64 {
+        let named = name.and_then(|name| {
+            self.options
+                .animation_speed_for(name)
+                .map(|range| (name, range))
+        });
+
+        match named {
+            Some((name, range)) => self.float(&format!("{name}AnimationSpeed"), Some(range), 1.0),
+            None => self.animation_speed(),
+        }
     }
 
     pub fn title(&self) -> Option<String> {
@@ -800,5 +828,76 @@ mod tests {
         );
 
         assert_eq!(colors, vec!["#8d5524", "#d4a574"]);
+    }
+
+    #[test]
+    fn animation_speed_lets_the_specific_option_win_over_the_global_one() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let options = Options::new(json!({
+            "animationSpeed": 0.5,
+            "blinkAnimationSpeed": 2
+        }));
+        let resolver = Resolver::new(&style, &options);
+
+        assert_eq!(resolver.animation_speed_for(Some("blink")), 2.0);
+        assert_eq!(resolver.animation_speed_for(Some("sway")), 0.5);
+        assert_eq!(resolver.animation_speed_for(None), 0.5);
+
+        let resolved = resolver.resolved();
+
+        assert_eq!(resolved["blinkAnimationSpeed"], json!(2));
+        assert!(resolved.get("swayAnimationSpeed").is_none());
+    }
+
+    #[test]
+    fn animation_speed_draws_a_specific_range_under_its_own_key() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let options = json!({
+            "seed": "x",
+            "blinkAnimationSpeed": [0.5, 2],
+            "swayAnimationSpeed": [0.5, 2]
+        });
+        let named = Options::new(options.clone());
+        let resolver = Resolver::new(&style, &named);
+        let blink = resolver.animation_speed_for(Some("blink"));
+
+        assert!((0.5..=2.0).contains(&blink));
+        assert_ne!(blink, resolver.animation_speed_for(Some("sway")));
+
+        // The named key is not the global key, so the same seed and range
+        // yield a different draw.
+        let global = Options::new(json!({ "seed": "x", "animationSpeed": [0.5, 2] }));
+
+        assert_ne!(blink, Resolver::new(&style, &global).animation_speed());
+
+        let again = Options::new(options);
+
+        assert_eq!(
+            Resolver::new(&style, &again).animation_speed_for(Some("blink")),
+            blink
+        );
+    }
+
+    #[test]
+    fn animation_plays_lets_a_named_switch_win_over_the_global_one() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let on = Options::new(json!({ "animation": false, "blinkAnimation": true }));
+        let resolver = Resolver::new(&style, &on);
+
+        assert!(resolver.animation_plays(Some("blink")));
+        assert!(!resolver.animation_plays(Some("sway")));
+        assert!(!resolver.animation_plays(None));
+
+        let resolved = resolver.resolved();
+
+        assert_eq!(resolved["blinkAnimation"], json!(true));
+        assert!(resolved.get("swayAnimation").is_none());
+
+        let off = Options::new(json!({ "animation": true, "blinkAnimation": false }));
+        let resolver = Resolver::new(&style, &off);
+
+        assert!(!resolver.animation_plays(Some("blink")));
+        assert!(resolver.animation_plays(Some("sway")));
+        assert!(resolver.animation_plays(None));
     }
 }

@@ -54,21 +54,44 @@ class Resolver:
             "idRandomization", lambda: self._options.id_randomization() or False
         )
 
-    def animation(self) -> bool | list[str]:
-        # Deliberately without PRNG involvement — whether and what animates
-        # must not depend on the seed. ``True`` plays every timeline, a name
-        # list only the timelines carrying one of those names. The memo keeps
-        # the raw option value (a boolean, or the list in user order), so it
-        # lands unchanged in the resolved() snapshot.
-        return self._memo("animation", self._resolve_animation)
+    def animation(self) -> bool:
+        # Deliberately without PRNG involvement: whether an avatar animates
+        # must not depend on the seed.
+        return self._memo("animation", lambda: self._options.animation() or False)
 
-    def _resolve_animation(self) -> bool | list[str]:
-        raw = self._options.animation()
+    def animation_plays(self, name: str | None) -> bool:
+        """Return whether one timeline plays.
 
-        return False if raw is None else raw
+        A named timeline follows its ``{name}Animation`` switch when the user
+        set one, recorded under that key, and the global ``animation`` switch
+        otherwise. Unnamed timelines always follow the global switch.
+        """
+        value = None if name is None else self._options.animation_for(name)
+
+        if name is None or value is None:
+            return self.animation()
+
+        return self._memo(f"{name}Animation", lambda: value)
 
     def animation_speed(self) -> float:
         return self._memo_float("animationSpeed", self._options.animation_speed(), 1.0)
+
+    def animation_speed_for(self, name: str | None) -> float:
+        """Return the speed factor of one timeline.
+
+        A named timeline plays at its ``{name}AnimationSpeed`` option when the
+        user set one, drawn under that key, and at the global factor
+        otherwise. Unnamed timelines always follow the global factor. The
+        option is drawn only when asked for, so it reaches the resolved()
+        snapshot once the renderer hashes the style's names, and never for a
+        name the style does not carry.
+        """
+        range_ = None if name is None else self._options.animation_speed_for(name)
+
+        if name is None or range_ is None:
+            return self.animation_speed()
+
+        return self._memo_float(f"{name}AnimationSpeed", range_, 1.0)
 
     def title(self) -> str | None:
         return self._memo("title", self._options.title)

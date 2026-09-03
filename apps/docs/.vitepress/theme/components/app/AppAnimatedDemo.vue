@@ -159,9 +159,9 @@ const svg = new Avatar(style, {
         </UiWindow>
 
         <p class="app-animated-demo-note">
-          A style can name its animations. To play just one, pass its name in a
-          list:
-          <a href="/customize/options/"><code>animation: ['blink']</code></a
+          A style can name its animations. Each name has its own switch, so one
+          plays alone with
+          <a href="/customize/options/"><code>blinkAnimation: true</code></a
           >.
         </p>
       </div>

@@ -665,13 +665,22 @@ export class Renderer {
    * than through the id rewrite, which only knows `id`/`url(#…)`/`href`.
    */
   #animationHash(): string {
-    const selection = this.#resolver.animation();
-    const names = Array.isArray(selection)
-      ? ':' + [...new Set(selection)].sort().join(',')
-      : '';
     const random = this.#resolver.idRandomization()
       ? ':' + this.#randomSuffix()
       : '';
+
+    // Every named timeline the style carries joins the hash with its state,
+    // `off` or the factor it plays at, so two renders that differ only in a
+    // `${name}Animation` or `${name}AnimationSpeed` option never share their
+    // rules.
+    const states = [...this.#style.animationNames()]
+      .sort()
+      .map((name) =>
+        this.#resolver.animationPlays(name)
+          ? `${name}:${Number.format(this.#resolver.animationSpeedFor(name))}`
+          : `${name}:off`,
+      );
+    const named = states.length > 0 ? ':' + states.join(',') : '';
 
     return (this.#cachedAnimationHash ??= Fnv1a.hex(
       (this.#style.meta().source().name() ?? '') +
@@ -679,16 +688,16 @@ export class Renderer {
         this.#resolver.seed() +
         ':' +
         Number.format(this.#resolver.animationSpeed()) +
-        names +
+        named +
         random,
     ));
   }
 
   /**
-   * Returns the animation blocks of an element that the `animation` option
-   * selects. The element check comes first: only styles that carry declarative
-   * animations may touch the option, so the resolved-options snapshot of every
-   * other avatar stays free of it.
+   * Returns the animation blocks of an element that play. The element check
+   * comes first: only styles that carry declarative animations may touch the
+   * options, so the resolved-options snapshot of every other avatar stays
+   * free of them.
    */
   #activeAnimations(element: Element): readonly StyleDefinitionAnimation[] {
     const animations = element.animations();
@@ -697,19 +706,14 @@ export class Renderer {
       return animations;
     }
 
-    const selection = this.#resolver.animation();
+    // The global switch is read first so it lands in the resolved options
+    // whenever a node carries animations, on or off. Named timelines then
+    // follow their own switch when the user set one.
+    this.#resolver.animation();
 
-    // `true` plays every timeline. A name array plays only the timelines
-    // carrying one of those names, so unnamed timelines stay static then.
-    return selection === true
-      ? animations
-      : selection === false
-        ? []
-        : animations.filter(
-            (animation) =>
-              animation.name !== undefined &&
-              selection.includes(animation.name),
-          );
+    return animations.filter((animation) =>
+      this.#resolver.animationPlays(animation.name),
+    );
   }
 
   /**
@@ -826,7 +830,7 @@ export class Renderer {
       this.#keyframesCss.push(`@keyframes ${keyframesName}{${body}}`);
     }
 
-    const speed = this.#resolver.animationSpeed();
+    const speed = this.#resolver.animationSpeedFor(animation.name);
     const duration = Number.format(animation.duration / speed);
     const delay = Number.format((animation.delay ?? 0) / speed);
     const iterations =

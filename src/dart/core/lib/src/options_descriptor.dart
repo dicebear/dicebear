@@ -119,16 +119,17 @@ class OptionsDescriptor {
     }
 
     // Only advertise the animation options when the style carries declarative
-    // animations — on a static style both are accepted but have no effect.
+    // animations. On a static style they are accepted but have no effect.
+    // Every animation name gets its own switch and speed field, in the order
+    // of the name list.
     if (_style.hasAnimations) {
-      result['animation'] = {
-        'type': 'animation',
-        // The style's animation timeline names. The option takes
-        // `true`/`false` or a subset of these values. An empty list means
-        // every timeline is unnamed and only the boolean form has an effect.
-        'values': _style.animationNames,
-      };
-      result['animationSpeed'] = {'type': 'range', 'min': 0.1, 'max': 10};
+      result['animation'] = {'type': 'boolean'};
+      result['animationSpeed'] = _animationSpeedRange;
+
+      for (final name in _style.animationNames) {
+        result['${name}Animation'] = {'type': 'boolean'};
+        result['${name}AnimationSpeed'] = _animationSpeedRange;
+      }
     }
 
     return result;
@@ -137,6 +138,12 @@ class OptionsDescriptor {
   // Shared, immutable singletons reused across the rotate/translate/colorAngle
   // fields, mirroring the JS port's static descriptors. toJson deep-copies the
   // whole descriptor per call, so handing out the same instance is safe.
+  static const Map<String, Object?> _animationSpeedRange = {
+    'type': 'range',
+    'min': 0.1,
+    'max': 10,
+  };
+
   static const Map<String, Object?> _rotateRange = {
     'type': 'range',
     'min': -360,

@@ -67,15 +67,48 @@ export class Resolver<D = unknown> {
     );
   }
 
-  animation(): boolean | readonly string[] {
-    // Deliberately without PRNG involvement — whether and what animates must
-    // not depend on the seed. `true` plays every timeline, a name array only
-    // the timelines carrying one of those names.
+  animation(): boolean {
+    // Deliberately without PRNG involvement: whether an avatar animates must
+    // not depend on the seed.
     return this.#memo('animation', () => this.#options.animation() ?? false);
+  }
+
+  /**
+   * Whether one timeline plays. A named timeline follows its
+   * `${name}Animation` switch when the user set one, recorded under that
+   * key, and the global `animation` switch otherwise. Unnamed timelines
+   * always follow the global switch.
+   */
+  animationPlays(name: string | undefined): boolean {
+    const value =
+      name === undefined ? undefined : this.#options.animationFor(name);
+
+    if (name === undefined || value === undefined) {
+      return this.animation();
+    }
+
+    return this.#memo(`${name}Animation`, () => value);
   }
 
   animationSpeed(): number {
     return this.#memoFloat('animationSpeed', this.#options.animationSpeed(), 1);
+  }
+
+  /**
+   * Returns the speed factor of one timeline. A named timeline plays at its
+   * `${name}AnimationSpeed` option when the user set one, drawn under that
+   * key, and at the global factor otherwise. Unnamed timelines always follow
+   * the global factor.
+   */
+  animationSpeedFor(name: string | undefined): number {
+    const range =
+      name === undefined ? undefined : this.#options.animationSpeedFor(name);
+
+    if (name === undefined || range === undefined) {
+      return this.animationSpeed();
+    }
+
+    return this.#memoFloat(`${name}AnimationSpeed`, range, 1);
   }
 
   title(): string | undefined {

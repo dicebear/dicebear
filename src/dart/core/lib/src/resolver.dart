@@ -2,7 +2,6 @@
 /// options, and a seeded PRNG, exposing them as memoized named accessors.
 library;
 
-import 'animation_selection.dart';
 import 'error/circular_color_reference_error.dart';
 import 'options.dart';
 import 'prng/prng.dart';
@@ -55,17 +54,42 @@ class Resolver {
   bool idRandomization() =>
       _memo('idRandomization', () => _options.idRandomization() ?? false);
 
-  /// The animation selection. Deliberately without PRNG involvement — whether
-  /// and what animates must not depend on the seed. The raw normalized value
-  /// (the boolean, or the name list in user order) is what the memo records,
-  /// so the [resolved] snapshot keeps the user's shape. Consumers work with
-  /// the [AnimationSelection] accessors.
-  AnimationSelection animation() => AnimationSelection.from(
-        _memo<Object>('animation', () => _options.animation() ?? false),
-      );
+  /// The global animation switch. Deliberately without PRNG involvement:
+  /// whether an avatar animates must not depend on the seed.
+  bool animation() => _memo('animation', () => _options.animation() ?? false);
+
+  /// Whether one timeline plays. A named timeline follows its
+  /// `${name}Animation` switch when the user set one, recorded under that
+  /// key, and the global `animation` switch otherwise. Unnamed timelines
+  /// always follow the global switch.
+  bool animationPlays(String? name) {
+    final value = name == null ? null : _options.animationFor(name);
+
+    if (name == null || value == null) {
+      return animation();
+    }
+
+    return _memo('${name}Animation', () => value);
+  }
 
   double animationSpeed() =>
       _memoFloat('animationSpeed', _options.animationSpeed(), 1);
+
+  /// Returns the speed factor of one timeline. A named timeline plays at its
+  /// `${name}AnimationSpeed` option when the user set one, drawn under that
+  /// key, and at the global factor otherwise. Unnamed timelines always follow
+  /// the global factor. The per-name value is memoized only when asked for,
+  /// so a name the style does not carry leaves nothing in the [resolved]
+  /// snapshot.
+  double animationSpeedFor(String? name) {
+    final range = name == null ? null : _options.animationSpeedFor(name);
+
+    if (name == null || range == null) {
+      return animationSpeed();
+    }
+
+    return _memoFloat('${name}AnimationSpeed', range, 1);
+  }
 
   String? title() => _memo('title', () => _options.title());
 

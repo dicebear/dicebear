@@ -204,7 +204,7 @@
       "id": "animated",
       "name": "Animated",
       "summary": "Turns the style's built-in animation on.",
-      "description": "The animation is off by default and `animation: true` switches it on. A list like `animation: ['squash']` plays just that one, and `animationSpeed` sets the pace. The motion respects prefers-reduced-motion.",
+      "description": "The animation is off by default and `animation: true` switches it on. `squashAnimation: true` plays just that one, and `animationSpeed` sets the pace. The motion respects prefers-reduced-motion.",
       "options": {
         "animation": true
       }

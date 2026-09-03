@@ -258,7 +258,7 @@ describe('OptionsDescriptor', () => {
         }),
       ).toJSON();
 
-      assert.deepEqual(descriptor.animation, { type: 'animation', values: [] });
+      assert.deepEqual(descriptor.animation, { type: 'boolean' });
       assert.deepEqual(descriptor.animationSpeed, {
         type: 'range',
         min: 0.1,
@@ -266,7 +266,7 @@ describe('OptionsDescriptor', () => {
       });
     });
 
-    it('should list the sorted distinct animation names', () => {
+    it('should advertise a switch and a speed per animation name', () => {
       const descriptor = new OptionsDescriptor(
         new Style({
           canvas: {
@@ -305,9 +305,22 @@ describe('OptionsDescriptor', () => {
         }),
       ).toJSON();
 
-      assert.deepEqual(descriptor.animation, {
-        type: 'animation',
-        values: ['blink', 'sway'],
+      assert.deepEqual(
+        Object.keys(descriptor).filter((key) => /[aA]nimation/.test(key)),
+        [
+          'animation',
+          'animationSpeed',
+          'blinkAnimation',
+          'blinkAnimationSpeed',
+          'swayAnimation',
+          'swayAnimationSpeed',
+        ],
+      );
+      assert.deepEqual(descriptor.blinkAnimation, { type: 'boolean' });
+      assert.deepEqual(descriptor.swayAnimationSpeed, {
+        type: 'range',
+        min: 0.1,
+        max: 10,
       });
     });
   });

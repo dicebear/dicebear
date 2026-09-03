@@ -60,18 +60,50 @@ class Resolver
         return $this->memo('idRandomization', fn() => $this->options->idRandomization() ?? false);
     }
 
-    /** @return bool|list<string> */
-    public function animation(): bool|array
+    public function animation(): bool
     {
-        // Deliberately without PRNG involvement — whether and what animates
-        // must not depend on the seed. `true` plays every timeline, a name
-        // list only the timelines carrying one of those names.
+        // Deliberately without PRNG involvement: whether an avatar animates
+        // must not depend on the seed.
         return $this->memo('animation', fn() => $this->options->animation() ?? false);
+    }
+
+    /**
+     * Whether one timeline plays. A named timeline follows its
+     * `${name}Animation` switch when the user set one, recorded under that
+     * key, and the global `animation` switch otherwise. Unnamed timelines
+     * always follow the global switch.
+     */
+    public function animationPlays(?string $name): bool
+    {
+        $value = $name === null ? null : $this->options->animationFor($name);
+
+        if ($name === null || $value === null) {
+            return $this->animation();
+        }
+
+        return $this->memo("{$name}Animation", fn() => $value);
     }
 
     public function animationSpeed(): float
     {
         return $this->memoFloat('animationSpeed', $this->options->animationSpeed(), 1.0);
+    }
+
+    /**
+     * Returns the speed factor of one timeline. A named timeline plays at its
+     * `${name}AnimationSpeed` option when the user set one, drawn under that
+     * key, and at the global factor otherwise. Unnamed timelines always
+     * follow the global factor.
+     */
+    public function animationSpeedFor(?string $name): float
+    {
+        $range = $name === null ? null : $this->options->animationSpeedFor($name);
+
+        if ($name === null || $range === null) {
+            return $this->animationSpeed();
+        }
+
+        return $this->memoFloat("{$name}AnimationSpeed", $range, 1.0);
     }
 
     public function title(): ?string

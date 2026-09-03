@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 
 from dicebear import Style
-from dicebear.errors import CircularColorReferenceError
+from dicebear.errors import CircularColorReferenceError, ValidationError
 from dicebear.options import Options
 from dicebear.resolver import Resolver
 
@@ -860,3 +860,90 @@ def test_color_angle_range() -> None:
     )
     value = resolver.color_angle("skin")
     assert -90 <= value <= 90
+
+
+# ---------------------------------------------------------------------------
+# animation_speed_for
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "options",
+    [
+        {"blinkAnimationSpeed": 0},
+        {"blinkAnimationSpeed": [0.5, 2, 4]},
+        {"BlinkAnimationSpeed": 2},
+        {"blinkAnimationSpeed": "fast"},
+    ],
+    ids=["zero", "range-excess", "uppercase", "string"],
+)
+def test_named_animation_speed_rejects_invalid_values(options: dict[str, Any]) -> None:
+    with pytest.raises(ValidationError):
+        Options(options)
+
+
+@pytest.mark.parametrize(
+    "options",
+    [{"animation": "yes"}, {"animation": ["blink"]}, {"blinkAnimation": "yes"}],
+    ids=["string", "list", "named-string"],
+)
+def test_animation_rejects_non_boolean_values(options: dict[str, Any]) -> None:
+    with pytest.raises(ValidationError):
+        Options(options)
+
+
+def test_named_animation_switch_wins_over_global() -> None:
+    on = _make_resolver(_minimal_style(), {"animation": False, "blinkAnimation": True})
+
+    assert on.animation_plays("blink") is True
+    assert on.animation_plays("sway") is False
+    assert on.animation_plays(None) is False
+    assert on.resolved()["blinkAnimation"] is True
+    assert "swayAnimation" not in on.resolved()
+
+    off = _make_resolver(_minimal_style(), {"animation": True, "blinkAnimation": False})
+
+    assert off.animation_plays("blink") is False
+    assert off.animation_plays("sway") is True
+    assert off.animation_plays(None) is True
+
+
+def test_named_animation_speed_wins_over_global() -> None:
+    resolver = _make_resolver(
+        _minimal_style(), {"animationSpeed": 0.5, "blinkAnimationSpeed": 2}
+    )
+
+    assert resolver.animation_speed_for("blink") == 2
+    assert resolver.animation_speed_for("sway") == 0.5
+    assert resolver.animation_speed_for(None) == 0.5
+    assert resolver.resolved()["blinkAnimationSpeed"] == 2
+    assert "swayAnimationSpeed" not in resolver.resolved()
+
+
+def test_named_animation_speed_draws_range_under_its_own_key() -> None:
+    options = {
+        "seed": "x",
+        "blinkAnimationSpeed": [0.5, 2],
+        "swayAnimationSpeed": [0.5, 2],
+    }
+    resolver = _make_resolver(_minimal_style(), options)
+    blink = resolver.animation_speed_for("blink")
+
+    assert 0.5 <= blink <= 2
+    assert blink != resolver.animation_speed_for("sway")
+    assert (
+        blink
+        != _make_resolver(
+            _minimal_style(), {"seed": "x", "animationSpeed": [0.5, 2]}
+        ).animation_speed()
+    )
+    assert (
+        _make_resolver(_minimal_style(), options).animation_speed_for("blink") == blink
+    )
+
+
+def test_animation_speed_global_factor_is_shared_by_every_timeline() -> None:
+    resolver = _make_resolver(_minimal_style(), {"animationSpeed": 2})
+
+    assert resolver.animation_speed_for("blink") == 2
+    assert resolver.animation_speed_for(None) == 2

@@ -1378,28 +1378,69 @@ describe('Resolver', () => {
     it('should reject out-of-range values at validation', () => {
       assert.throws(() => new Options({ animation: 'Yes' }));
       assert.throws(() => new Options({ animation: ['blink', 'Bad'] }));
+      assert.throws(() => new Options({ blinkAnimation: 'yes' }));
+      assert.throws(() => new Options({ BlinkAnimation: true }));
       assert.throws(() => new Options({ animationSpeed: 0 }));
       assert.throws(() => new Options({ animationSpeed: 20 }));
       assert.throws(() => new Options({ animationSpeed: [0, 2] }));
+      assert.throws(() => new Options({ blinkAnimationSpeed: 0 }));
+      assert.throws(() => new Options({ blinkAnimationSpeed: [0.5, 2, 4] }));
+      assert.throws(() => new Options({ BlinkAnimationSpeed: 2 }));
+      assert.throws(() => new Options({ blinkAnimationSpeed: 'fast' }));
     });
 
-    it('should resolve a name selection without PRNG involvement', () => {
-      assert.deepEqual(
-        makeResolver(style, { seed: 'x', animation: 'blink' }).animation(),
-        ['blink'],
-      );
-      assert.deepEqual(
-        makeResolver(style, { seed: 'x', animation: ['sway', 'blink'] })
-          .animation(),
-        ['sway', 'blink'],
-      );
+    it('should let the specific option win over the global one', () => {
+      const resolver = makeResolver(style, {
+        animationSpeed: 0.5,
+        blinkAnimationSpeed: 2,
+      });
+
+      assert.equal(resolver.animationSpeedFor('blink'), 2);
+      assert.equal(resolver.animationSpeedFor('sway'), 0.5);
+      assert.equal(resolver.animationSpeedFor(undefined), 0.5);
+      assert.equal(resolver.resolved().blinkAnimationSpeed, 2);
+      assert.equal('swayAnimationSpeed' in resolver.resolved(), false);
     });
 
-    it('should resolve an empty name list as an empty selection', () => {
-      assert.deepEqual(
-        makeResolver(style, { seed: 'x', animation: [] }).animation(),
-        [],
+    it('should draw a specific range under its own key', () => {
+      const options = {
+        seed: 'x',
+        blinkAnimationSpeed: [0.5, 2],
+        swayAnimationSpeed: [0.5, 2],
+      };
+      const resolver = makeResolver(style, options);
+      const blink = resolver.animationSpeedFor('blink');
+
+      assert.ok(blink >= 0.5 && blink <= 2);
+      assert.notEqual(blink, resolver.animationSpeedFor('sway'));
+      assert.notEqual(
+        blink,
+        makeResolver(style, { seed: 'x', animationSpeed: [0.5, 2] }).animationSpeed(),
       );
+      assert.equal(makeResolver(style, options).animationSpeedFor('blink'), blink);
+    });
+
+    it('should share the global factor with every timeline', () => {
+      const resolver = makeResolver(style, { animationSpeed: 2 });
+
+      assert.equal(resolver.animationSpeedFor('blink'), 2);
+      assert.equal(resolver.animationSpeedFor(undefined), 2);
+    });
+
+    it('should let a named switch win over the global one', () => {
+      const on = makeResolver(style, { animation: false, blinkAnimation: true });
+
+      assert.equal(on.animationPlays('blink'), true);
+      assert.equal(on.animationPlays('sway'), false);
+      assert.equal(on.animationPlays(undefined), false);
+      assert.equal(on.resolved().blinkAnimation, true);
+      assert.equal('swayAnimation' in on.resolved(), false);
+
+      const off = makeResolver(style, { animation: true, blinkAnimation: false });
+
+      assert.equal(off.animationPlays('blink'), false);
+      assert.equal(off.animationPlays('sway'), true);
+      assert.equal(off.animationPlays(undefined), true);
     });
   });
 });

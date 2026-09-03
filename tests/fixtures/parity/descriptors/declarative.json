@@ -101,17 +101,57 @@
     ]
   },
   "animation": {
-    "type": "animation",
-    "values": [
-      "drift",
-      "pulse",
-      "reveal",
-      "squash",
-      "tilt",
-      "travel"
-    ]
+    "type": "boolean"
   },
   "animationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "driftAnimation": {
+    "type": "boolean"
+  },
+  "driftAnimationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "pulseAnimation": {
+    "type": "boolean"
+  },
+  "pulseAnimationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "revealAnimation": {
+    "type": "boolean"
+  },
+  "revealAnimationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "squashAnimation": {
+    "type": "boolean"
+  },
+  "squashAnimationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "tiltAnimation": {
+    "type": "boolean"
+  },
+  "tiltAnimationSpeed": {
+    "type": "range",
+    "min": 0.1,
+    "max": 10
+  },
+  "travelAnimation": {
+    "type": "boolean"
+  },
+  "travelAnimationSpeed": {
     "type": "range",
     "min": 0.1,
     "max": 10

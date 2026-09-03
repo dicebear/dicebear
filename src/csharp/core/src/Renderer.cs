@@ -804,19 +804,18 @@ namespace DiceBear.Internal
             var animations = element.Animations();
 
             // The element check comes first: only styles that carry
-            // declarative animations may touch the `animation` option, so the
-            // resolved-options snapshot of every other avatar stays free of it.
+            // declarative animations may touch the animation options, so the
+            // resolved-options snapshot of every other avatar stays free of
+            // them.
             if (animations is null || animations.Count == 0)
             {
                 return markup;
             }
 
-            var selection = _resolver.Animation();
-
-            if (selection.Off)
-            {
-                return markup;
-            }
+            // The global switch is read first so it lands in the resolved
+            // options whenever a node carries animations, on or off. Named
+            // timelines then follow their own switch when the user set one.
+            _resolver.Animation();
 
             var classes = new List<string>();
             var opacityWrapper = -1;
@@ -829,10 +828,7 @@ namespace DiceBear.Internal
                     continue;
                 }
 
-                // `true` plays every timeline. A name selection plays only
-                // the timelines carrying one of those names, so unnamed
-                // timelines stay static then.
-                if (!selection.Matches(JsonRead.Str(animation, "name")))
+                if (!_resolver.AnimationPlays(JsonRead.Str(animation, "name")))
                 {
                     continue;
                 }
@@ -891,19 +887,15 @@ namespace DiceBear.Internal
             var animations = element.Animations();
 
             // The element check comes first: only styles that carry
-            // declarative animations may touch the `animation` option, so the
-            // resolved-options snapshot of every other avatar stays free of it.
+            // declarative animations may touch the animation options, so the
+            // resolved-options snapshot of every other avatar stays free of
+            // them.
             if (attributes?["opacity"] is null || animations is null || animations.Count == 0)
             {
                 return attributes;
             }
 
-            var selection = _resolver.Animation();
-
-            if (selection.Off)
-            {
-                return attributes;
-            }
+            _resolver.Animation();
 
             foreach (var node in animations)
             {
@@ -913,7 +905,7 @@ namespace DiceBear.Internal
                     continue;
                 }
 
-                if (!selection.Matches(JsonRead.Str(animation, "name")))
+                if (!_resolver.AnimationPlays(JsonRead.Str(animation, "name")))
                 {
                     continue;
                 }
@@ -947,7 +939,7 @@ namespace DiceBear.Internal
                 _keyframesCss.Add($"@keyframes {keyframesName}{{{body}}}");
             }
 
-            var speed = _resolver.AnimationSpeed();
+            var speed = _resolver.AnimationSpeedFor(JsonRead.Str(animation, "name"));
             var duration = Num.Format((JsonRead.Num(animation, "duration") ?? 0.0) / speed);
             var delay = Num.Format((JsonRead.Num(animation, "delay") ?? 0.0) / speed);
             var iterationsNum = JsonRead.Num(animation, "iterations");
@@ -1158,11 +1150,11 @@ namespace DiceBear.Internal
         /// </summary>
         /// <remarks>
         /// Extends the <see cref="HashSeed"/> input with the animation speed
-        /// and, for a by-name selection, the sorted names: two renders of the
-        /// same avatar with different speeds or selections inlined on one page
-        /// must not select each other's rules, while identical renders sharing
-        /// identical rules is harmless deduplication. <c>true</c> adds no name
-        /// suffix, so enabling all animations hashes as before.
+        /// and the state of every named timeline, <c>off</c> or the factor it
+        /// plays at: two renders of the same avatar with different speeds or
+        /// switches inlined on one page must not select each other's rules,
+        /// while identical renders sharing identical rules is harmless
+        /// deduplication.
         /// <para>
         /// Everything else about an avatar stays out of the hash, so two
         /// renders of the same style and seed that differ in any other option
@@ -1176,18 +1168,23 @@ namespace DiceBear.Internal
         {
             if (_cachedAnimationHash is null)
             {
-                var names = _resolver.Animation().Names;
-                var suffix = names is null
-                    ? string.Empty
-                    : ":" + string.Join(
-                        ",",
-                        names.Distinct().OrderBy(name => name, StringComparer.Ordinal));
-
                 var random = _resolver.IdRandomization() ? ":" + RandomSuffix() : string.Empty;
+
+                // Every named timeline the style carries joins the hash with
+                // its state, `off` or the factor it plays at, so two renders
+                // that differ only in a `{name}Animation` or
+                // `{name}AnimationSpeed` option never share their rules. The
+                // style lists its names in code unit order.
+                var states = _style.AnimationNames()
+                    .Select(name => _resolver.AnimationPlays(name)
+                        ? name + ":" + Num.Format(_resolver.AnimationSpeedFor(name))
+                        : name + ":off")
+                    .ToList();
+                var named = states.Count > 0 ? ":" + string.Join(",", states) : string.Empty;
 
                 _cachedAnimationHash = Fnv1a.Hex(
                     (_style.MetaBlock().Source().Name() ?? string.Empty) + ":" + _resolver.Seed()
-                    + ":" + Num.Format(_resolver.AnimationSpeed()) + suffix + random);
+                    + ":" + Num.Format(_resolver.AnimationSpeed()) + named + random);
             }
 
             return _cachedAnimationHash;

@@ -17,34 +17,63 @@ const store = useStore();
 const animationKey = 'animation';
 const speedKey = 'animationSpeed';
 
-// `false` and an empty list both mean "off", so an imported configuration
-// carrying either leaves the toggle down. The speed rides along with the
-// switch: it has no meaning on its own and would otherwise linger in the
-// emitted options after the animations are turned off again.
-function turnOff() {
-  delete store.avatarStyleOptions[animationKey];
-  delete store.avatarStyleOptions[speedKey];
+// The switch and the speed option of one animation, `blinkAnimation` and
+// `blinkAnimationSpeed` for `blink`.
+function switchKeyFor(name: string): string {
+  return `${name}Animation`;
 }
 
-// The reset next to the toggle clears the speed with it, for the same reason.
-function resetAnimation() {
-  store.resetOption(animationKey);
+function speedKeyFor(name: string): string {
+  return `${name}AnimationSpeed`;
+}
 
-  if (store.isOptionSet(speedKey)) {
-    store.resetOption(speedKey);
+const allKeys = computed(() => [
+  animationKey,
+  speedKey,
+  ...props.names.flatMap((name) => [switchKeyFor(name), speedKeyFor(name)]),
+]);
+
+// The global switch as set. Anything but `true` leaves the toggle down.
+const globalOn = computed(
+  () => store.avatarStyleOptions[animationKey] === true,
+);
+
+// Whether the timelines of one name play: their own switch when set, the
+// global one otherwise.
+function plays(name: string): boolean {
+  const value = store.avatarStyleOptions[switchKeyFor(name)];
+
+  return typeof value === 'boolean' ? value : globalOn.value;
+}
+
+const playingNames = computed(() => props.names.filter(plays));
+const anythingPlays = computed(
+  () => globalOn.value || playingNames.value.length > 0,
+);
+const anythingSet = computed(() =>
+  allKeys.value.some((key) => store.isOptionSet(key)),
+);
+
+// Turning the toggle off clears every animation option. A speed or a named
+// switch has no meaning without the animations and would otherwise linger in
+// the emitted options.
+function turnOff() {
+  for (const key of allKeys.value) {
+    delete store.avatarStyleOptions[key];
+  }
+}
+
+// The reset next to the toggle clears all of them, for the same reason.
+function resetAnimation() {
+  for (const key of allKeys.value) {
+    if (store.isOptionSet(key)) {
+      store.resetOption(key);
+    }
   }
 }
 
 const animation = computed({
-  get: () => {
-    const value = store.avatarStyleOptions[animationKey];
-
-    if (value === undefined || value === false) {
-      return false;
-    }
-
-    return !Array.isArray(value) || value.length > 0;
-  },
+  get: () => globalOn.value,
   set: (val: boolean) => {
     if (val) {
       store.avatarStyleOptions[animationKey] = true;
@@ -54,39 +83,18 @@ const animation = computed({
   },
 });
 
-// The current selection as a list of names. `true` means all of them.
-const selectedNames = computed<string[]>(() => {
-  const value = store.avatarStyleOptions[animationKey];
-
-  if (value === true) {
-    return props.names;
-  }
-
-  if (typeof value === 'string') {
-    return [value];
-  }
-
-  return Array.isArray(value) ? (value as string[]) : [];
-});
-
-function isSelected(name: string): boolean {
-  return selectedNames.value.includes(name);
-}
-
-// Writes the canonical option for a selection: every name checked collapses
-// to `true`, none checked turns the toggle off (an empty list is not a valid
-// option value), anything else is the list in descriptor order.
+// A name's switch is written only where it differs from the global one, so
+// the emitted options stay as short as the same result allows. Switching a
+// name off takes its speed with it.
 function toggleName(name: string, checked: boolean) {
-  const next = props.names.filter((candidate) =>
-    candidate === name ? checked : isSelected(candidate),
-  );
-
-  if (next.length === props.names.length) {
-    store.avatarStyleOptions[animationKey] = true;
-  } else if (next.length === 0) {
-    turnOff();
+  if (checked === globalOn.value) {
+    delete store.avatarStyleOptions[switchKeyFor(name)];
   } else {
-    store.avatarStyleOptions[animationKey] = next;
+    store.avatarStyleOptions[switchKeyFor(name)] = checked;
+  }
+
+  if (!checked) {
+    delete store.avatarStyleOptions[speedKeyFor(name)];
   }
 }
 </script>
@@ -97,10 +105,7 @@ function toggleName(name: string, checked: boolean) {
       <div class="pg-field-label pg-animation-toggle-row">
         <ToggleSwitch v-model="animation" />
         <span>Play animations</span>
-        <PlaygroundFieldReset
-          v-if="store.isOptionSet(animationKey)"
-          @click="resetAnimation()"
-        />
+        <PlaygroundFieldReset v-if="anythingSet" @click="resetAnimation()" />
       </div>
       <p class="pg-help">
         Plays the style's built-in animations in the SVG output. Raster formats
@@ -109,14 +114,14 @@ function toggleName(name: string, checked: boolean) {
       </p>
     </div>
 
-    <div v-if="animation && names.length > 0" class="pg-field">
+    <div v-if="names.length > 0" class="pg-field">
       <div class="pg-field-label">
         <span>Animations</span>
       </div>
       <div class="pg-animation-names">
         <label v-for="name in names" :key="name" class="pg-animation-name">
           <Checkbox
-            :model-value="isSelected(name)"
+            :model-value="plays(name)"
             :binary="true"
             @update:model-value="
               (checked: boolean) => toggleName(name, checked)
@@ -126,15 +131,27 @@ function toggleName(name: string, checked: boolean) {
         </label>
       </div>
       <p class="pg-help">
-        Pick which of the style's animations play. Unchecking all of them turns
-        animations off.
+        Switch single animations on or off. A name's own switch wins over the
+        toggle above.
       </p>
     </div>
 
     <PlaygroundRangeField
-      v-if="animation"
+      v-if="anythingPlays"
       label="Speed"
       option-key="animationSpeed"
+      :min="0.1"
+      :max="10"
+      :step="0.05"
+      unit="×"
+      :default-single="1"
+    />
+
+    <PlaygroundRangeField
+      v-for="name in playingNames"
+      :key="name"
+      :label="`Speed of ${name}`"
+      :option-key="speedKeyFor(name)"
       :min="0.1"
       :max="10"
       :step="0.05"

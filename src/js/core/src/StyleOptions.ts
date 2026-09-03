@@ -95,7 +95,7 @@ export interface StyleOptionsBase {
   readonly translateX?: number | readonly [number, number];
   readonly translateY?: number | readonly [number, number];
   readonly tags?: string | readonly string[];
-  readonly animation?: boolean | string | readonly string[];
+  readonly animation?: boolean;
   readonly animationSpeed?: number | readonly [number, number];
 }
 
@@ -149,9 +149,19 @@ type ColorOptions<C extends string> = [C] extends [never]
       readonly [K in C as `${K}ColorOrder`]?: StyleOptionsColorOrderValue;
     };
 
+// One `${name}Animation` switch and one `${name}AnimationSpeed` factor per
+// animation name the style carries. The names are not derived from the
+// definition type, so any camelCase name is accepted here and the schema
+// decides at runtime.
+type AnimationOptions = {
+  readonly [key: `${string}Animation`]: boolean | undefined;
+  readonly [key: `${string}AnimationSpeed`]:
+    number | readonly [number, number] | undefined;
+};
+
 export type StyleOptions<D = unknown> = StyleOptionsBase &
   ComponentOptions<D, ComponentNames<D>> &
   ColorOptions<AllColorNames<D>> &
   (HasSpecificKeys<D> extends true
-    ? unknown
+    ? AnimationOptions
     : { readonly [key: string]: unknown });

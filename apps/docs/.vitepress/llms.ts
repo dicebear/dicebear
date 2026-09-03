@@ -387,14 +387,6 @@ function describeField(name: string, field: FieldDescriptor): string {
     case 'color':
       detail = 'Hex color, `#` optional';
       break;
-    case 'animation':
-      type = 'boolean | name | name[]';
-      detail =
-        field.values.length > 0
-          ? '`true` plays all: ' +
-            field.values.map((value) => `\`${value}\``).join(', ')
-          : '`true` plays all';
-      break;
   }
 
   if ('list' in field && field.list) {

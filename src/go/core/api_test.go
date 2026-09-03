@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -377,5 +378,285 @@ func TestJSONDoesNotHTMLEscapeSVG(t *testing.T) {
 		if strings.Contains(s, escaped) {
 			t.Errorf("JSON() must not HTML-escape (found %s), got: %s", escaped, s)
 		}
+	}
+}
+
+// pacedStyle carries a named timeline next to an unnamed one on the same
+// element, so a per-name animation speed has one to scale and one to leave as
+// authored. Mirrors the describe('per-name speed', ...) block of the JS
+// reference suite (src/js/core/tests/Renderer.test.js).
+const pacedStyle = `{
+	"canvas": {
+		"width": 100,
+		"height": 100,
+		"elements": [
+			{
+				"type": "element",
+				"name": "rect",
+				"animations": [
+					{
+						"name": "sway",
+						"duration": 4,
+						"delay": 1,
+						"tracks": { "rotate": { "keyframes": [{ "at": 0, "value": 0 }, { "at": 100, "value": 4 }] } }
+					},
+					{
+						"duration": 3,
+						"tracks": { "opacity": { "keyframes": [{ "at": 0, "value": 1 }, { "at": 50, "value": 0.5 }] } }
+					}
+				]
+			}
+		]
+	}
+}`
+
+// animationHashOf extracts the animation namespace hash from the first class
+// name in the rendered SVG.
+func animationHashOf(t *testing.T, svg string) string {
+	t.Helper()
+	match := regexp.MustCompile(`dba-([0-9a-f]+)-\d+`).FindStringSubmatch(svg)
+	if match == nil {
+		t.Fatalf("expected an animation class in the output, got: %s", svg)
+	}
+	return match[1]
+}
+
+func mustAvatar(t *testing.T, style *Style, options map[string]any) *Avatar {
+	t.Helper()
+	avatar, err := NewAvatar(style, options)
+	if err != nil {
+		t.Fatalf("NewAvatar: %v", err)
+	}
+	return avatar
+}
+
+func TestPerNameSpeedScalesOnlyTheNamedTimeline(t *testing.T) {
+	svg := mustAvatar(t, mustStyle(t, pacedStyle), map[string]any{
+		"animation":          true,
+		"swayAnimationSpeed": 2,
+	}).SVG()
+
+	for _, want := range []string{"animation:2s linear 0.5s infinite", "animation:3s linear 0s infinite"} {
+		if !strings.Contains(svg, want) {
+			t.Errorf("SVG should contain %q, got: %s", want, svg)
+		}
+	}
+}
+
+func TestPerNameSpeedLetsTheSpecificOptionWinOverTheGlobalOne(t *testing.T) {
+	svg := mustAvatar(t, mustStyle(t, pacedStyle), map[string]any{
+		"animation":          true,
+		"animationSpeed":     0.5,
+		"swayAnimationSpeed": 2,
+	}).SVG()
+
+	for _, want := range []string{"animation:2s linear 0.5s infinite", "animation:6s linear 0s infinite"} {
+		if !strings.Contains(svg, want) {
+			t.Errorf("SVG should contain %q, got: %s", want, svg)
+		}
+	}
+}
+
+func TestPerNameSpeedIgnoresANameTheStyleDoesNotCarry(t *testing.T) {
+	style := mustStyle(t, pacedStyle)
+	listed := mustAvatar(t, style, map[string]any{
+		"animation":            true,
+		"bounceAnimationSpeed": 2,
+	})
+	plain := mustAvatar(t, style, map[string]any{"animation": true})
+
+	if listed.SVG() != plain.SVG() {
+		t.Errorf("an unknown name should not change the output\n got: %s\nwant: %s", listed.SVG(), plain.SVG())
+	}
+	if _, ok := listed.ResolvedOptions()["bounceAnimationSpeed"]; ok {
+		t.Error("bounceAnimationSpeed should stay out of the resolved options")
+	}
+}
+
+func TestPerNameSpeedLeavesATimelineThatDoesNotPlayUntouched(t *testing.T) {
+	style := mustStyle(t, pacedStyle)
+	off := mustAvatar(t, style, map[string]any{
+		"animation":          false,
+		"swayAnimationSpeed": 2,
+	})
+	static := mustAvatar(t, style, nil)
+
+	if off.SVG() != static.SVG() {
+		t.Errorf("a static render should ignore the option\n got: %s\nwant: %s", off.SVG(), static.SVG())
+	}
+	if _, ok := off.ResolvedOptions()["swayAnimationSpeed"]; ok {
+		t.Error("swayAnimationSpeed should stay out of the resolved options")
+	}
+}
+
+func TestPerNameSpeedIncludesTheNamedFactorInTheClassNamespace(t *testing.T) {
+	style := mustStyle(t, pacedStyle)
+	named := mustAvatar(t, style, map[string]any{
+		"animation":          true,
+		"swayAnimationSpeed": 2,
+	}).SVG()
+	global := mustAvatar(t, style, map[string]any{
+		"animation":      true,
+		"animationSpeed": 2,
+	}).SVG()
+
+	if animationHashOf(t, named) == animationHashOf(t, global) {
+		t.Errorf("the named factor should hash differently from the global one, got %s", animationHashOf(t, named))
+	}
+}
+
+func TestPerNameSpeedRecordsTheDrawnFactorInTheResolvedOptions(t *testing.T) {
+	options := mustAvatar(t, mustStyle(t, pacedStyle), map[string]any{
+		"animation":          true,
+		"swayAnimationSpeed": []any{2, 2},
+	}).ResolvedOptions()
+
+	if got := options["swayAnimationSpeed"]; got != 2.0 {
+		t.Errorf("resolved swayAnimationSpeed = %v, want 2", got)
+	}
+	if got := options["animationSpeed"]; got != 1.0 {
+		t.Errorf("resolved animationSpeed = %v, want 1", got)
+	}
+}
+
+// namedStyle carries one named block per element plus an unnamed one, so
+// every switch has something to include and something to skip. Mirrors the
+// describe('named selection', ...) block of the JS reference suite
+// (src/js/core/tests/Renderer.test.js).
+const namedStyle = `{
+	"canvas": {
+		"width": 100,
+		"height": 100,
+		"elements": [
+			{
+				"type": "element",
+				"name": "rect",
+				"animations": [
+					{
+						"name": "sway",
+						"duration": 1,
+						"tracks": { "rotate": { "keyframes": [{ "at": 0, "value": 0 }, { "at": 100, "value": 4 }] } }
+					}
+				]
+			},
+			{
+				"type": "element",
+				"name": "circle",
+				"animations": [
+					{
+						"name": "blink",
+						"duration": 2,
+						"tracks": { "scaleY": { "keyframes": [{ "at": 0, "value": 1 }, { "at": 50, "value": 0.1 }] } }
+					},
+					{
+						"duration": 3,
+						"tracks": { "opacity": { "keyframes": [{ "at": 0, "value": 1 }, { "at": 50, "value": 0.5 }] } }
+					}
+				]
+			}
+		]
+	}
+}`
+
+func TestNamedSelectionPlaysOnlyATimelineSwitchedOnByName(t *testing.T) {
+	svg := mustAvatar(t, mustStyle(t, namedStyle), map[string]any{"blinkAnimation": true}).SVG()
+
+	if got := strings.Count(svg, "animation:"); got != 1 {
+		t.Errorf("animation rules = %d, want 1 in: %s", got, svg)
+	}
+	if !strings.Contains(svg, "scaleY") {
+		t.Errorf("SVG should contain the blink track, got: %s", svg)
+	}
+	if strings.Contains(svg, "rotate(") || strings.Contains(svg, "opacity:") {
+		t.Errorf("SVG should contain neither the sway nor the unnamed track, got: %s", svg)
+	}
+	if got := strings.Count(svg, `<g class="dba-`); got != 1 {
+		t.Errorf("animation wrappers = %d, want 1 in: %s", got, svg)
+	}
+}
+
+func TestNamedSelectionCombinesSeveralSwitches(t *testing.T) {
+	svg := mustAvatar(t, mustStyle(t, namedStyle), map[string]any{
+		"swayAnimation":  true,
+		"blinkAnimation": true,
+	}).SVG()
+
+	if got := strings.Count(svg, "animation:"); got != 2 {
+		t.Errorf("animation rules = %d, want 2 in: %s", got, svg)
+	}
+	if !strings.Contains(svg, "rotate(") || !strings.Contains(svg, "scaleY") {
+		t.Errorf("SVG should contain the sway and blink tracks, got: %s", svg)
+	}
+	if strings.Contains(svg, "opacity:") {
+		t.Errorf("SVG should not contain the unnamed track, got: %s", svg)
+	}
+}
+
+func TestNamedSelectionPlaysUnnamedTimelinesOnlyThroughTheGlobalSwitch(t *testing.T) {
+	svg := mustAvatar(t, mustStyle(t, namedStyle), map[string]any{"animation": true}).SVG()
+
+	if got := strings.Count(svg, "animation:"); got != 3 {
+		t.Errorf("animation rules = %d, want 3 in: %s", got, svg)
+	}
+	if !strings.Contains(svg, "opacity:") {
+		t.Errorf("SVG should contain the unnamed track, got: %s", svg)
+	}
+}
+
+func TestNamedSelectionSwitchesATimelineOffWhileTheRestPlay(t *testing.T) {
+	svg := mustAvatar(t, mustStyle(t, namedStyle), map[string]any{
+		"animation":      true,
+		"blinkAnimation": false,
+	}).SVG()
+
+	if got := strings.Count(svg, "animation:"); got != 2 {
+		t.Errorf("animation rules = %d, want 2 in: %s", got, svg)
+	}
+	if strings.Contains(svg, "scaleY") {
+		t.Errorf("SVG should not contain the blink track, got: %s", svg)
+	}
+	if !strings.Contains(svg, "rotate(") || !strings.Contains(svg, "opacity:") {
+		t.Errorf("SVG should contain the sway and unnamed tracks, got: %s", svg)
+	}
+}
+
+func TestNamedSelectionStaysStaticForANameTheStyleDoesNotCarry(t *testing.T) {
+	style := mustStyle(t, namedStyle)
+	switched := mustAvatar(t, style, map[string]any{"bounceAnimation": true})
+	off := mustAvatar(t, style, nil)
+
+	if switched.SVG() != off.SVG() {
+		t.Errorf("an unknown name should not change the output\n got: %s\nwant: %s", switched.SVG(), off.SVG())
+	}
+	if _, ok := switched.ResolvedOptions()["bounceAnimation"]; ok {
+		t.Error("bounceAnimation should stay out of the resolved options")
+	}
+}
+
+func TestNamedSelectionRecordsTheSwitchesInTheResolvedOptions(t *testing.T) {
+	options := mustAvatar(t, mustStyle(t, namedStyle), map[string]any{"blinkAnimation": true}).ResolvedOptions()
+
+	if got := options["animation"]; got != false {
+		t.Errorf("resolved animation = %v, want false", got)
+	}
+	if got := options["blinkAnimation"]; got != true {
+		t.Errorf("resolved blinkAnimation = %v, want true", got)
+	}
+	if _, ok := options["swayAnimation"]; ok {
+		t.Error("swayAnimation should stay out of the resolved options")
+	}
+}
+
+func TestNamedSelectionIncludesTheSwitchesInTheClassNamespace(t *testing.T) {
+	style := mustStyle(t, namedStyle)
+	all := animationHashOf(t, mustAvatar(t, style, map[string]any{"animation": true}).SVG())
+	one := animationHashOf(t, mustAvatar(t, style, map[string]any{"blinkAnimation": true}).SVG())
+	allButOne := animationHashOf(t, mustAvatar(t, style, map[string]any{
+		"animation":      true,
+		"blinkAnimation": false,
+	}).SVG())
+
+	if all == one || all == allButOne || one == allButOne {
+		t.Errorf("switch combinations should hash apart, got all=%s one=%s allButOne=%s", all, one, allButOne)
 	}
 }

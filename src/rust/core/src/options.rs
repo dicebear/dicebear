@@ -25,56 +25,6 @@ pub(crate) struct TagFilterToken {
     pub negated: bool,
 }
 
-/// The interpreted `animation` option: a boolean switch, or a selection of
-/// timeline names in user order (a bare name is normalized to a one-element
-/// list). Keeps the raw shape so the resolved-options snapshot serializes the
-/// user's input, while consumers work with the accessors.
-#[derive(Clone)]
-pub(crate) enum AnimationSelection {
-    Flag(bool),
-    Names(Vec<String>),
-}
-
-impl AnimationSelection {
-    /// Whether no timeline plays at all.
-    pub(crate) fn off(&self) -> bool {
-        match self {
-            Self::Flag(flag) => !flag,
-            Self::Names(names) => names.is_empty(),
-        }
-    }
-
-    /// Whether a timeline carrying the given name plays. `true` plays every
-    /// timeline. A name selection plays only named timelines carrying one of
-    /// the selected names.
-    pub(crate) fn matches(&self, name: Option<&str>) -> bool {
-        match self {
-            Self::Flag(flag) => *flag,
-            Self::Names(names) => {
-                name.is_some_and(|name| names.iter().any(|candidate| candidate == name))
-            }
-        }
-    }
-
-    /// The selected names in user order, or `None` for the boolean forms.
-    /// Consumed by the animation class namespace hash.
-    pub(crate) fn names(&self) -> Option<&[String]> {
-        match self {
-            Self::Flag(_) => None,
-            Self::Names(names) => Some(names),
-        }
-    }
-
-    /// The raw option value for the resolved-options snapshot: the boolean as
-    /// given, or the name list in user order as a JSON array.
-    pub(crate) fn to_value(&self) -> Value {
-        match self {
-            Self::Flag(flag) => Value::from(*flag),
-            Self::Names(names) => Value::from(names.clone()),
-        }
-    }
-}
-
 pub struct Options {
     data: Value,
     tags: OnceCell<Vec<TagFilterToken>>,
@@ -146,18 +96,25 @@ impl Options {
         to_range(self.get("translateY"))
     }
 
-    /// Returns the animation switch as given for booleans, or a name
-    /// selection normalized to a list (a bare name becomes a one-element
-    /// list). `None` when unset.
-    pub(crate) fn animation(&self) -> Option<AnimationSelection> {
-        match self.get("animation")? {
-            Value::Bool(flag) => Some(AnimationSelection::Flag(*flag)),
-            value => Some(AnimationSelection::Names(as_string_array(Some(value)))),
-        }
+    pub fn animation(&self) -> Option<bool> {
+        self.get("animation").and_then(Value::as_bool)
+    }
+
+    /// Returns the `${name}Animation` switch for one animation name, or
+    /// `None` when unset.
+    pub fn animation_for(&self, name: &str) -> Option<bool> {
+        self.get(&format!("{name}Animation"))
+            .and_then(Value::as_bool)
     }
 
     pub fn animation_speed(&self) -> Option<Range> {
         to_range(self.get("animationSpeed"))
+    }
+
+    /// Returns the `${name}AnimationSpeed` option for one animation name as a
+    /// range, or `None` when unset.
+    pub fn animation_speed_for(&self, name: &str) -> Option<Range> {
+        to_range(self.get(&format!("{name}AnimationSpeed")))
     }
 
     /// Returns the global `tags` filter as parsed tokens, or an empty list when

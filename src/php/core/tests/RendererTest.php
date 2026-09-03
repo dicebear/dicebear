@@ -975,4 +975,263 @@ class RendererTest extends TestCase
 
         $this->assertSame($without, $with);
     }
+
+    // per-name animation speed
+
+    /**
+     * A named timeline next to an unnamed one on the same element, so the
+     * per-name option has one to scale and one to leave as authored.
+     */
+    private static function pacedStyle(): Style
+    {
+        return new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    [
+                        'type' => 'element',
+                        'name' => 'rect',
+                        'animations' => [
+                            [
+                                'name' => 'sway',
+                                'duration' => 4,
+                                'delay' => 1,
+                                'tracks' => [
+                                    'rotate' => [
+                                        'keyframes' => [
+                                            ['at' => 0, 'value' => 0],
+                                            ['at' => 100, 'value' => 4],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            [
+                                'duration' => 3,
+                                'tracks' => [
+                                    'opacity' => [
+                                        'keyframes' => [
+                                            ['at' => 0, 'value' => 1],
+                                            ['at' => 50, 'value' => 0.5],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    private static function animationHashOf(string $svg): string
+    {
+        self::assertSame(1, preg_match('/dba-([0-9a-f]+)-\\d+/', $svg, $match), 'expected an animation class in the output');
+
+        return $match[1];
+    }
+
+    public function testScalesOnlyTheNamedTimeline(): void
+    {
+        $svg = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'swayAnimationSpeed' => 2,
+        ]))->toString();
+
+        $this->assertStringContainsString('animation:2s linear 0.5s infinite', $svg);
+        $this->assertStringContainsString('animation:3s linear 0s infinite', $svg);
+    }
+
+    public function testLetsTheSpecificOptionWinOverTheGlobalOne(): void
+    {
+        $svg = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'animationSpeed' => 0.5,
+            'swayAnimationSpeed' => 2,
+        ]))->toString();
+
+        $this->assertStringContainsString('animation:2s linear 0.5s infinite', $svg);
+        $this->assertStringContainsString('animation:6s linear 0s infinite', $svg);
+    }
+
+    public function testIgnoresANameTheStyleDoesNotCarry(): void
+    {
+        $listed = new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'bounceAnimationSpeed' => 2,
+        ]);
+        $plain = new Avatar(self::pacedStyle(), ['animation' => true]);
+
+        $this->assertSame($plain->toString(), $listed->toString());
+        $this->assertArrayNotHasKey('bounceAnimationSpeed', $listed->toJSON()['options']);
+    }
+
+    public function testLeavesATimelineThatDoesNotPlayUntouched(): void
+    {
+        $off = new Avatar(self::pacedStyle(), [
+            'animation' => false,
+            'swayAnimationSpeed' => 2,
+        ]);
+
+        $this->assertSame((new Avatar(self::pacedStyle()))->toString(), $off->toString());
+        $this->assertArrayNotHasKey('swayAnimationSpeed', $off->toJSON()['options']);
+    }
+
+    public function testDoesNotDrawASpeedForASwitchedOffName(): void
+    {
+        $options = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'swayAnimation' => false,
+            'swayAnimationSpeed' => 2,
+        ]))->toJSON()['options'];
+
+        $this->assertFalse($options['swayAnimation']);
+        $this->assertArrayNotHasKey('swayAnimationSpeed', $options);
+    }
+
+    public function testIncludesTheNamedFactorInTheClassNamespace(): void
+    {
+        $named = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'swayAnimationSpeed' => 2,
+        ]))->toString();
+        $global = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'animationSpeed' => 2,
+        ]))->toString();
+
+        $this->assertNotSame(self::animationHashOf($global), self::animationHashOf($named));
+    }
+
+    public function testRecordsTheDrawnFactorInTheResolvedOptions(): void
+    {
+        $options = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'swayAnimationSpeed' => [2, 2],
+        ]))->toJSON()['options'];
+
+        $this->assertSame(2.0, $options['swayAnimationSpeed']);
+        $this->assertSame(1.0, $options['animationSpeed']);
+    }
+
+    // named selection
+
+    /**
+     * One named block per element plus an unnamed one, so every switch has
+     * something to include and something to skip.
+     */
+    private static function namedStyle(): Style
+    {
+        return new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    [
+                        'type' => 'element',
+                        'name' => 'rect',
+                        'animations' => [
+                            [
+                                'name' => 'sway',
+                                'duration' => 1,
+                                'tracks' => ['rotate' => ['keyframes' => [['at' => 0, 'value' => 0], ['at' => 100, 'value' => 4]]]],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'element',
+                        'name' => 'circle',
+                        'animations' => [
+                            [
+                                'name' => 'blink',
+                                'duration' => 2,
+                                'tracks' => ['scaleY' => ['keyframes' => [['at' => 0, 'value' => 1], ['at' => 50, 'value' => 0.1]]]],
+                            ],
+                            [
+                                'duration' => 3,
+                                'tracks' => ['opacity' => ['keyframes' => [['at' => 0, 'value' => 1], ['at' => 50, 'value' => 0.5]]]],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    public function testPlaysOnlyATimelineSwitchedOnByName(): void
+    {
+        $svg = (new Avatar(self::namedStyle(), ['blinkAnimation' => true]))->toString();
+
+        $this->assertSame(1, substr_count($svg, 'animation:'));
+        $this->assertStringContainsString('scaleY', $svg);
+        $this->assertStringNotContainsString('rotate(', $svg);
+        $this->assertStringNotContainsString('opacity:', $svg);
+        $this->assertSame(1, substr_count($svg, '<g class="dba-'));
+    }
+
+    public function testCombinesSeveralSwitches(): void
+    {
+        $svg = (new Avatar(self::namedStyle(), [
+            'swayAnimation' => true,
+            'blinkAnimation' => true,
+        ]))->toString();
+
+        $this->assertSame(2, substr_count($svg, 'animation:'));
+        $this->assertStringContainsString('rotate(', $svg);
+        $this->assertStringContainsString('scaleY', $svg);
+        $this->assertStringNotContainsString('opacity:', $svg);
+    }
+
+    public function testPlaysUnnamedTimelinesOnlyThroughTheGlobalSwitch(): void
+    {
+        $svg = (new Avatar(self::namedStyle(), ['animation' => true]))->toString();
+
+        $this->assertSame(3, substr_count($svg, 'animation:'));
+        $this->assertStringContainsString('opacity:', $svg);
+    }
+
+    public function testSwitchesATimelineOffWhileTheRestPlay(): void
+    {
+        $svg = (new Avatar(self::namedStyle(), [
+            'animation' => true,
+            'blinkAnimation' => false,
+        ]))->toString();
+
+        $this->assertSame(2, substr_count($svg, 'animation:'));
+        $this->assertStringNotContainsString('scaleY', $svg);
+        $this->assertStringContainsString('rotate(', $svg);
+        $this->assertStringContainsString('opacity:', $svg);
+    }
+
+    public function testStaysStaticForANameTheStyleDoesNotCarry(): void
+    {
+        $switched = new Avatar(self::namedStyle(), ['bounceAnimation' => true]);
+        $off = (new Avatar(self::namedStyle()))->toString();
+
+        $this->assertSame($off, $switched->toString());
+        $this->assertArrayNotHasKey('bounceAnimation', $switched->toJSON()['options']);
+    }
+
+    public function testRecordsTheSwitchesInTheResolvedOptions(): void
+    {
+        $options = (new Avatar(self::namedStyle(), ['blinkAnimation' => true]))->toJSON()['options'];
+
+        $this->assertFalse($options['animation']);
+        $this->assertTrue($options['blinkAnimation']);
+        $this->assertArrayNotHasKey('swayAnimation', $options);
+    }
+
+    public function testIncludesTheSwitchesInTheClassNamespace(): void
+    {
+        $all = (new Avatar(self::namedStyle(), ['animation' => true]))->toString();
+        $one = (new Avatar(self::namedStyle(), ['blinkAnimation' => true]))->toString();
+        $allButOne = (new Avatar(self::namedStyle(), [
+            'animation' => true,
+            'blinkAnimation' => false,
+        ]))->toString();
+
+        $this->assertNotSame(self::animationHashOf($all), self::animationHashOf($one));
+        $this->assertNotSame(self::animationHashOf($all), self::animationHashOf($allButOne));
+        $this->assertNotSame(self::animationHashOf($one), self::animationHashOf($allButOne));
+    }
 }

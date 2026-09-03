@@ -8,6 +8,21 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Core:** `animation` is a boolean. The name and list forms from 11.0.0-rc.1
+  are gone, a single animation is switched through its `${name}Animation` option
+  instead.
+
+### Added
+
+- **Core:** A switch and a speed per animation, in all seven cores.
+  `blinkAnimation: true` plays the `blink` timelines alone, `animation: true`
+  with `blinkAnimation: false` plays everything but them, and
+  `blinkAnimationSpeed: 2` sets their pace, as a factor or a range the seed
+  picks from. Each named option wins over its global counterpart. The options
+  descriptor lists one switch and one speed field per animation name.
+
 ## [11.0.0-rc.1] - 2026-09-01
 
 ### Added

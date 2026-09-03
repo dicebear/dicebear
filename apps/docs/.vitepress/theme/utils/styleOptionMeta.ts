@@ -16,9 +16,13 @@ export function getOptionDescription(name: string): string | undefined {
   if (name === 'tags')
     return 'Keep only variants that carry the given tags. Within a category the values combine with or, different categories combine with and, and a leading ! disallows a tag.';
   if (name === 'animation')
-    return "Plays the style's built-in animations in the SVG output. Accepts true for all of them, or one or more animation names. Raster formats always show the resting state.";
+    return "Plays the style's built-in animations in the SVG output. Raster formats always show the resting state.";
+  if (name.match(/Animation$/))
+    return 'Switches this animation on or off by itself. Wins over animation for it, so it can play alone or stay still while the rest play.';
   if (name === 'animationSpeed')
     return 'Speed factor for the animations. 1 plays them as authored, 2 twice as fast. As a range [min, max], the PRNG picks a value in between.';
+  if (name.match(/AnimationSpeed$/))
+    return 'Speed factor for this animation alone. Wins over animationSpeed for it, the other animations keep the global factor.';
   if (name.match(/Probability$/))
     return 'Probability that this component appears in the avatar.';
   if (name.match(/Variant$/))

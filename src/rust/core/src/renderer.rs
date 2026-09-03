@@ -5,7 +5,7 @@
 //! circular color reference encountered during resolution surfaces as an
 //! [`Error`] from [`Renderer::render`].
 
-use std::collections::{BTreeSet, HashMap, HashSet};
+use std::collections::{HashMap, HashSet};
 use std::hash::{BuildHasher, Hasher, RandomState};
 use std::sync::LazyLock;
 
@@ -574,12 +574,12 @@ impl<'a> Renderer<'a> {
 
     /// Returns the FNV-1a hex hash namespacing the animation class and
     /// keyframe names, cached after the first call. Extends the
-    /// [`Self::hash_seed`] input with the animation speed and, for a by-name
-    /// selection, the sorted names: two renders of the same avatar with
-    /// different speeds or selections inlined on one page must not select
-    /// each other's rules, while identical renders sharing identical rules is
-    /// harmless deduplication. `true` adds no name suffix, so enabling all
-    /// animations hashes as before.
+    /// [`Self::hash_seed`] input with the animation speed and, for every
+    /// named timeline the style carries, its state (`off` or the factor it
+    /// plays at): two renders of the same avatar with different speeds or
+    /// switches inlined on one page must not select each other's rules,
+    /// while identical renders sharing identical rules is harmless
+    /// deduplication.
     ///
     /// Everything else about an avatar stays out of the hash, so two renders
     /// of the same style and seed that differ in any other option would share
@@ -601,14 +601,30 @@ impl<'a> Renderer<'a> {
                     .meta()
                     .and_then(|meta| meta.source().name())
                     .unwrap_or("");
-                let selection = self.resolver.animation();
-                let names = match selection.names() {
-                    Some(names) => {
-                        let sorted: BTreeSet<&str> = names.iter().map(String::as_str).collect();
-
-                        format!(":{}", sorted.into_iter().collect::<Vec<_>>().join(","))
-                    }
-                    None => String::new(),
+                // Every named timeline the style carries joins the hash with
+                // its state, `off` or the factor it plays at, so two renders
+                // that differ only in a `${name}Animation` or
+                // `${name}AnimationSpeed` option never share their rules. The
+                // style's name list is already sorted.
+                let states: Vec<String> = self
+                    .style
+                    .animation_names()
+                    .iter()
+                    .map(|name| {
+                        if self.resolver.animation_plays(Some(name)) {
+                            format!(
+                                "{name}:{}",
+                                number::format(self.resolver.animation_speed_for(Some(name)))
+                            )
+                        } else {
+                            format!("{name}:off")
+                        }
+                    })
+                    .collect();
+                let states = if states.is_empty() {
+                    String::new()
+                } else {
+                    format!(":{}", states.join(","))
                 };
 
                 fnv1a::hex(&format!(
@@ -616,11 +632,33 @@ impl<'a> Renderer<'a> {
                     source_name,
                     self.resolver.seed(),
                     number::format(self.resolver.animation_speed()),
-                    names,
+                    states,
                     random
                 ))
             })
             .clone()
+    }
+
+    /// Returns the animation blocks of an element that play. The element
+    /// check comes first: only styles that carry declarative animations may
+    /// touch the options, so the resolved-options snapshot of every other
+    /// avatar stays free of them.
+    fn playing_animations<'e>(&self, element: &'e Element) -> Vec<&'e Animation> {
+        let animations = element.animations();
+
+        if animations.is_empty() {
+            return Vec::new();
+        }
+
+        // The global switch is read first so it lands in the resolved options
+        // whenever a node carries animations, on or off. Named timelines then
+        // follow their own switch when the user set one.
+        self.resolver.animation();
+
+        animations
+            .iter()
+            .filter(|animation| self.resolver.animation_plays(animation.name()))
+            .collect()
     }
 
     /// Wraps an element's rendered markup in one `<g class="…">` per animation
@@ -639,18 +677,9 @@ impl<'a> Renderer<'a> {
             return markup;
         }
 
-        let animations = element.animations();
+        let animations = self.playing_animations(element);
 
-        // The element check comes first: only styles that carry declarative
-        // animations may touch the `animation` option, so the resolved-options
-        // snapshot of every other avatar stays free of it.
         if animations.is_empty() {
-            return markup;
-        }
-
-        let selection = self.resolver.animation();
-
-        if selection.off() {
             return markup;
         }
 
@@ -658,13 +687,6 @@ impl<'a> Renderer<'a> {
         let mut opacity_wrapper: Option<usize> = None;
 
         for animation in animations {
-            // `true` plays every timeline. A name selection plays only the
-            // timelines carrying one of those names, so unnamed timelines
-            // stay static then.
-            if !selection.matches(animation.name()) {
-                continue;
-            }
-
             for track in TRACK_ORDER {
                 if let Some(track_data) = animation.tracks().get(track) {
                     if track == "opacity" {
@@ -724,24 +746,11 @@ impl<'a> Renderer<'a> {
     ) -> Option<IndexMap<String, DynValue>> {
         let attributes = element.attributes()?;
 
-        // The element check comes first: only styles that carry declarative
-        // animations may touch the `animation` option, so the resolved-options
-        // snapshot of every other avatar stays free of it.
-        if !attributes.contains_key("opacity") || element.animations().is_empty() {
+        if !attributes.contains_key("opacity") {
             return None;
         }
 
-        let selection = self.resolver.animation();
-
-        if selection.off() {
-            return None;
-        }
-
-        for animation in element.animations() {
-            if !selection.matches(animation.name()) {
-                continue;
-            }
-
+        for animation in self.playing_animations(element) {
             if animation.tracks().contains_key("opacity") {
                 let mut rest = attributes.clone();
                 rest.shift_remove("opacity");
@@ -777,7 +786,7 @@ impl<'a> Renderer<'a> {
             }
         };
 
-        let speed = self.resolver.animation_speed();
+        let speed = self.resolver.animation_speed_for(animation.name());
         let duration = number::format(animation.duration() / speed);
         let delay = number::format(animation.delay() / speed);
         let iterations = match animation.iterations() {
@@ -987,4 +996,282 @@ fn randomize_ids(svg: &str, suffix: &str) -> String {
         format!("{}{}-{suffix}{}", &caps[1], &caps[2], &caps[3])
     })
     .into_owned()
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::{json, Value};
+
+    use crate::avatar::Avatar;
+    use crate::style::Style;
+
+    /// A named timeline next to an unnamed one on the same element, so the
+    /// per-name option has one to scale and one to leave as authored.
+    fn paced() -> Style {
+        Style::from_str(
+            r#"{
+                "canvas": {
+                    "width": 100,
+                    "height": 100,
+                    "elements": [
+                        {
+                            "type": "element",
+                            "name": "rect",
+                            "animations": [
+                                {
+                                    "name": "sway",
+                                    "duration": 4,
+                                    "delay": 1,
+                                    "tracks": {
+                                        "rotate": {
+                                            "keyframes": [
+                                                { "at": 0, "value": 0 },
+                                                { "at": 100, "value": 4 }
+                                            ]
+                                        }
+                                    }
+                                },
+                                {
+                                    "duration": 3,
+                                    "tracks": {
+                                        "opacity": {
+                                            "keyframes": [
+                                                { "at": 0, "value": 1 },
+                                                { "at": 50, "value": 0.5 }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }"#,
+        )
+        .unwrap()
+    }
+
+    fn render(style: &Style, options: Value) -> String {
+        Avatar::new(style, options).unwrap().to_svg().to_string()
+    }
+
+    fn resolved(style: &Style, options: Value) -> Value {
+        Avatar::new(style, options).unwrap().to_json()["options"].clone()
+    }
+
+    /// The animation hash shared by every class and keyframes name.
+    fn hash_of(svg: &str) -> String {
+        let start = svg.find("dba-").expect("animation class") + 4;
+
+        svg[start..start + 8].to_string()
+    }
+
+    #[test]
+    fn per_name_speed_scales_only_the_named_timeline() {
+        let svg = render(
+            &paced(),
+            json!({ "animation": true, "swayAnimationSpeed": 2 }),
+        );
+
+        assert!(svg.contains("animation:2s linear 0.5s infinite"), "{svg}");
+        assert!(svg.contains("animation:3s linear 0s infinite"), "{svg}");
+    }
+
+    #[test]
+    fn per_name_speed_lets_the_specific_option_win_over_the_global_one() {
+        let svg = render(
+            &paced(),
+            json!({ "animation": true, "animationSpeed": 0.5, "swayAnimationSpeed": 2 }),
+        );
+
+        assert!(svg.contains("animation:2s linear 0.5s infinite"), "{svg}");
+        assert!(svg.contains("animation:6s linear 0s infinite"), "{svg}");
+    }
+
+    #[test]
+    fn per_name_speed_ignores_a_name_the_style_does_not_carry() {
+        let style = paced();
+        let listed = json!({ "animation": true, "bounceAnimationSpeed": 2 });
+
+        assert_eq!(
+            render(&style, listed.clone()),
+            render(&style, json!({ "animation": true }))
+        );
+        assert!(resolved(&style, listed)
+            .get("bounceAnimationSpeed")
+            .is_none());
+    }
+
+    #[test]
+    fn per_name_speed_leaves_a_timeline_that_does_not_play_untouched() {
+        let style = paced();
+        let off = json!({ "animation": false, "swayAnimationSpeed": 2 });
+
+        assert_eq!(render(&style, off.clone()), render(&style, json!({})));
+        assert!(resolved(&style, off).get("swayAnimationSpeed").is_none());
+    }
+
+    #[test]
+    fn per_name_speed_includes_the_named_factor_in_the_class_namespace() {
+        let style = paced();
+        let named = render(
+            &style,
+            json!({ "animation": true, "swayAnimationSpeed": 2 }),
+        );
+        let global = render(&style, json!({ "animation": true, "animationSpeed": 2 }));
+
+        assert_ne!(hash_of(&named), hash_of(&global));
+    }
+
+    #[test]
+    fn per_name_speed_records_the_drawn_factor_in_the_resolved_options() {
+        let options = resolved(
+            &paced(),
+            json!({ "animation": true, "swayAnimationSpeed": [2, 2] }),
+        );
+
+        assert_eq!(options["swayAnimationSpeed"], json!(2));
+        assert_eq!(options["animationSpeed"], json!(1));
+    }
+
+    /// One named block per element plus an unnamed one, so every switch has
+    /// something to include and something to skip.
+    fn named() -> Style {
+        Style::from_str(
+            r#"{
+                "canvas": {
+                    "width": 100,
+                    "height": 100,
+                    "elements": [
+                        {
+                            "type": "element",
+                            "name": "rect",
+                            "animations": [
+                                {
+                                    "name": "sway",
+                                    "duration": 1,
+                                    "tracks": {
+                                        "rotate": {
+                                            "keyframes": [
+                                                { "at": 0, "value": 0 },
+                                                { "at": 100, "value": 4 }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "element",
+                            "name": "circle",
+                            "animations": [
+                                {
+                                    "name": "blink",
+                                    "duration": 2,
+                                    "tracks": {
+                                        "scaleY": {
+                                            "keyframes": [
+                                                { "at": 0, "value": 1 },
+                                                { "at": 50, "value": 0.1 }
+                                            ]
+                                        }
+                                    }
+                                },
+                                {
+                                    "duration": 3,
+                                    "tracks": {
+                                        "opacity": {
+                                            "keyframes": [
+                                                { "at": 0, "value": 1 },
+                                                { "at": 50, "value": 0.5 }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }"#,
+        )
+        .unwrap()
+    }
+
+    #[test]
+    fn named_selection_plays_only_a_timeline_switched_on_by_name() {
+        let svg = render(&named(), json!({ "blinkAnimation": true }));
+
+        assert_eq!(svg.matches("animation:").count(), 1, "{svg}");
+        assert!(svg.contains("scaleY"));
+        assert!(!svg.contains("rotate("));
+        assert!(!svg.contains("opacity:"));
+        assert_eq!(svg.matches("<g class=\"dba-").count(), 1);
+    }
+
+    #[test]
+    fn named_selection_combines_several_switches() {
+        let svg = render(
+            &named(),
+            json!({ "swayAnimation": true, "blinkAnimation": true }),
+        );
+
+        assert_eq!(svg.matches("animation:").count(), 2, "{svg}");
+        assert!(svg.contains("rotate("));
+        assert!(svg.contains("scaleY"));
+        assert!(!svg.contains("opacity:"));
+    }
+
+    #[test]
+    fn named_selection_plays_unnamed_timelines_only_through_the_global_switch() {
+        let svg = render(&named(), json!({ "animation": true }));
+
+        assert_eq!(svg.matches("animation:").count(), 3, "{svg}");
+        assert!(svg.contains("opacity:"));
+    }
+
+    #[test]
+    fn named_selection_switches_a_timeline_off_while_the_rest_play() {
+        let svg = render(
+            &named(),
+            json!({ "animation": true, "blinkAnimation": false }),
+        );
+
+        assert_eq!(svg.matches("animation:").count(), 2, "{svg}");
+        assert!(!svg.contains("scaleY"));
+        assert!(svg.contains("rotate("));
+        assert!(svg.contains("opacity:"));
+    }
+
+    #[test]
+    fn named_selection_stays_static_for_a_name_the_style_does_not_carry() {
+        let style = named();
+        let switched = json!({ "bounceAnimation": true });
+
+        assert_eq!(render(&style, switched.clone()), render(&style, json!({})));
+        assert!(resolved(&style, switched).get("bounceAnimation").is_none());
+    }
+
+    #[test]
+    fn named_selection_records_the_switches_in_the_resolved_options() {
+        let options = resolved(&named(), json!({ "blinkAnimation": true }));
+
+        assert_eq!(options["animation"], json!(false));
+        assert_eq!(options["blinkAnimation"], json!(true));
+        assert!(options.get("swayAnimation").is_none());
+    }
+
+    #[test]
+    fn named_selection_includes_the_switches_in_the_class_namespace() {
+        let style = named();
+        let all = render(&style, json!({ "animation": true }));
+        let one = render(&style, json!({ "blinkAnimation": true }));
+        let all_but_one = render(
+            &style,
+            json!({ "animation": true, "blinkAnimation": false }),
+        );
+
+        assert_ne!(hash_of(&all), hash_of(&one));
+        assert_ne!(hash_of(&all), hash_of(&all_but_one));
+        assert_ne!(hash_of(&one), hash_of(&all_but_one));
+    }
 }

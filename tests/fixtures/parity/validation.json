@@ -2179,39 +2179,36 @@
       "options": {
         "animation": "yes"
       },
-      "valid": true
+      "valid": false
     },
     {
-      "id": "animation-name-list",
+      "id": "animation-list",
       "options": {
         "animation": [
           "look",
           "blink"
         ]
       },
+      "valid": false
+    },
+    {
+      "id": "named-animation-off",
+      "options": {
+        "blinkAnimation": false
+      },
       "valid": true
     },
     {
-      "id": "animation-name-uppercase",
+      "id": "named-animation-string",
       "options": {
-        "animation": "Blink"
+        "blinkAnimation": "yes"
       },
       "valid": false
     },
     {
-      "id": "animation-name-empty-list",
+      "id": "named-animation-uppercase",
       "options": {
-        "animation": []
-      },
-      "valid": true
-    },
-    {
-      "id": "animation-name-mixed-list",
-      "options": {
-        "animation": [
-          "blink",
-          "Bad"
-        ]
+        "BlinkAnimation": true
       },
       "valid": false
     },
@@ -2271,6 +2268,55 @@
           2,
           4
         ]
+      },
+      "valid": false
+    },
+    {
+      "id": "named-animation-speed",
+      "options": {
+        "blinkAnimationSpeed": 2
+      },
+      "valid": true
+    },
+    {
+      "id": "named-animation-speed-range",
+      "options": {
+        "blinkAnimationSpeed": [
+          0.5,
+          2
+        ]
+      },
+      "valid": true
+    },
+    {
+      "id": "named-animation-speed-zero",
+      "options": {
+        "blinkAnimationSpeed": 0
+      },
+      "valid": false
+    },
+    {
+      "id": "named-animation-speed-range-excess",
+      "options": {
+        "blinkAnimationSpeed": [
+          0.5,
+          2,
+          4
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "named-animation-speed-uppercase",
+      "options": {
+        "BlinkAnimationSpeed": 2
+      },
+      "valid": false
+    },
+    {
+      "id": "named-animation-speed-string",
+      "options": {
+        "blinkAnimationSpeed": "fast"
       },
       "valid": false
     }

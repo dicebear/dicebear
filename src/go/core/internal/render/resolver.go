@@ -75,27 +75,58 @@ func (r *resolver) idRandomization() bool {
 	return v
 }
 
-// animation is deliberately PRNG-free — whether and what animates must not
-// depend on the seed. The snapshot records the raw normalized value (the
-// boolean switch, or the name list in user order). The returned selection is
-// the interpreted view the renderer works with: true plays every timeline, a
-// name list only the timelines carrying one of those names.
-func (r *resolver) animation() animationSelection {
-	raw, ok := r.options.animation()
-	if !ok {
-		raw = false
+// animation returns the global animation switch, recorded under `animation`,
+// default false. Deliberately without PRNG involvement: whether an avatar
+// animates must not depend on the seed.
+func (r *resolver) animation() bool {
+	v := false
+	if p := r.options.animation(); p != nil {
+		v = *p
 	}
-	r.record("animation", raw)
+	r.record("animation", v)
+	return v
+}
 
-	if names, isList := raw.([]string); isList {
-		return animationSelection{names: names}
+// animationPlays reports whether one timeline plays. A named timeline follows
+// its ${name}Animation switch when the user set one, recorded under that key,
+// and the global switch otherwise. Unnamed timelines (name is "") always
+// follow the global switch. The switch is read only when asked for, so a name
+// the style does not carry leaves nothing in the snapshot.
+func (r *resolver) animationPlays(name string) bool {
+	if name == "" {
+		return r.animation()
 	}
-	all, _ := raw.(bool)
-	return animationSelection{all: all}
+
+	v, ok := r.options.animationFor(name)
+	if !ok {
+		return r.animation()
+	}
+
+	r.record(name+"Animation", v)
+	return v
 }
 
 func (r *resolver) animationSpeed() float64 {
 	return r.floatOpt("animationSpeed", r.options.animationSpeed(), 1)
+}
+
+// animationSpeedFor returns the speed factor of one timeline. A named
+// timeline plays at its ${name}AnimationSpeed option when the user set one,
+// drawn under that key, and at the global factor otherwise. Unnamed timelines
+// (name is "") always follow the global factor. The option is resolved only
+// when asked for, so a name the style does not carry leaves nothing in the
+// snapshot.
+func (r *resolver) animationSpeedFor(name string) float64 {
+	if name == "" {
+		return r.animationSpeed()
+	}
+
+	rng := r.options.animationSpeedFor(name)
+	if rng == nil {
+		return r.animationSpeed()
+	}
+
+	return r.floatOpt(name+"AnimationSpeed", rng, 1)
 }
 
 func (r *resolver) title() (string, bool) {

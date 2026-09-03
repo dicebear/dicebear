@@ -76,22 +76,31 @@ export class Options<D = unknown> {
     return this.#toRange(this.#data.translateY);
   }
 
+  animation(): boolean | undefined {
+    return this.#data.animation;
+  }
+
   /**
-   * Returns the animation switch as given for booleans, and normalizes a
-   * single animation name to a one-element array.
+   * Returns the `${name}Animation` switch for one animation name, or
+   * `undefined` when unset.
    */
-  animation(): boolean | readonly string[] | undefined {
-    const raw = this.#data.animation;
-
-    if (raw === undefined || typeof raw === 'boolean') {
-      return raw;
-    }
-
-    return this.#asArray(raw);
+  animationFor(name: string): boolean | undefined {
+    return this.#dynamic(`${name}Animation`) as boolean | undefined;
   }
 
   animationSpeed(): Range | undefined {
     return this.#toRange(this.#data.animationSpeed);
+  }
+
+  /**
+   * Returns the `${name}AnimationSpeed` option for one animation name as a
+   * range, or `undefined` when unset.
+   */
+  animationSpeedFor(name: string): Range | undefined {
+    return this.#toRange(
+      this.#dynamic(`${name}AnimationSpeed`) as
+        number | readonly number[] | undefined,
+    );
   }
 
   /**

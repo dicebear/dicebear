@@ -110,8 +110,7 @@
     "open": true
   },
   "animation": {
-    "type": "animation",
-    "values": []
+    "type": "boolean"
   },
   "animationSpeed": {
     "type": "range",

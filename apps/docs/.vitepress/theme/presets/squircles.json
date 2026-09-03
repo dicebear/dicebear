@@ -101,7 +101,7 @@
       "id": "animated",
       "name": "Animated",
       "summary": "Turns the style's built-in animation on.",
-      "description": "The animation is off by default and `animation: true` switches it on. A list like `animation: ['orbit']` plays just that one, and `animationSpeed` sets the pace. The motion respects prefers-reduced-motion, and a static avatar next to an animated one stays static.",
+      "description": "The animation is off by default and `animation: true` switches it on. `orbitAnimation: true` plays just that one, and `animationSpeed` sets the pace. The motion respects prefers-reduced-motion, and a static avatar next to an animated one stays static.",
       "options": {
         "animation": true
       }

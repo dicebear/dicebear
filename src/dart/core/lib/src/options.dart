@@ -85,20 +85,26 @@ class Options {
 
   Range? translateY() => _toRange(_get('translateY'));
 
-  /// Returns the animation switch as given for booleans, and normalizes a
-  /// single animation name to a one-element list (a list of names passes
-  /// through in user order). `null` when unset.
-  Object? animation() {
+  bool? animation() {
     final value = _get('animation');
 
-    if (value == null || value is bool) {
-      return value;
-    }
+    return value is bool ? value : null;
+  }
 
-    return _asStringArray(value);
+  /// Returns the `${name}Animation` switch for one animation name, or `null`
+  /// when unset.
+  bool? animationFor(String name) {
+    final value = _get('${name}Animation');
+
+    return value is bool ? value : null;
   }
 
   Range? animationSpeed() => _toRange(_get('animationSpeed'));
+
+  /// Returns the `${name}AnimationSpeed` option for one animation name as a
+  /// range, or `null` when unset.
+  Range? animationSpeedFor(String name) =>
+      _toRange(_get('${name}AnimationSpeed'));
 
   /// Returns the global `tags` filter as parsed tokens, or an empty list when
   /// unset. Each raw token (`category` / `category:value`, optionally

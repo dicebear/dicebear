@@ -1147,3 +1147,235 @@ def test_alias_silently_ignores_alias_keyed_options() -> None:
         {"seed": "ignore-alias-key", "eyesVariant": "a", "eyesRightVariant": "d"},
     ).to_string()
     assert without == with_
+
+
+# ---------------------------------------------------------------------------
+# animation: per-name speed
+# ---------------------------------------------------------------------------
+
+
+def _paced_style() -> Style:
+    # A named timeline next to an unnamed one on the same element, so the
+    # per-name form has one to scale and one to leave as authored.
+    return Style(
+        {
+            "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                    {
+                        "type": "element",
+                        "name": "rect",
+                        "animations": [
+                            {
+                                "name": "sway",
+                                "duration": 4,
+                                "delay": 1,
+                                "tracks": {
+                                    "rotate": {
+                                        "keyframes": [
+                                            {"at": 0, "value": 0},
+                                            {"at": 100, "value": 4},
+                                        ]
+                                    }
+                                },
+                            },
+                            {
+                                "duration": 3,
+                                "tracks": {
+                                    "opacity": {
+                                        "keyframes": [
+                                            {"at": 0, "value": 1},
+                                            {"at": 50, "value": 0.5},
+                                        ]
+                                    }
+                                },
+                            },
+                        ],
+                    }
+                ],
+            }
+        }
+    )
+
+
+def _animation_hash_of(svg: str) -> str:
+    match = re.search(r"dba-([0-9a-f]{8})-", svg)
+    assert match is not None
+    return match.group(1)
+
+
+def test_named_speed_scales_only_the_named_timeline() -> None:
+    svg = Avatar(
+        _paced_style(), {"animation": True, "swayAnimationSpeed": 2}
+    ).to_string()
+
+    assert "animation:2s linear 0.5s infinite" in svg
+    assert "animation:3s linear 0s infinite" in svg
+
+
+def test_named_speed_wins_over_global() -> None:
+    svg = Avatar(
+        _paced_style(),
+        {"animation": True, "animationSpeed": 0.5, "swayAnimationSpeed": 2},
+    ).to_string()
+
+    assert "animation:2s linear 0.5s infinite" in svg
+    assert "animation:6s linear 0s infinite" in svg
+
+
+def test_named_speed_ignores_a_name_the_style_does_not_carry() -> None:
+    listed = Avatar(_paced_style(), {"animation": True, "bounceAnimationSpeed": 2})
+    plain = Avatar(_paced_style(), {"animation": True})
+
+    assert listed.to_string() == plain.to_string()
+    assert "bounceAnimationSpeed" not in listed.to_json()["options"]
+
+
+def test_named_speed_leaves_a_static_render_untouched() -> None:
+    off = Avatar(_paced_style(), {"animation": False, "swayAnimationSpeed": 2})
+
+    assert off.to_string() == Avatar(_paced_style()).to_string()
+    assert "swayAnimationSpeed" not in off.to_json()["options"]
+
+
+def test_named_speed_is_not_drawn_for_a_switched_off_name() -> None:
+    options = Avatar(
+        _paced_style(),
+        {"animation": False, "swayAnimationSpeed": 2, "blinkAnimation": True},
+    ).to_json()["options"]
+
+    assert "swayAnimationSpeed" not in options
+
+
+# ---------------------------------------------------------------------------
+# animation: named selection
+# ---------------------------------------------------------------------------
+
+
+def _named_style() -> Style:
+    # One named block per element plus an unnamed one, so every switch has
+    # something to include and something to skip.
+    return Style(
+        {
+            "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                    {
+                        "type": "element",
+                        "name": "rect",
+                        "animations": [
+                            {
+                                "name": "sway",
+                                "duration": 1,
+                                "tracks": {
+                                    "rotate": {
+                                        "keyframes": [
+                                            {"at": 0, "value": 0},
+                                            {"at": 100, "value": 4},
+                                        ]
+                                    }
+                                },
+                            }
+                        ],
+                    },
+                    {
+                        "type": "element",
+                        "name": "circle",
+                        "animations": [
+                            {
+                                "name": "blink",
+                                "duration": 2,
+                                "tracks": {
+                                    "scaleY": {
+                                        "keyframes": [
+                                            {"at": 0, "value": 1},
+                                            {"at": 50, "value": 0.1},
+                                        ]
+                                    }
+                                },
+                            },
+                            {
+                                "duration": 3,
+                                "tracks": {
+                                    "opacity": {
+                                        "keyframes": [
+                                            {"at": 0, "value": 1},
+                                            {"at": 50, "value": 0.5},
+                                        ]
+                                    }
+                                },
+                            },
+                        ],
+                    },
+                ],
+            }
+        }
+    )
+
+
+def test_named_selection_plays_only_a_timeline_switched_on_by_name() -> None:
+    svg = Avatar(_named_style(), {"blinkAnimation": True}).to_string()
+
+    assert svg.count("animation:") == 1
+    assert "scaleY" in svg
+    assert "rotate(" not in svg
+    assert "opacity:" not in svg
+    assert svg.count('<g class="dba-') == 1
+
+
+def test_named_selection_combines_several_switches() -> None:
+    svg = Avatar(
+        _named_style(), {"swayAnimation": True, "blinkAnimation": True}
+    ).to_string()
+
+    assert svg.count("animation:") == 2
+    assert "rotate(" in svg
+    assert "scaleY" in svg
+    assert "opacity:" not in svg
+
+
+def test_named_selection_plays_unnamed_only_through_the_global_switch() -> None:
+    svg = Avatar(_named_style(), {"animation": True}).to_string()
+
+    assert svg.count("animation:") == 3
+    assert "opacity:" in svg
+
+
+def test_named_selection_switches_one_off_while_the_rest_play() -> None:
+    svg = Avatar(
+        _named_style(), {"animation": True, "blinkAnimation": False}
+    ).to_string()
+
+    assert svg.count("animation:") == 2
+    assert "scaleY" not in svg
+    assert "rotate(" in svg
+    assert "opacity:" in svg
+
+
+def test_named_selection_stays_static_for_a_name_the_style_does_not_carry() -> None:
+    switched = Avatar(_named_style(), {"bounceAnimation": True})
+
+    assert switched.to_string() == Avatar(_named_style()).to_string()
+    assert "bounceAnimation" not in switched.to_json()["options"]
+
+
+def test_named_selection_records_the_switches() -> None:
+    options = Avatar(_named_style(), {"blinkAnimation": True}).to_json()["options"]
+
+    assert options["animation"] is False
+    assert options["blinkAnimation"] is True
+    assert "swayAnimation" not in options
+
+
+def test_named_selection_joins_the_class_namespace() -> None:
+    all_ = Avatar(_named_style(), {"animation": True}).to_string()
+    one = Avatar(_named_style(), {"blinkAnimation": True}).to_string()
+    all_but_one = Avatar(
+        _named_style(), {"animation": True, "blinkAnimation": False}
+    ).to_string()
+
+    assert _animation_hash_of(all_) != _animation_hash_of(one)
+    assert _animation_hash_of(all_) != _animation_hash_of(all_but_one)
+    assert _animation_hash_of(one) != _animation_hash_of(all_but_one)

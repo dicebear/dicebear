@@ -203,13 +203,28 @@ Enum values are passed as strings. For example, the `flip` option accepts
 ### Animations
 
 Styles that carry [animations](/customize/options/) play them once you set
-`animation=true`. A name or a comma-separated list of names plays only those,
-and `animationSpeed` sets the pace. Only the SVG format moves. The raster
-formats render the resting state, with or without the option.
+`animation=true`, and `animationSpeed` sets the pace. Only the SVG format moves.
+The raster formats render the resting state, with or without the option.
 
 ```
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true
-https://api.dicebear.com/11.x/planets/svg?seed=John&animation=orbit&animationSpeed=2
+https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationSpeed=2
+```
+
+Every animation also has a switch named after it, which wins over `animation`.
+One animation alone, or everything but one:
+
+```
+https://api.dicebear.com/11.x/planets/svg?seed=John&orbitAnimation=true
+https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&twinkleAnimation=false
+```
+
+The speed works the same way per animation. `orbitAnimationSpeed` wins over
+`animationSpeed` for the orbit, and a range works as everywhere else:
+
+```
+https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimationSpeed=0.5&twinkleAnimationSpeed=2
+https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimationSpeed=0.5,1
 ```
 
 The `11.x` line is the first one with animations. On `10.x` the option is

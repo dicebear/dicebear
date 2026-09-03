@@ -1228,15 +1228,6 @@ describe('Renderer', () => {
       assert.ok(!withAnimations.includes('dba-'));
     });
 
-    it('should render statically for an empty name selection', () => {
-      // The HTTP API turns `?animation=` into an empty list, which has to
-      // mean the same as leaving the option out.
-      assert.equal(
-        new Avatar(new Style(squash), { animation: [] }).toString(),
-        new Avatar(new Style(squash)).toString(),
-      );
-    });
-
     it('should hand a hidden element its opacity back while animating', () => {
       // The element's own opacity is the resting state an opacity track
       // replaces, not a factor it is multiplied with, so a layer hidden with
@@ -1352,6 +1343,115 @@ describe('Renderer', () => {
       assert.notEqual(hashOf(base.toString()), hashOf(fast.toString()));
     });
 
+    describe('per-name speed', () => {
+      // A named timeline next to an unnamed one on the same element, so a
+      // `${name}AnimationSpeed` option has one to scale and one to leave to
+      // the global factor.
+      const paced = {
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'rect',
+              animations: [
+                {
+                  name: 'sway',
+                  duration: 4,
+                  delay: 1,
+                  tracks: {
+                    rotate: {
+                      keyframes: [
+                        { at: 0, value: 0 },
+                        { at: 100, value: 4 },
+                      ],
+                    },
+                  },
+                },
+                {
+                  duration: 3,
+                  tracks: {
+                    opacity: {
+                      keyframes: [
+                        { at: 0, value: 1 },
+                        { at: 50, value: 0.5 },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      it('should scale only the named timeline', () => {
+        const svg = new Avatar(new Style(paced), {
+          animation: true,
+          swayAnimationSpeed: 2,
+        }).toString();
+
+        assert.ok(svg.includes('animation:2s linear 0.5s infinite'));
+        assert.ok(svg.includes('animation:3s linear 0s infinite'));
+      });
+
+      it('should let the specific option win over the global one', () => {
+        const svg = new Avatar(new Style(paced), {
+          animation: true,
+          animationSpeed: 0.5,
+          swayAnimationSpeed: 2,
+        }).toString();
+
+        assert.ok(svg.includes('animation:2s linear 0.5s infinite'));
+        assert.ok(svg.includes('animation:6s linear 0s infinite'));
+      });
+
+      it('should ignore a name the style does not carry', () => {
+        const listed = new Avatar(new Style(paced), {
+          animation: true,
+          bounceAnimationSpeed: 2,
+        });
+        const plain = new Avatar(new Style(paced), { animation: true });
+
+        assert.equal(listed.toString(), plain.toString());
+        assert.equal('bounceAnimationSpeed' in listed.toJSON().options, false);
+      });
+
+      it('should leave a timeline that does not play untouched', () => {
+        const off = new Avatar(new Style(paced), {
+          animation: false,
+          swayAnimationSpeed: 2,
+        });
+
+        assert.equal(off.toString(), new Avatar(new Style(paced)).toString());
+        assert.equal('swayAnimationSpeed' in off.toJSON().options, false);
+      });
+
+      it('should include the named factor in the class namespace', () => {
+        const named = new Avatar(new Style(paced), {
+          animation: true,
+          swayAnimationSpeed: 2,
+        }).toString();
+        const global = new Avatar(new Style(paced), {
+          animation: true,
+          animationSpeed: 2,
+        }).toString();
+
+        assert.notEqual(hashOf(named), hashOf(global));
+      });
+
+      it('should record the drawn factor in the resolved options', () => {
+        const options = new Avatar(new Style(paced), {
+          animation: true,
+          swayAnimationSpeed: [2, 2],
+        }).toJSON().options;
+
+        assert.equal(options.swayAnimationSpeed, 2);
+        assert.equal(options.animationSpeed, 1);
+      });
+    });
+
     describe('named selection', () => {
       // One named block per element plus an unnamed one, so every selection
       // form has something to include and something to skip.
@@ -1411,9 +1511,9 @@ describe('Renderer', () => {
         },
       };
 
-      it('should render only the timelines carrying a selected name', () => {
+      it('should play only a timeline switched on by name', () => {
         const svg = new Avatar(new Style(named), {
-          animation: 'blink',
+          blinkAnimation: true,
         }).toString();
 
         assert.equal(svg.match(/animation:/g).length, 1);
@@ -1423,9 +1523,10 @@ describe('Renderer', () => {
         assert.equal(svg.match(/<g class="dba-/g).length, 1);
       });
 
-      it('should combine several selected names', () => {
+      it('should combine several switches', () => {
         const svg = new Avatar(new Style(named), {
-          animation: ['sway', 'blink'],
+          swayAnimation: true,
+          blinkAnimation: true,
         }).toString();
 
         assert.equal(svg.match(/animation:/g).length, 2);
@@ -1434,51 +1535,59 @@ describe('Renderer', () => {
         assert.ok(!svg.includes('opacity:'));
       });
 
-      it('should play unnamed timelines only with the boolean form', () => {
+      it('should play unnamed timelines only through the global switch', () => {
         const svg = new Avatar(new Style(named), { animation: true }).toString();
 
         assert.equal(svg.match(/animation:/g).length, 3);
         assert.ok(svg.includes('opacity:'));
       });
 
-      it('should stay static for a name the style does not carry', () => {
-        const selected = new Avatar(new Style(named), {
-          animation: 'bounce',
+      it('should switch a timeline off while the rest play', () => {
+        const svg = new Avatar(new Style(named), {
+          animation: true,
+          blinkAnimation: false,
         }).toString();
+
+        assert.equal(svg.match(/animation:/g).length, 2);
+        assert.ok(!svg.includes('scaleY'));
+        assert.ok(svg.includes('rotate('));
+        assert.ok(svg.includes('opacity:'));
+      });
+
+      it('should stay static for a name the style does not carry', () => {
+        const switched = new Avatar(new Style(named), {
+          bounceAnimation: true,
+        });
         const off = new Avatar(new Style(named)).toString();
 
-        assert.equal(selected, off);
+        assert.equal(switched.toString(), off);
+        assert.equal('bounceAnimation' in switched.toJSON().options, false);
       });
 
-      it('should record the normalized selection in the resolved options', () => {
-        assert.deepEqual(
-          new Avatar(new Style(named), { animation: 'blink' }).toJSON().options
-            .animation,
-          ['blink'],
-        );
-        assert.deepEqual(
-          new Avatar(new Style(named), { animation: ['sway', 'blink'] }).toJSON()
-            .options.animation,
-          ['sway', 'blink'],
-        );
+      it('should record the switches in the resolved options', () => {
+        const options = new Avatar(new Style(named), {
+          blinkAnimation: true,
+        }).toJSON().options;
+
+        assert.equal(options.animation, false);
+        assert.equal(options.blinkAnimation, true);
+        assert.equal('swayAnimation' in options, false);
       });
 
-      it('should include the sorted selection in the class namespace', () => {
+      it('should include the switches in the class namespace', () => {
         const all = new Avatar(new Style(named), { animation: true }).toString();
         const one = new Avatar(new Style(named), {
-          animation: 'blink',
+          blinkAnimation: true,
         }).toString();
-        const both = new Avatar(new Style(named), {
-          animation: ['sway', 'blink'],
-        }).toString();
-        const bothReversed = new Avatar(new Style(named), {
-          animation: ['blink', 'sway'],
+        const allButOne = new Avatar(new Style(named), {
+          animation: true,
+          blinkAnimation: false,
         }).toString();
         const hashOfNamed = (svg) => svg.match(/dba-([0-9a-f]+)-\d+/)[1];
 
         assert.notEqual(hashOfNamed(all), hashOfNamed(one));
-        assert.notEqual(hashOfNamed(one), hashOfNamed(both));
-        assert.equal(hashOfNamed(both), hashOfNamed(bothReversed));
+        assert.notEqual(hashOfNamed(all), hashOfNamed(allButOne));
+        assert.notEqual(hashOfNamed(one), hashOfNamed(allButOne));
       });
     });
 

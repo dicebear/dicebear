@@ -49,16 +49,55 @@ namespace DiceBear.Internal
             Memo("idRandomization", this, static self => self._options.IdRandomization() ?? false);
 
         /// <summary>
-        /// The animation selection. Deliberately without PRNG involvement —
-        /// whether and what animates must not depend on the seed. The memo
-        /// keeps the raw option value (a boolean, or the name list as given)
-        /// for the resolved-options snapshot.
+        /// The global animation switch. Deliberately without PRNG
+        /// involvement: whether an avatar animates must not depend on the
+        /// seed.
         /// </summary>
-        internal AnimationSelection Animation() =>
-            AnimationSelection.From(
-                Memo("animation", this, static self => self._options.Animation() ?? (object)false));
+        internal bool Animation() => Memo("animation", this, static self => self._options.Animation() ?? false);
+
+        /// <summary>
+        /// Whether one timeline plays. A named timeline follows its
+        /// <c>{name}Animation</c> switch when the user set one, recorded under
+        /// that key, and the global <c>animation</c> switch otherwise. Unnamed
+        /// timelines always follow the global switch.
+        /// </summary>
+        internal bool AnimationPlays(string? name)
+        {
+            var value = name is null ? null : _options.AnimationFor(name);
+
+            if (name is null || !value.HasValue)
+            {
+                return Animation();
+            }
+
+            return Memo(name + "Animation", value.Value, static flag => flag);
+        }
 
         internal double AnimationSpeed() => MemoFloat("animationSpeed", _options.AnimationSpeed(), 1.0);
+
+        /// <summary>
+        /// Returns the speed factor of one timeline. A named timeline plays at
+        /// its <c>{name}AnimationSpeed</c> option when the user set one, drawn
+        /// under that key, and at the global factor otherwise. Unnamed
+        /// timelines always follow the global factor.
+        /// </summary>
+        /// <remarks>
+        /// The option is drawn only when asked for. The class namespace hash
+        /// asks for every name the style carries once any animation plays, so
+        /// a name the style does not carry or a static render leaves nothing
+        /// in the <see cref="Resolved"/> snapshot.
+        /// </remarks>
+        internal double AnimationSpeedFor(string? name)
+        {
+            var range = name is null ? null : _options.AnimationSpeedFor(name);
+
+            if (name is null || !range.HasValue)
+            {
+                return AnimationSpeed();
+            }
+
+            return MemoFloat(name + "AnimationSpeed", range, 1.0);
+        }
 
         internal string? Title() => Memo("title", this, static self => self._options.Title());
 

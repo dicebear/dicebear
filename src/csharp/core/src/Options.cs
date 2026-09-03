@@ -263,29 +263,21 @@ namespace DiceBear.Internal
 
         internal NumberRange? TranslateY() => ToRange(_data["translateY"]);
 
+        internal bool? Animation() => JsonRead.Bool(_data, "animation");
+
         /// <summary>
-        /// Returns the animation switch as given for booleans, or a name
-        /// selection normalized to a list (a bare name becomes a one-element
-        /// list). Null when unset.
+        /// Returns the <c>{name}Animation</c> switch for one animation name,
+        /// or <see langword="null"/> when unset.
         /// </summary>
-        internal object? Animation()
-        {
-            var node = _data["animation"];
-
-            if (node is null)
-            {
-                return null;
-            }
-
-            if (JsonRead.Bool(node) is bool flag)
-            {
-                return flag;
-            }
-
-            return StringList(node);
-        }
+        internal bool? AnimationFor(string name) => JsonRead.Bool(_data, name + "Animation");
 
         internal NumberRange? AnimationSpeed() => ToRange(_data["animationSpeed"]);
+
+        /// <summary>
+        /// Returns the <c>{name}AnimationSpeed</c> option for one animation
+        /// name as a range, or <see langword="null"/> when unset.
+        /// </summary>
+        internal NumberRange? AnimationSpeedFor(string name) => ToRange(_data[name + "AnimationSpeed"]);
 
         /// <summary>
         /// Returns the global <c>tags</c> filter as parsed tokens, or an empty

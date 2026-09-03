@@ -87,11 +87,12 @@ const hasFontWeight = computed(() =>
 // has an effect.
 const hasAnimation = computed(() => 'animation' in descriptor.value);
 
-const animationNames = computed<string[]>(() => {
-  const field = descriptor.value.animation;
-
-  return field && 'values' in field ? [...field.values] : [];
-});
+// Every animation name comes with a `${name}Animation` switch field.
+const animationNames = computed<string[]>(() =>
+  Object.keys(descriptor.value)
+    .filter((key) => key !== 'animation' && key.endsWith('Animation'))
+    .map((key) => key.slice(0, -'Animation'.length)),
+);
 
 // The `tags` filter only does something for styles whose variants carry tags;
 // OptionsDescriptor advertises the `tags` field (with the style's own tag

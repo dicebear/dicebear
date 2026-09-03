@@ -138,14 +138,17 @@ class OptionsDescriptor
         }
 
         // Only advertise the animation options when the style carries
-        // declarative animations — on a static style both are accepted but
-        // have no effect.
+        // declarative animations. On a static style they are accepted but
+        // have no effect. Every animation name gets its own switch and speed
+        // field, in the order of the name list.
         if ($this->style->hasAnimations()) {
-            $result['animation'] = [
-                'type' => 'animation',
-                'values' => $this->style->animationNames(),
-            ];
+            $result['animation'] = ['type' => 'boolean'];
             $result['animationSpeed'] = ['type' => 'range', 'min' => 0.1, 'max' => 10];
+
+            foreach ($this->style->animationNames() as $name) {
+                $result["{$name}Animation"] = ['type' => 'boolean'];
+                $result["{$name}AnimationSpeed"] = ['type' => 'range', 'min' => 0.1, 'max' => 10];
+            }
         }
 
         return $result;
