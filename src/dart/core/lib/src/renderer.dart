@@ -341,25 +341,32 @@ class Renderer {
       return '';
     }
 
-    final attrs = _renderAttributes(
-      _attributesWithoutAnimatedOpacity(element.attributes, element),
-    );
     final children = _renderElements(element.children);
 
-    if (children.isEmpty) {
-      // A wrapper whose children all rendered to nothing, because an optional
-      // component came up empty, has no content left to group. It draws
-      // nothing either way, but a masked group without content has an empty
-      // bounding box, and strict SVG parsers reject the whole document over
-      // it. Wrappers that carry an id stay, so references keep resolving.
-      if (element.children.isNotEmpty && element.attributes?['id'] == null) {
-        return '';
-      }
-
-      return _applyAnimations('<$name$attrs/>', element);
+    // A wrapper whose children all rendered to nothing, because an optional
+    // component came up empty, has no content left to group. It draws
+    // nothing either way, but a masked group without content has an empty
+    // bounding box, and strict SVG parsers reject the whole document over
+    // it. Wrappers that carry an id stay, so references keep resolving.
+    if (children.isEmpty &&
+        element.children.isNotEmpty &&
+        element.attributes?['id'] == null) {
+      return '';
     }
 
-    return _applyAnimations('<$name$attrs>$children</$name>', element);
+    // The animation switches are read once the element is known to render,
+    // after its children, so the resolved options record them in one order
+    // regardless of the attributes the element carries.
+    final active = _playingAnimations(element);
+    final attrs = _renderAttributes(
+      _attributesWithoutAnimatedOpacity(element.attributes, active),
+    );
+
+    if (children.isEmpty) {
+      return _applyAnimations('<$name$attrs/>', element, active);
+    }
+
+    return _applyAnimations('<$name$attrs>$children</$name>', element, active);
   }
 
   /// Renders a text element by escaping its resolved value.
@@ -415,8 +422,9 @@ class Renderer {
     }
 
     final transforms = _buildTransforms(component);
+    final active = _playingAnimations(element);
     final userAttributes =
-        _attributesWithoutAnimatedOpacity(element.attributes, element);
+        _attributesWithoutAnimatedOpacity(element.attributes, active);
     Map<String, Object?>? mergedAttributes = userAttributes;
 
     if (transforms.isNotEmpty) {
@@ -434,7 +442,7 @@ class Renderer {
 
     final attrs = _renderAttributes(mergedAttributes);
 
-    return _applyAnimations('<use$attrs href="#$id"/>', element);
+    return _applyAnimations('<use$attrs href="#$id"/>', element, active);
   }
 
   /// Returns the per-component SVG `transform` fragments derived from the
@@ -661,9 +669,9 @@ class Renderer {
   }
 
   /// Wraps an element's rendered markup in one `<g class="…">` per animation
-  /// track and queues the matching CSS. A no-op when the `animation` option
-  /// is off, the element carries no animations, or its markup rendered to
-  /// nothing (the empty-wrapper pruning then also prunes the animation).
+  /// track and queues the matching CSS. A no-op when no animation plays on
+  /// the element ([active] empty) or its markup rendered to nothing (the
+  /// empty-wrapper pruning then also prunes the animation).
   ///
   /// Wrapper nesting is block 0 outermost, and within a block the canonical
   /// track order (translate before rotate before scale, opacity innermost) —
@@ -671,21 +679,19 @@ class Renderer {
   ///
   /// The element's own `opacity` rides on the innermost opacity wrapper as the
   /// resting value the keyframes then override.
-  String _applyAnimations(String markup, ElementNode element) {
-    if (markup.isEmpty) {
-      return markup;
-    }
-
-    final animations = _playingAnimations(element);
-
-    if (animations.isEmpty) {
+  String _applyAnimations(
+    String markup,
+    ElementNode element,
+    List<Map<String, Object?>> active,
+  ) {
+    if (markup.isEmpty || active.isEmpty) {
       return markup;
     }
 
     final classes = <String>[];
     var opacityWrapper = -1;
 
-    for (final animation in animations) {
+    for (final animation in active) {
       final tracks = animation['tracks'] as Map<String, Object?>;
 
       for (final track in _trackOrder) {
@@ -751,15 +757,18 @@ class Renderer {
   /// itself would. The attribute therefore moves to the animating wrapper,
   /// where the keyframes override it. With the animation off no wrapper
   /// exists and the attribute stays where it is.
+  ///
+  /// [active] is the element's playing animations as [_playingAnimations]
+  /// returns them, read once by the caller and shared with the wrapper step.
   Map<String, Object?>? _attributesWithoutAnimatedOpacity(
     Map<String, Object?>? attributes,
-    ElementNode element,
+    List<Map<String, Object?>> active,
   ) {
     if (attributes == null || attributes['opacity'] == null) {
       return attributes;
     }
 
-    for (final animation in _playingAnimations(element)) {
+    for (final animation in active) {
       final tracks = animation['tracks'] as Map<String, Object?>;
 
       if (tracks['opacity'] != null) {

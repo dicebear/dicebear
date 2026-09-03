@@ -59,20 +59,20 @@ const apiUrl = computed(() =>
 
 const jsCode = computed(() => {
   const importName = camelCase(styleName.value);
-  const animationLines =
-    speedFactor.value === null
-      ? ''
-      : `\n  animation: true,` +
-        (speedFactor.value === 1
-          ? ''
-          : `\n  animationSpeed: ${speedFactor.value},`);
+  // The snippet lists the same options the API URL carries.
+  const optionLines = Object.entries(demoOptions.value)
+    .map(
+      ([key, value]) =>
+        `  ${key}: ${typeof value === 'string' ? `'${value}'` : value},`,
+    )
+    .join('\n');
 
   return `import { Style, Avatar } from '@dicebear/core';
 import ${importName} from '@dicebear/styles/${styleName.value}.json' with { type: 'json' };
 
 const style = new Style(${importName});
 const svg = new Avatar(style, {
-  seed: '${DEMO_SEED}',${animationLines}
+${optionLines}
 }).toString();`;
 });
 </script>

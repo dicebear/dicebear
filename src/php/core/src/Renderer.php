@@ -369,28 +369,33 @@ class Renderer
             return '';
         }
 
-        $attrs = $this->renderAttributes(
-            $this->attributesWithoutAnimatedOpacity($element->attributes(), $element),
-        );
         $children = $this->renderElements($element->children());
 
-        if (strlen($children) === 0) {
-            // A wrapper whose children all rendered to nothing, because an
-            // optional component came up empty, has no content left to group.
-            // It draws nothing either way, but a masked group without content
-            // has an empty bounding box, and strict SVG parsers reject the
-            // whole document over it. Wrappers that carry an id stay, so
-            // references keep resolving.
-            $ownAttributes = $element->attributes();
+        // A wrapper whose children all rendered to nothing, because an
+        // optional component came up empty, has no content left to group.
+        // It draws nothing either way, but a masked group without content
+        // has an empty bounding box, and strict SVG parsers reject the
+        // whole document over it. Wrappers that carry an id stay, so
+        // references keep resolving.
+        $ownAttributes = $element->attributes();
 
-            if (count($element->children()) > 0 && !isset($ownAttributes['id'])) {
-                return '';
-            }
-
-            return $this->applyAnimations("<{$name}{$attrs}/>", $element);
+        if (strlen($children) === 0 && count($element->children()) > 0 && !isset($ownAttributes['id'])) {
+            return '';
         }
 
-        return $this->applyAnimations("<{$name}{$attrs}>{$children}</{$name}>", $element);
+        // The animation switches are read once the element is known to
+        // render, after its children, so the resolved options record them in
+        // one order regardless of the attributes the element carries.
+        $active = $this->activeAnimations($element);
+        $attrs = $this->renderAttributes(
+            $this->attributesWithoutAnimatedOpacity($ownAttributes, $active),
+        );
+
+        if (strlen($children) === 0) {
+            return $this->applyAnimations("<{$name}{$attrs}/>", $element, $active);
+        }
+
+        return $this->applyAnimations("<{$name}{$attrs}>{$children}</{$name}>", $element, $active);
     }
 
     /**
@@ -452,7 +457,8 @@ class Renderer
         }
 
         $transforms = $this->buildTransforms($component);
-        $userAttributes = $this->attributesWithoutAnimatedOpacity($element->attributes(), $element);
+        $active = $this->activeAnimations($element);
+        $userAttributes = $this->attributesWithoutAnimatedOpacity($element->attributes(), $active);
         $mergedAttributes = $userAttributes;
 
         if (count($transforms) > 0) {
@@ -467,7 +473,7 @@ class Renderer
 
         $attrs = $this->renderAttributes($mergedAttributes);
 
-        return $this->applyAnimations("<use{$attrs} href=\"#{$id}\"/>", $element);
+        return $this->applyAnimations("<use{$attrs} href=\"#{$id}\"/>", $element, $active);
     }
 
     /**
@@ -758,19 +764,20 @@ class Renderer
      * where the keyframes override it. With the animation off no wrapper
      * exists and the attribute stays where it is.
      *
+     * `$active` is the element's playing animations as `activeAnimations()`
+     * returns them, read once by the caller and shared with the wrapper step.
+     *
      * @param array<string, mixed>|null $attributes
+     * @param list<array<string, mixed>> $active
      * @return array<string, mixed>|null
      */
-    private function attributesWithoutAnimatedOpacity(?array $attributes, Element $element): ?array
+    private function attributesWithoutAnimatedOpacity(?array $attributes, array $active): ?array
     {
-        // The element check comes first: only styles that carry declarative
-        // animations may touch the `animation` option, so the resolved-options
-        // snapshot of every other avatar stays free of it.
-        if (!isset($attributes['opacity']) || count($element->animations()) === 0) {
+        if (!isset($attributes['opacity'])) {
             return $attributes;
         }
 
-        foreach ($this->activeAnimations($element) as $animation) {
+        foreach ($active as $animation) {
             if (isset($animation['tracks']['opacity'])) {
                 unset($attributes['opacity']);
 
@@ -783,9 +790,9 @@ class Renderer
 
     /**
      * Wraps an element's rendered markup in one `<g class="…">` per animation
-     * track and queues the matching CSS. A no-op when the `animation` option
-     * is off, the element carries no animations, or its markup rendered to
-     * nothing (the empty-wrapper pruning then also prunes the animation).
+     * track and queues the matching CSS. A no-op when no animation plays on
+     * the element (`$active` empty) or its markup rendered to nothing (the
+     * empty-wrapper pruning then also prunes the animation).
      *
      * Wrapper nesting is block 0 outermost, and within a block the canonical
      * track order (translate before rotate before scale, opacity innermost) —
@@ -794,16 +801,11 @@ class Renderer
      * The element's own `opacity` rides on the innermost opacity wrapper as
      * the resting value the keyframes then override.
      *
+     * @param list<array<string, mixed>> $active
      */
-    private function applyAnimations(string $markup, Element $element): string
+    private function applyAnimations(string $markup, Element $element, array $active): string
     {
-        if ($markup === '') {
-            return $markup;
-        }
-
-        $active = $this->activeAnimations($element);
-
-        if (count($active) === 0) {
+        if ($markup === '' || count($active) === 0) {
             return $markup;
         }
 

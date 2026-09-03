@@ -294,27 +294,36 @@ impl<'a> Renderer<'a> {
             return Ok(String::new());
         }
 
-        let stripped = self.attributes_without_animated_opacity(element);
-        let attrs = self.render_attributes(stripped.as_ref().or(element.attributes()))?;
         let children = self.render_elements(element.children())?;
 
-        if children.is_empty() {
-            // A wrapper whose children all rendered to nothing, because an
-            // optional component came up empty, has no content left to group.
-            // It draws nothing either way, but a masked group without content
-            // has an empty bounding box, and strict SVG parsers reject the
-            // whole document over it. Wrappers that carry an id stay, so
-            // references keep resolving.
-            let has_id = element.attributes().and_then(|a| a.get("id")).is_some();
+        // A wrapper whose children all rendered to nothing, because an
+        // optional component came up empty, has no content left to group. It
+        // draws nothing either way, but a masked group without content has an
+        // empty bounding box, and strict SVG parsers reject the whole document
+        // over it. Wrappers that carry an id stay, so references keep
+        // resolving.
+        let has_id = element.attributes().and_then(|a| a.get("id")).is_some();
 
-            if !element.children().is_empty() && !has_id {
-                return Ok(String::new());
-            }
-
-            return Ok(self.apply_animations(format!("<{name}{attrs}/>"), element));
+        if children.is_empty() && !element.children().is_empty() && !has_id {
+            return Ok(String::new());
         }
 
-        Ok(self.apply_animations(format!("<{name}{attrs}>{children}</{name}>"), element))
+        // The animation switches are read once the element is known to
+        // render, after its children, so the resolved options record them in
+        // one order regardless of the attributes the element carries.
+        let active = self.playing_animations(element);
+        let stripped = self.attributes_without_animated_opacity(element.attributes(), &active);
+        let attrs = self.render_attributes(stripped.as_ref().or(element.attributes()))?;
+
+        if children.is_empty() {
+            return Ok(self.apply_animations(format!("<{name}{attrs}/>"), element, &active));
+        }
+
+        Ok(self.apply_animations(
+            format!("<{name}{attrs}>{children}</{name}>"),
+            element,
+            &active,
+        ))
     }
 
     fn render_text_element(&mut self, element: &Element) -> String {
@@ -355,7 +364,8 @@ impl<'a> Renderer<'a> {
         }
 
         let transforms = self.build_transforms(component);
-        let stripped = self.attributes_without_animated_opacity(element);
+        let active = self.playing_animations(element);
+        let stripped = self.attributes_without_animated_opacity(element.attributes(), &active);
         let user_attributes = stripped.as_ref().or(element.attributes());
 
         let merged = if transforms.is_empty() {
@@ -380,7 +390,7 @@ impl<'a> Renderer<'a> {
 
         let attrs = self.render_attributes(merged.as_ref())?;
 
-        Ok(self.apply_animations(format!("<use{attrs} href=\"#{id}\"/>"), element))
+        Ok(self.apply_animations(format!("<use{attrs} href=\"#{id}\"/>"), element, &active))
     }
 
     /// The per-component `transform` fragments (translate, rotate, scale),
@@ -665,9 +675,9 @@ impl<'a> Renderer<'a> {
     }
 
     /// Wraps an element's rendered markup in one `<g class="…">` per animation
-    /// track and queues the matching CSS. A no-op when the `animation` option
-    /// is off, the element carries no animations, or its markup rendered to
-    /// nothing (the empty-wrapper pruning then also prunes the animation).
+    /// track and queues the matching CSS. A no-op when no animation plays on
+    /// the element (`active` empty) or its markup rendered to nothing (the
+    /// empty-wrapper pruning then also prunes the animation).
     ///
     /// Wrapper nesting is block 0 outermost, and within a block the canonical
     /// track order (translate before rotate before scale, opacity innermost) —
@@ -675,21 +685,20 @@ impl<'a> Renderer<'a> {
     ///
     /// The element's own `opacity` rides on the innermost opacity wrapper as
     /// the resting value the keyframes then override.
-    fn apply_animations(&mut self, markup: String, element: &Element) -> String {
-        if markup.is_empty() {
-            return markup;
-        }
-
-        let animations = self.playing_animations(element);
-
-        if animations.is_empty() {
+    fn apply_animations(
+        &mut self,
+        markup: String,
+        element: &Element,
+        active: &[&Animation],
+    ) -> String {
+        if markup.is_empty() || active.is_empty() {
             return markup;
         }
 
         let mut classes: Vec<String> = Vec::new();
         let mut opacity_wrapper: Option<usize> = None;
 
-        for animation in animations {
+        for animation in active {
             for track in TRACK_ORDER {
                 if let Some(track_data) = animation.tracks().get(track) {
                     if track == "opacity" {
@@ -741,28 +750,34 @@ impl<'a> Renderer<'a> {
     /// (see [`Self::apply_animations`]), where the keyframes override it. With
     /// the animation off no wrapper exists and the attribute stays where it is.
     ///
+    /// `active` is the element's playing animations as
+    /// [`Self::playing_animations`] returns them, read once by the caller and
+    /// shared with the wrapper step.
+    ///
     /// Returns `None` when nothing is stripped, so the caller keeps using the
     /// element's own list.
     fn attributes_without_animated_opacity(
-        &mut self,
-        element: &Element,
+        &self,
+        attributes: Option<&IndexMap<String, DynValue>>,
+        active: &[&Animation],
     ) -> Option<IndexMap<String, DynValue>> {
-        let attributes = element.attributes()?;
+        let attributes = attributes?;
 
         if !attributes.contains_key("opacity") {
             return None;
         }
 
-        for animation in self.playing_animations(element) {
-            if animation.tracks().contains_key("opacity") {
-                let mut rest = attributes.clone();
-                rest.shift_remove("opacity");
-
-                return Some(rest);
-            }
+        if !active
+            .iter()
+            .any(|animation| animation.tracks().contains_key("opacity"))
+        {
+            return None;
         }
 
-        None
+        let mut rest = attributes.clone();
+        rest.shift_remove("opacity");
+
+        Some(rest)
     }
 
     /// Generates the `@keyframes` block (deduplicated by content, so identical

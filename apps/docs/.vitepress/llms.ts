@@ -32,6 +32,7 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { parse as parseYaml } from 'yaml';
 import { siteUrl } from './config/site.ts';
+import { docsSectionGroups } from './config/sidebarDocs.ts';
 import avatarStyles, {
   definitionsDir,
   styleCount,
@@ -64,19 +65,15 @@ const MIN_PROSE_LENGTH = 200;
 const EXAMPLE_SEED = 'John';
 
 /**
- * Sections of the `llms.txt` index, in the order they appear. Every page that
- * gets a mirror is filed under the first section whose prefix matches its
- * route; `Other` catches the rest.
+ * Sections of the `llms.txt` index, the sidebar groups in their order. Every
+ * page that gets a mirror is filed under the first section whose prefix
+ * matches its route; `Optional` catches the rest.
  */
-const SECTIONS: readonly { title: string; prefixes: readonly string[] }[] = [
-  { title: 'Getting started', prefixes: ['/start/'] },
-  { title: 'Integrations', prefixes: ['/integrations/'] },
-  { title: 'Customize', prefixes: ['/customize/'] },
-  { title: 'Recipes', prefixes: ['/recipes/'] },
-  { title: 'Understand', prefixes: ['/understand/'] },
-  { title: 'Create styles', prefixes: ['/create-styles/'] },
-  { title: 'Contribute', prefixes: ['/contribute/'] },
-];
+const SECTIONS: readonly { title: string; prefix: string }[] =
+  docsSectionGroups.map((group) => ({
+    title: group.title,
+    prefix: `/${group.slug}/`,
+  }));
 
 export interface LlmsPage {
   /** Site route with a trailing slash, e.g. `/integrations/http-api/`. */
@@ -832,9 +829,7 @@ function renderIndex(pages: readonly LlmsPage[]): string {
     `- [${page.title}](${siteUrl(page.route)}index.md)${page.description ? `: ${page.description}` : ''}`;
 
   const sections = SECTIONS.map((section) => {
-    const items = pages.filter((page) =>
-      section.prefixes.some((prefix) => page.route.startsWith(prefix)),
-    );
+    const items = pages.filter((page) => page.route.startsWith(section.prefix));
 
     return items.length > 0
       ? `## ${section.title}\n\n${items.map(link).join('\n')}`
@@ -882,9 +877,7 @@ function renderIndex(pages: readonly LlmsPage[]): string {
   const rest = pages.filter(
     (page) =>
       !page.route.startsWith('/styles/') &&
-      !SECTIONS.some((section) =>
-        section.prefixes.some((prefix) => page.route.startsWith(prefix)),
-      ),
+      !SECTIONS.some((section) => page.route.startsWith(section.prefix)),
   );
 
   return `# DiceBear
@@ -922,7 +915,7 @@ function renderFull(pages: readonly LlmsPage[]): string {
   // introduction comes before the guides instead of after them.
   const sectionRank = (page: LlmsPage) => {
     const index = SECTIONS.findIndex((section) =>
-      section.prefixes.some((prefix) => page.route.startsWith(prefix)),
+      page.route.startsWith(section.prefix),
     );
 
     return index === -1 ? SECTIONS.length : index;

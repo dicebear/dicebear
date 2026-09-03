@@ -267,6 +267,59 @@ func TestValidation(t *testing.T) {
 	}
 }
 
+// animatedContainerStyle wraps one animated circle in the named container
+// element. Mirrors the defs/clipPath/mask cases of the describe('animations',
+// ...) block in the JS reference suite (src/js/core/tests/Style.test.js).
+func animatedContainerStyle(container string) string {
+	return `{
+		"canvas": {
+			"width": 100,
+			"height": 100,
+			"elements": [
+				{
+					"type": "element",
+					"name": "` + container + `",
+					"attributes": { "id": "wrap" },
+					"children": [
+						{
+							"type": "element",
+							"name": "g",
+							"children": [
+								{
+									"type": "element",
+									"name": "circle",
+									"attributes": { "r": "10" },
+									"animations": [
+										{ "duration": 1, "tracks": { "opacity": { "keyframes": [{ "at": 0, "value": 1 }] } } }
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}`
+}
+
+// The schema rejects animations below defs and clipPath, so the constructor
+// fails through validation and no core carries a check of its own.
+func TestAnimationsAreRejectedInsideDefsAndClipPath(t *testing.T) {
+	for _, container := range []string{"defs", "clipPath"} {
+		if _, err := NewStyle([]byte(animatedContainerStyle(container))); err == nil {
+			t.Errorf("animation inside %s must fail", container)
+		}
+	}
+}
+
+func TestAnimationsAreAcceptedInsideMask(t *testing.T) {
+	style := mustStyle(t, animatedContainerStyle("mask"))
+
+	if !style.HasAnimations() {
+		t.Error("HasAnimations() = false, want true")
+	}
+}
+
 func TestColorOrderValidation(t *testing.T) {
 	style := mustStyle(t, minimalStyle)
 

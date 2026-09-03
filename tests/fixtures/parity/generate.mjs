@@ -1235,6 +1235,104 @@ const styleValidationCases = [
       },
     ]),
   },
+  // Animations inside `defs` and `clipPath` are rejected by the cores' load
+  // check: the wrappers the renderer adds never reach a `<use>` instance and
+  // are no valid clipPath content. A mask keeps them, its content allows
+  // groups.
+  {
+    id: 'animation-inside-defs',
+    definition: {
+      canvas: {
+        width: 100,
+        height: 100,
+        elements: [
+          {
+            type: 'element',
+            name: 'defs',
+            children: [
+              {
+                type: 'element',
+                name: 'circle',
+                attributes: { id: 'dot', r: '10' },
+                animations: [
+                  {
+                    duration: 1,
+                    tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 'animation-inside-clip-path',
+    definition: {
+      canvas: {
+        width: 100,
+        height: 100,
+        elements: [
+          {
+            type: 'element',
+            name: 'clipPath',
+            attributes: { id: 'clip' },
+            children: [
+              {
+                type: 'element',
+                name: 'g',
+                children: [
+                  {
+                    type: 'element',
+                    name: 'circle',
+                    attributes: { r: '10' },
+                    animations: [
+                      {
+                        duration: 1,
+                        tracks: {
+                          scaleX: { keyframes: [{ at: 0, value: 1 }] },
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 'animation-inside-mask',
+    definition: {
+      canvas: {
+        width: 100,
+        height: 100,
+        elements: [
+          {
+            type: 'element',
+            name: 'mask',
+            attributes: { id: 'fade' },
+            children: [
+              {
+                type: 'element',
+                name: 'circle',
+                attributes: { r: '10', fill: '#fff' },
+                animations: [
+                  {
+                    duration: 1,
+                    tracks: { opacity: { keyframes: [{ at: 0, value: 1 }] } },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
   {
     id: 'animation-on-style-element',
     definition: {

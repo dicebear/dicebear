@@ -34,6 +34,15 @@ and this project adheres to
 - **Core:** `animation` is a boolean. The name and list forms from 11.0.0-rc.1
   are gone, a single animation is switched through its `${name}Animation` option
   instead.
+- **Core:** All seven cores require `@dicebear/schema` 2.0.2, which rejects
+  `animations` below `defs` and `clipPath` and on elements a group cannot wrap,
+  such as `stop`, `tspan` and the filter primitives. The wrappers the renderer
+  adds never reach a `<use>` instance and are no valid clipPath content, so such
+  an animation played nowhere and could hide the clipped content. Animations
+  below `mask` stay allowed.
+- **Core:** The renderer reads an element's animation switches once, after its
+  children rendered. The resolved options of an avatar no longer depend on
+  whether a pruned wrapper carried an `opacity` attribute.
 
 ### Added
 

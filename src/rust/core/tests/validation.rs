@@ -111,6 +111,90 @@ fn validation_parity() {
     }
 }
 
+/// A one-keyframe opacity track, the smallest animation the schema accepts.
+fn opacity_track() -> Value {
+    json!({
+        "duration": 1,
+        "tracks": { "opacity": { "keyframes": [{ "at": 0, "value": 1 }] } },
+    })
+}
+
+#[test]
+fn rejects_animations_inside_defs() {
+    let result = Style::from_value(json!({
+        "canvas": {
+            "width": 100,
+            "height": 100,
+            "elements": [{
+                "type": "element",
+                "name": "defs",
+                "children": [{
+                    "type": "element",
+                    "name": "circle",
+                    "attributes": { "id": "dot", "r": "10" },
+                    "animations": [opacity_track()],
+                }],
+            }],
+        },
+    }));
+
+    // The schema rejects animations below `defs`: a `<use>` clones only the
+    // node it references, so the animation wrappers never reach the instance.
+    assert!(result.is_err(), "animation inside defs must fail");
+}
+
+#[test]
+fn rejects_animations_below_a_clip_path() {
+    let result = Style::from_value(json!({
+        "canvas": {
+            "width": 100,
+            "height": 100,
+            "elements": [{
+                "type": "element",
+                "name": "clipPath",
+                "attributes": { "id": "clip" },
+                "children": [{
+                    "type": "element",
+                    "name": "g",
+                    "children": [{
+                        "type": "element",
+                        "name": "circle",
+                        "attributes": { "r": "10" },
+                        "animations": [opacity_track()],
+                    }],
+                }],
+            }],
+        },
+    }));
+
+    // `<g>` is no valid clipPath content, so the schema rejects animations
+    // anywhere below it.
+    assert!(result.is_err(), "animation below a clipPath must fail");
+}
+
+#[test]
+fn accepts_animations_inside_a_mask() {
+    let result = Style::from_value(json!({
+        "canvas": {
+            "width": 100,
+            "height": 100,
+            "elements": [{
+                "type": "element",
+                "name": "mask",
+                "attributes": { "id": "fade" },
+                "children": [{
+                    "type": "element",
+                    "name": "circle",
+                    "attributes": { "r": "10", "fill": "#fff" },
+                    "animations": [opacity_track()],
+                }],
+            }],
+        },
+    }));
+
+    assert!(result.is_ok(), "animation inside a mask must be accepted");
+}
+
 fn attribute_style(fill: &str) -> Result<Style, Error> {
     Style::from_value(json!({
         "canvas": { "width": 100, "height": 100, "elements": [] },

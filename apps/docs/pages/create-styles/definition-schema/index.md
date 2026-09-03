@@ -228,6 +228,13 @@ clip paths, and component bodies. This keeps the rendered SVG to a single
 `<defs>` element while letting style authors ship reusable fragments (filters,
 gradients, masks, …) and reference them from elsewhere in the tree.
 
+Elements below `defs` and below `clipPath` cannot carry `animations`, and
+neither can elements no group can wrap: `stop`, `tspan`, `textPath`, `mpath` and
+the filter primitives. The schema rejects such definitions. A `<use>` clones
+only the node it references, so an animation on the def would never reach the
+instance. Animate the `<use>` element instead. Elements below `mask` may carry
+animations.
+
 ## `components`
 
 Named, randomizable parts of the avatar. Each component defines a set of

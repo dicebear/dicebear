@@ -404,6 +404,103 @@ public class AnimationOptionsTests
     }
 
     [Fact]
+    public void RejectsAnimationsInsideDefs()
+    {
+        Assert.Throws<StyleValidationException>(() => Style.Parse("""
+            {
+              "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "defs",
+                    "children": [
+                      {
+                        "type": "element",
+                        "name": "circle",
+                        "attributes": { "id": "dot", "r": "10" },
+                        "animations": [
+                          { "duration": 1, "tracks": { "opacity": { "keyframes": [{ "at": 0, "value": 1 }] } } }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+            """));
+    }
+
+    [Fact]
+    public void RejectsAnimationsBelowAClipPath()
+    {
+        Assert.Throws<StyleValidationException>(() => Style.Parse("""
+            {
+              "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "clipPath",
+                    "attributes": { "id": "clip" },
+                    "children": [
+                      {
+                        "type": "element",
+                        "name": "g",
+                        "children": [
+                          {
+                            "type": "element",
+                            "name": "circle",
+                            "attributes": { "r": "10" },
+                            "animations": [
+                              { "duration": 1, "tracks": { "opacity": { "keyframes": [{ "at": 0, "value": 1 }] } } }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+            """));
+    }
+
+    [Fact]
+    public void AcceptsAnimationsInsideAMask()
+    {
+        var style = Style.Parse("""
+            {
+              "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "mask",
+                    "attributes": { "id": "fade" },
+                    "children": [
+                      {
+                        "type": "element",
+                        "name": "circle",
+                        "attributes": { "r": "10", "fill": "#fff" },
+                        "animations": [
+                          { "duration": 1, "tracks": { "opacity": { "keyframes": [{ "at": 0, "value": 1 }] } } }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+            """);
+
+        Assert.True(style.HasAnimations());
+    }
+
+    [Fact]
     public void AdvertisesASwitchASpeedAndADelayPerAnimationName()
     {
         var descriptor = new OptionsDescriptor(Style.Parse(NamedStyle)).ToJson();

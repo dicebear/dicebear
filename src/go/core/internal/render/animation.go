@@ -47,9 +47,9 @@ func (r *renderer) playingAnimations(el *style.Element) []*style.Animation {
 }
 
 // applyAnimations wraps an element's rendered markup in one <g class="…"> per
-// animation track and queues the matching CSS. A no-op when the element
-// carries no animations, none of its timelines plays, or the markup rendered
-// to nothing (the empty-wrapper pruning then also prunes the animation).
+// animation track and queues the matching CSS. A no-op when no animation plays
+// on the element (playing empty) or the markup rendered to nothing (the
+// empty-wrapper pruning then also prunes the animation).
 //
 // Wrapper nesting is block 0 outermost, and within a block the canonical
 // track order (translate before rotate before scale, opacity innermost) — the
@@ -57,15 +57,10 @@ func (r *renderer) playingAnimations(el *style.Element) []*style.Animation {
 //
 // The element's own opacity rides on the innermost opacity wrapper as the
 // resting value the keyframes then override.
-func (r *renderer) applyAnimations(markup string, el *style.Element) string {
-	if markup == "" {
-		return markup
-	}
-
+func (r *renderer) applyAnimations(markup string, el *style.Element, playing []*style.Animation) string {
 	// A skipped timeline contributes neither wrappers nor CSS. If none plays,
 	// the markup passes through untouched.
-	playing := r.playingAnimations(el)
-	if len(playing) == 0 {
+	if markup == "" || len(playing) == 0 {
 		return markup
 	}
 
@@ -115,17 +110,17 @@ func (r *renderer) applyAnimations(markup string, el *style.Element) string {
 // The attribute therefore moves to the animating wrapper, where the keyframes
 // override it. With the animation off no wrapper exists and the attribute
 // stays where it is.
-func (r *renderer) attributesWithoutAnimatedOpacity(el *style.Element) *style.AttrList {
+//
+// playing is the element's playing animations as playingAnimations returns
+// them, read once by the caller and shared with the wrapper step.
+func (r *renderer) attributesWithoutAnimatedOpacity(el *style.Element, playing []*style.Animation) *style.AttrList {
 	attributes := &el.Attributes
 
-	// The element check comes first: only styles that carry declarative
-	// animations may touch the options, so the resolved-options snapshot of
-	// every other avatar stays free of them.
-	if _, ok := attributes.Get("opacity"); !ok || len(el.Animations) == 0 {
+	if _, ok := attributes.Get("opacity"); !ok {
 		return attributes
 	}
 
-	for _, animation := range r.playingAnimations(el) {
+	for _, animation := range playing {
 		if _, ok := animation.Tracks["opacity"]; ok {
 			out := attributes.Without("opacity")
 			return &out

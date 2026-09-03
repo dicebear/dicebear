@@ -436,4 +436,100 @@ class StyleTest extends TestCase
             ],
         ]);
     }
+
+    // animation placement, enforced by the schema
+
+    private static function opacityTrack(): array
+    {
+        return [
+            'duration' => 1,
+            'tracks' => ['opacity' => ['keyframes' => [['at' => 0, 'value' => 1]]]],
+        ];
+    }
+
+    public function testRejectsAnimationsInsideDefs(): void
+    {
+        $this->expectException(StyleValidationError::class);
+
+        new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    [
+                        'type' => 'element',
+                        'name' => 'defs',
+                        'children' => [
+                            [
+                                'type' => 'element',
+                                'name' => 'circle',
+                                'attributes' => ['id' => 'dot', 'r' => '10'],
+                                'animations' => [self::opacityTrack()],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    public function testRejectsAnimationsBelowClipPath(): void
+    {
+        $this->expectException(StyleValidationError::class);
+
+        new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    [
+                        'type' => 'element',
+                        'name' => 'clipPath',
+                        'attributes' => ['id' => 'clip'],
+                        'children' => [
+                            [
+                                'type' => 'element',
+                                'name' => 'g',
+                                'children' => [
+                                    [
+                                        'type' => 'element',
+                                        'name' => 'circle',
+                                        'attributes' => ['r' => '10'],
+                                        'animations' => [self::opacityTrack()],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    public function testAcceptsAnimationsInsideMask(): void
+    {
+        $style = new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    [
+                        'type' => 'element',
+                        'name' => 'mask',
+                        'attributes' => ['id' => 'fade'],
+                        'children' => [
+                            [
+                                'type' => 'element',
+                                'name' => 'circle',
+                                'attributes' => ['r' => '10', 'fill' => '#fff'],
+                                'animations' => [self::opacityTrack()],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->assertTrue($style->hasAnimations());
+    }
 }

@@ -442,26 +442,33 @@ namespace DiceBear.Internal
                 return string.Empty;
             }
 
-            var attrs = RenderAttributes(AttributesWithoutAnimatedOpacity(element));
             var children = RenderElements(element.Children());
+
+            // A wrapper whose children all rendered to nothing, because an
+            // optional component came up empty, has no content left to group.
+            // It draws nothing either way, but a masked group without content
+            // has an empty bounding box, and strict SVG parsers reject the
+            // whole document over it. Wrappers that carry an id stay, so
+            // references keep resolving.
+            if (children.Length == 0
+                && element.Children().Count > 0
+                && element.Attributes()?["id"] is null)
+            {
+                return string.Empty;
+            }
+
+            // The animation switches are read once the element is known to
+            // render, after its children, so the resolved options record them
+            // in one order regardless of the attributes the element carries.
+            var active = ActiveAnimations(element);
+            var attrs = RenderAttributes(AttributesWithoutAnimatedOpacity(element.Attributes(), active));
 
             if (children.Length == 0)
             {
-                // A wrapper whose children all rendered to nothing, because an
-                // optional component came up empty, has no content left to
-                // group. It draws nothing either way, but a masked group
-                // without content has an empty bounding box, and strict SVG
-                // parsers reject the whole document over it. Wrappers that
-                // carry an id stay, so references keep resolving.
-                if (element.Children().Count > 0 && element.Attributes()?["id"] is null)
-                {
-                    return string.Empty;
-                }
-
-                return ApplyAnimations($"<{name}{attrs}/>", element);
+                return ApplyAnimations($"<{name}{attrs}/>", element, active);
             }
 
-            return ApplyAnimations($"<{name}{attrs}>{children}</{name}>", element);
+            return ApplyAnimations($"<{name}{attrs}>{children}</{name}>", element, active);
         }
 
         /// <summary>
@@ -542,7 +549,8 @@ namespace DiceBear.Internal
 
             var transforms = BuildTransforms(component);
             var userAttributes = element.Attributes();
-            var ownAttributes = AttributesWithoutAnimatedOpacity(element);
+            var active = ActiveAnimations(element);
+            var ownAttributes = AttributesWithoutAnimatedOpacity(userAttributes, active);
             IEnumerable<KeyValuePair<string, JsonNode?>>? mergedAttributes = ownAttributes;
 
             if (transforms.Count > 0)
@@ -569,7 +577,7 @@ namespace DiceBear.Internal
                 mergedAttributes = merged;
             }
 
-            return ApplyAnimations($"<use{RenderAttributes(mergedAttributes)} href=\"#{id}\"/>", element);
+            return ApplyAnimations($"<use{RenderAttributes(mergedAttributes)} href=\"#{id}\"/>", element, active);
         }
 
         /// <summary>
@@ -783,10 +791,10 @@ namespace DiceBear.Internal
 
         /// <summary>
         /// Wraps an element's rendered markup in one <c>&lt;g class="…"&gt;</c>
-        /// per animation track and queues the matching CSS. A no-op when the
-        /// <c>animation</c> option is off, the element carries no animations,
-        /// or its markup rendered to nothing (the empty-wrapper pruning then
-        /// also prunes the animation).
+        /// per animation track and queues the matching CSS. A no-op when no
+        /// animation plays on the element (<paramref name="active"/> empty) or
+        /// its markup rendered to nothing (the empty-wrapper pruning then also
+        /// prunes the animation).
         /// </summary>
         /// <remarks>
         /// Wrapper nesting is block 0 outermost, and within a block the
@@ -794,41 +802,19 @@ namespace DiceBear.Internal
         /// opacity innermost) — the composition contract the Figma plugin maps
         /// onto node transforms.
         /// </remarks>
-        private string ApplyAnimations(string markup, Element element)
+        private string ApplyAnimations(string markup, Element element, IReadOnlyList<JsonObject> active)
         {
-            if (markup.Length == 0)
+            if (markup.Length == 0 || active.Count == 0)
             {
                 return markup;
             }
-
-            var animations = element.Animations();
-
-            // The element check comes first: only styles that carry
-            // declarative animations may touch the animation options, so the
-            // resolved-options snapshot of every other avatar stays free of
-            // them.
-            if (animations is null || animations.Count == 0)
-            {
-                return markup;
-            }
-
-            // The global switch is read first so it lands in the resolved
-            // options whenever a node carries animations, on or off. Named
-            // timelines then follow their own switch when the user set one.
-            _resolver.Animation();
 
             var classes = new List<string>();
             var opacityWrapper = -1;
 
-            foreach (var node in animations)
+            foreach (var animation in active)
             {
-                if (node is not JsonObject animation
-                    || JsonRead.Obj(animation, "tracks") is not JsonObject tracks)
-                {
-                    continue;
-                }
-
-                if (!_resolver.AnimationPlays(JsonRead.Str(animation, "name")))
+                if (JsonRead.Obj(animation, "tracks") is not JsonObject tracks)
                 {
                     continue;
                 }
@@ -879,46 +865,51 @@ namespace DiceBear.Internal
         /// on the element itself would. The attribute therefore moves to the
         /// animating wrapper, where the keyframes override it. With the
         /// animation off no wrapper exists and the attribute stays where it is.
+        /// <para>
+        /// <paramref name="active"/> is the element's playing animations as
+        /// <see cref="ActiveAnimations"/> returns them, read once by the caller
+        /// and shared with the wrapper step.
+        /// </para>
         /// </remarks>
-        private IEnumerable<KeyValuePair<string, JsonNode?>>? AttributesWithoutAnimatedOpacity(
-            Element element)
+        private static IEnumerable<KeyValuePair<string, JsonNode?>>? AttributesWithoutAnimatedOpacity(
+            JsonObject? attributes,
+            IReadOnlyList<JsonObject> active)
         {
-            var attributes = element.Attributes();
-            var animations = element.Animations();
-
-            // The element check comes first: only styles that carry
-            // declarative animations may touch the animation options, so the
-            // resolved-options snapshot of every other avatar stays free of
-            // them.
-            if (attributes?["opacity"] is null || animations is null || animations.Count == 0)
+            if (attributes?["opacity"] is null
+                || !active.Any(animation => JsonRead.Obj(animation, "tracks")?["opacity"] is not null))
             {
                 return attributes;
             }
 
-            _resolver.Animation();
+            return attributes
+                .Where(entry => entry.Key != "opacity")
+                .ToList();
+        }
 
-            foreach (var node in animations)
+        /// <summary>
+        /// Returns the animation blocks of an element that play. The element
+        /// check comes first: only styles that carry declarative animations
+        /// may touch the options, so the resolved-options snapshot of every
+        /// other avatar stays free of them.
+        /// </summary>
+        private IReadOnlyList<JsonObject> ActiveAnimations(Element element)
+        {
+            var animations = element.Animations();
+
+            if (animations is null || animations.Count == 0)
             {
-                if (node is not JsonObject animation
-                    || JsonRead.Obj(animation, "tracks") is not JsonObject tracks)
-                {
-                    continue;
-                }
-
-                if (!_resolver.AnimationPlays(JsonRead.Str(animation, "name")))
-                {
-                    continue;
-                }
-
-                if (tracks["opacity"] is not null)
-                {
-                    return attributes
-                        .Where(entry => entry.Key != "opacity")
-                        .ToList();
-                }
+                return Array.Empty<JsonObject>();
             }
 
-            return attributes;
+            // The global switch is read first so it lands in the resolved
+            // options whenever a node carries animations, on or off. Named
+            // timelines then follow their own switch when the user set one.
+            _resolver.Animation();
+
+            return animations
+                .OfType<JsonObject>()
+                .Where(animation => _resolver.AnimationPlays(JsonRead.Str(animation, "name")))
+                .ToList();
         }
 
         /// <summary>

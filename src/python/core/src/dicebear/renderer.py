@@ -315,29 +315,36 @@ class Renderer:
 
             return ""
 
-        attrs_str = self._render_attributes(
-            self._attributes_without_animated_opacity(element.attributes(), element)
-        )
         children = self._render_elements(element.children())
 
+        # A wrapper whose children all rendered to nothing, because an
+        # optional component came up empty, has no content left to group.
+        # It draws nothing either way, but a masked group without content
+        # has an empty bounding box, and strict SVG parsers reject the
+        # whole document over it. Wrappers that carry an id stay, so
+        # references keep resolving.
+        own_attributes = element.attributes()
+
+        if (
+            len(children) == 0
+            and len(element.children()) > 0
+            and (own_attributes is None or "id" not in own_attributes)
+        ):
+            return ""
+
+        # The animation switches are read once the element is known to render,
+        # after its children, so the resolved options record them in one order
+        # regardless of the attributes the element carries.
+        active = self._active_animations(element)
+        attrs_str = self._render_attributes(
+            self._attributes_without_animated_opacity(own_attributes, active)
+        )
+
         if len(children) == 0:
-            # A wrapper whose children all rendered to nothing, because an
-            # optional component came up empty, has no content left to group.
-            # It draws nothing either way, but a masked group without content
-            # has an empty bounding box, and strict SVG parsers reject the
-            # whole document over it. Wrappers that carry an id stay, so
-            # references keep resolving.
-            own_attributes = element.attributes()
-
-            if len(element.children()) > 0 and (
-                own_attributes is None or "id" not in own_attributes
-            ):
-                return ""
-
-            return self._apply_animations(f"<{name}{attrs_str}/>", element)
+            return self._apply_animations(f"<{name}{attrs_str}/>", element, active)
 
         return self._apply_animations(
-            f"<{name}{attrs_str}>{children}</{name}>", element
+            f"<{name}{attrs_str}>{children}</{name}>", element, active
         )
 
     def _render_text_element(self, element: Element) -> str:
@@ -381,8 +388,9 @@ class Renderer:
             self._defs[id_] = f'<g id="{id_}">{body}</g>'
 
         transforms = self._build_transforms(component)
+        active = self._active_animations(element)
         user_attributes = self._attributes_without_animated_opacity(
-            element.attributes(), element
+            element.attributes(), active
         )
         merged_attributes: dict[str, Any] | None = user_attributes
 
@@ -402,7 +410,9 @@ class Renderer:
 
         attrs_str = self._render_attributes(merged_attributes)
 
-        return self._apply_animations(f'<use{attrs_str} href="#{id_}"/>', element)
+        return self._apply_animations(
+            f'<use{attrs_str} href="#{id_}"/>', element, active
+        )
 
     def _build_transforms(self, component: Component) -> list[str]:
         """Return the per-component SVG ``transform`` fragments.
@@ -639,7 +649,7 @@ class Renderer:
         ]
 
     def _attributes_without_animated_opacity(
-        self, attributes: dict[str, Any] | None, element: Element
+        self, attributes: dict[str, Any] | None, active: list[dict[str, Any]]
     ) -> dict[str, Any] | None:
         """Strip the ``opacity`` attribute an animated opacity track takes over.
 
@@ -649,32 +659,31 @@ class Renderer:
         itself would. The attribute therefore moves to the animating wrapper,
         where the keyframes override it. With the animation off no wrapper
         exists and the attribute stays where it is.
+
+        ``active`` is the element's playing animations as
+        :meth:`_active_animations` returns them, read once by the caller and
+        shared with the wrapper step.
         """
-        # The element check comes first: only styles that carry declarative
-        # animations may touch the animation options, so the resolved-options
-        # snapshot of every other avatar stays free of them.
         if (
             attributes is None
             or attributes.get("opacity") is None
-            or len(element.animations()) == 0
-        ):
-            return attributes
-
-        if not any(
-            animation["tracks"].get("opacity") is not None
-            for animation in self._active_animations(element)
+            or not any(
+                animation["tracks"].get("opacity") is not None for animation in active
+            )
         ):
             return attributes
 
         return {key: value for key, value in attributes.items() if key != "opacity"}
 
-    def _apply_animations(self, markup: str, element: Element) -> str:
+    def _apply_animations(
+        self, markup: str, element: Element, active: list[dict[str, Any]]
+    ) -> str:
         """Wrap an element's rendered markup in one ``<g class="…">`` per
         animation track and queue the matching CSS.
 
-        A no-op when the ``animation`` option is off, the element carries no
-        animations, or its markup rendered to nothing (the empty-wrapper
-        pruning then also prunes the animation).
+        A no-op when no animation plays on the element (``active`` empty) or
+        its markup rendered to nothing (the empty-wrapper pruning then also
+        prunes the animation).
 
         Wrapper nesting is block 0 outermost, and within a block the canonical
         track order (translate before rotate before scale, opacity innermost) —
@@ -683,12 +692,7 @@ class Renderer:
         The element's own ``opacity`` rides on the innermost opacity wrapper as
         the resting value the keyframes then override.
         """
-        if len(markup) == 0:
-            return markup
-
-        active = self._active_animations(element)
-
-        if len(active) == 0:
+        if len(markup) == 0 or len(active) == 0:
             return markup
 
         classes: list[str] = []

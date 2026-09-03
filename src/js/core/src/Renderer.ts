@@ -349,30 +349,37 @@ export class Renderer {
       return '';
     }
 
-    const attrs = this.#renderAttributes(
-      this.#attributesWithoutAnimatedOpacity(element.attributes(), element),
-    );
     const children = this.#renderElements(element.children());
 
-    if (children.length === 0) {
-      // A wrapper whose children all rendered to nothing, because an optional
-      // component came up empty, has no content left to group. It draws
-      // nothing either way, but a masked group without content has an empty
-      // bounding box, and strict SVG parsers reject the whole document over
-      // it. Wrappers that carry an id stay, so references keep resolving.
-      if (
-        element.children().length > 0 &&
-        element.attributes()?.id === undefined
-      ) {
-        return '';
-      }
+    // A wrapper whose children all rendered to nothing, because an optional
+    // component came up empty, has no content left to group. It draws
+    // nothing either way, but a masked group without content has an empty
+    // bounding box, and strict SVG parsers reject the whole document over
+    // it. Wrappers that carry an id stay, so references keep resolving.
+    if (
+      children.length === 0 &&
+      element.children().length > 0 &&
+      element.attributes()?.id === undefined
+    ) {
+      return '';
+    }
 
-      return this.#applyAnimations(`<${name}${attrs}/>`, element);
+    // The animation switches are read once the element is known to render,
+    // after its children, so the resolved options record them in one order
+    // regardless of the attributes the element carries.
+    const active = this.#activeAnimations(element);
+    const attrs = this.#renderAttributes(
+      this.#attributesWithoutAnimatedOpacity(element.attributes(), active),
+    );
+
+    if (children.length === 0) {
+      return this.#applyAnimations(`<${name}${attrs}/>`, element, active);
     }
 
     return this.#applyAnimations(
       `<${name}${attrs}>${children}</${name}>`,
       element,
+      active,
     );
   }
 
@@ -431,9 +438,10 @@ export class Renderer {
     }
 
     const transforms = this.#buildTransforms(component);
+    const active = this.#activeAnimations(element);
     const userAttributes = this.#attributesWithoutAnimatedOpacity(
       element.attributes(),
-      element,
+      active,
     );
     let mergedAttributes: StyleDefinitionAttributes | undefined =
       userAttributes;
@@ -450,7 +458,11 @@ export class Renderer {
 
     const attrs = this.#renderAttributes(mergedAttributes);
 
-    return this.#applyAnimations(`<use${attrs} href="#${id}"/>`, element);
+    return this.#applyAnimations(
+      `<use${attrs} href="#${id}"/>`,
+      element,
+      active,
+    );
   }
 
   /**
@@ -731,21 +743,18 @@ export class Renderer {
    * itself would. The attribute therefore moves to the animating wrapper (see
    * {@link #applyAnimations}), where the keyframes override it. With the
    * animation off no wrapper exists and the attribute stays where it is.
+   *
+   * `active` is the element's playing animations as {@link #activeAnimations}
+   * returns them, read once by the caller and shared with the wrapper step.
    */
   #attributesWithoutAnimatedOpacity(
     attributes: StyleDefinitionAttributes | undefined,
-    element: Element,
+    active: readonly StyleDefinitionAnimation[],
   ): StyleDefinitionAttributes | undefined {
     if (
       attributes?.opacity === undefined ||
-      element.animations().length === 0
+      !active.some((animation) => animation.tracks.opacity !== undefined)
     ) {
-      return attributes;
-    }
-
-    const active = this.#activeAnimations(element);
-
-    if (!active.some((animation) => animation.tracks.opacity !== undefined)) {
       return attributes;
     }
 
@@ -758,9 +767,9 @@ export class Renderer {
 
   /**
    * Wraps an element's rendered markup in one `<g class="…">` per animation
-   * track and queues the matching CSS. A no-op when the `animation` option is
-   * off, the element carries no animations, or its markup rendered to nothing
-   * (the empty-wrapper pruning then also prunes the animation).
+   * track and queues the matching CSS. A no-op when no animation plays on the
+   * element (`active` empty) or its markup rendered to nothing (the
+   * empty-wrapper pruning then also prunes the animation).
    *
    * Wrapper nesting is block 0 outermost, and within a block the canonical
    * track order (translate before rotate before scale, opacity innermost) —
@@ -769,14 +778,12 @@ export class Renderer {
    * The element's own `opacity` rides on the innermost opacity wrapper as the
    * resting value the keyframes then override.
    */
-  #applyAnimations(markup: string, element: Element): string {
-    if (markup.length === 0) {
-      return markup;
-    }
-
-    const active = this.#activeAnimations(element);
-
-    if (active.length === 0) {
+  #applyAnimations(
+    markup: string,
+    element: Element,
+    active: readonly StyleDefinitionAnimation[],
+  ): string {
+    if (markup.length === 0 || active.length === 0) {
       return markup;
     }
 

@@ -267,28 +267,33 @@ func (r *renderer) renderSvgElement(el *style.Element) (string, error) {
 		return "", nil
 	}
 
-	attrs, err := r.renderAttributes(r.attributesWithoutAnimatedOpacity(el))
-	if err != nil {
-		return "", err
-	}
 	children, err := r.renderElements(el.Children)
 	if err != nil {
 		return "", err
 	}
 
-	if children == "" {
-		// A wrapper whose children all rendered to nothing, because an optional
-		// component came up empty, has no content left to group. It draws
-		// nothing either way, but a masked group without content has an empty
-		// bounding box, and strict SVG parsers reject the whole document over
-		// it. Wrappers that carry an id stay, so references keep resolving.
-		if _, hasID := el.Attributes.Get("id"); len(el.Children) > 0 && !hasID {
-			return "", nil
-		}
-
-		return r.applyAnimations("<"+name+attrs+"/>", el), nil
+	// A wrapper whose children all rendered to nothing, because an optional
+	// component came up empty, has no content left to group. It draws
+	// nothing either way, but a masked group without content has an empty
+	// bounding box, and strict SVG parsers reject the whole document over
+	// it. Wrappers that carry an id stay, so references keep resolving.
+	if _, hasID := el.Attributes.Get("id"); children == "" && len(el.Children) > 0 && !hasID {
+		return "", nil
 	}
-	return r.applyAnimations("<"+name+attrs+">"+children+"</"+name+">", el), nil
+
+	// The animation switches are read once the element is known to render,
+	// after its children, so the resolved options record them in one order
+	// regardless of the attributes the element carries.
+	playing := r.playingAnimations(el)
+	attrs, err := r.renderAttributes(r.attributesWithoutAnimatedOpacity(el, playing))
+	if err != nil {
+		return "", err
+	}
+
+	if children == "" {
+		return r.applyAnimations("<"+name+attrs+"/>", el, playing), nil
+	}
+	return r.applyAnimations("<"+name+attrs+">"+children+"</"+name+">", el, playing), nil
 }
 
 func (r *renderer) renderTextElement(el *style.Element) string {
@@ -331,7 +336,8 @@ func (r *renderer) renderComponentElement(el *style.Element) (string, error) {
 
 	transforms := r.buildTransforms(comp)
 
-	own := r.attributesWithoutAnimatedOpacity(el)
+	playing := r.playingAnimations(el)
+	own := r.attributesWithoutAnimatedOpacity(el, playing)
 
 	var merged *style.AttrList
 	if len(transforms) == 0 {
@@ -360,7 +366,7 @@ func (r *renderer) renderComponentElement(el *style.Element) (string, error) {
 		return "", err
 	}
 
-	return r.applyAnimations("<use"+attrs+` href="#`+id+`"/>`, el), nil
+	return r.applyAnimations("<use"+attrs+` href="#`+id+`"/>`, el, playing), nil
 }
 
 // buildTransforms returns the per-component transform fragments (translate,

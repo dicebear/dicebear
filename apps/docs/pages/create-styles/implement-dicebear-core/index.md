@@ -866,6 +866,13 @@ under its JSON pointer path, for example
 part of the contract. A step jump is expressed with the `hold` easing, never
 with two keyframes at the same position.
 
+The schema itself rejects `animations` below a `defs` or a `clipPath` element
+and on the elements a group cannot wrap (`stop`, `tspan`, `textPath`, `mpath`
+and the filter primitives), so no constructor check is needed for them. The
+wrappers the renderer adds would be lost in both places: a `<use>` clones only
+the node it references, and a `<g>` is no valid clipPath content. Masks accept
+groups, so animations below a `mask` element pass.
+
 ### Selecting timelines
 
 A timeline plays when the resolver's `animationPlays(name)` says so: the

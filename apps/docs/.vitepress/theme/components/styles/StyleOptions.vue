@@ -8,6 +8,7 @@ import { inBrowser } from 'vitepress';
 // @ts-expect-error -- the deep client path ships no type definitions
 import { contentUpdatedCallbacks } from 'vitepress/dist/client/app/utils.js';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
+import { isAnimationOption } from '@theme/utils/styleOptionMeta';
 import { watchOnce, watchDebounced } from '@vueuse/core';
 import { track } from '@theme/utils/track';
 import { capitalCase } from 'change-case';
@@ -177,13 +178,8 @@ function isColorOption(key: string, names: string[]): boolean {
 // speed and the delay.
 const globalAnimationKeys = ['animation', 'animationSpeed', 'animationDelay'];
 
-function isAnimationOption(key: string, names: readonly string[]): boolean {
-  return names.some(
-    (name) =>
-      key === `${name}Animation` ||
-      key === `${name}AnimationSpeed` ||
-      key === `${name}AnimationDelay`,
-  );
+function namedAnimationKeys(name: string): string[] {
+  return [`${name}Animation`, `${name}AnimationSpeed`, `${name}AnimationDelay`];
 }
 
 function pick(
@@ -222,8 +218,7 @@ const groups = computed<OptionGroup[]>(() => {
       !hiddenKeys.has(key) &&
       !isComponentOption(key, componentNames.value) &&
       !isColorOption(key, colorNames.value) &&
-      !globalAnimationKeys.includes(key) &&
-      !isAnimationOption(key, animationNames.value),
+      !isAnimationOption(key),
   );
 
   if (generalKeys.length > 0) {
@@ -281,8 +276,8 @@ const groups = computed<OptionGroup[]>(() => {
   }
 
   for (const name of animationNames.value) {
-    const keys = Object.keys(descriptor.value).filter((k) =>
-      isAnimationOption(k, [name]),
+    const keys = namedAnimationKeys(name).filter(
+      (key) => key in descriptor.value,
     );
 
     if (keys.length > 0) {

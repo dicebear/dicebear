@@ -503,6 +503,90 @@ void main() {
     });
   });
 
+  // Ported from the placement cases of Style.test.js: the schema rejects an
+  // animated element below `defs` or `clipPath`, one below `mask` is fine.
+  group('Style animation placement', () {
+    Map<String, Object?> canvas(String elements) => _decode('''
+{
+  "canvas": {
+    "width": 100,
+    "height": 100,
+    "elements": [$elements]
+  }
+}
+''');
+
+    const track = '{"duration":1,"tracks":{"opacity":{"keyframes":'
+        '[{"at":0,"value":1}]}}}';
+
+    test('rejects animations inside defs', () {
+      expect(
+        () => Style(canvas('''
+{
+  "type": "element",
+  "name": "defs",
+  "children": [
+    {
+      "type": "element",
+      "name": "circle",
+      "attributes": { "id": "dot", "r": "10" },
+      "animations": [$track]
+    }
+  ]
+}
+''')),
+        throwsA(isA<StyleValidationError>()),
+      );
+    });
+
+    test('rejects animations below a clipPath', () {
+      expect(
+        () => Style(canvas('''
+{
+  "type": "element",
+  "name": "clipPath",
+  "attributes": { "id": "clip" },
+  "children": [
+    {
+      "type": "element",
+      "name": "g",
+      "children": [
+        {
+          "type": "element",
+          "name": "circle",
+          "attributes": { "r": "10" },
+          "animations": [$track]
+        }
+      ]
+    }
+  ]
+}
+''')),
+        throwsA(isA<StyleValidationError>()),
+      );
+    });
+
+    test('accepts animations inside a mask', () {
+      final style = Style(canvas('''
+{
+  "type": "element",
+  "name": "mask",
+  "attributes": { "id": "fade" },
+  "children": [
+    {
+      "type": "element",
+      "name": "circle",
+      "attributes": { "r": "10", "fill": "#fff" },
+      "animations": [$track]
+    }
+  ]
+}
+'''));
+
+      expect(style.hasAnimations, isTrue);
+    });
+  });
+
   test('descriptor advertises a switch and a range per animation name', () {
     final descriptor = OptionsDescriptor(_named).toJson();
     final keys = descriptor.keys.toList();

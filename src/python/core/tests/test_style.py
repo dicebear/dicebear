@@ -412,3 +412,100 @@ def test_alias_rejects_alias_of_alias() -> None:
                 },
             }
         )
+
+
+def _track(keyframes: list[dict[str, Any]]) -> dict[str, Any]:
+    return {"duration": 1, "tracks": {"opacity": {"keyframes": keyframes}}}
+
+
+def test_rejects_animations_inside_defs() -> None:
+    # The schema rejects animations below defs: a <use> clones only the node
+    # it references, so the animating wrapper never reaches the instance.
+    with pytest.raises(StyleValidationError):
+        Style(
+            {
+                "canvas": {
+                    "width": 100,
+                    "height": 100,
+                    "elements": [
+                        {
+                            "type": "element",
+                            "name": "defs",
+                            "children": [
+                                {
+                                    "type": "element",
+                                    "name": "circle",
+                                    "attributes": {"id": "dot", "r": "10"},
+                                    "animations": [_track([{"at": 0, "value": 1}])],
+                                }
+                            ],
+                        }
+                    ],
+                }
+            }
+        )
+
+
+def test_rejects_animations_below_a_clip_path() -> None:
+    # The schema rejects animations below clipPath: <g> is no valid clipPath
+    # content, so the wrapper would empty the clip region.
+    with pytest.raises(StyleValidationError):
+        Style(
+            {
+                "canvas": {
+                    "width": 100,
+                    "height": 100,
+                    "elements": [
+                        {
+                            "type": "element",
+                            "name": "clipPath",
+                            "attributes": {"id": "clip"},
+                            "children": [
+                                {
+                                    "type": "element",
+                                    "name": "g",
+                                    "children": [
+                                        {
+                                            "type": "element",
+                                            "name": "circle",
+                                            "attributes": {"r": "10"},
+                                            "animations": [
+                                                _track([{"at": 0, "value": 1}])
+                                            ],
+                                        }
+                                    ],
+                                }
+                            ],
+                        }
+                    ],
+                }
+            }
+        )
+
+
+def test_accepts_animations_inside_a_mask() -> None:
+    style = Style(
+        {
+            "canvas": {
+                "width": 100,
+                "height": 100,
+                "elements": [
+                    {
+                        "type": "element",
+                        "name": "mask",
+                        "attributes": {"id": "fade"},
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "circle",
+                                "attributes": {"r": "10", "fill": "#fff"},
+                                "animations": [_track([{"at": 0, "value": 1}])],
+                            }
+                        ],
+                    }
+                ],
+            }
+        }
+    )
+
+    assert style.has_animations() is True

@@ -4,7 +4,7 @@ import ToggleSwitch from 'primevue/toggleswitch';
 import useStore from '@theme/stores/playground';
 import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
-import { animationPlays } from './animationState';
+import { animationPlays, animationSwitch } from './animationState';
 
 const props = defineProps<{
   // The style's animation names, as the loaded style reports them. Empty when
@@ -24,12 +24,21 @@ const animation = computed({
   set: (val: boolean) => {
     if (val) {
       store.avatarStyleOptions[animationKey] = true;
-    } else {
-      // The speed and delay have no meaning without the animations and would
-      // otherwise linger in the emitted options.
-      for (const key of keys) {
-        delete store.avatarStyleOptions[key];
-      }
+      return;
+    }
+
+    delete store.avatarStyleOptions[animationKey];
+
+    // A timeline on its own switch keeps playing and takes the global speed
+    // and delay, so those stay while any such switch is on. Otherwise they
+    // would only linger in the emitted options.
+    const stillPlays = props.names.some(
+      (name) => animationSwitch(store.avatarStyleOptions, name) === true,
+    );
+
+    if (!stillPlays) {
+      delete store.avatarStyleOptions[speedKey];
+      delete store.avatarStyleOptions[delayKey];
     }
   },
 });

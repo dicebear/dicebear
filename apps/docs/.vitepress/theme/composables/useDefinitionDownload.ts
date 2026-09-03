@@ -53,5 +53,5 @@ export function useDefinitionDownload(styleName: MaybeRefOrGetter<string>) {
     }
   }
 
-  return { url, fileName, pending, download };
+  return { url, pending, download };
 }

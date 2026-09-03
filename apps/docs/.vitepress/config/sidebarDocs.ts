@@ -167,18 +167,28 @@ const sidebar: DefaultTheme.SidebarItem[] = [
 ];
 
 /**
- * First route segment of every top-level group, e.g. `start`. The nav item
- * and the sidebar map in config.ts are built from this list, so a new group
- * here is enough to wire its pages up.
+ * Every top-level group with its first route segment, e.g. `start`, and its
+ * title without badge markup. The nav item and the sidebar map in config.ts
+ * and the sections of llms.txt are built from this list, so a new group here
+ * is enough to wire its pages up.
  */
-export const docsSections: readonly string[] = sidebar.map((group) => {
-  const link = group.items?.[0]?.link;
+export const docsSectionGroups: readonly { slug: string; title: string }[] =
+  sidebar.map((group) => {
+    const link = group.items?.[0]?.link;
 
-  if (!link) {
-    throw new Error(`Sidebar group "${group.text}" has no first link`);
-  }
+    if (!link || !group.text) {
+      throw new Error(`Sidebar group "${group.text}" has no first link`);
+    }
 
-  return link.split('/')[1];
-});
+    return {
+      slug: link.split('/')[1],
+      title: group.text.replace(/<[^>]+>/g, '').trim(),
+    };
+  });
+
+/** First route segment of every top-level group. */
+export const docsSections: readonly string[] = docsSectionGroups.map(
+  (group) => group.slug,
+);
 
 export default sidebar;
