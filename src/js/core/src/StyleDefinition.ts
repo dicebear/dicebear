@@ -104,9 +104,10 @@ export interface StyleDefinitionAnimationOrigin {
  * `animation` render option is enabled. Absent fields carry these defaults:
  * `delay` 0, `iterations` `'infinite'`, `direction` `'normal'`, `fill`
  * `'none'`, `easing` `'linear'`, `origin` center (50/50). The optional
- * `name` groups the timeline under a user-selectable animation: the
- * `animation` option accepts these names to play a subset, and a timeline
- * without a name only plays when the option enables all animations.
+ * `name` groups the timeline under a user-selectable animation: a named
+ * timeline follows its `${name}Animation`, `${name}AnimationSpeed` and
+ * `${name}AnimationDelay` options when set, and a timeline without a name
+ * always follows the global `animation` switch.
  */
 export interface StyleDefinitionAnimation {
   readonly name?: string;

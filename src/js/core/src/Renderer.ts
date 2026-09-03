@@ -652,11 +652,11 @@ export class Renderer {
   /**
    * Returns the FNV-1a hex hash namespacing the animation class and keyframe
    * names, cached after the first call. Extends the {@link #hashSeed} input
-   * with the animation speed and, for a by-name selection, the sorted names:
-   * two renders of the same avatar with different speeds or selections
-   * inlined on one page must not select each other's rules, while identical
-   * renders sharing identical rules is harmless deduplication. `true` adds
-   * no name suffix, so enabling all animations hashes as before.
+   * with the global speed and delay and with the state of every named
+   * timeline: two renders of the same avatar with different speeds or
+   * per-name switches inlined on one page must not select each other's
+   * rules, while identical renders sharing identical rules is harmless
+   * deduplication.
    *
    * Everything else about an avatar stays out of the hash, so two renders of
    * the same style and seed that differ in any other option would share their
