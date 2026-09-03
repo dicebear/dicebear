@@ -1,4 +1,3 @@
-import { StyleValidator } from './Validator/StyleValidator.js';
 import { StyleValidationError } from './Error/StyleValidationError.js';
 import type {
   StyleDefinition,
@@ -28,8 +27,6 @@ export class Style<D = unknown> {
   #animationNames?: readonly string[];
 
   constructor(data: D) {
-    StyleValidator.validate(data);
-
     this.#data = structuredClone(data) as StyleDefinition;
 
     this.#validateAliases();

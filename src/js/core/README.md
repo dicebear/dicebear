@@ -50,6 +50,21 @@ const avatar1 = new Avatar(style, { seed: 'Alice' });
 const avatar2 = new Avatar(style, { seed: 'Bob' });
 ```
 
+## Smaller bundle without validation
+
+About half of the package is the two schema validators. `@dicebear/core/lite`
+exports the same API without them, about 14 kB instead of 30 kB gzipped.
+
+> **Warning:** The validation is what keeps unsafe content such as scripts,
+> event handlers and external references out of the SVG, and what turns a wrong
+> option into an error instead of odd output. The lite entry renders whatever it
+> gets. Use it only for definitions and options you wrote or generated yourself,
+> never for anything from an upload, a URL or another source you do not control.
+
+```js
+import { Style, Avatar } from '@dicebear/core/lite';
+```
+
 ## Sponsors
 
 Advertisement: Many thanks to our sponsors who provide us with free or

@@ -328,6 +328,32 @@ If you embed the SVG inside an `<img>` (via `toDataUri()`), use the `<img>`
 element's `alt` attribute instead. The SVG's internal `title` is not read by
 assistive technology when the SVG is loaded as an image.
 
+## Bundle size
+
+About half of `@dicebear/core` is the two schema validators that check a style
+definition and the render options. `@dicebear/core/lite` exports the same API
+without them, which brings the library from about 30 kB down to about 14 kB
+gzipped:
+
+```js
+import { Style, Avatar } from '@dicebear/core/lite';
+```
+
+::: warning The lite entry trusts what it gets
+
+The schema validation is what keeps unsafe content out of the SVG: scripts,
+event handlers, external references and elements the renderer cannot handle. The
+lite entry renders a definition that the schema would reject, so a definition
+from an upload, a URL or any other source you do not control can put such
+content into your page. Wrong options are not reported either. They change the
+output quietly or fail somewhere inside the renderer instead of raising a
+validation error.
+
+Use `@dicebear/core/lite` only for definitions and options that you wrote or
+generated yourself. When in doubt, stay on `@dicebear/core`.
+
+:::
+
 ## TypeScript
 
 The library is fully typed. You can import types for better IDE support:

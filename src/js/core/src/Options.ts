@@ -1,4 +1,3 @@
-import { OptionsValidator } from './Validator/OptionsValidator.js';
 import type { Range } from './StyleDefinition.js';
 import type {
   StyleOptions,
@@ -23,8 +22,6 @@ export class Options<D = unknown> {
   #tags?: readonly TagFilterToken[];
 
   constructor(data: StyleOptions<D> = {} as StyleOptions<D>) {
-    OptionsValidator.validate(data);
-
     this.#data = structuredClone(data);
   }
 

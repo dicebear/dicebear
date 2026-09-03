@@ -46,6 +46,10 @@ and this project adheres to
 
 ### Added
 
+- **Core (JS):** `@dicebear/core/lite` exports the same API as the package root
+  without the two schema validators, about 14 kB instead of 30 kB gzipped. It is
+  for definitions and options that come from your own code. The root entry keeps
+  validating, so nothing changes for existing imports.
 - **Core:** A switch and a speed per animation, in all seven cores.
   `blinkAnimation: true` plays the `blink` timelines alone, `animation: true`
   with `blinkAnimation: false` plays everything but them, and

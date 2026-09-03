@@ -2,10 +2,20 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { Style } from '../lib/index.js';
 import { Options } from '../lib/Options.js';
+import { OptionsValidator } from '../lib/Validator/OptionsValidator.js';
 import { Resolver } from '../lib/Resolver.js';
 import { CircularColorReferenceError } from '../lib/Error/CircularColorReferenceError.js';
 
-const makeResolver = (style, data = {}) => new Resolver(style, new Options(data));
+// The package root checks the options in `Avatar`; the reader class itself
+// accepts anything, so the rejection tests run the validator first.
+function validated(data) {
+  OptionsValidator.validate(data);
+
+  return new Options(data);
+}
+
+const makeResolver = (style, data = {}) =>
+  new Resolver(style, new Options(data));
 
 const aliasFixture = {
   canvas: {
@@ -226,7 +236,9 @@ describe('Resolver', () => {
       assert.ok(['horizontal', 'vertical'].includes(resolver.flip()));
       assert.equal(resolver.variant('eyes'), undefined);
       assert.equal(resolver.color('skin').length, 1);
-      assert.ok(['#f0c8a0', '#d4a574', '#8d5524'].includes(resolver.color('skin')[0]));
+      assert.ok(
+        ['#f0c8a0', '#d4a574', '#8d5524'].includes(resolver.color('skin')[0]),
+      );
     });
 
     it('should pick colorFill from arrays', () => {
@@ -235,7 +247,9 @@ describe('Resolver', () => {
         skinColorFill: ['solid', 'linear', 'radial'],
       });
 
-      assert.ok(['solid', 'linear', 'radial'].includes(resolver.colorFill('skin')));
+      assert.ok(
+        ['solid', 'linear', 'radial'].includes(resolver.colorFill('skin')),
+      );
     });
 
     it('should return colorFillStops colors for gradient fills', () => {
@@ -542,7 +556,10 @@ describe('Resolver', () => {
       const a = makeResolver(styleWithComponents, { seed: 'pick' });
       const b = makeResolver(styleWithComponents, { seed: 'pick' });
 
-      assert.deepEqual(a.componentTransform('eyes'), b.componentTransform('eyes'));
+      assert.deepEqual(
+        a.componentTransform('eyes'),
+        b.componentTransform('eyes'),
+      );
     });
 
     it('should return identity for an unknown component name', () => {
@@ -584,10 +601,7 @@ describe('Resolver', () => {
       const resolver = makeResolver(aliasStyle, { seed: 'alias-variant' });
       const result = resolver.variant('eyesRight');
 
-      const sourceVariants = aliasStyle
-        .components()
-        .get('eyes')
-        .variants();
+      const sourceVariants = aliasStyle.components().get('eyes').variants();
 
       assert.ok(sourceVariants.has(result));
     });
@@ -828,7 +842,9 @@ describe('Resolver', () => {
   describe('variant weights', () => {
     it('should never pick a weight-0 variant via PRNG', () => {
       for (let i = 0; i < 100; i++) {
-        const resolver = makeResolver(styleWithWeights, { seed: `weight-${i}` });
+        const resolver = makeResolver(styleWithWeights, {
+          seed: `weight-${i}`,
+        });
         const result = resolver.variant('eyes');
 
         assert.notEqual(result, 'hidden');
@@ -855,7 +871,10 @@ describe('Resolver', () => {
         }
       }
 
-      assert.ok(commonCount > 100, `Expected common to be picked most of the time, got ${commonCount}/200`);
+      assert.ok(
+        commonCount > 100,
+        `Expected common to be picked most of the time, got ${commonCount}/200`,
+      );
     });
 
     it('should override weights via object variant option', () => {
@@ -1010,10 +1029,10 @@ describe('Resolver', () => {
     };
 
     it('should restrict to variants matching an include token', () => {
-      assertPool(variantPool(styleWithTags, { tags: 'hairLength:long' }, 'hair'), [
-        'longLight',
-        'longDark',
-      ]);
+      assertPool(
+        variantPool(styleWithTags, { tags: 'hairLength:long' }, 'hair'),
+        ['longLight', 'longDark'],
+      );
     });
 
     it('should filter an axis that spans several components', () => {
@@ -1127,7 +1146,11 @@ describe('Resolver', () => {
         'none',
       ]);
       assertPool(
-        variantPool(style, { tags: ['animation', 'animation:slow'] }, 'animation'),
+        variantPool(
+          style,
+          { tags: ['animation', 'animation:slow'] },
+          'animation',
+        ),
         ['slow'],
       );
     });
@@ -1249,8 +1272,16 @@ describe('Resolver', () => {
       }
 
       // long (authored 100) is overridden to 0 and never picked, so short wins.
-      assert.equal(long, 0, `expected weight 0 to override authored 100, got ${long}/200`);
-      assert.equal(short, 200, `expected short to always win, got ${short}/200`);
+      assert.equal(
+        long,
+        0,
+        `expected weight 0 to override authored 100, got ${long}/200`,
+      );
+      assert.equal(
+        short,
+        200,
+        `expected short to always win, got ${short}/200`,
+      );
     });
 
     it('should treat an empty tags array as no filter (classic restriction)', () => {
@@ -1275,15 +1306,20 @@ describe('Resolver', () => {
     it('should hide an optional component when the filter empties its pool', () => {
       // !facialHair drops every facialHair variant. The component is optional
       // (prob 50), so it stays hidden and never resolves to a variant.
-      assertPool(variantPool(styleWithTags, { tags: '!facialHair' }, 'facialHair'), [
-        undefined,
-      ]);
+      assertPool(
+        variantPool(styleWithTags, { tags: '!facialHair' }, 'facialHair'),
+        [undefined],
+      );
     });
 
     it('should be deterministic for the same seed and tags', () => {
       const options = { seed: 'deterministic', tags: 'hairLength:long' };
-      const a = new Resolver(styleWithTags, new Options(options)).variant('hair');
-      const b = new Resolver(styleWithTags, new Options(options)).variant('hair');
+      const a = new Resolver(styleWithTags, new Options(options)).variant(
+        'hair',
+      );
+      const b = new Resolver(styleWithTags, new Options(options)).variant(
+        'hair',
+      );
 
       assert.equal(a, b);
       // and the result is constrained by the filter, not just stable
@@ -1294,7 +1330,11 @@ describe('Resolver', () => {
       // An explicit empty allowlist means "none". Since ${name}Variant governs
       // the component, the tags filter is ignored and cannot resurrect the pool.
       assertPool(
-        variantPool(styleWithTags, { tags: 'tone:warm', noseVariant: [] }, 'nose'),
+        variantPool(
+          styleWithTags,
+          { tags: 'tone:warm', noseVariant: [] },
+          'nose',
+        ),
         [undefined],
       );
     });
@@ -1338,7 +1378,7 @@ describe('Resolver', () => {
     });
 
     it('should reject an invalid tag token at validation', () => {
-      assert.throws(() => new Options({ tags: ['Bad:X'] }));
+      assert.throws(() => validated({ tags: ['Bad:X'] }));
     });
   });
 
@@ -1374,26 +1414,28 @@ describe('Resolver', () => {
       assert.ok(speed >= 0.5 && speed <= 2);
       assert.equal(
         speed,
-        makeResolver(style, { seed: 'x', animationSpeed: [0.5, 2] })
-          .animationSpeed(),
+        makeResolver(style, {
+          seed: 'x',
+          animationSpeed: [0.5, 2],
+        }).animationSpeed(),
       );
     });
 
     it('should reject out-of-range values at validation', () => {
-      assert.throws(() => new Options({ animation: 'Yes' }));
-      assert.throws(() => new Options({ animation: ['blink', 'Bad'] }));
-      assert.throws(() => new Options({ blinkAnimation: 'yes' }));
-      assert.throws(() => new Options({ BlinkAnimation: true }));
-      assert.throws(() => new Options({ animationDelay: 4000 }));
-      assert.throws(() => new Options({ blinkAnimationDelay: [0, 1, 2] }));
-      assert.throws(() => new Options({ blinkAnimationDelay: 'later' }));
-      assert.throws(() => new Options({ animationSpeed: 0 }));
-      assert.throws(() => new Options({ animationSpeed: 20 }));
-      assert.throws(() => new Options({ animationSpeed: [0, 2] }));
-      assert.throws(() => new Options({ blinkAnimationSpeed: 0 }));
-      assert.throws(() => new Options({ blinkAnimationSpeed: [0.5, 2, 4] }));
-      assert.throws(() => new Options({ BlinkAnimationSpeed: 2 }));
-      assert.throws(() => new Options({ blinkAnimationSpeed: 'fast' }));
+      assert.throws(() => validated({ animation: 'Yes' }));
+      assert.throws(() => validated({ animation: ['blink', 'Bad'] }));
+      assert.throws(() => validated({ blinkAnimation: 'yes' }));
+      assert.throws(() => validated({ BlinkAnimation: true }));
+      assert.throws(() => validated({ animationDelay: 4000 }));
+      assert.throws(() => validated({ blinkAnimationDelay: [0, 1, 2] }));
+      assert.throws(() => validated({ blinkAnimationDelay: 'later' }));
+      assert.throws(() => validated({ animationSpeed: 0 }));
+      assert.throws(() => validated({ animationSpeed: 20 }));
+      assert.throws(() => validated({ animationSpeed: [0, 2] }));
+      assert.throws(() => validated({ blinkAnimationSpeed: 0 }));
+      assert.throws(() => validated({ blinkAnimationSpeed: [0.5, 2, 4] }));
+      assert.throws(() => validated({ BlinkAnimationSpeed: 2 }));
+      assert.throws(() => validated({ blinkAnimationSpeed: 'fast' }));
     });
 
     it('should let the specific option win over the global one', () => {
@@ -1422,9 +1464,15 @@ describe('Resolver', () => {
       assert.notEqual(blink, resolver.animationSpeedFor('sway'));
       assert.notEqual(
         blink,
-        makeResolver(style, { seed: 'x', animationSpeed: [0.5, 2] }).animationSpeed(),
+        makeResolver(style, {
+          seed: 'x',
+          animationSpeed: [0.5, 2],
+        }).animationSpeed(),
       );
-      assert.equal(makeResolver(style, options).animationSpeedFor('blink'), blink);
+      assert.equal(
+        makeResolver(style, options).animationSpeedFor('blink'),
+        blink,
+      );
     });
 
     it('should share the global factor with every timeline', () => {
@@ -1448,7 +1496,11 @@ describe('Resolver', () => {
     });
 
     it('should draw a delay range under its own key, seeded', () => {
-      const options = { seed: 'x', animationDelay: [0, 3], blinkAnimationDelay: [0, 3] };
+      const options = {
+        seed: 'x',
+        animationDelay: [0, 3],
+        blinkAnimationDelay: [0, 3],
+      };
       const resolver = makeResolver(style, options);
       const global = resolver.animationDelay();
       const blink = resolver.animationDelayFor('blink');
@@ -1456,11 +1508,17 @@ describe('Resolver', () => {
       assert.ok(global >= 0 && global <= 3);
       assert.ok(blink >= 0 && blink <= 3);
       assert.notEqual(global, blink);
-      assert.equal(makeResolver(style, options).animationDelayFor('blink'), blink);
+      assert.equal(
+        makeResolver(style, options).animationDelayFor('blink'),
+        blink,
+      );
     });
 
     it('should let a named switch win over the global one', () => {
-      const on = makeResolver(style, { animation: false, blinkAnimation: true });
+      const on = makeResolver(style, {
+        animation: false,
+        blinkAnimation: true,
+      });
 
       assert.equal(on.animationPlays('blink'), true);
       assert.equal(on.animationPlays('sway'), false);
@@ -1468,7 +1526,10 @@ describe('Resolver', () => {
       assert.equal(on.resolved().blinkAnimation, true);
       assert.equal('swayAnimation' in on.resolved(), false);
 
-      const off = makeResolver(style, { animation: true, blinkAnimation: false });
+      const off = makeResolver(style, {
+        animation: true,
+        blinkAnimation: false,
+      });
 
       assert.equal(off.animationPlays('blink'), false);
       assert.equal(off.animationPlays('sway'), true);

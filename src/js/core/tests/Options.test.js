@@ -1,18 +1,27 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { Options } from '../lib/Options.js';
+import { OptionsValidator } from '../lib/Validator/OptionsValidator.js';
 import { OptionsValidationError } from '../lib/Error/OptionsValidationError.js';
 import { ValidationError } from '../lib/Error/ValidationError.js';
+
+// The package root checks the options in `Avatar`, so the reader class itself
+// no longer validates. These tests cover both steps together.
+function validated(data = {}) {
+  OptionsValidator.validate(data);
+
+  return new Options(data);
+}
 
 describe('Options', () => {
   describe('constructor', () => {
     it('should accept an empty data object', () => {
-      assert.ok(new Options({}));
+      assert.ok(validated({}));
     });
 
     it('should accept full input data', () => {
       assert.ok(
-        new Options({
+        validated({
           seed: 'test-seed',
           size: 128,
           flip: 'horizontal',
@@ -22,16 +31,16 @@ describe('Options', () => {
     });
 
     it('should throw OptionsValidationError for invalid data', () => {
-      assert.throws(() => new Options({ size: -1 }), OptionsValidationError);
+      assert.throws(() => validated({ size: -1 }), OptionsValidationError);
     });
 
     it('should throw an instance of ValidationError', () => {
-      assert.throws(() => new Options({ size: -1 }), ValidationError);
+      assert.throws(() => validated({ size: -1 }), ValidationError);
     });
 
     it('should include details on the validation error', () => {
       try {
-        new Options({ size: -1 });
+        validated({ size: -1 });
         assert.fail('Expected error');
       } catch (e) {
         assert.ok(e instanceof OptionsValidationError);
@@ -42,7 +51,7 @@ describe('Options', () => {
 
     it('should isolate internal state from caller mutations', () => {
       const input = { seed: 'orig' };
-      const options = new Options(input);
+      const options = validated(input);
 
       input.seed = 'mutated';
 
@@ -52,7 +61,7 @@ describe('Options', () => {
 
   describe('scalar passthroughs', () => {
     it('should return undefined when not set', () => {
-      const options = new Options({});
+      const options = validated({});
 
       assert.equal(options.seed(), undefined);
       assert.equal(options.size(), undefined);
@@ -61,7 +70,7 @@ describe('Options', () => {
     });
 
     it('should return user-set scalar values', () => {
-      const options = new Options({
+      const options = validated({
         seed: 'abc',
         size: 256,
         idRandomization: true,
@@ -77,25 +86,25 @@ describe('Options', () => {
 
   describe('top-level normalization', () => {
     it('should normalize a scalar list option to a one-element array', () => {
-      const options = new Options({ flip: 'horizontal' });
+      const options = validated({ flip: 'horizontal' });
 
       assert.deepEqual(options.flip(), ['horizontal']);
     });
 
     it('should pass a list option array through unchanged', () => {
-      const options = new Options({ flip: ['horizontal', 'vertical'] });
+      const options = validated({ flip: ['horizontal', 'vertical'] });
 
       assert.deepEqual(options.flip(), ['horizontal', 'vertical']);
     });
 
     it('should normalize a scalar range option to a fixed-value range', () => {
-      const options = new Options({ scale: 1.5 });
+      const options = validated({ scale: 1.5 });
 
       assert.deepEqual(options.scale(), { min: 1.5, max: 1.5 });
     });
 
     it('should normalize a tuple range option to a min/max range', () => {
-      const options = new Options({ scale: [0.8, 1.2] });
+      const options = validated({ scale: [0.8, 1.2] });
 
       assert.deepEqual(options.scale(), { min: 0.8, max: 1.2 });
     });
@@ -103,12 +112,12 @@ describe('Options', () => {
     it('should treat a single-element range array as a fixed value', () => {
       // `[n]` behaves like the scalar `n`; an empty array is unset (default,
       // not a Range with a missing bound that would render as NaN).
-      assert.deepEqual(new Options({ scale: [2] }).scale(), { min: 2, max: 2 });
-      assert.equal(new Options({ scale: [] }).scale(), undefined);
+      assert.deepEqual(validated({ scale: [2] }).scale(), { min: 2, max: 2 });
+      assert.equal(validated({ scale: [] }).scale(), undefined);
     });
 
     it('should return undefined for unset range options', () => {
-      const options = new Options({});
+      const options = validated({});
 
       assert.equal(options.scale(), undefined);
       assert.equal(options.borderRadius(), undefined);
@@ -118,7 +127,7 @@ describe('Options', () => {
     });
 
     it('should return empty arrays for unset list options', () => {
-      const options = new Options({});
+      const options = validated({});
 
       assert.deepEqual(options.flip(), []);
       assert.deepEqual(options.fontFamily(), []);
@@ -128,35 +137,41 @@ describe('Options', () => {
 
   describe('componentVariant()', () => {
     it('should return undefined when unset', () => {
-      assert.equal(new Options({}).componentVariant('eyes'), undefined);
+      assert.equal(validated({}).componentVariant('eyes'), undefined);
     });
 
     it('should normalize a string to a single-entry weighted map', () => {
-      const options = new Options({ eyesVariant: 'open' });
+      const options = validated({ eyesVariant: 'open' });
 
       assert.deepEqual(options.componentVariant('eyes'), { open: 1 });
     });
 
     it('should normalize a string array to a weighted map (weight 1 each)', () => {
-      const options = new Options({ eyesVariant: ['open', 'closed'] });
+      const options = validated({ eyesVariant: ['open', 'closed'] });
 
-      assert.deepEqual(options.componentVariant('eyes'), { open: 1, closed: 1 });
+      assert.deepEqual(options.componentVariant('eyes'), {
+        open: 1,
+        closed: 1,
+      });
     });
 
     it('should pass a weighted record through', () => {
-      const options = new Options({ eyesVariant: { open: 5, closed: 1 } });
+      const options = validated({ eyesVariant: { open: 5, closed: 1 } });
 
-      assert.deepEqual(options.componentVariant('eyes'), { open: 5, closed: 1 });
+      assert.deepEqual(options.componentVariant('eyes'), {
+        open: 5,
+        closed: 1,
+      });
     });
   });
 
   describe('componentProbability()', () => {
     it('should return undefined when unset', () => {
-      assert.equal(new Options({}).componentProbability('eyes'), undefined);
+      assert.equal(validated({}).componentProbability('eyes'), undefined);
     });
 
     it('should return the user-set numeric value', () => {
-      const options = new Options({ eyesProbability: 80 });
+      const options = validated({ eyesProbability: 80 });
 
       assert.equal(options.componentProbability('eyes'), 80);
     });
@@ -164,17 +179,17 @@ describe('Options', () => {
 
   describe('color()', () => {
     it('should return undefined when unset', () => {
-      assert.equal(new Options({}).color('skin'), undefined);
+      assert.equal(validated({}).color('skin'), undefined);
     });
 
     it('should normalize a single hex color to a one-element array', () => {
-      const options = new Options({ skinColor: '#f0c8a0' });
+      const options = validated({ skinColor: '#f0c8a0' });
 
       assert.deepEqual(options.color('skin'), ['#f0c8a0']);
     });
 
     it('should pass a color array through', () => {
-      const options = new Options({ skinColor: ['#f0c8a0', '#d4a574'] });
+      const options = validated({ skinColor: ['#f0c8a0', '#d4a574'] });
 
       assert.deepEqual(options.color('skin'), ['#f0c8a0', '#d4a574']);
     });
@@ -182,7 +197,7 @@ describe('Options', () => {
 
   describe('colorFill / colorAngle / colorFillStops', () => {
     it('should normalize all three correctly', () => {
-      const options = new Options({
+      const options = validated({
         skinColorFill: 'linear',
         skinColorAngle: 45,
         skinColorFillStops: [2, 4],
@@ -194,7 +209,7 @@ describe('Options', () => {
     });
 
     it('should return defaults when unset', () => {
-      const options = new Options({});
+      const options = validated({});
 
       assert.deepEqual(options.colorFill('skin'), []);
       assert.equal(options.colorAngle('skin'), undefined);
@@ -204,25 +219,25 @@ describe('Options', () => {
 
   describe('colorOrder()', () => {
     it('should return undefined when unset', () => {
-      assert.equal(new Options({}).colorOrder('skin'), undefined);
+      assert.equal(validated({}).colorOrder('skin'), undefined);
     });
 
     it('should pass the value through', () => {
-      const options = new Options({ skinColorOrder: 'fixed' });
+      const options = validated({ skinColorOrder: 'fixed' });
 
       assert.equal(options.colorOrder('skin'), 'fixed');
     });
 
     it('should reject an unknown value', () => {
       assert.throws(
-        () => new Options({ skinColorOrder: 'sorted' }),
+        () => validated({ skinColorOrder: 'sorted' }),
         OptionsValidationError,
       );
     });
 
     it('should reject an array value', () => {
       assert.throws(
-        () => new Options({ skinColorOrder: ['fixed'] }),
+        () => validated({ skinColorOrder: ['fixed'] }),
         OptionsValidationError,
       );
     });
