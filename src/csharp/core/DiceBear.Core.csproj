@@ -50,7 +50,7 @@
       The shared draft-07 JSON Schemas (style definition format and avatar
       options), shipped as a pure-data package.
     -->
-    <PackageReference Include="DiceBear.Schema" Version="[1.6.1,2.0.0)" />
+    <PackageReference Include="DiceBear.Schema" Version="[2.0.0,3.0.0)" />
     <!--
       Runtime validation against those schemas, matching the validators the
       other ports use.

@@ -7,17 +7,17 @@ import (
 	"bytes"
 	"sync"
 
-	"github.com/dicebear/schema"
+	"github.com/dicebear/schema/v2"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 
-	"github.com/dicebear/dicebear-go/v10/internal/errs"
+	"github.com/dicebear/dicebear-go/v11/internal/errs"
 )
 
 // The schemas are registered under their published CDN URIs: a relative name
 // would be resolved against the process working directory, leaking the
 // consumer's filesystem paths into validation error messages. Keep the
 // version in sync with the github.com/dicebear/schema dependency in go.mod.
-const schemaBaseURL = "https://cdn.hopjs.net/npm/@dicebear/schema@1.6.1/dist/"
+const schemaBaseURL = "https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/"
 
 var definitionValidator = sync.OnceValue(func() *jsonschema.Schema {
 	return compileSchema(schemaBaseURL+"definition.min.json", schema.Definition)
