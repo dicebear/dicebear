@@ -169,10 +169,10 @@ func TestColorOrderFixedStillAppliesNotEqualToFiltering(t *testing.T) {
 	}
 }
 
-func TestColorOrderFixedSortsStylePaletteInsteadOfVerbatim(t *testing.T) {
-	// Without user-supplied colors, "fixed" only skips the shuffle: the style
-	// palette keeps the canonical code-point sort, for every seed.
-	want := []string{"#8d5524", "#d4a574", "#f0c8a0"}
+func TestColorOrderFixedKeepsStylePaletteInDefinitionOrder(t *testing.T) {
+	// Without user-supplied colors, "fixed" uses the palette as the style
+	// lists it, for every seed.
+	want := []string{"#f0c8a0", "#d4a574", "#8d5524"}
 
 	for i := 0; i < 5; i++ {
 		r := makeResolver(t, styleWithColorsJSON, fmt.Sprintf(`{
@@ -188,12 +188,12 @@ func TestColorOrderFixedSortsStylePaletteInsteadOfVerbatim(t *testing.T) {
 	}
 }
 
-func TestColorOrderFixedKeepsContrastSortingForStylePalette(t *testing.T) {
-	// background.contrastTo = skin and no user-supplied background colors: the
-	// strongest-contrast candidate still comes first.
+func TestColorOrderFixedSkipsContrastSortingForStylePalette(t *testing.T) {
+	// background.contrastTo = skin: the contrast sort would put black first
+	// against a white skin, the fixed order keeps white first.
 	r := makeResolver(t, styleWithColorsJSON, `{
 		"seed": "order-style-contrast",
-		"skinColor": "#000000",
+		"skinColor": "#ffffff",
 		"backgroundColorOrder": "fixed"
 	}`)
 
@@ -203,14 +203,14 @@ func TestColorOrderFixedKeepsContrastSortingForStylePalette(t *testing.T) {
 	}
 }
 
-func TestColorOrderFixedKeepsDefaultTwoStopsForStylePalette(t *testing.T) {
+func TestColorOrderFixedDefaultsStopCountToPaletteSize(t *testing.T) {
 	r := makeResolver(t, styleWithColorsJSON, `{
 		"seed": "order-style-stops",
 		"skinColorFill": "linear",
 		"skinColorOrder": "fixed"
 	}`)
 
-	want := []string{"#8d5524", "#d4a574"}
+	want := []string{"#f0c8a0", "#d4a574", "#8d5524"}
 	if got := mustColor(t, r, "skin"); !slices.Equal(got, want) {
 		t.Errorf("color(skin) = %v, want %v", got, want)
 	}

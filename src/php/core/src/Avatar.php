@@ -17,24 +17,12 @@ class Avatar
     private array $resolvedOptions;
 
     /**
-     * Pass a {@see Style} instance. Passing a raw definition array is
-     * deprecated and will be removed in v11; wrap it with `new Style(...)` and
-     * reuse the instance across avatars.
+     * Pass a {@see Style} instance and reuse it across avatars.
      *
      * @param array<string, mixed> $optionsInput
      */
-    public function __construct(mixed $styleInput, array $optionsInput = [])
+    public function __construct(Style $style, array $optionsInput = [])
     {
-        if (!$styleInput instanceof Style) {
-            trigger_error(
-                'Passing a style definition to ' . self::class . ' is deprecated and '
-                    . 'will be removed in v11. Wrap it in a Style first: '
-                    . 'new Avatar(new Style($definition), $options).',
-                E_USER_DEPRECATED,
-            );
-        }
-
-        $style = $styleInput instanceof Style ? $styleInput : new Style($styleInput);
         $options = new Options($optionsInput);
         $resolver = new Resolver($style, $options);
 

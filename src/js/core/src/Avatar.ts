@@ -4,17 +4,10 @@ import { Resolver } from './Resolver.js';
 import { Renderer } from './Renderer.js';
 import type { StyleOptions } from './StyleOptions.js';
 
-type UnwrapStyle<D> = D extends Style<infer S> ? S : D;
-
 interface AvatarJson<D = unknown> {
   readonly svg: string;
-  readonly options: StyleOptions<UnwrapStyle<D>>;
+  readonly options: StyleOptions<D>;
 }
-
-// Emitted at most once per process: passing a raw definition is deprecated, but
-// it was the documented usage for a long time, so a per-call warning would be
-// noisy.
-let definitionInputWarned = false;
 
 /**
  * Top-level entry point for rendering an avatar from a style and options.
@@ -24,26 +17,21 @@ let definitionInputWarned = false;
  */
 export class Avatar<D = unknown> {
   #svg: string;
-  #resolvedOptions: StyleOptions<UnwrapStyle<D>>;
+  #resolvedOptions: StyleOptions<D>;
 
   /**
-   * Pass a {@link Style} instance. Passing a raw style definition is
-   * deprecated and will be removed in v11; wrap it with `new Style(...)` and
-   * reuse the instance across avatars.
+   * Pass a {@link Style} instance and reuse it across avatars. The parsed
+   * style carries the validation, so nothing is re-checked per render.
    */
-  constructor(styleInput: D, optionsInput?: StyleOptions<UnwrapStyle<D>>) {
-    if (!(styleInput instanceof Style) && !definitionInputWarned) {
-      definitionInputWarned = true;
-      console.warn(
-        '[DiceBear] Passing a style definition to `new Avatar()` is deprecated ' +
-          'and will be removed in v11. Wrap it in a Style first: ' +
+  constructor(style: Style<D>, optionsInput?: StyleOptions<D>) {
+    if (!(style instanceof Style)) {
+      throw new TypeError(
+        '[DiceBear] `new Avatar()` expects a Style. Wrap the definition first: ' +
           '`new Avatar(new Style(definition), options)`.',
       );
     }
 
-    const style =
-      styleInput instanceof Style ? styleInput : new Style(styleInput);
-    const options = new Options<UnwrapStyle<D>>(optionsInput);
+    const options = new Options<D>(optionsInput);
     const resolver = new Resolver(style, options);
 
     this.#svg = new Renderer(style, resolver).render();

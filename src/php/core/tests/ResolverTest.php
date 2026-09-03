@@ -427,10 +427,10 @@ class ResolverTest extends TestCase
         $this->assertSame(['#b55239', '#d6b370'], $resolver->color('hair'));
     }
 
-    public function testColorOrderFixedSortsStylePaletteInsteadOfVerbatim(): void
+    public function testColorOrderFixedKeepsStylePaletteInDefinitionOrder(): void
     {
-        // Without user-supplied colors, 'fixed' only skips the shuffle: the
-        // style palette keeps the canonical code-point sort, for every seed.
+        // Without user-supplied colors, 'fixed' uses the palette as the style
+        // lists it, for every seed.
         for ($i = 0; $i < 5; $i++) {
             $resolver = self::makeResolver(self::styleWithColors(), [
                 'seed' => "order-style-{$i}",
@@ -439,24 +439,24 @@ class ResolverTest extends TestCase
                 'skinColorOrder' => 'fixed',
             ]);
 
-            $this->assertSame(['#8d5524', '#d4a574', '#f0c8a0'], $resolver->color('skin'));
+            $this->assertSame(['#f0c8a0', '#d4a574', '#8d5524'], $resolver->color('skin'));
         }
     }
 
-    public function testColorOrderFixedKeepsContrastSortingForStylePalette(): void
+    public function testColorOrderFixedSkipsContrastSortingForStylePalette(): void
     {
-        // background.contrastTo = skin and no user-supplied background colors:
-        // the strongest-contrast candidate still comes first.
+        // background.contrastTo = skin: the contrast sort would put black
+        // first against a white skin, the fixed order keeps white first.
         $resolver = self::makeResolver(self::styleWithColors(), [
             'seed' => 'order-style-contrast',
-            'skinColor' => '#000000',
+            'skinColor' => '#ffffff',
             'backgroundColorOrder' => 'fixed',
         ]);
 
         $this->assertSame(['#ffffff'], $resolver->color('background'));
     }
 
-    public function testColorOrderFixedKeepsDefaultTwoStopsForStylePalette(): void
+    public function testColorOrderFixedDefaultsStopCountToPaletteSize(): void
     {
         $resolver = self::makeResolver(self::styleWithColors(), [
             'seed' => 'order-style-stops',
@@ -464,7 +464,7 @@ class ResolverTest extends TestCase
             'skinColorOrder' => 'fixed',
         ]);
 
-        $this->assertSame(['#8d5524', '#d4a574'], $resolver->color('skin'));
+        $this->assertSame(['#f0c8a0', '#d4a574', '#8d5524'], $resolver->color('skin'));
     }
 
     // componentTransform()

@@ -8,8 +8,20 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Removed
+
+- **Core (JS, PHP, Python):** `Avatar` no longer accepts a raw style definition,
+  deprecated since 10.1. Pass a `Style`:
+  `new Avatar(new Style(definition), options)`. JS throws a `TypeError`, PHP and
+  Python reject the argument by type.
+
 ### Changed
 
+- **Core:** `*ColorOrder: 'fixed'` treats the style's palette the way it treats
+  user colors, as announced in 10.5: the palette is used in its definition
+  order, duplicates included, the contrast sort is skipped, and the gradient
+  stop count defaults to the number of colors. The deduplicated, code-point
+  sorted fallback is gone from all seven cores.
 - **Core:** `animation` is a boolean. The name and list forms from 11.0.0-rc.1
   are gone, a single animation is switched through its `${name}Animation` option
   instead.

@@ -973,6 +973,7 @@ writeJson('colors.json', {
 console.log('Generating validation.json…');
 
 const minimalStyle = { canvas: { width: 100, height: 100, elements: [] } };
+const minimalStyleParsed = new Style(minimalStyle);
 
 // A canvas holding one element, so a single attribute value can carry the
 // string under test into both the validator and the rendered SVG.
@@ -1398,7 +1399,7 @@ const validationFixtures = {
   options: optionsValidationCases.map((c) => {
     let valid = true;
     try {
-      new Avatar(minimalStyle, c.options);
+      new Avatar(minimalStyleParsed, c.options);
     } catch {
       valid = false;
     }
@@ -1407,7 +1408,7 @@ const validationFixtures = {
   }),
   circularColors: circularColorCases.map((c) => {
     try {
-      new Avatar(c.style, { seed: 'x' });
+      new Avatar(new Style(c.style), { seed: 'x' });
     } catch (e) {
       if (e.name !== 'CircularColorReferenceError') {
         throw new Error(
@@ -1493,8 +1494,8 @@ function avatarCases(extra) {
         backgroundColorOrder: 'fixed',
       },
     },
-    // Without user-supplied colors a fixed order falls back to the style's
-    // palette in canonical sorted order, independent of the seed.
+    // Without user-supplied colors a fixed order uses the style's palette in
+    // its definition order, independent of the seed.
     {
       id: 'background-fixed-order-palette',
       options: {
@@ -1766,7 +1767,7 @@ const avatarFixtures = {
 for (const [styleName, cases] of Object.entries(avatarFixtures)) {
   const styleData = styles[styleName];
   const out = cases.map((c) => {
-    const avatar = new Avatar(styleData, c.options);
+    const avatar = new Avatar(new Style(styleData), c.options);
     const json = avatar.toJSON();
     // JSON-round-trip the resolved options so the fixture matches what
     // any consumer would see after JSON.stringify — this drops undefined

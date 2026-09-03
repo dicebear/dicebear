@@ -85,13 +85,13 @@ following options are available:
 | `{color}ColorAngle`     | `number \| [min, max]`            | Gradient angle in degrees (−360 to 360)                            |
 | `{color}ColorOrder`     | `'random' \| 'fixed'`             | Use the given colors in order (`fixed`) instead of shuffling them  |
 
-With `{color}ColorOrder: 'fixed'`, colors passed via `{color}Color` keep exactly
-the order you give them: gradient fills apply them as stops from first to last,
-solid fills always use the first color, and the number of gradient stops
-defaults to the number of given colors. Without `{color}Color`, `fixed` only
-skips the shuffle; the style's palette is deduplicated and used in sorted order.
-Constraints in the style definition (`contrastTo`, `notEqualTo`) still apply, so
-the result can stay seed-dependent through the referenced color groups.
+With `{color}ColorOrder: 'fixed'`, the colors keep exactly the order they are
+given in, whether you pass them via `{color}Color` or the style's palette is
+used: gradient fills apply them as stops from first to last, solid fills always
+use the first color, and the number of gradient stops defaults to the number of
+colors. A `contrastTo` constraint in the style definition is skipped, a
+`notEqualTo` constraint still applies, so the result can stay seed-dependent
+through the referenced color groups.
 
 ## Variant tags
 

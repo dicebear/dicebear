@@ -14,7 +14,7 @@ use serde_json::Value;
 
 use crate::error::Error;
 use crate::options::{Options, COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM};
-use crate::prng::{cmp_utf16, unique_by_code_point, Prng, Range};
+use crate::prng::{Prng, Range};
 use crate::style::{Color, Component, Style};
 use crate::utils::color;
 
@@ -487,17 +487,15 @@ impl<'a> Resolver<'a> {
     /// [`Error::CircularColorReference`] when colors reference each other in a
     /// cycle.
     ///
-    /// A user-set `${name}ColorOrder: 'fixed'` pins user-supplied colors to
-    /// their verbatim order: the shuffle and the contrast sort are skipped
-    /// (`notEqualTo` filtering still applies), and the gradient stop count
-    /// defaults to the number of supplied colors instead of 2. A style palette
-    /// carries no order contract, so with `fixed` it is still deduplicated,
-    /// code-point sorted, and contrast sorted; only the shuffle is skipped.
+    /// A user-set `${name}ColorOrder: 'fixed'` pins the candidates to their
+    /// given order, whether they come from the option or from the style's
+    /// palette: the shuffle and the contrast sort are skipped (`notEqualTo`
+    /// filtering still applies), and the gradient stop count defaults to the
+    /// number of candidates instead of 2.
     fn resolve_color(&self, name: &str) -> Result<Vec<String>, Error> {
         let style_color = self.style.colors().get(name);
         let user_colors = self.options.color(name);
         let fixed = self.color_order(name) == COLOR_ORDER_FIXED;
-        let verbatim = user_colors.is_some() && fixed;
         let source: Vec<String> = user_colors
             .or_else(|| style_color.map(|c| c.values().to_vec()))
             .unwrap_or_default();
@@ -507,11 +505,11 @@ impl<'a> Resolver<'a> {
         let stops = if fill == "solid" {
             1
         } else {
-            self.color_fill_stops(name, if verbatim { candidates.len() } else { 2 })
+            self.color_fill_stops(name, if fixed { candidates.len() } else { 2 })
         };
 
         let Some(style_color) = style_color else {
-            let ordered = self.order(name, candidates, fixed, verbatim);
+            let ordered = self.order(name, candidates, fixed);
             return Ok(ordered.into_iter().take(stops).collect());
         };
 
@@ -523,7 +521,7 @@ impl<'a> Resolver<'a> {
 
         self.color_resolving.borrow_mut().push(name.to_string());
         // Apply constraints, then always pop the stack (even on error).
-        let outcome = self.apply_color_constraints(style_color, &mut candidates, verbatim);
+        let outcome = self.apply_color_constraints(style_color, &mut candidates, fixed);
         self.color_resolving.borrow_mut().pop();
         outcome?;
 
@@ -531,7 +529,7 @@ impl<'a> Resolver<'a> {
         let ordered = if style_color.contrast_to().is_some() {
             candidates
         } else {
-            self.order(name, candidates, fixed, verbatim)
+            self.order(name, candidates, fixed)
         };
 
         Ok(ordered.into_iter().take(stops).collect())
@@ -541,10 +539,10 @@ impl<'a> Resolver<'a> {
         &self,
         style_color: &Color,
         candidates: &mut Vec<String>,
-        verbatim: bool,
+        fixed: bool,
     ) -> Result<(), Error> {
         if let Some(reference) = style_color.contrast_to() {
-            if !verbatim {
+            if !fixed {
                 if let Some(ref_color) = self.color(reference)?.into_iter().next() {
                     *candidates = color::sort_by_contrast(candidates, &ref_color);
                 }
@@ -563,32 +561,13 @@ impl<'a> Resolver<'a> {
     }
 
     /// Applies `${name}ColorOrder` to the candidate list. `random` shuffles via
-    /// the PRNG. `fixed` skips the shuffle: user-supplied colors (`verbatim`)
-    /// keep exactly the given order, while a style palette is still deduplicated
-    /// and sorted by UTF-16 code units, matching the canonicalization the
-    /// shuffle applies before drawing.
-    fn order(
-        &self,
-        name: &str,
-        candidates: Vec<String>,
-        fixed: bool,
-        verbatim: bool,
-    ) -> Vec<String> {
-        if !fixed {
-            return self.prng.shuffle(&format!("{name}Color"), &candidates);
+    /// the PRNG, `fixed` keeps the candidates as given, duplicates included.
+    fn order(&self, name: &str, candidates: Vec<String>, fixed: bool) -> Vec<String> {
+        if fixed {
+            candidates
+        } else {
+            self.prng.shuffle(&format!("{name}Color"), &candidates)
         }
-
-        if verbatim {
-            return candidates;
-        }
-
-        // Deprecated: DiceBear 11 will take the palette in its definition
-        // order here, the same verbatim rule as user-supplied colors, and
-        // drop this sort (see CHANGELOG.md, "Deprecated").
-        let mut unique = unique_by_code_point(&candidates);
-        unique.sort_by(|a, b| cmp_utf16(a.as_str(), b.as_str()));
-
-        unique.into_iter().cloned().collect()
     }
 
     fn color_fill_stops(&self, name: &str, fallback: usize) -> usize {
@@ -797,9 +776,9 @@ mod tests {
     }
 
     #[test]
-    fn fixed_order_sorts_a_style_palette_instead_of_taking_it_verbatim() {
-        // Without user-supplied colors, 'fixed' only skips the shuffle: the
-        // style palette keeps the canonical code-point sort, for every seed.
+    fn fixed_order_keeps_a_style_palette_in_definition_order() {
+        // Without user-supplied colors, 'fixed' uses the palette as the style
+        // lists it, for every seed.
         let style = style_with_colors();
 
         for i in 0..5 {
@@ -814,20 +793,20 @@ mod tests {
                 "skin",
             );
 
-            assert_eq!(colors, vec!["#8d5524", "#d4a574", "#f0c8a0"]);
+            assert_eq!(colors, vec!["#f0c8a0", "#d4a574", "#8d5524"]);
         }
     }
 
     #[test]
-    fn fixed_order_keeps_contrast_sorting_for_a_style_palette() {
-        // background.contrastTo = skin and no user-supplied background colors:
-        // the strongest-contrast candidate still comes first.
+    fn fixed_order_skips_contrast_sorting_for_a_style_palette() {
+        // background.contrastTo = skin: the contrast sort would put black
+        // first against a white skin, the fixed order keeps white first.
         let style = style_with_colors();
         let colors = resolve(
             &style,
             json!({
                 "seed": "order-style-contrast",
-                "skinColor": "#000000",
+                "skinColor": "#ffffff",
                 "backgroundColorOrder": "fixed",
             }),
             "background",
@@ -837,7 +816,7 @@ mod tests {
     }
 
     #[test]
-    fn fixed_order_keeps_the_default_of_two_stops_for_a_style_palette() {
+    fn fixed_order_defaults_the_stop_count_to_the_palette_size() {
         let style = style_with_colors();
         let colors = resolve(
             &style,
@@ -849,7 +828,7 @@ mod tests {
             "skin",
         );
 
-        assert_eq!(colors, vec!["#8d5524", "#d4a574"]);
+        assert_eq!(colors, vec!["#f0c8a0", "#d4a574", "#8d5524"]);
     }
 
     #[test]

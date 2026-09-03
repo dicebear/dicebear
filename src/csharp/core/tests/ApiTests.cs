@@ -243,6 +243,69 @@ public class ApiTests
         Assert.Contains(expected, new Avatar(style, options).ToSvg(), StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// A style with a plain palette, one filtered against it and one sorted
+    /// for contrast against it, so the fixed order has every rule to skip or
+    /// keep.
+    /// </summary>
+    private const string StyleWithColors = """
+        {
+          "canvas": { "width": 100, "height": 100, "elements": [] },
+          "colors": {
+            "skin": { "values": ["#f0c8a0", "#d4a574", "#8d5524"] },
+            "hair": { "values": ["#2c1b18", "#b55239", "#d6b370"], "notEqualTo": ["skin"] },
+            "background": { "values": ["#ffffff", "#000000", "#cccccc"], "contrastTo": "skin" }
+          }
+        }
+        """;
+
+    [Fact]
+    public void KeepsAStylePaletteInDefinitionOrderWhenFixed()
+    {
+        // Without user-supplied colors, fixed uses the palette as the style
+        // lists it, for every seed.
+        for (var i = 0; i < 5; i++)
+        {
+            var resolver = new Resolver(
+                Style.Parse(StyleWithColors),
+                new Options(Options(
+                    ("seed", "order-style-" + i),
+                    ("skinColorFill", "linear"),
+                    ("skinColorFillStops", 3),
+                    ("skinColorOrder", "fixed"))));
+
+            Assert.Equal(new[] { "#f0c8a0", "#d4a574", "#8d5524" }, resolver.Color("skin"));
+        }
+    }
+
+    [Fact]
+    public void SkipsContrastSortingForAStylePaletteWhenFixed()
+    {
+        // background.contrastTo = skin: the contrast sort would put black
+        // first against a white skin, the fixed order keeps white first.
+        var resolver = new Resolver(
+            Style.Parse(StyleWithColors),
+            new Options(Options(
+                ("seed", "order-style-contrast"),
+                ("skinColor", new[] { "#ffffff" }),
+                ("backgroundColorOrder", "fixed"))));
+
+        Assert.Equal(new[] { "#ffffff" }, resolver.Color("background"));
+    }
+
+    [Fact]
+    public void DefaultsTheStopCountToThePaletteSizeWhenFixed()
+    {
+        var resolver = new Resolver(
+            Style.Parse(StyleWithColors),
+            new Options(Options(
+                ("seed", "order-style-stops"),
+                ("skinColorFill", "linear"),
+                ("skinColorOrder", "fixed"))));
+
+        Assert.Equal(new[] { "#f0c8a0", "#d4a574", "#8d5524" }, resolver.Color("skin"));
+    }
+
     [Fact]
     public void RendersATitleAsRoleAndAriaLabel()
     {

@@ -43,11 +43,11 @@ In JavaScript it looks like this; the
 equivalent for each language:
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Avatar, Style } from '@dicebear/core';
 import definition from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(definition, {
-  seed: 'John Doe',
+const avatar = new Avatar(new Style(definition), {
+  seed: 'John',
   size: 128,
 });
 

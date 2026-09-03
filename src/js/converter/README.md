@@ -20,13 +20,13 @@ Requires Node.js 22+ or any modern browser.
 ## Usage
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Avatar, Style } from '@dicebear/core';
 import { toPng } from '@dicebear/converter';
 
 // From a style definition (here from the @dicebear/styles package)
 import definition from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(definition, { seed: 'John Doe' });
+const avatar = new Avatar(new Style(definition), { seed: 'John' });
 
 const png = toPng(avatar, { size: 256 });
 

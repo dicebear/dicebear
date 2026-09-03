@@ -365,12 +365,11 @@ class Resolver {
   /// and `notEqualTo` filtering from the style definition. Detects circular
   /// references between colors and throws [CircularColorReferenceError].
   ///
-  /// A user-set `${name}ColorOrder: 'fixed'` pins user-supplied colors to
-  /// their verbatim order: the shuffle and the contrast sort are skipped
-  /// (`notEqualTo` filtering still applies), and the gradient stop count
-  /// defaults to the number of supplied colors instead of 2. A style palette
-  /// carries no order contract, so with `fixed` it is still deduplicated,
-  /// code-point sorted, and contrast sorted; only the shuffle is skipped.
+  /// A user-set `${name}ColorOrder: 'fixed'` pins the candidates to their
+  /// given order, whether they come from the option or from the style's
+  /// palette: the shuffle and the contrast sort are skipped (`notEqualTo`
+  /// filtering still applies), and the gradient stop count defaults to the
+  /// number of candidates instead of 2.
   List<String> _resolveColor(String name) {
     final userColors = _options.color(name);
     final styleColor = _style.colors[name];
@@ -378,17 +377,16 @@ class Resolver {
 
     var candidates = [for (final c in source) Color.toHex(c)];
     final fixed = colorOrder(name) == colorOrderFixed;
-    final verbatim = userColors != null && fixed;
 
     // colorFill is memoized inside this computation, so it lands in the
     // snapshot before `${name}Color` — the memo writes after compute returns.
     final fill = colorFill(name);
     final stops = fill == 'solid'
         ? 1
-        : _colorFillStops(name, verbatim ? candidates.length : 2);
+        : _colorFillStops(name, fixed ? candidates.length : 2);
 
     if (styleColor == null) {
-      return _takeN(_order(name, candidates, fixed, verbatim), stops);
+      return _takeN(_order(name, candidates, fixed), stops);
     }
 
     // Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a).
@@ -401,7 +399,7 @@ class Resolver {
     final notEqualTo = styleColor.notEqualTo();
 
     try {
-      if (contrastTo != null && !verbatim) {
+      if (contrastTo != null && !fixed) {
         final refColors = color(contrastTo);
 
         if (refColors.isNotEmpty) {
@@ -423,37 +421,16 @@ class Resolver {
     }
 
     // Skip the shuffle when sorted by contrast, to preserve that ordering.
-    final ordered = contrastTo != null
-        ? candidates
-        : _order(name, candidates, fixed, verbatim);
+    final ordered =
+        contrastTo != null ? candidates : _order(name, candidates, fixed);
 
     return _takeN(ordered, stops);
   }
 
   /// Applies `${name}ColorOrder` to the candidate list. `random` shuffles via
-  /// the PRNG. `fixed` skips the shuffle: user-supplied colors ([verbatim])
-  /// keep exactly the given order, while a style palette is still deduplicated
-  /// and sorted by UTF-16 code units, matching the canonicalization the
-  /// shuffle applies before drawing.
-  List<String> _order(
-    String name,
-    List<String> candidates,
-    bool fixed,
-    bool verbatim,
-  ) {
-    if (!fixed) {
-      return _prng.shuffle('${name}Color', candidates);
-    }
-
-    if (verbatim) {
-      return candidates;
-    }
-
-    // Deprecated: DiceBear 11 will take the palette in its definition order
-    // here, the same verbatim rule as user-supplied colors, and drop this
-    // sort (see CHANGELOG.md, "Deprecated").
-    return candidates.toSet().toList()..sort();
-  }
+  /// the PRNG, `fixed` keeps the candidates as given, duplicates included.
+  List<String> _order(String name, List<String> candidates, bool fixed) =>
+      fixed ? candidates : _prng.shuffle('${name}Color', candidates);
 
   // The JS port's truthy check: an empty `contrastTo` counts as unset.
   static String? _contrastTo(ColorDefinition styleColor) {

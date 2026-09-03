@@ -529,21 +529,19 @@ no PRNG pick, so the snapshot stays unchanged for existing inputs.
 Resolution for each group:
 
 1. Get candidate colors from the user option (`${name}Color`) or fall back to
-   the style definition's palette. Remember which source was used: `'fixed'`
-   treats user-supplied candidates ("verbatim") differently from the definition
-   palette.
+   the style definition's palette. From here on both sources are treated the
+   same.
 2. Normalize every candidate to lowercase hex (6 or 8 digits, leading `#`).
    3-/4-digit shorthand expands to 6/8.
 3. Determine the number of stops: `1` if fill is `solid`, otherwise sample
    `${name}ColorFillStops` (PRNG `integer`). When the option is unset the
-   fallback is `2`; in the verbatim case (`'fixed'` with user-supplied
-   candidates) it is the candidate count instead, measured before the
-   `notEqualTo` filtering below.
+   fallback is `2`, or with `${name}ColorOrder: 'fixed'` the candidate count,
+   measured before the `notEqualTo` filtering below.
 4. Apply constraints from the style definition:
    - **`contrastTo`**: Sort the candidates by WCAG 2.1 contrast ratio
      (descending) against the referenced color. The reference is resolved by
      calling the color-resolver recursively, so cycles must be detected and
-     rejected. Skipped in the verbatim case: the user's order wins.
+     rejected. Skipped with `'fixed'`: the given order wins.
    - **`notEqualTo`**: Strip the alpha channel from every candidate and every
      already-picked color in the referenced groups, then drop the matches. If
      filtering would empty the candidate list, fall back to the unfiltered list:
@@ -552,10 +550,8 @@ Resolution for each group:
 5. Order the candidates. If the definition declares `contrastTo`, keep the
    current order, even when the sort itself was skipped because the reference
    resolved to no color. Otherwise shuffle, unless `${name}ColorOrder` is
-   `'fixed'`: verbatim candidates then keep exactly the given order (duplicates
-   included), while a definition palette is deduplicated (first occurrence wins)
-   and sorted by UTF-16 code units (the same canonicalization `shuffle` applies
-   before drawing, without the shuffle itself).
+   `'fixed'`: the candidates then keep exactly their given order, duplicates
+   included, whether they come from the option or from the palette.
 6. Slice to the number of stops.
 
 A group declared without a color entry in the style definition (the implicit

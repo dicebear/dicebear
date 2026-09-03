@@ -437,13 +437,11 @@ namespace DiceBear.Internal
         /// <see cref="CircularColorReferenceException"/>.
         /// </summary>
         /// <remarks>
-        /// A user-set <c>{name}ColorOrder: "fixed"</c> pins user-supplied
-        /// colors to their verbatim order: the shuffle and the contrast sort
-        /// are skipped (<c>notEqualTo</c> filtering still applies), and the
-        /// gradient stop count defaults to the number of supplied colors
-        /// instead of 2. A style palette carries no order contract, so with
-        /// <c>fixed</c> it is still deduplicated, code-point sorted and
-        /// contrast sorted; only the shuffle is skipped.
+        /// A user-set <c>{name}ColorOrder: "fixed"</c> pins the candidates to
+        /// their given order, whether they come from the option or from the
+        /// style's palette: the shuffle and the contrast sort are skipped
+        /// (<c>notEqualTo</c> filtering still applies), and the gradient stop
+        /// count defaults to the number of candidates instead of 2.
         /// </remarks>
         private IReadOnlyList<string> ResolveColor(string name)
         {
@@ -453,15 +451,14 @@ namespace DiceBear.Internal
 
             var candidates = source.Select(DiceBear.Internal.Color.ToHex).ToList();
             var isFixed = ColorOrder(name) == ColorOrderFixed;
-            var verbatim = userColors is not null && isFixed;
             var fill = ColorFill(name);
             var stops = fill == "solid"
                 ? 1
-                : ColorFillStops(name, verbatim ? candidates.Count : 2);
+                : ColorFillStops(name, isFixed ? candidates.Count : 2);
 
             if (!hasStyleColor)
             {
-                return Take(Order(name, candidates, isFixed, verbatim), stops);
+                return Take(Order(name, candidates, isFixed), stops);
             }
 
             // Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a)
@@ -479,7 +476,7 @@ namespace DiceBear.Internal
 
             try
             {
-                if (!string.IsNullOrEmpty(contrastTo) && !verbatim)
+                if (!string.IsNullOrEmpty(contrastTo) && !isFixed)
                 {
                     var reference = Color(contrastTo!);
 
@@ -509,7 +506,7 @@ namespace DiceBear.Internal
             // Skip the shuffle when sorted by contrast, to preserve the ordering
             var ordered = !string.IsNullOrEmpty(contrastTo)
                 ? candidates
-                : Order(name, candidates, isFixed, verbatim);
+                : Order(name, candidates, isFixed);
 
             return Take(ordered, stops);
         }
@@ -524,33 +521,11 @@ namespace DiceBear.Internal
         /// Applies <c>{name}ColorOrder</c> to the candidate list.
         /// </summary>
         /// <remarks>
-        /// <c>random</c> shuffles via the PRNG. <c>fixed</c> skips the shuffle:
-        /// user-supplied colors (<paramref name="verbatim"/>) keep exactly the
-        /// given order, while a style palette is still deduplicated and sorted
-        /// by UTF-16 code units, matching the canonicalization the shuffle
-        /// applies before drawing.
+        /// <c>random</c> shuffles via the PRNG, <c>fixed</c> keeps the
+        /// candidates as given, duplicates included.
         /// </remarks>
-        private IReadOnlyList<string> Order(
-            string name,
-            IReadOnlyList<string> candidates,
-            bool isFixed,
-            bool verbatim)
-        {
-            if (!isFixed)
-            {
-                return _prng.Shuffle(name + "Color", candidates);
-            }
-
-            if (verbatim)
-            {
-                return candidates;
-            }
-
-            // Deprecated: DiceBear 11 will take the palette in its definition
-            // order here, the same verbatim rule as user-supplied colors, and
-            // drop this sort (see CHANGELOG.md, "Deprecated").
-            return candidates.Distinct(StringComparer.Ordinal).OrderBy(c => c, StringComparer.Ordinal).ToList();
-        }
+        private IReadOnlyList<string> Order(string name, IReadOnlyList<string> candidates, bool isFixed) =>
+            isFixed ? candidates : _prng.Shuffle(name + "Color", candidates);
 
         private int ColorFillStops(string name, int fallback)
         {

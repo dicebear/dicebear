@@ -1,8 +1,6 @@
 package render
 
 import (
-	"sort"
-
 	"github.com/dicebear/dicebear-go/v10/color"
 	"github.com/dicebear/dicebear-go/v10/internal/errs"
 	"github.com/dicebear/dicebear-go/v10/internal/prng"
@@ -518,12 +516,11 @@ func (r *resolver) isVisible(name string, comp *style.Component) bool {
 // are detected via the colorResolving stack and reported as a
 // CircularColorReferenceError.
 //
-// A user-set ${name}ColorOrder: "fixed" pins user-supplied colors to their
-// verbatim order: the shuffle and the contrast sort are skipped (notEqualTo
-// filtering still applies), and the gradient stop count defaults to the number
-// of supplied colors instead of 2. A style palette carries no order contract,
-// so with "fixed" it is still deduplicated, code-point sorted, and contrast
-// sorted; only the shuffle is skipped.
+// A user-set ${name}ColorOrder: "fixed" pins the candidates to their given
+// order, whether they come from the ${name}Color option or from the style's
+// palette: the shuffle and the contrast sort are skipped (notEqualTo filtering
+// still applies), and the gradient stop count defaults to the number of
+// candidates instead of 2.
 func (r *resolver) resolveColor(name string) ([]string, error) {
 	styleColor, hasStyleColor := r.style.Colors()[name]
 
@@ -541,19 +538,18 @@ func (r *resolver) resolveColor(name string) ([]string, error) {
 	}
 
 	fixed := r.colorOrder(name) == style.ColorOrderFixed
-	verbatim := hasUserColors && fixed
 	fill := r.colorFill(name)
 	stops := 1
 	if fill != "solid" {
 		fallback := 2
-		if verbatim {
+		if fixed {
 			fallback = len(candidates)
 		}
 		stops = r.colorFillStops(name, fallback)
 	}
 
 	if !hasStyleColor {
-		return takeN(r.orderColors(name, candidates, fixed, verbatim), stops), nil
+		return takeN(r.orderColors(name, candidates, fixed), stops), nil
 	}
 
 	// Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a).
@@ -565,7 +561,7 @@ func (r *resolver) resolveColor(name string) ([]string, error) {
 	}
 
 	r.colorResolving = append(r.colorResolving, name)
-	err := r.applyColorConstraints(styleColor, &candidates, verbatim)
+	err := r.applyColorConstraints(styleColor, &candidates, fixed)
 	r.colorResolving = r.colorResolving[:len(r.colorResolving)-1]
 	if err != nil {
 		return nil, err
@@ -574,44 +570,24 @@ func (r *resolver) resolveColor(name string) ([]string, error) {
 	// Skip the shuffle when sorted by contrast, to preserve that ordering.
 	ordered := candidates
 	if styleColor.ContrastTo == "" {
-		ordered = r.orderColors(name, candidates, fixed, verbatim)
+		ordered = r.orderColors(name, candidates, fixed)
 	}
 
 	return takeN(ordered, stops), nil
 }
 
 // orderColors applies ${name}ColorOrder to the candidate list. "random"
-// shuffles via the PRNG. "fixed" skips the shuffle: user-supplied colors
-// (verbatim) keep exactly the given order, while a style palette is still
-// deduplicated and sorted by UTF-16 code units, matching the canonicalization
-// the shuffle applies before drawing. The candidates are normalized hex
-// strings, so Go's byte order equals the UTF-16 code unit order here.
-func (r *resolver) orderColors(name string, candidates []string, fixed, verbatim bool) []string {
-	if !fixed {
-		return r.rng.Shuffle(name+"Color", candidates)
-	}
-
-	if verbatim {
+// shuffles via the PRNG, "fixed" keeps the candidates as given, duplicates
+// included.
+func (r *resolver) orderColors(name string, candidates []string, fixed bool) []string {
+	if fixed {
 		return candidates
 	}
-
-	// Deprecated: DiceBear 11 will take the palette in its definition order
-	// here, the same verbatim rule as user-supplied colors, and drop this
-	// sort (see CHANGELOG.md, "Deprecated").
-	seen := make(map[string]struct{}, len(candidates))
-	unique := make([]string, 0, len(candidates))
-	for _, c := range candidates {
-		if _, ok := seen[c]; !ok {
-			seen[c] = struct{}{}
-			unique = append(unique, c)
-		}
-	}
-	sort.Strings(unique)
-	return unique
+	return r.rng.Shuffle(name+"Color", candidates)
 }
 
-func (r *resolver) applyColorConstraints(styleColor style.ColorDef, candidates *[]string, verbatim bool) error {
-	if styleColor.ContrastTo != "" && !verbatim {
+func (r *resolver) applyColorConstraints(styleColor style.ColorDef, candidates *[]string, fixed bool) error {
+	if styleColor.ContrastTo != "" && !fixed {
 		refColors, err := r.color(styleColor.ContrastTo)
 		if err != nil {
 			return err

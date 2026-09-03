@@ -440,9 +440,9 @@ def test_color_order_still_applies_not_equal_to_filtering_when_fixed() -> None:
     assert resolver.color("hair") == ["#b55239", "#d6b370"]
 
 
-def test_color_order_sorts_style_palette_instead_of_taking_it_verbatim() -> None:
-    # Without user-supplied colors, 'fixed' only skips the shuffle: the style
-    # palette keeps the canonical code-point sort, for every seed.
+def test_color_order_keeps_style_palette_in_definition_order_when_fixed() -> None:
+    # Without user-supplied colors, 'fixed' uses the palette as the style
+    # lists it, for every seed.
     for i in range(5):
         resolver = _make_resolver(
             _style_with_colors(),
@@ -453,24 +453,24 @@ def test_color_order_sorts_style_palette_instead_of_taking_it_verbatim() -> None
                 "skinColorOrder": "fixed",
             },
         )
-        assert resolver.color("skin") == ["#8d5524", "#d4a574", "#f0c8a0"]
+        assert resolver.color("skin") == ["#f0c8a0", "#d4a574", "#8d5524"]
 
 
-def test_color_order_keeps_contrast_sorting_for_style_palette_when_fixed() -> None:
-    # background.contrastTo = skin and no user-supplied background colors: the
-    # strongest-contrast candidate still comes first.
+def test_color_order_skips_contrast_sorting_for_style_palette_when_fixed() -> None:
+    # background.contrastTo = skin: the contrast sort would put black first
+    # against a white skin, the fixed order keeps white first.
     resolver = _make_resolver(
         _style_with_colors(),
         {
             "seed": "order-style-contrast",
-            "skinColor": "#000000",
+            "skinColor": "#ffffff",
             "backgroundColorOrder": "fixed",
         },
     )
     assert resolver.color("background") == ["#ffffff"]
 
 
-def test_color_order_keeps_default_of_2_stops_for_style_palette_when_fixed() -> None:
+def test_color_order_defaults_stops_to_palette_size_when_fixed() -> None:
     resolver = _make_resolver(
         _style_with_colors(),
         {
@@ -479,7 +479,7 @@ def test_color_order_keeps_default_of_2_stops_for_style_palette_when_fixed() -> 
             "skinColorOrder": "fixed",
         },
     )
-    assert resolver.color("skin") == ["#8d5524", "#d4a574"]
+    assert resolver.color("skin") == ["#f0c8a0", "#d4a574", "#8d5524"]
 
 
 # ---------------------------------------------------------------------------

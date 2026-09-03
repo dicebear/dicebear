@@ -463,9 +463,9 @@ describe('Resolver', () => {
       assert.deepEqual(resolver.color('hair'), ['#b55239', '#d6b370']);
     });
 
-    it('should sort a style palette instead of taking it verbatim', () => {
-      // Without user-supplied colors, 'fixed' only skips the shuffle: the
-      // style palette keeps the canonical code-point sort, for every seed.
+    it('should keep a style palette in definition order when fixed', () => {
+      // Without user-supplied colors, 'fixed' uses the palette as the style
+      // lists it, for every seed.
       for (let i = 0; i < 5; i++) {
         const resolver = makeResolver(styleWithColors, {
           seed: `order-style-${i}`,
@@ -475,33 +475,37 @@ describe('Resolver', () => {
         });
 
         assert.deepEqual(resolver.color('skin'), [
-          '#8d5524',
-          '#d4a574',
           '#f0c8a0',
+          '#d4a574',
+          '#8d5524',
         ]);
       }
     });
 
-    it('should keep contrast sorting for a style palette when fixed', () => {
-      // background.contrastTo = skin and no user-supplied background colors:
-      // the strongest-contrast candidate still comes first.
+    it('should skip contrast sorting for a style palette when fixed', () => {
+      // background.contrastTo = skin: the contrast sort would put black
+      // first against a white skin, the fixed order keeps white first.
       const resolver = makeResolver(styleWithColors, {
         seed: 'order-style-contrast',
-        skinColor: '#000000',
+        skinColor: '#ffffff',
         backgroundColorOrder: 'fixed',
       });
 
       assert.deepEqual(resolver.color('background'), ['#ffffff']);
     });
 
-    it('should keep the default of 2 stops for a style palette when fixed', () => {
+    it('should default the stop count to the palette size when fixed', () => {
       const resolver = makeResolver(styleWithColors, {
         seed: 'order-style-stops',
         skinColorFill: 'linear',
         skinColorOrder: 'fixed',
       });
 
-      assert.deepEqual(resolver.color('skin'), ['#8d5524', '#d4a574']);
+      assert.deepEqual(resolver.color('skin'), [
+        '#f0c8a0',
+        '#d4a574',
+        '#8d5524',
+      ]);
     });
   });
 

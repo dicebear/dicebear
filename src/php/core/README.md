@@ -25,28 +25,21 @@ Requires PHP 8.2+ and the `mbstring` extension.
 
 ```php
 use DiceBear\Avatar;
+use DiceBear\Style;
 
 // From a style definition (JSON-decoded array)
 $definition = json_decode(file_get_contents('path/to/style.json'), true);
+$style = new Style($definition);
 
-$avatar = new Avatar($definition, [
-    'seed' => 'John Doe',
+$avatar = new Avatar($style, [
+    'seed' => 'John',
     'size' => 128,
 ]);
 
 echo $avatar;              // SVG string
 echo $avatar->toDataUri(); // data:image/svg+xml;charset=utf-8,...
-```
 
-### Using the Style class
-
-```php
-use DiceBear\Style;
-use DiceBear\Avatar;
-
-$style = new Style($definition);
-
-// Create multiple avatars from the same style
+// Reuse the style for further avatars
 $avatar1 = new Avatar($style, ['seed' => 'Alice']);
 $avatar2 = new Avatar($style, ['seed' => 'Bob']);
 ```

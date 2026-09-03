@@ -372,11 +372,11 @@ Named color palettes. The PRNG picks a color from the palette based on the seed.
 }
 ```
 
-| Property     | Type     | Description                                                                                    |
-| ------------ | -------- | ---------------------------------------------------------------------------------------------- |
-| `values`     | string[] | **Required.** Hex colors in `#RGB`, `#RGBA`, `#RRGGBB`, or `#RRGGBBAA` form (1 to 128 entries) |
-| `contrastTo` | string   | Optional. Pick the color with highest contrast to this group's selection                       |
-| `notEqualTo` | string[] | Optional. Filter out colors already picked by these groups (up to 64 refs)                     |
+| Property     | Type     | Description                                                                                                                                                                       |
+| ------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `values`     | string[] | **Required.** Hex colors in `#RGB`, `#RGBA`, `#RRGGBB`, or `#RRGGBBAA` form (1 to 128 entries). With `*ColorOrder: 'fixed'` and no user colors, the palette is used in this order |
+| `contrastTo` | string   | Optional. Pick the color with highest contrast to this group's selection                                                                                                          |
+| `notEqualTo` | string[] | Optional. Filter out colors already picked by these groups (up to 64 refs)                                                                                                        |
 
 A definition may declare up to 512 color groups.
 

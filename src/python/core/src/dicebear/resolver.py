@@ -376,12 +376,11 @@ class Resolver:
         """Resolve a named color to its final stop list, applying contrast
         sorting and ``notEqualTo`` filtering from the style definition.
 
-        A user-set ``{name}ColorOrder: 'fixed'`` pins user-supplied colors to
-        their verbatim order: the shuffle and the contrast sort are skipped
-        (``notEqualTo`` filtering still applies), and the gradient stop count
-        defaults to the number of supplied colors instead of 2. A style palette
-        carries no order contract, so with ``fixed`` it is still deduplicated,
-        code-point sorted, and contrast sorted; only the shuffle is skipped.
+        A user-set ``{name}ColorOrder: 'fixed'`` pins the candidates to their
+        given order, whether they come from the option or from the style's
+        palette: the shuffle and the contrast sort are skipped (``notEqualTo``
+        filtering still applies), and the gradient stop count defaults to the
+        number of candidates instead of 2.
         """
         user_colors = self._options.color(name)
         style_color = self._style.colors().get(name)
@@ -395,16 +394,15 @@ class Resolver:
 
         candidates = [ColorUtil.to_hex(c) for c in source]
         fixed = self.color_order(name) == COLOR_ORDER_FIXED
-        verbatim = user_colors is not None and fixed
         fill = self.color_fill(name)
         stops = (
             1
             if fill == "solid"
-            else self._color_fill_stops(name, len(candidates) if verbatim else 2)
+            else self._color_fill_stops(name, len(candidates) if fixed else 2)
         )
 
         if style_color is None:
-            return self._order(name, candidates, fixed, verbatim)[:stops]
+            return self._order(name, candidates, fixed)[:stops]
 
         # Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a).
         if name in self._color_resolving:
@@ -415,7 +413,7 @@ class Resolver:
         not_equal_to = style_color.not_equal_to()
 
         try:
-            if contrast_to is not None and not verbatim:
+            if contrast_to is not None and not fixed:
                 ref = self.color(contrast_to)
                 ref_color = ref[0] if len(ref) > 0 else None
 
@@ -436,32 +434,18 @@ class Resolver:
         ordered = (
             candidates
             if contrast_to is not None
-            else self._order(name, candidates, fixed, verbatim)
+            else self._order(name, candidates, fixed)
         )
 
         return ordered[:stops]
 
-    def _order(
-        self, name: str, candidates: list[str], fixed: bool, verbatim: bool
-    ) -> list[str]:
+    def _order(self, name: str, candidates: list[str], fixed: bool) -> list[str]:
         """Apply ``{name}ColorOrder`` to the candidate list.
 
-        ``random`` shuffles via the PRNG. ``fixed`` skips the shuffle:
-        user-supplied colors (``verbatim``) keep exactly the given order, while
-        a style palette is still deduplicated and sorted by UTF-16 code units,
-        matching the canonicalization the shuffle applies before drawing. For
-        the ASCII hex strings involved a plain lexicographic sort is identical.
+        ``random`` shuffles via the PRNG, ``fixed`` keeps the candidates as
+        given, duplicates included.
         """
-        if not fixed:
-            return self._prng.shuffle(f"{name}Color", candidates)
-
-        if verbatim:
-            return candidates
-
-        # Deprecated: DiceBear 11 will take the palette in its definition
-        # order here, the same verbatim rule as user-supplied colors, and
-        # drop this sort (see CHANGELOG.md, "Deprecated").
-        return sorted(dict.fromkeys(candidates))
+        return candidates if fixed else self._prng.shuffle(f"{name}Color", candidates)
 
     def _color_fill_stops(self, name: str, fallback: int) -> int:
         range_ = self._options.color_fill_stops(name)

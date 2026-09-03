@@ -24,41 +24,13 @@ class AvatarTest extends TestCase
         $this->assertInstanceOf(Avatar::class, $avatar);
     }
 
-    public function testAcceptsRawStyleDataButEmitsDeprecation(): void
+    public function testRejectsARawDefinitionArray(): void
     {
-        // Back-compat: passing a raw definition still renders, but is
-        // deprecated in favor of wrapping it in a Style first. This is the
-        // single test that intentionally exercises the E_USER_DEPRECATED.
-        //
-        // A temporary error handler fully captures (and thereby consumes) the
-        // deprecation so it does not surface as a reported PHPUnit issue,
-        // while still letting us assert that it fired and that rendering works.
-        $captured = [];
-        set_error_handler(static function (int $errno, string $errstr) use (&$captured): bool {
-            $captured[] = $errstr;
-            return true;
-        }, E_USER_DEPRECATED);
-
-        try {
-            $avatar = new Avatar(self::minimalStyleData(), ['seed' => 'test']);
-        } finally {
-            restore_error_handler();
-        }
-
-        $this->assertCount(1, $captured, 'passing a raw definition must emit exactly one deprecation');
-        $this->assertSame(
-            'Passing a style definition to ' . Avatar::class . ' is deprecated and '
-                . 'will be removed in v11. Wrap it in a Style first: '
-                . 'new Avatar(new Style($definition), $options).',
-            $captured[0],
-        );
-
-        // The deprecated definition path must still render identically.
-        $this->assertInstanceOf(Avatar::class, $avatar);
-        $this->assertStringStartsWith('<svg ', $avatar->toString());
+        $this->expectException(\TypeError::class);
+        new Avatar(self::minimalStyleData(), ['seed' => 'test']);
     }
 
-    public function testAcceptsRawStyleDataAndRawOptions(): void
+    public function testAcceptsRawOptions(): void
     {
         $avatar = new Avatar(new Style(self::minimalStyleData()), ['seed' => 'test']);
         $this->assertInstanceOf(Avatar::class, $avatar);

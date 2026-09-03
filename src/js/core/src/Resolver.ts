@@ -436,12 +436,11 @@ export class Resolver<D = unknown> {
    * and `notEqualTo` filtering from the style definition. Detects circular
    * references between colors and throws {@link CircularColorReferenceError}.
    *
-   * A user-set `${name}ColorOrder: 'fixed'` pins user-supplied colors to
-   * their verbatim order: the shuffle and the contrast sort are skipped
-   * (`notEqualTo` filtering still applies), and the gradient stop count
-   * defaults to the number of supplied colors instead of 2. A style palette
-   * carries no order contract, so with `fixed` it is still deduplicated,
-   * code-point sorted, and contrast sorted; only the shuffle is skipped.
+   * A user-set `${name}ColorOrder: 'fixed'` pins the candidates to their
+   * given order, whether they come from the option or from the style's
+   * palette: the shuffle and the contrast sort are skipped (`notEqualTo`
+   * filtering still applies), and the gradient stop count defaults to the
+   * number of candidates instead of 2.
    */
   #resolveColor(name: string): readonly string[] {
     const userColors = this.#options.color(name);
@@ -450,15 +449,14 @@ export class Resolver<D = unknown> {
 
     let candidates = source.map((c) => Color.toHex(c));
     const fixed = this.colorOrder(name) === COLOR_ORDER_FIXED;
-    const verbatim = userColors !== undefined && fixed;
     const fill = this.colorFill(name);
     const stops =
       fill === 'solid'
         ? 1
-        : this.#colorFillStops(name, verbatim ? candidates.length : 2);
+        : this.#colorFillStops(name, fixed ? candidates.length : 2);
 
     if (!styleColor) {
-      return this.#order(name, candidates, fixed, verbatim).slice(0, stops);
+      return this.#order(name, candidates, fixed).slice(0, stops);
     }
 
     // Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a)
@@ -471,7 +469,7 @@ export class Resolver<D = unknown> {
     const notEqualTo = styleColor.notEqualTo();
 
     try {
-      if (contrastTo && !verbatim) {
+      if (contrastTo && !fixed) {
         const refColor = this.color(contrastTo)[0];
 
         if (refColor) {
@@ -497,36 +495,17 @@ export class Resolver<D = unknown> {
     // Skip shuffle when sorted by contrast to preserve the ordering
     const ordered = contrastTo
       ? candidates
-      : this.#order(name, candidates, fixed, verbatim);
+      : this.#order(name, candidates, fixed);
 
     return ordered.slice(0, stops);
   }
 
   /**
    * Applies `${name}ColorOrder` to the candidate list. `random` shuffles via
-   * the PRNG. `fixed` skips the shuffle: user-supplied colors (`verbatim`)
-   * keep exactly the given order, while a style palette is still deduplicated
-   * and sorted by UTF-16 code units, matching the canonicalization the
-   * shuffle applies before drawing.
+   * the PRNG, `fixed` keeps the candidates as given, duplicates included.
    */
-  #order(
-    name: string,
-    candidates: string[],
-    fixed: boolean,
-    verbatim: boolean,
-  ): string[] {
-    if (!fixed) {
-      return this.#prng.shuffle(`${name}Color`, candidates);
-    }
-
-    if (verbatim) {
-      return candidates;
-    }
-
-    // Deprecated: DiceBear 11 will take the palette in its definition order
-    // here, the same verbatim rule as user-supplied colors, and drop this
-    // sort (see CHANGELOG.md, "Deprecated").
-    return Array.from(new Set(candidates)).sort();
+  #order(name: string, candidates: string[], fixed: boolean): string[] {
+    return fixed ? candidates : this.#prng.shuffle(`${name}Color`, candidates);
   }
 
   #colorFillStops(name: string, fallback: number): number {
