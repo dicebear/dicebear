@@ -1,10 +1,11 @@
 <script lang="ts">
-import { Settings, Puzzle, Palette } from '@lucide/vue';
+import { Settings, Puzzle, Palette, Play } from '@lucide/vue';
 
 const categoryIcons = {
   general: Settings,
   component: Puzzle,
   color: Palette,
+  animation: Play,
 } as const;
 </script>
 

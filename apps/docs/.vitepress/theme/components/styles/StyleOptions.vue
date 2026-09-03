@@ -41,7 +41,7 @@ function rangeDefault(
 interface OptionGroup {
   id: string;
   label: string;
-  category: 'general' | 'component' | 'color';
+  category: 'general' | 'component' | 'color' | 'animation';
   options: Record<string, any>;
 }
 
@@ -172,6 +172,26 @@ function isColorOption(key: string, names: string[]): boolean {
   );
 }
 
+// The global animation options and, per animation name, the switch, the
+// speed and the delay.
+const globalAnimationKeys = ['animation', 'animationSpeed', 'animationDelay'];
+
+function isAnimationOption(key: string, names: string[]): boolean {
+  return names.some(
+    (name) =>
+      key === `${name}Animation` ||
+      key === `${name}AnimationSpeed` ||
+      key === `${name}AnimationDelay`,
+  );
+}
+
+// Every animation name comes with a `${name}Animation` switch field.
+const animationNames = computed<string[]>(() =>
+  Object.keys(descriptor.value)
+    .filter((key) => key !== 'animation' && key.endsWith('Animation'))
+    .map((key) => key.slice(0, -'Animation'.length)),
+);
+
 function pick(
   source: Record<string, any>,
   keys: string[],
@@ -207,7 +227,9 @@ const groups = computed<OptionGroup[]>(() => {
     (key) =>
       !hiddenKeys.has(key) &&
       !isComponentOption(key, componentNames.value) &&
-      !isColorOption(key, colorNames.value),
+      !isColorOption(key, colorNames.value) &&
+      !globalAnimationKeys.includes(key) &&
+      !isAnimationOption(key, animationNames.value),
   );
 
   if (generalKeys.length > 0) {
@@ -244,6 +266,36 @@ const groups = computed<OptionGroup[]>(() => {
         id: `color-${name}`,
         label: `${capitalCase(name)} Color`,
         category: 'color',
+        options: pick(descriptor.value, keys),
+      });
+    }
+  }
+
+  // The global switch, speed and delay first, then one group per animation
+  // name with the options that win over them for that animation.
+  const animationKeys = globalAnimationKeys.filter(
+    (key) => key in descriptor.value,
+  );
+
+  if (animationKeys.length > 0) {
+    result.push({
+      id: 'animation',
+      label: 'All Animations',
+      category: 'animation',
+      options: pick(descriptor.value, animationKeys),
+    });
+  }
+
+  for (const name of animationNames.value) {
+    const keys = Object.keys(descriptor.value).filter((k) =>
+      isAnimationOption(k, [name]),
+    );
+
+    if (keys.length > 0) {
+      result.push({
+        id: `animation-${name}`,
+        label: `${capitalCase(name)} Animation`,
+        category: 'animation',
         options: pick(descriptor.value, keys),
       });
     }

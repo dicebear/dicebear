@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isAnimationOption } from '@theme/utils/styleOptionMeta';
 import { computed, inject } from 'vue';
 import { getAvatarPropertyPreviewOptions } from '@theme/utils/avatar/preview';
 import { padColors, resolveColors } from '@theme/utils/avatar/colors';
@@ -183,10 +184,10 @@ const generalOptions = computed(() => {
 });
 
 // The HTTP API can only render options its deployed core already knows, so
-// the *ColorOrder previews go through the local library until the API ships
-// a core with the option.
+// the *ColorOrder and the animation previews go through the local library
+// until the API ships a core with the options.
 const previewMode = computed(() =>
-  previewTarget.value.type === 'colorOrder'
+  previewTarget.value.type === 'colorOrder' || isAnimationOption(props.name)
     ? ('library' as const)
     : ('http-api' as const),
 );

@@ -31,6 +31,26 @@ export function getAvatarPropertyPreviewOptions(
     };
   }
 
+  // A speed or delay only shows once something plays: the global ones switch
+  // every animation on, the per-name ones only their own animation.
+  const named = propertyName.match(/^(.+)Animation(Speed|Delay)$/);
+
+  if (named) {
+    return {
+      seed: exampleSeeds[0],
+      [`${named[1]}Animation`]: true,
+      [propertyName]: propertyValue,
+    };
+  }
+
+  if (propertyName === 'animationSpeed' || propertyName === 'animationDelay') {
+    return {
+      seed: exampleSeeds[0],
+      animation: true,
+      [propertyName]: propertyValue,
+    };
+  }
+
   // Every tile in the row shows the same avatar so the option being previewed is
   // the only thing that changes between them.
   return {

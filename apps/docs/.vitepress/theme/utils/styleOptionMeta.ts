@@ -106,6 +106,23 @@ export function getOptionExamples(
   if (name === 'translateX') return [-50, -25, 0, 25, 50];
   if (name === 'translateY') return [-50, -25, 0, 25, 50];
   if (name === 'fontWeight') return [100, 400, 700, 900];
+  // The animation previews render through the local library, so the tiles
+  // move: a still one next to a playing one for the switches, three paces for
+  // the speeds, and three start offsets for the delays.
+  if (isAnimationOption(name)) {
+    if (name.match(/Speed$/)) return [0.5, 1, 2];
+    if (name.match(/Delay$/)) return [0, 1, 2];
+    return [false, true];
+  }
 
   return undefined;
+}
+
+/**
+ * The global animation options and their per-name counterparts:
+ * `animation`, `animationSpeed`, `animationDelay`, `blinkAnimation`,
+ * `blinkAnimationSpeed`, `blinkAnimationDelay`.
+ */
+export function isAnimationOption(name: string): boolean {
+  return /^animation(Speed|Delay)?$|Animation(Speed|Delay)?$/.test(name);
 }

@@ -27,6 +27,7 @@ import {
   getOptionDescription,
   getOptionExamples,
   getOptionValueOrder,
+  isAnimationOption,
 } from '@theme/utils/styleOptionMeta';
 import { groupTagsByCategory } from '@theme/utils/avatar/tags';
 import {
@@ -127,9 +128,11 @@ const badges = computed<BadgeConfig[]>(() => {
   }
 });
 
+// Booleans have nothing to show, except the animation switches, whose
+// previews move.
 const skipPreview = computed(
   () =>
-    fieldType.value === 'boolean' ||
+    (fieldType.value === 'boolean' && !isAnimationOption(props.name)) ||
     props.name === 'fontFamily' ||
     props.name === 'title',
 );
