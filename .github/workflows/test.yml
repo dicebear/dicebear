@@ -92,13 +92,13 @@ jobs:
       - name: Use Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.25'
+          go-version: '1.27'
       - name: Use Dart
         uses: dart-lang/setup-dart@v1
       - name: Use .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Install JS dependencies
         if: ${{ !cancelled() }}
@@ -219,7 +219,9 @@ jobs:
 
     strategy:
       matrix:
-        go-version: ['1.23', '1.24', '1.25']
+        # Lower bound = the `go` directive in go.mod, then the two lines the Go
+        # project supports (the current release and the one before it).
+        go-version: ['1.23', '1.26', '1.27']
 
     steps:
       - uses: actions/checkout@v6
@@ -290,9 +292,12 @@ jobs:
       - name: Use .NET
         uses: actions/setup-dotnet@v4
         with:
-          # Lower bound = the highest framework the library targets; keep in
-          # sync with TargetFrameworks in DiceBear.Core.csproj.
-          dotnet-version: '8.0.x'
+          # The runtimes the test project targets: the highest framework the
+          # library targets (keep in sync with TargetFrameworks in
+          # DiceBear.Core.csproj) and the current LTS, so the tests run on both.
+          dotnet-version: |
+            8.0.x
+            10.0.x
       - name: Build
         # The library multi-targets netstandard2.0 and net8.0, and warnings are
         # errors. Building it on its own covers both targets, which the test run
