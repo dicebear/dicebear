@@ -475,7 +475,7 @@ A complete but minimal definition that renders a colored circle:
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/definition.min.json",
   "canvas": {
     "width": 100,
     "height": 100,
@@ -567,8 +567,8 @@ your style definition so editors like VS Code provide autocomplete and inline
 validation:
 
 ```
-https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/definition.min.json
-https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/options.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/definition.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/options.min.json
 ```
 
 The vendored style definitions shipped by DiceBear live in a separate package:
