@@ -30,6 +30,9 @@ jobs:
       # them turbo pulls the two apps back in and builds them here, even though
       # neither has a test script.
       - run: npx turbo run test --filter='!@dicebear/docs' --filter='!@dicebear/editor'
+      # The release and workspace helpers under tests/scripts are not a turbo
+      # package. They also pin the Go module path to the workspace major.
+      - run: npm run test:scripts
 
   # Style only, so a failure shows up as its own red check without failing the
   # run. Kept apart from type-check-js, which does gate: ESLint runs no

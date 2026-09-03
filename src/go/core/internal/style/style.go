@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/dicebear/dicebear-go/v10/internal/errs"
-	"github.com/dicebear/dicebear-go/v10/internal/validate"
+	"github.com/dicebear/dicebear-go/v11/internal/errs"
+	"github.com/dicebear/dicebear-go/v11/internal/validate"
 )
 
 // definition is the raw, deserialized style definition.

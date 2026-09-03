@@ -34,7 +34,7 @@ regenerate it later in a Go or PHP backend, and you get the same bytes.
 | PHP                     | [`dicebear/core`](https://packagist.org/packages/dicebear/core)         | `composer require dicebear/core`             |
 | Python                  | [`dicebear-core`](https://pypi.org/project/dicebear-core/)              | `pip install dicebear-core`                  |
 | Rust                    | [`dicebear-core`](https://crates.io/crates/dicebear-core)               | `cargo add dicebear-core`                    |
-| Go                      | [`dicebear-go`](https://pkg.go.dev/github.com/dicebear/dicebear-go/v10) | `go get github.com/dicebear/dicebear-go/v10` |
+| Go                      | [`dicebear-go`](https://pkg.go.dev/github.com/dicebear/dicebear-go/v11) | `go get github.com/dicebear/dicebear-go/v11` |
 | Dart                    | [`dicebear_core`](https://pub.dev/packages/dicebear_core)               | `dart pub add dicebear_core`                 |
 | C#                      | [`DiceBear.Core`](https://www.nuget.org/packages/DiceBear.Core)         | `dotnet add package DiceBear.Core`           |
 

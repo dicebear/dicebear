@@ -4,9 +4,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dicebear/dicebear-go/v10/internal/num"
-	"github.com/dicebear/dicebear-go/v10/internal/prng"
-	"github.com/dicebear/dicebear-go/v10/internal/style"
+	"github.com/dicebear/dicebear-go/v11/internal/num"
+	"github.com/dicebear/dicebear-go/v11/internal/prng"
+	"github.com/dicebear/dicebear-go/v11/internal/style"
 )
 
 // animationTrackOrder is the canonical track order, outermost wrapper to

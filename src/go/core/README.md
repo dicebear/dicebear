@@ -16,7 +16,7 @@ style, and options, regardless of the language used.
 ## Installation
 
 ```sh
-go get github.com/dicebear/dicebear-go/v10
+go get github.com/dicebear/dicebear-go/v11
 ```
 
 Requires Go 1.23 or newer.
@@ -25,7 +25,7 @@ Requires Go 1.23 or newer.
 
 ```go
 import (
-	dicebear "github.com/dicebear/dicebear-go/v10"
+	dicebear "github.com/dicebear/dicebear-go/v11"
 	"github.com/dicebear/styles/v10"
 )
 

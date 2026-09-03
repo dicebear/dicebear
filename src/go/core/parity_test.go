@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dicebear/dicebear-go/v10/color"
-	"github.com/dicebear/dicebear-go/v10/internal/initials"
-	"github.com/dicebear/dicebear-go/v10/internal/num"
-	"github.com/dicebear/dicebear-go/v10/internal/prng"
+	"github.com/dicebear/dicebear-go/v11/color"
+	"github.com/dicebear/dicebear-go/v11/internal/initials"
+	"github.com/dicebear/dicebear-go/v11/internal/num"
+	"github.com/dicebear/dicebear-go/v11/internal/prng"
 )
 
 // Cross-language parity: assert the primitives produce exactly the values in the

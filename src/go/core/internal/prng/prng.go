@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"unicode/utf16"
 
-	"github.com/dicebear/dicebear-go/v10/internal/num"
+	"github.com/dicebear/dicebear-go/v11/internal/num"
 )
 
 // Range is a closed numeric range. Min == Max is a fixed value. Step quantizes

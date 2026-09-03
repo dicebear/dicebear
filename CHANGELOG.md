@@ -17,6 +17,13 @@ and this project adheres to
 
 ### Changed
 
+- **Core (Go):** The module path is `github.com/dicebear/dicebear-go/v11`, as Go
+  requires for the new major version. `11.0.0-rc.1` still carried `/v10` and was
+  not fetchable as a Go module. The release script and the workspace tests now
+  check the path against the version before a tag is created.
+- **Core:** All seven cores require `@dicebear/schema` 2.0, which carries the
+  animation options and the boolean `animation`. The Go module imports
+  `github.com/dicebear/schema/v2`.
 - **Core:** `*ColorOrder: 'fixed'` treats the style's palette the way it treats
   user colors, as announced in 10.5: the palette is used in its definition
   order, duplicates included, the contrast sort is skipped, and the gradient

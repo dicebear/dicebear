@@ -5,6 +5,7 @@ import {
   updatePackageJson,
   collectWorkspaceNames,
   updateChangelog,
+  expectedGoModulePath,
 } from "../../scripts/lib/version.mjs";
 
 const CHANGELOG = [
@@ -198,4 +199,23 @@ test("updateChangelog promotes even without bottom link references", () => {
   const result = updateChangelog(raw, "1.2.3", "2026-01-01");
 
   assert.match(result, /## \[Unreleased\]\n\n## \[1\.2\.3\] - 2026-01-01\n\n### Fixed\n\n- A fix\./);
+});
+
+test("expectedGoModulePath accepts a module path that carries the major version", () => {
+  assert.equal(expectedGoModulePath("module github.com/dicebear/dicebear-go/v11\n\ngo 1.23\n", "11.0.0"), null);
+  assert.equal(expectedGoModulePath("module github.com/dicebear/dicebear-go/v11\n", "11.4.2-rc.1"), null);
+  assert.equal(expectedGoModulePath("module example.com/lib\n", "1.9.0"), null);
+});
+
+test("expectedGoModulePath names the path a mismatching major needs", () => {
+  assert.equal(
+    expectedGoModulePath("module github.com/dicebear/dicebear-go/v10\n", "11.0.0-rc.1"),
+    "github.com/dicebear/dicebear-go/v11",
+  );
+  assert.equal(expectedGoModulePath("module example.com/lib\n", "2.0.0"), "example.com/lib/v2");
+  assert.equal(expectedGoModulePath("module example.com/lib/v2\n", "1.0.0"), "example.com/lib");
+});
+
+test("expectedGoModulePath rejects a go.mod without a module line", () => {
+  assert.throws(() => expectedGoModulePath("go 1.23\n", "11.0.0"));
 });

@@ -104,7 +104,7 @@ src/
 ├── php/             # PHP port (Composer package `dicebear/core`)
 ├── python/          # Python port (PyPI package `dicebear-core`)
 ├── rust/            # Rust port (crates.io crate `dicebear-core`)
-├── go/              # Go port (module `github.com/dicebear/dicebear-go/v10`)
+├── go/              # Go port (module `github.com/dicebear/dicebear-go/v11`)
 ├── dart/            # Dart port (pub.dev package `dicebear_core`)
 └── csharp/          # C# port (NuGet package `DiceBear.Core`)
 apps/

@@ -3,7 +3,7 @@ package render
 import (
 	"strings"
 
-	"github.com/dicebear/dicebear-go/v10/internal/prng"
+	"github.com/dicebear/dicebear-go/v11/internal/prng"
 )
 
 // tagFilterToken is a parsed `tags` filter token. options.tags decodes each raw

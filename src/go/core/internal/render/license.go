@@ -3,7 +3,7 @@ package render
 import (
 	"strings"
 
-	"github.com/dicebear/dicebear-go/v10/internal/style"
+	"github.com/dicebear/dicebear-go/v11/internal/style"
 )
 
 // Builds attribution strings and embedded RDF/Dublin Core metadata from a

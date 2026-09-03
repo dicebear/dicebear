@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/dicebear/dicebear-go/v10/internal/render"
+	"github.com/dicebear/dicebear-go/v11/internal/render"
 )
 
 // Avatar is a rendered avatar. NewAvatar immediately resolves and renders the

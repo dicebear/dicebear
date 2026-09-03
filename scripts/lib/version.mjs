@@ -66,6 +66,24 @@ const CHANGELOG_REPO_URL = "https://github.com/dicebear/dicebear";
  * @param {string} date - Release date in `YYYY-MM-DD` form
  * @returns {string | null} Updated changelog, or null if there is nothing to do
  */
+// A Go module path carries its major version as a suffix from v2 on, and the
+// module proxy rejects a tag whose go.mod disagrees with it. Returns the module
+// path `version` requires, or null when `goModRaw` already declares it.
+export function expectedGoModulePath(goModRaw, version) {
+  const match = goModRaw.match(/^module\s+(\S+)/m);
+
+  if (!match) {
+    throw new Error("go.mod carries no module line");
+  }
+
+  const current = match[1];
+  const base = current.replace(/\/v\d+$/, "");
+  const major = version.split(".")[0];
+  const expected = major === "0" || major === "1" ? base : `${base}/v${major}`;
+
+  return current === expected ? null : expected;
+}
+
 export function updateChangelog(raw, newVersion, date) {
   const unreleasedHeading = /^## \[Unreleased\][^\n]*$/m;
 

@@ -1,6 +1,6 @@
 package style
 
-import "github.com/dicebear/dicebear-go/v10/internal/prng"
+import "github.com/dicebear/dicebear-go/v11/internal/prng"
 
 // componentTranslate is a read-only view over a component's translate block,
 // providing the X and Y offset ranges.

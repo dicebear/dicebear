@@ -1,14 +1,20 @@
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { join, resolve } from "node:path";
-import { execSync } from "node:child_process";
-import { isValidVersion, updatePackageJson, collectWorkspaceNames, updateChangelog } from "./lib/version.mjs";
-import { resolveWorkspacePackages } from "./lib/workspace.mjs";
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { execSync } from 'node:child_process';
+import {
+  isValidVersion,
+  updatePackageJson,
+  collectWorkspaceNames,
+  updateChangelog,
+  expectedGoModulePath,
+} from './lib/version.mjs';
+import { resolveWorkspacePackages } from './lib/workspace.mjs';
 
-const ROOT = resolve(import.meta.dirname, "..");
+const ROOT = resolve(import.meta.dirname, '..');
 
 const version = process.argv[2];
 if (!version) {
-  console.error("Usage: node scripts/version.mjs <version>");
+  console.error('Usage: node scripts/version.mjs <version>');
   process.exit(1);
 }
 
@@ -17,32 +23,53 @@ if (!isValidVersion(version)) {
   process.exit(1);
 }
 
-const packageJsonPaths = [join(ROOT, "package.json"), ...resolveWorkspacePackages(ROOT)];
+// The Go module proxy refuses a tag whose go.mod does not carry the major
+// version in its module path, so a mismatch has to stop the release before
+// anything is written or tagged.
+const goModPath = join(ROOT, 'src/go/core/go.mod');
+const goModuleMismatch = expectedGoModulePath(
+  readFileSync(goModPath, 'utf-8'),
+  version,
+);
+if (goModuleMismatch !== null) {
+  console.error(
+    `The Go module path in src/go/core/go.mod does not match ${version}: ` +
+      `it has to be ${goModuleMismatch}. Change the module line, every ` +
+      `import of the old path in src/go/core, the Go README, the root README ` +
+      `and CONTRIBUTING.md, then run the release again.`,
+  );
+  process.exit(1);
+}
+
+const packageJsonPaths = [
+  join(ROOT, 'package.json'),
+  ...resolveWorkspacePackages(ROOT),
+];
 
 // Collect all workspace package names
 const workspaceNames = collectWorkspaceNames(
-  packageJsonPaths.map((p) => readFileSync(p, "utf-8"))
+  packageJsonPaths.map((p) => readFileSync(p, 'utf-8')),
 );
 
 // Update each package.json
 for (const pkgPath of packageJsonPaths) {
-  const raw = readFileSync(pkgPath, "utf-8");
+  const raw = readFileSync(pkgPath, 'utf-8');
   const pkg = JSON.parse(raw);
   const oldVersion = pkg.version;
   const newRaw = updatePackageJson(raw, version, workspaceNames);
 
   if (newRaw !== null) {
     writeFileSync(pkgPath, newRaw);
-    console.log(`  ${pkg.name ?? "root"}: ${oldVersion ?? "-"} → ${version}`);
+    console.log(`  ${pkg.name ?? 'root'}: ${oldVersion ?? '-'} → ${version}`);
   }
 }
 
 // The Python core is not an npm workspace (like the PHP core), so bump its
 // pyproject.toml here to keep all ports on the same version. Only the version
 // string is replaced so the rest of the manifest stays byte-for-byte untouched.
-const pyprojectPath = join(ROOT, "src/python/core/pyproject.toml");
+const pyprojectPath = join(ROOT, 'src/python/core/pyproject.toml');
 if (existsSync(pyprojectPath)) {
-  const raw = readFileSync(pyprojectPath, "utf-8");
+  const raw = readFileSync(pyprojectPath, 'utf-8');
   const updated = raw.replace(/^version = "[^"]*"$/m, `version = "${version}"`);
 
   if (updated !== raw) {
@@ -54,9 +81,9 @@ if (existsSync(pyprojectPath)) {
 // The Rust core is not an npm workspace either; bump its Cargo.toml so it ships
 // on the same version as the other ports. Only the [package] version line (at
 // column 0) matches `^version = "…"`, not the indented dependency versions.
-const cargoPath = join(ROOT, "src/rust/core/Cargo.toml");
+const cargoPath = join(ROOT, 'src/rust/core/Cargo.toml');
 if (existsSync(cargoPath)) {
-  const raw = readFileSync(cargoPath, "utf-8");
+  const raw = readFileSync(cargoPath, 'utf-8');
   const updated = raw.replace(/^version = "[^"]*"$/m, `version = "${version}"`);
 
   if (updated !== raw) {
@@ -70,9 +97,9 @@ if (existsSync(cargoPath)) {
 // requires the pubspec version to match the v{{version}} tag exactly. Only the
 // top-level `version:` line (at column 0) matches; indented dependency
 // constraints do not.
-const pubspecPath = join(ROOT, "src/dart/core/pubspec.yaml");
+const pubspecPath = join(ROOT, 'src/dart/core/pubspec.yaml');
 if (existsSync(pubspecPath)) {
-  const raw = readFileSync(pubspecPath, "utf-8");
+  const raw = readFileSync(pubspecPath, 'utf-8');
   const updated = raw.replace(/^version: .*$/m, `version: ${version}`);
 
   if (updated !== raw) {
@@ -84,9 +111,9 @@ if (existsSync(pubspecPath)) {
 // The C# core is not an npm workspace either; bump the <Version> property in
 // its csproj so the NuGet package ships on the same version as the other ports.
 // The project file carries exactly one, so no anchoring is needed.
-const csprojPath = join(ROOT, "src/csharp/core/DiceBear.Core.csproj");
+const csprojPath = join(ROOT, 'src/csharp/core/DiceBear.Core.csproj');
 if (existsSync(csprojPath)) {
-  const raw = readFileSync(csprojPath, "utf-8");
+  const raw = readFileSync(csprojPath, 'utf-8');
   const updated = raw.replace(
     /<Version>[^<]*<\/Version>/,
     `<Version>${version}</Version>`,
@@ -100,15 +127,15 @@ if (existsSync(csprojPath)) {
 
 // The Go core (src/go/core) needs no file bump: a Go module's version lives
 // entirely in the Git tag, which the module proxy reads directly. The tag
-// created below (e.g. v10.2.0) is mirrored to the standalone dicebear-go repo by
-// split-go-core.yml, and `github.com/dicebear/dicebear-go/v10` resolves it from
-// there. The major version is encoded in the module path (/v10), so it only
-// changes by hand on a major bump — not here.
+// created below (e.g. v11.2.0) is mirrored to the standalone dicebear-go repo by
+// split-go-core.yml, and `github.com/dicebear/dicebear-go/v11` resolves it from
+// there. The major version is encoded in the module path, which the check at
+// the top of this script verifies against the version being released.
 
 // Promote the changelog's Unreleased section to the new version
-const changelogPath = join(ROOT, "CHANGELOG.md");
+const changelogPath = join(ROOT, 'CHANGELOG.md');
 if (existsSync(changelogPath)) {
-  const raw = readFileSync(changelogPath, "utf-8");
+  const raw = readFileSync(changelogPath, 'utf-8');
   const date = new Date().toISOString().slice(0, 10);
   const updated = updateChangelog(raw, version, date);
 
@@ -117,22 +144,25 @@ if (existsSync(changelogPath)) {
     // The compare-link line the promotion appends runs past Prettier's print
     // width as soon as a version carries a prerelease suffix, which fails the
     // format job on the release commit. Reflow the file before it is staged.
-    execSync("npx prettier --write CHANGELOG.md", { cwd: ROOT, stdio: "inherit" });
+    execSync('npx prettier --write CHANGELOG.md', {
+      cwd: ROOT,
+      stdio: 'inherit',
+    });
     console.log(`\nCHANGELOG.md: Unreleased → ${version} (${date})`);
   } else {
-    console.log("\nCHANGELOG.md: nothing to promote (skipped)");
+    console.log('\nCHANGELOG.md: nothing to promote (skipped)');
   }
 }
 
 // Sync package-lock.json
-console.log("\nSyncing package-lock.json...");
-execSync("npm install --package-lock-only", { cwd: ROOT, stdio: "inherit" });
+console.log('\nSyncing package-lock.json...');
+execSync('npm install --package-lock-only', { cwd: ROOT, stdio: 'inherit' });
 
 // Git commit and tag
 const tag = `v${version}`;
 console.log(`\nCreating commit and tag ${tag}...`);
-execSync("git add -A", { cwd: ROOT, stdio: "inherit" });
-execSync(`git commit -m "${tag}"`, { cwd: ROOT, stdio: "inherit" });
-execSync(`git tag "${tag}"`, { cwd: ROOT, stdio: "inherit" });
+execSync('git add -A', { cwd: ROOT, stdio: 'inherit' });
+execSync(`git commit -m "${tag}"`, { cwd: ROOT, stdio: 'inherit' });
+execSync(`git tag "${tag}"`, { cwd: ROOT, stdio: 'inherit' });
 
 console.log(`\nDone! Push with: git push && git push --tags`);

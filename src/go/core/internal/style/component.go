@@ -3,7 +3,7 @@ package style
 import (
 	"encoding/json"
 
-	"github.com/dicebear/dicebear-go/v10/internal/prng"
+	"github.com/dicebear/dicebear-go/v11/internal/prng"
 )
 
 // Component is a read-only view over an entry in a style definition's

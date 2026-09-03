@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/dicebear/dicebear-go/v10/internal/style"
+	"github.com/dicebear/dicebear-go/v11/internal/style"
 )
 
 // The colorOrder tests mirror the describe('colorOrder', ...) block of the JS

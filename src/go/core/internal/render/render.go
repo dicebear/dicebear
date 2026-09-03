@@ -7,8 +7,8 @@ package render
 import (
 	"encoding/json"
 
-	"github.com/dicebear/dicebear-go/v10/internal/style"
-	"github.com/dicebear/dicebear-go/v10/internal/validate"
+	"github.com/dicebear/dicebear-go/v11/internal/style"
+	"github.com/dicebear/dicebear-go/v11/internal/validate"
 )
 
 // Result is the outcome of rendering an avatar: the SVG, the resolved-options

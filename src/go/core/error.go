@@ -1,6 +1,6 @@
 package dicebear
 
-import "github.com/dicebear/dicebear-go/v10/internal/errs"
+import "github.com/dicebear/dicebear-go/v11/internal/errs"
 
 // ValidationError is returned when a style definition or an options object
 // fails schema (or, for style definitions, alias) validation. It is an alias of

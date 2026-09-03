@@ -11,7 +11,7 @@
 // engine — PRNG, resolver, renderer, options reader, style model, validation —
 // lives under internal/ so it can be refactored freely without affecting the
 // public API. The color helpers are the one other public surface, in the
-// sub-package github.com/dicebear/dicebear-go/v10/color.
+// sub-package github.com/dicebear/dicebear-go/v11/color.
 //
 // Style definitions and option sets are the same JSON the npm, Composer, PyPI,
 // crates.io and pub.dev packages consume; the pure-data style definitions ship

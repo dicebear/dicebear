@@ -1,10 +1,10 @@
 package render
 
 import (
-	"github.com/dicebear/dicebear-go/v10/color"
-	"github.com/dicebear/dicebear-go/v10/internal/errs"
-	"github.com/dicebear/dicebear-go/v10/internal/prng"
-	"github.com/dicebear/dicebear-go/v10/internal/style"
+	"github.com/dicebear/dicebear-go/v11/color"
+	"github.com/dicebear/dicebear-go/v11/internal/errs"
+	"github.com/dicebear/dicebear-go/v11/internal/prng"
+	"github.com/dicebear/dicebear-go/v11/internal/style"
 )
 
 // resolver derives every deterministic value for an avatar from the style, the
