@@ -17,6 +17,8 @@ and this project adheres to
 
 ### Changed
 
+- **Styles:** Bumped `@dicebear/styles` to `11.0.0-rc.2` for the docs. The
+  definitions reference `@dicebear/schema` 2.0.1.
 - **Core (Go):** The module path is `github.com/dicebear/dicebear-go/v11`, as Go
   requires for the new major version. `11.0.0-rc.1` still carried `/v10` and was
   not fetchable as a Go module. The release script and the workspace tests now
