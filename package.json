@@ -12,7 +12,7 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "type-check": "turbo run type-check",
-    "test:scripts": "node --test 'tests/**/*.test.js'",
+    "test:scripts": "node --test tests/scripts/*.test.js",
     "fixtures:parity": "node tests/fixtures/parity/generate.mjs",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --cache --fix",
