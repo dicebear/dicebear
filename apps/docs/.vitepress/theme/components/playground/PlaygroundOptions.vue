@@ -26,6 +26,8 @@ import Button from 'primevue/button';
 import ToggleSwitch from 'primevue/toggleswitch';
 import { Shuffle } from '@lucide/vue';
 import PlaygroundAnimationSection from './PlaygroundAnimationSection.vue';
+import PlaygroundAnimationNameSection from './PlaygroundAnimationNameSection.vue';
+import { animationPlays, animationSwitch } from './animationState';
 import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
 import PlaygroundTagsSection from './PlaygroundTagsSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
@@ -86,6 +88,16 @@ const hasFontWeight = computed(() =>
 // carry declarative animations, so the panel appears only where the toggle
 // has an effect.
 const hasAnimation = computed(() => 'animation' in descriptor.value);
+
+// The card badge of one animation: the state the core resolves, and whether
+// it comes from the animation's own switch (`own`) or from the global one.
+function animationTag(name: string): string {
+  const plays = animationPlays(store.avatarStyleOptions, name) ? 'on' : 'off';
+
+  return animationSwitch(store.avatarStyleOptions, name) === undefined
+    ? plays
+    : `${plays} · own`;
+}
 
 // Every animation name comes with a `${name}Animation` switch field.
 const animationNames = computed<string[]>(() =>
@@ -375,17 +387,6 @@ const onSeedFocus = (e: FocusEvent) => {
             />
           </AccordionContent>
         </AccordionPanel>
-        <AccordionPanel v-if="hasAnimation" value="__animation">
-          <AccordionHeader>
-            <span class="pg-options-label">Animation</span>
-          </AccordionHeader>
-          <AccordionContent>
-            <PlaygroundAnimationSection
-              :key="avatarStyleName"
-              :names="animationNames"
-            />
-          </AccordionContent>
-        </AccordionPanel>
         <AccordionPanel value="__transform">
           <AccordionHeader>
             <span class="pg-options-label">Transform</span>
@@ -572,6 +573,63 @@ const onSeedFocus = (e: FocusEvent) => {
               :has-fill-stops="color.hasFillStops"
               :has-order="color.hasOrder"
               :contrast-to="color.contrastTo"
+            />
+          </AccordionContent>
+        </AccordionPanel>
+      </Accordion>
+    </div>
+
+    <div class="pg-options-group" v-if="hasAnimation">
+      <h3 class="pg-options-group-title">Animations</h3>
+      <p v-if="animationNames.length > 0" class="pg-help">
+        The first card switches every animation. Each animation below follows it
+        unless it has a switch of its own, which then wins, as do its own speed
+        and delay.
+      </p>
+      <Accordion :multiple="true" class="pg-options-accordion">
+        <AccordionPanel :value="'__animation'">
+          <AccordionHeader>
+            <span class="pg-options-label">All animations</span>
+            <Tag
+              :value="
+                store.avatarStyleOptions.animation === true ? 'on' : 'off'
+              "
+              :severity="
+                store.avatarStyleOptions.animation === true
+                  ? 'primary'
+                  : 'secondary'
+              "
+              class="pg-options-tag"
+            />
+          </AccordionHeader>
+          <AccordionContent>
+            <PlaygroundAnimationSection
+              :key="avatarStyleName"
+              :names="animationNames"
+            />
+          </AccordionContent>
+        </AccordionPanel>
+        <AccordionPanel
+          v-for="name in animationNames"
+          :key="`${avatarStyleName}-${name}`"
+          :value="`__animation-${name}`"
+        >
+          <AccordionHeader>
+            <span class="pg-options-label">{{ capitalCase(name) }}</span>
+            <Tag
+              :value="animationTag(name)"
+              :severity="
+                animationSwitch(store.avatarStyleOptions, name) === undefined
+                  ? 'secondary'
+                  : 'primary'
+              "
+              class="pg-options-tag"
+            />
+          </AccordionHeader>
+          <AccordionContent>
+            <PlaygroundAnimationNameSection
+              :key="`${avatarStyleName}-${name}`"
+              :name="name"
             />
           </AccordionContent>
         </AccordionPanel>
