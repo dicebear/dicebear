@@ -574,10 +574,11 @@ impl<'a> Renderer<'a> {
 
     /// Returns the FNV-1a hex hash namespacing the animation class and
     /// keyframe names, cached after the first call. Extends the
-    /// [`Self::hash_seed`] input with the animation speed and, for every
-    /// named timeline the style carries, its state (`off` or the factor it
-    /// plays at): two renders of the same avatar with different speeds or
-    /// switches inlined on one page must not select each other's rules,
+    /// [`Self::hash_seed`] input with the animation speed and delay and, for
+    /// every named timeline the style carries, its state (`off`, or the
+    /// factor and offset it plays at): two renders of the same avatar with
+    /// different speeds, delays, or switches inlined on one page must not
+    /// select each other's rules,
     /// while identical renders sharing identical rules is harmless
     /// deduplication.
     ///
@@ -602,10 +603,10 @@ impl<'a> Renderer<'a> {
                     .and_then(|meta| meta.source().name())
                     .unwrap_or("");
                 // Every named timeline the style carries joins the hash with
-                // its state, `off` or the factor it plays at, so two renders
-                // that differ only in a `${name}Animation` or
-                // `${name}AnimationSpeed` option never share their rules. The
-                // style's name list is already sorted.
+                // its state, `off` or the factor and offset it plays at, so
+                // two renders that differ only in a per-name switch, speed,
+                // or delay option never share their rules. The style's name
+                // list is already sorted.
                 let states: Vec<String> = self
                     .style
                     .animation_names()
@@ -613,8 +614,9 @@ impl<'a> Renderer<'a> {
                     .map(|name| {
                         if self.resolver.animation_plays(Some(name)) {
                             format!(
-                                "{name}:{}",
-                                number::format(self.resolver.animation_speed_for(Some(name)))
+                                "{name}:{}:{}",
+                                number::format(self.resolver.animation_speed_for(Some(name))),
+                                number::format(self.resolver.animation_delay_for(Some(name)))
                             )
                         } else {
                             format!("{name}:off")
@@ -628,10 +630,11 @@ impl<'a> Renderer<'a> {
                 };
 
                 fnv1a::hex(&format!(
-                    "{}:{}:{}{}{}",
+                    "{}:{}:{}:{}{}{}",
                     source_name,
                     self.resolver.seed(),
                     number::format(self.resolver.animation_speed()),
+                    number::format(self.resolver.animation_delay()),
                     states,
                     random
                 ))
@@ -788,7 +791,11 @@ impl<'a> Renderer<'a> {
 
         let speed = self.resolver.animation_speed_for(animation.name());
         let duration = number::format(animation.duration() / speed);
-        let delay = number::format(animation.delay() / speed);
+        // The start offset is wall clock seconds, so it is added after the
+        // speed has scaled the authored delay.
+        let delay = number::format(
+            animation.delay() / speed + self.resolver.animation_delay_for(animation.name()),
+        );
         let iterations = match animation.iterations() {
             Some(count) => number::format(count),
             None => "infinite".to_string(),
@@ -1273,5 +1280,54 @@ mod tests {
         assert_ne!(hash_of(&all), hash_of(&one));
         assert_ne!(hash_of(&all), hash_of(&all_but_one));
         assert_ne!(hash_of(&one), hash_of(&all_but_one));
+    }
+
+    #[test]
+    fn delay_is_added_after_the_speed_has_scaled_the_authored_one() {
+        let svg = render(
+            &paced(),
+            json!({ "animation": true, "animationSpeed": 2, "animationDelay": 3 }),
+        );
+
+        assert!(svg.contains("animation:2s linear 3.5s infinite"), "{svg}");
+        assert!(svg.contains("animation:1.5s linear 3s infinite"), "{svg}");
+    }
+
+    #[test]
+    fn delay_lets_a_named_delay_win_over_the_global_one() {
+        let svg = render(
+            &paced(),
+            json!({ "animation": true, "animationDelay": 1, "swayAnimationDelay": -2 }),
+        );
+
+        assert!(svg.contains("animation:4s linear -1s infinite"), "{svg}");
+        assert!(svg.contains("animation:3s linear 1s infinite"), "{svg}");
+    }
+
+    #[test]
+    fn delay_is_included_in_the_class_namespace() {
+        let style = paced();
+        let plain = render(&style, json!({ "animation": true }));
+        let shifted = render(&style, json!({ "animation": true, "animationDelay": 1 }));
+        let named = render(
+            &style,
+            json!({ "animation": true, "swayAnimationDelay": 1 }),
+        );
+
+        assert_ne!(hash_of(&plain), hash_of(&shifted));
+        assert_ne!(hash_of(&shifted), hash_of(&named));
+    }
+
+    #[test]
+    fn delay_is_recorded_in_the_resolved_options() {
+        let style = paced();
+        let options = resolved(
+            &style,
+            json!({ "animation": true, "animationDelay": 1, "swayAnimationDelay": [-2, -2] }),
+        );
+
+        assert_eq!(options["animationDelay"], json!(1));
+        assert_eq!(options["swayAnimationDelay"], json!(-2));
+        assert!(resolved(&style, json!({})).get("animationDelay").is_none());
     }
 }

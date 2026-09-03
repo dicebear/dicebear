@@ -1248,6 +1248,49 @@ def test_named_speed_is_not_drawn_for_a_switched_off_name() -> None:
     assert "swayAnimationSpeed" not in options
 
 
+def test_delay_is_added_after_the_speed_scaled_the_authored_one() -> None:
+    svg = Avatar(
+        _paced_style(), {"animation": True, "animationSpeed": 2, "animationDelay": 3}
+    ).to_string()
+
+    assert "animation:2s linear 3.5s infinite" in svg
+    assert "animation:1.5s linear 3s infinite" in svg
+
+
+def test_named_delay_wins_over_global() -> None:
+    svg = Avatar(
+        _paced_style(),
+        {"animation": True, "animationDelay": 1, "swayAnimationDelay": -2},
+    ).to_string()
+
+    assert "animation:4s linear -1s infinite" in svg
+    assert "animation:3s linear 1s infinite" in svg
+
+
+def test_delays_join_the_class_namespace() -> None:
+    plain = Avatar(_paced_style(), {"animation": True}).to_string()
+    shifted = Avatar(
+        _paced_style(), {"animation": True, "animationDelay": 1}
+    ).to_string()
+    named = Avatar(
+        _paced_style(), {"animation": True, "swayAnimationDelay": 1}
+    ).to_string()
+
+    assert _animation_hash_of(plain) != _animation_hash_of(shifted)
+    assert _animation_hash_of(shifted) != _animation_hash_of(named)
+
+
+def test_delays_are_recorded_in_the_resolved_options() -> None:
+    options = Avatar(
+        _paced_style(),
+        {"animation": True, "animationDelay": 1, "swayAnimationDelay": [-2, -2]},
+    ).to_json()["options"]
+
+    assert options["animationDelay"] == 1
+    assert options["swayAnimationDelay"] == -2
+    assert "animationDelay" not in Avatar(_paced_style()).to_json()["options"]
+
+
 # ---------------------------------------------------------------------------
 # animation: named selection
 # ---------------------------------------------------------------------------

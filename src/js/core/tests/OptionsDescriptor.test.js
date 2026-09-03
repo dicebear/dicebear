@@ -310,10 +310,13 @@ describe('OptionsDescriptor', () => {
         [
           'animation',
           'animationSpeed',
+          'animationDelay',
           'blinkAnimation',
           'blinkAnimationSpeed',
+          'blinkAnimationDelay',
           'swayAnimation',
           'swayAnimationSpeed',
+          'swayAnimationDelay',
         ],
       );
       assert.deepEqual(descriptor.blinkAnimation, { type: 'boolean' });
@@ -321,6 +324,11 @@ describe('OptionsDescriptor', () => {
         type: 'range',
         min: 0.1,
         max: 10,
+      });
+      assert.deepEqual(descriptor.swayAnimationDelay, {
+        type: 'range',
+        min: -3600,
+        max: 3600,
       });
     });
   });

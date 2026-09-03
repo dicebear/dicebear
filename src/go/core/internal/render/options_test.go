@@ -69,3 +69,23 @@ func TestOptionsAnimationForPassesTheSwitchThrough(t *testing.T) {
 		t.Errorf(`animationFor("sway") = %v, %v, want false, false`, got, ok)
 	}
 }
+
+// Mirrors the animationDelay() / animationDelayFor() accessors, which read
+// like the speed ones.
+
+func TestOptionsAnimationDelayForNormalizesValueAndRange(t *testing.T) {
+	opts := newOptions(map[string]any{
+		"animationDelay":      1.0,
+		"blinkAnimationDelay": []any{-2.0, 2.0},
+	})
+
+	if global := opts.animationDelay(); global == nil || global.Min != 1 || global.Max != 1 {
+		t.Errorf("animationDelay() = %v, want a fixed range of 1", global)
+	}
+	if blink := opts.animationDelayFor("blink"); blink == nil || blink.Min != -2 || blink.Max != 2 {
+		t.Errorf(`animationDelayFor("blink") = %v, want a range of -2 to 2`, blink)
+	}
+	if sway := opts.animationDelayFor("sway"); sway != nil {
+		t.Errorf(`animationDelayFor("sway") = %v, want nil`, sway)
+	}
+}

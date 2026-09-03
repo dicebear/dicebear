@@ -140,12 +140,14 @@ impl<'a> OptionsDescriptor<'a> {
         if self.style.has_animations() {
             result.insert("animation".into(), json!({ "type": "boolean" }));
             result.insert("animationSpeed".into(), animation_speed_range());
+            result.insert("animationDelay".into(), animation_delay_range());
 
-            // Every animation name gets its own switch and speed field, in
-            // the order of the name list.
+            // Every animation name gets its own switch, speed, and delay
+            // field, in the order of the name list.
             for name in self.style.animation_names() {
                 result.insert(format!("{name}Animation"), json!({ "type": "boolean" }));
                 result.insert(format!("{name}AnimationSpeed"), animation_speed_range());
+                result.insert(format!("{name}AnimationDelay"), animation_delay_range());
             }
         }
 
@@ -155,6 +157,10 @@ impl<'a> OptionsDescriptor<'a> {
 
 fn animation_speed_range() -> Value {
     json!({ "type": "range", "min": 0.1, "max": 10 })
+}
+
+fn animation_delay_range() -> Value {
+    json!({ "type": "range", "min": -3600, "max": 3600 })
 }
 
 fn rotate_range() -> Value {

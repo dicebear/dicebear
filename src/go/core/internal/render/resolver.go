@@ -129,6 +129,29 @@ func (r *resolver) animationSpeedFor(name string) float64 {
 	return r.floatOpt(name+"AnimationSpeed", rng, 1)
 }
 
+// animationDelay returns the start offset in seconds shared by every
+// timeline, drawn under `animationDelay`, default 0.
+func (r *resolver) animationDelay() float64 {
+	return r.floatOpt("animationDelay", r.options.animationDelay(), 0)
+}
+
+// animationDelayFor returns the start offset of one timeline. A named
+// timeline uses its ${name}AnimationDelay option when the user set one, drawn
+// under that key, and the global offset otherwise. Unnamed timelines (name is
+// "") always follow the global offset. Mirrors animationSpeedFor.
+func (r *resolver) animationDelayFor(name string) float64 {
+	if name == "" {
+		return r.animationDelay()
+	}
+
+	rng := r.options.animationDelayFor(name)
+	if rng == nil {
+		return r.animationDelay()
+	}
+
+	return r.floatOpt(name+"AnimationDelay", rng, 0)
+}
+
 func (r *resolver) title() (string, bool) {
 	s, ok := r.options.title()
 	if ok {

@@ -1114,6 +1114,59 @@ class RendererTest extends TestCase
         $this->assertSame(1.0, $options['animationSpeed']);
     }
 
+    public function testAddsTheDelayAfterTheSpeedHasScaledTheAuthoredOne(): void
+    {
+        $svg = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'animationSpeed' => 2,
+            'animationDelay' => 3,
+        ]))->toString();
+
+        $this->assertStringContainsString('animation:2s linear 3.5s infinite', $svg);
+        $this->assertStringContainsString('animation:1.5s linear 3s infinite', $svg);
+    }
+
+    public function testLetsANamedDelayWinOverTheGlobalOne(): void
+    {
+        $svg = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'animationDelay' => 1,
+            'swayAnimationDelay' => -2,
+        ]))->toString();
+
+        $this->assertStringContainsString('animation:4s linear -1s infinite', $svg);
+        $this->assertStringContainsString('animation:3s linear 1s infinite', $svg);
+    }
+
+    public function testIncludesTheDelaysInTheClassNamespace(): void
+    {
+        $plain = (new Avatar(self::pacedStyle(), ['animation' => true]))->toString();
+        $shifted = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'animationDelay' => 1,
+        ]))->toString();
+        $named = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'swayAnimationDelay' => 1,
+        ]))->toString();
+
+        $this->assertNotSame(self::animationHashOf($plain), self::animationHashOf($shifted));
+        $this->assertNotSame(self::animationHashOf($shifted), self::animationHashOf($named));
+    }
+
+    public function testRecordsTheDelaysInTheResolvedOptions(): void
+    {
+        $options = (new Avatar(self::pacedStyle(), [
+            'animation' => true,
+            'animationDelay' => 1,
+            'swayAnimationDelay' => [-2, -2],
+        ]))->toJSON()['options'];
+
+        $this->assertSame(1.0, $options['animationDelay']);
+        $this->assertSame(-2.0, $options['swayAnimationDelay']);
+        $this->assertArrayNotHasKey('animationDelay', (new Avatar(self::pacedStyle()))->toJSON()['options']);
+    }
+
     // named selection
 
     /**

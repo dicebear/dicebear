@@ -16,9 +16,10 @@ const store = useStore();
 
 const animationKey = 'animation';
 const speedKey = 'animationSpeed';
+const delayKey = 'animationDelay';
 
-// The switch and the speed option of one animation, `blinkAnimation` and
-// `blinkAnimationSpeed` for `blink`.
+// The switch, speed and delay option of one animation, `blinkAnimation`,
+// `blinkAnimationSpeed` and `blinkAnimationDelay` for `blink`.
 function switchKeyFor(name: string): string {
   return `${name}Animation`;
 }
@@ -27,10 +28,19 @@ function speedKeyFor(name: string): string {
   return `${name}AnimationSpeed`;
 }
 
+function delayKeyFor(name: string): string {
+  return `${name}AnimationDelay`;
+}
+
 const allKeys = computed(() => [
   animationKey,
   speedKey,
-  ...props.names.flatMap((name) => [switchKeyFor(name), speedKeyFor(name)]),
+  delayKey,
+  ...props.names.flatMap((name) => [
+    switchKeyFor(name),
+    speedKeyFor(name),
+    delayKeyFor(name),
+  ]),
 ]);
 
 // The global switch as set. Anything but `true` leaves the toggle down.
@@ -85,16 +95,16 @@ const animation = computed({
 
 // A name's switch is written only where it differs from the global one, so
 // the emitted options stay as short as the same result allows. Switching a
-// name off takes its speed with it.
+// name off takes its speed and delay with it.
 function toggleName(name: string, checked: boolean) {
   if (checked === globalOn.value) {
     delete store.avatarStyleOptions[switchKeyFor(name)];
   } else {
     store.avatarStyleOptions[switchKeyFor(name)] = checked;
   }
-
   if (!checked) {
     delete store.avatarStyleOptions[speedKeyFor(name)];
+    delete store.avatarStyleOptions[delayKeyFor(name)];
   }
 }
 </script>
@@ -146,18 +156,37 @@ function toggleName(name: string, checked: boolean) {
       unit="×"
       :default-single="1"
     />
-
     <PlaygroundRangeField
-      v-for="name in playingNames"
-      :key="name"
-      :label="`Speed of ${name}`"
-      :option-key="speedKeyFor(name)"
-      :min="0.1"
+      v-if="anythingPlays"
+      label="Delay"
+      option-key="animationDelay"
+      :min="-10"
       :max="10"
-      :step="0.05"
-      unit="×"
-      :default-single="1"
+      :step="0.1"
+      unit="s"
+      :default-single="0"
     />
+
+    <template v-for="name in playingNames" :key="name">
+      <PlaygroundRangeField
+        :label="`Speed of ${name}`"
+        :option-key="speedKeyFor(name)"
+        :min="0.1"
+        :max="10"
+        :step="0.05"
+        unit="×"
+        :default-single="1"
+      />
+      <PlaygroundRangeField
+        :label="`Delay of ${name}`"
+        :option-key="delayKeyFor(name)"
+        :min="-10"
+        :max="10"
+        :step="0.1"
+        unit="s"
+        :default-single="0"
+      />
+    </template>
   </div>
 </template>
 

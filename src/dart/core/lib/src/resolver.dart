@@ -91,6 +91,23 @@ class Resolver {
     return _memoFloat('${name}AnimationSpeed', range, 1);
   }
 
+  double animationDelay() =>
+      _memoFloat('animationDelay', _options.animationDelay(), 0);
+
+  /// Returns the start offset of one timeline in seconds. A named timeline
+  /// uses its `${name}AnimationDelay` option when the user set one, drawn
+  /// under that key, and the global offset otherwise. Unnamed timelines
+  /// always follow the global offset.
+  double animationDelayFor(String? name) {
+    final range = name == null ? null : _options.animationDelayFor(name);
+
+    if (name == null || range == null) {
+      return animationDelay();
+    }
+
+    return _memoFloat('${name}AnimationDelay', range, 0);
+  }
+
   String? title() => _memo('title', () => _options.title());
 
   String flip() =>

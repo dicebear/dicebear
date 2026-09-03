@@ -117,11 +117,12 @@ class OptionsDescriptor:
 
         # Only advertise the animation options when the style carries
         # declarative animations. A static style accepts them without effect.
-        # Every animation name gets its own switch and speed field, in the
-        # order of the name list.
+        # Every animation name gets its own switch, speed and delay field, in
+        # the order of the name list.
         if self._style.has_animations():
             result["animation"] = {"type": "boolean"}
             result["animationSpeed"] = {"type": "range", "min": 0.1, "max": 10}
+            result["animationDelay"] = {"type": "range", "min": -3600, "max": 3600}
 
             for name in self._style.animation_names():
                 result[name + "Animation"] = {"type": "boolean"}
@@ -129,6 +130,11 @@ class OptionsDescriptor:
                     "type": "range",
                     "min": 0.1,
                     "max": 10,
+                }
+                result[name + "AnimationDelay"] = {
+                    "type": "range",
+                    "min": -3600,
+                    "max": 3600,
                 }
 
         return result

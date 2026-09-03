@@ -93,6 +93,23 @@ class Resolver:
 
         return self._memo_float(f"{name}AnimationSpeed", range_, 1.0)
 
+    def animation_delay(self) -> float:
+        return self._memo_float("animationDelay", self._options.animation_delay(), 0.0)
+
+    def animation_delay_for(self, name: str | None) -> float:
+        """Return the start offset of one timeline in seconds.
+
+        A named timeline uses its ``{name}AnimationDelay`` option when the
+        user set one, drawn under that key, and the global offset otherwise.
+        Unnamed timelines always follow the global offset.
+        """
+        range_ = None if name is None else self._options.animation_delay_for(name)
+
+        if name is None or range_ is None:
+            return self.animation_delay()
+
+        return self._memo_float(f"{name}AnimationDelay", range_, 0.0)
+
     def title(self) -> str | None:
         return self._memo("title", self._options.title)
 

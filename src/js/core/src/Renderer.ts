@@ -670,14 +670,13 @@ export class Renderer {
       : '';
 
     // Every named timeline the style carries joins the hash with its state,
-    // `off` or the factor it plays at, so two renders that differ only in a
-    // `${name}Animation` or `${name}AnimationSpeed` option never share their
-    // rules.
+    // `off` or the factor and offset it plays at, so two renders that differ
+    // only in a per-name animation option never share their rules.
     const states = [...this.#style.animationNames()]
       .sort()
       .map((name) =>
         this.#resolver.animationPlays(name)
-          ? `${name}:${Number.format(this.#resolver.animationSpeedFor(name))}`
+          ? `${name}:${Number.format(this.#resolver.animationSpeedFor(name))}:${Number.format(this.#resolver.animationDelayFor(name))}`
           : `${name}:off`,
       );
     const named = states.length > 0 ? ':' + states.join(',') : '';
@@ -688,6 +687,8 @@ export class Renderer {
         this.#resolver.seed() +
         ':' +
         Number.format(this.#resolver.animationSpeed()) +
+        ':' +
+        Number.format(this.#resolver.animationDelay()) +
         named +
         random,
     ));
@@ -832,7 +833,12 @@ export class Renderer {
 
     const speed = this.#resolver.animationSpeedFor(animation.name);
     const duration = Number.format(animation.duration / speed);
-    const delay = Number.format((animation.delay ?? 0) / speed);
+    // The user's offset is in seconds of playback, so it is added after the
+    // speed has scaled the authored delay.
+    const delay = Number.format(
+      (animation.delay ?? 0) / speed +
+        this.#resolver.animationDelayFor(animation.name),
+    );
     const iterations =
       animation.iterations === undefined || animation.iterations === 'infinite'
         ? 'infinite'

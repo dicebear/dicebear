@@ -165,6 +165,22 @@ class OptionsTest extends TestCase
         new Options(['BlinkAnimationSpeed' => 2]);
     }
 
+    // animationDelay() / animationDelayFor()
+
+    public function testAnimationDelayNormalizesLikeTheSpeedOptions(): void
+    {
+        $this->assertNull((new Options([]))->animationDelay());
+        $this->assertSame(['min' => -2, 'max' => -2], (new Options(['animationDelay' => -2]))->animationDelay());
+        $this->assertSame(['min' => 0, 'max' => 3], (new Options(['blinkAnimationDelay' => [0, 3]]))->animationDelayFor('blink'));
+        $this->assertNull((new Options(['animationDelay' => 1]))->animationDelayFor('blink'));
+    }
+
+    public function testAnimationDelayRejectsAnOffsetBeyondAnHour(): void
+    {
+        $this->expectException(OptionsValidationError::class);
+        new Options(['animationDelay' => 3601]);
+    }
+
     // componentVariant()
 
     public function testComponentVariantReturnsNullWhenUnset(): void

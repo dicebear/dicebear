@@ -117,6 +117,28 @@ impl<'a> Resolver<'a> {
         }
     }
 
+    /// The start offset in seconds shared by every timeline, default `0`.
+    pub fn animation_delay(&self) -> f64 {
+        self.float("animationDelay", self.options.animation_delay(), 0.0)
+    }
+
+    /// Returns the start offset of one timeline in seconds. A named timeline
+    /// uses its `${name}AnimationDelay` option when the user set one, drawn
+    /// under that key, and the global offset otherwise. Unnamed timelines
+    /// always follow the global offset.
+    pub fn animation_delay_for(&self, name: Option<&str>) -> f64 {
+        let named = name.and_then(|name| {
+            self.options
+                .animation_delay_for(name)
+                .map(|range| (name, range))
+        });
+
+        match named {
+            Some((name, range)) => self.float(&format!("{name}AnimationDelay"), Some(range), 0.0),
+            None => self.animation_delay(),
+        }
+    }
+
     pub fn title(&self) -> Option<String> {
         let value = self.options.title();
         self.record("title", value.clone().map_or(Value::Null, Value::from));
@@ -899,5 +921,49 @@ mod tests {
         assert!(!resolver.animation_plays(Some("blink")));
         assert!(resolver.animation_plays(Some("sway")));
         assert!(resolver.animation_plays(None));
+    }
+
+    #[test]
+    fn animation_delay_lets_a_named_delay_win_over_the_global_one() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let options = Options::new(json!({ "animationDelay": 1, "blinkAnimationDelay": -2 }));
+        let resolver = Resolver::new(&style, &options);
+
+        assert_eq!(resolver.animation_delay(), 1.0);
+        assert_eq!(resolver.animation_delay_for(Some("blink")), -2.0);
+        assert_eq!(resolver.animation_delay_for(Some("sway")), 1.0);
+        assert_eq!(resolver.animation_delay_for(None), 1.0);
+
+        let unset = Options::new(json!({}));
+
+        assert_eq!(
+            Resolver::new(&style, &unset).animation_delay_for(Some("blink")),
+            0.0
+        );
+    }
+
+    #[test]
+    fn animation_delay_draws_a_range_under_its_own_key_seeded() {
+        let style = Style::from_str(MINIMAL_STYLE).unwrap();
+        let options = json!({
+            "seed": "x",
+            "animationDelay": [0, 3],
+            "blinkAnimationDelay": [0, 3]
+        });
+        let first = Options::new(options.clone());
+        let resolver = Resolver::new(&style, &first);
+        let global = resolver.animation_delay();
+        let blink = resolver.animation_delay_for(Some("blink"));
+
+        assert!((0.0..=3.0).contains(&global));
+        assert!((0.0..=3.0).contains(&blink));
+        assert_ne!(global, blink);
+
+        let again = Options::new(options);
+
+        assert_eq!(
+            Resolver::new(&style, &again).animation_delay_for(Some("blink")),
+            blink
+        );
     }
 }

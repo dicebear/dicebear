@@ -99,6 +99,30 @@ namespace DiceBear.Internal
             return MemoFloat(name + "AnimationSpeed", range, 1.0);
         }
 
+        internal double AnimationDelay() => MemoFloat("animationDelay", _options.AnimationDelay(), 0.0);
+
+        /// <summary>
+        /// Returns the start offset of one timeline in seconds. A named
+        /// timeline uses its <c>{name}AnimationDelay</c> option when the user
+        /// set one, drawn under that key, and the global offset otherwise.
+        /// Unnamed timelines always follow the global offset.
+        /// </summary>
+        /// <remarks>
+        /// The option is drawn only when asked for, the same way
+        /// <see cref="AnimationSpeedFor"/> handles the factor.
+        /// </remarks>
+        internal double AnimationDelayFor(string? name)
+        {
+            var range = name is null ? null : _options.AnimationDelayFor(name);
+
+            if (name is null || !range.HasValue)
+            {
+                return AnimationDelay();
+            }
+
+            return MemoFloat(name + "AnimationDelay", range, 0.0);
+        }
+
         internal string? Title() => Memo("title", this, static self => self._options.Title());
 
         internal string Flip() =>

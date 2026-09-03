@@ -134,10 +134,11 @@ class Style:
         """Return the sorted distinct names of the definition's animation
         timelines.
 
-        Computed once and cached. The options descriptor advertises a switch
-        and a speed option per name, and the renderer hashes every name's
-        state into the animation class names. Sorted so every implementation
-        reports the same order regardless of how it walks the definition.
+        Computed once and cached. The options descriptor advertises a switch,
+        a speed and a delay option per name, and the renderer hashes every
+        name's state into the animation class names. Sorted so every
+        implementation reports the same order regardless of how it walks the
+        definition.
         """
         if self._animation_names is None:
             names: set[str] = set()

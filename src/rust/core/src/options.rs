@@ -117,6 +117,16 @@ impl Options {
         to_range(self.get(&format!("{name}AnimationSpeed")))
     }
 
+    pub fn animation_delay(&self) -> Option<Range> {
+        to_range(self.get("animationDelay"))
+    }
+
+    /// Returns the `${name}AnimationDelay` option for one animation name as a
+    /// range, or `None` when unset.
+    pub fn animation_delay_for(&self, name: &str) -> Option<Range> {
+        to_range(self.get(&format!("{name}AnimationDelay")))
+    }
+
     /// Returns the global `tags` filter as parsed tokens, or an empty list when
     /// unset. Each raw token (`category` / `category:value`, optionally
     /// `!`-prefixed to disallow) is decoded into `{ category, value?, negated }`

@@ -116,5 +116,10 @@
     "type": "range",
     "min": 0.1,
     "max": 10
+  },
+  "animationDelay": {
+    "type": "range",
+    "min": -3600,
+    "max": 3600
   }
 }

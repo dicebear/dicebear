@@ -23,6 +23,10 @@ export function getOptionDescription(name: string): string | undefined {
     return 'Speed factor for the animations. 1 plays them as authored, 2 twice as fast. As a range [min, max], the PRNG picks a value in between.';
   if (name.match(/AnimationSpeed$/))
     return 'Speed factor for this animation alone. Wins over animationSpeed for it, the other animations keep the global factor.';
+  if (name === 'animationDelay')
+    return 'Start offset in seconds, added after the speed applies. As a range [min, max], every seed starts at its own moment, so avatars next to each other do not move in step.';
+  if (name.match(/AnimationDelay$/))
+    return 'Start offset in seconds for this animation alone. Wins over animationDelay for it.';
   if (name.match(/Probability$/))
     return 'Probability that this component appears in the avatar.';
   if (name.match(/Variant$/))

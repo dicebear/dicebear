@@ -106,6 +106,13 @@ class Options {
   Range? animationSpeedFor(String name) =>
       _toRange(_get('${name}AnimationSpeed'));
 
+  Range? animationDelay() => _toRange(_get('animationDelay'));
+
+  /// Returns the `${name}AnimationDelay` option for one animation name as a
+  /// range, or `null` when unset.
+  Range? animationDelayFor(String name) =>
+      _toRange(_get('${name}AnimationDelay'));
+
   /// Returns the global `tags` filter as parsed tokens, or an empty list when
   /// unset. Each raw token (`category` / `category:value`, optionally
   /// `!`-prefixed to disallow) is decoded into a [TagFilterToken] so the

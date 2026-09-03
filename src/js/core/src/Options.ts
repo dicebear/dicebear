@@ -103,6 +103,21 @@ export class Options<D = unknown> {
     );
   }
 
+  animationDelay(): Range | undefined {
+    return this.#toRange(this.#data.animationDelay);
+  }
+
+  /**
+   * Returns the `${name}AnimationDelay` option for one animation name as a
+   * range, or `undefined` when unset.
+   */
+  animationDelayFor(name: string): Range | undefined {
+    return this.#toRange(
+      this.#dynamic(`${name}AnimationDelay`) as
+        number | readonly number[] | undefined,
+    );
+  }
+
   /**
    * Returns the global `tags` filter as parsed tokens, or an empty array when
    * unset. Each raw token (`category` / `category:value`, optionally

@@ -111,6 +111,27 @@ export class Resolver<D = unknown> {
     return this.#memoFloat(`${name}AnimationSpeed`, range, 1);
   }
 
+  animationDelay(): number {
+    return this.#memoFloat('animationDelay', this.#options.animationDelay(), 0);
+  }
+
+  /**
+   * Returns the start offset of one timeline in seconds. A named timeline
+   * uses its `${name}AnimationDelay` option when the user set one, drawn
+   * under that key, and the global offset otherwise. Unnamed timelines
+   * always follow the global offset.
+   */
+  animationDelayFor(name: string | undefined): number {
+    const range =
+      name === undefined ? undefined : this.#options.animationDelayFor(name);
+
+    if (name === undefined || range === undefined) {
+      return this.animationDelay();
+    }
+
+    return this.#memoFloat(`${name}AnimationDelay`, range, 0);
+  }
+
   title(): string | undefined {
     return this.#memo('title', () => this.#options.title());
   }

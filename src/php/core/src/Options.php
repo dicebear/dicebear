@@ -138,6 +138,23 @@ class Options
         return $this->toRange($this->dynamic($name . 'AnimationSpeed'));
     }
 
+    /** @return array{min: int|float, max: int|float}|null */
+    public function animationDelay(): ?array
+    {
+        return $this->toRange($this->data['animationDelay'] ?? null);
+    }
+
+    /**
+     * Returns the `${name}AnimationDelay` option for one animation name as a
+     * range, or `null` when unset.
+     *
+     * @return array{min: int|float, max: int|float}|null
+     */
+    public function animationDelayFor(string $name): ?array
+    {
+        return $this->toRange($this->dynamic($name . 'AnimationDelay'));
+    }
+
     /**
      * Returns the global `tags` filter as parsed tokens, or an empty list when
      * unset. Each raw token (`category` / `category:value`, optionally

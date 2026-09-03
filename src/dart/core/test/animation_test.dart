@@ -1,6 +1,7 @@
-// The per-name `${name}Animation` and `${name}AnimationSpeed` options,
-// ported from the JS reference suites: the per-name cases of Resolver.test.js
-// and the "named selection" and "per-name speed" cases of Renderer.test.js.
+// The per-name `${name}Animation`, `${name}AnimationSpeed`, and
+// `${name}AnimationDelay` options, ported from the JS reference suites: the
+// per-name cases of Resolver.test.js and the "named selection" and "per-name
+// speed and delay" cases of Renderer.test.js.
 // These run without the parity fixtures, so they also cover the split pub.dev
 // repository.
 library;
@@ -171,6 +172,57 @@ void main() {
     });
   });
 
+  group('Resolver animationDelayFor', () {
+    test('lets a named delay win over the global one', () {
+      final resolver = _makeResolver(_minimalStyle, {
+        'animationDelay': 1,
+        'blinkAnimationDelay': -2,
+      });
+
+      expect(resolver.animationDelay(), 1);
+      expect(resolver.animationDelayFor('blink'), -2);
+      expect(resolver.animationDelayFor('sway'), 1);
+      expect(resolver.animationDelayFor(null), 1);
+      expect(_makeResolver(_minimalStyle, {}).animationDelayFor('blink'), 0);
+    });
+
+    test('draws a delay range under its own key, seeded', () {
+      final options = {
+        'seed': 'x',
+        'animationDelay': [0, 3],
+        'blinkAnimationDelay': [0, 3],
+      };
+      final resolver = _makeResolver(_minimalStyle, options);
+      final global = resolver.animationDelay();
+      final blink = resolver.animationDelayFor('blink');
+
+      expect(global, inInclusiveRange(0, 3));
+      expect(blink, inInclusiveRange(0, 3));
+      expect(global, isNot(blink));
+      expect(
+        _makeResolver(_minimalStyle, options).animationDelayFor('blink'),
+        blink,
+      );
+    });
+
+    test('rejects values outside the bounds at validation', () {
+      for (final data in [
+        {'animationDelay': 3601},
+        {'animationDelay': -3601},
+        {
+          'blinkAnimationDelay': [0, 1, 2],
+        },
+        {'blinkAnimationDelay': 'soon'},
+      ]) {
+        expect(
+          () => Options(data),
+          throwsA(isA<OptionsValidationError>()),
+          reason: jsonEncode(data),
+        );
+      }
+    });
+  });
+
   group('Resolver animationPlays', () {
     test('lets a named switch win over the global one', () {
       final on = _makeResolver(_minimalStyle, {
@@ -331,7 +383,59 @@ void main() {
     });
   });
 
-  group('Renderer per-name speed', () {
+  group('Renderer per-name speed and delay', () {
+    test('adds the delay after the speed has scaled the authored one', () {
+      final svg = Avatar(_paced, {
+        'animation': true,
+        'animationSpeed': 2,
+        'animationDelay': 3,
+      }).svg;
+
+      expect(svg, contains('animation:2s linear 3.5s infinite'));
+      expect(svg, contains('animation:1.5s linear 3s infinite'));
+    });
+
+    test('lets a named delay win over the global one', () {
+      final svg = Avatar(_paced, {
+        'animation': true,
+        'animationDelay': 1,
+        'swayAnimationDelay': -2,
+      }).svg;
+
+      expect(svg, contains('animation:4s linear -1s infinite'));
+      expect(svg, contains('animation:3s linear 1s infinite'));
+    });
+
+    test('includes the delays in the class namespace', () {
+      final plain = _hashOf(Avatar(_paced, {'animation': true}).svg);
+      final shifted = _hashOf(Avatar(_paced, {
+        'animation': true,
+        'animationDelay': 1,
+      }).svg);
+      final named = _hashOf(Avatar(_paced, {
+        'animation': true,
+        'swayAnimationDelay': 1,
+      }).svg);
+
+      expect(plain, isNot(shifted));
+      expect(shifted, isNot(named));
+    });
+
+    test('records the delays in the resolved options', () {
+      final options = Avatar(_paced, {
+        'animation': true,
+        'animationDelay': 1,
+        'swayAnimationDelay': [-2, -2],
+      }).resolvedOptions;
+
+      expect(options['animationDelay'], 1);
+      expect(options['swayAnimationDelay'], -2);
+      expect(
+        Avatar(_paced).resolvedOptions.containsKey('animationDelay'),
+        isFalse,
+      );
+    });
+
     test('scales only the named timeline', () {
       final svg = Avatar(_paced, {
         'animation': true,
@@ -409,13 +513,20 @@ void main() {
       descriptor['blinkAnimationSpeed'],
       {'type': 'range', 'min': 0.1, 'max': 10},
     );
+    expect(
+      descriptor['blinkAnimationDelay'],
+      {'type': 'range', 'min': -3600, 'max': 3600},
+    );
     expect(keys.sublist(keys.indexOf('animation')), [
       'animation',
       'animationSpeed',
+      'animationDelay',
       'blinkAnimation',
       'blinkAnimationSpeed',
+      'blinkAnimationDelay',
       'swayAnimation',
       'swayAnimationSpeed',
+      'swayAnimationDelay',
     ]);
     expect(
       OptionsDescriptor(_minimalStyle).toJson().containsKey('animationSpeed'),

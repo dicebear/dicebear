@@ -939,9 +939,14 @@ namespace DiceBear.Internal
                 _keyframesCss.Add($"@keyframes {keyframesName}{{{body}}}");
             }
 
-            var speed = _resolver.AnimationSpeedFor(JsonRead.Str(animation, "name"));
+            var name = JsonRead.Str(animation, "name");
+            var speed = _resolver.AnimationSpeedFor(name);
             var duration = Num.Format((JsonRead.Num(animation, "duration") ?? 0.0) / speed);
-            var delay = Num.Format((JsonRead.Num(animation, "delay") ?? 0.0) / speed);
+
+            // The offset is wall clock seconds, so it is added after the speed
+            // has scaled the authored delay.
+            var delay = Num.Format(
+                ((JsonRead.Num(animation, "delay") ?? 0.0) / speed) + _resolver.AnimationDelayFor(name));
             var iterationsNum = JsonRead.Num(animation, "iterations");
             var iterations = iterationsNum.HasValue ? Num.Format(iterationsNum.Value) : "infinite";
             var direction = DirectionCss(JsonRead.Str(animation, "direction"));
@@ -1150,11 +1155,11 @@ namespace DiceBear.Internal
         /// </summary>
         /// <remarks>
         /// Extends the <see cref="HashSeed"/> input with the animation speed
-        /// and the state of every named timeline, <c>off</c> or the factor it
-        /// plays at: two renders of the same avatar with different speeds or
-        /// switches inlined on one page must not select each other's rules,
-        /// while identical renders sharing identical rules is harmless
-        /// deduplication.
+        /// and delay and the state of every named timeline, <c>off</c> or the
+        /// factor and offset it plays at: two renders of the same avatar with
+        /// different speeds, delays or switches inlined on one page must not
+        /// select each other's rules, while identical renders sharing
+        /// identical rules is harmless deduplication.
         /// <para>
         /// Everything else about an avatar stays out of the hash, so two
         /// renders of the same style and seed that differ in any other option
@@ -1171,20 +1176,22 @@ namespace DiceBear.Internal
                 var random = _resolver.IdRandomization() ? ":" + RandomSuffix() : string.Empty;
 
                 // Every named timeline the style carries joins the hash with
-                // its state, `off` or the factor it plays at, so two renders
-                // that differ only in a `{name}Animation` or
-                // `{name}AnimationSpeed` option never share their rules. The
-                // style lists its names in code unit order.
+                // its state, `off` or the factor and offset it plays at, so
+                // two renders that differ only in a per-name animation option
+                // never share their rules. The style lists its names in code
+                // unit order.
                 var states = _style.AnimationNames()
                     .Select(name => _resolver.AnimationPlays(name)
                         ? name + ":" + Num.Format(_resolver.AnimationSpeedFor(name))
+                            + ":" + Num.Format(_resolver.AnimationDelayFor(name))
                         : name + ":off")
                     .ToList();
                 var named = states.Count > 0 ? ":" + string.Join(",", states) : string.Empty;
 
                 _cachedAnimationHash = Fnv1a.Hex(
                     (_style.MetaBlock().Source().Name() ?? string.Empty) + ":" + _resolver.Seed()
-                    + ":" + Num.Format(_resolver.AnimationSpeed()) + named + random);
+                    + ":" + Num.Format(_resolver.AnimationSpeed())
+                    + ":" + Num.Format(_resolver.AnimationDelay()) + named + random);
             }
 
             return _cachedAnimationHash;

@@ -156,7 +156,9 @@ func (r *renderer) buildAnimationCss(animation *style.Animation, track string, k
 		delaySeconds = *animation.Delay
 	}
 	duration := num.Format(animation.Duration / speed)
-	delay := num.Format(delaySeconds / speed)
+	// The offset is wall clock seconds, so it is added after the speed has
+	// scaled the authored delay.
+	delay := num.Format(delaySeconds/speed + r.resolver.animationDelayFor(animation.Name))
 
 	iterations := "infinite"
 	if animation.Iterations != nil {
@@ -321,8 +323,9 @@ func (r *renderer) registerAnimationStyle() {
 
 // animationHash returns the FNV-1a hex hash namespacing the animation class
 // and keyframe names, cached after the first call. Extends the hashSeed input
-// with the animation speed and the state of every named timeline the style
-// carries: two renders of the same avatar with different speeds or switches
+// with the animation speed, the animation delay and the state of every named
+// timeline the style carries: two renders of the same avatar with different
+// speeds, delays or switches
 // inlined on one page must not select each other's rules, while identical
 // renders sharing identical rules is harmless deduplication.
 //
@@ -339,16 +342,16 @@ func (r *renderer) animationHash() string {
 		}
 
 		// Every named timeline the style carries joins the hash with its
-		// state, `off` or the factor it plays at, in code unit order
-		// (AnimationNames is already sorted that way), so two renders that
-		// differ only in a ${name}Animation or ${name}AnimationSpeed option
-		// never share their rules. The part is absent when the style has no
-		// named timelines.
+		// state, `off` or the factor and offset it plays at, in code unit
+		// order (AnimationNames is already sorted that way), so two renders
+		// that differ only in a ${name}Animation, ${name}AnimationSpeed or
+		// ${name}AnimationDelay option never share their rules. The part is
+		// absent when the style has no named timelines.
 		names := r.style.AnimationNames()
 		states := make([]string, 0, len(names))
 		for _, name := range names {
 			if r.resolver.animationPlays(name) {
-				states = append(states, name+":"+num.Format(r.resolver.animationSpeedFor(name)))
+				states = append(states, name+":"+num.Format(r.resolver.animationSpeedFor(name))+":"+num.Format(r.resolver.animationDelayFor(name)))
 			} else {
 				states = append(states, name+":off")
 			}
@@ -362,7 +365,7 @@ func (r *renderer) animationHash() string {
 		if meta := r.style.Meta(); meta != nil && meta.Source.Name != nil {
 			sourceName = *meta.Source.Name
 		}
-		v := prng.Hex(sourceName + ":" + r.resolver.seed() + ":" + num.Format(r.resolver.animationSpeed()) + named + random)
+		v := prng.Hex(sourceName + ":" + r.resolver.seed() + ":" + num.Format(r.resolver.animationSpeed()) + ":" + num.Format(r.resolver.animationDelay()) + named + random)
 		r.cachedAnimationHash = &v
 	}
 	return *r.cachedAnimationHash

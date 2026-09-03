@@ -279,6 +279,14 @@ namespace DiceBear.Internal
         /// </summary>
         internal NumberRange? AnimationSpeedFor(string name) => ToRange(_data[name + "AnimationSpeed"]);
 
+        internal NumberRange? AnimationDelay() => ToRange(_data["animationDelay"]);
+
+        /// <summary>
+        /// Returns the <c>{name}AnimationDelay</c> option for one animation
+        /// name as a range, or <see langword="null"/> when unset.
+        /// </summary>
+        internal NumberRange? AnimationDelayFor(string name) => ToRange(_data[name + "AnimationDelay"]);
+
         /// <summary>
         /// Returns the global <c>tags</c> filter as parsed tokens, or an empty
         /// list when unset.

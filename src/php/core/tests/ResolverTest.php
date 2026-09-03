@@ -895,6 +895,35 @@ class ResolverTest extends TestCase
         $this->assertSame(2.0, $resolver->animationSpeedFor(null));
     }
 
+    public function testLetsANamedDelayWinOverTheGlobalOne(): void
+    {
+        $resolver = self::makeResolver(self::minimalStyle(), [
+            'animationDelay' => 1,
+            'blinkAnimationDelay' => -2,
+        ]);
+
+        $this->assertSame(1.0, $resolver->animationDelay());
+        $this->assertSame(-2.0, $resolver->animationDelayFor('blink'));
+        $this->assertSame(1.0, $resolver->animationDelayFor('sway'));
+        $this->assertSame(1.0, $resolver->animationDelayFor(null));
+        $this->assertSame(0.0, self::makeResolver(self::minimalStyle())->animationDelayFor('blink'));
+    }
+
+    public function testDrawsADelayRangeUnderItsOwnKeySeeded(): void
+    {
+        $options = ['seed' => 'x', 'animationDelay' => [0, 3], 'blinkAnimationDelay' => [0, 3]];
+        $resolver = self::makeResolver(self::minimalStyle(), $options);
+        $global = $resolver->animationDelay();
+        $blink = $resolver->animationDelayFor('blink');
+
+        $this->assertGreaterThanOrEqual(0, $global);
+        $this->assertLessThanOrEqual(3, $global);
+        $this->assertGreaterThanOrEqual(0, $blink);
+        $this->assertLessThanOrEqual(3, $blink);
+        $this->assertNotSame($global, $blink);
+        $this->assertSame($blink, self::makeResolver(self::minimalStyle(), $options)->animationDelayFor('blink'));
+    }
+
     public function testLetsANamedSwitchWinOverTheGlobalOne(): void
     {
         $on = self::makeResolver(self::minimalStyle(), ['animation' => false, 'blinkAnimation' => true]);

@@ -1380,6 +1380,9 @@ describe('Resolver', () => {
       assert.throws(() => new Options({ animation: ['blink', 'Bad'] }));
       assert.throws(() => new Options({ blinkAnimation: 'yes' }));
       assert.throws(() => new Options({ BlinkAnimation: true }));
+      assert.throws(() => new Options({ animationDelay: 4000 }));
+      assert.throws(() => new Options({ blinkAnimationDelay: [0, 1, 2] }));
+      assert.throws(() => new Options({ blinkAnimationDelay: 'later' }));
       assert.throws(() => new Options({ animationSpeed: 0 }));
       assert.throws(() => new Options({ animationSpeed: 20 }));
       assert.throws(() => new Options({ animationSpeed: [0, 2] }));
@@ -1425,6 +1428,31 @@ describe('Resolver', () => {
 
       assert.equal(resolver.animationSpeedFor('blink'), 2);
       assert.equal(resolver.animationSpeedFor(undefined), 2);
+    });
+
+    it('should let a named delay win over the global one', () => {
+      const resolver = makeResolver(style, {
+        animationDelay: 1,
+        blinkAnimationDelay: -2,
+      });
+
+      assert.equal(resolver.animationDelay(), 1);
+      assert.equal(resolver.animationDelayFor('blink'), -2);
+      assert.equal(resolver.animationDelayFor('sway'), 1);
+      assert.equal(resolver.animationDelayFor(undefined), 1);
+      assert.equal(makeResolver(style).animationDelayFor('blink'), 0);
+    });
+
+    it('should draw a delay range under its own key, seeded', () => {
+      const options = { seed: 'x', animationDelay: [0, 3], blinkAnimationDelay: [0, 3] };
+      const resolver = makeResolver(style, options);
+      const global = resolver.animationDelay();
+      const blink = resolver.animationDelayFor('blink');
+
+      assert.ok(global >= 0 && global <= 3);
+      assert.ok(blink >= 0 && blink <= 3);
+      assert.notEqual(global, blink);
+      assert.equal(makeResolver(style, options).animationDelayFor('blink'), blink);
     });
 
     it('should let a named switch win over the global one', () => {

@@ -333,15 +333,17 @@ renderer. Each resolution uses the PRNG with a specific key.
 | `${name}Animation`      | —                       | Boolean, only for named timelines the style carries; recorded when set and met                        |
 | `animationSpeed`        | `animationSpeed`        | `float` from range, default `1`                                                                       |
 | `${name}AnimationSpeed` | `${name}AnimationSpeed` | `float` from range, default is the global factor; only for playing timelines of that name (see below) |
+| `animationDelay`        | `animationDelay`        | `float` from range, default `0`; a start offset in seconds                                            |
+| `${name}AnimationDelay` | `${name}AnimationDelay` | `float` from range, default is the global offset; only for playing timelines of that name             |
 
 Options with no PRNG key are read directly from the user input. The rest sample
 from a user-supplied range/list under the given key, falling back to the listed
 default.
 
 The range options (`rotate`, `scale`, `borderRadius`, `translateX`,
-`translateY`, `animationSpeed`, and the per-color `${name}ColorAngle` /
-`${name}ColorFillStops`) accept a number or an array, normalized to a
-`{ min, max }` range before `float`/`integer` sampling:
+`translateY`, `animationSpeed`, `animationDelay`, and the per-color
+`${name}ColorAngle` / `${name}ColorFillStops`) accept a number or an array,
+normalized to a `{ min, max }` range before `float`/`integer` sampling:
 
 - a bare number `n` → `{ min: n, max: n }` (a fixed value);
 - a single-element array `[n]` → `{ min: n, max: n }` (same as the bare number);
@@ -366,15 +368,17 @@ unset.
 
 `${name}Animation` switches the timelines of one name on or off and wins over
 `animation` for them. `${name}AnimationSpeed` sets their factor, with the same
-values as `animationSpeed`, and wins over it. A named timeline plays when its
-switch says so, or when the global switch does and no switch of its own is set,
-and it plays at its own factor when one is set, at the global factor otherwise.
-Unnamed timelines follow the global switch and factor alone. A switch is
-recorded in `resolvedOptions` under its key when the renderer meets a timeline
-of that name, a factor is drawn under `${name}AnimationSpeed` the first time a
-playing timeline of that name asks for it, or the animation hash does. Nothing
-is recorded for a name the style does not carry, and a static render records
-only `animation`.
+values as `animationSpeed`, and wins over it. `${name}AnimationDelay` sets their
+start offset in seconds the same way, with the same values as `animationDelay`
+(default `0`, `-3600` to `3600`), and wins over it. A named timeline plays when
+its switch says so, or when the global switch does and no switch of its own is
+set, and it plays at its own factor when one is set, at the global factor
+otherwise. Unnamed timelines follow the global switch and factor alone. A switch
+is recorded in `resolvedOptions` under its key when the renderer meets a
+timeline of that name, a factor or offset is drawn under `${name}AnimationSpeed`
+or `${name}AnimationDelay` the first time a playing timeline of that name asks
+for it, or the animation hash does. Nothing is recorded for a name the style
+does not carry, and a static render records only `animation`.
 
 ### Component options
 
@@ -874,8 +878,8 @@ timeline's `${name}Animation` switch when the user set one, the global
 timeline. No PRNG is involved. The global `animation` memo is touched the first
 time the renderer meets a node that carries `animations`, regardless of whether
 anything plays, so it is always part of `resolvedOptions` for an animated style.
-`animationSpeed` and the per-name factors are only touched once a track is
-actually rendered.
+`animationSpeed`, `animationDelay`, and the per-name factors and offsets are
+only touched once a track is actually rendered.
 
 ### Wrappers
 
@@ -915,19 +919,20 @@ emission order. `animationHash` is the FNV-1a hex hash (8 characters, lowercase,
 zero-padded) of
 
 ```
-{source.name or ''} + ':' + seed + ':' + formatNumber(animationSpeed)
+{source.name or ''} + ':' + seed + ':' + formatNumber(animationSpeed) + ':' + formatNumber(animationDelay)
   [+ ':' + states]     // only when the style carries named timelines, see below
   [+ ':' + suffix]     // only when idRandomization is on: the same suffix the id rewrite uses
 ```
 
 `states` lists every name the style carries in UTF-16 code unit order, joined
 with `,`, each as `{name}:off` when its timelines do not play and as
-`{name}:{formatNumber(factor)}` when they do, with the factor
-`animationSpeedFor` yields. A style without named timelines has no such part.
-The first two parts equal the input of the component-id hash. Compute the hash
-once per render and cache it. Two renders of the same seed with different speeds
-or selections placed on one page must not pick up each other's rules, while
-identical renders sharing identical rules is harmless.
+`{name}:{formatNumber(factor)}:{formatNumber(offset)}` when they do, with the
+factor `animationSpeedFor` and the offset `animationDelayFor` yield. A style
+without named timelines has no such part. The first two parts equal the input of
+the component-id hash. Compute the hash once per render and cache it. Two
+renders of the same seed with different speeds or selections placed on one page
+must not pick up each other's rules, while identical renders sharing identical
+rules is harmless.
 
 ### Keyframes body
 
@@ -974,10 +979,13 @@ Every track adds one rule to the class list:
   `scaleX`, and `scaleY`. `origin` defaults to `{ x: 50, y: 50 }`, and both
   values go through `formatNumber`.
 - `duration` is `formatNumber(duration / speed)`, `delay` is
-  `formatNumber((delay ?? 0) / speed)`, where `speed` is the timeline's factor:
-  its `${name}AnimationSpeed` option when the timeline is named and the user set
-  one, the global `animationSpeed` otherwise. Negative delays are allowed and
-  start the timeline mid-way.
+  `formatNumber((delay ?? 0) / speed + offset)`, where `speed` is the timeline's
+  factor (its `${name}AnimationSpeed` option when the timeline is named and the
+  user set one, the global `animationSpeed` otherwise) and `offset` the
+  timeline's start offset in seconds from `${name}AnimationDelay` or
+  `animationDelay` the same way, default `0`. The offset is added after the
+  speed has scaled the authored delay, so it shifts by wall clock time. Negative
+  delays are allowed and start the timeline mid-way.
 - `iterations` is the literal `infinite` when the field is unset or
   `'infinite'`, otherwise `formatNumber(iterations)`.
 - `direction` maps `alternateReverse` to `alternate-reverse`; the other three
@@ -1011,19 +1019,22 @@ fixture pins that both render side by side in one avatar.
 ### Options descriptor
 
 When any node in the definition (canvas tree or component variants) has a
-non-empty `animations` array, the descriptor gains a switch and a speed field,
-plus one pair per distinct timeline name in UTF-16 code unit order:
+non-empty `animations` array, the descriptor gains a switch, a speed and a delay
+field, plus one triple per distinct timeline name in UTF-16 code unit order:
 
 ```json
 "animation": { "type": "boolean" },
 "animationSpeed": { "type": "range", "min": 0.1, "max": 10 },
+"animationDelay": { "type": "range", "min": -3600, "max": 3600 },
 "driftAnimation": { "type": "boolean" },
 "driftAnimationSpeed": { "type": "range", "min": 0.1, "max": 10 },
+"driftAnimationDelay": { "type": "range", "min": -3600, "max": 3600 },
 "pulseAnimation": { "type": "boolean" },
-"pulseAnimationSpeed": { "type": "range", "min": 0.1, "max": 10 }
+"pulseAnimationSpeed": { "type": "range", "min": 0.1, "max": 10 },
+"pulseAnimationDelay": { "type": "range", "min": -3600, "max": 3600 }
 ```
 
-A style whose timelines are all unnamed advertises only the first two. Static
+A style whose timelines are all unnamed advertises only the first three. Static
 styles do not advertise any of them, although the options are accepted (and
 ignored) everywhere.
 
@@ -1060,15 +1071,15 @@ gets the same coverage for free.
 
 The unit fixtures each pin one contract:
 
-| Fixture           | Pins                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fnv1a.json`      | The 32-bit hash and its 8-char hex form for ASCII input, the `seed:key` patterns produced by `Prng.getValue()`, and Unicode (`„é"`, `„日本語"`, emoji, long strings)                                                                                                                                                                                                                                                                                                                                                                                |
-| `mulberry32.json` | The first 5 chained `{nextFloat, state}` pairs per seed, so state progression is checked, not only the first step                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `prng.json`       | Every `Prng` method (`getValue`, `pick`, `weightedPick`, `bool`, `float`, `integer`, `shuffle`) as `{seed, key, args, result}` cases, including order-independence checks for `pick`, `weightedPick`, and `shuffle`                                                                                                                                                                                                                                                                                                                                 |
-| `numbers.json`    | Number formatting: at most 5 decimal places, halves toward +Infinity, negative half-way boundaries, tiny values that collapse to `0`                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `initials.json`   | Seed-to-initials extraction with accents, quotes, email `@`-stripping, CJK, and emoji                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `colors.json`     | The `Color` helpers (`toHex`, `toRgbHex`, `parseHex`, `luminance`, `sortByContrast`, `filterNotEqualTo`). The luminance entries pin exact doubles, including values around the linearization threshold (see the warning above), and the sort cases include a stability check                                                                                                                                                                                                                                                                        |
-| `validation.json` | Accept/reject outcomes for definitions and options (error _messages_ are language-specific and not part of the contract), circular `contrastTo` chains with their resolution path, tag tokens that break the grammar (uppercase segments, a third segment, a double `!`), animation blocks with unordered or duplicate keyframes or unknown tracks, `animation` given a name or a list, `${name}Animation` given a string or an uppercase name, and `animationSpeed` and `${name}AnimationSpeed` out of range, with too many bounds, or non-numeric |
+| Fixture           | Pins                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fnv1a.json`      | The 32-bit hash and its 8-char hex form for ASCII input, the `seed:key` patterns produced by `Prng.getValue()`, and Unicode (`„é"`, `„日本語"`, emoji, long strings)                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `mulberry32.json` | The first 5 chained `{nextFloat, state}` pairs per seed, so state progression is checked, not only the first step                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `prng.json`       | Every `Prng` method (`getValue`, `pick`, `weightedPick`, `bool`, `float`, `integer`, `shuffle`) as `{seed, key, args, result}` cases, including order-independence checks for `pick`, `weightedPick`, and `shuffle`                                                                                                                                                                                                                                                                                                                                                                             |
+| `numbers.json`    | Number formatting: at most 5 decimal places, halves toward +Infinity, negative half-way boundaries, tiny values that collapse to `0`                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `initials.json`   | Seed-to-initials extraction with accents, quotes, email `@`-stripping, CJK, and emoji                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `colors.json`     | The `Color` helpers (`toHex`, `toRgbHex`, `parseHex`, `luminance`, `sortByContrast`, `filterNotEqualTo`). The luminance entries pin exact doubles, including values around the linearization threshold (see the warning above), and the sort cases include a stability check                                                                                                                                                                                                                                                                                                                    |
+| `validation.json` | Accept/reject outcomes for definitions and options (error _messages_ are language-specific and not part of the contract), circular `contrastTo` chains with their resolution path, tag tokens that break the grammar (uppercase segments, a third segment, a double `!`), animation blocks with unordered or duplicate keyframes or unknown tracks, `animation` given a name or a list, `${name}Animation` given a string or an uppercase name, and `animationSpeed`, `${name}AnimationSpeed`, `animationDelay`, and `${name}AnimationDelay` out of range, with too many bounds, or non-numeric |
 
 The remaining fixtures come in threes, one set per style. `styles/{name}.json`
 is a vendored copy of the definition. `avatars/{name}.json` holds
@@ -1085,17 +1096,17 @@ with and without characters that need escaping. Select cases also carry a
 `encodeURIComponent`: every byte except `A-Za-z0-9-_.!~*'()` is escaped). The
 cases after those are specific to the style:
 
-| Style         | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `initials`    | Text elements, `fontFamily` and `fontWeight`, a text color with `contrastTo`                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `thumbs`      | Four components with per-component transforms, `contrastTo` and `notEqualTo` chains, a user color override, root `attributes`                                                                                                                                                                                                                                                                                                                                                 |
-| `glass`       | Component aliases via `extends`, an authored `defs` element, a probability of zero                                                                                                                                                                                                                                                                                                                                                                                            |
-| `notionists`  | Eleven components, `notEqualTo` between the ink and paper colors, `gestureVariant`                                                                                                                                                                                                                                                                                                                                                                                            |
-| `shape-grid`  | Sixteen aliases of one component, pinned variants, a probability of zero                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `tagged`      | Variants tagged in several categories next to one untagged component. Every token form of `tags`: allow, bare, `!` disallow, "or" within a category, "and" across categories, unknown category, unknown value, and the precedence of `${name}Variant`                                                                                                                                                                                                                         |
-| `animated`    | An opt-in animation component whose variants have `weight: 0` and are reachable only through the `tags` filter                                                                                                                                                                                                                                                                                                                                                                |
-| `declarative` | Every track type, keyword and bezier easings, custom origins, negative delays, finite iterations, named and unnamed timelines, an animated component reference. `animation` off and on, `${name}Animation` switching one name on, two names on, one name off while the rest play, and an unknown name, `animationSpeed` as a factor and as a range, and `${name}AnimationSpeed` alone, over a global factor, as a range, for an unknown name, and next to a switched-off name |
-| `coexist`     | A declarative timeline next to a tag-gated `<style>` component, each on its own and both together                                                                                                                                                                                                                                                                                                                                                                             |
+| Style         | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `initials`    | Text elements, `fontFamily` and `fontWeight`, a text color with `contrastTo`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `thumbs`      | Four components with per-component transforms, `contrastTo` and `notEqualTo` chains, a user color override, root `attributes`                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `glass`       | Component aliases via `extends`, an authored `defs` element, a probability of zero                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `notionists`  | Eleven components, `notEqualTo` between the ink and paper colors, `gestureVariant`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `shape-grid`  | Sixteen aliases of one component, pinned variants, a probability of zero                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `tagged`      | Variants tagged in several categories next to one untagged component. Every token form of `tags`: allow, bare, `!` disallow, "or" within a category, "and" across categories, unknown category, unknown value, and the precedence of `${name}Variant`                                                                                                                                                                                                                                                                                                                                |
+| `animated`    | An opt-in animation component whose variants have `weight: 0` and are reachable only through the `tags` filter                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `declarative` | Every track type, keyword and bezier easings, custom origins, negative delays, finite iterations, named and unnamed timelines, an animated component reference. `animation` off and on, `${name}Animation` switching one name on, two names on, one name off while the rest play, and an unknown name, `animationSpeed` as a factor and as a range, `${name}AnimationSpeed` alone, over a global factor, as a range, for an unknown name, and next to a switched-off name, and `animationDelay` alone, next to a speed, as a range, overridden per name, and for a switched-off name |
+| `coexist`     | A declarative timeline next to a tag-gated `<style>` component, each on its own and both together                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 ### How to use the fixtures
 

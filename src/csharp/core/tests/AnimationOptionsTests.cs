@@ -7,9 +7,10 @@ using Xunit;
 namespace DiceBear.Tests;
 
 /// <summary>
-/// The animation options: the global <c>animation</c> switch and
-/// <c>animationSpeed</c> factor, and the <c>{name}Animation</c> and
-/// <c>{name}AnimationSpeed</c> pair every animation name gets. The resolver
+/// The animation options: the global <c>animation</c> switch,
+/// <c>animationSpeed</c> factor and <c>animationDelay</c> offset, and the
+/// <c>{name}Animation</c>, <c>{name}AnimationSpeed</c> and
+/// <c>{name}AnimationDelay</c> triple every animation name gets. The resolver
 /// cases pin the PRNG keys and what lands in the snapshot, the avatar cases pin
 /// what reaches the markup and the JSON envelope. The behaviors mirror the
 /// reference suite.
@@ -105,6 +106,9 @@ public class AnimationOptionsTests
     [InlineData("""{"blinkAnimationSpeed":[0.5,2,4]}""")]
     [InlineData("""{"BlinkAnimationSpeed":2}""")]
     [InlineData("""{"blinkAnimationSpeed":"fast"}""")]
+    [InlineData("""{"animationDelay":3601}""")]
+    [InlineData("""{"blinkAnimationDelay":[0,1,2]}""")]
+    [InlineData("""{"blinkAnimationDelay":"late"}""")]
     public void RejectsInvalidValuesAtValidation(string json) =>
         Assert.Throws<OptionsValidationException>(() => new Options(JsonNode.Parse(json)));
 
@@ -163,6 +167,35 @@ public class AnimationOptionsTests
             blink,
             Resolver(Options(("seed", "x"), ("animationSpeed", new[] { 0.5, 2 }))).AnimationSpeed());
         Assert.Equal(blink, Resolver(options).AnimationSpeedFor("blink"));
+    }
+
+    [Fact]
+    public void LetsANamedDelayWinOverTheGlobalOne()
+    {
+        var resolver = Resolver(Options(("animationDelay", 1), ("blinkAnimationDelay", -2)));
+
+        Assert.Equal(1.0, resolver.AnimationDelay());
+        Assert.Equal(-2.0, resolver.AnimationDelayFor("blink"));
+        Assert.Equal(1.0, resolver.AnimationDelayFor("sway"));
+        Assert.Equal(1.0, resolver.AnimationDelayFor(null));
+        Assert.Equal(0.0, Resolver(Options()).AnimationDelayFor("blink"));
+    }
+
+    [Fact]
+    public void DrawsADelayRangeUnderItsOwnKeySeeded()
+    {
+        var options = Options(
+            ("seed", "x"),
+            ("animationDelay", new[] { 0, 3 }),
+            ("blinkAnimationDelay", new[] { 0, 3 }));
+        var resolver = Resolver(options);
+        var global = resolver.AnimationDelay();
+        var blink = resolver.AnimationDelayFor("blink");
+
+        Assert.InRange(global, 0.0, 3.0);
+        Assert.InRange(blink, 0.0, 3.0);
+        Assert.NotEqual(global, blink);
+        Assert.Equal(blink, Resolver(options).AnimationDelayFor("blink"));
     }
 
     [Fact]
@@ -324,19 +357,74 @@ public class AnimationOptionsTests
     }
 
     [Fact]
-    public void AdvertisesASwitchAndARangePerAnimationName()
+    public void AddsTheDelayAfterTheSpeedHasScaledTheAuthoredOne()
+    {
+        var svg = new Avatar(
+            Style.Parse(PacedStyle),
+            Options(("animation", true), ("animationSpeed", 2), ("animationDelay", 3))).ToSvg();
+
+        Assert.Contains("animation:2s linear 3.5s infinite", svg, StringComparison.Ordinal);
+        Assert.Contains("animation:1.5s linear 3s infinite", svg, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void LetsANamedDelayWinOverTheGlobalOneWhenRendering()
+    {
+        var svg = new Avatar(
+            Style.Parse(PacedStyle),
+            Options(("animation", true), ("animationDelay", 1), ("swayAnimationDelay", -2))).ToSvg();
+
+        Assert.Contains("animation:4s linear -1s infinite", svg, StringComparison.Ordinal);
+        Assert.Contains("animation:3s linear 1s infinite", svg, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void IncludesTheDelaysInTheClassNamespace()
+    {
+        var style = Style.Parse(PacedStyle);
+        var plain = new Avatar(style, Options(("animation", true))).ToSvg();
+        var shifted = new Avatar(style, Options(("animation", true), ("animationDelay", 1))).ToSvg();
+        var named = new Avatar(style, Options(("animation", true), ("swayAnimationDelay", 1))).ToSvg();
+
+        Assert.NotEqual(HashOf(plain), HashOf(shifted));
+        Assert.NotEqual(HashOf(shifted), HashOf(named));
+    }
+
+    [Fact]
+    public void RecordsTheDelaysInTheResolvedOptions()
+    {
+        var style = Style.Parse(PacedStyle);
+        var options = new Avatar(
+            style,
+            Options(("animation", true), ("animationDelay", 1), ("swayAnimationDelay", new[] { -2, -2 }))).ResolvedOptions();
+
+        Assert.Equal(1.0, options["animationDelay"]!.GetValue<double>());
+        Assert.Equal(-2.0, options["swayAnimationDelay"]!.GetValue<double>());
+        Assert.False(new Avatar(style, Options()).ResolvedOptions().ContainsKey("animationDelay"));
+    }
+
+    [Fact]
+    public void AdvertisesASwitchASpeedAndADelayPerAnimationName()
     {
         var descriptor = new OptionsDescriptor(Style.Parse(NamedStyle)).ToJson();
         var keys = descriptor.Select(entry => entry.Key).ToList();
 
         Assert.Equal("boolean", descriptor["animation"]!["type"]!.GetValue<string>());
         Assert.Equal(
-            new[] { "animation", "animationSpeed", "blinkAnimation", "blinkAnimationSpeed", "swayAnimation", "swayAnimationSpeed" },
-            keys.Skip(keys.IndexOf("animation")).Take(6));
+            new[]
+            {
+                "animation", "animationSpeed", "animationDelay",
+                "blinkAnimation", "blinkAnimationSpeed", "blinkAnimationDelay",
+                "swayAnimation", "swayAnimationSpeed", "swayAnimationDelay",
+            },
+            keys.Skip(keys.IndexOf("animation")).Take(9));
         Assert.Equal("boolean", descriptor["blinkAnimation"]!["type"]!.GetValue<string>());
         Assert.Equal("range", descriptor["blinkAnimationSpeed"]!["type"]!.GetValue<string>());
         Assert.Equal("0.1", descriptor["blinkAnimationSpeed"]!["min"]!.ToJsonString());
         Assert.Equal("10", descriptor["blinkAnimationSpeed"]!["max"]!.ToJsonString());
+        Assert.Equal("range", descriptor["blinkAnimationDelay"]!["type"]!.GetValue<string>());
+        Assert.Equal("-3600", descriptor["blinkAnimationDelay"]!["min"]!.ToJsonString());
+        Assert.Equal("3600", descriptor["blinkAnimationDelay"]!["max"]!.ToJsonString());
     }
 
     /// <summary>

@@ -227,6 +227,14 @@ https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimatio
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimationSpeed=0.5,1
 ```
 
+`animationDelay` shifts the start by seconds. As a range, every seed starts at
+its own moment, so avatars rendered next to each other do not move in step:
+
+```
+https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationDelay=0,5
+https://api.dicebear.com/11.x/planets/svg?seed=Jane&animation=true&animationDelay=0,5
+```
+
 The `11.x` line is the first one with animations. On `10.x` the option is
 accepted and ignored.
 

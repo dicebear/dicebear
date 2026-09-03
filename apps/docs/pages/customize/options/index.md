@@ -37,6 +37,8 @@ the tuple's range.
 | `*Animation`      | `boolean`                                        | _unset_       | Switch one animation by name, such as `blinkAnimation: true`. Wins over `animation` for that animation, so one animation can play alone or stay still while the rest play |
 | `animationSpeed`  | `number \| [min, max]`                           | `1`           | Playback speed multiplier for animations (0.1 to 10, `2` plays twice as fast). Only meaningful once `animation` is on                                                     |
 | `*AnimationSpeed` | `number \| [min, max]`                           | _unset_       | Playback speed of one animation by name, such as `blinkAnimationSpeed: 2`. Wins over `animationSpeed` for that animation, the others keep the global factor               |
+| `animationDelay`  | `number \| [min, max]`                           | `0`           | Start offset in seconds (-3600 to 3600), added after the speed applies. As a range, every seed starts at its own moment, so a wall of avatars does not move in step       |
+| `*AnimationDelay` | `number \| [min, max]`                           | _unset_       | Start offset of one animation by name, such as `blinkAnimationDelay: [0, 3]`. Wins over `animationDelay` for that animation                                               |
 
 ## Background options
 

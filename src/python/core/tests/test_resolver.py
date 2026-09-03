@@ -892,6 +892,32 @@ def test_animation_rejects_non_boolean_values(options: dict[str, Any]) -> None:
         Options(options)
 
 
+def test_named_animation_delay_wins_over_global() -> None:
+    resolver = _make_resolver(
+        _minimal_style(), {"animationDelay": 1, "blinkAnimationDelay": -2}
+    )
+
+    assert resolver.animation_delay() == 1
+    assert resolver.animation_delay_for("blink") == -2
+    assert resolver.animation_delay_for("sway") == 1
+    assert resolver.animation_delay_for(None) == 1
+    assert _make_resolver(_minimal_style()).animation_delay_for("blink") == 0
+
+
+def test_named_animation_delay_draws_range_under_its_own_key() -> None:
+    options = {"seed": "x", "animationDelay": [0, 3], "blinkAnimationDelay": [0, 3]}
+    resolver = _make_resolver(_minimal_style(), options)
+    global_ = resolver.animation_delay()
+    blink = resolver.animation_delay_for("blink")
+
+    assert 0 <= global_ <= 3
+    assert 0 <= blink <= 3
+    assert global_ != blink
+    assert (
+        _make_resolver(_minimal_style(), options).animation_delay_for("blink") == blink
+    )
+
+
 def test_named_animation_switch_wins_over_global() -> None:
     on = _make_resolver(_minimal_style(), {"animation": False, "blinkAnimation": True})
 

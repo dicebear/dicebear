@@ -660,3 +660,70 @@ func TestNamedSelectionIncludesTheSwitchesInTheClassNamespace(t *testing.T) {
 		t.Errorf("switch combinations should hash apart, got all=%s one=%s allButOne=%s", all, one, allButOne)
 	}
 }
+
+// The delay tests mirror the delay cases of the describe('per-name speed and
+// delay', ...) block of the JS reference suite, on the same paced style.
+
+func TestPerNameDelayAddsTheDelayAfterTheSpeedHasScaledTheAuthoredOne(t *testing.T) {
+	svg := mustAvatar(t, mustStyle(t, pacedStyle), map[string]any{
+		"animation":      true,
+		"animationSpeed": 2,
+		"animationDelay": 3,
+	}).SVG()
+
+	for _, want := range []string{"animation:2s linear 3.5s infinite", "animation:1.5s linear 3s infinite"} {
+		if !strings.Contains(svg, want) {
+			t.Errorf("SVG should contain %q, got: %s", want, svg)
+		}
+	}
+}
+
+func TestPerNameDelayLetsANamedDelayWinOverTheGlobalOne(t *testing.T) {
+	svg := mustAvatar(t, mustStyle(t, pacedStyle), map[string]any{
+		"animation":          true,
+		"animationDelay":     1,
+		"swayAnimationDelay": -2,
+	}).SVG()
+
+	for _, want := range []string{"animation:4s linear -1s infinite", "animation:3s linear 1s infinite"} {
+		if !strings.Contains(svg, want) {
+			t.Errorf("SVG should contain %q, got: %s", want, svg)
+		}
+	}
+}
+
+func TestPerNameDelayIncludesTheDelaysInTheClassNamespace(t *testing.T) {
+	style := mustStyle(t, pacedStyle)
+	plain := animationHashOf(t, mustAvatar(t, style, map[string]any{"animation": true}).SVG())
+	shifted := animationHashOf(t, mustAvatar(t, style, map[string]any{
+		"animation":      true,
+		"animationDelay": 1,
+	}).SVG())
+	named := animationHashOf(t, mustAvatar(t, style, map[string]any{
+		"animation":          true,
+		"swayAnimationDelay": 1,
+	}).SVG())
+
+	if plain == shifted || shifted == named {
+		t.Errorf("delays should hash apart, got plain=%s shifted=%s named=%s", plain, shifted, named)
+	}
+}
+
+func TestPerNameDelayRecordsTheDelaysInTheResolvedOptions(t *testing.T) {
+	style := mustStyle(t, pacedStyle)
+	options := mustAvatar(t, style, map[string]any{
+		"animation":          true,
+		"animationDelay":     1,
+		"swayAnimationDelay": []any{-2, -2},
+	}).ResolvedOptions()
+
+	if got := options["animationDelay"]; got != 1.0 {
+		t.Errorf("resolved animationDelay = %v, want 1", got)
+	}
+	if got := options["swayAnimationDelay"]; got != -2.0 {
+		t.Errorf("resolved swayAnimationDelay = %v, want -2", got)
+	}
+	if _, ok := mustAvatar(t, style, nil).ResolvedOptions()["animationDelay"]; ok {
+		t.Error("a static render should not record animationDelay")
+	}
+}

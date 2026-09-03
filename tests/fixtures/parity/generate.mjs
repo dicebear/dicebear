@@ -1332,6 +1332,14 @@ const optionsValidationCases = [
   { id: 'named-animation-speed-range-excess', options: { blinkAnimationSpeed: [0.5, 2, 4] } },
   { id: 'named-animation-speed-uppercase', options: { BlinkAnimationSpeed: 2 } },
   { id: 'named-animation-speed-string', options: { blinkAnimationSpeed: 'fast' } },
+  // A start offset in seconds, globally and per animation name.
+  { id: 'animation-delay-valid', options: { animationDelay: 2 } },
+  { id: 'animation-delay-negative', options: { animationDelay: -3600 } },
+  { id: 'animation-delay-too-large', options: { animationDelay: 3601 } },
+  { id: 'animation-delay-range', options: { animationDelay: [0, 3] } },
+  { id: 'named-animation-delay', options: { blinkAnimationDelay: [-1, 1] } },
+  { id: 'named-animation-delay-range-excess', options: { blinkAnimationDelay: [0, 1, 2] } },
+  { id: 'named-animation-delay-string', options: { blinkAnimationDelay: 'later' } },
 ];
 
 // A style whose canvas uses color `a`, so resolving it walks the (circular)
@@ -1719,6 +1727,33 @@ const avatarFixtures = {
         pulseAnimationSpeed: 2,
         squashAnimationSpeed: 0.5,
       },
+    },
+    // A start offset in seconds of playback: it is added after the speed
+    // has scaled the authored delay, so it shifts every timeline by the same
+    // wall clock time.
+    {
+      id: 'delay',
+      options: { seed: 'parity-1', animation: true, animationDelay: 2 },
+    },
+    {
+      id: 'delay-with-speed',
+      options: { seed: 'parity-1', animation: true, animationSpeed: 2, animationDelay: 2 },
+    },
+    // The range form draws a seeded offset, the way a wall of avatars falls
+    // out of step.
+    {
+      id: 'delay-range',
+      options: { seed: 'parity-1', animation: true, animationDelay: [-3, 3] },
+    },
+    // The named offset wins over the global one for its timelines.
+    {
+      id: 'named-delay-over-global',
+      options: { seed: 'parity-1', animation: true, animationDelay: 1, pulseAnimationDelay: -2 },
+    },
+    // A named offset for a switched-off name is never drawn.
+    {
+      id: 'named-delay-off',
+      options: { seed: 'parity-1', pulseAnimation: true, squashAnimationDelay: 2 },
     },
   ]),
   coexist: avatarCases([

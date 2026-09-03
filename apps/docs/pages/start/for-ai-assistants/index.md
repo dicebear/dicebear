@@ -149,8 +149,9 @@ lists the pairs explicitly.
 
 The animated styles describe their motion in the definition, and the core plays
 it through the `animation` option: `true` plays every animation of a style,
-`${name}Animation` switches one of them by name, and `animationSpeed` or
-`${name}AnimationSpeed` set the pace. The `animationVariant` option and the
+`${name}Animation` switches one of them by name, `animationSpeed` or
+`${name}AnimationSpeed` set the pace, and `animationDelay` or
+`${name}AnimationDelay` shift the start. The `animationVariant` option and the
 `animation` tag from 10.x are gone; passing them renders the static avatar.
 Nothing else changed, and the static output of every style is byte-identical to
 10.x.

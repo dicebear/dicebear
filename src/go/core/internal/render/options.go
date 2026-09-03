@@ -122,6 +122,18 @@ func (o *options) animationSpeedFor(name string) *prng.Range {
 	return toRange(v)
 }
 
+func (o *options) animationDelay() *prng.Range {
+	v, _ := o.get("animationDelay")
+	return toRange(v)
+}
+
+// animationDelayFor returns the ${name}AnimationDelay option for one
+// animation name as a range, or nil when unset.
+func (o *options) animationDelayFor(name string) *prng.Range {
+	v, _ := o.get(name + "AnimationDelay")
+	return toRange(v)
+}
+
 // tags returns the global `tags` filter as parsed tokens, or an empty slice when
 // unset. Each raw token (`category` / `category:value`, optionally `!`-prefixed
 // to disallow) is decoded into a tagFilterToken so the resolver composes the

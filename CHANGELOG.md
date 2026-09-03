@@ -22,6 +22,10 @@ and this project adheres to
   `blinkAnimationSpeed: 2` sets their pace, as a factor or a range the seed
   picks from. Each named option wins over its global counterpart. The options
   descriptor lists one switch and one speed field per animation name.
+- **Core:** `animationDelay` and `${name}AnimationDelay` shift the start of the
+  animations by seconds, added after the speed applies. As a range such as
+  `[0, 5]` every seed starts at its own moment, so a wall of avatars no longer
+  blinks in unison.
 
 ## [11.0.0-rc.1] - 2026-09-01
 

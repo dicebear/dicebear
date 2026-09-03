@@ -97,6 +97,7 @@ export interface StyleOptionsBase {
   readonly tags?: string | readonly string[];
   readonly animation?: boolean;
   readonly animationSpeed?: number | readonly [number, number];
+  readonly animationDelay?: number | readonly [number, number];
 }
 
 // Variant option accepts a single name, an array, or a name-to-weight record
@@ -149,13 +150,15 @@ type ColorOptions<C extends string> = [C] extends [never]
       readonly [K in C as `${K}ColorOrder`]?: StyleOptionsColorOrderValue;
     };
 
-// One `${name}Animation` switch and one `${name}AnimationSpeed` factor per
-// animation name the style carries. The names are not derived from the
-// definition type, so any camelCase name is accepted here and the schema
-// decides at runtime.
+// One `${name}Animation` switch, one `${name}AnimationSpeed` factor and one
+// `${name}AnimationDelay` offset per animation name the style carries. The
+// names are not derived from the definition type, so any camelCase name is
+// accepted here and the schema decides at runtime.
 type AnimationOptions = {
   readonly [key: `${string}Animation`]: boolean | undefined;
   readonly [key: `${string}AnimationSpeed`]:
+    number | readonly [number, number] | undefined;
+  readonly [key: `${string}AnimationDelay`]:
     number | readonly [number, number] | undefined;
 };
 

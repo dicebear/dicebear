@@ -2319,6 +2319,65 @@
         "blinkAnimationSpeed": "fast"
       },
       "valid": false
+    },
+    {
+      "id": "animation-delay-valid",
+      "options": {
+        "animationDelay": 2
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-delay-negative",
+      "options": {
+        "animationDelay": -3600
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-delay-too-large",
+      "options": {
+        "animationDelay": 3601
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-delay-range",
+      "options": {
+        "animationDelay": [
+          0,
+          3
+        ]
+      },
+      "valid": true
+    },
+    {
+      "id": "named-animation-delay",
+      "options": {
+        "blinkAnimationDelay": [
+          -1,
+          1
+        ]
+      },
+      "valid": true
+    },
+    {
+      "id": "named-animation-delay-range-excess",
+      "options": {
+        "blinkAnimationDelay": [
+          0,
+          1,
+          2
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "named-animation-delay-string",
+      "options": {
+        "blinkAnimationDelay": "later"
+      },
+      "valid": false
     }
   ],
   "circularColors": [

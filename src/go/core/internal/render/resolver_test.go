@@ -302,3 +302,43 @@ func TestAnimationPlaysLetsANamedSwitchWinOverTheGlobalOne(t *testing.T) {
 		t.Error(`animationPlays("") = false, want true`)
 	}
 }
+
+func TestAnimationDelayForLetsANamedDelayWinOverTheGlobalOne(t *testing.T) {
+	r := makeResolver(t, minimalStyleJSON, `{"animationDelay": 1, "blinkAnimationDelay": -2}`)
+
+	if got := r.animationDelay(); got != 1 {
+		t.Errorf("animationDelay() = %v, want 1", got)
+	}
+	if got := r.animationDelayFor("blink"); got != -2 {
+		t.Errorf(`animationDelayFor("blink") = %v, want -2`, got)
+	}
+	if got := r.animationDelayFor("sway"); got != 1 {
+		t.Errorf(`animationDelayFor("sway") = %v, want 1`, got)
+	}
+	if got := r.animationDelayFor(""); got != 1 {
+		t.Errorf(`animationDelayFor("") = %v, want 1`, got)
+	}
+	if got := makeResolver(t, minimalStyleJSON, `{}`).animationDelayFor("blink"); got != 0 {
+		t.Errorf(`animationDelayFor("blink") without options = %v, want 0`, got)
+	}
+}
+
+func TestAnimationDelayForDrawsADelayRangeUnderItsOwnKeySeeded(t *testing.T) {
+	options := `{"seed": "x", "animationDelay": [0, 3], "blinkAnimationDelay": [0, 3]}`
+	r := makeResolver(t, minimalStyleJSON, options)
+	global := r.animationDelay()
+	blink := r.animationDelayFor("blink")
+
+	if global < 0 || global > 3 {
+		t.Errorf("animationDelay() = %v, want a value within 0 to 3", global)
+	}
+	if blink < 0 || blink > 3 {
+		t.Errorf(`animationDelayFor("blink") = %v, want a value within 0 to 3`, blink)
+	}
+	if global == blink {
+		t.Errorf("global and blink both resolved to %v, want distinct draws", global)
+	}
+	if again := makeResolver(t, minimalStyleJSON, options).animationDelayFor("blink"); again != blink {
+		t.Errorf("second resolve = %v, want %v", again, blink)
+	}
+}

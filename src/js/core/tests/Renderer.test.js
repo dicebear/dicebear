@@ -1343,7 +1343,7 @@ describe('Renderer', () => {
       assert.notEqual(hashOf(base.toString()), hashOf(fast.toString()));
     });
 
-    describe('per-name speed', () => {
+    describe('per-name speed and delay', () => {
       // A named timeline next to an unnamed one on the same element, so a
       // `${name}AnimationSpeed` option has one to scale and one to leave to
       // the global factor.
@@ -1449,6 +1449,58 @@ describe('Renderer', () => {
 
         assert.equal(options.swayAnimationSpeed, 2);
         assert.equal(options.animationSpeed, 1);
+      });
+
+      it('should add the delay after the speed has scaled the authored one', () => {
+        const svg = new Avatar(new Style(paced), {
+          animation: true,
+          animationSpeed: 2,
+          animationDelay: 3,
+        }).toString();
+
+        assert.ok(svg.includes('animation:2s linear 3.5s infinite'));
+        assert.ok(svg.includes('animation:1.5s linear 3s infinite'));
+      });
+
+      it('should let a named delay win over the global one', () => {
+        const svg = new Avatar(new Style(paced), {
+          animation: true,
+          animationDelay: 1,
+          swayAnimationDelay: -2,
+        }).toString();
+
+        assert.ok(svg.includes('animation:4s linear -1s infinite'));
+        assert.ok(svg.includes('animation:3s linear 1s infinite'));
+      });
+
+      it('should include the delays in the class namespace', () => {
+        const plain = new Avatar(new Style(paced), { animation: true }).toString();
+        const shifted = new Avatar(new Style(paced), {
+          animation: true,
+          animationDelay: 1,
+        }).toString();
+        const named = new Avatar(new Style(paced), {
+          animation: true,
+          swayAnimationDelay: 1,
+        }).toString();
+
+        assert.notEqual(hashOf(plain), hashOf(shifted));
+        assert.notEqual(hashOf(shifted), hashOf(named));
+      });
+
+      it('should record the delays in the resolved options', () => {
+        const options = new Avatar(new Style(paced), {
+          animation: true,
+          animationDelay: 1,
+          swayAnimationDelay: [-2, -2],
+        }).toJSON().options;
+
+        assert.equal(options.animationDelay, 1);
+        assert.equal(options.swayAnimationDelay, -2);
+        assert.equal(
+          'animationDelay' in new Avatar(new Style(paced)).toJSON().options,
+          false,
+        );
       });
     });
 

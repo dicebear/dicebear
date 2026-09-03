@@ -618,10 +618,11 @@ class Renderer {
 
   /// Returns the FNV-1a hex hash namespacing the animation class and keyframe
   /// names, cached after the first call. Extends the [_hashSeed] input with
-  /// the animation speed and the state of every named timeline the style
-  /// carries: two renders of the same avatar with different speeds or
-  /// switches inlined on one page must not select each other's rules, while
-  /// identical renders sharing identical rules is harmless deduplication.
+  /// the animation speed and delay and the state of every named timeline the
+  /// style carries: two renders of the same avatar with different speeds,
+  /// delays, or switches inlined on one page must not select each other's
+  /// rules, while identical renders sharing identical rules is harmless
+  /// deduplication.
   ///
   /// Everything else about an avatar stays out of the hash, so two renders of
   /// the same style and seed that differ in any other option would share their
@@ -639,21 +640,23 @@ class Renderer {
     final random = _resolver.idRandomization() ? ':${_randomSuffix()}' : '';
 
     // Every named timeline the style carries joins the hash with its state,
-    // `off` or the factor it plays at, in code unit order (the order
-    // [Style.animationNames] keeps), so two renders that differ only in a
-    // `${name}Animation` or `${name}AnimationSpeed` option never share their
-    // rules. A style without named timelines adds no part.
+    // `off` or the factor and offset it plays at, in code unit order (the
+    // order [Style.animationNames] keeps), so two renders that differ only in
+    // a per-name switch, speed, or delay option never share their rules. A
+    // style without named timelines adds no part.
     final states = [
       for (final name in _style.animationNames)
         _resolver.animationPlays(name)
-            ? '$name:${formatNumber(_resolver.animationSpeedFor(name))}'
+            ? '$name:${formatNumber(_resolver.animationSpeedFor(name))}:'
+                '${formatNumber(_resolver.animationDelayFor(name))}'
             : '$name:off',
     ];
     final named = states.isEmpty ? '' : ':${states.join(',')}';
 
     return _cachedAnimationHash = fnv1aHex(
       '${_style.meta.source().name() ?? ''}:${_resolver.seed()}:'
-      '${formatNumber(_resolver.animationSpeed())}$named$random',
+      '${formatNumber(_resolver.animationSpeed())}:'
+      '${formatNumber(_resolver.animationDelay())}$named$random',
     );
   }
 
@@ -790,9 +793,16 @@ class Renderer {
       _keyframesCss.add('@keyframes $keyframesName{$body}');
     }
 
-    final speed = _resolver.animationSpeedFor(animation['name'] as String?);
+    final name = animation['name'] as String?;
+    final speed = _resolver.animationSpeedFor(name);
     final duration = formatNumber((animation['duration'] as num) / speed);
-    final delay = formatNumber((animation['delay'] as num? ?? 0) / speed);
+
+    // The user's offset is wall clock seconds, so it is added after the speed
+    // has scaled the authored delay.
+    final delay = formatNumber(
+      (animation['delay'] as num? ?? 0) / speed +
+          _resolver.animationDelayFor(name),
+    );
     final rawIterations = animation['iterations'];
     final iterations = rawIterations is num
         ? formatNumber(rawIterations.toDouble())

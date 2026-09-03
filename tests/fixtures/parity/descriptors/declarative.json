@@ -108,6 +108,11 @@
     "min": 0.1,
     "max": 10
   },
+  "animationDelay": {
+    "type": "range",
+    "min": -3600,
+    "max": 3600
+  },
   "driftAnimation": {
     "type": "boolean"
   },
@@ -115,6 +120,11 @@
     "type": "range",
     "min": 0.1,
     "max": 10
+  },
+  "driftAnimationDelay": {
+    "type": "range",
+    "min": -3600,
+    "max": 3600
   },
   "pulseAnimation": {
     "type": "boolean"
@@ -124,6 +134,11 @@
     "min": 0.1,
     "max": 10
   },
+  "pulseAnimationDelay": {
+    "type": "range",
+    "min": -3600,
+    "max": 3600
+  },
   "revealAnimation": {
     "type": "boolean"
   },
@@ -131,6 +146,11 @@
     "type": "range",
     "min": 0.1,
     "max": 10
+  },
+  "revealAnimationDelay": {
+    "type": "range",
+    "min": -3600,
+    "max": 3600
   },
   "squashAnimation": {
     "type": "boolean"
@@ -140,6 +160,11 @@
     "min": 0.1,
     "max": 10
   },
+  "squashAnimationDelay": {
+    "type": "range",
+    "min": -3600,
+    "max": 3600
+  },
   "tiltAnimation": {
     "type": "boolean"
   },
@@ -148,6 +173,11 @@
     "min": 0.1,
     "max": 10
   },
+  "tiltAnimationDelay": {
+    "type": "range",
+    "min": -3600,
+    "max": 3600
+  },
   "travelAnimation": {
     "type": "boolean"
   },
@@ -155,5 +185,10 @@
     "type": "range",
     "min": 0.1,
     "max": 10
+  },
+  "travelAnimationDelay": {
+    "type": "range",
+    "min": -3600,
+    "max": 3600
   }
 }

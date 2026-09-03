@@ -106,6 +106,28 @@ class Resolver
         return $this->memoFloat("{$name}AnimationSpeed", $range, 1.0);
     }
 
+    public function animationDelay(): float
+    {
+        return $this->memoFloat('animationDelay', $this->options->animationDelay(), 0.0);
+    }
+
+    /**
+     * Returns the start offset of one timeline in seconds. A named timeline
+     * uses its `${name}AnimationDelay` option when the user set one, drawn
+     * under that key, and the global offset otherwise. Unnamed timelines
+     * always follow the global offset.
+     */
+    public function animationDelayFor(?string $name): float
+    {
+        $range = $name === null ? null : $this->options->animationDelayFor($name);
+
+        if ($name === null || $range === null) {
+            return $this->animationDelay();
+        }
+
+        return $this->memoFloat("{$name}AnimationDelay", $range, 0.0);
+    }
+
     public function title(): ?string
     {
         return $this->memo('title', fn() => $this->options->title());

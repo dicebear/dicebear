@@ -101,15 +101,17 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 
 	// Only advertise the animation options when the style carries declarative
 	// animations. On a static style they are accepted but have no effect.
-	// Every animation name gets its own switch and speed field, in the order
-	// of the name list.
+	// Every animation name gets its own switch, speed and delay field, in the
+	// order of the name list.
 	if d.style.HasAnimations() {
 		result["animation"] = map[string]any{"type": "boolean"}
 		result["animationSpeed"] = map[string]any{"type": "range", "min": 0.1, "max": 10}
+		result["animationDelay"] = map[string]any{"type": "range", "min": -3600, "max": 3600}
 
 		for _, name := range d.style.AnimationNames() {
 			result[name+"Animation"] = map[string]any{"type": "boolean"}
 			result[name+"AnimationSpeed"] = map[string]any{"type": "range", "min": 0.1, "max": 10}
+			result[name+"AnimationDelay"] = map[string]any{"type": "range", "min": -3600, "max": 3600}
 		}
 	}
 

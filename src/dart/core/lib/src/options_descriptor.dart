@@ -120,15 +120,17 @@ class OptionsDescriptor {
 
     // Only advertise the animation options when the style carries declarative
     // animations. On a static style they are accepted but have no effect.
-    // Every animation name gets its own switch and speed field, in the order
-    // of the name list.
+    // Every animation name gets its own switch, speed, and delay field, in
+    // the order of the name list.
     if (_style.hasAnimations) {
       result['animation'] = {'type': 'boolean'};
       result['animationSpeed'] = _animationSpeedRange;
+      result['animationDelay'] = _animationDelayRange;
 
       for (final name in _style.animationNames) {
         result['${name}Animation'] = {'type': 'boolean'};
         result['${name}AnimationSpeed'] = _animationSpeedRange;
+        result['${name}AnimationDelay'] = _animationDelayRange;
       }
     }
 
@@ -142,6 +144,12 @@ class OptionsDescriptor {
     'type': 'range',
     'min': 0.1,
     'max': 10,
+  };
+
+  static const Map<String, Object?> _animationDelayRange = {
+    'type': 'range',
+    'min': -3600,
+    'max': 3600,
   };
 
   static const Map<String, Object?> _rotateRange = {

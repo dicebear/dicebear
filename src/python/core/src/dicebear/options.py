@@ -104,6 +104,15 @@ class Options:
         """
         return self._to_range(self._data.get(name + "AnimationSpeed"))
 
+    def animation_delay(self) -> Range | None:
+        return self._to_range(self._data.get("animationDelay"))
+
+    def animation_delay_for(self, name: str) -> Range | None:
+        """Return the ``{name}AnimationDelay`` option for one animation name as
+        a range, or ``None`` when unset.
+        """
+        return self._to_range(self._data.get(name + "AnimationDelay"))
+
     def tags(self) -> list[TagFilterToken]:
         """Return the global ``tags`` filter as parsed tokens, or an empty list
         when unset.

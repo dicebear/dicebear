@@ -697,15 +697,16 @@ class Renderer
         $random = $this->resolver->idRandomization() ? ':' . $this->randomSuffix() : '';
 
         // Every named timeline the style carries joins the hash with its
-        // state, `off` or the factor it plays at, so two renders that differ
-        // only in a `${name}Animation` or `${name}AnimationSpeed` option
-        // never share their rules. The style lists its names in byte order
-        // already.
+        // state, `off` or the factor and offset it plays at, so two renders
+        // that differ only in a per-name animation option never share their
+        // rules. The style lists its names in byte order already.
         $states = [];
 
         foreach ($this->style->animationNames() as $name) {
             $states[] = $this->resolver->animationPlays($name)
-                ? $name . ':' . Number::format($this->resolver->animationSpeedFor($name))
+                ? $name
+                    . ':' . Number::format($this->resolver->animationSpeedFor($name))
+                    . ':' . Number::format($this->resolver->animationDelayFor($name))
                 : $name . ':off';
         }
 
@@ -715,6 +716,7 @@ class Renderer
             ($this->style->meta()->source()->name() ?? '')
             . ':' . $this->resolver->seed()
             . ':' . Number::format($this->resolver->animationSpeed())
+            . ':' . Number::format($this->resolver->animationDelay())
             . $named
             . $random
         );
@@ -862,7 +864,11 @@ class Renderer
 
         $speed = $this->resolver->animationSpeedFor($animation['name'] ?? null);
         $duration = Number::format($animation['duration'] / $speed);
-        $delay = Number::format(($animation['delay'] ?? 0) / $speed);
+        // The user's offset is in seconds of playback, so it is added after
+        // the speed has scaled the authored delay.
+        $delay = Number::format(
+            ($animation['delay'] ?? 0) / $speed + $this->resolver->animationDelayFor($animation['name'] ?? null),
+        );
         $iterations = !isset($animation['iterations']) || $animation['iterations'] === 'infinite'
             ? 'infinite'
             : Number::format($animation['iterations']);

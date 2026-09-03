@@ -567,12 +567,12 @@ class Renderer:
         """Return the FNV-1a hex hash namespacing the animation class and
         keyframe names, cached after the first call.
 
-        Extends the :meth:`_hash_seed` input with the animation speed and,
-        for every named timeline the style carries, its state: two renders of
-        the same avatar with different speeds or switches inlined on one page
-        must not select each other's rules, while identical renders sharing
-        identical rules is harmless deduplication. A style without named
-        timelines adds no state suffix.
+        Extends the :meth:`_hash_seed` input with the animation speed and
+        delay and, for every named timeline the style carries, its state: two
+        renders of the same avatar with different speeds, delays or switches
+        inlined on one page must not select each other's rules, while
+        identical renders sharing identical rules is harmless deduplication.
+        A style without named timelines adds no state suffix.
 
         Everything else about an avatar stays out of the hash, so two renders
         of the same style and seed that differ in any other option would share
@@ -586,14 +586,15 @@ class Renderer:
                 ":" + self._random_suffix() if self._resolver.id_randomization() else ""
             )
             # Every named timeline the style carries joins the hash with its
-            # state, ``off`` or the factor it plays at, so two renders that
-            # differ only in a ``{name}Animation`` or ``{name}AnimationSpeed``
-            # option never share their rules. The style's name list is already
-            # sorted by code point. Drawing these before the global factor
+            # state, ``off`` or the factor and offset it plays at, so two
+            # renders that differ only in a per-name animation option never
+            # share their rules. The style's name list is already sorted by
+            # code point. Drawing these before the global factor and offset
             # keeps the resolved-options order the same across the
             # implementations.
             states = [
                 f"{name}:{Number.format(self._resolver.animation_speed_for(name))}"
+                f":{Number.format(self._resolver.animation_delay_for(name))}"
                 if self._resolver.animation_plays(name)
                 else f"{name}:off"
                 for name in self._style.animation_names()
@@ -606,6 +607,8 @@ class Renderer:
                 + self._resolver.seed()
                 + ":"
                 + Number.format(self._resolver.animation_speed())
+                + ":"
+                + Number.format(self._resolver.animation_delay())
                 + named
                 + random_suffix
             )
@@ -744,9 +747,14 @@ class Renderer:
                 "@keyframes " + keyframes_name + "{" + body + "}"
             )
 
-        speed = self._resolver.animation_speed_for(animation.get("name"))
+        name = animation.get("name")
+        speed = self._resolver.animation_speed_for(name)
         duration = Number.format(animation["duration"] / speed)
-        delay = Number.format(animation.get("delay", 0) / speed)
+        # The user's offset is in seconds of playback, so it is added after
+        # the speed has scaled the authored delay.
+        delay = Number.format(
+            animation.get("delay", 0) / speed + self._resolver.animation_delay_for(name)
+        )
         raw_iterations = animation.get("iterations")
         iterations = (
             "infinite"

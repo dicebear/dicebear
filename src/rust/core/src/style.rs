@@ -136,9 +136,9 @@ impl Style {
 
     /// The sorted distinct names of the definition's animation timelines.
     /// Computed at construction. Consumed by the options descriptor, which
-    /// advertises a switch and a speed field per name, and by the animation
-    /// hash. Sorted so every implementation reports the same order regardless
-    /// of how it walks the definition.
+    /// advertises a switch, a speed, and a delay field per name, and by the
+    /// animation hash. Sorted so every implementation reports the same order
+    /// regardless of how it walks the definition.
     pub(crate) fn animation_names(&self) -> &[String] {
         &self.animation_names
     }

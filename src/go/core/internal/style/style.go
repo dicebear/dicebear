@@ -111,9 +111,9 @@ func (s *Style) HasAnimations() bool { return s.hasAnimations }
 
 // AnimationNames returns the sorted distinct names of the definition's
 // animation timelines, possibly empty. Computed once at load. Consumed by the
-// options descriptor so tooling can offer a switch and a speed per animation
-// name. Sorted so every port reports the same order regardless of how it
-// walks the definition. Callers must not mutate the returned slice.
+// options descriptor so tooling can offer a switch, a speed and a delay per
+// animation name. Sorted so every port reports the same order regardless of
+// how it walks the definition. Callers must not mutate the returned slice.
 func (s *Style) AnimationNames() []string { return s.animationNames }
 
 // validateAliases verifies that every extends references an existing, non-alias
