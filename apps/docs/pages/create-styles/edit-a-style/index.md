@@ -82,8 +82,9 @@ it is a short guide for whoever opens the file after you.
 ## Step 6
 
 The rest of the style sits on the other pages. Thumbnail holds the cover that
-Figma shows for the file, Components holds the parts of the avatar. The palettes
-came along as color styles.
+Figma shows for the file, Components holds the parts of the avatar, and License
+holds the credits of the definition in one card. The palettes came along as
+color styles.
 
 ![The pages of the imported file and its color styles](/create-styles/edit-a-style/6.webp)
 
