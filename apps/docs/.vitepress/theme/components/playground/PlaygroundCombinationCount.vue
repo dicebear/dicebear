@@ -8,7 +8,7 @@ const count = useCombinationCount();
   <div v-if="count" class="pg-combo">
     <p class="pg-combo-main">
       <span class="pg-combo-value">{{ count.display }}</span>
-      <span class="pg-combo-label">possible avatars</span>
+      <span class="pg-combo-label">distinct avatars</span>
     </p>
     <p class="pg-combo-hint">
       Changes as you restrict variants, tags, colors, or probabilities.

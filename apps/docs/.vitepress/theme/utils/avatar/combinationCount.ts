@@ -76,6 +76,27 @@ function collectComponentRefs(node: unknown): Set<string> {
   return out;
 }
 
+function isColorRef(node: unknown): node is { type: 'color'; name: string } {
+  return (
+    typeof node === 'object' &&
+    node !== null &&
+    (node as { type?: unknown }).type === 'color' &&
+    typeof (node as { name?: unknown }).name === 'string'
+  );
+}
+
+function collectColorRefs(node: unknown): Set<string> {
+  const out = new Set<string>();
+
+  walkElements(node, (n) => {
+    if (isColorRef(n)) {
+      out.add(n.name);
+    }
+  });
+
+  return out;
+}
+
 type InitialsUsage = { initial: boolean; initials: boolean };
 
 function collectInitialsUsage(node: unknown, usage: InitialsUsage): void {
@@ -132,49 +153,142 @@ function effectiveVariants(base: ComponentBase): Variant[] {
   return allZero ? variants : variants.filter((v) => (v.weight ?? 1) > 0);
 }
 
-// Counts the distinct outputs produced by Prng.float on the definition's
-// rotate/scale/translate ranges. Prng.float rounds to 4 decimals
-// (src/js/core/src/Prng.ts:89-98), so a continuous `{ min, max }` range
-// yields round((max-min)*10000)+1 reachable values; a stepped range
-// yields floor((max-min)/step)+1; `min === max` yields 1.
-function transformMultiplier(base: ComponentBase): bigint {
-  const ranges: ReadonlyArray<Range | undefined> = [
-    base.rotate,
-    base.scale,
-    base.translate?.x,
-    base.translate?.y,
-  ];
+// Perceptual grain for continuous transform ranges. Prng.float rounds to
+// four decimals (src/js/core/src/Prng.ts:89-98), but nobody can tell a
+// rotation of 12.3456° from 12.3457°, so counting at that resolution would
+// inflate the number by orders of magnitude. Continuous ranges are counted
+// in whole degrees, whole percent of the component's size, and hundredths
+// of the scale factor instead. A definition's own `step` wins when it is
+// coarser. Keep in sync with the "Per-component transforms" paragraph on
+// pages/understand/how-many-unique-avatars/index.md.
+const TRANSFORM_GRAIN = {
+  rotate: 1,
+  scale: 0.01,
+  translate: 1,
+} as const;
 
-  let mult = 1n;
+// Guards against floating point noise in the division below, so a range
+// whose width is an exact multiple of the grain still counts both ends.
+const GRAIN_EPSILON = 1e-9;
 
-  for (const range of ranges) {
-    if (!range) {
-      continue;
-    }
-
-    const min = Math.min(range.min, range.max);
-    const max = Math.max(range.min, range.max);
-
-    if (min === max) {
-      continue;
-    }
-
-    const slots =
-      range.step !== undefined && range.step > 0
-        ? Math.floor((max - min) / range.step) + 1
-        : Math.round((max - min) * 10000) + 1;
-
-    mult *= BigInt(slots);
+// Counts the visibly distinct outputs of one transform range: a range
+// yields floor((max - min) / grain) + 1 buckets, where grain is the larger
+// of the definition's `step` and the perceptual grain; `min === max`
+// yields 1.
+function rangeSlots(range: Range | undefined, grain: number): bigint {
+  if (!range) {
+    return 1n;
   }
 
-  return mult;
+  const min = Math.min(range.min, range.max);
+  const max = Math.max(range.min, range.max);
+
+  if (min === max) {
+    return 1n;
+  }
+
+  const step = Math.max(range.step ?? 0, grain);
+
+  return BigInt(Math.floor((max - min) / step + GRAIN_EPSILON) + 1);
+}
+
+function transformMultiplier(base: ComponentBase): bigint {
+  return (
+    rangeSlots(base.rotate, TRANSFORM_GRAIN.rotate) *
+    rangeSlots(base.scale, TRANSFORM_GRAIN.scale) *
+    rangeSlots(base.translate?.x, TRANSFORM_GRAIN.translate) *
+    rangeSlots(base.translate?.y, TRANSFORM_GRAIN.translate)
+  );
+}
+
+// A bitmask over the definition's color groups, one bit per group in
+// declaration order. Bigint so that the count never depends on how many
+// groups a style declares.
+type GroupMask = bigint;
+
+// Distinct renderings keyed by the set of color groups they actually
+// reference. Splitting the count by mask lets the color palettes be counted
+// only where a color is visible: a hat color on an avatar without a hat
+// changes nothing on screen.
+type Outcomes = Map<GroupMask, bigint>;
+
+function addOutcome(target: Outcomes, mask: GroupMask, count: bigint): void {
+  target.set(mask, (target.get(mask) ?? 0n) + count);
+}
+
+function mergeOutcomes(target: Outcomes, source: Outcomes): void {
+  for (const [mask, count] of source) {
+    addOutcome(target, mask, count);
+  }
+}
+
+// Cartesian product of two outcome tables: masks union, counts multiply.
+function productOutcomes(a: Outcomes, b: Outcomes): Outcomes {
+  const out: Outcomes = new Map();
+
+  for (const [maskA, countA] of a) {
+    for (const [maskB, countB] of b) {
+      addOutcome(out, maskA | maskB, countA * countB);
+    }
+  }
+
+  return out;
+}
+
+function scaleOutcomes(source: Outcomes, factor: bigint): Outcomes {
+  if (factor === 1n) {
+    return source;
+  }
+
+  const out: Outcomes = new Map();
+
+  for (const [mask, count] of source) {
+    out.set(mask, count * factor);
+  }
+
+  return out;
+}
+
+const NOT_RENDERED: Outcomes = new Map([[0n, 1n]]);
+
+class GroupIndex {
+  readonly #bits = new Map<string, GroupMask>();
+
+  // The renderer paints a `background` group behind every avatar without
+  // any element referencing it (Renderer.ts, `#renderBackground`), so it
+  // counts as visible whenever the definition declares it.
+  readonly always: GroupMask;
+
+  constructor(definition: StyleDefinition) {
+    Object.keys(definition.colors ?? {}).forEach((name, i) => {
+      this.#bits.set(name, 1n << BigInt(i));
+    });
+
+    this.always = this.#bits.get('background') ?? 0n;
+  }
+
+  maskOf(node: unknown): GroupMask {
+    let mask = this.always;
+
+    for (const name of collectColorRefs(node)) {
+      mask |= this.#bits.get(name) ?? 0n;
+    }
+
+    return mask;
+  }
+
+  has(name: string, mask: GroupMask): boolean {
+    const bit = this.#bits.get(name);
+
+    return bit !== undefined && (mask & bit) !== 0n;
+  }
 }
 
 /**
- * Computes the number of distinct renderings produced when a `<use>` of
- * `name` is rendered. Mirrors {@link Resolver.variant},
- * {@link Resolver.componentTransform}, and the probability short-circuit
- * in `Resolver.#isVisible`.
+ * Computes the distinct renderings produced when a `<use>` of `name` is
+ * rendered, grouped by the color groups those renderings reference.
+ * Mirrors {@link Resolver.variant}, {@link Resolver.componentTransform},
+ * and the probability short-circuit in `Resolver.#isVisible`.
  *
  * Exact for tree-shaped reachability (one parent per component). The two
  * shipped definitions with shared descendants (lorelei: `mouth` reachable
@@ -185,54 +299,72 @@ function transformMultiplier(base: ComponentBase): bigint {
  */
 function outcomes(
   definition: StyleDefinition,
+  groups: GroupIndex,
   name: string,
   visited: Set<string>,
-): bigint {
+): Outcomes {
   if (visited.has(name)) {
-    return 1n;
+    return NOT_RENDERED;
   }
 
   const base = resolveBase(definition, name);
 
   if (!base) {
-    return 1n;
+    return NOT_RENDERED;
   }
 
   visited.add(name);
 
-  let variantSum = 0n;
+  const variantSum: Outcomes = new Map();
 
   for (const variant of effectiveVariants(base.component)) {
-    let product = 1n;
+    let product: Outcomes = new Map([[groups.maskOf(variant.elements), 1n]]);
 
     for (const ref of collectComponentRefs(variant.elements)) {
-      product *= outcomes(definition, ref, visited);
+      product = productOutcomes(
+        product,
+        outcomes(definition, groups, ref, visited),
+      );
     }
 
-    variantSum += product;
+    mergeOutcomes(variantSum, product);
   }
 
   visited.delete(name);
 
-  const rendered = variantSum * transformMultiplier(base.component);
+  const rendered = scaleOutcomes(
+    variantSum,
+    transformMultiplier(base.component),
+  );
   const p = base.component.probability ?? 100;
 
   if (p <= 0) {
-    return 1n;
+    return NOT_RENDERED;
   }
 
   if (p >= 100) {
     return rendered;
   }
 
-  return rendered + 1n;
+  const withAbsent = new Map(rendered);
+
+  mergeOutcomes(withAbsent, NOT_RENDERED);
+
+  return withAbsent;
 }
 
-function componentCount(definition: StyleDefinition): bigint {
-  let total = 1n;
+function componentOutcomes(
+  definition: StyleDefinition,
+  groups: GroupIndex,
+): Outcomes {
+  const elements = definition.canvas?.elements;
+  let total: Outcomes = new Map([[groups.maskOf(elements), 1n]]);
 
-  for (const ref of collectComponentRefs(definition.canvas?.elements)) {
-    total *= outcomes(definition, ref, new Set());
+  for (const ref of collectComponentRefs(elements)) {
+    total = productOutcomes(
+      total,
+      outcomes(definition, groups, ref, new Set()),
+    );
   }
 
   return total;
@@ -347,10 +479,8 @@ function topoSortColorGroups(
   return order;
 }
 
-function jointColorCount(definition: StyleDefinition): bigint {
-  const groups = definition.colors;
-
-  if (!groups || Object.keys(groups).length === 0) {
+function jointColorCount(groups: Record<string, ColorGroup>): bigint {
+  if (Object.keys(groups).length === 0) {
     return 1n;
   }
 
@@ -571,11 +701,55 @@ function bigintLog10(n: bigint): number {
   return s.length - headLength + Math.log10(head);
 }
 
+// Counts the distinct color tuples over the groups in `mask`. Groups
+// outside the mask are dropped along with the constraints that point at
+// them: a `notEqualTo` against a color nobody sees excludes no visible
+// outcome (every hidden palette with two or more colors lets the visible
+// group reach its whole palette), and a `contrastTo` against a hidden
+// color is counted as a free pick over its palette, which can overcount
+// by that palette's size (2 in every shipped style, and never reached).
+function visibleColorCount(
+  definition: StyleDefinition,
+  groups: GroupIndex,
+  mask: GroupMask,
+): bigint {
+  const visible: Record<string, ColorGroup> = {};
+
+  for (const [name, group] of Object.entries(definition.colors ?? {})) {
+    if (!groups.has(name, mask)) {
+      continue;
+    }
+
+    visible[name] = {
+      ...group,
+      notEqualTo: group.notEqualTo?.filter((ref) => groups.has(ref, mask)),
+      contrastTo:
+        group.contrastTo && groups.has(group.contrastTo, mask)
+          ? group.contrastTo
+          : undefined,
+    };
+  }
+
+  return jointColorCount(visible);
+}
+
 export function computeCount(definition: StyleDefinition): AvatarUniqueCount {
-  const count =
-    componentCount(definition) *
-    jointColorCount(definition) *
-    initialsTextCardinality(initialsUsage(definition));
+  const groups = new GroupIndex(definition);
+  const colorCounts = new Map<GroupMask, bigint>();
+  let count = 0n;
+
+  for (const [mask, renderings] of componentOutcomes(definition, groups)) {
+    let colors = colorCounts.get(mask);
+
+    if (colors === undefined) {
+      colors = visibleColorCount(definition, groups, mask);
+      colorCounts.set(mask, colors);
+    }
+
+    count += renderings * colors;
+  }
+
+  count *= initialsTextCardinality(initialsUsage(definition));
 
   return { display: formatCount(count), log10: bigintLog10(count) };
 }

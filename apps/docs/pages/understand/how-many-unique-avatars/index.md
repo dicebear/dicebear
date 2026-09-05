@@ -1,8 +1,8 @@
 ---
 title: How Many Unique Avatars Are Possible?
 description: >
-  Find out how many unique seed-driven avatar combinations are possible for each
-  DiceBear avatar style at default configuration.
+  Find out how many visibly distinct seed-driven avatars each DiceBear avatar
+  style can produce at its default configuration.
 ---
 
 <script setup lang="ts">
@@ -11,10 +11,10 @@ import UniqueAvatarsTable from '@theme/components/guides/UniqueAvatarsTable.vue'
 
 # How many unique avatars are possible per avatar style?
 
-The number below is the size of the seed-driven output space for each style at
-its default configuration: how many distinct avatars the seed can produce while
-every other option is left untouched. The count mirrors what the renderer
-actually does:
+The number below estimates how many visibly distinct avatars the seed can
+produce for each style at its default configuration, with every other option
+left untouched. It follows the renderer's choices, with one deliberate exception
+for transforms:
 
 - **Variant pick per component.** Each visible component contributes one variant
   choice. Variants with `weight: 0` are excluded because the PRNG never picks
@@ -24,13 +24,21 @@ actually does:
   `100` adds the "not rendered" branch as one extra outcome. A component with
   `probability: 0` collapses to a single (always-absent) outcome.
 - **Per-component transforms.** `rotate`, `scale`, and `translate` ranges in the
-  definition are sampled with 4-decimal precision per component reference, so a
-  `[min, max]` range contributes `round((max - min) × 10000) + 1` distinct
-  values.
-- **Color palettes.** Color groups are evaluated jointly: `notEqualTo` strips
-  the picked hex values of the referenced groups (with the renderer's "fall back
-  to full palette when filtering empties" rule), and `contrastTo` reduces to a
-  single, deterministic pick.
+  definition are counted at a grain the eye can still tell apart: whole degrees
+  for `rotate`, whole percent of the component's size for `translate`, and
+  hundredths for `scale`. A range with a coarser `step` is counted at that step
+  instead. The renderer itself samples these ranges with four decimal places, so
+  the true output space is far larger. Those extra values are invisible, so we
+  leave them out.
+- **Color palettes.** A color group only counts for renderings whose chosen
+  variants reference it. A hat color on an avatar without a hat changes nothing,
+  so it adds nothing. The `background` group counts for every rendering because
+  the renderer paints it behind the avatar. Within one rendering the visible
+  groups are evaluated jointly: `notEqualTo` strips the picked hex values of the
+  referenced groups (with the renderer's "fall back to full palette when
+  filtering empties" rule), and `contrastTo` reduces to a single, deterministic
+  pick. Constraints against a hidden group are dropped, since a hidden color
+  with two or more palette entries leaves the visible group its whole palette.
 - **Seed-derived initials.** When a style renders the `initial` or `initials`
   variable, each output letter ranges over the Unicode `\p{L}` category (about
   140,000 distinct uppercased characters), and `initials` emits up to two

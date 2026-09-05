@@ -119,7 +119,7 @@ function onOpenPlayground() {
           {{ optionCount }} options
           <template v-if="count">
             <span class="preset-dialog-sep">·</span>
-            <strong>{{ count.display }}</strong> possible avatars
+            <strong>{{ count.display }}</strong> distinct avatars
           </template>
         </p>
         <a

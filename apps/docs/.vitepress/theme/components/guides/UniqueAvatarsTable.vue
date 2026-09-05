@@ -81,7 +81,7 @@ function sortIndicator(column: SortColumn): string {
           class="sortable numeric"
           @click="toggleSort('value')"
         >
-          Unique Avatars{{ sortIndicator('value') }}
+          Distinct Avatars{{ sortIndicator('value') }}
         </th>
       </tr>
     </thead>
