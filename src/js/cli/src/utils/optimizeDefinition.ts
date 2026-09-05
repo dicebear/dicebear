@@ -300,7 +300,21 @@ export async function optimizeDefinition(
       );
     }
 
-    const optimized = optimize(svg, { multipass: true, plugins }).data;
+    // svgo keeps the parsed path data of an element across its passes, so a
+    // fresh parse of its own rounded output can still find a shorter form.
+    // The check parses fresh, so the file is run until a fresh pass leaves it
+    // alone. Almost every unit settles on the first pass.
+    let optimized = svg;
+
+    for (let pass = 0; pass < 3; pass++) {
+      const next = optimize(optimized, { multipass: true, plugins }).data;
+
+      if (next === optimized) {
+        break;
+      }
+
+      optimized = next;
+    }
 
     unit.owner.elements = (await parse(optimized)).children.map(
       svgsonToDefinition,

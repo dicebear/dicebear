@@ -29,7 +29,8 @@ and this project adheres to
   banner and the progress bar go to stderr. `dicebear optimize <definition...>`
   prints the optimized definition to stdout and writes with `-o`, either one
   file or a directory for several definitions, `--check` reports without
-  writing. List options take a comma-separated value
+  writing. svgo runs until a fresh pass leaves the output alone, so a written
+  file always passes its own check. List options take a comma-separated value
   (`--backgroundColor b6e3f4,c0aede`) or repeated flags; a flag no longer
   swallows the style name that follows it. Only the requested style is loaded,
   which makes every call start faster.
