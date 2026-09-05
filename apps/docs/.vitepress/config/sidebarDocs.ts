@@ -88,6 +88,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         ],
       },
       { text: 'CLI', link: '/integrations/cli/' },
+      {
+        text: 'Figma <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/integrations/figma/',
+      },
     ],
   },
   {

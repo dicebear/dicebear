@@ -6,7 +6,7 @@ description: >
 ---
 
 <script setup>
-import { Globe, Code2, Terminal, Palette } from '@lucide/vue';
+import { Globe, Code2, Terminal, Palette, Frame } from '@lucide/vue';
 import DocsHighlights from '@theme/components/docs/DocsHighlights.vue';
 
 const highlights = [
@@ -42,15 +42,24 @@ const highlights = [
     color: '#ec4899',
     link: 'https://editor.dicebear.com',
   },
+  {
+    icon: Frame,
+    title: 'Figma plugin',
+    description:
+      'Fill the placeholders in your mockups with avatars, and hand seeds and URLs to developers.',
+    color: '#a259ff',
+    link: '/integrations/figma/',
+  },
 ];
 </script>
 
 # Pick your integration
 
-DiceBear runs as an API, as a library in seven languages, as a CLI, and as a
-browser-based editor. They all produce identical avatars from the same seed, so
-this is not a decision you can get wrong, and you can switch later without your
-avatars changing. It's only a question of what fits your project best.
+DiceBear runs as an API, as a library in seven languages, as a CLI, as a
+browser-based editor, and as a Figma plugin. They all produce identical avatars
+from the same seed, so this is not a decision you can get wrong, and you can
+switch later without your avatars changing. It's only a question of what fits
+your project best.
 
 Three questions narrow it down:
 
@@ -66,6 +75,10 @@ Pick your language below.
 [CLI](/integrations/cli/) exports batches to SVG, PNG, JPEG, and more. And for a
 single avatar, say a default profile picture for your app, the
 [Editor](https://editor.dicebear.com) is the no-code way.
+
+**Designing before you build?** The [Figma plugin](/integrations/figma/) fills
+the placeholders in your mockups and tells the developer which seed and URL
+render the same avatar in the app.
 
 <DocsHighlights :highlights="highlights" />
 

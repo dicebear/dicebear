@@ -11,94 +11,110 @@ Our [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787)
 is the easiest way to create an avatar style for DiceBear. The following
 tutorial requires basic knowledge about [Figma](https://www.figma.com/).
 
-::: tip
+::: tip Looking for something else?
 
-You do not have to start with an empty canvas. The plugin also imports a
-definition file, so you can take an existing style into Figma and change it
-there. See [Edit an avatar style with Figma](/create-styles/edit-a-style/).
+This guide draws a style from scratch. The plugin has two more guides:
+
+- You want to change one of our styles instead of starting empty:
+  [Edit an avatar style with Figma](/create-styles/edit-a-style/)
+- You only want avatars in your designs, no style of your own:
+  [Figma plugin](/integrations/figma/)
 
 :::
+
+The screenshots below build a small style called "shape-face" out of two
+component groups, `face` and `eyes`, with a color group for each. Your style can
+have as many groups as you like, the steps stay the same.
 
 ## Step 1
 
-If you want DiceBear to dynamically change colors in your avatar, you have to
-create the colors in Figma as
-[locale style](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles).
-Arrange the colors in
-[groups](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles#Manage_styles).
-Name them according to the following pattern: `<group>/<option-name>`. For
-example, `skin/light`.
+If you want DiceBear to change the colors of your avatar, create the colors as
+[color styles](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles)
+in Figma. With nothing selected, the Design panel shows a Styles section, and
+its plus button creates a new style.
 
-You will use the locale styles later to colorize paths. DiceBear will then
-change the colors of the paths within a group depending on the seed and color
-settings. For the names of `<group>` and `<option-name>` you can use
-alphanumeric characters as well as hyphens.
+Name every color `<group>/<option-name>`, for example `face/yellow`. The slash
+puts the colors into
+[groups](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles#Manage_styles),
+and each group becomes one color option of your style. DiceBear later picks a
+color from the group, depending on the seed and the settings. For `<group>` and
+`<option-name>` you can use letters, digits and hyphens.
 
-In the following example you can see how this could look like:
-
-<video src="/create-styles/with-figma/1.mp4" controls muted></video>
+![The Styles section of the Design panel with the color groups face and eyes](/create-styles/with-figma/1.webp)
 
 ## Step 2
 
-Now assign a color from the created groups to your paths that will be colored
-dynamically. Which color from a group does not matter. The important thing is
-that the group is correct.
+Assign a color from one of the groups to every path that should be colored
+dynamically. Which color of the group you pick does not matter, only the group
+counts.
 
-<video src="/create-styles/with-figma/2.mp4" controls muted></video>
+![A selected rectangle with the color style face/yellow as its fill](/create-styles/with-figma/2.webp)
 
 ## Step 3
 
-Create the individual parts of your avatar as
+Turn the individual parts of your avatar into
 [components](https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-components-in-Figma).
-Again, use the `<group>/<option-name>` naming pattern to create groups.
+Name them with the same `<group>/<option-name>` pattern, for example
+`face/rectangle`, then right-click and choose Create component.
 
-Identical to the colors, DiceBear will later (taking into account the seed and
-the settings) select a component from a group and put it into the avatar.
+A component group works like a color group: DiceBear picks one component from it
+for every avatar, depending on the seed and the settings.
 
-<video src="/create-styles/with-figma/3.mp4" controls muted></video>
+![The context menu of a layer named face/rectangle, with Create component highlighted](/create-styles/with-figma/3.webp)
 
 ## Step 4
 
-Make sure that each component in a group has the same dimensions.
-
-<video src="/create-styles/with-figma/4.mp4" controls muted></video>
+Every component of a group needs the same width and height. The fastest way is
+to select all components of a group and set the size once, which changes all of
+them together.
 
 ## Step 5
 
-Create as many color and component groups as you like. Then you can bring all
-the components together.
+Create as many color and component groups as you like, then bring everything
+together in one
+[frame](https://help.figma.com/hc/en-us/articles/360041539473-Frames-in-Figma).
+Its width and height must be identical, and Clip content should be on.
 
-To do this,
-[create a frame](https://help.figma.com/hc/en-us/articles/360041539473-Frames-in-Figma)
-and make sure that the width and height are identical. From the Assets tab, drag
-one instance from each component group into the frame.
+![A new 100 by 100 frame with Clip content turned on](/create-styles/with-figma/4.webp)
 
-<video src="/create-styles/with-figma/5.mp4" controls muted></video>
+Open the Assets panel and drag one instance from each component group into the
+frame. The plugin reads the group from the instance, so which variant you pick
+does not matter.
+
+![The Assets panel with the components of the file, and the frame holding one face and one eyes instance](/create-styles/with-figma/5.webp)
+
+The frame now holds one instance per group.
+
+![The Layers panel with the frame and its two instances](/create-styles/with-figma/6.webp)
 
 ## Step 6
 
-Search now for the
+Select the frame, then start the
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787)
-plugin. Make sure you have selected the frame and start the plugin.
+plugin. The quickest way is the Actions search in the toolbar.
 
-A dialog will open where you can make all kinds of settings. For example the
-name of your avatar style, the license or the probability with which the
-components will appear in your avatar later.
+![The Actions search in Figma with "dicebear studio" typed in](/create-styles/with-figma/7.webp)
 
-The settings are automatically saved to your frame. Once you are happy with your
-settings, you can export your avatar style.
+The plugin opens on the tab you used last. Switch to the Style tab in the rail
+on the left. With your frame selected, the tab shows the settings of your style:
+the title, the license, and one entry per component group and color group.
+Everything you change here is saved on your frame, so it is there again the next
+time you open the plugin.
 
-<video src="/create-styles/with-figma/6.mp4" controls muted></video>
+![The Style tab of the plugin with the General settings of the frame](/create-styles/with-figma/8.webp)
 
-::: tip
+Every component group has four tabs. Settings holds the probability with which
+the component appears at all, and the ranges for rotation, translation and scale
+that DiceBear picks from. Weights make one variant more likely than another.
+Tags describe a variant, for example `mood:positive`, so that a user of your
+style can filter variants when rendering. Normalize trims every variant of the
+group to the same frame size and keeps the drawing where it is. A color group
+has two settings: whether its color must contrast with another group, and which
+groups it must not share a color with.
 
-Make sure you select version **11.x** in the export settings. This guide covers
-version 11.x. An export for 10.x writes the same definition, but without
-animations, because the 10.x cores render every avatar static.
+![The Settings tab of the eyes component group, with the four tabs of a component group](/create-styles/with-figma/9.webp)
 
-![You can find the version option in the "General" tab](/create-styles/with-figma/version-hint.png)
-
-:::
+When you are happy with your settings, click Export definition.
 
 ## Step 7
 
@@ -109,10 +125,14 @@ immediately, without a build step.
 You can test your style right away with the [CLI](/integrations/cli/):
 
 ```
-dicebear ./your-style.json ./test-output --count 10
+dicebear create ./your-style.json -o ./test-output --count 10
 ```
 
 This generates 10 sample avatars in the `./test-output` directory.
+
+To use the style in Figma itself, upload the definition to the library of the
+plugin's Generate tab. It is then available in every file you open, see
+[Use your own styles](/integrations/figma/#use-your-own-styles).
 
 ## Step 8
 
@@ -232,7 +252,7 @@ var avatar = new Avatar(style, new JsonObject
 ### With the CLI
 
 ```
-dicebear ./your-style.json ./avatars --seed "dicebear" --format png
+dicebear create ./your-style.json -o ./avatar.png --seed "dicebear"
 ```
 
 ::: tip
@@ -241,7 +261,7 @@ The CLI automatically detects all available options from your style definition.
 Use `--help` with your definition file to see them:
 
 ```
-dicebear ./your-style.json --help
+dicebear create ./your-style.json --help
 ```
 
 :::
