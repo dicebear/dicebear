@@ -47,10 +47,30 @@ function parseRangeValue(value: unknown): unknown {
 }
 
 /**
+ * Splits comma-separated list values (`b6e3f4,c0aede`) that yargs hands over
+ * as single array entries. Arrays are not greedy on this CLI, so a list is
+ * either repeated flags or one comma-joined value.
+ */
+function splitListValue(value: unknown): unknown {
+  if (!Array.isArray(value)) {
+    return value;
+  }
+
+  return value.flatMap((entry) =>
+    typeof entry === 'string' && entry.includes(',')
+      ? entry
+          .split(',')
+          .map((part) => part.trim())
+          .filter((part) => part !== '')
+      : [entry],
+  );
+}
+
+/**
  * Extracts only the style-relevant options from the yargs argv object,
- * filtering out CLI-specific keys (`_`, `$0`, `outputPath`, `count`,
- * `format`, etc.) and converting weighted/range values into the shapes the
- * core resolver expects.
+ * filtering out CLI-specific keys (`_`, `$0`, `output`, `count`, `format`,
+ * etc.) and converting weighted/range/list values into the shapes the core
+ * resolver expects.
  */
 export function extractStyleOptions(
   argv: Record<string, unknown>,
@@ -64,7 +84,7 @@ export function extractStyleOptions(
       continue;
     }
 
-    let value: unknown = argv[key];
+    let value: unknown = splitListValue(argv[key]);
 
     if (field.type === 'enum' && field.weighted && Array.isArray(value)) {
       value = parseWeightedValue(value);

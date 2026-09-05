@@ -13,7 +13,7 @@ export async function writeFile(
     throw new Error(`File already exists at ${filePath}`);
   }
 
-  fs.ensureDir(path.dirname(filePath));
+  await fs.ensureDir(path.dirname(filePath));
 
   if (typeof content === 'string') {
     await fs.writeFile(filePath, content);

@@ -1169,9 +1169,9 @@ For ad-hoc spot checks beyond the fixtures, you can also generate reference SVGs
 from the CLI and compare byte-for-byte:
 
 ```bash
-dicebear initials ./reference --seed "Alice" --count 1
-dicebear lorelei ./reference --seed "Alice" --count 1
-dicebear avataaars ./reference --seed "Alice" --count 1
+dicebear create initials --seed "Alice" -o ./reference/initials.svg
+dicebear create lorelei --seed "Alice" -o ./reference/lorelei.svg
+dicebear create avataaars --seed "Alice" -o ./reference/avataaars.svg
 ```
 
 Start with the `initials` style (simplest) and work up to more complex styles

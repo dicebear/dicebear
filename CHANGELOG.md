@@ -10,6 +10,12 @@ and this project adheres to
 
 ### Removed
 
+- **CLI:** The style names are no longer commands, and `--optimize`,
+  `--optimize-check` and `--optimize-precision` are gone. `dicebear lorelei` is
+  now `dicebear create lorelei`, and `dicebear my-style.json --optimize` is
+  `dicebear optimize my-style.json -o my-style.json`. A bare style name gets a
+  hint to the new command.
+
 - **Core (JS, PHP, Python):** `Avatar` no longer accepts a raw style definition,
   deprecated since 10.1. Pass a `Style`:
   `new Avatar(new Style(definition), options)`. JS throws a `TypeError`, PHP and
@@ -17,8 +23,18 @@ and this project adheres to
 
 ### Changed
 
-- **Styles:** Bumped `@dicebear/styles` to `11.0.0-rc.2` for the docs. The
-  definitions reference `@dicebear/schema` 2.0.1.
+- **CLI:** `dicebear create <style>` prints one avatar to stdout, as SVG, JSON
+  or the raw bytes of a raster format, so it can be piped. `-o` names a file,
+  whose extension picks the format, or a directory for `--count`. The license
+  banner and the progress bar go to stderr. `dicebear optimize <definition...>`
+  prints the optimized definition to stdout and writes with `-o`, either one
+  file or a directory for several definitions, `--check` reports without
+  writing. List options take a comma-separated value
+  (`--backgroundColor b6e3f4,c0aede`) or repeated flags; a flag no longer
+  swallows the style name that follows it. Only the requested style is loaded,
+  which makes every call start faster.
+- **Styles:** Bumped `@dicebear/styles` to `11.0.0-rc.2` for the CLI and the
+  docs. The definitions reference `@dicebear/schema` 2.0.1.
 - **Core (Go):** The module path is `github.com/dicebear/dicebear-go/v11`, as Go
   requires for the new major version. `11.0.0-rc.1` still carried `/v10` and was
   not fetchable as a Go module. The release script and the workspace tests now
@@ -46,6 +62,16 @@ and this project adheres to
 
 ### Added
 
+- **CLI:** `dicebear compare <before> <after>` checks whether a new version of a
+  style still renders like the released one. It takes two definition files or
+  two directories, paired by file name. For every pair it diffs the canvas,
+  meta, components, variants, weights, probabilities and palettes, renders a
+  number of seeds on both sides, and renders every variant on its own with the
+  rest of the avatar pinned. Renders are compared pixel by pixel with resvg and
+  pixelmatch, `--tolerance` sets the share of pixels a render may differ by. The
+  result is a table with one row per style and a detail block per change, or
+  JSON with `--json`, and `-o` writes before, after and diff images of every
+  reported render. The exit code is non-zero when anything differs.
 - **Core (JS):** `@dicebear/core/lite` exports the same API as the package root
   without the two schema validators, about 14 kB instead of 30 kB gzipped. It is
   for definitions and options that come from your own code. The root entry keeps

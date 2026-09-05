@@ -1,10 +1,11 @@
 import type { Style } from '@dicebear/core';
-import chalk from 'chalk';
+import { chalkStderr } from 'chalk';
 import chalkTemplate from 'chalk-template';
 
 /**
  * Prints a colorized attribution banner with the style's source, creator,
- * and license info to stdout. Skipped sections are omitted silently.
+ * and license info to stderr, so it never mixes with an avatar written to
+ * stdout. Skipped sections are omitted silently.
  */
 export function outputStyleLicenseBanner(name: string, style: Style) {
   const meta = style.meta();
@@ -39,5 +40,5 @@ export function outputStyleLicenseBanner(name: string, style: Style) {
   banner.push('-'.repeat(64));
   banner.push('');
 
-  console.log(chalk.blueBright(banner.join('\n')));
+  console.error(chalkStderr.blueBright(banner.join('\n')));
 }

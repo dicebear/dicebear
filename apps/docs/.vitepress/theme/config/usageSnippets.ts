@@ -207,7 +207,7 @@ var svg = avatar.ToSvg();`,
       id: 'cli',
       label: 'CLI',
       install: 'npm install --global dicebear',
-      code: `dicebear ${file}`,
+      code: `dicebear create ${file} --seed "Felix"`,
       docs: '/integrations/cli/',
     },
   ];

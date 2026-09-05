@@ -69,8 +69,9 @@ with Figma or from scratch.
   privacy you can
   [host it yourself](https://www.dicebear.com/recipes/self-host-the-http-api/)
   with a single Docker container.
-- The [CLI](https://www.dicebear.com/integrations/cli/) generates avatar files
-  in bulk: `npx dicebear lorelei --count 10`.
+- The [CLI](https://www.dicebear.com/integrations/cli/) prints an avatar to the
+  terminal or generates files in bulk:
+  `npx dicebear create lorelei -o ./avatars --count 10`.
 - The [editor](https://editor.dicebear.com) lets you assemble a single avatar by
   hand and export it.
 

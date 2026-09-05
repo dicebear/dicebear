@@ -19,7 +19,7 @@ function walk(definition, visit) {
   }
 }
 
-describe('dicebear --optimize', () => {
+describe('dicebear optimize', () => {
   let workdir;
 
   /**
@@ -72,7 +72,7 @@ describe('dicebear --optimize', () => {
   it('reports a definition exported from Figma as already optimized', () => {
     const file = fixture('notionists');
     const before = fs.readFileSync(file, 'utf-8');
-    const result = runCli([file, '--optimize-check']);
+    const result = runCli(['optimize', file, '--check']);
 
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /already optimized/);
@@ -82,7 +82,7 @@ describe('dicebear --optimize', () => {
   it('reports an unoptimized definition and writes nothing', () => {
     const file = unoptimizedFixture();
     const before = fs.readFileSync(file, 'utf-8');
-    const result = runCli([file, '--optimize-check']);
+    const result = runCli(['optimize', file, '--check']);
 
     assert.equal(result.status, 1);
     assert.match(result.stdout, /not optimized/);
@@ -93,22 +93,22 @@ describe('dicebear --optimize', () => {
   it('shrinks an unoptimized definition', () => {
     const file = unoptimizedFixture();
     const before = fs.readFileSync(file, 'utf-8').length;
-    const result = runCli([file, '--optimize']);
+    const result = runCli(['optimize', file, '-o', file]);
 
     assert.equal(result.status, 0, result.stderr);
     assert.ok(fs.readFileSync(file, 'utf-8').length < before);
 
     // A second check now passes, so the two flags agree on what "optimized" is.
-    assert.equal(runCli([file, '--optimize-check']).status, 0);
+    assert.equal(runCli(['optimize', file, '--check']).status, 0);
   });
 
   it('is idempotent', () => {
     const file = fixture('identicon');
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
     const once = fs.readFileSync(file, 'utf-8');
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
     assert.equal(fs.readFileSync(file, 'utf-8'), once);
   });
 
@@ -129,7 +129,7 @@ describe('dicebear --optimize', () => {
 
     fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
     const shapes = [];
 
@@ -163,7 +163,7 @@ describe('dicebear --optimize', () => {
 
     fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
     const shapes = [];
 
@@ -196,7 +196,7 @@ describe('dicebear --optimize', () => {
 
     fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
     const paths = [];
 
@@ -234,7 +234,7 @@ describe('dicebear --optimize', () => {
 
     fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
     walk(read(file), (element) => {
       assert.notEqual(element.name, 'circle');
@@ -288,7 +288,7 @@ describe('dicebear --optimize', () => {
 
     fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
     const after = read(file);
     const found = [];
@@ -355,7 +355,7 @@ describe('dicebear --optimize', () => {
 
     const before = read(file);
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
     const after = read(file);
 
@@ -402,7 +402,7 @@ describe('dicebear --optimize', () => {
     const file = fixture('initials');
     const before = read(file);
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
     const collect = (definition) => {
       const variables = [];
@@ -432,7 +432,7 @@ describe('dicebear --optimize', () => {
     const file = fixture('bottts');
     const before = read(file);
 
-    assert.equal(runCli([file, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
     const collect = (definition) => {
       const ids = [];
@@ -457,7 +457,7 @@ describe('dicebear --optimize', () => {
       const file = fixture(name);
       const before = read(file);
 
-      assert.equal(runCli([file, '--optimize']).status, 0);
+      assert.equal(runCli(['optimize', file, '-o', file]).status, 0);
 
       const after = read(file);
 
@@ -474,9 +474,9 @@ describe('dicebear --optimize', () => {
 
     fs.copyFileSync(relaxed, strict);
 
-    assert.equal(runCli([relaxed, '--optimize']).status, 0);
+    assert.equal(runCli(['optimize', relaxed, '-o', relaxed]).status, 0);
     assert.equal(
-      runCli([strict, '--optimize', '--optimize-precision', '0']).status,
+      runCli(['optimize', strict, '-o', strict, '--precision', '0']).status,
       0,
     );
 
@@ -504,39 +504,80 @@ describe('dicebear --optimize', () => {
 
     fs.writeFileSync(file, `${JSON.stringify(definition, null, 2)}\n`);
 
-    const result = runCli([file, '--optimize']);
+    const result = runCli(['optimize', file, '-o', file]);
 
     assert.equal(result.status, 0, result.stderr);
   });
 
   it('accepts a boolean flag before the definition path', () => {
     const file = fixture('notionists');
-    const result = runCli(['--json', file, '--optimize-check']);
+    const result = runCli(['optimize', '--check', file]);
 
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /already optimized/);
   });
 
-  it('rejects an invalid --optimize-precision value', () => {
+  it('rejects an invalid --precision value', () => {
     const file = fixture('identicon');
     const before = fs.readFileSync(file, 'utf-8');
 
     for (const value of ['abc', '-1', '9', '2.5']) {
-      const result = runCli([
-        file,
-        '--optimize',
-        '--optimize-precision',
-        value,
-      ]);
+      const result = runCli(['optimize', file, '-o', file, '--precision', value]);
 
       assert.equal(result.status, 1, value);
-      assert.match(result.stderr, /optimize-precision/);
+      assert.match(result.stderr, /--precision/);
       assert.equal(fs.readFileSync(file, 'utf-8'), before);
     }
   });
 
+  it('prints the optimized definition to stdout and the report to stderr', () => {
+    const file = unoptimizedFixture();
+    const before = fs.readFileSync(file, 'utf-8');
+    const result = runCli(['optimize', file]);
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.ok(result.stdout.length < before.length);
+    assert.equal(
+      JSON.parse(result.stdout).canvas.elements.at(-1).attributes.d,
+      'M10 10h10v10H10Z',
+    );
+    assert.match(result.stderr, /-\d+\.\d%/);
+    // stdout mode writes nothing.
+    assert.equal(fs.readFileSync(file, 'utf-8'), before);
+  });
+
+  it('refuses several definitions without an output directory', () => {
+    const result = runCli(['optimize', fixture('identicon'), fixture('notionists')]);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /--output <dir>/);
+  });
+
+  it('writes a single definition to the --output file', () => {
+    const file = unoptimizedFixture();
+    const target = path.join(workdir, 'nested', 'optimized.json');
+    const result = runCli(['optimize', file, '-o', target]);
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /-\d+\.\d%/);
+    assert.ok(fs.existsSync(target));
+    assert.equal(runCli(['optimize', target, '--check']).status, 0);
+  });
+
+  it('writes several definitions into the --output directory', () => {
+    const files = [fixture('identicon'), fixture('notionists')];
+    const target = path.join(workdir, 'out-dir');
+    const result = runCli(['optimize', ...files, '-o', target]);
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.deepEqual(fs.readdirSync(target).sort(), [
+      'identicon.json',
+      'notionists.json',
+    ]);
+  });
+
   it('refuses to optimize a built-in style', () => {
-    const result = runCli(['croodles', '--optimize']);
+    const result = runCli(['optimize', 'croodles']);
 
     assert.equal(result.status, 1);
     assert.match(result.stderr, /no definition file to optimize/);

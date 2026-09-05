@@ -140,7 +140,8 @@ var avatar = new Avatar(style, new JsonObject
 });
 
 const cliExample = computed(
-  () => `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`,
+  () =>
+    `npx dicebear create ${props.style} --seed '${escapeShellArg(props.seed)}'`,
 );
 
 const playgroundLink = '/playground/';

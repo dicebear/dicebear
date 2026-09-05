@@ -76,7 +76,7 @@ using DiceBear;
 var style = Style.Parse(Styles.Lorelei);
 var svg = new Avatar(style, new JsonObject { ["seed"] = "Felix" }).ToSvg();`,
   api: `https://api.dicebear.com/11.x/lorelei/svg?seed=Felix`,
-  cli: `npx dicebear lorelei --seed "Felix" --format svg`,
+  cli: `npx dicebear create lorelei --seed "Felix"`,
 };
 </script>
 

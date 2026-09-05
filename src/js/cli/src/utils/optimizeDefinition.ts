@@ -38,6 +38,8 @@ const RENDER_CHECK_SEEDS = [
  *
  * This mirrors what DiceBear Studio for Figma already runs on export, so
  * a hand-authored definition ends up in the same shape as a generated one.
+ * Only `removeEmptyAttrs` is extra here, a hand-written file may carry
+ * attributes an editor never writes.
  * `cleanupNumericValues` is the exporter's custom variant, which keeps
  * normalized 0..1 attributes usable at low precision, and
  * `convertPathToShape` undoes what an editor without primitives does to a
