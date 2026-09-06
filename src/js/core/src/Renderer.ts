@@ -773,7 +773,7 @@ export class Renderer {
    *
    * Wrapper nesting is block 0 outermost, and within a block the canonical
    * track order (translate before rotate before scale, opacity innermost) —
-   * the composition contract the Figma plugin maps onto node transforms.
+   * the composition contract the plugin for Figma maps onto node transforms.
    *
    * The element's own `opacity` rides on the innermost opacity wrapper as the
    * resting value the keyframes then override.

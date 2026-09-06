@@ -799,7 +799,7 @@ namespace DiceBear.Internal
         /// <remarks>
         /// Wrapper nesting is block 0 outermost, and within a block the
         /// canonical track order (translate before rotate before scale,
-        /// opacity innermost) — the composition contract the Figma plugin maps
+        /// opacity innermost) — the composition contract the plugin for Figma maps
         /// onto node transforms.
         /// </remarks>
         private string ApplyAnimations(string markup, Element element, IReadOnlyList<JsonObject> active)

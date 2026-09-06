@@ -91,7 +91,7 @@ const highlights = [
   // Row 3: design & trust
   {
     iconPath: siFigma.path,
-    title: 'Figma Plugin',
+    title: 'Plugin for Figma',
     description:
       'Design custom avatar styles in Figma and export them as ready-to-use DiceBear definitions, with no code required.',
     color: 'var(--logo-monochrome)',

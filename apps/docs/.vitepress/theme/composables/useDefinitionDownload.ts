@@ -7,7 +7,7 @@ import type { ThemeOptions } from '@theme/types';
 
 /**
  * Saves a style's definition file, the JSON that every DiceBear library reads
- * and that the Figma plugin imports.
+ * and that the plugin for Figma imports.
  *
  * The definitions sit on the CDN and browsers ignore the `download` attribute
  * across origins, so the file travels through a fetch and a blob instead of a
@@ -23,7 +23,7 @@ export function useDefinitionDownload(styleName: MaybeRefOrGetter<string>) {
     () => theme.value.avatarStyles[toValue(styleName)]?.definitionUrl,
   );
 
-  // The Figma plugin takes the style title from the file name, so `bottts.json`
+  // The plugin for Figma takes the style title from the file name, so `bottts.json`
   // reads better than the packaged `bottts.min.json`.
   const fileName = computed(() => `${name.value}.json`);
 
