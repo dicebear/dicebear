@@ -18,6 +18,15 @@ check() {
     --retry 3 --retry-delay 5 \
     "${url}")"
 
+  # A page that moved answers with a redirect, and a redirect carries the
+  # wrong Content-Type for a reason that has nothing to do with the edge
+  # rules. Say so, instead of blaming a rule that is still in place.
+  if ! grep -qi '^HTTP/[0-9.]* 200' <<<"${headers}"; then
+    echo "${url}: expected a 200 response, got:" >&2
+    grep -i '^HTTP/' <<<"${headers}" >&2
+    exit 1
+  fi
+
   if ! grep -qi '^content-type: text/plain; charset=utf-8' <<<"${headers}"; then
     echo "${url}: expected 'Content-Type: text/plain; charset=utf-8', got:" >&2
     grep -i '^content-type:' <<<"${headers}" >&2 || echo '(no Content-Type header)' >&2
@@ -34,4 +43,4 @@ check() {
 
 check 'https://www.dicebear.com/llms.txt'
 check 'https://www.dicebear.com/llms-full.txt'
-check 'https://www.dicebear.com/how-to-use/http-api/index.md'
+check 'https://www.dicebear.com/integrations/http-api/index.md'
