@@ -19,7 +19,7 @@ for user identities. With the built-in PRNG you create the same avatar over and
 over again based on a seed. But also individual avatars are possible! Just use
 the countless options that each avatar style provides.
 
-And thanks to the JavaScript library, HTTP API, CLI, Figma plugin and
+And thanks to the JavaScript library, HTTP API, CLI, plugin for Figma and
 Playground, your next avatar is always just a stone's throw away!
 
 [Playground](https://www.dicebear.com/playground) |

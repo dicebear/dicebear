@@ -64,7 +64,7 @@ are possible! Just use the countless options that each avatar style provides.
 
 And thanks to the [JavaScript library](/how-to-use/js-library/),
 [HTTP API](/how-to-use/http-api/), [CLI](/how-to-use/cli/),
-[Figma plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
+[plugin for Figma](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
 [Editor](https://editor.dicebear.com) and [Playground](/playground/), your next
 avatar is always just a stone's throw away! Explore our [Avatar API](/how-to-use/http-api/) for simple URL-based integration.
 

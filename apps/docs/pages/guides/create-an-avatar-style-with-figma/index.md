@@ -7,8 +7,8 @@ description: >
 
 # Create an avatar style with Figma
 
-Our [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787)
-is the easiest way to create an avatar style for DiceBear. The following
+[DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787),
+our plugin for Figma, is the easiest way to create an avatar style for DiceBear. The following
 tutorial requires basic knowledge about [Figma](https://www.figma.com/) and
 [Node.js](https://nodejs.org/en/).
 

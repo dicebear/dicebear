@@ -2,13 +2,13 @@
 title: Create an Avatar Style from Scratch | DiceBear
 description: >
   Learn how to create a DiceBear avatar style from scratch using TypeScript
-  without the Figma plugin.
+  without the plugin for Figma.
 ---
 
 # Create an avatar style from Scratch
 
 We highly recommend our
-[Figma plugin](/guides/create-an-avatar-style-with-figma/) to create an avatar
+[plugin for Figma](/guides/create-an-avatar-style-with-figma/) to create an avatar
 style. Most of DiceBear official avatar styles were created with the plugin. But
 with appropriate programming skills you can also create an avatar style without
 Figma.
