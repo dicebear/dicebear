@@ -73,6 +73,12 @@ into the definition. This needs animation support in your Figma plan. Styles
 that still keep their animation as raw CSS in a `<style>` element arrive as a
 still avatar instead, since Figma has no place for CSS.
 
+The opacity of a layer is what the still avatar shows, the keyframes only say
+how it moves. A part that fades in from nothing keeps its layer opacity at 100
+percent. A part that should show only while the animation plays sits at 0
+percent: invisible on the canvas, but listed in the layers panel and exported
+with its animation.
+
 :::
 
 ## Step 5
