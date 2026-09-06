@@ -8,9 +8,9 @@ description: >
 # Create an avatar style from scratch
 
 We highly recommend our
-[Figma plugin](/guides/create-an-avatar-style-with-figma/) to create an avatar
-style. Most of DiceBear's official avatar styles were created with the plugin.
-But you can also create an avatar style by writing a JSON
+[plugin for Figma](/guides/create-an-avatar-style-with-figma/) to create an
+avatar style. Most of DiceBear's official avatar styles were created with the
+plugin. But you can also create an avatar style by writing a JSON
 [definition file](/specification/definition-schema/) by hand.
 
 ## Minimal example
@@ -433,5 +433,5 @@ Console.WriteLine(avatar.ToSvg());
   the complete specification
 - Browse the [official definitions](https://github.com/dicebear/styles) for
   real-world examples
-- Use the [Figma plugin](/guides/create-an-avatar-style-with-figma/) for a
+- Use the [plugin for Figma](/guides/create-an-avatar-style-with-figma/) for a
   visual workflow

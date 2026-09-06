@@ -46,7 +46,7 @@ separately in [`dicebear/schema`](https://github.com/dicebear/schema).
 
 ## Figma exporter plugin
 
-The Figma plugin that produces new avatar style definitions lives in
+The plugin for Figma that produces new avatar style definitions lives in
 [`dicebear/exporter-plugin-for-figma`](https://github.com/dicebear/exporter-plugin-for-figma).
 
 - [`CONTRIBUTING.md`](https://github.com/dicebear/exporter-plugin-for-figma/blob/main/CONTRIBUTING.md)

@@ -19,7 +19,7 @@ export const toolLinks: FooterLink[] = [
   { label: 'Bundle Size Estimator', href: '/tools/bundle-size/' },
   { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
   {
-    label: 'Figma Plugin',
+    label: 'Plugin for Figma',
     href: 'https://www.figma.com/community/plugin/1005765655729342787',
     external: true,
   },

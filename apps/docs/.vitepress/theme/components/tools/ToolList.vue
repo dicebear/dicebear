@@ -63,7 +63,7 @@ const tools: Tool[] = [
     slug: 'figma-plugin',
     href: 'https://www.figma.com/community/plugin/1005765655729342787',
     external: true,
-    name: 'Figma Plugin',
+    name: 'Plugin for Figma',
     description:
       'Export DiceBear avatar styles directly from Figma, keeping your design source in sync with what ships in production.',
     icon: Paintbrush,

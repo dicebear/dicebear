@@ -271,8 +271,8 @@ Options:
 ## Custom styles
 
 You can use any JSON [definition file](/specification/definition-schema/) as a
-style, including your own custom styles or styles exported from the
-[Figma plugin](/guides/create-an-avatar-style-with-figma/).
+style, including your own custom styles or styles exported from our
+[plugin for Figma](/guides/create-an-avatar-style-with-figma/).
 
 Just pass the path to the JSON file instead of a style name:
 
@@ -295,8 +295,8 @@ dicebear ./my-style.json ./avatars --count 20 --format png
 
 ### Compressing a definition file
 
-Definition files exported from the
-[Figma plugin](/guides/create-an-avatar-style-with-figma/) are already
+Definition files exported from our
+[plugin for Figma](/guides/create-an-avatar-style-with-figma/) are already
 compressed on export. A definition you wrote or edited by hand is not, and its
 path data usually has a lot of room left. `--optimize` runs the same
 [svgo](https://github.com/svg/svgo) pass over every element tree in the file and

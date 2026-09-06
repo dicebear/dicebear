@@ -15,7 +15,7 @@ API, and the Figma exporter are separate and each have their own
 - [`dicebear/api`](https://github.com/dicebear/api/blob/main/CONTRIBUTING.md):
   Self-hostable HTTP API
 - [`dicebear/exporter-plugin-for-figma`](https://github.com/dicebear/exporter-plugin-for-figma/blob/main/CONTRIBUTING.md):
-  Figma plugin
+  plugin for Figma
 
 If your contribution belongs to one of those repos, read its file first. The
 instructions below only cover this monorepo.
