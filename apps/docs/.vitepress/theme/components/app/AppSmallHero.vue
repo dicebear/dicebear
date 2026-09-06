@@ -25,7 +25,7 @@ const { theme } = useData<ThemeOptions>();
 const resolvedDescription = computed(
   () =>
     props.description ??
-    `DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art, our privacy-focused SVG avatar library gives you ${theme.value.styleCount} styles to choose from.`,
+    `DiceBear is an open source avatar generator that creates unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art, our privacy-focused SVG avatar library gives you ${theme.value.styleCount} styles to choose from.`,
 );
 
 const sectionRef = ref();

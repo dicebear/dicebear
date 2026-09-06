@@ -98,7 +98,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
-  description: `DiceBear is a free, open source avatar library and avatar API with ${styleCount} avatar styles. Generate profile pictures and user placeholder images for any project.`,
+  description: `DiceBear is a free, open source avatar generator with ${styleCount} avatar styles, available as an avatar library and avatar API. Generate profile pictures and user placeholder images for any project.`,
   head: [
     // Most pages load avatars from the HTTP API (seed demo, style showcase,
     // playground). Warming up the connection hides the DNS/TLS latency on
@@ -139,7 +139,7 @@ export default defineConfig<ThemeOptions>({
         '@type': 'WebSite',
         name: 'DiceBear',
         url: siteUrl('/'),
-        description: `DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with ${styleCount} styles, privacy-focused and self-hostable.`,
+        description: `DiceBear is a free, open source avatar generator, available as an avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with ${styleCount} styles, privacy-focused and self-hostable.`,
       }),
     ],
     [
@@ -152,7 +152,7 @@ export default defineConfig<ThemeOptions>({
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Any',
         url: siteUrl('/'),
-        description: `Privacy-focused, open source SVG avatar library with ${styleCount} styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, C# library, and CLI for generating deterministic profile pictures and user placeholder images.`,
+        description: `Privacy-focused, open source SVG avatar generator with ${styleCount} styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, Dart library, C# library, and CLI for generating deterministic profile pictures and user placeholder images.`,
         offers: {
           '@type': 'Offer',
           price: '0',

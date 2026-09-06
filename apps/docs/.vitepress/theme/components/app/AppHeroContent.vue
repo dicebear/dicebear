@@ -17,7 +17,7 @@ const { theme } = useData<ThemeOptions>();
     </h1>
 
     <p class="app-hero-description">
-      DiceBear is a privacy-focused, open source avatar library with
+      DiceBear is a privacy-focused, open source avatar generator with
       <a class="app-hero-underline" href="/styles/"
         >{{ theme.styleCount }}&nbsp;avatar&nbsp;styles</a
       >, from hand-drawn characters to abstract patterns. Generate deterministic
