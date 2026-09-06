@@ -10,6 +10,9 @@ export const productLinks: FooterLink[] = [
   { label: 'Why DiceBear?', href: '/why-dicebear/' },
   { label: 'Animated Avatars', href: '/animated-avatars/' },
   { label: 'All Styles', href: '/styles/' },
+  { label: 'Supported versions', href: '/versions/' },
+  { label: 'Statistics', href: '/stats/' },
+  { label: 'Support DiceBear', href: '/support/' },
 ];
 
 // Mirrors the tool list on /tools/ (see theme/components/tools/ToolList.vue).
@@ -25,13 +28,13 @@ export const toolLinks: FooterLink[] = [
   },
 ];
 
+// Entry points for building with DiceBear. The pages about the project itself
+// (statistics, version support, ways to help) live in the Explore column.
 export const resourceLinks: FooterLink[] = [
   { label: 'Documentation', href: '/start/what-is-dicebear/' },
   { label: 'JS Library', href: '/integrations/javascript/' },
   { label: 'HTTP API', href: '/integrations/http-api/' },
   { label: 'CLI', href: '/integrations/cli/' },
-  { label: 'Statistics', href: '/stats/' },
-  { label: 'Support DiceBear', href: '/support/' },
 ];
 
 // Older major versions keep their docs on a subdomain of their own. This list

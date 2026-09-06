@@ -43,6 +43,11 @@ import avatarStyles, {
 import { versions, libraryVersions } from './config/versions.ts';
 import { softwareLicense } from './config/softwareLicense.ts';
 import {
+  formatDate,
+  stateLabels,
+  supportTracks,
+} from './theme/config/versionSupport.ts';
+import {
   categoryOrder,
   getStyleCategory,
   normalizeLicense,
@@ -581,6 +586,34 @@ raw definition at
 }
 
 /**
+ * One support table of `/versions/`, built from the data the timeline on that
+ * page reads. Written as a table because the columns are what a reader comes
+ * for: when a line was released, where it stands, and when it ends.
+ */
+function renderVersionTable(key: string): string {
+  const track = supportTracks.find((entry) => entry.key === key);
+
+  if (!track) {
+    throw new Error(`Unknown version track "${key}"`);
+  }
+
+  const rows = track.lines.map(
+    (line) =>
+      `| \`${line.version}\` | ${formatDate(line.released)} | ${
+        stateLabels[line.state]
+      } | ${line.note} |`,
+  );
+
+  return [
+    track.subtitle,
+    '',
+    '| Version | Released | Status | Support |',
+    '| --- | --- | --- | --- |',
+    ...rows,
+  ].join('\n');
+}
+
+/**
  * Builds the licenses page from the style metadata and the repository
  * LICENSE. Like the style pages, the source page is almost entirely a
  * component mount, so its mirror is assembled from the same data the page
@@ -747,6 +780,15 @@ async function buildPage(
       renderPresetBlocks(await loadPresets(presetsOf));
   } else if (route === '/licenses/') {
     markdown = renderLicensesPage(renderMarkdown(body.split(/^<[A-Z]/m)[0]));
+  } else if (route === '/versions/') {
+    // The chart is the page's answer, and a mirror cannot draw one. Its mount
+    // point marks where the same data belongs in prose form.
+    markdown = renderMarkdown(
+      body.replace(
+        /^<DocsVersionTimeline track="([^"]+)"\s*\/>$/gm,
+        (_, key: string) => renderVersionTable(key),
+      ),
+    );
   } else {
     markdown = renderMarkdown(body);
   }

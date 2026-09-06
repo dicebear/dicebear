@@ -259,29 +259,15 @@ supports the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
 You can set the version in the URL. Just replace the `11.x` from the previous
 examples with the one you want.
 
-| Version | Status     | End of Life    |
-| ------- | ---------- | -------------- |
-| `11.x`  | **Active** | None           |
-| `10.x`  | **Active** | None           |
-| `9.x`   | **Active** | None           |
-| `8.x`   | Deprecated | April 30, 2028 |
-| `7.x`   | Deprecated | April 30, 2028 |
-| `6.x`   | Deprecated | April 30, 2028 |
-| `5.x`   | Deprecated | April 30, 2028 |
+Every prefix from `5.x` to `11.x` still answers.
+[Supported versions](/versions/) shows how long each one stays that way, and
+which of them the libraries still cover.
 
 ::: warning
 
-Versions 5.x to 8.x will reach End of Life on April 30, 2028. After that date,
-the HTTP API for these versions will be shut down and no longer available.
-Please upgrade to the latest version. See the
+Versions `5.x` to `8.x` will reach end of life on April 30, 2028. After that
+date the API shuts them down and the URLs stop working. See the
 [announcement](https://github.com/orgs/dicebear/discussions/491) for details.
-
-:::
-
-::: info
-
-You can [host the API yourself](/recipes/self-host-the-http-api/) to keep using
-discontinued versions after their End of Life.
 
 :::
 
