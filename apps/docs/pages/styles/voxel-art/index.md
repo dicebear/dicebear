@@ -1,8 +1,9 @@
 ---
 title: Voxel Art – Avatar Style
 description: >
-  Create Voxel Art avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free voxel avatar generator: 3D cube characters with hair, outfits, glasses
+  and beards. Create Voxel Art avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

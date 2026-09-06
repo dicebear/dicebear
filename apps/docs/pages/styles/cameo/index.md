@@ -1,8 +1,9 @@
 ---
 title: Cameo – Avatar Style
 description: >
-  Create Cameo avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free one-color portrait avatar generator: head, hair and mouth in a single
+  hue, no eyes. Create Cameo avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

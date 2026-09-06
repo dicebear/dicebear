@@ -1,8 +1,9 @@
 ---
 title: Glyphs – Avatar Style
 description: >
-  Create Glyphs avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free minimal avatar generator: a shoulder silhouette with a glyph-like
+  headpiece in a circle. Create Glyphs avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

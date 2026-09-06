@@ -1,8 +1,8 @@
 ---
 title: Landscape – Avatar Style
 description: >
-  Create Landscape avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free landscape avatar generator with layered mountain ridges under a soft sun.
+  Create Landscape avatars with the DiceBear avatar API or JavaScript library.
 outline: [2, 3]
 ---
 

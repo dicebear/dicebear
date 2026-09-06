@@ -1,8 +1,9 @@
 ---
 title: Stack – Avatar Style
 description: >
-  Create Stack avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free abstract avatar generator that balances a pile of stones in three tones
+  on paper. Create Stack avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

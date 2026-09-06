@@ -1,8 +1,8 @@
 ---
 title: Clay – Avatar Style
 description: >
-  Create Clay avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free clay character avatar generator with rounded lumps, simple faces and tiny
+  horns. Create Clay avatars with the DiceBear avatar API or JavaScript library.
 outline: [2, 3]
 ---
 

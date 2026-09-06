@@ -1,8 +1,9 @@
 ---
 title: Identicon – SVG Identicon API
 description: >
-  Generate deterministic Identicon avatars with DiceBear, a free, open source
-  SVG identicon API and avatar library for user profile pictures.
+  Free identicon generator and SVG identicon API: symmetrical pixel patterns
+  from any seed, name or ID. Create Identicon avatars with the DiceBear avatar
+  API or JavaScript library.
 outline: [2, 3]
 ---
 

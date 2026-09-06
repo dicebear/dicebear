@@ -1,8 +1,9 @@
 ---
 title: Adventurer – Avatar Style
 description: >
-  Create Adventurer avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free cartoon avatar generator with expressive faces, bold outlines and varied
+  hairstyles. Create Adventurer avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

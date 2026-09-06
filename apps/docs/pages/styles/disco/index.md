@@ -1,8 +1,9 @@
 ---
 title: Disco – Avatar Style
 description: >
-  Create Disco avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free abstract avatar generator with halftone grids of shapes on a colored
+  background. Create Disco avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

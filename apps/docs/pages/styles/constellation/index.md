@@ -1,8 +1,9 @@
 ---
 title: Constellation – Avatar Style
 description: >
-  Create Constellation avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free star map avatar generator that connects bright stars into a unique night
+  sky. Create Constellation avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

@@ -1,9 +1,9 @@
 ---
 title: Bottts Neutral – Avatar Style
 description: >
-  Create Bottts Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  Robot face avatar generator: robot eyes and mouth on a colored square, no head
+  or antennas. Create Bottts Neutral avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

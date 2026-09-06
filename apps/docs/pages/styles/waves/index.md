@@ -1,8 +1,9 @@
 ---
 title: Waves – Avatar Style
 description: >
-  Create Waves avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free abstract avatar generator that layers rippling wave bands in shades of
+  one color. Create Waves avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

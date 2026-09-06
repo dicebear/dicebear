@@ -1,8 +1,9 @@
 ---
 title: Shadows – Avatar Style
 description: >
-  Create Shadows avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free silhouette avatar generator: a bust in one ink with hats and hairstyles
+  on a pale ground. Create Shadows avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

@@ -1,8 +1,9 @@
 ---
 title: Loops – Avatar Style
 description: >
-  Create Loops avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free abstract avatar generator that tiles arcs and wavy strokes into a
+  two-tone pattern. Create Loops avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

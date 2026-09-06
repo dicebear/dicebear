@@ -1,8 +1,9 @@
 ---
 title: Glass – Avatar Style
 description: >
-  Create Glass avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free gradient avatar generator with smooth color blends and a soft glassy
+  sheen. Create Glass avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

@@ -1,8 +1,9 @@
 ---
 title: Gaze – Avatar Style
 description: >
-  Create Gaze avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free minimal avatar generator: a pair of eyes on a colored shape, optionally
+  animated. Create Gaze avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

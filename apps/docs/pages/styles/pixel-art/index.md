@@ -1,8 +1,9 @@
 ---
 title: Pixel Art – Avatar Style
 description: >
-  Create Pixel Art avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free pixel art avatar generator: 8-bit half-body characters with retro
+  hairstyles and tops. Create Pixel Art avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

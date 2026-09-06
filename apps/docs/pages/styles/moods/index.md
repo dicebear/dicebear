@@ -1,8 +1,9 @@
 ---
 title: Moods – Avatar Style
 description: >
-  Create Moods avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free mood avatar generator: pastel shapes with faces from cheerful to sleepy
+  to grumpy. Create Moods avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

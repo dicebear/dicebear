@@ -1,8 +1,9 @@
 ---
 title: Personas – Avatar Style
 description: >
-  Create Personas avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free flat design avatar generator covering a broad range of ages, hair, beards
+  and glasses. Create Personas avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

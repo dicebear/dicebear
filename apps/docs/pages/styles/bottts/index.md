@@ -1,8 +1,9 @@
 ---
 title: Bottts – Avatar Style
 description: >
-  Create Bottts avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free robot avatar generator with modular bot heads, faces, antennas and side
+  units. Create Bottts avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

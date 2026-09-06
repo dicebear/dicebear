@@ -1,8 +1,9 @@
 ---
 title: Croodles – Avatar Style
 description: >
-  Create Croodles avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free doodle avatar generator with sketchy ink faces, hair, glasses and quirky
+  expressions. Create Croodles avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

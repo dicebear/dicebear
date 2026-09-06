@@ -1,8 +1,9 @@
 ---
 title: Big Ears – Avatar Style
 description: >
-  Create Big Ears avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free cartoon avatar generator with big round ears, varied hairstyles and
+  simple faces. Create Big Ears avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

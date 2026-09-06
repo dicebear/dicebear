@@ -1,8 +1,9 @@
 ---
 title: Big Smile – Avatar Style
 description: >
-  Create Big Smile avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free cartoon avatar generator with rounded faces, full hairstyles and big
+  toothy smiles. Create Big Smile avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

@@ -1,9 +1,9 @@
 ---
 title: Notionists Neutral – Avatar Style
 description: >
-  Create Notionists Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  Hand-drawn face avatar generator: eyes, nose and mouth in loose black lines,
+  no head or body. Create Notionists Neutral avatars with the DiceBear avatar
+  API or JavaScript library.
 outline: [2, 3]
 ---
 

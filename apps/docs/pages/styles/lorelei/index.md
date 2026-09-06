@@ -1,8 +1,9 @@
 ---
 title: Lorelei – Avatar Style
 description: >
-  Create Lorelei avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free hand-drawn avatar generator in fine ink lines with detailed hair and
+  expressive eyes. Create Lorelei avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

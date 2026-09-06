@@ -1,8 +1,9 @@
 ---
 title: Avataaars – Avatar Style
 description: >
-  Create Avataaars avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free Avataaars avatar generator: cartoon characters with hairstyles, clothing
+  and accessories. Create Avataaars avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

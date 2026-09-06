@@ -1,8 +1,9 @@
 ---
 title: Patchwork – Avatar Style
 description: >
-  Create Patchwork avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free quilt pattern avatar generator built from traditional blocks like
+  pinwheel and flying geese. Create Patchwork avatars with the DiceBear avatar
+  API or JavaScript library.
 outline: [2, 3]
 ---
 

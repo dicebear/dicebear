@@ -1,8 +1,9 @@
 ---
 title: Pixelbot – Avatar Style
 description: >
-  Create Pixelbot avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free pixel robot avatar generator with glowing faces built from blocks on a
+  dark grid. Create Pixelbot avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: Cutouts – Avatar Style
 description: >
-  Create Cutouts avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free paper collage avatar generator: faces assembled from torn craft paper.
+  Create Cutouts avatars with the DiceBear avatar API or JavaScript library.
 outline: [2, 3]
 ---
 

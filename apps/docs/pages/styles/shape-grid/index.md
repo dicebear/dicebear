@@ -1,8 +1,9 @@
 ---
 title: Shape Grid – Avatar Style
 description: >
-  Create Shape Grid avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free geometric avatar generator that arranges four simple shapes in a 2×2
+  grid. Create Shape Grid avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

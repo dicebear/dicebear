@@ -1,8 +1,9 @@
 ---
 title: Slice – Avatar Style
 description: >
-  Create Slice avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free abstract avatar generator that cuts a silhouette into shifted horizontal
+  bands. Create Slice avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

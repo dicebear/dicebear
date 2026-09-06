@@ -1,8 +1,9 @@
 ---
 title: Dylan – Avatar Style
 description: >
-  Create Dylan avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free flat illustration avatar generator with chunky outlined faces on
+  saturated colors. Create Dylan avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

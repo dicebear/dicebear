@@ -1,8 +1,9 @@
 ---
 title: Weave – Avatar Style
 description: >
-  Create Weave avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free plaid pattern avatar generator that crosses pastel stripes into a woven
+  texture. Create Weave avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

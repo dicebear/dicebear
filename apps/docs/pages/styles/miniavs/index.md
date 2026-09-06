@@ -1,8 +1,9 @@
 ---
 title: Miniavs – Avatar Style
 description: >
-  Create Miniavs avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free flat cartoon avatar generator with chunky characters that read clearly at
+  small sizes. Create Miniavs avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

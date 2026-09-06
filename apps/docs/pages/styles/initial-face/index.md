@@ -1,8 +1,9 @@
 ---
 title: Initial Face – Avatar Style
 description: >
-  Create Initial Face avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free initials avatar generator with a face: one bold letter plus expressive
+  eyes. Create Initial Face avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

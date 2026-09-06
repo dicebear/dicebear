@@ -1,9 +1,9 @@
 ---
 title: Pixel Art Neutral – Avatar Style
 description: >
-  Create Pixel Art Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  Pixel art face avatar generator: pixel eyes and mouth on a solid background,
+  no head or body. Create Pixel Art Neutral avatars with the DiceBear avatar API
+  or JavaScript library.
 outline: [2, 3]
 ---
 

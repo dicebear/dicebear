@@ -1,8 +1,9 @@
 ---
 title: Marbles – Avatar Style
 description: >
-  Create Marbles avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free hand-drawn avatar generator: a small face on a shaded sphere with hats or
+  headphones. Create Marbles avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

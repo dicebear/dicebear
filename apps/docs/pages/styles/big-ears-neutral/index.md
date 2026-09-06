@@ -1,9 +1,9 @@
 ---
 title: Big Ears Neutral – Avatar Style
 description: >
-  Create Big Ears Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  Cartoon face avatar generator: eyes and mouth on a colored square, no head,
+  hair or ears. Create Big Ears Neutral avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

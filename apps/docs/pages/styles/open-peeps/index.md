@@ -1,8 +1,9 @@
 ---
 title: Open Peeps – Avatar Style
 description: >
-  Create Open Peeps avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free hand-drawn people avatar generator with sketchy outlines and
+  mix-and-match features. Create Open Peeps avatars with the DiceBear avatar API
+  or JavaScript library.
 outline: [2, 3]
 ---
 

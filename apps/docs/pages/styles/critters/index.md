@@ -1,8 +1,9 @@
 ---
 title: Critters – Avatar Style
 description: >
-  Create Critters avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free cute monster avatar generator: colorful creatures with big eyes, horns,
+  ears or antennae. Create Critters avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

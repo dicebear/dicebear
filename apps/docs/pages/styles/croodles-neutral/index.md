@@ -1,9 +1,9 @@
 ---
 title: Croodles Neutral – Avatar Style
 description: >
-  Create Croodles Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  Doodle face avatar generator: eyes, nose and mouth in loose ink lines, no head
+  or hair. Create Croodles Neutral avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

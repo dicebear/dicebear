@@ -1,8 +1,9 @@
 ---
 title: Shapes – Avatar Style
 description: >
-  Create Shapes avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free geometric avatar generator with large squares, circles and triangles on a
+  colored background. Create Shapes avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

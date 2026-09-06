@@ -1,8 +1,9 @@
 ---
 title: Rings – Avatar Style
 description: >
-  Create Rings avatars with the DiceBear avatar library. Generate unique profile
-  pictures using our free avatar API or JavaScript avatar library.
+  Free geometric avatar generator with segmented concentric rings in a single
+  color. Create Rings avatars with the DiceBear avatar API or JavaScript
+  library.
 outline: [2, 3]
 ---
 

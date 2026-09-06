@@ -1,8 +1,9 @@
 ---
 title: Initials – Avatar Placeholder API
 description: >
-  Generate SVG initials avatars with DiceBear, a free avatar placeholder API and
-  JavaScript library for user profile pictures.
+  Free initials avatar generator and placeholder API: one or two letters on a
+  colored square, from any name. Create Initials avatars with the DiceBear
+  avatar API or JavaScript library.
 outline: [2, 3]
 ---
 

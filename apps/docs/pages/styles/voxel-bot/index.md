@@ -1,8 +1,9 @@
 ---
 title: Voxel Bot – Avatar Style
 description: >
-  Create Voxel Bot avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Free voxel robot avatar generator with glowing screen faces and two-tone
+  blocky bodies. Create Voxel Bot avatars with the DiceBear avatar API or
+  JavaScript library.
 outline: [2, 3]
 ---
 

@@ -1,9 +1,9 @@
 ---
 title: Avataaars Neutral – Avatar Style
 description: >
-  Create Avataaars Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  Avataaars face generator: eyes, eyebrows and mouth on a colored square, no
+  head or clothing. Create Avataaars Neutral avatars with the DiceBear avatar
+  API or JavaScript library.
 outline: [2, 3]
 ---
 
