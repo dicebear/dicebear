@@ -7,20 +7,11 @@ description: >
 
 # Create an avatar style with Figma
 
-Our [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787)
-is the easiest way to create an avatar style for DiceBear. The following
-tutorial requires basic knowledge about [Figma](https://www.figma.com/).
-
-::: tip Looking for something else?
-
-This guide draws a style from scratch. The plugin has two more guides:
-
-- You want to change one of our styles instead of starting empty:
-  [Edit an avatar style with Figma](/create-styles/edit-a-style/)
-- You only want avatars in your designs, no style of your own:
-  [Figma plugin](/integrations/figma/)
-
-:::
+[DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787),
+our plugin for Figma, is the easiest way to create an avatar style for DiceBear.
+This guide covers its Style tab, the [plugin overview](/integrations/figma/)
+covers the rest. The tutorial requires basic knowledge about
+[Figma](https://www.figma.com/).
 
 The screenshots below build a small style called "shape-face" out of two
 component groups, `face` and `eyes`, with a color group for each. Your style can

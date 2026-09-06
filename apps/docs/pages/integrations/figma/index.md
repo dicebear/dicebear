@@ -1,34 +1,37 @@
 ---
-title: Figma Plugin – Avatars in Your Designs
+title: DiceBear Studio – Our Plugin for Figma
 description: >
   Fill placeholders with DiceBear avatars, insert batches of new ones, and hand
   seeds, API URLs and code to developers, all inside Figma.
 ---
 
-# Figma plugin
+# DiceBear Studio for Figma
 
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787)
 puts DiceBear into Figma. It fills the avatar placeholders in your mockups with
 real avatars, inserts batches of new ones, and tells developers how to render
 the same avatar in the app.
 
-::: tip Looking for something else?
-
-This page is about avatars in your designs. The plugin has two more guides:
-
-- You want to draw your own avatar style:
-  [Create an avatar style with Figma](/create-styles/with-figma/)
-- You want to change one of our styles:
-  [Edit an avatar style with Figma](/create-styles/edit-a-style/)
-
-:::
-
 The plugin is free and works in the Figma desktop app and in the browser. Start
 it from the Actions search in the toolbar, or from **Plugins** in the context
 menu of the canvas.
 
-The plugin has three tabs in the rail on the left. Generate and Inspect are for
-designers who use avatars, Style is for creators of avatar styles.
+## The three tabs
+
+The rail on the left switches between three tabs. Two are for designers who use
+avatars, one is for people who make avatar styles.
+
+- **Generate** fills the selected layers with avatars or inserts a batch of new
+  ones, from the DiceBear collection or from a style of your own. This page
+  starts with it, in [Fill layers with avatars](#fill-layers-with-avatars).
+- **Inspect** shows what a generated avatar carries and gives developers the
+  seed, the API URL and the code to render the same avatar. See
+  [Hand avatars to developers](#hand-avatars-to-developers).
+- **Style** turns a Figma frame into an avatar style and back. Two guides cover
+  it: [Create an avatar style with Figma](/create-styles/with-figma/) draws a
+  style from your own components, and
+  [Edit an avatar style with Figma](/create-styles/edit-a-style/) imports one of
+  our styles so you can change it.
 
 ## Fill layers with avatars
 

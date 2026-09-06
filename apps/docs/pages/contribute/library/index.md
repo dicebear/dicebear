@@ -44,9 +44,9 @@ separately in [`dicebear/schema`](https://github.com/dicebear/schema).
 - [`CONTRIBUTING.md`](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md)
   in `dicebear/schema`
 
-## DiceBear Studio (Figma plugin)
+## DiceBear Studio (plugin for Figma)
 
-The Figma plugin that produces new avatar style definitions lives in
+The plugin for Figma that produces new avatar style definitions lives in
 [`dicebear/studio`](https://github.com/dicebear/studio).
 
 - [`CONTRIBUTING.md`](https://github.com/dicebear/studio/blob/main/CONTRIBUTING.md)

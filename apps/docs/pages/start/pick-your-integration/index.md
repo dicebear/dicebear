@@ -44,7 +44,7 @@ const highlights = [
   },
   {
     icon: Frame,
-    title: 'Figma plugin',
+    title: 'Plugin for Figma',
     description:
       'Fill the placeholders in your mockups with avatars, and hand seeds and URLs to developers.',
     color: '#a259ff',
@@ -56,10 +56,10 @@ const highlights = [
 # Pick your integration
 
 DiceBear runs as an API, as a library in seven languages, as a CLI, as a
-browser-based editor, and as a Figma plugin. They all produce identical avatars
-from the same seed, so this is not a decision you can get wrong, and you can
-switch later without your avatars changing. It's only a question of what fits
-your project best.
+browser-based editor, and as a plugin for Figma. They all produce identical
+avatars from the same seed, so this is not a decision you can get wrong, and you
+can switch later without your avatars changing. It's only a question of what
+fits your project best.
 
 Three questions narrow it down:
 
@@ -76,9 +76,9 @@ Pick your language below.
 single avatar, say a default profile picture for your app, the
 [Editor](https://editor.dicebear.com) is the no-code way.
 
-**Designing before you build?** The [Figma plugin](/integrations/figma/) fills
-the placeholders in your mockups and tells the developer which seed and URL
-render the same avatar in the app.
+**Designing before you build?** [DiceBear Studio](/integrations/figma/), our
+plugin for Figma, fills the placeholders in your mockups and tells the developer
+which seed and URL render the same avatar in the app.
 
 <DocsHighlights :highlights="highlights" />
 

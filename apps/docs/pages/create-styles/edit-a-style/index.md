@@ -11,23 +11,14 @@ Our
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787)
 plugin works in both directions. It turns a Figma frame into an avatar style,
 and it turns a style definition back into a Figma file. So you can open one of
-our styles in Figma, change it, and export your own version of it.
+our styles in Figma, change it, and export your own version of it. This guide
+covers that round trip, the [plugin overview](/integrations/figma/) covers the
+other tabs.
 
 You need two things: the plugin, and the
 [definition file](/create-styles/definition-schema/) of the style you want to
 change. Every style page has a Definition button above the preview. The
 screenshots below use [Critters](/styles/critters/).
-
-::: tip Looking for something else?
-
-This guide changes one of our styles. The plugin has two more guides:
-
-- You want to draw a style of your own from scratch:
-  [Create an avatar style with Figma](/create-styles/with-figma/)
-- You only want avatars in your designs, no style of your own:
-  [Figma plugin](/integrations/figma/)
-
-:::
 
 ::: warning
 
@@ -133,7 +124,7 @@ Try it with the [CLI](/integrations/cli/):
 dicebear create ./critters.json -o ./test-output --count 10
 ```
 
-[Step 8 of the Figma guide](/create-styles/with-figma/#step-8) shows how to use
-your definition with each of our libraries. To use it in Figma itself, upload it
-to the library of the plugin's Generate tab, see
+[Step 8 of Create an avatar style with Figma](/create-styles/with-figma/#step-8)
+shows how to use your definition with each of our libraries. To use it in Figma
+itself, upload it to the library of the plugin's Generate tab, see
 [Use your own styles](/integrations/figma/#use-your-own-styles).
