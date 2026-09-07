@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-rc.2] - 2026-09-07
+
 ### Removed
 
 - **CLI:** The style names are no longer commands, and `--optimize`,
@@ -652,7 +654,9 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.1...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.2...HEAD
+[11.0.0-rc.2]:
+  https://github.com/dicebear/dicebear/compare/v11.0.0-rc.1...v11.0.0-rc.2
 [11.0.0-rc.1]:
   https://github.com/dicebear/dicebear/compare/v10.7.0...v11.0.0-rc.1
 [10.7.0]: https://github.com/dicebear/dicebear/compare/v10.7.0-rc.1...v10.7.0
