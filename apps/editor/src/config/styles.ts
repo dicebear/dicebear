@@ -12,11 +12,13 @@ import bigSmileDef from '@dicebear/styles/big-smile.json';
 import botttsDef from '@dicebear/styles/bottts.json';
 import botttsNeutralDef from '@dicebear/styles/bottts-neutral.json';
 import cameoDef from '@dicebear/styles/cameo.json';
+import catsDef from '@dicebear/styles/cats.json';
 import clayDef from '@dicebear/styles/clay.json';
 import crittersDef from '@dicebear/styles/critters.json';
 import croodlesDef from '@dicebear/styles/croodles.json';
 import croodlesNeutralDef from '@dicebear/styles/croodles-neutral.json';
 import cutoutsDef from '@dicebear/styles/cutouts.json';
+import dogsDef from '@dicebear/styles/dogs.json';
 import dylanDef from '@dicebear/styles/dylan.json';
 import funEmojiDef from '@dicebear/styles/fun-emoji.json';
 import gazeDef from '@dicebear/styles/gaze.json';
@@ -61,11 +63,13 @@ const availableStyles: ConfigStyleCollection = {
   bottts: createStyle(botttsDef),
   botttsNeutral: createStyle(botttsNeutralDef),
   cameo: createStyle(cameoDef),
+  cats: createStyle(catsDef),
   clay: createStyle(clayDef),
   critters: createStyle(crittersDef),
   croodles: createStyle(croodlesDef),
   croodlesNeutral: createStyle(croodlesNeutralDef),
   cutouts: createStyle(cutoutsDef),
+  dogs: createStyle(dogsDef),
   dylan: createStyle(dylanDef),
   funEmoji: createStyle(funEmojiDef),
   gaze: createStyle(gazeDef),

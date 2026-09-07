@@ -1,0 +1,112 @@
+{
+  "presets": [
+    {
+      "id": "kittens",
+      "name": "Kittens",
+      "summary": "The small skull with the big ears, every time.",
+      "description": "One of the four head builds is a kitten: a smaller head with ears too large for it. Pinning it makes a set read as a litter rather than a shelter.",
+      "options": {
+        "headVariant": ["kitten"]
+      }
+    },
+    {
+      "id": "tabbies",
+      "name": "Tabbies",
+      "summary": "Stripes or a tabby M on every cat.",
+      "description": "The markings are ink at low opacity, so they darken whatever fur is underneath instead of needing a second color. Seven in ten cats get one; this hands the striped ones to all of them.",
+      "options": {
+        "patternProbability": 100,
+        "patternVariant": ["tabbyM", "stripes", "stripesCheeks"]
+      }
+    },
+    {
+      "id": "plain-coats",
+      "name": "Plain Coats",
+      "summary": "No markings at all.",
+      "description": "Turns the pattern off, which leaves the fur color, the head build and the face to tell two cats apart. Cleaner at the size a comment thread gives an avatar.",
+      "options": {
+        "patternProbability": 0
+      }
+    },
+    {
+      "id": "collared",
+      "name": "Collared",
+      "summary": "A collar on every cat.",
+      "description": "Fewer than half the cats wear one by default. The collar is the only saturated accent in the style, so putting it on everyone adds a spot of red, blue, green or gold to each tile.",
+      "options": {
+        "collarProbability": 100
+      }
+    },
+    {
+      "id": "indoors",
+      "name": "Indoors",
+      "summary": "Living room, bedroom or nursery behind the cat.",
+      "description": "Three of the six scenes are rooms. Keeping to those gives a set one kind of place and a narrower band of wall colors.",
+      "options": {
+        "sceneVariant": ["livingRoom", "bedroom", "nursery"]
+      }
+    },
+    {
+      "id": "outdoors",
+      "name": "Outdoors",
+      "summary": "Meadow, forest or playground behind the cat.",
+      "description": "The other half of the scenes, all under a sky. The greens and blues sit further from the fur colors than the room walls do.",
+      "options": {
+        "sceneVariant": ["meadow", "forest", "playground"]
+      }
+    },
+    {
+      "id": "studio",
+      "name": "Studio",
+      "summary": "No scene, a flat pale ground instead.",
+      "description": "The scene is what paints the tile, and without it the cat sits on nothing. A background color fills that in. Use this when the avatars have to sit on one flat color across a whole interface.",
+      "options": {
+        "sceneProbability": 0,
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Grey fur on a grey ground, scene off.",
+      "description": "The scenes carry their own colors and no option reaches them, so a monochrome set has to drop the scene first. Fur, nose, blush and collar all move to grey; the paws are white and stay.",
+      "options": {
+        "sceneProbability": 0,
+        "backgroundColor": ["f4f4f5"],
+        "furColor": ["d4d4d8", "c1c1c7", "e4e4e7", "a1a1aa"],
+        "noseColor": ["8a8a92"],
+        "blushColor": ["c8c8cd"],
+        "collarColor": ["6b6b73", "55555c"],
+        "inkColor": ["27272a"]
+      }
+    },
+    {
+      "id": "candy",
+      "name": "Candy",
+      "summary": "Pastel fur the style does not ship.",
+      "description": "The shipped furs are the colors cats come in. These are not. Pink, lavender and mint cats still read, because the ink features were drawn to hold on light fur of any hue.",
+      "options": {
+        "furColor": ["f7c6d9", "c9d9f7", "d9c9f7", "c6f0e2", "fff0b3"]
+      }
+    },
+    {
+      "id": "sleepy",
+      "name": "Sleepy",
+      "summary": "Half-closed eyes and the odd yawn.",
+      "description": "Three of the twelve eye sets and three of the seven mouths, picked for a cat that has just woken up or is about to go back to sleep.",
+      "options": {
+        "eyesVariant": ["sleepy", "relaxed", "happy"],
+        "mouthVariant": ["yawn", "smile", "cat"]
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The animation is off by default and `animation: true` switches it on, so the head tilts and the tail wags. `tiltAnimation: true` or `wagAnimation: true` plays just one of the two, and `animationSpeed` sets the pace. The motion respects prefers-reduced-motion.",
+      "options": {
+        "animation": true
+      }
+    }
+  ]
+}

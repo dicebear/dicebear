@@ -3,16 +3,19 @@ import type { DefaultTheme } from 'vitepress';
 import avatarStyles from './avatarStyles.ts';
 
 // Avatar styles to flag with a "New" badge in the sidebar: the ones a 10.x
-// minor added. The six that shipped with 10.0.0 are as old as v10 itself and
-// carry no badge. Update this set when new styles ship. The badge markup is
-// rendered via v-html (see `.vp-sidebar-badge` in theme/styles/main.scss).
+// minor or 11.0 added. The six that shipped with 10.0.0 are as old as v10
+// itself and carry no badge. Update this set when new styles ship. The badge
+// markup is rendered via v-html (see `.vp-sidebar-badge` in
+// theme/styles/main.scss).
 const NEW_STYLES = new Set<string>([
   'blobs',
   'cameo',
+  'cats',
   'clay',
   'constellation',
   'critters',
   'cutouts',
+  'dogs',
   'gaze',
   'landscape',
   'line-face',

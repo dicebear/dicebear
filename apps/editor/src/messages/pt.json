@@ -121,6 +121,12 @@
   "shouldersVariant": "Ombros",
   "headsVariant": "Cabeça",
   "topsVariant": "Topo da Cabeça",
+  "collarVariant": "Coleira",
+  "sceneVariant": "Cenário",
+  "tailVariant": "Cauda",
+  "blushColor": "Cor do Rosto Corado",
+  "collarColor": "Cor da Coleira",
+  "furColor": "Cor do Pelo",
   "styles": {
     "cameo": {
       "bodyColor": "Cor"

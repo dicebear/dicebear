@@ -1,0 +1,130 @@
+{
+  "presets": [
+    {
+      "id": "puppies",
+      "name": "Puppies",
+      "summary": "Big glossy eyes on the compact sitting build.",
+      "description": "The puppy eyes are one of eleven eye sets, and the sitting body is the smallest of the three builds. Together they make every dog look a few months old.",
+      "options": {
+        "eyesVariant": ["puppy"],
+        "bodyVariant": ["sitting"]
+      }
+    },
+    {
+      "id": "big-dogs",
+      "name": "Big Dogs",
+      "summary": "The tall build with the small head and long legs.",
+      "description": "The Great Dane build: a smaller head on a deep chest, the shoulders right under the chin. The head family still varies, so a tall poodle and a tall husky both turn up.",
+      "options": {
+        "bodyVariant": ["tall"]
+      }
+    },
+    {
+      "id": "stocky",
+      "name": "Stocky",
+      "summary": "A big head low in wide shoulders.",
+      "description": "The bulldog build, short legs set wide. Pairs well with the flat-faced heads but is not limited to them.",
+      "options": {
+        "bodyVariant": ["stocky"]
+      }
+    },
+    {
+      "id": "floppy-ears",
+      "name": "Floppy Ears",
+      "summary": "Beagle, basset and poodle heads only.",
+      "description": "Three of the nine head families let the ears hang: the labrador and beagle head, the basset and cocker head with ears down to the shoulders, and the scalloped poodle head.",
+      "options": {
+        "headVariant": ["floppy", "droopy", "fluffy"]
+      }
+    },
+    {
+      "id": "pointed-ears",
+      "name": "Pointed Ears",
+      "summary": "Shepherd, spitz and french bulldog heads only.",
+      "description": "The three families whose ears stand up: the shepherd and husky head, the pomeranian head with its ruff, and the wide head with the tall bat ears.",
+      "options": {
+        "headVariant": ["pointed", "spitz", "bat"]
+      }
+    },
+    {
+      "id": "flat-faces",
+      "name": "Flat Faces",
+      "summary": "Pug, bulldog and french bulldog heads only.",
+      "description": "The short-muzzled families. The pug carries a dark muzzle instead of markings, and the bulldog has jowls that hang past the mouth.",
+      "options": {
+        "headVariant": ["pug", "blocky", "bat"]
+      }
+    },
+    {
+      "id": "bandanas",
+      "name": "Bandanas",
+      "summary": "A bandana around every neck.",
+      "description": "One of the four collar variants, on every dog instead of a share of them. The bandana takes the collar color, so the shipped red, blue, green and gold still spread across a set.",
+      "options": {
+        "collarProbability": 100,
+        "collarVariant": ["bandana"]
+      }
+    },
+    {
+      "id": "bare-neck",
+      "name": "Bare Neck",
+      "summary": "No collar on anyone.",
+      "description": "Six in ten dogs wear a collar by default. Turning it off leaves the chest patch as the only thing between the head and the paws.",
+      "options": {
+        "collarProbability": 0
+      }
+    },
+    {
+      "id": "indoors",
+      "name": "Indoors",
+      "summary": "Living room, bedroom or nursery behind the dog.",
+      "description": "Three of the six scenes are rooms. Keeping to those gives a set one kind of place and a narrower band of wall colors.",
+      "options": {
+        "sceneVariant": ["livingRoom", "bedroom", "nursery"]
+      }
+    },
+    {
+      "id": "outdoors",
+      "name": "Outdoors",
+      "summary": "Meadow, forest or playground behind the dog.",
+      "description": "The other half of the scenes, all under a sky. The greens and blues sit further from the fur colors than the room walls do.",
+      "options": {
+        "sceneVariant": ["meadow", "forest", "playground"]
+      }
+    },
+    {
+      "id": "studio",
+      "name": "Studio",
+      "summary": "No scene, a flat pale ground instead.",
+      "description": "The scene is what paints the tile, and without it the dog sits on nothing. A background color fills that in. Use this when the avatars have to sit on one flat color across a whole interface.",
+      "options": {
+        "sceneProbability": 0,
+        "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
+      }
+    },
+    {
+      "id": "greyscale",
+      "name": "Greyscale",
+      "summary": "Grey fur on a grey ground, scene off.",
+      "description": "The scenes carry their own colors and no option reaches them, so a monochrome set has to drop the scene first. Fur, tongue, blush and collar all move to grey.",
+      "options": {
+        "sceneProbability": 0,
+        "backgroundColor": ["f4f4f5"],
+        "furColor": ["d4d4d8", "c1c1c7", "e4e4e7", "a1a1aa"],
+        "tongueColor": ["8a8a92"],
+        "blushColor": ["c8c8cd"],
+        "collarColor": ["6b6b73", "55555c"],
+        "inkColor": ["27272a"]
+      }
+    },
+    {
+      "id": "animated",
+      "name": "Animated",
+      "summary": "Turns the style's built-in animation on.",
+      "description": "The animation is off by default and `animation: true` switches it on, so the head tilts and the tail wags. `tiltAnimation: true` or `wagAnimation: true` plays just one of the two, and `animationSpeed` sets the pace. The motion respects prefers-reduced-motion.",
+      "options": {
+        "animation": true
+      }
+    }
+  ]
+}

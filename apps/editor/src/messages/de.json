@@ -121,6 +121,12 @@
   "shouldersVariant": "Schultern",
   "headsVariant": "Kopf",
   "topsVariant": "Oberkopf",
+  "collarVariant": "Halsband",
+  "sceneVariant": "Szene",
+  "tailVariant": "Schwanz",
+  "blushColor": "Rougefarbe",
+  "collarColor": "Halsbandfarbe",
+  "furColor": "Fellfarbe",
   "styles": {
     "bottts": {
       "topVariant": "Kopfaufsatz"

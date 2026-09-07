@@ -121,6 +121,12 @@
   "shouldersVariant": "Shoulders",
   "headsVariant": "Head",
   "topsVariant": "Top",
+  "collarVariant": "Collar",
+  "sceneVariant": "Scene",
+  "tailVariant": "Tail",
+  "blushColor": "Blush Color",
+  "collarColor": "Collar Color",
+  "furColor": "Fur Color",
   "styles": {
     "cameo": {
       "bodyColor": "Color"

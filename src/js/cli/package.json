@@ -29,7 +29,7 @@
   "dependencies": {
     "@dicebear/converter": "11.0.0-rc.2",
     "@dicebear/core": "11.0.0-rc.2",
-    "@dicebear/styles": "^11.0.0-rc.2",
+    "@dicebear/styles": "^11.0.0-rc.3",
     "chalk": "^6.0.0",
     "chalk-template": "^1.1.2",
     "cli-progress": "^3.12.0",

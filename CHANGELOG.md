@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Styles:** Bumped `@dicebear/styles` to `11.0.0-rc.3` for the CLI, the docs,
+  and the editor. The release adds `cats` and `dogs`, which take the collection
+  from 61 to 63 styles. Both are animated, which takes that count from 19 to 21.
+  Each has a style page with its own preview row and a preset gallery, and both
+  are in the editor. The sidebar icons in the docs now come from the 11.x API,
+  which is the first one that serves the two.
+
 ## [11.0.0-rc.2] - 2026-09-07
 
 ### Removed
