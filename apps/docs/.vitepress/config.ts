@@ -384,10 +384,6 @@ export default defineConfig<ThemeOptions>({
           'theme/components/playground',
         ),
         '@theme': path.resolve(import.meta.dirname, 'theme'),
-        './components/VPLocalNav.vue': path.resolve(
-          import.meta.dirname,
-          'theme/components/layout/LayoutVPLocalNav.vue',
-        ),
       },
     },
   },
@@ -443,7 +439,6 @@ export default defineConfig<ThemeOptions>({
       },
     ],
     outline: [2, 2],
-    socialLinks: [],
     editLink: {
       pattern:
         'https://github.com/dicebear/dicebear/edit/11.x/apps/docs/pages/:path',

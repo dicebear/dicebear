@@ -5,7 +5,6 @@ import { inBrowser } from 'vitepress';
 // VitePress announces new markdown content. Not part of the public API,
 // hence the deep import; the bundle shares one module instance with the
 // theme, so the registry is the same one the outline listens on.
-// @ts-expect-error -- the deep client path ships no type definitions
 import { contentUpdatedCallbacks } from 'vitepress/dist/client/app/utils.js';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
 import { isAnimationOption } from '@theme/utils/styleOptionMeta';

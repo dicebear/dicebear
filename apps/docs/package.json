@@ -34,7 +34,7 @@
     "random-int": "^3.1.0",
     "random-item": "^4.0.1",
     "simple-icons": "^16.29.0",
-    "vitepress": "2.0.0-alpha.19",
+    "vitepress": "2.0.0-alpha.20",
     "vue": "^3.5.42",
     "vue-chartjs": "^5.3.4"
   },

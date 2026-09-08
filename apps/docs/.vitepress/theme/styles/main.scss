@@ -253,10 +253,13 @@ h6,
   text-wrap: pretty;
 }
 
-/* Hide default VitePress navbar extras (replaced by LayoutNavActions) */
+/* LayoutNavActions carries its own search and theme buttons, so the stock
+ * ones stay hidden. The "..." flyout stays visible: when the bar runs out
+ * of room, VitePress moves menu items into it, and the appearance row it
+ * adds alongside them is the one we hide here. */
 .VPNavBarAppearance,
 .VPNavBarSearch,
-.VPNavBarExtra {
+.VPNavBarExtra .group:has(> .VPNavAppearance) {
   display: none !important;
 }
 
