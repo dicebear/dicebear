@@ -17,11 +17,11 @@ import path from 'node:path';
 // Keep in sync with the tiles in theme/components/app/AppHeroSwarm.vue.
 const tiles = [
   { styleName: 'lorelei', seed: 'Felix', background: 'ffe4e6', size: 256 },
-  { styleName: 'clay', seed: 'Aneka', background: 'fef3c7', size: 160 },
-  { styleName: 'bottts', seed: 'Pixel', background: 'cffafe', size: 128 },
-  { styleName: 'notionists', seed: 'Rowan', background: 'dcfce7', size: 128 },
-  { styleName: 'adventurer', seed: 'Juno', background: 'dbeafe', size: 160 },
-  { styleName: 'sprouts', seed: 'Sage', background: 'ecfccb', size: 128 },
+  { styleName: 'stack', seed: 'Aneka', background: 'fef3c7', size: 160 },
+  { styleName: 'slice', seed: 'Nova', background: 'cffafe', size: 128 },
+  { styleName: 'open-peeps', seed: 'Aneka', background: 'dcfce7', size: 128 },
+  { styleName: 'pixel-art', seed: 'Juno', background: 'dbeafe', size: 160 },
+  { styleName: 'waves', seed: 'Mika', background: 'c2410c', size: 128 },
 ];
 
 const outDir = fileURLToPath(

@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress';
-import { PALETTE, type Pastel } from '@theme/utils/palette';
+import { PALETTE } from '@theme/utils/palette';
 
 interface Tile {
   styleName: string;
   seed: string;
-  background: Pastel;
+  /** Hex without `#`, usually a PALETTE pastel. The waves tile is the exception. */
+  background: string;
   size: number;
   delay: number;
 }
 
+// Only CC0 styles go in here. The hero has no room for the credit line that
+// CC BY styles ask for.
 const tiles: Tile[] = [
   {
     styleName: 'lorelei',
@@ -19,37 +22,41 @@ const tiles: Tile[] = [
     delay: 0,
   },
   {
-    styleName: 'clay',
+    styleName: 'stack',
     seed: 'Aneka',
     background: PALETTE.amber,
     size: 160,
     delay: -1.2,
   },
   {
-    styleName: 'bottts',
-    seed: 'Pixel',
+    styleName: 'slice',
+    seed: 'Nova',
     background: PALETTE.cyan,
     size: 128,
     delay: -2.1,
   },
   {
-    styleName: 'notionists',
-    seed: 'Rowan',
+    styleName: 'open-peeps',
+    seed: 'Aneka',
     background: PALETTE.green,
     size: 128,
     delay: -3.0,
   },
   {
-    styleName: 'adventurer',
+    styleName: 'pixel-art',
     seed: 'Juno',
     background: PALETTE.blue,
     size: 160,
     delay: -0.6,
   },
   {
-    styleName: 'sprouts',
-    seed: 'Sage',
-    background: PALETTE.lime,
+    // waves fills the whole tile and picks its wave color by contrast, so a
+    // pastel would turn the waves black. A deep tone from the style's own
+    // background palette keeps them white. It is the one saturated tile in
+    // the swarm.
+    styleName: 'waves',
+    seed: 'Mika',
+    background: 'c2410c',
     size: 128,
     delay: -1.6,
   },
