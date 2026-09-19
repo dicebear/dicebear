@@ -81,13 +81,13 @@ const styleLink = computed(() => `/styles/${kebabCase(props.styleName)}/`);
 
   a {
     font-weight: 500;
-    color: var(--vp-c-brand-1);
+    color: var(--db-brand-text);
     text-decoration-style: dotted;
     transition: color var(--duration-fast);
     cursor: pointer;
 
     &:hover {
-      color: var(--vp-c-brand-2);
+      color: var(--db-brand);
     }
   }
 }

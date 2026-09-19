@@ -10,57 +10,66 @@ const count = useCombinationCount();
       <span class="pg-combo-value">{{ count.display }}</span>
       <span class="pg-combo-label">distinct avatars</span>
     </p>
-    <p class="pg-combo-hint">
-      Changes as you restrict variants, tags, colors, or probabilities.
-      <a href="/understand/how-many-unique-avatars/">Learn more →</a>
-    </p>
+    <a href="/understand/how-many-unique-avatars/" class="pg-combo-link hv-link"
+      >Learn more</a
+    >
   </div>
 </template>
 
 <style scoped lang="scss">
 .pg-combo {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
 }
 
 .pg-combo-main {
-  margin: 0;
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px;
-  font-size: 12px;
-  line-height: 1.4;
-  color: var(--ui-c-text-muted);
-  white-space: nowrap;
+  gap: 0 10px;
+  margin: 0;
 }
 
 .pg-combo-value {
-  font-weight: 600;
+  font-size: 32px;
+  line-height: 38px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-  color: var(--vp-c-text-1);
+  color: var(--db-ink);
 }
 
-.pg-combo-hint {
-  margin: 0;
-  font-size: 11px;
-  line-height: 1.4;
-  color: var(--ui-c-text-subtle);
+.pg-combo-label {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--db-ink-2);
+}
 
-  a {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-color: var(--pg-border);
-    text-underline-offset: 2px;
-    white-space: nowrap;
-    transition:
-      color var(--duration-fast),
-      text-decoration-color var(--duration-fast);
+.pg-combo-link {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--db-brand-text);
+  text-decoration: none;
+}
 
-    &:hover {
-      color: var(--vp-c-brand-1);
-      text-decoration-color: var(--vp-c-brand-1);
-    }
+@media (max-width: 767px) {
+  .pg-combo-main {
+    gap: 0 8px;
+  }
+
+  .pg-combo-value {
+    font-size: 20px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+  }
+
+  .pg-combo-label {
+    font-size: 14px;
+    line-height: 20px;
   }
 }
 </style>

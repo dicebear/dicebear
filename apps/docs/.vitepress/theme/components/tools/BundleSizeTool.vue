@@ -1,52 +1,80 @@
 <script setup lang="ts">
+/**
+ * The bundle size estimator: a list of all styles to tick on the left, the
+ * total with its parts on the right. All sizes are measured at build time.
+ */
 import { computed, ref } from 'vue';
 import { useData } from 'vitepress';
-import { capitalCase } from 'change-case';
-import Checkbox from 'primevue/checkbox';
-import IconField from 'primevue/iconfield';
-import InputIcon from 'primevue/inputicon';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import { Search, X } from '@lucide/vue';
-import {
-  UiAvatar,
-  UiCard,
-  UiContainer,
-  UiHeadline,
-  UiDescription,
-} from '@theme/components/ui';
-import { useVisibility } from '@theme/composables/useVisibility';
-import type { ThemeOptions } from '@theme/types';
+import SiteAvatar from '@theme/components/site/SiteAvatar.vue';
+import SiteCheckbox from '@theme/components/site/SiteCheckbox.vue';
+import SiteSearch from '@theme/components/site/SiteSearch.vue';
+import SiteSwitch from '@theme/components/site/SiteSwitch.vue';
+import { styleDisplayName, styleSeed } from '@theme/utils/styleMeta';
+import type { AvatarStyleSize, ThemeOptions } from '@theme/types';
 
 const { theme } = useData<ThemeOptions>();
 
-const sizes = theme.value.avatarStyleSizes;
+// `coreLite` is optional: the choice between the two cores only shows when
+// the build measured the lite entry point too.
+const sizes: ThemeOptions['avatarStyleSizes'] & { coreLite?: AvatarStyleSize } =
+  theme.value.avatarStyleSizes;
 const styleNames = Object.keys(theme.value.avatarStyles).sort();
+const maxGzip = Math.max(
+  1,
+  ...styleNames.map((name) => sizes.styles[name]?.gzip ?? 0),
+);
 
 const selected = ref<Set<string>>(new Set());
 const includeConverter = ref(false);
+const useLite = ref(false);
 const filter = ref('');
-const summarySentinel = ref<HTMLElement | null>(null);
 
-// Sentinel sits at the summary's natural position; when it scrolls past the
-// sticky top edge the summary is "stuck" and we show its drop shadow.
-const sentinelVisible = useVisibility(summarySentinel, {
-  threshold: 0,
-  rootMargin: '-80px 0px 0px 0px',
-  once: false,
+const styles = styleNames.map((name) => {
+  const gzip = sizes.styles[name]?.gzip ?? 0;
+
+  return {
+    name,
+    title: styleDisplayName(name),
+    seed: styleSeed(name),
+    size: formatSize(gzip),
+    width: `${Math.max(2, (gzip / maxGzip) * 100).toFixed(1)}%`,
+  };
 });
-const isSummaryStuck = computed(() => !sentinelVisible.value);
 
 const visibleStyles = computed(() => {
   const q = filter.value.toLowerCase().trim();
-  if (!q) return styleNames;
-  return styleNames.filter((name) => {
-    return (
-      name.toLowerCase().includes(q) ||
-      styleTitle(name).toLowerCase().includes(q)
-    );
-  });
+  if (!q) return styles;
+  return styles.filter(
+    (style) =>
+      style.name.toLowerCase().includes(q) ||
+      style.title.toLowerCase().includes(q),
+  );
 });
+
+const shownLabel = computed(() =>
+  visibleStyles.value.length === styles.length
+    ? `${styles.length} styles`
+    : `${visibleStyles.value.length} of ${styles.length} styles`,
+);
+
+const cores = [
+  {
+    lite: false,
+    pkg: '@dicebear/core',
+    hint: 'Checks definitions and options against the schema.',
+    gzip: sizes.core.gzip,
+  },
+  ...(sizes.coreLite
+    ? [
+        {
+          lite: true,
+          pkg: '@dicebear/core/lite',
+          hint: 'Skips the schema check. Use it only for definitions and options from your own code.',
+          gzip: sizes.coreLite.gzip,
+        },
+      ]
+    : []),
+];
 
 const selectedGzip = computed(() => {
   let total = 0;
@@ -57,7 +85,9 @@ const selectedGzip = computed(() => {
 });
 
 const libraryGzip = computed(
-  () => sizes.core.gzip + (includeConverter.value ? sizes.converter.gzip : 0),
+  () =>
+    (useLite.value && sizes.coreLite ? sizes.coreLite.gzip : sizes.core.gzip) +
+    (includeConverter.value ? sizes.converter.gzip : 0),
 );
 
 const grandTotalGzip = computed(() => libraryGzip.value + selectedGzip.value);
@@ -82,597 +112,427 @@ function formatSize(bytes: number): string {
   if (bytes >= 1e3) return `${(bytes / 1e3).toFixed(1)} kB`;
   return `${bytes} B`;
 }
-
-function styleTitle(name: string): string {
-  return capitalCase(name);
-}
 </script>
 
 <template>
-  <UiContainer class="bundle-size-tool">
-    <header class="bundle-size-tool-hero">
-      <UiHeadline tag="h1"> <strong>Bundle Size</strong> Estimator </UiHeadline>
-      <UiDescription>
-        Pick the styles you plan to use and see how many minified, gzipped
-        kilobytes they'll add to your JavaScript bundle.
-      </UiDescription>
-    </header>
+  <section class="site-container bundle-size">
+    <!-- The total stays first in the DOM, so the stacked layout on narrow
+         viewports shows the result above the list. The grid moves it into
+         the right column. -->
+    <aside class="bundle-size-aside">
+      <div class="bundle-size-summary">
+        <span class="site-label">Total, minified and gzipped</span>
+        <output class="site-display bundle-size-total" aria-live="polite">{{
+          formatSize(grandTotalGzip)
+        }}</output>
 
-    <div class="bundle-size-columns">
-      <!-- The calculation stays first in the DOM, so the stacked layout on
-           narrow viewports shows the result above the pickers; the grid
-           moves it into the right column. -->
-      <aside class="bundle-size-aside">
-        <div
-          ref="summarySentinel"
-          class="bundle-size-summary-sentinel"
-          aria-hidden="true"
-        />
-        <UiCard
-          padding="lg"
-          class="bundle-size-summary"
-          :class="{ 'is-stuck': isSummaryStuck }"
-        >
-          <div class="bundle-size-summary-row">
-            <div class="bundle-size-summary-row-label">
-              <span class="bundle-size-summary-label">Library</span>
-              <span class="bundle-size-summary-values">
-                <span class="bundle-size-summary-raw">{{
-                  formatSize(libraryGzip)
-                }}</span>
-                <span class="bundle-size-summary-gzip">gzip</span>
-              </span>
-            </div>
-          </div>
-          <div class="bundle-size-summary-row">
-            <div class="bundle-size-summary-row-label">
-              <span class="bundle-size-summary-label">
-                {{ selected.size }} style{{ selected.size === 1 ? '' : 's' }}
-                selected
-              </span>
-              <span class="bundle-size-summary-values">
-                <span class="bundle-size-summary-raw">{{
-                  formatSize(selectedGzip)
-                }}</span>
-                <span class="bundle-size-summary-gzip">gzip</span>
-              </span>
-            </div>
-          </div>
-          <div class="bundle-size-summary-row bundle-size-summary-row-total">
-            <div class="bundle-size-summary-row-label">
-              <span class="bundle-size-summary-label">Total</span>
-              <span class="bundle-size-summary-values">
-                <span class="bundle-size-summary-raw">{{
-                  formatSize(grandTotalGzip)
-                }}</span>
-                <span class="bundle-size-summary-gzip">gzip</span>
-              </span>
-            </div>
-          </div>
-        </UiCard>
-      </aside>
-
-      <div class="bundle-size-main">
-        <UiCard padding="lg" class="bundle-size-packages">
+        <div class="bundle-size-parts">
           <div
-            class="bundle-size-summary-row bundle-size-summary-row-toggle is-disabled"
+            :role="cores.length > 1 ? 'radiogroup' : undefined"
+            :aria-label="cores.length > 1 ? 'Core' : undefined"
           >
-            <label class="bundle-size-summary-row-label">
-              <Checkbox :model-value="true" :binary="true" :disabled="true" />
-              <span class="bundle-size-summary-label">
-                <code>@dicebear/core</code>
-                <span class="bundle-size-summary-hint">always required</span>
-              </span>
-              <span class="bundle-size-summary-values">
-                <span class="bundle-size-summary-raw">{{
-                  formatSize(sizes.core.gzip)
-                }}</span>
-                <span class="bundle-size-summary-gzip">gzip</span>
-              </span>
-            </label>
-          </div>
-          <div class="bundle-size-summary-row bundle-size-summary-row-toggle">
-            <label class="bundle-size-summary-row-label">
-              <Checkbox v-model="includeConverter" :binary="true" />
-              <span class="bundle-size-summary-label">
-                <code>@dicebear/converter</code>
-                <span class="bundle-size-summary-hint"
-                  >PNG, JPEG, WebP & AVIF output</span
-                >
-              </span>
-              <span class="bundle-size-summary-values">
-                <span class="bundle-size-summary-raw">{{
-                  formatSize(sizes.converter.gzip)
-                }}</span>
-                <span class="bundle-size-summary-gzip">gzip</span>
-              </span>
-            </label>
-          </div>
-        </UiCard>
-
-        <UiCard padding="lg" class="bundle-size-picker">
-          <div class="bundle-size-picker-toolbar">
-            <IconField class="bundle-size-picker-search">
-              <InputIcon>
-                <Search :size="16" />
-              </InputIcon>
-              <InputText
-                v-model="filter"
-                placeholder="Filter styles…"
-                spellcheck="false"
-                fluid
-              />
-            </IconField>
-            <div class="bundle-size-picker-actions">
-              <Button
-                label="Select all"
-                severity="secondary"
-                variant="outlined"
-                @click="selectAll"
-              />
-              <Button
-                label="Clear"
-                severity="secondary"
-                variant="outlined"
-                @click="clear"
-              >
-                <template #icon><X :size="14" /></template>
-              </Button>
-            </div>
-          </div>
-
-          <ul class="bundle-size-list">
-            <li
-              v-for="name in visibleStyles"
-              :key="name"
-              class="bundle-size-row"
-              :class="{ 'bundle-size-row-selected': selected.has(name) }"
+            <component
+              :is="cores.length > 1 ? 'label' : 'div'"
+              v-for="core in cores"
+              :key="core.pkg"
+              class="bundle-size-part"
+              :class="{ 'is-control': cores.length > 1 }"
             >
-              <label class="bundle-size-row-label">
-                <Checkbox
-                  :model-value="selected.has(name)"
-                  :binary="true"
-                  @update:model-value="toggle(name)"
-                />
-                <UiAvatar
-                  :style-name="name"
-                  :style-options="{ seed: name, size: 28 }"
-                  :size="28"
-                  alt=""
-                  mode="library"
-                  class="bundle-size-row-avatar"
-                />
-                <span class="bundle-size-row-title">{{
-                  styleTitle(name)
-                }}</span>
-                <code class="bundle-size-row-slug">{{ name }}</code>
-                <span class="bundle-size-row-values">
-                  <span class="bundle-size-row-raw">{{
-                    formatSize(sizes.styles[name]?.gzip ?? 0)
-                  }}</span>
-                  <span class="bundle-size-row-gzip">gzip</span>
-                </span>
-              </label>
-            </li>
-            <li v-if="visibleStyles.length === 0" class="bundle-size-empty">
-              No styles match "{{ filter }}".
-            </li>
-          </ul>
-        </UiCard>
+              <input
+                v-if="cores.length > 1"
+                v-model="useLite"
+                type="radio"
+                name="bundle-size-core"
+                class="bundle-size-radio"
+                :value="core.lite"
+              />
+              <span class="bundle-size-part-copy">
+                <code class="bundle-size-part-name">{{ core.pkg }}</code>
+                <span class="bundle-size-part-hint">{{ core.hint }}</span>
+              </span>
+              <span class="bundle-size-part-size">{{
+                formatSize(core.gzip)
+              }}</span>
+            </component>
+          </div>
+
+          <label class="bundle-size-part is-control hv-switch">
+            <SiteSwitch v-model="includeConverter" class="hv-track" />
+            <span class="bundle-size-part-copy">
+              <code class="bundle-size-part-name">@dicebear/converter</code>
+              <span class="bundle-size-part-hint"
+                >PNG, JPEG, WebP and AVIF output</span
+              >
+            </span>
+            <span class="bundle-size-part-size">{{
+              formatSize(sizes.converter.gzip)
+            }}</span>
+          </label>
+
+          <div class="bundle-size-part">
+            <span class="bundle-size-part-copy">
+              <span class="bundle-size-part-name"
+                >{{ selected.size }}
+                {{ selected.size === 1 ? 'style' : 'styles' }} selected</span
+              >
+            </span>
+            <span class="bundle-size-part-size">{{
+              formatSize(selectedGzip)
+            }}</span>
+          </div>
+        </div>
+
+        <p class="bundle-size-note">
+          Styles are measured as their minified JSON files, the packages as one
+          minified bundle each, all gzipped.
+        </p>
       </div>
+    </aside>
+
+    <div class="bundle-size-main">
+      <div class="bundle-size-toolbar">
+        <SiteSearch
+          v-model="filter"
+          :placeholder="`Filter ${styles.length} styles`"
+          label="Filter styles"
+          class="bundle-size-search"
+        />
+        <button
+          type="button"
+          class="site-btn site-btn-sm site-btn-secondary"
+          @click="selectAll"
+        >
+          Select all
+        </button>
+        <button
+          type="button"
+          class="site-btn site-btn-sm site-btn-secondary"
+          @click="clear"
+        >
+          Clear
+        </button>
+        <span class="bundle-size-shown" aria-live="polite">{{
+          shownLabel
+        }}</span>
+      </div>
+
+      <ul class="bundle-size-list">
+        <li v-for="style in visibleStyles" :key="style.name">
+          <label
+            class="bundle-size-row"
+            :class="{ 'is-selected': selected.has(style.name) }"
+          >
+            <SiteCheckbox
+              :model-value="selected.has(style.name)"
+              @update:model-value="toggle(style.name)"
+            />
+            <SiteAvatar
+              :style-name="style.name"
+              :options="{ seed: style.seed }"
+              :size="40"
+              :radius="10"
+            />
+            <span class="bundle-size-row-name">
+              <span class="bundle-size-row-title">{{ style.title }}</span>
+              <code class="bundle-size-row-slug">{{ style.name }}</code>
+            </span>
+            <span class="bundle-size-row-bar" aria-hidden="true">
+              <span :style="{ width: style.width }" />
+            </span>
+            <span class="bundle-size-row-size">{{ style.size }}</span>
+          </label>
+        </li>
+        <li v-if="visibleStyles.length === 0" class="bundle-size-empty">
+          No styles match "{{ filter }}".
+        </li>
+      </ul>
     </div>
-  </UiContainer>
+  </section>
 </template>
 
-<style lang="scss">
-html.dark {
-  .bundle-size-summary,
-  .bundle-size-packages,
-  .bundle-size-picker {
-    background: var(--vp-c-bg-soft);
-  }
-
-  .bundle-size-row:hover,
-  .bundle-size-summary-row-toggle:not(.is-disabled):hover {
-    background: var(--vp-c-bg);
-  }
-
-  .bundle-size-row-slug,
-  .bundle-size-summary-label code {
-    background: var(--vp-c-bg);
-  }
-
-  .bundle-size-summary.is-stuck {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-  }
-}
-
-/* @dicebear/core is always required, so its checkbox is `disabled`. Restore
- * the checked brand color so it still reads as an active state instead of a
- * muted disabled control. */
-.bundle-size-summary-row-toggle.is-disabled
-  .p-checkbox-checked
-  .p-checkbox-box {
-  background: var(--p-checkbox-checked-background);
-  border-color: var(--p-checkbox-checked-border-color);
-  color: var(--p-checkbox-icon-checked-color);
-}
-</style>
-
 <style lang="scss" scoped>
-.bundle-size-tool {
-  padding-top: 80px;
-  padding-bottom: 96px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-
-  &-hero {
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto 8px;
-
-    code {
-      background: var(--vp-c-bg-soft);
-      padding: 2px 6px;
-      border-radius: var(--vp-radius-xs);
-      font-size: 0.9em;
-    }
-  }
-
-  @media (max-width: 640px) {
-    padding-top: 32px;
-  }
-}
-
-.bundle-size-columns {
+.bundle-size {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) 384px;
+  gap: 64px;
+  align-items: start;
+  padding-top: 64px;
+  padding-bottom: 168px;
 
-  @media (max-width: 959px) {
-    grid-template-columns: minmax(0, 1fr);
+  // Explicit placement flips the visual order: the total is first in the DOM
+  // and in the stacked layout, but sits in the right column on wide screens.
+  // The aside stretches to the row height, which gives the sticky block room.
+  &-main {
+    grid-row: 1;
+    grid-column: 1;
+    min-width: 0;
   }
-}
 
-// Explicit placement flips the visual order: the summary is first in the DOM
-// (and in the stacked layout), but sits in the right column on wide screens.
-// The aside stretches to the row height, which gives the sticky card room.
-.bundle-size-main {
-  grid-row: 1;
-  grid-column: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-
-  @media (max-width: 959px) {
-    grid-row: auto;
-    grid-column: auto;
+  &-aside {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: stretch;
+    min-width: 0;
   }
-}
 
-.bundle-size-aside {
-  grid-row: 1;
-  grid-column: 2;
-  min-width: 0;
-  // The compact summary styles key on this column's width, so the narrow
-  // desktop column and small viewports get the same treatment.
-  container-type: inline-size;
-
-  @media (max-width: 959px) {
-    grid-row: auto;
-    grid-column: auto;
-  }
-}
-
-.bundle-size-summary-sentinel {
-  height: 1px;
-  margin-bottom: -1px;
-}
-
-.bundle-size-summary {
-  position: sticky;
-  top: calc(var(--vp-nav-height, 64px) + 16px);
-  z-index: 10;
-  box-shadow: none;
-  transition: box-shadow var(--duration-fast) var(--ease-smooth);
-
-  :deep(.ui-card-body) {
+  &-summary {
+    position: sticky;
+    top: calc(var(--db-header-h) + 32px);
     display: flex;
     flex-direction: column;
-    gap: 4px;
   }
 
-  &.is-stuck {
-    box-shadow: var(--vp-shadow-2);
+  &-total {
+    display: block;
+    margin-top: 12px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
 
-  // Row container mirrors `.bundle-size-row` from the picker below.
-  &-row {
-    border-radius: var(--vp-radius-xs);
-    transition: background-color var(--duration-fast) var(--ease-smooth);
-
-    &-toggle:not(.is-disabled):hover {
-      background: var(--vp-c-bg-soft);
-    }
-
-    &-total {
-      margin-top: 8px;
-      padding-top: 12px;
-      border-top: 1px solid var(--vp-c-divider);
-      border-radius: 0;
-    }
+  &-parts {
+    margin-top: 32px;
+    border-bottom: 1px solid var(--db-line);
   }
 
-  // Inner label mirrors `.bundle-size-row-label` from the picker.
-  &-row-label {
+  &-part {
     display: flex;
     align-items: center;
     gap: 12px;
-    width: 100%;
-    padding: 10px 12px;
-    min-width: 0;
-  }
+    padding: 16px 0;
+    border-top: 1px solid var(--db-line);
 
-  &-row-toggle &-row-label {
-    cursor: pointer;
-  }
+    &.is-control {
+      cursor: pointer;
+    }
 
-  &-row-toggle.is-disabled &-row-label {
-    cursor: not-allowed;
-  }
+    &-copy {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
 
-  &-label {
-    font-size: 13px;
-    color: var(--ui-c-text-muted);
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    flex: 1;
-    min-width: 0;
+    &-name {
+      font-size: 15px;
+      line-height: 24px;
+      font-weight: 600;
+      color: var(--db-ink);
+      overflow-wrap: anywhere;
+    }
 
     code {
-      font-family: var(--vp-font-family-mono);
+      font-size: 0.9em;
+    }
+
+    &-hint {
       font-size: 13px;
-      color: var(--vp-c-text-1);
-      background: var(--vp-c-bg-soft);
-      padding: 2px 6px;
-      border-radius: var(--vp-radius-xs);
+      line-height: 18px;
+      color: var(--db-muted);
+    }
+
+    &-size {
+      flex-shrink: 0;
+      font-family: var(--db-font-mono);
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--db-ink);
+      font-variant-numeric: tabular-nums;
     }
   }
 
-  &-hint {
-    font-size: 12px;
-    color: var(--ui-c-text-subtle);
-  }
-
-  &-row-total &-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--vp-c-text-1);
-  }
-
-  &-values {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    font-variant-numeric: tabular-nums;
+  &-radio {
     flex-shrink: 0;
-    margin-left: auto;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    box-sizing: border-box;
+    border: 1.5px solid var(--db-btn-border);
+    border-radius: 50%;
+    background: var(--db-paper);
+    cursor: pointer;
+    appearance: none;
+    transition: border-color var(--duration-fast);
+
+    &:hover {
+      border-color: var(--db-hover-border);
+    }
+
+    &:checked {
+      border: 6px solid var(--db-brand);
+    }
+
+    &:focus-visible {
+      outline-offset: 2px;
+    }
   }
 
-  &-raw {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--vp-c-text-1);
-  }
-
-  &-row-total &-raw {
-    font-size: 22px;
-  }
-
-  &-gzip {
-    font-size: 12px;
-    color: var(--ui-c-text-subtle);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-}
-
-// The package toggles reuse the summary row primitives, so the card only
-// needs the same stacked body.
-.bundle-size-packages {
-  :deep(.ui-card-body) {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-}
-
-.bundle-size-picker {
-  :deep(.ui-card-body) {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  &-note {
+    margin: 20px 0 0;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--db-muted);
   }
 
   &-toolbar {
     display: flex;
     align-items: center;
-    gap: 16px;
     flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 20px;
   }
 
-  &-search {
-    flex: 1;
-    min-width: 200px;
+  // Doubled selector, so the width wins over the field's own.
+  & &-search {
+    width: 320px;
   }
 
-  &-actions {
-    display: flex;
-    gap: 8px;
-  }
-}
-
-.bundle-size-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.bundle-size-row {
-  border-radius: var(--vp-radius-xs);
-  transition: background-color var(--duration-fast) var(--ease-smooth);
-
-  &:hover {
-    background: var(--vp-c-bg-soft);
+  &-shown {
+    margin-left: auto;
+    font-size: 16px;
+    line-height: 26px;
+    color: var(--db-muted);
+    font-variant-numeric: tabular-nums;
   }
 
-  &-selected {
-    background: var(--vp-c-brand-soft);
+  &-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--db-line);
+  }
 
-    &:hover {
-      background: var(--vp-c-brand-soft);
+  &-row {
+    display: grid;
+    grid-template-columns: 18px 40px minmax(0, 1fr) 240px 72px;
+    gap: 16px;
+    align-items: center;
+    min-height: 56px;
+    border-top: 1px solid var(--db-line);
+    color: var(--db-ink);
+    cursor: pointer;
+
+    &-name {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    &-title {
+      font-size: 16px;
+      line-height: 26px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    &-slug {
+      overflow: hidden;
+      font-size: 13px;
+      line-height: 18px;
+      color: var(--db-muted);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &-bar {
+      display: block;
+      height: 8px;
+      overflow: hidden;
+      border-radius: 4px;
+      background: var(--db-line);
+
+      span {
+        display: block;
+        height: 100%;
+        border-radius: 4px;
+        background: var(--db-btn-border);
+        transition: background-color var(--duration-fast);
+      }
+    }
+
+    &-size {
+      font-family: var(--db-font-mono);
+      font-size: 14px;
+      line-height: 20px;
+      text-align: right;
+      color: var(--db-ink-2);
+      font-variant-numeric: tabular-nums;
+    }
+
+    &.is-selected &-bar span {
+      background: var(--db-brand);
+    }
+
+    &.is-selected &-size {
+      color: var(--db-ink);
     }
   }
 
-  &-label {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    width: 100%;
-    padding: 10px 12px;
-    min-width: 0;
+  &-empty {
+    padding: 24px 0;
+    border-top: 1px solid var(--db-line);
+    font-size: 16px;
+    line-height: 26px;
+    color: var(--db-muted);
   }
 
-  &-avatar {
-    flex-shrink: 0;
+  @media (max-width: 1279px) {
+    gap: 48px;
+
+    &-row {
+      grid-template-columns: 18px 40px minmax(0, 1fr) 160px 72px;
+    }
   }
 
-  &-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--vp-c-text-1);
+  @media (max-width: 959px) {
+    grid-template-columns: minmax(0, 1fr);
+
+    &-main,
+    &-aside {
+      grid-row: auto;
+      grid-column: auto;
+    }
+
+    // Stacked, the block would cover most of the viewport, so it scrolls
+    // away with the rest of the page.
+    &-summary {
+      position: static;
+    }
   }
 
-  &-slug {
-    font-family: var(--vp-font-family-mono);
-    font-size: 12px;
-    color: var(--ui-c-text-subtle);
-    background: var(--vp-c-bg-soft);
-    padding: 2px 6px;
-    border-radius: var(--vp-radius-xs);
+  @media (max-width: 767px) {
+    padding-top: 48px;
+    padding-bottom: 96px;
+
+    & &-search {
+      width: 100%;
+    }
+
+    &-row {
+      grid-template-columns: 18px 40px minmax(0, 1fr) 72px;
+      gap: 12px;
+
+      &-bar {
+        display: none;
+      }
+
+      &-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 
-  &-values {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    font-variant-numeric: tabular-nums;
-    flex-shrink: 0;
-    margin-left: auto;
-  }
+  @media (max-width: 640px) {
+    &-row-slug {
+      display: none;
+    }
 
-  &-raw {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--vp-c-text-1);
-  }
-
-  &-gzip {
-    font-size: 11px;
-    color: var(--ui-c-text-subtle);
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-  }
-}
-
-.bundle-size-empty {
-  text-align: center;
-  padding: 24px;
-  color: var(--ui-c-text-subtle);
-  font-size: 13px;
-}
-
-@media (max-width: 640px) {
-  // On small screens the sticky summary card eats too much of the viewport;
-  // drop the sticky behavior so it scrolls away with the rest of the content.
-  .bundle-size-summary {
-    position: static;
-    box-shadow: none !important;
-  }
-}
-
-// Compact summary rows, keyed on the aside's width instead of the viewport:
-// the narrow desktop column and small stacked viewports get the same
-// treatment.
-@container (max-width: 480px) {
-  // Tighter row padding + smaller "raw" value so summary rows fit in narrow
-  // columns without the value crashing into the label. Allow wrapping so
-  // the values drop to a second line if the label needs the full width.
-  .bundle-size-summary-row-label {
-    flex-wrap: wrap;
-    padding: 8px 10px;
-    gap: 6px 10px;
-  }
-
-  // Force the values onto a second row so the code/label can use the full
-  // width above without being clipped by the value column. Left-align so
-  // the size reads directly under the package name.
-  .bundle-size-summary-values {
-    flex-basis: 100%;
-    margin-left: 0;
-    justify-content: flex-start;
-  }
-
-  // Toggle rows have a checkbox before the label; indent the values to sit
-  // under the package name instead of the checkbox.
-  .bundle-size-summary-row-toggle .bundle-size-summary-values {
-    margin-left: 30px;
-  }
-
-  .bundle-size-summary-raw {
-    font-size: 15px;
-  }
-
-  .bundle-size-summary-row-total .bundle-size-summary-raw {
-    font-size: 18px;
-  }
-
-  // Allow the label/hint to wrap to a second line in tight columns if needed.
-  .bundle-size-summary-label {
-    flex-wrap: wrap;
-    gap: 2px 10px;
-  }
-
-  // Hide the secondary "always required" / "PNG, JPEG, …" hint to save
-  // vertical space; the package name + size carry the meaning.
-  .bundle-size-summary-hint {
-    display: none;
-  }
-}
-
-@media (max-width: 640px) {
-  // Mirror the summary row layout: name on top, size on a second line,
-  // left-aligned under the title so it reads as a labeled column.
-  .bundle-size-row-label {
-    flex-wrap: wrap;
-    gap: 6px 12px;
-  }
-
-  .bundle-size-row-slug {
-    display: none;
-  }
-
-  .bundle-size-row-values {
-    flex-basis: 100%;
-    margin-left: 72px; // checkbox (20) + gap (12) + avatar (28) + gap (12)
-    justify-content: flex-start;
+    &-shown {
+      font-size: 14px;
+      line-height: 20px;
+    }
   }
 }
 </style>

@@ -30,25 +30,22 @@ title: ${title} Presets – Avatar Style
 description: >
   Ready-made option sets for the ${title} avatar style. Copy a preset into your
   code or open it in the DiceBear playground and keep tuning from there.
+layout: page
+sidebar: false
 aside: false
 ---
 
 <script setup lang="ts">
-${IMPORT}
+import SitePresetsPage from "@theme/components/site/SitePresetsPage.vue";
 </script>
 
-# ${title} presets
+<SitePresetsPage styleName="${styleName}">
 
-Every preset here is an ordinary set of render options. Nothing needs to be
-installed, and the same values work in all seven libraries and as HTTP-API query
-parameters. Pick one to read its code, or open it in the playground and change
-whatever you like.
+A preset is an ordinary set of render options. Pick one, read its code or open
+it in the Playground and keep tuning. Options a preset leaves alone keep varying
+with the seed, so each row lists how many distinct avatars it still gives you.
 
-Options a preset does not set keep varying with the seed, so most of these stay
-as unique per user as the plain style does. Each preset lists how many distinct
-avatars it still leaves you.
-
-<StylePresets styleName="${styleName}" large />
+</SitePresetsPage>
 `;
 }
 
@@ -58,6 +55,11 @@ avatars it still leaves you.
  * ready-made looks before the full list of knobs.
  */
 function withSection(source: string, styleName: string) {
+  // A style page on the SiteStylePage component renders the presets section
+  // itself, so there is nothing to wire into the Markdown.
+  if (source.includes('<SiteStylePage')) {
+    return source;
+  }
   let next = source;
 
   if (!next.includes(IMPORT)) {
@@ -125,12 +127,21 @@ for (const styleName of styles) {
   // asks whether the mount is there rather than whether the bytes still match
   // the template. Only a missing gallery page is written; an existing one is
   // left alone, because it may carry hand-written prose by now.
-  const mount = `<StylePresets styleName="${styleName}" large />`;
+  const mount = `<SitePresetsPage styleName="${styleName}">`;
   let gallery;
 
   try {
     gallery = readFileSync(galleryPath, 'utf8');
   } catch {
+    gallery = undefined;
+  }
+
+  // Gallery pages from before the Site components mounted the old gallery
+  // component. They carried no hand-written prose, so the template replaces
+  // them once.
+  const legacyMount = `<StylePresets styleName="${styleName}" large />`;
+
+  if (gallery?.includes(legacyMount)) {
     gallery = undefined;
   }
 

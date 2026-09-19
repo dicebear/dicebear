@@ -15,8 +15,10 @@ import DocsVersionTimeline from '@theme/components/docs/DocsVersionTimeline.vue'
 
 DiceBear comes as two things that age differently. A library is maintained for a
 while and then stops moving, while the package itself stays on the registry for
-good. The [HTTP API](/integrations/http-api/) is a URL we keep answering, and
-old version prefixes stay online long after their library line has gone quiet.
+good.
+
+The [HTTP API](/integrations/http-api/) is a URL we keep answering, and old
+version prefixes stay online long after their library line has gone quiet.
 
 ## Libraries
 

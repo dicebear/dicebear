@@ -7,6 +7,9 @@ description: >
 
 # How to load all avatar styles from `@dicebear/styles`?
 
+Most projects need one or two avatar styles. For a style picker, a gallery page
+or a batch job you want all of them at once.
+
 The [DiceBear styles repository](https://github.com/dicebear/styles) ships every
 official avatar style as a separate JSON file. It is distributed as
 [`@dicebear/styles`](https://www.npmjs.com/package/@dicebear/styles) on npm,
@@ -18,8 +21,6 @@ crates.io,
 as a Go module and [`dicebear_styles`](https://pub.dev/packages/dicebear_styles)
 on pub.dev, and
 [`DiceBear.Styles`](https://www.nuget.org/packages/DiceBear.Styles) on NuGet.
-Most projects only need one or two styles, but sometimes (for a style picker, a
-gallery page, or a batch job) you want to load all of them at once.
 
 This guide shows how to do that in Node.js, PHP, Python, Rust, Go, Dart and C#.
 

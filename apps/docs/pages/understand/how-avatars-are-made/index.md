@@ -10,12 +10,13 @@ description: >
 
 Every DiceBear avatar is an
 [SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) composed at
-request time. Nothing is drawn pixel by pixel: an avatar style is a JSON
-definition that describes components such as hair, eyes, or mouth, each with a
-set of variants and colors. The renderer picks one variant per component,
-applies the colors, and assembles the parts into a single SVG. That's cheap
-enough to do on every request, and the result scales to any size without losing
-sharpness.
+request time.
+
+Nothing is drawn pixel by pixel: an avatar style is a JSON definition that
+describes components such as hair, eyes, or mouth, each with a set of variants
+and colors. The renderer picks one variant per component, applies the colors,
+and assembles the parts into a single SVG. That's cheap enough to do on every
+request, and the result scales to any size without losing sharpness.
 
 ## The seed makes it deterministic
 

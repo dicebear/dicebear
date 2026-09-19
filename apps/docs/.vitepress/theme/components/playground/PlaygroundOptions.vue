@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, provide, ref, watch } from 'vue';
+import { computed, nextTick, provide, reactive, ref, useId, watch } from 'vue';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
 import {
   componentPreviewKey,
@@ -15,15 +15,10 @@ import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
 import { track, styleLabel } from '@theme/utils/track';
 import { storeToRefs } from 'pinia';
-import Accordion from 'primevue/accordion';
-import AccordionPanel from 'primevue/accordionpanel';
-import AccordionHeader from 'primevue/accordionheader';
-import AccordionContent from 'primevue/accordioncontent';
-import Tag from 'primevue/tag';
-import InputText from 'primevue/inputtext';
-import InputNumber from 'primevue/inputnumber';
-import Button from 'primevue/button';
-import ToggleSwitch from 'primevue/toggleswitch';
+import SiteDisclosure from '@theme/components/site/SiteDisclosure.vue';
+import SiteTextField from '@theme/components/site/SiteTextField.vue';
+import SiteNumberField from '@theme/components/site/SiteNumberField.vue';
+import SiteSwitch from '@theme/components/site/SiteSwitch.vue';
 import { Shuffle } from '@lucide/vue';
 import PlaygroundAnimationSection from './PlaygroundAnimationSection.vue';
 import PlaygroundAnimationNameSection from './PlaygroundAnimationNameSection.vue';
@@ -209,27 +204,50 @@ const sortedColors = computed(() => {
   return [...bg, ...rest];
 });
 
+const root = ref<HTMLElement>();
+
+// The groups of the column. All of them start closed, so the column opens as
+// a list of what a style offers. The seed sits above them and has no group of
+// its own, because it is the one field everybody needs.
+const openSections = reactive({
+  transform: false,
+  components: false,
+  colors: false,
+  animations: false,
+  font: false,
+  tags: false,
+  output: false,
+});
+
+// Any number of color rows can be open. The list lives here so that a linked
+// color can open the row it points to.
 const openColorPanels = ref<string[]>([]);
 watch(avatarStyleName, () => {
   openColorPanels.value = [];
 });
 
+function setColorPanel(key: string, open: boolean) {
+  const rest = openColorPanels.value.filter((k) => k !== key);
+
+  openColorPanels.value = open ? [...rest, key] : rest;
+}
+
 async function navigateToColor(colorName: string) {
   const targetKey = `${colorName}Color`;
 
-  if (!openColorPanels.value.includes(targetKey)) {
-    openColorPanels.value = [...openColorPanels.value, targetKey];
-  }
+  openSections.colors = true;
+  setColorPanel(targetKey, true);
 
   await nextTick();
 
-  const header = document.querySelector(
-    `[id$="_accordionheader_${targetKey}"]`,
-  );
+  const row = [
+    ...(root.value?.querySelectorAll<HTMLElement>('[data-color-key]') ?? []),
+  ].find((el) => el.dataset.colorKey === targetKey);
+  const summary = row?.querySelector('summary');
 
-  if (header instanceof HTMLElement) {
-    header.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    header.focus({ preventScroll: true });
+  if (summary) {
+    summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    summary.focus({ preventScroll: true });
   }
 }
 
@@ -248,13 +266,44 @@ function activeCount(comp: ComponentInfo): number {
   return comp.variants.length;
 }
 
-function colorCount(color: ColorInfo): number {
+function selectedColors(color: ColorInfo): string[] {
   const val = store.avatarStyleOptions[color.key];
 
-  if (Array.isArray(val)) return val.length;
-
-  return color.defaultValues.length;
+  return Array.isArray(val) ? (val as string[]) : color.defaultValues;
 }
+
+// Selected colors against the colors of the style. A style without colors of
+// its own shows the plain number.
+function colorCount(color: ColorInfo): string {
+  const selected = selectedColors(color).length;
+  const total = color.defaultValues.length;
+
+  if (total > 0) return `${selected}/${total}`;
+
+  return selected > 0 ? String(selected) : 'none';
+}
+
+const componentTotal = computed(() => {
+  const active = components.value.reduce((n, c) => n + activeCount(c), 0);
+  const all = components.value.reduce((n, c) => n + c.variants.length, 0);
+
+  return `${active}/${all}`;
+});
+
+const colorTotal = computed(() => {
+  const n = sortedColors.value.reduce(
+    (sum, color) => sum + selectedColors(color).length,
+    0,
+  );
+
+  return `${n} ${n === 1 ? 'color' : 'colors'}`;
+});
+
+const animationTotal = computed(() => {
+  const n = animationNames.value.length;
+
+  return `${n} ${n === 1 ? 'animation' : 'animations'}`;
+});
 
 function randomizeSeed() {
   seed.value = Math.random().toString(36).substring(2, 10);
@@ -309,6 +358,8 @@ const idRandomization = computed({
   },
 });
 
+const idRandomizationId = useId();
+
 const onSeedFocus = (e: FocusEvent) => {
   const input = e.target as HTMLInputElement;
 
@@ -319,411 +370,409 @@ const onSeedFocus = (e: FocusEvent) => {
 </script>
 
 <template>
-  <div class="pg-options">
-    <div class="pg-options-group">
-      <h3 class="pg-options-group-title">Avatar Style</h3>
-      <PlaygroundStyleSelect />
+  <div ref="root" class="pg-options">
+    <div class="pg-options-pickers">
+      <div class="pg-options-picker">
+        <span class="site-label">Avatar style</span>
+        <PlaygroundStyleSelect />
+      </div>
+
+      <div v-show="hasPresets" class="pg-options-picker">
+        <span class="site-label">Preset</span>
+        <PlaygroundPresetSelect v-model:ready="hasPresets" />
+      </div>
     </div>
 
-    <div v-show="hasPresets" class="pg-options-group">
-      <h3 class="pg-options-group-title">Preset</h3>
-      <PlaygroundPresetSelect v-model:ready="hasPresets" />
-    </div>
-
-    <div class="pg-options-group">
-      <h3 class="pg-options-group-title">General</h3>
-      <Accordion
-        :multiple="true"
-        :value="['__seed']"
-        class="pg-options-accordion"
-      >
-        <AccordionPanel value="__seed">
-          <AccordionHeader>
-            <span class="pg-options-label">Seed</span>
-          </AccordionHeader>
-          <AccordionContent>
-            <div class="pg-options-seed-row">
-              <InputText
-                v-model="seed"
-                placeholder="Enter a seed"
-                class="pg-options-seed"
-                @focus="onSeedFocus"
-              />
-              <Button
-                severity="secondary"
-                variant="outlined"
-                v-tooltip="'Random seed'"
+    <div class="pg-options-sections">
+      <section class="pg-options-seed-group">
+        <h2 class="pg-options-seed-title">Seed</h2>
+        <div class="pg-options-body">
+          <SiteTextField
+            v-model="seed"
+            size="lg"
+            fluid
+            placeholder="Enter a seed"
+            aria-label="Seed"
+            class="pg-options-seed"
+            @focus="onSeedFocus"
+          >
+            <template #action>
+              <button
+                type="button"
+                aria-label="Random seed"
+                data-tip="Random seed"
                 @click="randomizeSeed"
               >
-                <Shuffle :size="16" />
-              </Button>
-            </div>
-            <p class="pg-help">
-              The seed is the starting value used to generate the avatar.
-              <strong>The same seed always produces the same avatar</strong>, so
-              you can reuse it whenever you need the exact same result. For
-              privacy, prefer an opaque identifier such as a random string or
-              hashed user ID instead of personal data like names or email
-              addresses.
-            </p>
-          </AccordionContent>
-        </AccordionPanel>
-        <AccordionPanel v-if="hasFontFamily || hasFontWeight" value="__font">
-          <AccordionHeader>
-            <span class="pg-options-label">Font</span>
-          </AccordionHeader>
-          <AccordionContent>
-            <PlaygroundFontSection
-              :key="avatarStyleName"
-              :has-font-family="hasFontFamily"
-              :has-font-weight="hasFontWeight"
-            />
-          </AccordionContent>
-        </AccordionPanel>
-        <AccordionPanel value="__transform">
-          <AccordionHeader>
-            <span class="pg-options-label">Transform</span>
-          </AccordionHeader>
-          <AccordionContent>
-            <PlaygroundTransformSection :key="avatarStyleName" />
-          </AccordionContent>
-        </AccordionPanel>
-        <AccordionPanel value="__output">
-          <AccordionHeader>
-            <span class="pg-options-label">Output</span>
-          </AccordionHeader>
-          <AccordionContent>
-            <div class="pg-options-output">
-              <div class="pg-field">
-                <div class="pg-field-label">
-                  <span>Size</span>
+                <Shuffle :size="16" aria-hidden="true" />
+              </button>
+            </template>
+          </SiteTextField>
+          <p class="pg-help">
+            The seed is the starting value used to generate the avatar.
+            <strong>The same seed always produces the same avatar</strong>, so
+            you can reuse it whenever you need the exact same result. For
+            privacy, prefer an opaque identifier such as a random string or
+            hashed user ID instead of personal data like names or email
+            addresses.
+          </p>
+        </div>
+      </section>
+
+      <SiteDisclosure
+        v-model:open="openSections.transform"
+        title="Transform"
+        size="section"
+      >
+        <div class="pg-options-body">
+          <PlaygroundTransformSection :key="avatarStyleName" />
+        </div>
+      </SiteDisclosure>
+
+      <SiteDisclosure
+        v-if="components.length > 0"
+        v-model:open="openSections.components"
+        title="Components"
+        size="section"
+      >
+        <template #summary>{{ componentTotal }}</template>
+        <SiteDisclosure
+          v-for="comp in components"
+          :key="`${avatarStyleName}-${comp.name}`"
+          :title="capitalCase(comp.name)"
+          lazy
+        >
+          <template #summary>
+            {{ activeCount(comp) }}/{{ comp.variants.length }}
+          </template>
+          <PlaygroundComponentSection
+            :component-name="comp.name"
+            :variants="comp.variants"
+            :has-probability="comp.hasProbability"
+            :default-probability="comp.defaultProbability"
+            :has-non-default-weights="comp.hasNonDefaultWeights"
+            :default-weights="comp.defaultWeights"
+          />
+        </SiteDisclosure>
+      </SiteDisclosure>
+
+      <SiteDisclosure
+        v-if="allColors.length > 0"
+        v-model:open="openSections.colors"
+        title="Colors"
+        size="section"
+      >
+        <template #summary>{{ colorTotal }}</template>
+        <SiteDisclosure
+          v-for="color in sortedColors"
+          :key="`${avatarStyleName}-${color.key}`"
+          :open="openColorPanels.includes(color.key)"
+          :title="capitalCase(color.name)"
+          :data-color-key="color.key"
+          lazy
+          @update:open="setColorPanel(color.key, $event)"
+        >
+          <template #summary>
+            <span class="pg-options-dots" aria-hidden="true">
+              <span
+                v-for="(hex, i) in selectedColors(color).slice(0, 6)"
+                :key="i"
+                class="pg-options-dot"
+                :style="{ background: `#${hex}` }"
+              ></span>
+            </span>
+            {{ colorCount(color) }}
+          </template>
+          <PlaygroundColorSection
+            :color-name="color.name"
+            :default-values="color.defaultValues"
+            :has-fill="color.hasFill"
+            :has-angle="color.hasAngle"
+            :has-fill-stops="color.hasFillStops"
+            :has-order="color.hasOrder"
+            :contrast-to="color.contrastTo"
+          />
+        </SiteDisclosure>
+      </SiteDisclosure>
+
+      <SiteDisclosure
+        v-if="hasAnimation"
+        v-model:open="openSections.animations"
+        title="Animations"
+        size="section"
+      >
+        <template v-if="animationNames.length > 0" #summary>
+          {{ animationTotal }}
+        </template>
+        <p v-if="animationNames.length > 0" class="pg-help pg-options-intro">
+          The first card switches every animation. Each animation below follows
+          it unless it has a switch of its own, which then wins, as do its own
+          speed and delay.
+        </p>
+        <SiteDisclosure title="All animations">
+          <template #summary>
+            <span
+              class="site-chip pg-options-state"
+              :class="
+                store.avatarStyleOptions.animation === true
+                  ? 'site-chip-brand'
+                  : 'site-chip-muted'
+              "
+            >
+              {{ store.avatarStyleOptions.animation === true ? 'on' : 'off' }}
+            </span>
+          </template>
+          <PlaygroundAnimationSection
+            :key="avatarStyleName"
+            :names="animationNames"
+          />
+        </SiteDisclosure>
+        <SiteDisclosure
+          v-for="name in animationNames"
+          :key="`${avatarStyleName}-${name}`"
+          :title="capitalCase(name)"
+        >
+          <template #summary>
+            <span
+              class="site-chip pg-options-state"
+              :class="
+                animationSwitch(store.avatarStyleOptions, name) === undefined
+                  ? 'site-chip-muted'
+                  : 'site-chip-brand'
+              "
+            >
+              {{ animationTag(name) }}
+            </span>
+          </template>
+          <PlaygroundAnimationNameSection :name="name" />
+        </SiteDisclosure>
+      </SiteDisclosure>
+
+      <SiteDisclosure
+        v-if="hasFontFamily || hasFontWeight"
+        v-model:open="openSections.font"
+        title="Font"
+        size="section"
+      >
+        <div class="pg-options-body">
+          <PlaygroundFontSection
+            :key="avatarStyleName"
+            :has-font-family="hasFontFamily"
+            :has-font-weight="hasFontWeight"
+          />
+        </div>
+      </SiteDisclosure>
+
+      <SiteDisclosure
+        v-if="hasTags"
+        v-model:open="openSections.tags"
+        title="Tags"
+        size="section"
+      >
+        <p class="pg-help pg-options-intro">
+          Allow keeps only matching variants, disallow drops them. Allowing a
+          whole category requires it, which turns an opt-in feature like the
+          animation on. Components with a variant chosen manually ignore the
+          filter.
+        </p>
+        <SiteDisclosure
+          v-for="group in tagCategories"
+          :key="`${avatarStyleName}-${group.category}`"
+          :title="group.label"
+        >
+          <template #summary>
+            {{ tagCounts.get(group.category) ?? 0 }}
+          </template>
+          <PlaygroundTagsSection :category="group" />
+        </SiteDisclosure>
+      </SiteDisclosure>
+
+      <SiteDisclosure
+        v-model:open="openSections.output"
+        title="Output"
+        size="section"
+      >
+        <div class="pg-options-body">
+          <div class="pg-options-pair">
+            <div class="pg-field">
+              <div class="pg-field-label">
+                <span>Size</span>
+                <span class="pg-field-tools">
                   <PlaygroundFieldReset
                     v-if="store.isOptionSet(sizeKey)"
                     @click="store.resetOption(sizeKey)"
                   />
-                </div>
-                <InputNumber
-                  v-model="size"
-                  :min="1"
-                  :max="4096"
-                  :step="1"
-                  :use-grouping="false"
-                  placeholder="Auto"
-                  suffix=" px"
-                  show-buttons
-                  button-layout="horizontal"
-                  :input-style="{ width: '6em', textAlign: 'center' }"
-                >
-                  <template #incrementicon>+</template>
-                  <template #decrementicon>−</template>
-                </InputNumber>
-                <p class="pg-options-field-help">
-                  Output size in pixels. If left empty, the avatar scales to
-                  100% of its container.
-                </p>
+                </span>
               </div>
+              <SiteNumberField
+                v-model="size"
+                :min="1"
+                :max="4096"
+                :step="1"
+                placeholder="Auto"
+                suffix="px"
+                show-buttons
+                fluid
+                aria-label="Size"
+              />
+              <p class="pg-help">
+                Output size in pixels. If left empty, the avatar scales to 100%
+                of its container.
+              </p>
+            </div>
 
-              <div class="pg-field">
-                <div class="pg-field-label">
-                  <span>Title</span>
+            <div class="pg-field">
+              <div class="pg-field-label">
+                <span>Title</span>
+                <span class="pg-field-tools">
                   <PlaygroundFieldReset
                     v-if="store.isOptionSet(titleKey)"
                     @click="store.resetOption(titleKey)"
                   />
-                </div>
-                <InputText
-                  v-model="title"
-                  placeholder="Accessible title"
-                  class="pg-options-input"
-                />
-                <p class="pg-options-field-help">
-                  Accessible <code>&lt;title&gt;</code> element rendered inside
-                  the SVG. Useful for screen readers.
-                </p>
+                </span>
               </div>
-
-              <div class="pg-field">
-                <div class="pg-field-label pg-options-toggle-row">
-                  <ToggleSwitch v-model="idRandomization" />
-                  <span>Randomize element IDs</span>
-                  <PlaygroundFieldReset
-                    v-if="store.isOptionSet(idRandomizationKey)"
-                    @click="store.resetOption(idRandomizationKey)"
-                  />
-                </div>
-                <p class="pg-options-field-help">
-                  Randomizes all SVG element IDs to avoid conflicts when
-                  embedding multiple avatars in the same page.
-                </p>
-              </div>
-
-              <p class="pg-options-field-help pg-options-field-help-warn">
-                <strong>Title</strong> and
-                <strong>Randomize element IDs</strong>
-                are not supported by our public
-                <a href="/integrations/http-api/">HTTP-API</a>. You can enable
-                them by
-                <a href="/recipes/self-host-the-http-api/"
-                  >hosting your own instance</a
-                >.
+              <SiteTextField
+                v-model="title"
+                fluid
+                placeholder="Accessible title"
+                aria-label="Title"
+              />
+              <p class="pg-help">
+                Accessible <code>&lt;title&gt;</code> element rendered inside
+                the SVG. Useful for screen readers.
               </p>
             </div>
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
-    </div>
+          </div>
 
-    <div class="pg-options-group" v-if="hasTags">
-      <h3 class="pg-options-group-title">Tags</h3>
-      <p class="pg-help">
-        Allow keeps only matching variants, disallow drops them. Allowing a
-        whole category requires it, which turns an opt-in feature like the
-        animation on. Components with a variant chosen manually ignore the
-        filter.
-      </p>
-      <Accordion :multiple="true" class="pg-options-accordion">
-        <AccordionPanel
-          v-for="group in tagCategories"
-          :key="`${avatarStyleName}-${group.category}`"
-          :value="group.category"
-        >
-          <AccordionHeader>
-            <span class="pg-options-label">{{ group.label }}</span>
-            <Tag
-              :value="`${tagCounts.get(group.category) ?? 0}`"
-              severity="secondary"
-              class="pg-options-tag"
-            />
-          </AccordionHeader>
-          <AccordionContent>
-            <PlaygroundTagsSection
-              :key="`${avatarStyleName}-${group.category}`"
-              :category="group"
-            />
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
-    </div>
+          <div class="pg-field">
+            <div class="pg-field-label">
+              <label :for="idRandomizationId">Randomize element IDs</label>
+              <span class="pg-field-tools">
+                <PlaygroundFieldReset
+                  v-if="store.isOptionSet(idRandomizationKey)"
+                  @click="store.resetOption(idRandomizationKey)"
+                />
+                <SiteSwitch :id="idRandomizationId" v-model="idRandomization" />
+              </span>
+            </div>
+            <p class="pg-help">
+              Randomizes all SVG element IDs to avoid conflicts when embedding
+              multiple avatars in the same page.
+            </p>
+          </div>
 
-    <div class="pg-options-group" v-if="components.length > 0">
-      <h3 class="pg-options-group-title">Components</h3>
-      <Accordion :multiple="true" class="pg-options-accordion">
-        <AccordionPanel
-          v-for="comp in components"
-          :key="`${avatarStyleName}-${comp.name}`"
-          :value="comp.name"
-        >
-          <AccordionHeader>
-            <span class="pg-options-label">{{ capitalCase(comp.name) }}</span>
-            <Tag
-              :value="`${activeCount(comp)}/${comp.variants.length}`"
-              severity="secondary"
-              class="pg-options-tag"
-            />
-          </AccordionHeader>
-          <AccordionContent>
-            <PlaygroundComponentSection
-              :key="`${avatarStyleName}-${comp.name}`"
-              :component-name="comp.name"
-              :variants="comp.variants"
-              :has-probability="comp.hasProbability"
-              :default-probability="comp.defaultProbability"
-              :has-non-default-weights="comp.hasNonDefaultWeights"
-              :default-weights="comp.defaultWeights"
-            />
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
-    </div>
-
-    <div class="pg-options-group" v-if="allColors.length > 0">
-      <h3 class="pg-options-group-title">Colors</h3>
-      <Accordion
-        v-model:value="openColorPanels"
-        :multiple="true"
-        class="pg-options-accordion"
-      >
-        <AccordionPanel
-          v-for="color in sortedColors"
-          :key="`${avatarStyleName}-${color.key}`"
-          :value="color.key"
-        >
-          <AccordionHeader>
-            <span class="pg-options-label">{{ capitalCase(color.name) }}</span>
-            <Tag
-              :value="String(colorCount(color))"
-              severity="secondary"
-              class="pg-options-tag"
-            />
-          </AccordionHeader>
-          <AccordionContent>
-            <PlaygroundColorSection
-              :key="`${avatarStyleName}-${color.key}`"
-              :color-name="color.name"
-              :default-values="color.defaultValues"
-              :has-fill="color.hasFill"
-              :has-angle="color.hasAngle"
-              :has-fill-stops="color.hasFillStops"
-              :has-order="color.hasOrder"
-              :contrast-to="color.contrastTo"
-            />
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
-    </div>
-
-    <div class="pg-options-group" v-if="hasAnimation">
-      <h3 class="pg-options-group-title">Animations</h3>
-      <p v-if="animationNames.length > 0" class="pg-help">
-        The first card switches every animation. Each animation below follows it
-        unless it has a switch of its own, which then wins, as do its own speed
-        and delay.
-      </p>
-      <Accordion :multiple="true" class="pg-options-accordion">
-        <AccordionPanel :value="'__animation'">
-          <AccordionHeader>
-            <span class="pg-options-label">All animations</span>
-            <Tag
-              :value="
-                store.avatarStyleOptions.animation === true ? 'on' : 'off'
-              "
-              :severity="
-                store.avatarStyleOptions.animation === true
-                  ? 'primary'
-                  : 'secondary'
-              "
-              class="pg-options-tag"
-            />
-          </AccordionHeader>
-          <AccordionContent>
-            <PlaygroundAnimationSection
-              :key="avatarStyleName"
-              :names="animationNames"
-            />
-          </AccordionContent>
-        </AccordionPanel>
-        <AccordionPanel
-          v-for="name in animationNames"
-          :key="`${avatarStyleName}-${name}`"
-          :value="`__animation-${name}`"
-        >
-          <AccordionHeader>
-            <span class="pg-options-label">{{ capitalCase(name) }}</span>
-            <Tag
-              :value="animationTag(name)"
-              :severity="
-                animationSwitch(store.avatarStyleOptions, name) === undefined
-                  ? 'secondary'
-                  : 'primary'
-              "
-              class="pg-options-tag"
-            />
-          </AccordionHeader>
-          <AccordionContent>
-            <PlaygroundAnimationNameSection
-              :key="`${avatarStyleName}-${name}`"
-              :name="name"
-            />
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
+          <p class="pg-help">
+            <strong>Title</strong> and
+            <strong>Randomize element IDs</strong>
+            are not supported by our public
+            <a href="/integrations/http-api/">HTTP-API</a>. You can enable them
+            by
+            <a href="/recipes/self-host-the-http-api/"
+              >hosting your own instance</a
+            >.
+          </p>
+        </div>
+      </SiteDisclosure>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+/* The sections answer to the width of the column, not of the page, so they
+   fold the same way on a phone and in a narrow desktop column. */
 .pg-options {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.pg-options-group {
-  /* A help paragraph between the group title and its cards (e.g. the tags
-     filter intro) needs its own spacing toward the card below. */
-  > .pg-help {
-    margin: 0 2px 10px;
-  }
-
-  &-title {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ui-c-text-subtle);
-    margin: 0 0 8px 2px;
-  }
-}
-
-.pg-options-accordion {
-  border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-sm);
-  overflow: hidden;
-
-  :deep(.p-accordionpanel:last-child) {
-    border-width: 0;
-  }
-}
-
-.pg-options-label {
-  font-weight: 600;
-  flex: 1;
-  font-size: 14px;
-}
-
-.pg-options-tag {
-  margin-right: 8px;
-}
-
-.pg-options-seed-row {
-  display: flex;
-  gap: 8px;
-}
-
-.pg-options-seed {
-  flex: 1;
+  container: pg-options / inline-size;
   min-width: 0;
 }
 
-.pg-options-output {
+.pg-options-pickers {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.pg-options-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pg-options-sections {
+  margin-top: 24px;
+  border-bottom: 1px solid var(--db-line);
+}
+
+/* The seed carries the heading of a group without being collapsible. */
+.pg-options-seed-group {
+  border-top: 1px solid var(--db-line);
+  padding-bottom: 20px;
+}
+
+.pg-options-seed-title {
+  padding: 20px 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--db-ink);
+}
+
+/* Content of a group that holds fields instead of rows. */
+.pg-options-body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 4px 4px 8px;
 }
 
-.pg-options-input {
-  width: 100%;
+.pg-options-intro {
+  padding: 0 4px 16px;
 }
 
-.pg-options-toggle-row {
-  flex-wrap: wrap;
+.pg-options-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
 
-  span {
-    flex: 1;
-    min-width: 0;
+.pg-options-dots {
+  display: flex;
+  gap: 4px;
+  margin-right: 12px;
+}
+
+.pg-options-dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--db-line);
+  border-radius: 50%;
+}
+
+/* The row summary is set in mono for counts. A state chip keeps the text font. */
+.pg-options-state {
+  font-family: var(--db-font);
+}
+
+/* The randomize button sits at the right edge of the column, so its tooltip
+   grows to the left. */
+.pg-options-seed :deep([data-tip]:hover::after),
+.pg-options-seed :deep([data-tip]:focus-visible::after) {
+  right: 0;
+  left: auto;
+  transform: none;
+}
+
+@container pg-options (max-width: 520px) {
+  .pg-options-pickers {
+    grid-auto-flow: row;
+    gap: 16px;
   }
-}
 
-.pg-options-field-help {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--ui-c-text-muted);
-
-  a {
-    color: var(--vp-c-brand-1);
-    text-decoration: underline;
-
-    &:hover {
-      color: var(--vp-c-brand-2);
-    }
+  .pg-options-pair {
+    grid-template-columns: minmax(0, 1fr);
   }
-}
-
-.pg-options-field-help-warn {
-  padding: 8px 10px;
-  border-radius: var(--vp-radius-xs);
-  background: color-mix(in srgb, var(--p-orange-500) 10%, transparent);
-  color: var(--ui-c-text);
 }
 </style>

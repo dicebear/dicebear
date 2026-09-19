@@ -6,45 +6,10 @@ export interface FooterLink {
   external?: boolean;
 }
 
-export const productLinks: FooterLink[] = [
-  { label: 'Why DiceBear?', href: '/why-dicebear/' },
-  { label: 'Animated Avatars', href: '/animated-avatars/' },
-  { label: 'All Styles', href: '/styles/' },
-  { label: 'Supported versions', href: '/versions/' },
-  { label: 'Statistics', href: '/stats/' },
-  { label: 'Support DiceBear', href: '/support/' },
-];
-
-// Mirrors the tool list on /tools/ (see theme/components/tools/ToolList.vue).
-export const toolLinks: FooterLink[] = [
-  { label: 'Playground', href: '/playground/' },
-  { label: 'WCAG Contrast Picker', href: '/tools/contrast/' },
-  { label: 'Bundle Size Estimator', href: '/tools/bundle-size/' },
-  { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
-  {
-    label: 'Plugin for Figma',
-    href: 'https://www.figma.com/community/plugin/1005765655729342787',
-    external: true,
-  },
-];
-
-// Entry points for building with DiceBear. The pages about the project itself
-// (statistics, version support, ways to help) live in the Explore column.
-export const resourceLinks: FooterLink[] = [
-  { label: 'Documentation', href: '/start/what-is-dicebear/' },
-  { label: 'JS Library', href: '/integrations/javascript/' },
-  { label: 'HTTP API', href: '/integrations/http-api/' },
-  { label: 'CLI', href: '/integrations/cli/' },
-];
-
-// Older major versions keep their docs on a subdomain of their own. This list
-// replaces the version dropdown that used to sit in the top nav. 10.x has no
-// entry: it reads these docs too, since 11 only changed how animations are
-// switched on.
-export const versionLinks: FooterLink[] = [
-  { label: '11.x (current)', href: '/' },
-  { label: '9.x', href: 'https://v9.dicebear.com', external: true },
-];
+export interface FooterColumn {
+  title: string;
+  links: FooterLink[];
+}
 
 function buildLegalLink(
   label: string,
@@ -63,9 +28,64 @@ function buildLegalLink(
   return { label, href: rawHref, external: isExternal || undefined };
 }
 
-export const legalLinks: FooterLink[] = [
+const legalLinks: FooterLink[] = [
   { label: 'Licenses', href: '/licenses/' },
   buildLegalLink('Privacy Policy', import.meta.env.VITE_PRIVACY_POLICY_URL),
   buildLegalLink('Cookie Policy', import.meta.env.VITE_COOKIE_POLICY_URL),
   buildLegalLink('Legal Notice', import.meta.env.VITE_LEGAL_NOTICE_URL),
 ].filter((link): link is FooterLink => link !== null);
+
+// What you can use, how to build with it, the project itself, the legal pages.
+export const footerColumns: FooterColumn[] = [
+  {
+    title: 'Product',
+    links: [
+      { label: 'Styles', href: '/styles/' },
+      { label: 'Animated avatars', href: '/animated-avatars/' },
+      { label: 'Playground', href: '/playground/' },
+      { label: 'DiceBear Studio', href: '/studio/' },
+      { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
+      { label: 'Tools', href: '/tools/' },
+    ],
+  },
+  {
+    title: 'Developers',
+    links: [
+      { label: 'Documentation', href: '/start/' },
+      { label: 'HTTP API', href: '/integrations/http-api/' },
+      { label: 'JavaScript', href: '/integrations/javascript/' },
+      { label: 'Python', href: '/integrations/python/' },
+      { label: 'PHP', href: '/integrations/php/' },
+      { label: 'All integrations', href: '/start/pick-your-integration/' },
+      { label: 'For AI assistants', href: '/start/for-ai-assistants/' },
+    ],
+  },
+  {
+    title: 'Project',
+    links: [
+      { label: 'Why DiceBear?', href: '/why-dicebear/' },
+      { label: 'Statistics', href: '/stats/' },
+      { label: 'Supported versions', href: '/versions/' },
+      { label: 'Support DiceBear', href: '/support/' },
+      {
+        label: 'GitHub',
+        href: 'https://github.com/dicebear/dicebear',
+        external: true,
+      },
+      {
+        label: 'Figma Community',
+        href: 'https://www.figma.com/@dicebear_com',
+        external: true,
+      },
+    ],
+  },
+  { title: 'Legal', links: legalLinks },
+];
+
+// Older major versions keep their docs on a subdomain of their own. 10.x has
+// no entry: it reads these docs too.
+export const olderDocs: FooterLink = {
+  label: 'Docs for 9.x',
+  href: 'https://v9.dicebear.com',
+  external: true,
+};

@@ -1,19 +1,12 @@
 <script setup lang="ts">
 /**
- * One preset in the gallery grid: a row of avatars over the preset's name.
- * Every tile draws the same seeds, so the rows stay comparable across the
- * grid, and everything else about a preset lives in the dialog this opens.
- *
- * The avatars keep gaps and their own corners rather than butting together
- * into one strip. A seamless row only holds up while a preset paints every
- * avatar the same background: a preset that varies the background turns into
- * hard color seams, and one that crops to a circle leaves its avatars visibly
- * stuck to each other. Separated avatars survive both, and a gallery that is
- * meant to grow cannot assume anything about the next preset's palette.
+ * One preset in a picker grid: its avatars over the name and the summary.
+ * Every tile draws the same seeds, so the tiles stay comparable across the
+ * grid. The parent marks the applied preset with `aria-pressed`.
  */
 import { computed } from 'vue';
 import type { StylePreset } from '@theme/config/presets';
-import { UiAvatar } from '../ui';
+import PlaygroundThumb from '../playground/PlaygroundThumb.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -21,9 +14,9 @@ const props = withDefaults(
     preset: StylePreset;
     seeds: readonly string[];
     /**
-     * The gallery opens a dialog on click; the playground picker applies the
-     * preset and closes the dialog it already sits in. Announcing a popup in
-     * the second case tells a screen reader the opposite of what happens.
+     * Whether a click opens a dialog. The playground picker applies the preset
+     * and closes the dialog it sits in, and announcing a popup there would
+     * tell a screen reader the opposite of what happens.
      */
     opensDialog?: boolean;
   }>(),
@@ -34,10 +27,9 @@ defineEmits<{
   open: [];
 }>();
 
-// One option set per avatar, held rather than built in the template: an object
-// literal there would be a new one on every render, and UiAvatar re-renders its
-// SVG whenever that prop changes identity. A grid of tiles re-renders whenever
-// the gallery around it does, e.g. when the dialog opens.
+// One option set per avatar, held here. An object literal in the template
+// would be a new one on every render, and the thumbnail renders again whenever
+// its options change identity.
 const avatarOptions = computed(() =>
   props.seeds.map((seed) => ({ seed, ...props.preset.options })),
 );
@@ -46,100 +38,73 @@ const avatarOptions = computed(() =>
 <template>
   <button
     type="button"
-    class="preset-tile"
+    class="preset-tile hv-tile"
     :aria-haspopup="opensDialog ? 'dialog' : undefined"
     @click="$emit('open')"
   >
-    <span class="preset-tile-band">
-      <UiAvatar
+    <!-- The checkerboard stays visible where a preset sets no background. -->
+    <span
+      class="preset-tile-band"
+      :style="{ '--preset-tile-columns': Math.max(avatarOptions.length, 1) }"
+    >
+      <PlaygroundThumb
         v-for="options in avatarOptions"
         :key="options.seed"
-        :size="72"
         :style-name="styleName"
-        :style-options="options"
-        mode="library"
-        alt=""
+        :options="options"
       />
     </span>
-    <span class="preset-tile-label">
-      <span class="preset-tile-name">{{ preset.name }}</span>
-      <span class="preset-tile-summary">{{ preset.summary }}</span>
-    </span>
+    <span class="preset-tile-name">{{ preset.name }}</span>
+    <span class="preset-tile-summary">{{ preset.summary }}</span>
   </button>
 </template>
 
 <style scoped lang="scss">
 .preset-tile {
-  display: block;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
   width: 100%;
-  padding: 0;
+  min-width: 0;
+  padding: 8px 8px 12px;
+  border: 1px solid var(--db-line);
+  border-radius: 14px;
+  background: transparent;
+  font: inherit;
+  color: var(--db-ink);
   text-align: left;
-  /* A bare <button> would otherwise render the label in the browser's own
-     button font instead of the page face. */
-  font-family: inherit;
-  background: var(--ui-card-bg);
-  border: 1px solid var(--ui-card-border-color);
-  border-radius: var(--ui-card-radius);
-  color: var(--vp-c-text-1);
   cursor: pointer;
-  overflow: hidden;
-  transition:
-    border-color var(--duration-fast) var(--ease-smooth),
-    box-shadow var(--duration-mid) var(--ease-smooth);
 
-  &:hover {
-    border-color: var(--vp-c-brand-1);
-    box-shadow: var(--vp-shadow-2);
+  // The ring is drawn inside the border, so the applied preset keeps its size.
+  &[aria-pressed='true'] {
+    border-color: var(--db-brand);
+    box-shadow: inset 0 0 0 1px var(--db-brand);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--vp-c-brand-1);
+    outline: 2px solid var(--db-brand);
     outline-offset: 2px;
   }
 
   &-band {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(var(--preset-tile-columns), minmax(0, 1fr));
     gap: 6px;
-    padding: 12px 12px 0;
-
-    /* UiAvatar's checkerboard stays. Some presets set no background at all, and
-       the chequer is what tells you the avatar is transparent rather than
-       white, which is a real difference once you paste it onto your own page. */
-    :deep(.ui-avatar) {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 1 / 1;
-      border-radius: var(--vp-radius-xs);
-    }
-  }
-
-  &-label {
-    display: block;
-    padding: 10px 12px 12px;
+    width: 100%;
   }
 
   &-name {
-    display: block;
     font-size: 14px;
-    font-weight: 600;
-    line-height: 1.4;
+    line-height: 20px;
+    font-weight: 700;
   }
 
-  /* Clamped to two lines so one long summary cannot stretch a whole grid row.
-     The tiles themselves already line up, because grid items stretch to the
-     tallest in their row. A summary that needs a third line is too long for a
-     tile anyway, and the full reasoning is one click away. */
   &-summary {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-    margin-top: 2px;
-    font-size: 12.5px;
-    line-height: 1.45;
-    color: var(--ui-c-text-muted);
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--db-muted);
   }
 }
 </style>

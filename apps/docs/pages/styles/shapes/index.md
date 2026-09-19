@@ -4,41 +4,17 @@ description: >
   Free geometric avatar generator with large squares, circles and triangles on a
   colored background. Create Shapes avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Shapes
+<SiteStylePage styleName="shapes">
 
-Shapes is an abstract vector avatar style composed of two or three large
-geometric forms (squares, circles, and triangles) layered and rotated on a
-colored background. Generate minimal SVG profile icons that work as avatar
-placeholders or abstract user identifiers.
+Two or three large geometric forms, layered and rotated on a colored background.
 
-<StylePreview styleName="shapes" />
-
-<StyleDescription styleName="shapes" />
-
-## Usage
-
-<StyleUsage styleName="shapes" />
-
-## Presets
-
-<StylePresets styleName="shapes" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="shapes" />
-
-## Details
-
-<StyleInfo styleName="shapes" />
+</SiteStylePage>

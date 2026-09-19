@@ -9,6 +9,7 @@ description: >
 
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787),
 our plugin for Figma, is the easiest way to create an avatar style for DiceBear.
+
 This guide covers its Style tab, the [plugin overview](/integrations/figma/)
 covers the rest. The tutorial requires basic knowledge about
 [Figma](https://www.figma.com/).
@@ -115,7 +116,7 @@ immediately, without a build step.
 
 You can test your style right away with the [CLI](/integrations/cli/):
 
-```
+```sh
 dicebear create ./your-style.json -o ./test-output --count 10
 ```
 
@@ -242,7 +243,7 @@ var avatar = new Avatar(style, new JsonObject
 
 ### With the CLI
 
-```
+```sh
 dicebear create ./your-style.json -o ./avatar.png --seed "dicebear"
 ```
 
@@ -251,7 +252,7 @@ dicebear create ./your-style.json -o ./avatar.png --seed "dicebear"
 The CLI automatically detects all available options from your style definition.
 Use `--help` with your definition file to see them:
 
-```
+```sh
 dicebear create ./your-style.json --help
 ```
 

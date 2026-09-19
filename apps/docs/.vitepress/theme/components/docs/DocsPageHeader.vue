@@ -24,10 +24,10 @@ import DocsMarkdownLink from './DocsMarkdownLink.vue';
   display: flex;
   align-items: center;
   gap: 16px;
-  // The slot renders outside `.vp-doc`, so nothing else spaces this row from
-  // the page title below it.
-  margin-bottom: 16px;
-  min-height: 32px;
+  // The row sits outside `.vp-doc`, so nothing else spaces it from the page
+  // title below it.
+  margin-bottom: 30px;
+  min-height: 26px;
 
   // Pushing one child right, rather than spacing both apart, keeps the link
   // on the right edge on the pages where the trail renders nothing.

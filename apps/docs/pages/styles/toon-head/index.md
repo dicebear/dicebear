@@ -4,41 +4,18 @@ description: >
   Free cartoon portrait avatar generator with naturalistic proportions and
   diverse skin tones. Create ToonHead avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Toon Head
+<SiteStylePage styleName="toon-head">
 
-Toon Head is an illustrated vector avatar style of half-body character portraits
-with naturalistic proportions, diverse skin tones, hairstyles, and facial hair.
-Generate expressive SVG profile icons in an animated-series look, well suited to
-community apps and social products.
+Half-body portraits with natural proportions, diverse skin tones, hairstyles and
+facial hair, in an animated-series look.
 
-<StylePreview styleName="toon-head" />
-
-<StyleDescription styleName="toon-head" />
-
-## Usage
-
-<StyleUsage styleName="toon-head" />
-
-## Presets
-
-<StylePresets styleName="toon-head" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="toon-head" />
-
-## Details
-
-<StyleInfo styleName="toon-head" />
+</SiteStylePage>

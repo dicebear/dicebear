@@ -4,41 +4,18 @@ description: >
   Free hand-drawn avatar generator in fine ink lines with detailed hair and
   expressive eyes. Create Lorelei avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Lorelei
+<SiteStylePage styleName="lorelei">
 
-Lorelei is a hand-drawn vector avatar style rendered in fine black ink lines,
-with detailed hairstyles, expressive eyes, and sketched collars. Generate
-illustration-style SVG profile icons for social apps, editorial sites, and user
-accounts.
+Hand-drawn faces in fine black ink lines, with detailed hairstyles, expressive
+eyes and sketched collars.
 
-<StylePreview styleName="lorelei" />
-
-<StyleDescription styleName="lorelei" />
-
-## Usage
-
-<StyleUsage styleName="lorelei" />
-
-## Presets
-
-<StylePresets styleName="lorelei" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="lorelei" />
-
-## Details
-
-<StyleInfo styleName="lorelei" />
+</SiteStylePage>

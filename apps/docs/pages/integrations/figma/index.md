@@ -8,9 +8,11 @@ description: >
 # DiceBear Studio for Figma
 
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787)
-puts DiceBear into Figma. It fills the avatar placeholders in your mockups with
-real avatars, inserts batches of new ones, and tells developers how to render
-the same avatar in the app.
+puts DiceBear into Figma.
+
+It fills the avatar placeholders in your mockups with real avatars, inserts
+batches of new ones, and tells developers how to render the same avatar in the
+app.
 
 The plugin is free and works in the Figma desktop app and in the browser. Start
 it from the Actions search in the toolbar, or from **Plugins** in the context

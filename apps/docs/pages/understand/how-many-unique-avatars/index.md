@@ -13,8 +13,9 @@ import UniqueAvatarsTable from '@theme/components/guides/UniqueAvatarsTable.vue'
 
 The number below estimates how many visibly distinct avatars the seed can
 produce for each style at its default configuration, with every other option
-left untouched. It follows the renderer's choices, with one deliberate exception
-for transforms:
+left untouched.
+
+It follows the renderer's choices, with one deliberate exception for transforms:
 
 - **Variant pick per component.** Each visible component contributes one variant
   choice. Variants with `weight: 0` are excluded because the PRNG never picks

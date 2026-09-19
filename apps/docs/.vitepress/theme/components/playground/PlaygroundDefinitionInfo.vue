@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useData } from 'vitepress';
-import { ExternalLink } from '@lucide/vue';
+import { ArrowUpRight } from '@lucide/vue';
 import useStore from '@theme/stores/playground';
 import type { ThemeOptions } from '@theme/types';
 
@@ -40,91 +40,65 @@ function formatSize(bytes: number): string {
     :href="definitionUrl"
     target="_blank"
     rel="noopener noreferrer"
-    class="pg-def"
+    class="pg-def hv-row"
   >
     <span class="pg-def-main">
       <span class="pg-def-name">{{ fileName }}</span>
-      <ExternalLink :size="13" class="pg-def-icon" />
+      <span v-if="size" class="pg-def-size"
+        >{{ formatSize(size.gzip) }} gzipped ·
+        {{ formatSize(size.raw) }} raw</span
+      >
     </span>
-    <span v-if="size" class="pg-def-size">
-      <span class="pg-def-size-value">{{ formatSize(size.gzip) }}</span>
-      <span class="pg-def-size-unit">gzipped</span>
-      <span class="pg-def-size-sep">·</span>
-      <span class="pg-def-size-value">{{ formatSize(size.raw) }}</span>
-      <span class="pg-def-size-unit">raw</span>
-    </span>
+    <ArrowUpRight :size="16" class="pg-def-icon hv-chev" aria-hidden="true" />
   </a>
 </template>
 
 <style scoped lang="scss">
 .pg-def {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--db-ink);
   text-decoration: none;
-  color: var(--ui-c-text-muted);
-  transition: color var(--duration-fast);
-
-  &:hover,
-  &:focus-visible {
-    color: var(--vp-c-brand-1);
-    outline: none;
-
-    .pg-def-name {
-      text-decoration-color: var(--vp-c-brand-1);
-    }
-
-    .pg-def-icon {
-      color: var(--vp-c-brand-1);
-      transform: translate(1px, -1px);
-    }
-  }
 }
 
 .pg-def-main {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .pg-def-name {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--db-font-mono);
+  font-size: 15px;
+  line-height: 24px;
   font-weight: 500;
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-color: var(--pg-border);
-  text-underline-offset: 2px;
-  transition: text-decoration-color var(--duration-fast);
   word-break: break-all;
+}
+
+.pg-def-size {
+  font-size: 14px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--db-muted);
 }
 
 .pg-def-icon {
   flex-shrink: 0;
-  color: var(--ui-c-text-subtle);
-  transition:
-    color var(--duration-fast),
-    transform var(--duration-fast) var(--ease-smooth);
+  color: var(--db-muted);
 }
 
-.pg-def-size {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
-  font-size: 11px;
-  line-height: 1.2;
-  color: var(--ui-c-text-subtle);
-  font-variant-numeric: tabular-nums;
-}
+@media (max-width: 767px) {
+  .pg-def-name {
+    font-size: 14px;
+    line-height: 20px;
+  }
 
-.pg-def-size-value {
-  font-weight: 600;
-  color: var(--ui-c-text-muted);
-}
-
-.pg-def-size-sep {
-  opacity: 0.5;
-  margin: 0 2px;
+  .pg-def-size {
+    font-size: 13px;
+    line-height: 18px;
+  }
 }
 </style>

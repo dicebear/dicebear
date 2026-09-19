@@ -1,0 +1,199 @@
+/**
+ * Page basics. Everything here sits in a cascade layer, so a component rule
+ * wins over it whatever the import order. The first half clears the browser
+ * defaults that components would otherwise undo one by one.
+ */
+@layer db-base {
+  /* Boxes start without spacing. A border shows once a width is set. */
+  *,
+  *::before,
+  *::after,
+  ::backdrop {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-style: solid;
+  }
+
+  html {
+    font-family: var(--db-font);
+    font-feature-settings: 'cv11', 'ss01';
+    line-height: 1.5;
+    tab-size: 4;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    color-scheme: light;
+
+    &.dark {
+      color-scheme: dark;
+    }
+  }
+
+  body {
+    color: var(--db-ink);
+    background-color: var(--db-paper);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Text elements look like their surroundings until a component says
+     otherwise. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  li {
+    overflow-wrap: break-word;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  b,
+  strong {
+    font-weight: 600;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--db-font-mono);
+    font-size: 1em;
+  }
+
+  sub,
+  sup {
+    font-size: 0.75em;
+    line-height: 0;
+  }
+
+  ol,
+  ul,
+  menu {
+    list-style: none;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-color: inherit;
+  }
+
+  /* Media behaves like a block and never outgrows its column. */
+  img,
+  svg,
+  video,
+  canvas,
+  iframe {
+    display: block;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Controls use the page font and colors instead of the system look. */
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    font-feature-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    background-color: transparent;
+    border-radius: 0;
+  }
+
+  button:enabled,
+  [role='button'] {
+    cursor: pointer;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  ::placeholder {
+    color: var(--db-muted);
+    opacity: 1;
+  }
+
+  input[type='search']::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  [hidden]:not([hidden='until-found']) {
+    display: none !important;
+  }
+
+  /* One focus ring for links, buttons and fields. */
+  :focus-visible {
+    outline: 2px solid var(--db-brand);
+    outline-offset: 3px;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline-offset: 0;
+  }
+
+  /* Motion finishes at once. Elements that fade in still end up visible,
+     because their animations run to the last frame. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-delay: 0s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0s !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--db-brand) 30%, transparent);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* Theme-dependent images: both are in the markup, CSS shows one. */
+.dark .only-light,
+html:not(.dark) .only-dark {
+  display: none !important;
+}
+
+/* Shortcut hints: the core marks Apple platforms with .mac on the root. */
+.mac .only-other,
+html:not(.mac) .only-mac {
+  display: none !important;
+}

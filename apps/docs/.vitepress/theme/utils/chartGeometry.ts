@@ -1,5 +1,5 @@
 /**
- * Coordinate scaling shared by the stats charts (AppStatsSparkline,
+ * Coordinate scaling shared by the stats charts (SiteStatsSparkline,
  * AppStatsBannerCard, StylePopularity).
  *
  * The y scale runs from zero to the series' own peak. A min-to-max scale

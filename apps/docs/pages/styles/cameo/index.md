@@ -4,43 +4,18 @@ description: >
   Free one-color portrait avatar generator: head, hair and mouth in a single
   hue, no eyes. Create Cameo avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Cameo
+<SiteStylePage styleName="cameo">
 
-Cameo draws a head with hair and a mouth and leaves the eyes out. Six head
-shapes carry eight hairstyles and five mouths, all clipped to the outline, with
-a bun or a tail on top of roughly half of them. Everything is painted in one
-body color under a translucent black or white overlay, so a portrait holds a
-single hue in two tones. Generate quiet, graphic profile pictures for editorial
-sites and personal pages.
+A head with hair and a mouth and no eyes, painted in one color under a
+translucent overlay, so each portrait holds a single hue in two tones.
 
-<StylePreview styleName="cameo" />
-
-<StyleDescription styleName="cameo" />
-
-## Usage
-
-<StyleUsage styleName="cameo" />
-
-## Presets
-
-<StylePresets styleName="cameo" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="cameo" />
-
-## Details
-
-<StyleInfo styleName="cameo" />
+</SiteStylePage>

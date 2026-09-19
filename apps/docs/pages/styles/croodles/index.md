@@ -4,40 +4,17 @@ description: >
   Free doodle avatar generator with sketchy ink faces, hair, glasses and quirky
   expressions. Create Croodles avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Croodles
+<SiteStylePage styleName="croodles">
 
-Croodles is a hand-drawn doodle vector avatar style rendered in loose black ink
-lines: sketchy faces with hair, glasses, and quirky expressions. Generate
-informal profile icons for blogs, creative tools, and sketchbook-style products.
+Doodled faces in loose black ink, with hair, glasses and quirky expressions.
 
-<StylePreview styleName="croodles" />
-
-<StyleDescription styleName="croodles" />
-
-## Usage
-
-<StyleUsage styleName="croodles" />
-
-## Presets
-
-<StylePresets styleName="croodles" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="croodles" />
-
-## Details
-
-<StyleInfo styleName="croodles" />
+</SiteStylePage>

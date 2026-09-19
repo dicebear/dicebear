@@ -1,26 +1,28 @@
 <script setup lang="ts">
-import { Copy } from '@lucide/vue';
-import { ref } from 'vue';
+import { Check, Copy } from '@lucide/vue';
+import { onBeforeUnmount, ref } from 'vue';
 import copy from 'copy-to-clipboard';
 import { Avatar } from '@dicebear/core';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
 import { track, styleLabel } from '@theme/utils/track';
-import { UiAvatar, UiConfetti, UiDialog } from '../ui';
-import Button from 'primevue/button';
-import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
-import PlaygroundStarCta from './PlaygroundStarCta.vue';
+import PlaygroundDone from './PlaygroundDone.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
-import { DIALOG_PREVIEW_AVATAR_SIZE, DOWNLOAD_AVATAR_SIZE } from './constants';
+import { DOWNLOAD_AVATAR_SIZE } from './constants';
 
 const props = defineProps<{
   seed: string;
 }>();
 
-const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(
+const { store, open, options, showDialog } = usePlaygroundDialog(
   () => props.seed,
 );
 
-const text = ref('');
+const title = ref('');
+const copied = ref(false);
+
+let copiedTimer: ReturnType<typeof setTimeout> | undefined;
+
+onBeforeUnmount(() => clearTimeout(copiedTimer));
 
 async function onClick() {
   const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
@@ -38,40 +40,44 @@ async function onClick() {
     track('Playground: Copy SVG', {
       style: styleLabel(store.avatarStyleName),
     });
+
+    // The button confirms the copy for a moment as well.
+    copied.value = true;
+    clearTimeout(copiedTimer);
+    copiedTimer = setTimeout(() => (copied.value = false), 1600);
   }
 
-  text.value = successful
-    ? 'Your avatar was successfully copied! 🎉'
-    : 'Your avatar could not be copied. 😞';
+  title.value = successful
+    ? 'Your avatar was copied'
+    : 'Your avatar could not be copied';
 
   showDialog();
 }
 </script>
 
 <template>
-  <Button label="Copy SVG" severity="secondary" @click="onClick">
-    <template #icon>
-      <Copy :size="15" />
-    </template>
-  </Button>
+  <button
+    type="button"
+    class="site-btn site-btn-secondary pg-button-copy"
+    @click="onClick"
+  >
+    <component :is="copied ? Check : Copy" :size="16" aria-hidden="true" />
+    <span aria-live="polite">{{ copied ? 'Copied' : 'Copy SVG' }}</span>
+  </button>
 
-  <UiDialog v-model:open="open">
-    <UiConfetti :key="confettiKey" />
-    <div class="dialog-preview">
-      <UiAvatar
-        :style-name="store.avatarStyleName"
-        :style-options="options"
-        :size="DIALOG_PREVIEW_AVATAR_SIZE"
-        mode="library"
-      />
-    </div>
-    <h2 class="dialog-title">{{ text }}</h2>
-    <div class="dialog-subtitle">
-      Please note the license below before using.
-    </div>
-    <div class="dialog-text">
-      <PlaygroundLicenseAlert />
-      <PlaygroundStarCta source="copy" />
-    </div>
-  </UiDialog>
+  <PlaygroundDone
+    v-model:open="open"
+    :title="title"
+    :options="options"
+    source="copy"
+  />
 </template>
+
+<style scoped lang="scss">
+.pg-button-copy {
+  width: 100%;
+  min-width: 0;
+  padding: 0 12px;
+  font-size: 15px;
+}
+</style>

@@ -9,8 +9,9 @@ description: >
 
 Gravatar shows a default image for everyone without a Gravatar account, and you
 can point it at the DiceBear HTTP API, so those people get a friendly generated
-avatar instead of the gray silhouette. Gravatar sets a few conditions for
-default images:
+avatar instead of the gray silhouette.
+
+Gravatar sets a few conditions for default images:
 
 > 1. ✅ MUST be publicly available (e.g. cannot be on an intranet, on a local
 >    development machine, behind HTTP Auth or some other firewall etc). Default

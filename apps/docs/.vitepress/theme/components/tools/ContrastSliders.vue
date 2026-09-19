@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import Slider from 'primevue/slider';
-import InputNumber from 'primevue/inputnumber';
-import InputText from 'primevue/inputtext';
-import SelectButton from 'primevue/selectbutton';
+import SiteNumberField from '@theme/components/site/SiteNumberField.vue';
+import SiteSegmented from '@theme/components/site/SiteSegmented.vue';
+import SiteSlider from '@theme/components/site/SiteSlider.vue';
+import SiteTextField from '@theme/components/site/SiteTextField.vue';
 import {
   hexToRgb,
   hslToRgb,
@@ -64,7 +64,7 @@ function updateRgbChannel(channel: 'r' | 'g' | 'b', value: number) {
 function updateHslChannel(channel: 'h' | 's' | 'l', value: number) {
   const next = { ...hsl.value, [channel]: value };
   const asRgb = hslToRgb(next);
-  // HSL lets the user move hue directly; treat it as the authoritative hue.
+  // HSL lets the user move hue directly, so its hue is the authoritative one.
   const max = Math.max(asRgb.r, asRgb.g, asRgb.b) / 255;
   const min = Math.min(asRgb.r, asRgb.g, asRgb.b) / 255;
   const v = max * 100;
@@ -98,6 +98,8 @@ function onNativePick(event: Event) {
 type ChannelDef = {
   key: string;
   label: string;
+  /** Spoken name of the channel for the slider and the number field. */
+  name: string;
   unit?: string;
   min: number;
   max: number;
@@ -105,25 +107,53 @@ type ChannelDef = {
 };
 
 const rgbChannels: ChannelDef[] = [
-  { key: 'r', label: 'R', min: 0, max: 255, step: 1 },
-  { key: 'g', label: 'G', min: 0, max: 255, step: 1 },
-  { key: 'b', label: 'B', min: 0, max: 255, step: 1 },
+  { key: 'r', label: 'R', name: 'Red', min: 0, max: 255, step: 1 },
+  { key: 'g', label: 'G', name: 'Green', min: 0, max: 255, step: 1 },
+  { key: 'b', label: 'B', name: 'Blue', min: 0, max: 255, step: 1 },
 ];
 
 const hslChannels: ChannelDef[] = [
-  { key: 'h', label: 'H', unit: '°', min: 0, max: 359, step: 1 },
-  { key: 's', label: 'S', unit: '%', min: 0, max: 100, step: 1 },
-  { key: 'l', label: 'L', unit: '%', min: 0, max: 100, step: 1 },
+  { key: 'h', label: 'H', name: 'Hue', unit: '°', min: 0, max: 359, step: 1 },
+  {
+    key: 's',
+    label: 'S',
+    name: 'Saturation',
+    unit: '%',
+    min: 0,
+    max: 100,
+    step: 1,
+  },
+  {
+    key: 'l',
+    label: 'L',
+    name: 'Lightness',
+    unit: '%',
+    min: 0,
+    max: 100,
+    step: 1,
+  },
 ];
 
 const hsvChannels: ChannelDef[] = [
-  { key: 'h', label: 'H', unit: '°', min: 0, max: 359, step: 1 },
-  { key: 's', label: 'S', unit: '%', min: 0, max: 100, step: 1 },
-  { key: 'v', label: 'V', unit: '%', min: 0, max: 100, step: 1 },
+  { key: 'h', label: 'H', name: 'Hue', unit: '°', min: 0, max: 359, step: 1 },
+  {
+    key: 's',
+    label: 'S',
+    name: 'Saturation',
+    unit: '%',
+    min: 0,
+    max: 100,
+    step: 1,
+  },
+  { key: 'v', label: 'V', name: 'Value', unit: '%', min: 0, max: 100, step: 1 },
 ];
 
 type Space = 'RGB' | 'HSL' | 'HSV';
-const spaces: Space[] = ['RGB', 'HSL', 'HSV'];
+const spaces: { value: Space; label: string }[] = [
+  { value: 'RGB', label: 'RGB' },
+  { value: 'HSL', label: 'HSL' },
+  { value: 'HSV', label: 'HSV' },
+];
 const activeSpace = ref<Space>('HSV');
 
 const activeChannels = computed<ChannelDef[]>(() => {
@@ -146,7 +176,10 @@ const activeValues = computed<Record<string, number>>(() => {
   return roundChannels(props.hsv);
 });
 
-function updateActiveChannel(key: string, value: number) {
+function updateActiveChannel(key: string, value: number | null) {
+  // An emptied number field keeps the current value until it has a number.
+  if (value === null) return;
+
   if (activeSpace.value === 'RGB') {
     updateRgbChannel(key as 'r' | 'g' | 'b', value);
   } else if (activeSpace.value === 'HSL') {
@@ -163,32 +196,29 @@ function updateActiveChannel(key: string, value: number) {
       <input
         type="color"
         :value="hex"
-        class="contrast-sliders-hex-swatch"
+        class="contrast-sliders-hex-swatch hv-border"
         aria-label="Open native color picker"
         @input="onNativePick"
       />
-      <InputText
+      <SiteTextField
         id="contrast-hex"
         v-model="hexInput"
         class="contrast-sliders-hex-input"
         aria-label="Hex color"
-        :maxlength="7"
+        maxlength="7"
         spellcheck="false"
         autocomplete="off"
         @change="commitHex"
         @keydown.enter="commitHex"
         @blur="commitHex"
       />
+      <SiteSegmented
+        v-model="activeSpace"
+        :options="spaces"
+        aria-label="Color space"
+        class="contrast-sliders-space"
+      />
     </div>
-
-    <SelectButton
-      v-model="activeSpace"
-      :options="spaces"
-      :allow-empty="false"
-      size="small"
-      aria-label="Color space"
-      class="contrast-sliders-space-toggle"
-    />
 
     <div class="contrast-sliders-channels">
       <div
@@ -196,32 +226,24 @@ function updateActiveChannel(key: string, value: number) {
         :key="`${activeSpace}-${channel.key}`"
         class="contrast-sliders-row"
       >
-        <span class="contrast-sliders-row-label">
-          {{ channel.label }}
-          <span v-if="channel.unit" class="contrast-sliders-row-unit">{{
-            channel.unit
-          }}</span>
-        </span>
-        <Slider
+        <span class="contrast-sliders-row-label">{{ channel.label }}</span>
+        <SiteSlider
           :model-value="activeValues[channel.key]"
           :min="channel.min"
           :max="channel.max"
           :step="channel.step"
-          class="contrast-sliders-row-slider"
-          @update:model-value="
-            updateActiveChannel(channel.key, $event as number)
-          "
+          :aria-label="channel.name"
+          @update:model-value="updateActiveChannel(channel.key, $event)"
         />
-        <InputNumber
+        <SiteNumberField
           :model-value="activeValues[channel.key]"
           :min="channel.min"
           :max="channel.max"
           :step="channel.step"
-          :show-buttons="false"
-          fluid
-          class="contrast-sliders-row-input"
-          input-class="contrast-sliders-row-input-field"
-          @update:model-value="updateActiveChannel(channel.key, $event ?? 0)"
+          :suffix="channel.unit"
+          :aria-label="channel.name"
+          size="sm"
+          @update:model-value="updateActiveChannel(channel.key, $event)"
         />
       </div>
     </div>
@@ -232,22 +254,23 @@ function updateActiveChannel(key: string, value: number) {
 .contrast-sliders {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
 
   &-hex {
     display: flex;
-    align-items: stretch;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 10px;
 
     &-swatch {
-      width: 42px;
-      height: 42px;
-      padding: 2px;
       flex-shrink: 0;
-      border: 1px solid var(--vp-c-border);
-      border-radius: var(--vp-radius-xs);
-      background: var(--vp-c-bg);
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--db-btn-border);
+      border-radius: var(--db-radius-3);
+      background: transparent;
       cursor: pointer;
 
       &::-webkit-color-swatch-wrapper {
@@ -256,66 +279,47 @@ function updateActiveChannel(key: string, value: number) {
 
       &::-webkit-color-swatch {
         border: none;
-        border-radius: 4px;
       }
 
       &::-moz-color-swatch {
         border: none;
-        border-radius: 4px;
       }
     }
+  }
 
-    &-input {
-      flex: 1;
-      min-width: 0;
-      font-family: var(--vp-font-family-mono);
+  // Doubled selector, so the width wins over the field's own.
+  & &-hex-input {
+    flex: 1;
+    width: auto;
+    min-width: 120px;
+
+    :deep(input) {
+      font-family: var(--db-font-mono);
       font-variant-numeric: tabular-nums;
     }
   }
 
-  &-space-toggle {
-    display: flex;
-
-    :deep(.p-togglebutton) {
-      flex: 1;
-    }
+  &-space {
+    flex-shrink: 0;
   }
 
   &-channels {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
   }
 
   &-row {
     display: grid;
-    grid-template-columns: 36px 1fr 72px;
+    grid-template-columns: 20px minmax(0, 1fr) 88px;
+    gap: 16px;
     align-items: center;
-    gap: 12px;
 
     &-label {
-      font-size: 13px;
+      font-size: 15px;
+      line-height: 24px;
       font-weight: 600;
-      color: var(--ui-c-text-muted);
-      display: flex;
-      align-items: baseline;
-      gap: 2px;
-    }
-
-    &-unit {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--ui-c-text-subtle);
-    }
-
-    &-slider {
-      min-width: 0;
-    }
-
-    &-input :deep(.p-inputnumber-input) {
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-      padding-inline: 8px;
+      color: var(--db-ink-2);
     }
   }
 }

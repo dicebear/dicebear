@@ -1,45 +1,41 @@
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme-without-fonts';
-import { VPDocAsideSponsors } from 'vitepress/theme-without-fonts';
-import { withBase } from 'vitepress';
-import LayoutFooter from './components/layout/LayoutFooter.vue';
-import LayoutNavActions from './components/layout/LayoutNavActions.vue';
-import DocsPageHeader from './components/docs/DocsPageHeader.vue';
-import './styles/main.scss';
+/**
+ * The theme's single layout. A page with `layout: page` brings its own
+ * structure and gets the bare content, everything else is a docs page.
+ */
+import { useData } from 'vitepress';
+import ThemeDocsShell from './components/theme/ThemeDocsShell.vue';
+import ThemeFooter from './components/theme/ThemeFooter.vue';
+import ThemeHeader from './components/theme/ThemeHeader.vue';
+import ThemeNotFound from './components/theme/ThemeNotFound.vue';
+import ThemeSearch from './components/theme/ThemeSearch.vue';
+import ThemeSkipLink from './components/theme/ThemeSkipLink.vue';
+import './styles/index.scss';
 
-const { Layout } = DefaultTheme;
-
-const sponsors = [
-  {
-    tier: 'CDN sponsored by',
-    size: 'medium' as const,
-    items: [
-      {
-        name: 'bunny.net',
-        img: withBase('/sponsors/bunny-dark.svg'),
-        url: 'https://bunny.net/',
-      },
-    ],
-  },
-];
+const { page, frontmatter } = useData();
 </script>
 
 <template>
-  <Layout>
-    <template #nav-bar-content-after>
-      <LayoutNavActions />
-    </template>
-    <template #doc-before>
-      <DocsPageHeader />
-    </template>
-    <template #aside-outline-after>
-      <div class="layout-aside-sponsors">
-        <VPDocAsideSponsors :data="sponsors" />
-        <span class="layout-aside-sponsors-ad">Advertisement</span>
-      </div>
-    </template>
-    <template #layout-bottom>
-      <LayoutFooter />
-    </template>
-  </Layout>
+  <ThemeSkipLink />
+  <ThemeHeader />
+  <ThemeSearch />
+  <main id="content" class="theme-main" tabindex="-1">
+    <ThemeNotFound v-if="page.isNotFound" />
+    <Content v-else-if="frontmatter.layout === 'page'" />
+    <ThemeDocsShell v-else />
+  </main>
+  <ThemeFooter />
 </template>
+
+<style lang="scss">
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.theme-main {
+  flex: 1;
+  outline: none;
+}
+</style>

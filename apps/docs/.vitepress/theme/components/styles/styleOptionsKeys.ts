@@ -33,3 +33,14 @@ export const variantTagsDefault: VariantTagsLookup = () => [];
 export const showVariantTagsKey: InjectionKey<Ref<boolean>> =
   Symbol('showVariantTags');
 export const showVariantTagsDefault = readonly(ref(false));
+
+/** One option of a style as the options descriptor reports it. */
+export interface OptionValue {
+  type: string;
+  values?: string[];
+  min?: number;
+  max?: number;
+  list?: boolean;
+  weighted?: boolean;
+  contrastTo?: string;
+}

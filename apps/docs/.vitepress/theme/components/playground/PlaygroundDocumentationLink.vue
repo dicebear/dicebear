@@ -10,69 +10,60 @@ const url = computed(() => `/styles/${kebabCase(store.avatarStyleName)}/`);
 </script>
 
 <template>
-  <a :href="url" class="pg-doc-link">
+  <a :href="url" class="pg-doc-link hv-row">
     <span class="pg-doc-main">
       <span class="pg-doc-label">Style documentation</span>
-      <ArrowRight :size="13" class="pg-doc-arrow" />
+      <span class="pg-doc-hint"
+        >Full options reference, code examples, and integration guides.</span
+      >
     </span>
-    <span class="pg-doc-hint"
-      >Full options reference, code examples, and integration guides.</span
-    >
+    <ArrowRight :size="18" class="pg-doc-arrow hv-chev" aria-hidden="true" />
   </a>
 </template>
 
 <style scoped lang="scss">
 .pg-doc-link {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--db-ink);
   text-decoration: none;
-  color: var(--ui-c-text-muted);
-  transition: color var(--duration-fast);
-
-  &:hover,
-  &:focus-visible {
-    color: var(--vp-c-brand-1);
-    outline: none;
-
-    .pg-doc-label {
-      text-decoration-color: var(--vp-c-brand-1);
-    }
-
-    .pg-doc-arrow {
-      color: var(--vp-c-brand-1);
-      transform: translateX(2px);
-    }
-  }
 }
 
 .pg-doc-main {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .pg-doc-label {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-color: var(--pg-border);
-  text-underline-offset: 2px;
-  transition: text-decoration-color var(--duration-fast);
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 600;
+}
+
+.pg-doc-hint {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--db-muted);
 }
 
 .pg-doc-arrow {
   flex-shrink: 0;
-  color: var(--ui-c-text-subtle);
-  transition:
-    color var(--duration-fast),
-    transform var(--duration-fast) var(--ease-smooth);
+  color: var(--db-muted);
 }
 
-.pg-doc-hint {
-  font-size: 11px;
-  line-height: 1.2;
-  color: var(--ui-c-text-subtle);
+@media (max-width: 767px) {
+  .pg-doc-label {
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  .pg-doc-hint {
+    font-size: 13px;
+    line-height: 18px;
+  }
 }
 </style>

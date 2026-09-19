@@ -44,7 +44,7 @@ const markdownUrl = computed(() => withBase(`${route.value}index.md`));
     <UiIcon
       class="docs-markdown-link-icon"
       :path="siMarkdown.path"
-      :size="20"
+      :size="18"
       aria-hidden="true"
     />
     <span class="docs-markdown-link-label">View as Markdown</span>
@@ -53,26 +53,23 @@ const markdownUrl = computed(() => withBase(`${route.value}index.md`));
 
 <style lang="scss" scoped>
 .docs-markdown-link {
+  display: inline-flex;
   flex: none;
-  color: var(--ui-c-text-muted);
-  font-size: 13px;
+  align-items: center;
+  gap: 8px;
+  color: var(--db-muted);
+  font-size: 14px;
+  line-height: 20px;
   text-decoration: none;
 
   &:hover {
-    color: var(--vp-c-brand-1);
+    color: var(--db-brand-text);
     text-decoration: underline;
+    text-underline-offset: 3px;
   }
-}
-
-.docs-markdown-link-icon {
-  display: none;
 }
 
 @media (max-width: 767px) {
-  .docs-markdown-link-icon {
-    display: block;
-  }
-
   .docs-markdown-link-label {
     display: none;
   }

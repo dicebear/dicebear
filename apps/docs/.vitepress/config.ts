@@ -22,6 +22,7 @@ import avatarStyles, {
 import avatarUniqueCounts from './config/avatarUniqueCounts.ts';
 import avatarStyleSizes from './config/avatarStyleSizes.ts';
 import { softwareLicense } from './config/softwareLicense.ts';
+import { shikiDark, shikiLight } from './config/shikiThemes.ts';
 import { formatStars } from './theme/utils/format.ts';
 
 // Unauthenticated api.github.com allows 60 requests per hour and per IP, which
@@ -375,7 +376,7 @@ export default defineConfig<ThemeOptions>({
       },
     ],
     ssr: {
-      noExternal: ['vue-countup-v3', 'vue-chartjs'],
+      noExternal: ['vue-chartjs'],
     },
     resolve: {
       alias: {
@@ -427,6 +428,7 @@ export default defineConfig<ThemeOptions>({
         link: '/animated-avatars/',
         activeMatch: '^/animated-avatars',
       },
+      { text: 'Studio', link: '/studio/', activeMatch: '^/studio' },
       {
         text: 'Docs',
         link: '/start/',
@@ -454,6 +456,15 @@ export default defineConfig<ThemeOptions>({
     hostname: SITE_ORIGIN,
   },
   markdown: {
+    theme: { light: shikiLight, dark: shikiDark },
+    // Sentence case labels on the callouts, the renderer's default shouts.
+    container: {
+      tipLabel: 'Tip',
+      infoLabel: 'Info',
+      warningLabel: 'Warning',
+      dangerLabel: 'Danger',
+      detailsLabel: 'Details',
+    },
     config: (md) => {
       // The counterpart of transformPageData for page bodies: prose cannot
       // read themeConfig at build time, and a Vue interpolation would reach

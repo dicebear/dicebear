@@ -7,9 +7,10 @@ description: >
 
 # Nuxt avatar library: using DiceBear with Nuxt
 
-DiceBear works with Nuxt's universal rendering model. The avatar can be
-generated on the server during SSR, in a Nitro endpoint, or in a plain client
-component. Pick whichever matches the page's
+DiceBear works with Nuxt's universal rendering model.
+
+The avatar can be generated on the server during SSR, in a Nitro endpoint, or in
+a plain client component. Pick whichever matches the page's
 [rendering mode](https://nuxt.com/docs/guide/concepts/rendering).
 
 ## With the JS library

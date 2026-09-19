@@ -10,10 +10,11 @@ description: >
 Our
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787)
 plugin works in both directions. It turns a Figma frame into an avatar style,
-and it turns a style definition back into a Figma file. So you can open one of
-our styles in Figma, change it, and export your own version of it. This guide
-covers that round trip, the [plugin overview](/integrations/figma/) covers the
-other tabs.
+and it turns a style definition back into a Figma file.
+
+So you can open one of our styles in Figma, change it, and export your own
+version of it. This guide covers that round trip, the
+[plugin overview](/integrations/figma/) covers the other tabs.
 
 You need two things: the plugin, and the
 [definition file](/create-styles/definition-schema/) of the style you want to
@@ -126,7 +127,7 @@ definition file that works right away, without a build step.
 
 Try it with the [CLI](/integrations/cli/):
 
-```
+```sh
 dicebear create ./critters.json -o ./test-output --count 10
 ```
 

@@ -9,8 +9,9 @@ description: >
 # JavaScript avatar library
 
 Generate avatars right where you need them: in the browser, in
-[Node.js](https://nodejs.org/en/) (version 22 or higher), or at build time. The
-library is written in [TypeScript](https://www.typescriptlang.org/), and it
+[Node.js](https://nodejs.org/en/) (version 22 or higher), or at build time.
+
+The library is written in [TypeScript](https://www.typescriptlang.org/), and it
 renders the same avatar for the same seed as every other DiceBear integration,
 so you can start here and change your mind later. Working in a different
 language? [Pick your integration](/start/pick-your-integration/) lists them all.
@@ -20,7 +21,7 @@ language? [Pick your integration](/start/pick-your-integration/) lists them all.
 You need two packages: the core library `@dicebear/core` and the avatar style
 definitions `@dicebear/styles`.
 
-```
+```sh
 npm install @dicebear/core @dicebear/styles
 ```
 

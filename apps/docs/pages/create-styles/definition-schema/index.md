@@ -573,7 +573,7 @@ Or reference the schema directly from a CDN, handy for the `$schema` field of
 your style definition so editors like VS Code provide autocomplete and inline
 validation:
 
-```
+```http
 https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/definition.min.json
 https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/options.min.json
 ```

@@ -4,40 +4,17 @@ description: >
   Free cartoon avatar generator with big round ears, varied hairstyles and
   simple faces. Create Big Ears avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Big Ears
+<SiteStylePage styleName="big-ears">
 
-Big Ears is a playful vector avatar style of cartoon heads with oversized round
-ears, varied hairstyles, and simple expressive faces. Generate cheerful profile
-icons for community apps, kids' platforms, and casual social products.
+Cartoon heads with oversized round ears, varied hairstyles and simple faces.
 
-<StylePreview styleName="big-ears" />
-
-<StyleDescription styleName="big-ears" />
-
-## Usage
-
-<StyleUsage styleName="big-ears" />
-
-## Presets
-
-<StylePresets styleName="big-ears" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="big-ears" />
-
-## Details
-
-<StyleInfo styleName="big-ears" />
+</SiteStylePage>

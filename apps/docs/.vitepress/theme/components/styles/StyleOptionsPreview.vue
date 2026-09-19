@@ -150,7 +150,7 @@ const generalOptions = computed(() => {
     } else if (t.type === 'colorOrder') {
       // Three palette colors through a linear gradient make the order
       // visible: `random` shuffles them per seed, `fixed` keeps the list
-      // order and takes all three as stops. Single value, not an array; the
+      // order and takes all three as stops. It is a single value, because the
       // schema rejects the array form for this option.
       opts[colorKey] = padColors(
         resolveColors(t.color, styleColors.value),
@@ -244,34 +244,36 @@ function selectLabel(event: MouseEvent) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 6px;
   min-width: 0;
-  border-radius: var(--vp-radius-xs);
-  background: var(--vp-c-bg-soft);
   overflow: hidden;
-
-  html.dark & {
-    background: var(--vp-c-bg);
-  }
 
   &-avatar-wrapper {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 16px 12px 12px;
-    min-height: 96px;
+    min-height: 80px;
+  }
+
+  /* The checkerboard shows through where an avatar is transparent. It lies
+     on the tile color, which stays light in dark mode. */
+  &-img,
+  & &-avatar {
+    border-radius: var(--db-radius-4);
+    background:
+      repeating-conic-gradient(
+          rgba(11, 22, 32, 0.02) 0% 25%,
+          rgba(11, 22, 32, 0.07) 0% 50%
+        )
+        50% / 12px 12px,
+      var(--db-tile);
+    overflow: hidden;
+    user-select: none;
   }
 
   &-img {
     width: 80px;
     height: 80px;
-    border-radius: 3px;
-    background: repeating-conic-gradient(
-        var(--ui-avatar-bg-1, rgba(0, 0, 0, 0.02)) 0% 25%,
-        var(--ui-avatar-bg-2, rgba(0, 0, 0, 0.07)) 0% 50%
-      )
-      50% / 12px 12px;
-    overflow: hidden;
-    user-select: none;
 
     img {
       width: 100%;
@@ -281,18 +283,15 @@ function selectLabel(event: MouseEvent) {
     }
   }
 
-  &-avatar {
-    user-select: none;
-  }
-
   &-label {
     display: block;
-    text-align: center;
-    padding: 6px 4px;
+    max-width: 100%;
+    font-family: var(--db-font-mono);
     font-size: 11px;
-    font-weight: 500;
-    line-height: 1;
-    color: var(--vp-c-text-2);
+    line-height: 14px;
+    text-align: center;
+    color: var(--db-muted);
+    overflow-wrap: anywhere;
     cursor: pointer;
     background: none;
   }
@@ -301,24 +300,17 @@ function selectLabel(event: MouseEvent) {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 3px;
-    padding: 0 6px;
+    gap: 4px;
   }
 
   &-tag {
-    font-size: 10px;
-    line-height: 1.4;
     padding: 1px 6px;
-    border-radius: 99px;
-    background: var(--vp-code-bg);
-    color: var(--vp-c-text-2);
-  }
-
-  // Bottom breathing room lives on the last element so it adapts to whether
-  // tags are present.
-  &-label:last-child,
-  &-tags {
-    padding-bottom: 10px;
+    border-radius: 5px;
+    background: var(--db-soft);
+    font-family: var(--db-font-mono);
+    font-size: 10px;
+    line-height: 14px;
+    color: var(--db-muted);
   }
 }
 </style>

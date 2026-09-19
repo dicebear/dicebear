@@ -10,9 +10,21 @@ editLink: false
 ---
 
 <script setup lang="ts">
+import SitePageHead from "@theme/components/site/SitePageHead.vue";
 import ContrastTool from "@theme/components/tools/ContrastTool.vue";
+
+const crumbs = [
+  { text: 'Home', link: '/' },
+  { text: 'Tools', link: '/tools/' },
+  { text: 'Contrast' },
+];
 </script>
 
-<ClientOnly>
-  <ContrastTool />
-</ClientOnly>
+<SitePageHead :crumbs="crumbs" title="Contrast picker">
+
+See which of two contrast colors DiceBear picks for any color, using the WCAG
+2.1 algorithm from `@dicebear/core`.
+
+</SitePageHead>
+
+<ContrastTool />

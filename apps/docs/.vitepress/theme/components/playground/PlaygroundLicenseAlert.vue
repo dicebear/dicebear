@@ -1,26 +1,42 @@
 <script setup lang="ts">
-import { UiCard } from '@theme/components/ui';
 import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
 </script>
 
 <template>
-  <UiCard padding="sm" class="playground-license-alert">
+  <div class="playground-license-alert">
     <strong>
       Please note the following license before using the avatar:
     </strong>
     <PlaygroundLicenseText />
-  </UiCard>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .playground-license-alert {
+  padding: 14px 16px;
+  border: 1px solid var(--db-line);
+  border-radius: var(--db-radius-3);
+  background: var(--db-soft);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 20px;
+  color: var(--db-ink-2);
 
-  :deep(strong) {
+  strong {
     display: block;
-    margin-bottom: 4px;
     font-weight: 600;
+    color: var(--db-ink);
+  }
+
+  /* The license text of the built-in styles brings its own link colors. */
+  :deep(p a) {
+    font-weight: 500;
+    color: var(--db-brand-text);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
   }
 }
 </style>

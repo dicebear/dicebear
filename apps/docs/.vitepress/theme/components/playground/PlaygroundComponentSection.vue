@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { inject } from 'vue';
-import Slider from 'primevue/slider';
-import Button from 'primevue/button';
-import InputNumber from 'primevue/inputnumber';
-import { Weight } from '@lucide/vue';
+import SiteSlider from '@theme/components/site/SiteSlider.vue';
+import SiteNumberField from '@theme/components/site/SiteNumberField.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
@@ -59,93 +57,96 @@ function resetVariants() {
 
 <template>
   <div class="pg-comp-body">
-    <div class="pg-field" v-if="hasProbability">
+    <div v-if="hasProbability" class="pg-field">
       <div class="pg-field-label">
         <span>Probability</span>
-        <PlaygroundFieldReset
-          v-if="store.isOptionSet(probabilityKey)"
-          @click="store.resetOption(probabilityKey)"
-        />
-        <span class="pg-field-value">{{ probability }}%</span>
+        <span class="pg-field-tools">
+          <span class="pg-field-value">{{ probability }}%</span>
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(probabilityKey)"
+            @click="store.resetOption(probabilityKey)"
+          />
+        </span>
       </div>
-      <Slider v-model="probability" :min="0" :max="100" :step="1" />
+      <SiteSlider
+        v-model="probability"
+        :min="0"
+        :max="100"
+        :step="1"
+        aria-label="Probability"
+      />
     </div>
 
-    <div v-if="variants.length > 0" class="pg-comp-variants">
-      <div class="pg-field-label">
+    <div v-if="variants.length > 0" class="pg-field">
+      <div class="pg-field-label pg-comp-variants-label">
         <span>Variants</span>
-        <Button
-          size="small"
-          :severity="showWeights ? 'primary' : 'secondary'"
-          variant="outlined"
-          v-tooltip="showWeights ? 'Hide weights' : 'Show weights'"
-          @click="toggleWeights"
-          class="pg-field-toggle"
-        >
-          <Weight :size="14" />
-        </Button>
-        <Button
-          label="All"
-          size="small"
-          severity="secondary"
-          variant="outlined"
-          @click="selectAll"
-          class="pg-field-toggle"
-        />
-        <Button
-          label="None"
-          size="small"
-          severity="secondary"
-          variant="outlined"
-          @click="selectNone"
-          class="pg-field-toggle"
-        />
-        <PlaygroundFieldReset
-          v-if="store.isOptionSet(variantKey)"
-          @click="resetVariants"
-        />
+        <span class="pg-field-tools pg-comp-variants-tools">
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(variantKey)"
+            @click="resetVariants"
+          />
+          <button
+            type="button"
+            class="pg-field-action hv-ghost"
+            :aria-pressed="showWeights"
+            @click="toggleWeights"
+          >
+            {{ showWeights ? 'Hide weights' : 'Show weights' }}
+          </button>
+          <button
+            type="button"
+            class="pg-field-action hv-ghost"
+            @click="selectAll"
+          >
+            All
+          </button>
+          <button
+            type="button"
+            class="pg-field-action hv-ghost"
+            @click="selectNone"
+          >
+            None
+          </button>
+        </span>
       </div>
       <div class="pg-comp-variants-grid">
-        <div
-          v-for="variant in variants"
-          :key="variant"
-          class="pg-comp-variant"
-          :class="{
-            'pg-comp-variant-off': variantWeights[variant] === undefined,
-          }"
-        >
+        <div v-for="variant in variants" :key="variant" class="pg-comp-variant">
           <button
+            type="button"
             class="pg-comp-variant-btn"
-            :class="{
-              'pg-comp-variant-btn-active':
-                variantWeights[variant] !== undefined,
-            }"
+            :class="{ 'hv-thumb': variantWeights[variant] === undefined }"
+            :aria-pressed="variantWeights[variant] !== undefined"
+            :title="variant"
             @click="toggleVariant(variant)"
           >
-            <img
-              v-if="preview"
-              :src="preview.toDataUri(componentName, variant)"
-              alt=""
-              class="pg-comp-variant-img"
-            />
+            <span class="pg-comp-variant-tile">
+              <img
+                v-if="preview"
+                :src="preview.toDataUri(componentName, variant)"
+                alt=""
+                class="pg-comp-variant-img"
+              />
+            </span>
+            <span class="pg-comp-variant-name">{{ variant }}</span>
           </button>
-          <span class="pg-comp-variant-name">{{ variant }}</span>
-          <InputNumber
+          <SiteNumberField
             v-if="showWeights && variantWeights[variant] !== undefined"
-            v-tooltip="'Weight — higher values increase probability'"
             :model-value="variantWeights[variant]"
-            @update:model-value="
-              (val: number) => setWeight(variant, Math.max(0, val ?? 0))
-            "
             :min="0"
-            :min-fraction-digits="0"
             :max-fraction-digits="2"
-            :show-buttons="false"
-            locale="en-US"
+            size="sm"
+            fluid
+            :aria-label="`Weight of ${variant}`"
             class="pg-comp-variant-weight"
+            @update:model-value="
+              (val: number | null) => setWeight(variant, Math.max(0, val ?? 0))
+            "
           />
         </div>
       </div>
+      <p v-if="showWeights" class="pg-help">
+        Weight: a higher number makes this variant more likely
+      </p>
     </div>
   </div>
 </template>
@@ -154,90 +155,111 @@ function resetVariants() {
 .pg-comp-body {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
-.pg-comp-variants {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.pg-comp-variants-label {
+  flex-wrap: wrap;
+}
+
+.pg-comp-variants-tools {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+
+  .pg-field-reset {
+    margin-right: 6px;
+  }
 }
 
 .pg-comp-variants-grid {
   display: grid;
-  /* `minmax(0, 1fr)` allows the columns to shrink below the intrinsic
-     content width — without it long variant names would push the
-     tracks wider than the container. */
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* `minmax(0, 1fr)` lets the columns shrink below the width of a long
+     variant name. */
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 8px;
+}
+
+@container pg-options (max-width: 520px) {
+  .pg-comp-variants-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .pg-comp-variant {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  /* Allow flex children (e.g. the variant name) to shrink so the
-     ellipsis can engage. */
+  gap: 6px;
   min-width: 0;
-  transition: opacity var(--duration-fast) ease;
-
-  &-off {
-    opacity: 0.25;
-  }
 }
 
 .pg-comp-variant-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   width: 100%;
-  padding: 4px;
-  border: 2px solid transparent;
-  border-radius: var(--vp-radius-xs);
-  background: none;
+  padding: 6px 6px 4px;
+  box-sizing: border-box;
+  border: 1px solid var(--db-line);
+  border-radius: var(--db-radius-3);
+  background: var(--db-paper);
+  font: inherit;
   cursor: pointer;
-  transition: all var(--duration-fast) ease;
+  transition:
+    opacity var(--duration-fast) ease,
+    border-color 0.12s,
+    box-shadow 0.12s;
 
-  &-active {
-    border-color: var(--p-primary-color);
+  &[aria-pressed='false'] {
+    border-style: dashed;
+    opacity: 0.35;
   }
 
-  &:hover {
-    border-color: var(--p-primary-200);
+  &[aria-pressed='false']:hover,
+  &[aria-pressed='false']:focus-visible {
+    opacity: 0.7;
   }
+
+  &[aria-pressed='true'] {
+    border-color: var(--db-brand);
+    box-shadow: 0 0 0 1px var(--db-brand);
+  }
+}
+
+/* The light tile stays light in dark mode, like everywhere behind avatars. */
+.pg-comp-variant-tile {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--db-radius-2);
+  background: var(--db-tile);
 }
 
 .pg-comp-variant-img {
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   object-fit: contain;
-  border-radius: 3px;
-  background: repeating-conic-gradient(
-      var(--ui-avatar-bg-1, rgba(0, 0, 0, 0.02)) 0% 25%,
-      var(--ui-avatar-bg-2, rgba(0, 0, 0, 0.07)) 0% 50%
-    )
-    50% / 12px 12px;
 }
 
 .pg-comp-variant-name {
-  font-size: 9px;
-  color: var(--ui-c-text-subtle);
-  /* `width: 100%` (not `max-width`) ensures the span fills the
-     column so the ellipsis can clip long names cleanly. */
+  /* The full width lets the ellipsis clip a long name. */
   width: 100%;
   overflow: hidden;
+  font-family: var(--db-font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--db-muted);
+  text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-align: center;
 }
 
 .pg-comp-variant-weight {
-  width: 40px;
-
-  :deep(input) {
-    width: 40px;
-    height: 20px;
-    padding: 0 4px;
-    font-size: 11px;
+  :deep(.site-number-input) {
+    font-family: var(--db-font-mono);
     text-align: center;
   }
 }

@@ -4,41 +4,18 @@ description: >
   Free hand-drawn people avatar generator with sketchy outlines and
   mix-and-match features. Create Open Peeps avatars with the DiceBear avatar API
   or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Open Peeps
+<SiteStylePage styleName="open-peeps">
 
-Open Peeps is a hand-drawn vector avatar style of diverse half-body characters
-with sketchy outlines, mix-and-match hair, expressions, and accessories.
-Generate friendly SVG profile icons for community platforms, marketing pages,
-and social apps.
+Hand-drawn half-body characters with sketchy outlines and mix-and-match hair,
+expressions and accessories.
 
-<StylePreview styleName="open-peeps" />
-
-<StyleDescription styleName="open-peeps" />
-
-## Usage
-
-<StyleUsage styleName="open-peeps" />
-
-## Presets
-
-<StylePresets styleName="open-peeps" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="open-peeps" />
-
-## Details
-
-<StyleInfo styleName="open-peeps" />
+</SiteStylePage>

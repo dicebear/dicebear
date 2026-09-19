@@ -8,6 +8,7 @@ description: >
 # Implement DiceBear Core
 
 This guide explains how to implement DiceBear Core in any programming language.
+
 A correct implementation produces **byte-identical SVGs** to the
 [JavaScript](https://github.com/dicebear/dicebear/tree/11.x/src/js/core),
 [PHP](https://github.com/dicebear/dicebear/tree/11.x/src/php/core),
@@ -20,7 +21,7 @@ implementations for the same seed and style definition.
 
 ## Architecture overview
 
-```
+```text
 Avatar(definition, options)
   │
   ├── Style        Parse and validate the definition JSON
@@ -72,7 +73,7 @@ SVGs. Get this right first.
 converts a string into a 32-bit unsigned integer. DiceBear iterates over
 **UTF-16 code units** (not bytes, not code points).
 
-```
+```text
 offset_basis = 0x811c9dc5
 prime        = 0x01000193
 
@@ -116,7 +117,7 @@ static hash(input) {
 is a stateful PRNG that converts a 32-bit seed into a sequence of pseudo-random
 numbers. The implementation must match Tommy Ettinger's C reference exactly.
 
-```
+```text
 function mulberry32_next(state) -> (uint32, new_state):
     state = (state + 0x6D2B79F5) as signed 32-bit
     z = state
@@ -163,7 +164,7 @@ DiceBear does not call the PRNG sequentially. Instead, each random decision uses
 a **key** to derive an independent value. This makes the output independent of
 call order.
 
-```
+```text
 function getValue(seed: string, key: string) -> float:
     hash = fnv1a_hash(seed + ":" + key)
     prng = new Mulberry32(hash)
@@ -196,7 +197,7 @@ reference compares full UTF-16 code units. The PHP reference does exactly this.
 
 Selects one item from an array.
 
-```
+```text
 function pick(seed, key, items):
     if items is empty: return undefined
     if items has 1 item: return items[0]
@@ -213,7 +214,7 @@ Takes a map of `string → weight` and returns one of the map's keys, biased by
 weight. When every weight is `0`, falls back to an unweighted `pick` across the
 keys.
 
-```
+```text
 function weightedPick(seed, key, weights):
     keys = keys of weights
     if keys is empty: return undefined
@@ -234,7 +235,7 @@ function weightedPick(seed, key, weights):
 Returns `true` with probability `likelihood / 100`. `likelihood` defaults to
 `50`.
 
-```
+```text
 function bool(seed, key, likelihood = 50):
     return getValue(seed, key) * 100 < likelihood
 ```
@@ -248,7 +249,7 @@ With `step > 0`, sample uniformly from
 not a multiple of `step`, the last bucket is `≤ max` and `max` itself is only
 hit when the division is exact. Without `step`, the range is continuous.
 
-```
+```text
 function float(seed, key, range):
     min = min(range.min, range.max)
     max = max(range.min, range.max)
@@ -276,7 +277,7 @@ Returns an integer in the closed range, inclusive on both ends. Accepts the same
 `{ min, max, step? }` object as `float`; `step` is accepted for symmetry but
 ignored, since integers already step by 1.
 
-```
+```text
 function integer(seed, key, range):
     min = min(range.min, range.max)
     max = max(range.min, range.max)
@@ -288,7 +289,7 @@ function integer(seed, key, range):
 Fisher-Yates shuffle using a **stateful** Mulberry32 instance (not key-based).
 For inputs of length ≤ 1 the items are returned as a copy without deduplication.
 
-```
+```text
 function shuffle(seed, key, items):
     if length(items) <= 1: return copy of items
     unique  = deduplicate items by string representation
@@ -422,7 +423,7 @@ every user token once per avatar into `{ category, value?, negated }` by
 stripping the leading `!` and splitting at the first `:`. Then sort the tokens
 into four groups:
 
-```
+```text
 allows        category -> [values]   positive `category:value` tokens
 bares         set of categories      positive `category` tokens
 disallows     [{category, value?}]   every negated token
@@ -431,7 +432,7 @@ bareDisallows set of categories      negated `!category` tokens
 
 Two lookups on a variant's tags drive the filter:
 
-```
+```text
 hasTag(category)        any tag equals `category` or starts with `category:`
 hasTag(category, value) any tag equals `category:value`
 ```
@@ -493,7 +494,7 @@ In the emitted SVG, the non-identity values are concatenated (space-separated)
 into a single `transform` attribute on the `<use>` element, in this textual
 order (read left to right):
 
-```
+```text
 transform="translate(tx, ty) rotate(angle, cx, cy) translate(cx, cy) scale(s) translate(-cx, -cy)"
 ```
 
@@ -565,7 +566,7 @@ ports. Small differences in the linearization cutoff or the luminance
 coefficients change the ordering on certain palettes. These are the defining
 formulas:
 
-```
+```text
 function linearize(channel: uint8) -> float:
     s = channel / 255
     if s <= 0.04045:
@@ -626,7 +627,7 @@ translate/rotate/scale offsets and their centers, `rx`/`ry`, gradient stop
 offsets, the `fontWeight` variable, and so on) is stringified through a single
 helper so that all implementations produce byte-identical output:
 
-```
+```text
 function formatNumber(value):
     scaled = round(value * 100000)   # round halves toward +Infinity
     sign = "-" if scaled < 0 else ""
@@ -890,7 +891,7 @@ For a node with active timelines, collect one class name per track: timelines in
 definition order, and within a timeline the tracks in this canonical order,
 skipping absent ones:
 
-```
+```text
 translateX, translateY, rotate, scaleX, scaleY, opacity
 ```
 
@@ -921,7 +922,7 @@ Class names are `dba-{animationHash}-{n}` and keyframes names are
 emission order. `animationHash` is the FNV-1a hex hash (8 characters, lowercase,
 zero-padded) of
 
-```
+```text
 {source.name or ''} + ':' + seed + ':' + formatNumber(animationSpeed) + ':' + formatNumber(animationDelay)
   [+ ':' + states]     // only when the style carries named timelines, see below
   [+ ':' + suffix]     // only when idRandomization is on: the same suffix the id rewrite uses
@@ -974,7 +975,7 @@ tracks with the same body reuse that name. Class rules are never deduplicated.
 
 Every track adds one rule to the class list:
 
-```
+```text
 .dba-{hash}-{n}{[transform-box:fill-box;transform-origin:{x}% {y}%;]animation:{duration}s {easing} {delay}s {iterations} {direction} {fill} dbk-{hash}-{m}}
 ```
 
@@ -1005,7 +1006,7 @@ After the body has been rendered and wrapped, and before `<defs>` is serialized,
 register the accumulated CSS as one more `<defs>` entry if at least one
 keyframes block exists:
 
-```
+```html
 <style>@media (prefers-reduced-motion:no-preference){<keyframes blocks in registration order><class rules in emission order>}</style>
 ```
 
@@ -1155,7 +1156,7 @@ playing name without its own factor reads the global speed.
 
 The fixtures are produced from the JavaScript reference implementation:
 
-```bash
+```sh
 npm run fixtures:parity
 ```
 
@@ -1168,7 +1169,7 @@ output and want to update the expected values for every implementation.
 For ad-hoc spot checks beyond the fixtures, you can also generate reference SVGs
 from the CLI and compare byte-for-byte:
 
-```bash
+```sh
 dicebear create initials --seed "Alice" -o ./reference/initials.svg
 dicebear create lorelei --seed "Alice" -o ./reference/lorelei.svg
 dicebear create avataaars --seed "Alice" -o ./reference/avataaars.svg

@@ -51,7 +51,7 @@ style. Style names are lowercase, with hyphens for multi-word styles, e.g.
 `lorelei`, `pixel-art`, `adventurer-neutral`. Every official
 [avatar style](/styles/) is supported.
 
-```
+```http
 https://api.dicebear.com/11.x/<styleName>/svg
 ```
 
@@ -67,7 +67,7 @@ every visit. A user ID works well, and the same seed always returns the same
 image. That makes it a good default avatar for people who haven't uploaded a
 photo yet, since the picture stays the same across pages and sessions.
 
-```
+```http
 https://api.dicebear.com/11.x/lorelei/svg?seed=user-8f3a2c
 ```
 
@@ -89,7 +89,7 @@ To discover which avatar styles an instance supports, send a request to the
 version root. It returns the available style names as JSON, sorted
 alphabetically:
 
-```
+```http
 https://api.dicebear.com/11.x
 ```
 
@@ -111,7 +111,7 @@ support listing styles.
 Each style also exposes two metadata endpoints. They are handy for building
 tooling on top of the API, such as avatar editors:
 
-```
+```http
 https://api.dicebear.com/11.x/<styleName>/definition.json
 https://api.dicebear.com/11.x/<styleName>/options.json
 ```
@@ -188,7 +188,7 @@ use the [Pixel Art](/styles/pixel-art/) avatar style.
 The [`tags`](/customize/tags/) filter is an array too. Separate the tags with a
 comma and prefix a tag with `!` to exclude it:
 
-```
+```http
 https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,!facialHair
 ```
 
@@ -206,7 +206,7 @@ Styles that carry [animations](/customize/options/) play them once you set
 `animation=true`, and `animationSpeed` sets the pace. Only the SVG format moves.
 The raster formats render the resting state, with or without the option.
 
-```
+```http
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationSpeed=2
 ```
@@ -214,7 +214,7 @@ https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationSpee
 Every animation also has a switch named after it, which wins over `animation`.
 One animation alone, or everything but one:
 
-```
+```http
 https://api.dicebear.com/11.x/planets/svg?seed=John&orbitAnimation=true
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&twinkleAnimation=false
 ```
@@ -222,7 +222,7 @@ https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&twinkleAnimat
 The speed works the same way per animation. `orbitAnimationSpeed` wins over
 `animationSpeed` for the orbit, and a range works as everywhere else:
 
-```
+```http
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimationSpeed=0.5&twinkleAnimationSpeed=2
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimationSpeed=0.5,1
 ```
@@ -230,7 +230,7 @@ https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimatio
 `animationDelay` shifts the start by seconds. As a range, every seed starts at
 its own moment, so avatars rendered next to each other do not move in step:
 
-```
+```http
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationDelay=0,5
 https://api.dicebear.com/11.x/planets/svg?seed=Jane&animation=true&animationDelay=0,5
 ```

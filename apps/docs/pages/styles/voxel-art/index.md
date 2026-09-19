@@ -4,40 +4,18 @@ description: >
   Free voxel avatar generator: 3D cube characters with hair, outfits, glasses
   and beards. Create Voxel Art avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Voxel Art
+<SiteStylePage styleName="voxel-art">
 
-Voxel Art is a blocky vector avatar style that stacks small 3D cubes into
-full-body characters with hair, outfits, glasses, and beards. Generate playful
-SVG profile icons in a voxel-game look for games and community apps.
+Full-body characters stacked from small 3D cubes, with hair, outfits, glasses
+and beards.
 
-<StylePreview styleName="voxel-art" />
-
-<StyleDescription styleName="voxel-art" />
-
-## Usage
-
-<StyleUsage styleName="voxel-art" />
-
-## Presets
-
-<StylePresets styleName="voxel-art" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="voxel-art" />
-
-## Details
-
-<StyleInfo styleName="voxel-art" />
+</SiteStylePage>

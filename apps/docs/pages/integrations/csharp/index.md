@@ -7,9 +7,10 @@ description: >
 
 # C# avatar library
 
-Generate avatars in C#, from web backends to games. The library targets
-`netstandard2.0` and `net8.0`, so it runs on .NET 8 and newer and on .NET
-Framework 4.6.1 and newer. The API mirrors the
+Generate avatars in C#, from web backends to games.
+
+The library targets `netstandard2.0` and `net8.0`, so it runs on .NET 8 and
+newer and on .NET Framework 4.6.1 and newer. The API mirrors the
 [JavaScript library](/integrations/javascript/), and the output is
 byte-identical: the same seed and style produce the same SVG in every DiceBear
 library.

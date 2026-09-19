@@ -46,6 +46,7 @@ for (const file of fs.readdirSync(definitionsDir)) {
 
 const avatarStyleSizes: AvatarStyleSizeBundle = {
   core: bundleSize('@dicebear/core'),
+  coreLite: bundleSize('@dicebear/core/lite'),
   converter: bundleSize('@dicebear/converter'),
   styles,
 };

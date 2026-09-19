@@ -66,7 +66,7 @@ and copy the finished URL.
 If you'd rather create avatars locally, without a request to the API, use one of
 the libraries. In JavaScript:
 
-```
+```sh
 npm install @dicebear/core @dicebear/styles
 ```
 

@@ -58,8 +58,8 @@ const optionCount = computed(() =>
  * them straight into a Markdown file. Interpolating one here would show the
  * backticks around `outlineColor` or `animation` as literal characters, so the
  * code spans are pulled out and rendered as `<code>`. Nothing else about the
- * text is treated as Markdown; a full parser for one construct is not worth
- * the bytes.
+ * text is treated as Markdown, because a full parser for one construct is
+ * not worth the bytes.
  */
 const descriptionParts = computed(() =>
   (props.preset?.description ?? '')
@@ -118,13 +118,13 @@ function onOpenPlayground() {
         <p class="preset-dialog-count">
           {{ optionCount }} options
           <template v-if="count">
-            <span class="preset-dialog-sep">·</span>
+            ·
             <strong>{{ count.display }}</strong> distinct avatars
           </template>
         </p>
         <a
           :href="playgroundUrl"
-          class="preset-dialog-action no-icon"
+          class="preset-dialog-action hv-link"
           @click="onOpenPlayground"
         >
           <Sparkles :size="14" />
@@ -142,40 +142,44 @@ function onOpenPlayground() {
 
 <style scoped lang="scss">
 .preset-dialog {
+  min-width: 0;
+
   &-band {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: 8px;
 
-    /* Keeps UiAvatar's checkerboard, so a preset with no background reads as
-       transparent here as it does on the tiles. */
+    /* The checkerboard of UiAvatar stays, so a preset with no background
+       reads as transparent here as it does on the tiles. It lies on the tile
+       color, which stays light in dark mode. */
     :deep(.ui-avatar) {
       width: 100%;
       height: auto;
       aspect-ratio: 1 / 1;
-      border-radius: var(--vp-radius-xs);
+      border-radius: var(--db-radius-2);
+      background-color: var(--db-tile);
     }
 
     @media (max-width: 560px) {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
   &-description {
     margin: 14px 0 0;
     font-size: 14px;
-    line-height: 1.6;
-    color: var(--vp-c-text-2);
+    line-height: 20px;
+    color: var(--db-ink-2);
 
-    /* The dialog is teleported to the body and never sits inside `.vp-doc`,
-       so the option names it quotes need the inline-code look spelled out. */
+    /* The dialog sits outside the prose styles, so the option names it
+       quotes need the inline code look spelled out. */
     code {
       padding: 2px 5px;
-      border-radius: var(--vp-radius-xs);
-      background: var(--vp-c-default-soft);
-      font-family: var(--vp-font-family-mono);
+      border-radius: 4px;
+      background: var(--db-soft);
+      font-family: var(--db-font-mono);
       font-size: 0.9em;
-      color: var(--vp-c-text-1);
+      color: var(--db-ink);
     }
   }
 
@@ -185,46 +189,30 @@ function onOpenPlayground() {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-top: 10px;
-    margin-bottom: 16px;
+    margin: 10px 0 16px;
   }
 
   &-count {
     margin: 0;
-    font-size: 12px;
-    line-height: 1.4;
-    color: var(--ui-c-text-muted);
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--db-muted);
 
     strong {
       font-weight: 600;
       font-variant-numeric: tabular-nums;
-      color: var(--vp-c-text-1);
+      color: var(--db-ink);
     }
-  }
-
-  &-sep {
-    color: var(--ui-c-text-subtle);
   }
 
   &-action {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: var(--vp-radius-chrome);
-    font-size: 12px;
+    gap: 6px;
+    font-size: 14px;
+    line-height: 20px;
     font-weight: 600;
-    line-height: 1;
-    color: var(--ui-c-text-muted);
-    text-decoration: none;
-    transition:
-      color var(--duration-fast) var(--ease-smooth),
-      background-color var(--duration-fast) var(--ease-smooth);
-
-    &:hover {
-      color: var(--vp-c-brand-1);
-      background: var(--vp-c-brand-soft);
-    }
+    color: var(--db-brand-text);
   }
 }
 </style>

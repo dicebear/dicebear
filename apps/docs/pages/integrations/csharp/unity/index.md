@@ -7,8 +7,9 @@ description: >
 
 # Unity avatar library: using DiceBear with Unity
 
-You can bring DiceBear avatars into Unity two ways. The
-[HTTP API](/integrations/http-api/) returns finished PNGs that
+You can bring DiceBear avatars into Unity two ways.
+
+The [HTTP API](/integrations/http-api/) returns finished PNGs that
 `UnityWebRequestTexture` loads into a texture, and the
 [C# library](/integrations/csharp/) generates the SVG inside the game.
 
@@ -80,7 +81,7 @@ DiceBear ships on NuGet, and Unity has no NuGet client of its own. Add
 [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) through the package
 manager, using "Add package from git URL":
 
-```
+```http
 https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity
 ```
 

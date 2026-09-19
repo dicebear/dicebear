@@ -4,40 +4,17 @@ description: >
   Free planet avatar generator: a textured planet with optional rings and moons
   in a starry sky. Create Planets avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Planets
+<SiteStylePage styleName="planets">
 
-Planets is a space-themed vector avatar style with a single textured planet,
-optional rings and moons, and a star-filled sky. Generate atmospheric SVG
-profile icons for dashboards, games, and science apps.
+A single textured planet with optional rings and moons in a star-filled sky.
 
-<StylePreview styleName="planets" />
-
-<StyleDescription styleName="planets" />
-
-## Usage
-
-<StyleUsage styleName="planets" />
-
-## Presets
-
-<StylePresets styleName="planets" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="planets" />
-
-## Details
-
-<StyleInfo styleName="planets" />
+</SiteStylePage>

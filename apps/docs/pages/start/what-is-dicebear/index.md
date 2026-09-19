@@ -9,9 +9,11 @@ description: >
 # What is DiceBear?
 
 DiceBear generates avatars. You give it a seed, it gives you an SVG image, and
-the same seed always returns the same image. That one property makes it useful
-for user profiles: use the username or user ID as the seed and every person in
-your app has a consistent avatar without ever uploading a picture.
+the same seed always returns the same image.
+
+That one property makes it useful for user profiles: use the username or user ID
+as the seed and every person in your app has a consistent avatar without ever
+uploading a picture.
 
 The look comes from [avatar styles](/styles/). There are %STYLE_COUNT% of them,
 drawn by different artists, ranging from abstract shapes to illustrated

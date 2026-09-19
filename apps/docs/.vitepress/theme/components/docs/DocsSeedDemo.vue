@@ -1,15 +1,17 @@
 <script setup lang="ts">
 /**
- * Interactive seed demo for the quickstart: a text field and a row of
- * avatars that re-render on every keystroke. Rendering happens locally via
- * UiAvatar in library mode, so typing costs no API requests. Each avatar is
- * labeled with its style slug and selectable; the URL line below shows the
- * HTTP API equivalent for the selected style, so clicking a tile visibly
- * swaps one word in the URL.
+ * Interactive seed demo for the quickstart: a seed field and a grid of
+ * avatars that re-render on every keystroke. Rendering happens locally with
+ * the library, so typing costs no API requests. Each avatar is labeled with
+ * its style id and selectable. The URL row below shows the HTTP API
+ * equivalent for the selected style, so clicking a tile visibly swaps one
+ * word in the URL.
  */
 import { computed, ref } from 'vue';
+import { computedAsync } from '@vueuse/core';
+import { Avatar } from '@dicebear/core';
 import { getAvatarApiUrl } from '@theme/utils/avatar/api';
-import UiAvatar from '@theme/components/ui/UiAvatar.vue';
+import { loadAvatarStyle } from '@theme/utils/avatar/style';
 import UiCopyButton from '@theme/components/ui/UiCopyButton.vue';
 import UiDemoFrame from '@theme/components/ui/UiDemoFrame.vue';
 
@@ -30,12 +32,48 @@ const selectedStyle = ref(props.styleNames[0]);
 const apiUrl = computed(() =>
   getAvatarApiUrl(selectedStyle.value, { seed: seed.value }),
 );
+
+/** The URL cut around the style id, which the URL row picks out. */
+const urlParts = computed(() => {
+  const marker = `/${selectedStyle.value}/`;
+  const index = apiUrl.value.indexOf(marker);
+
+  return index < 0
+    ? { head: apiUrl.value, tail: '' }
+    : {
+        head: apiUrl.value.slice(0, index + 1),
+        tail: apiUrl.value.slice(index + marker.length - 1),
+      };
+});
+
+/** One data URI per style for the current seed. */
+const sources = computedAsync<Record<string, string>>(async () => {
+  const currentSeed = seed.value;
+  const entries = await Promise.all(
+    props.styleNames.map(async (styleName) => {
+      try {
+        const style = await loadAvatarStyle(styleName);
+        const avatar = new Avatar(style, { seed: currentSeed });
+
+        return [styleName, avatar.toDataUri()] as const;
+      } catch (e) {
+        if (import.meta.env.DEV) {
+          console.warn('Avatar render failed:', e);
+        }
+
+        return [styleName, ''] as const;
+      }
+    }),
+  );
+
+  return Object.fromEntries(entries);
+}, {});
 </script>
 
 <template>
   <UiDemoFrame title="Try it" playground-url="/playground/">
     <div class="docs-seed-demo">
-      <label class="docs-seed-demo-label">
+      <label class="docs-seed-demo-field">
         <span>Seed</span>
         <input
           v-model="seed"
@@ -53,23 +91,31 @@ const apiUrl = computed(() =>
           :key="styleName"
           type="button"
           class="docs-seed-demo-tile"
-          :class="{ 'is-selected': styleName === selectedStyle }"
           :aria-pressed="styleName === selectedStyle"
           @click="selectedStyle = styleName"
         >
-          <UiAvatar
-            :style-name="styleName"
-            :style-options="{ seed }"
-            :alt="`${styleName} avatar for the seed ${seed}`"
-            mode="library"
-          />
+          <span class="docs-seed-demo-avatar">
+            <img
+              v-if="sources[styleName]"
+              :src="sources[styleName]"
+              :alt="`${styleName} avatar for the seed ${seed}`"
+            />
+          </span>
           <code>{{ styleName }}</code>
         </button>
       </div>
 
       <div class="docs-seed-demo-url">
-        <code>{{ apiUrl }}</code>
-        <UiCopyButton :text="apiUrl" class="docs-seed-demo-copy" />
+        <code
+          >{{ urlParts.head }}<b>{{ selectedStyle }}</b
+          >{{ urlParts.tail }}</code
+        >
+        <UiCopyButton
+          :text="apiUrl"
+          :duration="1600"
+          label="Copy URL"
+          class="docs-seed-demo-copy"
+        />
       </div>
     </div>
   </UiDemoFrame>
@@ -82,87 +128,119 @@ const apiUrl = computed(() =>
   gap: 16px;
 }
 
-.docs-seed-demo-label {
+.docs-seed-demo-field {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ui-c-text-muted);
+  gap: 14px;
+  height: 52px;
+  padding: 0 16px;
+  border: 1px solid var(--db-btn-border);
+  border-radius: 10px;
+  background: var(--db-paper);
+  transition: border-color 0.12s;
+
+  &:hover {
+    border-color: var(--db-hover-border);
+  }
+
+  &:focus-within {
+    border-color: var(--db-brand);
+  }
+
+  span {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--db-muted);
+  }
 
   input {
     flex: 1;
     min-width: 0;
-    padding: 7px 12px;
-    border: 1px solid var(--vp-c-divider);
-    border-radius: var(--vp-radius-chrome);
-    background: var(--vp-c-bg);
+    height: 48px;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
     font-family: inherit;
-    font-size: 14px;
-    color: var(--vp-c-text-1);
-    transition: border-color var(--duration-fast) var(--ease-smooth);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--db-ink);
 
-    &:hover {
-      border-color: var(--vp-c-brand-2);
-    }
-
-    &:focus {
-      outline: none;
-      border-color: var(--vp-c-brand-1);
+    &::placeholder {
+      font-weight: 500;
+      color: var(--db-muted);
     }
   }
 }
 
 .docs-seed-demo-avatars {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 
-  @media (max-width: 480px) {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 .docs-seed-demo-tile {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 6px 6px 5px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: var(--vp-radius-xs);
-  background: var(--vp-c-bg);
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 10px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--db-paper);
+  box-shadow: 0 0 0 1px var(--db-line);
   font-family: inherit;
   cursor: pointer;
-  transition: border-color var(--duration-fast) var(--ease-smooth);
+  transition:
+    background-color 0.12s,
+    box-shadow 0.12s;
 
   &:hover {
-    border-color: var(--vp-c-brand-2);
+    background: var(--db-soft);
   }
 
-  &.is-selected {
-    border-color: var(--vp-c-brand-1);
+  &:focus-visible {
+    outline: 2px solid var(--db-brand);
+    outline-offset: 3px;
+  }
+
+  &[aria-pressed='true'] {
+    box-shadow: 0 0 0 2px var(--db-brand);
 
     code {
-      color: var(--vp-c-brand-1);
+      color: var(--db-brand-text);
     }
   }
 
-  .ui-avatar {
-    /* A calm surface instead of UiAvatar's transparency checkerboard: the
-       demo should show avatars the way an app embeds them, and the pattern
-       eats dark styles like lorelei's hair in dark mode. */
-    --ui-avatar-bg-1: var(--vp-c-default-soft);
-    --ui-avatar-bg-2: var(--vp-c-default-soft);
-    overflow: hidden;
-    border-radius: calc(var(--vp-radius-xs) - 3px);
-  }
-
   code {
-    background: none;
-    padding: 0;
-    font-size: 11.5px;
-    color: var(--ui-c-text-muted);
-    transition: color var(--duration-fast) var(--ease-smooth);
+    font-family: var(--db-font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--db-muted);
+    transition: color 0.12s;
+  }
+}
+
+.docs-seed-demo-avatar {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  background: var(--db-tile);
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -170,29 +248,31 @@ const apiUrl = computed(() =>
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: 48px;
+  padding: 0 6px 0 14px;
+  border: 1px solid var(--db-line);
+  border-radius: 10px;
+  background: var(--db-paper);
 
   code {
     flex: 1;
     min-width: 0;
-    overflow-x: auto;
-    padding: 6px 10px;
-    border-radius: var(--vp-radius-chrome);
-    background: var(--vp-c-bg);
-    font-size: 12px;
-    white-space: nowrap;
+    padding: 6px 0;
+    font-family: var(--db-font-mono);
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--db-ink-2);
+    overflow-wrap: anywhere;
   }
-}
 
-.docs-seed-demo-copy {
-  display: inline-flex;
-  padding: 6px;
-  border-radius: var(--vp-radius-chrome);
-  color: var(--ui-c-text-muted);
-  cursor: pointer;
+  b {
+    font-weight: 600;
+    color: var(--db-brand-text);
+  }
 
-  &:hover {
-    color: var(--vp-c-brand-1);
-    background: var(--vp-c-brand-soft);
+  .docs-seed-demo-copy {
+    width: 36px;
+    height: 36px;
   }
 }
 </style>

@@ -54,6 +54,7 @@ import {
   type LicenseBucket,
 } from './theme/config/styleCategories.ts';
 import { usageSnippets } from './theme/config/usageSnippets.ts';
+import { tools } from './theme/config/tools.ts';
 import type { StylePreset } from './theme/config/presets.ts';
 import { formatLicenseName } from './theme/utils/format.ts';
 import { attributionKind, attributionPrefix } from './theme/utils/license.ts';
@@ -767,19 +768,56 @@ async function buildPage(
 
   if (styleName && avatarStyles[styleName]) {
     // Everything from the first component onwards is a mount point whose
-    // content this build reproduces from the definition.
-    markdown = await renderStylePage(
-      styleName,
-      renderMarkdown(body.split(/^<[A-Z]/m)[0]),
+    // content this build reproduces from the definition. A page on the
+    // SiteStylePage component keeps its prose inside the mount and renders
+    // the heading itself, so both are read back out of it.
+    const mount = body.match(
+      /^<SiteStylePage\b[^>]*>\n([\s\S]*?)\n<\/SiteStylePage>/m,
     );
+    const intro = mount
+      ? `# ${capitalCase(styleName)}\n\n${mount[1].trim()}`
+      : body.split(/^<[A-Z]/m)[0];
+    markdown = await renderStylePage(styleName, renderMarkdown(intro));
   } else if (presetsOf && avatarStyles[presetsOf]) {
     // Same deal one level down: the page is an intro plus a gallery mount, so
     // the presets themselves come from the data the gallery reads.
+    const mount = body.match(
+      /^<SitePresetsPage\b[^>]*>\n([\s\S]*?)\n<\/SitePresetsPage>/m,
+    );
+    const intro = mount
+      ? `# ${capitalCase(presetsOf)} presets\n\n${mount[1].trim()}`
+      : body.split(/^<[A-Z]/m)[0];
     markdown =
-      renderMarkdown(body.split(/^<[A-Z]/m)[0]).trimEnd() +
+      renderMarkdown(intro).trimEnd() +
       renderPresetBlocks(await loadPresets(presetsOf));
   } else if (route === '/licenses/') {
-    markdown = renderLicensesPage(renderMarkdown(body.split(/^<[A-Z]/m)[0]));
+    // The page keeps its prose inside the SiteLicensesPage mount and renders
+    // the heading itself, so both are read back out of it.
+    const mount = body.match(
+      /^<SiteLicensesPage\b[^>]*>\n([\s\S]*?)\n<\/SiteLicensesPage>/m,
+    );
+    const intro = mount
+      ? `# Licenses\n\n${mount[1].trim()}`
+      : body.split(/^<[A-Z]/m)[0];
+    markdown = renderLicensesPage(renderMarkdown(intro));
+  } else if (route === '/tools/') {
+    // The intro sits inside the SitePageHead mount, and the list below it is
+    // a component. Both come back here, the list from the data it renders.
+    const mount = body.match(
+      /^<SitePageHead\b[^>]*>\n([\s\S]*?)\n<\/SitePageHead>/m,
+    );
+    const list = tools
+      .map((tool) => {
+        const href = tool.href.startsWith('/')
+          ? siteUrl(tool.href)
+          : tool.href;
+        const text = tool.text.replace(/<\/?code>/g, '`');
+
+        return `- [${tool.name}](${href}): ${text}`;
+      })
+      .join('\n');
+
+    markdown = `${renderMarkdown(`# Tools\n\n${mount?.[1].trim() ?? ''}`).trimEnd()}\n\n${list}\n`;
   } else if (route === '/versions/') {
     // The chart is the page's answer, and a mirror cannot draw one. Its mount
     // point marks where the same data belongs in prose form.

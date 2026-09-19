@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { exampleSeeds } from '@theme/config/styleCategories';
-import { UiAvatar } from '../ui';
+import SiteAvatar from '../site/SiteAvatar.vue';
 import { ArrowRight } from '@lucide/vue';
 
 const props = withDefaults(
@@ -44,65 +44,51 @@ const resolvedAllStylesLabel = computed(
       v-for="style in styles"
       :key="style.styleName"
       :href="style.link"
-      class="docs-style-grid-card"
+      class="docs-style-grid-row hv-row"
     >
-      <div class="docs-style-grid-avatars">
-        <UiAvatar
+      <span class="docs-style-grid-avatars">
+        <SiteAvatar
           v-for="seed in seeds"
           :key="seed"
           :size="avatarSize"
+          :radius="12"
           :style-name="style.styleName"
-          :style-options="{ seed, size: avatarSize, borderRadius: 50 }"
-          :alt="style.name"
+          :options="{ seed }"
+          :alt="`${style.name} avatar`"
         />
-      </div>
-      <div class="docs-style-grid-info">
-        <span class="docs-style-grid-name">
-          {{ style.name }}
-          <ArrowRight :size="14" class="docs-style-grid-arrow" />
-        </span>
+      </span>
+      <span class="docs-style-grid-info">
+        <span class="docs-style-grid-name">{{ style.name }}</span>
         <span class="docs-style-grid-desc">{{ style.bestFor }}</span>
-      </div>
+      </span>
+      <span class="docs-style-grid-chev hv-chev">
+        <ArrowRight :size="18" />
+      </span>
     </a>
   </div>
 
-  <a :href="allStylesLink" class="docs-style-grid-all">
-    <span>{{ resolvedAllStylesLabel }}</span>
+  <a :href="allStylesLink" class="docs-style-grid-all hv-link">
+    {{ resolvedAllStylesLabel }}
     <ArrowRight :size="16" />
   </a>
 </template>
 
 <style lang="scss" scoped>
 .docs-style-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
-  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--db-line);
+  /* The rows inherit their color, so the hover color of a row wins. */
+  color: var(--db-ink);
 
-  &-card {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-    border: 1px solid var(--vp-c-divider);
-    border-radius: var(--vp-radius-sm);
+  &-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) 20px;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 0;
+    border-top: 1px solid var(--db-line);
     text-decoration: none;
-    transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
-
-    &:hover {
-      border-color: var(--vp-c-brand-1);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-
-      .docs-style-grid-arrow {
-        transform: translateX(3px);
-      }
-    }
-
-    &::after {
-      display: none !important;
-    }
   }
 
   &-avatars {
@@ -113,46 +99,49 @@ const resolvedAllStylesLabel = computed(
   &-info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
   }
 
   &-name {
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 26px;
     font-weight: 600;
-    color: var(--vp-c-text-1);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  &-arrow {
-    color: var(--vp-c-brand-1);
-    transition: transform var(--duration-fast) ease;
   }
 
   &-desc {
-    font-size: 13px;
-    color: var(--vp-c-text-2);
-    line-height: 1.5;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--db-ink-2);
+  }
+
+  &-chev {
+    display: flex;
+    color: var(--db-muted);
   }
 
   &-all {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-top: 4px;
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 24px;
     font-weight: 500;
-    color: var(--vp-c-brand-1);
+    color: var(--db-brand-text);
     text-decoration: none;
-    transition: gap var(--duration-fast) ease;
 
     &:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    &-row {
+      grid-template-columns: minmax(0, 1fr);
       gap: 10px;
     }
 
-    &::after {
-      display: none !important;
+    &-chev {
+      display: none;
     }
   }
 }

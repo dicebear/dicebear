@@ -8,9 +8,10 @@ description: >
 # Angular avatar library: using DiceBear with Angular
 
 DiceBear can be integrated into Angular components using Signals (Angular 17+)
-or the `OnChanges` lifecycle hook. Use the JavaScript library for client-side
-SVG avatar generation, or the HTTP API as a simple `<img>` source with no
-additional dependencies.
+or the `OnChanges` lifecycle hook.
+
+Use the JavaScript library for client-side SVG avatar generation, or the HTTP
+API as a simple `<img>` source with no additional dependencies.
 
 ## With the JS library
 

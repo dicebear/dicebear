@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { computed, inject, watch } from 'vue';
-import { Trash2, ArrowLeftRight, Link2 } from '@lucide/vue';
-import Button from 'primevue/button';
-import Select from 'primevue/select';
-import Slider from 'primevue/slider';
+import { Link2 } from '@lucide/vue';
+import SiteSegmented from '@theme/components/site/SiteSegmented.vue';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
-import { useRangeField } from '@theme/composables/useRangeField';
 import { stripHash } from '@theme/utils/avatar/colors';
 import { navigateToColorKey } from '@theme/components/styles/styleOptionsKeys';
 import PlaygroundColorPicker from './PlaygroundColorPicker.vue';
+import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 
 const props = defineProps<{
@@ -69,11 +67,33 @@ function addColor(hex: string) {
   colors.value = [...colors.value, clean];
 }
 
-function removeColor(index: number) {
-  const next = [...colors.value];
+// Every color of the style stays visible as a swatch, pressed while it is
+// in use. Colors added by hand follow and leave again with a click.
+const swatches = computed(() => {
+  const customs = colors.value.filter((c) => !props.defaultValues.includes(c));
 
-  next.splice(index, 1);
-  colors.value = next;
+  return [...props.defaultValues, ...customs].map((hex) => ({
+    hex,
+    on: colors.value.includes(hex),
+    custom: !props.defaultValues.includes(hex),
+  }));
+});
+
+function toggleColor(hex: string) {
+  if (colors.value.includes(hex)) {
+    colors.value = colors.value.filter((c) => c !== hex);
+
+    return;
+  }
+
+  // A color of the style returns to its place in the style's order, ahead of
+  // the colors added by hand.
+  const customs = colors.value.filter((c) => !props.defaultValues.includes(c));
+
+  colors.value = [
+    ...props.defaultValues.filter((c) => c === hex || colors.value.includes(c)),
+    ...customs,
+  ];
 }
 
 const fillOptions = [
@@ -130,31 +150,17 @@ watch(fill, (val) => {
     delete store.avatarStyleOptions[orderKey];
   }
 });
-
-const {
-  isRangeMode,
-  toggleRangeMode,
-  resetRangeField,
-  singleComputed,
-  rangeComputed,
-} = useRangeField(store.avatarStyleOptions);
-
-const angleSingle = singleComputed(angleKey, 0);
-const angleRange = rangeComputed(angleKey, 0);
-
-const fillStopsSingle = singleComputed(fillStopsKey, 2);
-const fillStopsRange = rangeComputed(fillStopsKey, 2);
 </script>
 
 <template>
   <div class="pg-color">
-    <div v-if="contrastTo" class="pg-color-contrast-banner" role="note">
-      <Link2 :size="14" class="pg-color-contrast-banner-icon" />
-      <p class="pg-color-contrast-banner-text">
+    <p v-if="contrastTo" class="pg-color-contrast" role="note">
+      <Link2 :size="16" aria-hidden="true" class="pg-color-contrast-icon" />
+      <span>
         Linked to
         <button
           type="button"
-          class="pg-color-contrast-banner-link"
+          class="pg-color-contrast-link hv-link"
           @click="onContrastLinkClick"
         >
           {{ capitalCase(contrastTo) }}</button
@@ -162,142 +168,103 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
         {{ capitalCase(contrastTo).toLowerCase() }} is preferred. Adding more
         options here introduces variation, but the highest-contrast value still
         dominates.
-      </p>
-    </div>
+      </span>
+    </p>
 
-    <div class="pg-color-label">
-      <span>Color</span>
-      <PlaygroundFieldReset
-        v-if="store.isOptionSet(colorKey)"
-        @click="store.resetOption(colorKey)"
-      />
-    </div>
-    <div class="pg-color-grid">
-      <div
-        v-for="(color, i) in colors"
-        :key="i"
-        class="pg-color-tile"
-        :style="{ '--tile-color': `#${color}` }"
-        @click="removeColor(i)"
-      >
-        <div class="pg-color-tile-delete">
-          <Trash2 :size="16" />
-        </div>
+    <div class="pg-field">
+      <div class="pg-field-label">
+        <span>Color</span>
+        <span class="pg-field-tools">
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(colorKey)"
+            @click="store.resetOption(colorKey)"
+          />
+        </span>
       </div>
-      <PlaygroundColorPicker
-        :preset-colors="props.defaultValues"
-        :colors="colors"
-        @add="addColor"
-      />
+      <div class="pg-color-swatches">
+        <button
+          v-for="swatch in swatches"
+          :key="swatch.hex"
+          type="button"
+          class="pg-color-swatch hv-swatch"
+          :aria-pressed="swatch.on"
+          :aria-label="`#${swatch.hex}`"
+          :title="
+            swatch.custom
+              ? `#${swatch.hex} (click to remove)`
+              : `#${swatch.hex}`
+          "
+          :style="{ '--swatch': `#${swatch.hex}` }"
+          @click="toggleColor(swatch.hex)"
+        ></button>
+        <PlaygroundColorPicker
+          :preset-colors="props.defaultValues"
+          :colors="colors"
+          @add="addColor"
+        />
+      </div>
     </div>
 
     <template v-if="hasFill && colors.length > 0">
       <div class="pg-field">
         <div class="pg-field-label">
           <span>Fill</span>
-          <PlaygroundFieldReset
-            v-if="store.isOptionSet(fillKey)"
-            @click="store.resetOption(fillKey)"
-          />
+          <span class="pg-field-tools">
+            <PlaygroundFieldReset
+              v-if="store.isOptionSet(fillKey)"
+              @click="store.resetOption(fillKey)"
+            />
+          </span>
         </div>
-        <Select
+        <SiteSegmented
           v-model="fill"
           :options="fillOptions"
-          option-label="label"
-          option-value="value"
-          class="pg-color-fill-select"
+          aria-label="Fill"
+          fluid
         />
       </div>
 
-      <div class="pg-field" v-if="hasOrder && fill !== 'solid'">
+      <div v-if="hasOrder && fill !== 'solid'" class="pg-field">
         <div class="pg-field-label">
           <span>Order</span>
-          <PlaygroundFieldReset
-            v-if="store.isOptionSet(orderKey)"
-            @click="store.resetOption(orderKey)"
-          />
+          <span class="pg-field-tools">
+            <PlaygroundFieldReset
+              v-if="store.isOptionSet(orderKey)"
+              @click="store.resetOption(orderKey)"
+            />
+          </span>
         </div>
-        <Select
+        <SiteSegmented
           v-model="order"
           :options="orderOptions"
-          option-label="label"
-          option-value="value"
-          class="pg-color-fill-select"
+          aria-label="Order"
+          fluid
         />
       </div>
 
-      <div class="pg-field" v-if="hasAngle && fill !== 'solid'">
-        <div class="pg-field-label">
-          <span>Angle</span>
-          <Button
-            size="small"
-            :severity="isRangeMode(angleKey) ? 'primary' : 'secondary'"
-            variant="outlined"
-            v-tooltip="
-              isRangeMode(angleKey)
-                ? 'Switch to fixed value'
-                : 'Switch to range'
-            "
-            @click="toggleRangeMode(angleKey, 0)"
-            class="pg-field-toggle"
-          >
-            <ArrowLeftRight :size="14" />
-          </Button>
-          <PlaygroundFieldReset
-            v-if="store.isOptionSet(angleKey)"
-            @click="resetRangeField(angleKey)"
-          />
-          <span class="pg-field-value" v-if="isRangeMode(angleKey)"
-            >{{ angleRange[0] }}° — {{ angleRange[1] }}°</span
-          >
-          <span class="pg-field-value" v-else>{{ angleSingle }}°</span>
-        </div>
-        <Slider
-          v-if="isRangeMode(angleKey)"
-          v-model="angleRange"
-          :range="true"
+      <div
+        v-if="(hasAngle || hasFillStops) && fill !== 'solid'"
+        class="pg-color-pair"
+      >
+        <PlaygroundRangeField
+          v-if="hasAngle"
+          label="Angle"
+          :option-key="angleKey"
           :min="-360"
           :max="360"
           :step="1"
+          unit="°"
+          :default-single="0"
         />
-        <Slider v-else v-model="angleSingle" :min="-360" :max="360" :step="1" />
-      </div>
-
-      <div class="pg-field" v-if="hasFillStops && fill !== 'solid'">
-        <div class="pg-field-label">
-          <span>Stops</span>
-          <Button
-            size="small"
-            :severity="isRangeMode(fillStopsKey) ? 'primary' : 'secondary'"
-            variant="outlined"
-            v-tooltip="
-              isRangeMode(fillStopsKey)
-                ? 'Switch to fixed value'
-                : 'Switch to range'
-            "
-            @click="toggleRangeMode(fillStopsKey, 2)"
-            class="pg-field-toggle"
-          >
-            <ArrowLeftRight :size="14" />
-          </Button>
-          <PlaygroundFieldReset
-            v-if="store.isOptionSet(fillStopsKey)"
-            @click="resetRangeField(fillStopsKey)"
-          />
-          <span class="pg-field-value" v-if="isRangeMode(fillStopsKey)"
-            >{{ fillStopsRange[0] }} — {{ fillStopsRange[1] }}</span
-          >
-          <span class="pg-field-value" v-else>{{ fillStopsSingle }}</span>
-        </div>
-        <Slider
-          v-if="isRangeMode(fillStopsKey)"
-          v-model="fillStopsRange"
-          :range="true"
+        <PlaygroundRangeField
+          v-if="hasFillStops"
+          label="Stops"
+          :option-key="fillStopsKey"
           :min="2"
           :max="5"
           :step="1"
+          :default-single="2"
         />
-        <Slider v-else v-model="fillStopsSingle" :min="2" :max="5" :step="1" />
       </div>
     </template>
   </div>
@@ -307,105 +274,86 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
 .pg-color {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
-.pg-color-label {
+.pg-color-swatches {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ui-c-text-muted);
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 4px;
 }
 
-.pg-color-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-  gap: 6px;
-}
-
-.pg-color-tile {
-  aspect-ratio: 1;
-  border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-xs);
+/* The checker shows through a color with reduced opacity. */
+.pg-color-swatch {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid var(--db-line);
+  border-radius: 10px;
   background: repeating-conic-gradient(
-      var(--vp-c-bg-soft) 0% 25%,
-      var(--vp-c-bg) 0% 50%
+      var(--db-soft) 0% 25%,
+      var(--db-paper) 0% 50%
     )
     50% / 10px 10px;
   cursor: pointer;
-  transition: all var(--duration-fast) ease;
-  position: relative;
-  overflow: hidden;
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--tile-color);
-    border-radius: calc(var(--vp-radius-xs) - 1px);
+    background: var(--swatch);
   }
 
-  .pg-color-tile-delete {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: calc(var(--vp-radius-xs) - 1px);
-    color: white;
-    opacity: 0;
-    transition: opacity var(--duration-fast) ease;
-    z-index: 1;
+  &[aria-pressed='false'] {
+    opacity: 0.35;
   }
 
-  &:hover .pg-color-tile-delete {
-    opacity: 1;
+  &[aria-pressed='true'] {
+    box-shadow:
+      0 0 0 2px var(--db-paper),
+      0 0 0 4px var(--db-brand);
   }
 }
 
-.pg-color-fill-select {
-  width: 100%;
+.pg-color-pair {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 20px;
 }
 
-.pg-color-contrast-banner {
+@container pg-options (max-width: 520px) {
+  .pg-color-pair {
+    grid-auto-flow: row;
+  }
+}
+
+.pg-color-contrast {
   display: flex;
-  gap: 8px;
-  padding: 10px 12px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--ui-c-text-muted);
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-xs);
+  gap: 10px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--db-muted);
 }
 
-.pg-color-contrast-banner-icon {
+.pg-color-contrast-icon {
   flex-shrink: 0;
   margin-top: 2px;
-  opacity: 0.7;
 }
 
-.pg-color-contrast-banner-text {
-  margin: 0;
-}
-
-.pg-color-contrast-banner-link {
+.pg-color-contrast-link {
   display: inline;
   padding: 0;
   margin: 0;
-  font: inherit;
-  color: var(--vp-c-brand-1);
-  background: transparent;
   border: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--db-brand-text);
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-
-  &:hover {
-    color: var(--vp-c-brand-2);
-  }
 }
 </style>

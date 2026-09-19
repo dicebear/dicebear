@@ -10,10 +10,9 @@
 import { computed, ref, useId, watch } from 'vue';
 import { until } from '@vueuse/core';
 import { FileUp } from '@lucide/vue';
-import Button from 'primevue/button';
-import Message from 'primevue/message';
-import Textarea from 'primevue/textarea';
 import { UiDialog } from '../ui';
+import SiteNotice from '@theme/components/site/SiteNotice.vue';
+import SiteTextarea from '@theme/components/site/SiteTextarea.vue';
 import useStore from '@theme/stores/playground';
 import {
   checkPlaygroundConfig,
@@ -130,135 +129,110 @@ async function onFileSelect(event: Event) {
 </script>
 
 <template>
-  <Button
-    label="Import"
-    severity="secondary"
-    variant="link"
-    size="small"
+  <button
+    type="button"
+    class="site-btn site-btn-ghost site-btn-sm pg-quiet"
     @click="open = true"
   >
-    <template #icon>
-      <FileUp :size="14" />
-    </template>
-  </Button>
+    <FileUp :size="16" aria-hidden="true" />
+    <span class="pg-quiet-label">Import</span>
+  </button>
 
-  <UiDialog v-model:open="open" header="Import options" max-width="640px">
-    <p class="pg-transfer-intro">
-      Takes a file from Export, or an options block on its own. A file brings
-      its own avatar style, a bare block applies to the style you have selected
-      right now. Either way it replaces the options you have set.
-    </p>
+  <UiDialog v-model:open="open" header="Import options" max-width="760px">
+    <div class="pg-transfer">
+      <p class="pg-transfer-intro">
+        Takes a file from Export, or an options block on its own. A file brings
+        its own avatar style, a bare block applies to the style you have
+        selected right now. Either way it replaces the options you have set.
+      </p>
 
-    <Textarea
-      v-model="input"
-      class="pg-transfer-textarea"
-      aria-label="Options JSON"
-      :aria-invalid="error ? true : undefined"
-      :aria-describedby="error ? errorId : undefined"
-      placeholder="Paste your options JSON here..."
-      :rows="12"
-      fluid
-    />
-
-    <div class="pg-transfer-or">
-      <span>or</span>
-    </div>
-
-    <label class="pg-transfer-file">
-      <FileUp :size="16" />
-      <span>Choose JSON file</span>
-      <input
-        type="file"
-        accept=".json,application/json"
-        class="pg-transfer-file-input"
-        @change="onFileSelect"
+      <SiteTextarea
+        v-model="input"
+        mono
+        class="pg-transfer-textarea"
+        aria-label="Options JSON"
+        :invalid="!!error"
+        :aria-describedby="error ? errorId : undefined"
+        placeholder="Paste your options JSON here..."
+        :rows="12"
       />
-    </label>
 
-    <Message
-      v-if="error"
-      :id="errorId"
-      severity="error"
-      :closable="false"
-      class="pg-transfer-error"
-    >
-      {{ error }}
-    </Message>
+      <label class="pg-transfer-file hv-dashed">
+        <FileUp :size="16" aria-hidden="true" />
+        <span>Choose JSON file</span>
+        <input
+          type="file"
+          accept=".json,application/json"
+          class="pg-transfer-file-input"
+          @change="onFileSelect"
+        />
+      </label>
 
-    <Button
-      label="Apply"
-      class="pg-transfer-submit"
-      :disabled="!canSubmit"
-      :loading="loading"
-      @click="submit"
-    />
+      <SiteNotice v-if="error" :id="errorId" tone="error" compact role="alert">
+        {{ error }}
+      </SiteNotice>
+
+      <button
+        type="button"
+        class="site-btn site-btn-primary"
+        :class="{ 'is-loading': loading }"
+        :aria-busy="loading || undefined"
+        :disabled="!canSubmit"
+        @click="submit"
+      >
+        Apply
+      </button>
+    </div>
   </UiDialog>
 </template>
 
 <style scoped lang="scss">
+.pg-transfer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .pg-transfer-intro {
-  margin: 0 0 16px;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--vp-c-text-2);
+  margin: 0;
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--db-ink-2);
 }
 
 .pg-transfer-textarea {
-  min-height: 200px;
-  font-family: var(--vp-font-family-mono);
-  font-size: 12px;
-  line-height: 1.5;
+  min-height: 240px;
   resize: vertical;
 }
 
-.pg-transfer-or {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 16px 0;
-  color: var(--ui-c-text-subtle);
-  font-size: 13px;
-
-  &::before,
-  &::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--vp-c-border);
-  }
-}
-
 .pg-transfer-file {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px;
-  border: 1px dashed var(--vp-c-border);
-  border-radius: var(--vp-radius-xs);
-  font-size: 13px;
+  height: 48px;
+  border: 1px dashed var(--db-btn-border);
+  border-radius: var(--db-radius-3);
+  font-size: 15px;
+  line-height: 24px;
   font-weight: 500;
-  color: var(--ui-c-text-muted);
+  color: var(--db-muted);
   cursor: pointer;
-  transition: all var(--duration-fast);
 
-  &:hover {
-    border-color: var(--vp-c-brand-1);
-    color: var(--vp-c-brand-1);
+  /* The input stays focusable, so the label shows its focus ring. */
+  &:focus-within {
+    outline: 2px solid var(--db-brand);
+    outline-offset: 2px;
   }
 
   &-input {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    opacity: 0;
   }
-}
-
-.pg-transfer-error,
-.pg-transfer-submit {
-  margin-top: 16px;
-}
-
-.pg-transfer-submit {
-  width: 100%;
-  justify-content: center;
 }
 </style>

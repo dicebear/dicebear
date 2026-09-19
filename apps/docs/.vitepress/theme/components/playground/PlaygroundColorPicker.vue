@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Plus } from '@lucide/vue';
-import Button from 'primevue/button';
-import Slider from 'primevue/slider';
-import Popover from 'primevue/popover';
+import SitePopover from '@theme/components/site/SitePopover.vue';
+import SiteSlider from '@theme/components/site/SiteSlider.vue';
 import { stripHash } from '@theme/utils/avatar/colors';
 
-defineProps<{
+const props = defineProps<{
   presetColors: string[];
   colors: string[];
 }>();
@@ -15,11 +14,16 @@ const emit = defineEmits<{
   add: [hex: string];
 }>();
 
-const popover = ref();
-const nativePickerColor = ref('#b6e3f4');
+const popover = ref<InstanceType<typeof SitePopover>>();
+
+// The picker opens on the style's first color, so a new color starts close
+// to the palette. The native input takes six digits only.
+const nativePickerColor = ref(
+  `#${(props.presetColors[0] ?? 'b6e3f4').slice(0, 6)}`,
+);
 const pickerOpacity = ref(100);
 
-function pickerHexWithAlpha(): string {
+const pickedHex = computed(() => {
   const hex = stripHash(nativePickerColor.value);
 
   if (pickerOpacity.value >= 100) return hex;
@@ -29,133 +33,125 @@ function pickerHexWithAlpha(): string {
     .padStart(2, '0');
 
   return `${hex}${alpha}`;
-}
+});
+
+const alreadyAdded = computed(() =>
+  props.colors.includes(pickedHex.value.toLowerCase()),
+);
 
 function toggle(event: Event) {
-  popover.value.toggle(event);
+  popover.value?.toggle(event);
 }
 
 function addFromPicker() {
-  emit('add', pickerHexWithAlpha());
-  popover.value.hide();
-}
-
-function addPreset(hex: string) {
-  emit('add', hex);
-  popover.value.hide();
+  emit('add', pickedHex.value);
+  popover.value?.hide();
 }
 </script>
 
 <template>
-  <button class="pg-color-picker-trigger" @click="toggle">
-    <Plus :size="20" />
+  <button
+    type="button"
+    class="pg-color-picker-trigger hv-dashed"
+    aria-label="Add a color"
+    data-tip="Add a color"
+    @click="toggle"
+  >
+    <Plus :size="18" aria-hidden="true" />
   </button>
 
-  <Popover ref="popover">
-    <div class="pg-picker">
-      <div
-        class="pg-picker-presets"
-        v-if="presetColors.some((p) => !colors.includes(p))"
-      >
-        <button
-          v-for="preset in presetColors"
-          :key="preset"
-          v-show="!colors.includes(preset)"
-          class="pg-picker-preset"
-          :style="{ backgroundColor: `#${preset}` }"
-          @click="addPreset(preset)"
-        />
-      </div>
-      <div class="pg-picker-custom">
-        <input
-          type="color"
-          v-model="nativePickerColor"
-          class="pg-picker-native"
-        />
-        <div class="pg-picker-opacity">
-          <span class="pg-picker-opacity-label">Opacity</span>
-          <Slider
+  <SitePopover ref="popover" label="Add a color">
+    <template #default="{ hide }">
+      <div class="pg-picker">
+        <div class="pg-picker-custom">
+          <input
+            v-model="nativePickerColor"
+            type="color"
+            aria-label="Color"
+            class="pg-picker-native hv-border"
+          />
+          <span class="pg-picker-preview">
+            <span :style="{ background: `#${pickedHex}` }"></span>
+          </span>
+          <span class="pg-picker-hex">#{{ pickedHex.toUpperCase() }}</span>
+        </div>
+        <div class="pg-field">
+          <div class="pg-field-label">
+            <span>Opacity</span>
+            <span class="pg-field-tools">
+              <span class="pg-field-value">{{ pickerOpacity }}%</span>
+            </span>
+          </div>
+          <SiteSlider
             v-model="pickerOpacity"
             :min="0"
             :max="100"
             :step="1"
-            class="pg-picker-opacity-slider"
+            aria-label="Opacity"
           />
-          <span>{{ pickerOpacity }}%</span>
+        </div>
+        <div class="pg-picker-actions">
+          <button
+            type="button"
+            class="site-btn site-btn-primary site-btn-sm"
+            :disabled="alreadyAdded"
+            @click="addFromPicker"
+          >
+            Add color
+          </button>
+          <button
+            type="button"
+            class="site-btn site-btn-secondary site-btn-sm"
+            @click="hide"
+          >
+            Cancel
+          </button>
         </div>
       </div>
-      <Button
-        :label="`Add #${pickerHexWithAlpha()}`"
-        severity="secondary"
-        variant="outlined"
-        size="small"
-        @click="addFromPicker"
-      />
-    </div>
-  </Popover>
+    </template>
+  </SitePopover>
 </template>
 
 <style scoped lang="scss">
 .pg-color-picker-trigger {
-  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--vp-c-bg-soft);
-  border: 2px dashed var(--pg-border);
-  border-radius: var(--vp-radius-xs);
-  color: var(--ui-c-text-subtle);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  box-sizing: border-box;
+  border: 1px dashed var(--db-btn-border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--db-muted);
   cursor: pointer;
-
-  &:hover {
-    border-color: var(--p-primary-color);
-    color: var(--p-primary-color);
-  }
 }
 
 .pg-picker {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  min-width: 200px;
-}
-
-.pg-picker-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.pg-picker-preset {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: var(--vp-radius-xs);
-  cursor: pointer;
-  transition: transform var(--duration-fast) ease;
-
-  &:hover {
-    transform: scale(1.15);
-  }
+  gap: 14px;
+  width: 260px;
+  max-width: 100%;
 }
 
 .pg-picker-custom {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding-top: 6px;
-  border-top: 1px solid var(--pg-border);
+  gap: 12px;
 }
 
 .pg-picker-native {
-  width: 36px;
-  height: 36px;
-  padding: 2px;
-  border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-xs);
-  background: var(--vp-c-bg);
-  cursor: pointer;
   flex-shrink: 0;
+  width: 56px;
+  height: 40px;
+  padding: 3px;
+  box-sizing: border-box;
+  border: 1px solid var(--db-btn-border);
+  border-radius: 10px;
+  background: var(--db-paper);
+  cursor: pointer;
 
   &::-webkit-color-swatch-wrapper {
     padding: 0;
@@ -163,38 +159,47 @@ function addPreset(hex: string) {
 
   &::-webkit-color-swatch {
     border: none;
-    border-radius: 4px;
+    border-radius: var(--db-radius-1);
   }
 
   &::-moz-color-swatch {
     border: none;
-    border-radius: 4px;
+    border-radius: var(--db-radius-1);
   }
 }
 
-.pg-picker-opacity {
+/* The checker shows through a color with reduced opacity. */
+.pg-picker-preview {
+  display: block;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid var(--db-line);
+  border-radius: 10px;
+  background: repeating-conic-gradient(
+      var(--db-soft) 0% 25%,
+      var(--db-paper) 0% 50%
+    )
+    50% / 10px 10px;
+
+  > span {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.pg-picker-hex {
+  font-family: var(--db-font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--db-ink-2);
+}
+
+.pg-picker-actions {
   display: flex;
-  align-items: center;
   gap: 8px;
-  flex: 1;
-
-  &-label {
-    font-size: 12px;
-    color: var(--ui-c-text-subtle);
-    white-space: nowrap;
-  }
-
-  span {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ui-c-text-muted);
-    min-width: 36px;
-    text-align: right;
-  }
-}
-
-.pg-picker-opacity-slider {
-  flex: 1;
-  min-width: 60px;
 }
 </style>

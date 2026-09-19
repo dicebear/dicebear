@@ -1,0 +1,11 @@
+/* Entry point of the theme styles. The order matters: tokens first, the
+   reset in its layer, then the shared vocabulary, then page-level styles. */
+@use './tokens';
+@use './base';
+@use './animations';
+@use './typography';
+@use './hover';
+@use './prose';
+@use './search';
+@use './site';
+@use './print';

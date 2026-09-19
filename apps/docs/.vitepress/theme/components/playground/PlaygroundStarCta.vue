@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { siGithub } from 'simple-icons';
-import Button from 'primevue/button';
 import { track } from '@theme/utils/track';
 import { UiIcon } from '../ui';
 
@@ -21,19 +20,16 @@ function onClick() {
       DiceBear is free and open source. A star on GitHub helps other developers
       find it.
     </p>
-    <Button
-      as="a"
+    <a
       href="https://github.com/dicebear/dicebear"
       target="_blank"
-      rel="noopener"
-      severity="contrast"
-      size="small"
-      class="pg-star-cta-button"
+      rel="noopener noreferrer"
+      class="site-btn site-btn-primary pg-star-cta-button"
       @click="onClick"
     >
-      <UiIcon :path="siGithub.path" :size="16" />
+      <UiIcon :path="siGithub.path" :size="16" aria-hidden="true" />
       Star on GitHub
-    </Button>
+    </a>
   </div>
 </template>
 
@@ -43,31 +39,30 @@ function onClick() {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid var(--pg-border);
+  border-top: 1px solid var(--db-line);
 }
 
 .pg-star-cta-text {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
-  text-align: left;
-  color: var(--ui-c-text-muted);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--db-ink-2);
 }
 
 .pg-star-cta-button {
-  flex: none;
+  flex-shrink: 0;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: var(--db-radius-3);
+  font-size: 15px;
 }
 
 @media (max-width: 540px) {
   .pg-star-cta {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .pg-star-cta-text {
-    text-align: center;
   }
 }
 </style>

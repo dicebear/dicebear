@@ -9,6 +9,7 @@ description: >
 
 Generate avatars in Dart (3.4 or higher) and in
 [Flutter apps](/integrations/dart/flutter/), with no external service involved.
+
 The API mirrors the [JavaScript library](/integrations/javascript/), and the
 output is byte-identical: the same seed and style produce the same SVG in every
 DiceBear library.

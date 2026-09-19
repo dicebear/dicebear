@@ -1,0 +1,74 @@
+<script setup lang="ts">
+/**
+ * A text field with a search icon in front of it. The parent sets the width
+ * with a class on the root.
+ */
+import { Search } from '@lucide/vue';
+
+defineProps<{
+  placeholder: string;
+  label: string;
+}>();
+
+const model = defineModel<string>({ required: true });
+</script>
+
+<template>
+  <span class="site-search hv-border">
+    <Search :size="16" aria-hidden="true" class="site-search-icon" />
+    <input
+      v-model="model"
+      type="search"
+      class="site-search-input"
+      :placeholder="placeholder"
+      :aria-label="label"
+    />
+  </span>
+</template>
+
+<style scoped lang="scss">
+.site-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: 280px;
+  max-width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--db-btn-border);
+  border-radius: var(--db-radius-2);
+  background: var(--db-panel);
+
+  &:focus-within {
+    border-color: var(--db-brand);
+  }
+
+  &-icon {
+    flex-shrink: 0;
+    color: var(--db-muted);
+  }
+
+  &-input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    font-size: 15px;
+    color: var(--db-ink);
+
+    &::placeholder {
+      color: var(--db-muted);
+    }
+
+    // The field already shows an icon, and the clear button would crowd it.
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+}
+</style>

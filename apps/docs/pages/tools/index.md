@@ -10,32 +10,18 @@ sidebar: false
 ---
 
 <script setup lang="ts">
+import SitePageHead from "@theme/components/site/SitePageHead.vue";
 import ToolList from "@theme/components/tools/ToolList.vue";
-import { UiContainer, UiHeadline, UiDescription } from "@theme/components/ui";
+
+const crumbs = [{ text: 'Home', link: '/' }, { text: 'Tools' }];
 </script>
 
-<UiContainer size="sm" class="tools-page">
-  <div class="tools-hero">
-    <UiHeadline tag="h1" class="tools-title">
-      <strong>Tools</strong> Overview
-    </UiHeadline>
-    <UiDescription>
-      Small, focused utilities for working with DiceBear avatars. Each tool uses the same algorithms as the <code>@dicebear/core</code> library, so what you see here matches what your generated avatars do.
-    </UiDescription>
-  </div>
+<SitePageHead :crumbs="crumbs" title="Tools">
 
-  <ToolList />
-</UiContainer>
+Small, focused utilities for working with DiceBear avatars. The contrast picker
+and the bundle estimator run on the same code as `@dicebear/core`, so what you
+see there matches what your avatars do.
 
-<style>
-.tools-page .tools-hero {
-  text-align: center;
-  padding: 80px 0 48px;
-}
-.tools-page code {
-  background: var(--vp-c-bg-soft);
-  padding: 2px 6px;
-  border-radius: var(--vp-radius-xs);
-  font-size: 0.9em;
-}
-</style>
+</SitePageHead>
+
+<ToolList />

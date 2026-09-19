@@ -138,7 +138,7 @@ const crumbs = computed<Crumb[]>(() => {
       <li v-for="(crumb, index) in crumbs" :key="index">
         <ChevronRight
           v-if="index > 0"
-          :size="13"
+          :size="14"
           class="docs-breadcrumb-sep"
           aria-hidden="true"
         />
@@ -165,16 +165,16 @@ const crumbs = computed<Crumb[]>(() => {
 <style lang="scss" scoped>
 .docs-breadcrumb {
   min-width: 0;
-  font-size: 13px;
-  line-height: 1.4;
-  color: var(--ui-c-text-muted);
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--db-muted);
 }
 
 .docs-breadcrumb-list {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 2px 4px;
+  gap: 2px 8px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -182,13 +182,13 @@ const crumbs = computed<Crumb[]>(() => {
   li {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
   }
 }
 
 .docs-breadcrumb-sep {
   flex: none;
-  color: var(--ui-c-text-subtle);
+  color: var(--db-chevron);
 }
 
 .docs-breadcrumb-link {
@@ -196,7 +196,7 @@ const crumbs = computed<Crumb[]>(() => {
   text-decoration: none;
 
   &:hover {
-    color: var(--vp-c-brand-1);
+    color: var(--db-brand-text);
     text-decoration: underline;
   }
 }

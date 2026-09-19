@@ -4,40 +4,18 @@ description: >
   Pixel art face avatar generator: pixel eyes and mouth on a solid background,
   no head or body. Create Pixel Art Neutral avatars with the DiceBear avatar API
   or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Pixel Art Neutral
+<SiteStylePage styleName="pixel-art-neutral">
 
-Pixel Art Neutral is a reduced variant of the Pixel Art style, showing only
-pixel eyes and a mouth on a solid background, with no head outline, hair, or
-body.
+The Pixel Art face on its own: pixel eyes and a mouth on a solid background,
+without head outline, hair or body.
 
-<StylePreview styleName="pixel-art-neutral" />
-
-<StyleDescription styleName="pixel-art-neutral" />
-
-## Usage
-
-<StyleUsage styleName="pixel-art-neutral" />
-
-## Presets
-
-<StylePresets styleName="pixel-art-neutral" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="pixel-art-neutral" />
-
-## Details
-
-<StyleInfo styleName="pixel-art-neutral" />
+</SiteStylePage>

@@ -4,40 +4,18 @@ description: >
   Avataaars face generator: eyes, eyebrows and mouth on a colored square, no
   head or clothing. Create Avataaars Neutral avatars with the DiceBear avatar
   API or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Avataaars Neutral
+<SiteStylePage styleName="avataaars-neutral">
 
-Avataaars Neutral is a reduced variant of the Avataaars style, showing only the
-eyes, eyebrows, and mouth on a solid colored square, with no head, hair, or
-clothing.
+The Avataaars face on its own: eyes, eyebrows and mouth on a colored square,
+without head, hair or clothing.
 
-<StylePreview styleName="avataaars-neutral" />
-
-<StyleDescription styleName="avataaars-neutral" />
-
-## Usage
-
-<StyleUsage styleName="avataaars-neutral" />
-
-## Presets
-
-<StylePresets styleName="avataaars-neutral" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="avataaars-neutral" />
-
-## Details
-
-<StyleInfo styleName="avataaars-neutral" />
+</SiteStylePage>

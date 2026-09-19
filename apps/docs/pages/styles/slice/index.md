@@ -4,43 +4,18 @@ description: >
   Free abstract avatar generator that cuts a silhouette into shifted horizontal
   bands. Create Slice avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Slice
+<SiteStylePage styleName="slice">
 
-Slice takes one silhouette, cuts it into three to six horizontal bands and
-shifts them sideways against each other. Ten shapes, sixteen cut patterns and a
-tilt of up to 45 degrees decide how far the outline comes apart. Each band
-carries a different amount of white over the body color, so the shape runs
-through one hue from light to dark. Generate abstract SVG placeholders for user
-accounts and empty states.
+One silhouette cut into three to six horizontal bands and shifted sideways
+against each other, running through one hue from light to dark.
 
-<StylePreview styleName="slice" />
-
-<StyleDescription styleName="slice" />
-
-## Usage
-
-<StyleUsage styleName="slice" />
-
-## Presets
-
-<StylePresets styleName="slice" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="slice" />
-
-## Details
-
-<StyleInfo styleName="slice" />
+</SiteStylePage>

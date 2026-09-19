@@ -1,42 +1,45 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import Dialog from 'primevue/dialog';
+import SiteDialog from '../site/SiteDialog.vue';
 
-const props = defineProps<{
+defineProps<{
   open: boolean;
   maxWidth?: string;
   header?: string;
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
   'update:open': [value: boolean];
 }>();
-
-const visible = computed({
-  get: () => props.open,
-  set: (val: boolean) => emit('update:open', val),
-});
-
-const hasHeaderText = computed(() => !!props.header?.trim());
-
-const rootClass = computed(() =>
-  hasHeaderText.value ? 'ui-dialog' : 'ui-dialog ui-dialog--headerless',
-);
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    :closable="true"
-    dismissable-mask
-    :header="hasHeaderText ? header : ' '"
-    :style="{ width: maxWidth || '540px', maxWidth: 'calc(100vw - 32px)' }"
-    :pt="{
-      root: { class: rootClass },
-      content: { class: 'ui-dialog-content' },
-    }"
+  <SiteDialog
+    class="ui-dialog"
+    :open="open"
+    :header="header"
+    :max-width="maxWidth || '540px'"
+    content-class="ui-dialog-content"
+    @update:open="$emit('update:open', $event)"
   >
     <slot />
-  </Dialog>
+  </SiteDialog>
 </template>
+
+<style scoped lang="scss">
+// The content of these dialogs brings no side padding of its own.
+.ui-dialog {
+  :deep(.ui-dialog-content) {
+    padding: 20px 28px 28px;
+  }
+
+  &.site-dialog-headerless :deep(.ui-dialog-content) {
+    padding-top: 0;
+  }
+
+  @media (max-width: 640px) {
+    :deep(.ui-dialog-content) {
+      padding: 16px 20px 20px;
+    }
+  }
+}
+</style>

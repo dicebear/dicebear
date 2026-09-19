@@ -1,0 +1,123 @@
+/**
+ * Hover vocabulary. One class per kind of control, so a hover state looks the
+ * same wherever that kind appears.
+ */
+[class*='hv-'] {
+  transition:
+    background-color 0.12s,
+    border-color 0.12s,
+    color 0.12s,
+    box-shadow 0.12s,
+    filter 0.12s,
+    opacity 0.12s;
+}
+
+/* The :root prefix lifts these above the scoped base rules of components. */
+:root .hv-primary:hover {
+  background-color: var(--db-btn-hover);
+}
+
+:root .hv-outline:not([aria-pressed='true']):hover {
+  background-color: var(--db-soft);
+  border-color: var(--db-hover-border);
+}
+
+:root .hv-ghost:hover {
+  background-color: var(--db-soft);
+}
+
+:root .hv-ghost:not([aria-pressed='true']):hover {
+  color: var(--db-ink);
+}
+
+:root .hv-fill:hover {
+  background-color: var(--db-switch-bg);
+  color: var(--db-ink);
+}
+
+:root .hv-seg:not([aria-pressed='true']):not([aria-selected='true']):hover {
+  color: var(--db-ink);
+}
+
+:root .hv-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:root .hv-row:hover,
+:root .hv-row:hover .hv-chev {
+  color: var(--db-brand-text);
+}
+
+:root .hv-tile:hover {
+  background-color: var(--db-soft);
+}
+
+:root .hv-thumb:hover {
+  border-color: var(--db-hover-border);
+}
+
+:root .hv-swatch:not([aria-pressed='true']):hover {
+  box-shadow:
+    0 0 0 2px var(--db-paper),
+    0 0 0 4px var(--db-hover-border);
+}
+
+:root .hv-dashed:hover,
+:root .hv-dashed:hover span {
+  border-color: var(--db-brand);
+  color: var(--db-brand-text);
+}
+
+:root .hv-border:hover:not(:focus):not(:focus-within) {
+  border-color: var(--db-hover-border);
+}
+
+:root .hv-switch:hover .hv-track {
+  filter: brightness(0.93);
+}
+
+:root.dark .hv-switch:hover .hv-track {
+  filter: brightness(1.25);
+}
+
+:root .hv-fade:hover {
+  opacity: 0.7;
+}
+
+/* Tooltip for icon buttons. The button carries aria-label for assistive
+   technology and data-tip for the visible hint. */
+[data-tip] {
+  position: relative;
+}
+
+[data-tip]:hover::after,
+[data-tip]:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  z-index: 30;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  border-radius: var(--db-radius-2);
+  background: var(--db-ink);
+  color: var(--db-paper);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+[data-tip][data-tip-side='bottom']:hover::after,
+[data-tip][data-tip-side='bottom']:focus-visible::after {
+  top: calc(100% + 8px);
+  bottom: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*='hv-'] {
+    transition: none;
+  }
+}

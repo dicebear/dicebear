@@ -13,7 +13,7 @@ PNG, JPEG, WebP, and AVIF.
 
 ## Installation
 
-```
+```sh
 npm install @dicebear/converter
 ```
 

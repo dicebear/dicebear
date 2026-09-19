@@ -11,7 +11,6 @@ import { computed } from 'vue';
 import { useClipboard } from '@vueuse/core';
 import { kebabCase } from 'change-case';
 import { Check, Copy, FileDown } from '@lucide/vue';
-import Button from 'primevue/button';
 import { UiCode, UiDialog } from '../ui';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import { serializePlaygroundConfig } from '@theme/utils/playgroundConfig';
@@ -71,75 +70,85 @@ async function copyOptions() {
 </script>
 
 <template>
-  <Button
-    label="Export"
-    severity="secondary"
-    variant="link"
-    size="small"
+  <button
+    type="button"
+    class="site-btn site-btn-ghost site-btn-sm pg-quiet"
     @click="open = true"
   >
-    <template #icon>
-      <FileDown :size="14" />
-    </template>
-  </Button>
+    <FileDown :size="16" aria-hidden="true" />
+    <span class="pg-quiet-label">Export</span>
+  </button>
 
-  <UiDialog v-model:open="open" header="Export options" max-width="640px">
-    <p class="pg-transfer-intro">
-      The file holds the avatar style, the seed and every option you changed.
-      Import it here later to get this avatar back, or copy the
-      <code>options</code> block into your code: every DiceBear library reads
-      the same option names.
-    </p>
+  <UiDialog v-model:open="open" header="Export options" max-width="760px">
+    <div class="pg-transfer">
+      <p class="pg-transfer-intro">
+        The file holds the avatar style, the seed and every option you changed.
+        Import it here later to get this avatar back, or copy the
+        <code>options</code> block into your code: every DiceBear library reads
+        the same option names.
+      </p>
 
-    <UiCode lang="json" :code="json" class="pg-transfer-code" />
+      <UiCode lang="json" :code="json" class="pg-transfer-code" />
 
-    <div class="pg-transfer-actions">
-      <Button label="Download file" @click="download">
-        <template #icon>
-          <FileDown :size="15" />
-        </template>
-      </Button>
-      <Button
-        :label="copied ? 'Copied!' : 'Copy options'"
-        severity="secondary"
-        @click="copyOptions"
-      >
-        <template #icon>
-          <Check v-if="copied" :size="15" />
-          <Copy v-else :size="15" />
-        </template>
-      </Button>
+      <div class="pg-transfer-actions">
+        <button
+          type="button"
+          class="site-btn site-btn-primary"
+          @click="download"
+        >
+          <FileDown :size="16" aria-hidden="true" />
+          Download file
+        </button>
+        <button
+          type="button"
+          class="site-btn site-btn-secondary"
+          @click="copyOptions"
+        >
+          <Check v-if="copied" :size="16" aria-hidden="true" />
+          <Copy v-else :size="16" aria-hidden="true" />
+          {{ copied ? 'Copied!' : 'Copy options' }}
+        </button>
+      </div>
     </div>
   </UiDialog>
 </template>
 
 <style scoped lang="scss">
+.pg-transfer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .pg-transfer-intro {
-  margin: 0 0 16px;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--vp-c-text-2);
+  margin: 0;
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--db-ink-2);
 
   code {
-    font-family: var(--vp-font-family-mono);
+    font-family: var(--db-font-mono);
     font-size: 0.9em;
-    color: var(--vp-c-text-1);
+    color: var(--db-ink);
   }
 }
 
 .pg-transfer-code {
-  max-height: 40vh;
+  max-height: 360px;
 }
 
 .pg-transfer-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 
-  :deep(button) {
-    flex: 1 1 160px;
-    justify-content: center;
+  .site-btn {
+    gap: 8px;
+    padding: 0 12px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>

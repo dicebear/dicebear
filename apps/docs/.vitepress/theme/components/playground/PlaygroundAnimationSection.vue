@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import ToggleSwitch from 'primevue/toggleswitch';
+import { computed, useId } from 'vue';
+import SiteSwitch from '@theme/components/site/SiteSwitch.vue';
 import useStore from '@theme/stores/playground';
 import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
@@ -13,6 +13,7 @@ const props = defineProps<{
 }>();
 
 const store = useStore();
+const switchId = useId();
 
 const animationKey = 'animation';
 const speedKey = 'animationSpeed';
@@ -64,10 +65,12 @@ function resetAll() {
 <template>
   <div class="pg-animation">
     <div class="pg-field">
-      <div class="pg-field-label pg-animation-toggle-row">
-        <ToggleSwitch v-model="animation" />
-        <span>Play animations</span>
-        <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
+      <div class="pg-field-label">
+        <label :for="switchId">Play animations</label>
+        <span class="pg-field-tools">
+          <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
+          <SiteSwitch :id="switchId" v-model="animation" />
+        </span>
       </div>
       <p class="pg-help">
         Plays the style's built-in animations in the SVG output. Raster formats
@@ -80,7 +83,7 @@ function resetAll() {
       </p>
     </div>
 
-    <template v-if="anythingPlays">
+    <div v-if="anythingPlays" class="pg-animation-pair">
       <PlaygroundRangeField
         label="Speed"
         option-key="animationSpeed"
@@ -100,7 +103,7 @@ function resetAll() {
         unit="s"
         :default-single="0"
       />
-    </template>
+    </div>
   </div>
 </template>
 
@@ -111,8 +114,15 @@ function resetAll() {
   gap: 20px;
 }
 
-.pg-animation-toggle-row {
-  justify-content: flex-start;
-  gap: 10px;
+.pg-animation-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@container pg-options (max-width: 520px) {
+  .pg-animation-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 </style>

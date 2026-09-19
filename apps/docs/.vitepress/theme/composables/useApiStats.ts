@@ -77,7 +77,7 @@ export function formatMonthKey(
 
 export function lastCompleteMonth(
   daily: Record<string, number>,
-): { total: number; label: string } | null {
+): { key: string; total: number; label: string } | null {
   const months = aggregateMonthly(daily);
 
   if (months.length < 2) {
@@ -87,7 +87,7 @@ export function lastCompleteMonth(
   const last = months[months.length - 2];
   const label = formatMonthKey(last.key, { month: 'short', year: 'numeric' });
 
-  return { total: last.total, label };
+  return { key: last.key, total: last.total, label };
 }
 
 async function doFetch() {

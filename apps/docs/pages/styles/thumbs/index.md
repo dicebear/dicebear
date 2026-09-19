@@ -4,40 +4,18 @@ description: >
   Free default avatar generator: rounded thumb-shaped characters with simple
   faces. Create Thumbs avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Thumbs
+<SiteStylePage styleName="thumbs">
 
-Thumbs is a playful vector avatar style of rounded thumb-shaped characters in a
-single solid color, with simple eyes and mouth on a tinted background. Generate
-friendly SVG profile icons that work well as default user avatars.
+Rounded thumb-shaped characters in one solid color, with simple eyes and mouth
+on a tinted background.
 
-<StylePreview styleName="thumbs" />
-
-<StyleDescription styleName="thumbs" />
-
-## Usage
-
-<StyleUsage styleName="thumbs" />
-
-## Presets
-
-<StylePresets styleName="thumbs" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="thumbs" />
-
-## Details
-
-<StyleInfo styleName="thumbs" />
+</SiteStylePage>

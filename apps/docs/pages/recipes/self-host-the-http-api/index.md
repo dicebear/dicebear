@@ -8,9 +8,11 @@ description: >
 # Self-hosted avatar API: host DiceBear yourself
 
 The public HTTP API is free and needs no signup, and for most projects that is
-all you ever use. Hosting it yourself becomes interesting when you want avatar
-requests to stay on your own infrastructure, be it for data control, for your
-own rate limits, or because your app runs in a closed network.
+all you ever use.
+
+Hosting it yourself becomes interesting when you want avatar requests to stay on
+your own infrastructure, be it for data control, for your own rate limits, or
+because your app runs in a closed network.
 
 You can find the source code for the HTTP API on
 [GitHub](https://github.com/dicebear/api). The code is written in TypeScript and
@@ -21,14 +23,14 @@ uses the [Fastify](https://www.fastify.io/) framework.
 The easiest way to host the HTTP API yourself is to use the docker image. You
 can find the image on [Docker Hub](https://hub.docker.com/r/dicebear/api).
 
-```
+```sh
 docker run --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:4
 ```
 
 Or you can use `docker-compose.yml` to configure the HTTP API and start it with
 "docker compose up".
 
-```
+```yaml
 services:
   dicebear:
     image: dicebear/api:4
@@ -45,7 +47,7 @@ services:
 If you don't want to use docker, you can also run the HTTP API directly on your
 machine. You need to have [Node.js](https://nodejs.org/) installed.
 
-```
+```sh
 git clone git@github.com:dicebear/api.git
 cd api
 
@@ -60,7 +62,7 @@ Besides the avatar endpoints, your instance can expose two metadata endpoints
 per style. Both are disabled by default and can be enabled individually with an
 environment variable:
 
-```
+```http
 http://localhost:3000/11.x/<styleName>/definition.json
 http://localhost:3000/11.x/<styleName>/options.json
 ```

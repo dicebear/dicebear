@@ -4,41 +4,18 @@ description: >
   Free flat design avatar generator covering a broad range of ages, hair, beards
   and glasses. Create Personas avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Personas
+<SiteStylePage styleName="personas">
 
-Personas is a flat-design vector avatar style of half-body characters with
-subtle skin shading, varied hair, facial hair, and glasses on solid colored
-tops. Generate SVG profile icons that cover a broad range of ages and
-appearances.
+Flat half-body characters with subtle skin shading, varied hair, facial hair and
+glasses on solid colored tops.
 
-<StylePreview styleName="personas" />
-
-<StyleDescription styleName="personas" />
-
-## Usage
-
-<StyleUsage styleName="personas" />
-
-## Presets
-
-<StylePresets styleName="personas" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="personas" />
-
-## Details
-
-<StyleInfo styleName="personas" />
+</SiteStylePage>

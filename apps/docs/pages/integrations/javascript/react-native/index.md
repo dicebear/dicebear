@@ -16,7 +16,7 @@ The API approach requires no SVG library.
 You need an SVG library to render the avatars. In our example we use the package
 [react-native-svg](https://www.npmjs.com/package/react-native-svg).
 
-```
+```sh
 npm install react-native-svg
 ```
 

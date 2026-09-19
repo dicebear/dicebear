@@ -4,41 +4,18 @@ description: >
   Free minimal line art avatar generator: eyes, nose and mouth in a few brush
   strokes. Create Line Face avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Line Face
+<SiteStylePage styleName="line-face">
 
-Line Face draws a face with a few brush strokes and leaves out everything else.
-Eight eye pairs, six noses and eight mouths, each a single stroke, sit directly
-on a warm background with no head outline around them. Generate quiet, minimal
-profile icons for reading apps and personal sites.
+A face in a few brush strokes: eyes, nose and mouth on a warm background, with
+no head outline around them.
 
-<StylePreview styleName="line-face" />
-
-<StyleDescription styleName="line-face" />
-
-## Usage
-
-<StyleUsage styleName="line-face" />
-
-## Presets
-
-<StylePresets styleName="line-face" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="line-face" />
-
-## Details
-
-<StyleInfo styleName="line-face" />
+</SiteStylePage>

@@ -1,11 +1,15 @@
 <script setup lang="ts">
+/**
+ * The two contrast colors as hairline rows: a color input, the contrast ratio
+ * against the picked color with its WCAG levels, and a mark on the one
+ * DiceBear picks.
+ */
 import { computed } from 'vue';
-import { Sparkles } from '@lucide/vue';
 import { Color } from '@dicebear/core';
-import { UiCard } from '../ui';
 
 const props = defineProps<{
   pickedHex: string;
+  picked: 'a' | 'b';
   contrastA: string;
   contrastB: string;
 }>();
@@ -15,151 +19,110 @@ const emit = defineEmits<{
   'update:contrastB': [hex: string];
 }>();
 
+// WCAG 2.1 minimum ratios for normal text.
+const levels = [
+  { name: 'AA', min: 4.5 },
+  { name: 'AAA', min: 7 },
+];
+
 const pickedLuminance = computed(() => Color.luminance(props.pickedHex));
 
-const pickedId = computed<'a' | 'b'>(() => {
-  const sorted = Color.sortByContrast(
-    [props.contrastA, props.contrastB],
-    props.pickedHex,
-  );
-  return sorted[0] === props.contrastA ? 'a' : 'b';
-});
+function ratioFor(hex: string): number {
+  const l = Color.luminance(hex);
+  const lp = pickedLuminance.value;
+  return (Math.max(l, lp) + 0.05) / (Math.min(l, lp) + 0.05);
+}
 
-const targets = computed(() => [
-  { id: 'a' as const, label: 'Contrast color 1', value: props.contrastA },
-  { id: 'b' as const, label: 'Contrast color 2', value: props.contrastB },
-]);
+const targets = computed(() =>
+  [
+    { id: 'a' as const, label: 'Contrast color 1', value: props.contrastA },
+    { id: 'b' as const, label: 'Contrast color 2', value: props.contrastB },
+  ].map((target) => {
+    const ratio = ratioFor(target.value);
+
+    return {
+      ...target,
+      ratio: `${ratio.toFixed(2)}:1`,
+      levels: levels.map((level) => ({
+        name: level.name,
+        passed: ratio >= level.min,
+      })),
+    };
+  }),
+);
 
 function emitUpdate(id: 'a' | 'b', value: string) {
   if (id === 'a') emit('update:contrastA', value);
   else emit('update:contrastB', value);
 }
-
-function ratioFor(hex: string): string {
-  const l = Color.luminance(hex);
-  const lp = pickedLuminance.value;
-  const ratio = (Math.max(l, lp) + 0.05) / (Math.min(l, lp) + 0.05);
-  return `${ratio.toFixed(2)}:1`;
-}
 </script>
 
 <template>
   <div class="contrast-targets">
-    <UiCard
-      v-for="target in targets"
-      :key="target.id"
-      padding="sm"
-      class="contrast-target"
-      :class="{ 'contrast-target-picked': pickedId === target.id }"
-    >
-      <header class="contrast-target-header">
-        <h3 class="contrast-target-title">{{ target.label }}</h3>
-        <span
-          class="contrast-target-pick-badge"
-          :class="{
-            'contrast-target-pick-badge-hidden': pickedId !== target.id,
-          }"
-          :aria-hidden="pickedId !== target.id"
-        >
-          <Sparkles :size="12" />
-          DiceBear picks this
+    <div v-for="target in targets" :key="target.id" class="contrast-target">
+      <input
+        :id="`contrast-${target.id}`"
+        type="color"
+        :value="target.value"
+        class="contrast-target-input hv-border"
+        @input="
+          emitUpdate(target.id, ($event.target as HTMLInputElement).value)
+        "
+      />
+      <span class="contrast-target-copy">
+        <label :for="`contrast-${target.id}`" class="contrast-target-label">{{
+          target.label
+        }}</label>
+        <span class="contrast-target-hex">{{ target.value }}</span>
+      </span>
+      <span class="contrast-target-result">
+        <span class="site-h3 contrast-target-ratio">{{ target.ratio }}</span>
+        <span class="contrast-target-levels">
+          <span
+            v-for="level in target.levels"
+            :key="level.name"
+            class="site-chip"
+            :class="level.passed ? 'site-chip-ok' : 'site-chip-muted'"
+          >
+            {{ level.name }}
+            <span class="sr-only">{{
+              level.passed ? 'passed' : 'failed'
+            }}</span>
+          </span>
         </span>
-      </header>
-
-      <div class="contrast-target-input-row">
-        <input
-          type="color"
-          :value="target.value"
-          class="contrast-target-color-input"
-          @input="
-            emitUpdate(target.id, ($event.target as HTMLInputElement).value)
-          "
-        />
-        <div class="contrast-target-ratio">
-          <span class="contrast-target-ratio-value">{{
-            ratioFor(target.value)
-          }}</span>
-          <span class="contrast-target-ratio-label">Contrast ratio</span>
-        </div>
-      </div>
-    </UiCard>
+        <span
+          class="contrast-target-pick"
+          :class="{ 'is-hidden': picked !== target.id }"
+          :aria-hidden="picked !== target.id"
+          >DiceBear picks this</span
+        >
+      </span>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .contrast-targets {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-
-  @media (max-width: 960px) {
-    grid-template-columns: 1fr;
-  }
+  border-bottom: 1px solid var(--db-line);
 }
 
 .contrast-target {
-  :deep(.ui-card-body) {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid var(--db-line);
 
-  // Compound selector to beat UiCard's `.ui-card` rule in cascade
-  // (both selectors otherwise have identical specificity).
-  &.contrast-target-picked {
-    border-color: var(--vp-c-brand-1);
-    box-shadow: 0 0 0 4px var(--vp-c-brand-soft);
-  }
-
-  &-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  &-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--vp-c-text-1);
-    margin: 0;
-  }
-
-  &-pick-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
-    background: var(--vp-c-brand-1);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    border-radius: var(--vp-radius-lg);
-    letter-spacing: 0.3px;
-    transition: opacity var(--duration-fast) var(--ease-smooth);
-
-    &-hidden {
-      visibility: hidden;
-      opacity: 0;
-    }
-  }
-
-  &-input-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  &-color-input {
-    width: 42px;
-    height: 42px;
-    padding: 2px;
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-xs);
-    background: var(--vp-c-bg);
+  &-input {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--db-btn-border);
+    border-radius: 14px;
+    background: transparent;
     cursor: pointer;
-    flex-shrink: 0;
 
     &::-webkit-color-swatch-wrapper {
       padding: 0;
@@ -167,32 +130,74 @@ function ratioFor(hex: string): string {
 
     &::-webkit-color-swatch {
       border: none;
-      border-radius: 4px;
     }
 
     &::-moz-color-swatch {
       border: none;
-      border-radius: 4px;
     }
   }
 
-  &-ratio {
+  &-copy {
     display: flex;
-    align-items: baseline;
-    gap: 10px;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
 
-    &-value {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--vp-c-text-1);
-      font-variant-numeric: tabular-nums;
+  &-label {
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 600;
+    color: var(--db-ink);
+  }
+
+  &-hex {
+    font-family: var(--db-font-mono);
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--db-muted);
+  }
+
+  &-result {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  &-ratio {
+    font-variant-numeric: tabular-nums;
+  }
+
+  &-levels {
+    display: flex;
+    gap: 6px;
+  }
+
+  // Hidden instead of removed, so the row keeps its height when the pick
+  // moves to the other color.
+  &-pick {
+    margin-top: 2px;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--db-brand-text);
+
+    &.is-hidden {
+      visibility: hidden;
     }
+  }
 
-    &-label {
-      font-size: 11px;
-      color: var(--ui-c-text-subtle);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+  @media (max-width: 767px) {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 12px;
+
+    &-input {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--db-radius-3);
     }
   }
 }

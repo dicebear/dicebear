@@ -10,11 +10,20 @@ sidebar: false
 ---
 
 <script setup lang="ts">
-import StyleList from "@theme/components/styles/StyleList.vue";
-import { UiContainer } from "@theme/components/ui";
+import { useData } from 'vitepress';
+import { SitePageHead, SiteStylesTable } from '@theme/components/site';
+
+const { theme } = useData();
+const title = theme.value.styleCount + ' styles';
+const crumbs = [{ text: 'Home', link: '/' }, { text: 'Styles' }];
 </script>
 
-<UiContainer class="styles-page">
-  <h1 class="sr-only">Avatar Styles</h1>
-  <StyleList />
-</UiContainer>
+<SitePageHead :crumbs="crumbs" :title="title">
+
+Characters, animals, robots, scenes and abstract marks. Every style is one word
+in your code, and every one has its own page with presets, options and the
+license it comes with.
+
+</SitePageHead>
+
+<SiteStylesTable />

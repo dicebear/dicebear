@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import useStore from '@theme/stores/playground';
 import { toTagTokens, type TagCategory } from '@theme/utils/avatar/tags';
-import { Minus, Check, Ban } from '@lucide/vue';
+import SiteSegmented from '@theme/components/site/SiteSegmented.vue';
 
 const props = defineProps<{ category: TagCategory }>();
 
@@ -16,10 +16,10 @@ const TAGS_KEY = 'tags';
 // `!cat`. A value row writes `cat:value` / `!cat:value`.
 type RowState = 'neutral' | 'allow' | 'disallow';
 
-const STATES: { state: RowState; icon: unknown; label: string }[] = [
-  { state: 'neutral', icon: Minus, label: 'Neutral' },
-  { state: 'allow', icon: Check, label: 'Allow' },
-  { state: 'disallow', icon: Ban, label: 'Disallow' },
+const STATES: { value: RowState; label: string }[] = [
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'allow', label: 'Allow' },
+  { value: 'disallow', label: 'Disallow' },
 ];
 
 const selected = computed<string[]>(() =>
@@ -91,27 +91,15 @@ function setRowState(
       :class="{ 'pg-tags-row-category': row.bare }"
     >
       <span class="pg-tags-row-label">{{ row.label }}</span>
-      <div
-        class="pg-tags-tri"
-        role="group"
+      <SiteSegmented
+        :model-value="row.state"
+        :options="STATES"
+        size="sm"
         :aria-label="`${row.bare ? category.label : `${category.label} ${row.label}`} filter`"
-      >
-        <button
-          v-for="option in STATES"
-          :key="option.state"
-          type="button"
-          class="pg-tags-tri-btn"
-          :class="{
-            [`pg-tags-tri-btn-${option.state}`]: row.state === option.state,
-          }"
-          :aria-pressed="row.state === option.state"
-          :disabled="!row.bare && valuesDisabled"
-          :title="option.label"
-          @click="setRowState(row, option.state)"
-        >
-          <component :is="option.icon" :size="13" />
-        </button>
-      </div>
+        :disabled="!row.bare && valuesDisabled"
+        class="pg-tags-row-states"
+        @update:model-value="setRowState(row, $event)"
+      />
     </div>
   </div>
 </template>
@@ -120,94 +108,44 @@ function setRowState(
 .pg-tags-rows {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
 }
 
 .pg-tags-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 3px 0;
-}
-
-.pg-tags-row-category {
-  padding-bottom: 6px;
-
-  .pg-tags-row-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--ui-c-text);
-  }
-}
-
-.pg-tags-row:not(.pg-tags-row-category) {
-  padding-left: 16px;
+  gap: 16px;
 }
 
 .pg-tags-row-label {
-  font-size: 13px;
-  color: var(--ui-c-text-muted);
+  min-width: 0;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--db-ink);
 }
 
-.pg-tags-tri {
-  display: flex;
+.pg-tags-row-category .pg-tags-row-label {
+  font-weight: 700;
 }
 
-.pg-tags-tri-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 22px;
-  border: 1px solid var(--pg-border);
-  border-left-width: 0;
-  background: none;
-  color: var(--ui-c-text-muted);
-  cursor: pointer;
-  transition: all var(--duration-fast) ease;
+.pg-tags-row .pg-tags-row-states {
+  flex-shrink: 0;
+  grid-auto-columns: 84px;
+}
 
-  &:first-child {
-    border-left-width: 1px;
-    border-radius: 6px 0 0 6px;
+/* On a phone column the three states take the full width under the label. */
+@container pg-options (max-width: 520px) {
+  .pg-tags-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
   }
 
-  &:last-child {
-    border-radius: 0 6px 6px 0;
-  }
-
-  &:hover:not(:disabled) {
-    color: var(--ui-c-text);
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: default;
-  }
-
-  &-neutral {
-    background: var(--pg-border);
-    color: var(--ui-c-text);
-  }
-
-  &-allow {
-    border-color: var(--p-primary-color);
-    background: var(--p-primary-color);
-    color: var(--p-primary-contrast-color);
-
-    + .pg-tags-tri-btn {
-      border-left-color: var(--p-primary-color);
-    }
-  }
-
-  &-disallow {
-    border-color: var(--p-red-500);
-    background: var(--p-red-500);
-    color: #fff;
-
-    + .pg-tags-tri-btn {
-      border-left-color: var(--p-red-500);
-    }
+  .pg-tags-row .pg-tags-row-states {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
   }
 }
 </style>

@@ -4,41 +4,18 @@ description: >
   Free cartoon avatar generator with expressive faces, bold outlines and varied
   hairstyles. Create Adventurer avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Adventurer
+<SiteStylePage styleName="adventurer">
 
-Adventurer is an illustrated vector avatar style with expressive cartoon faces,
-bold outlines, varied hairstyles, and customizable details like glasses,
-earrings, and eyebrows. Generate friendly profile icons for games, communities,
-and social apps.
+Illustrated cartoon faces with bold outlines, many hairstyles, and details like
+glasses, earrings and eyebrows.
 
-<StylePreview styleName="adventurer" />
-
-<StyleDescription styleName="adventurer" />
-
-## Usage
-
-<StyleUsage styleName="adventurer" />
-
-## Presets
-
-<StylePresets styleName="adventurer" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="adventurer" />
-
-## Details
-
-<StyleInfo styleName="adventurer" />
+</SiteStylePage>

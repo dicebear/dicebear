@@ -4,40 +4,17 @@ description: >
   Free abstract avatar generator that stacks soft organic shapes in shades of
   one hue. Create Blobs avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Blobs
+<SiteStylePage styleName="blobs">
 
-Blobs is an abstract vector avatar style that stacks soft organic shapes in
-progressively lighter shades of a single hue. Generate smooth SVG profile icons
-that work as avatar placeholders or decorative user identifiers.
+Soft organic shapes stacked in lighter and lighter shades of one hue.
 
-<StylePreview styleName="blobs" />
-
-<StyleDescription styleName="blobs" />
-
-## Usage
-
-<StyleUsage styleName="blobs" />
-
-## Presets
-
-<StylePresets styleName="blobs" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="blobs" />
-
-## Details
-
-<StyleInfo styleName="blobs" />
+</SiteStylePage>

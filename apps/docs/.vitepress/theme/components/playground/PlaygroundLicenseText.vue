@@ -92,19 +92,20 @@ const customStyleDisplayName = computed(
 
 <style scoped lang="scss">
 .playground-license-text {
+  margin: 0;
+
   &-name {
     font-weight: 600;
   }
 
   a {
     font-weight: 500;
-    color: var(--vp-c-brand-1);
-    text-decoration-style: dotted;
-    transition: color var(--duration-fast);
-    cursor: pointer;
+    color: var(--db-brand-text);
+    text-decoration: none;
 
     &:hover {
-      color: var(--vp-c-brand-2);
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
   }
 }

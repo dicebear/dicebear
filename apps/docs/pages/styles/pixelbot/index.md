@@ -4,40 +4,17 @@ description: >
   Free pixel robot avatar generator with glowing faces built from blocks on a
   dark grid. Create Pixelbot avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Pixelbot
+<SiteStylePage styleName="pixelbot">
 
-Pixelbot is a retro vector avatar style that draws glowing robot faces from
-small pixel blocks on a dark grid. Generate neon SVG profile icons for developer
-tools, games, and dark-mode interfaces.
+Glowing robot faces drawn from small pixel blocks on a dark grid.
 
-<StylePreview styleName="pixelbot" />
-
-<StyleDescription styleName="pixelbot" />
-
-## Usage
-
-<StyleUsage styleName="pixelbot" />
-
-## Presets
-
-<StylePresets styleName="pixelbot" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="pixelbot" />
-
-## Details
-
-<StyleInfo styleName="pixelbot" />
+</SiteStylePage>

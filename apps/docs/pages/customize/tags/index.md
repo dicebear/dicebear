@@ -9,10 +9,11 @@ description: >
 # Filter avatar variants with tags
 
 Avatar styles can describe their variants with **tags**. A tag is a short label
-like `animation` or `hairLength:long` that says something about a variant. Tags
-only describe, they never change the artwork. They let you narrow the pool of
-variants an avatar is drawn from, and they work the same way across every style
-that carries them.
+like `animation` or `hairLength:long` that says something about a variant.
+
+Tags only describe, they never change the artwork. They let you narrow the pool
+of variants an avatar is drawn from, and they work the same way across every
+style that carries them.
 
 ## Filter with the `tags` option
 
@@ -33,7 +34,7 @@ const avatar = new Avatar(style, {
 In the [HTTP API](/integrations/http-api/) the same filter is a comma-separated
 query parameter:
 
-```
+```http
 https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,mood:positive
 ```
 

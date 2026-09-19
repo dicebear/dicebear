@@ -9,9 +9,10 @@ description: >
 # Next.js avatar library: using DiceBear with Next.js
 
 DiceBear works in every Next.js rendering mode: server components, client
-components, and the Pages Router. Server-side generation is the default
-recommendation because it produces zero JavaScript on the client and avoids
-hydration pitfalls.
+components, and the Pages Router.
+
+Server-side generation is the default recommendation because it produces zero
+JavaScript on the client and avoids hydration pitfalls.
 
 ## App Router
 

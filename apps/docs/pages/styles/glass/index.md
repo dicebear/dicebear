@@ -4,41 +4,17 @@ description: >
   Free gradient avatar generator with smooth color blends and a soft glassy
   sheen. Create Glass avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Glass
+<SiteStylePage styleName="glass">
 
-Glass is a minimal abstract vector avatar style rendered as smooth color
-gradients with a subtle glassy sheen and no visible shapes. Generate SVG profile
-icons that work as understated placeholders or backgrounds for polished
-interfaces.
+Smooth color gradients with a subtle glassy sheen and no visible shapes.
 
-<StylePreview styleName="glass" />
-
-<StyleDescription styleName="glass" />
-
-## Usage
-
-<StyleUsage styleName="glass" />
-
-## Presets
-
-<StylePresets styleName="glass" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="glass" />
-
-## Details
-
-<StyleInfo styleName="glass" />
+</SiteStylePage>

@@ -4,41 +4,18 @@ description: >
   Free minimal avatar generator: a shoulder silhouette with a glyph-like
   headpiece in a circle. Create Glyphs avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Glyphs
+<SiteStylePage styleName="glyphs">
 
-Glyphs is a minimal abstract vector avatar style that pairs a flat shoulder
-silhouette with a unique glyph-like hat or headpiece inside a soft tinted
-circle. Generate simple SVG profile icons that work well as placeholders in user
-lists and chat sidebars.
+A flat shoulder silhouette with a glyph-like hat or headpiece inside a tinted
+circle.
 
-<StylePreview styleName="glyphs" />
-
-<StyleDescription styleName="glyphs" />
-
-## Usage
-
-<StyleUsage styleName="glyphs" />
-
-## Presets
-
-<StylePresets styleName="glyphs" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="glyphs" />
-
-## Details
-
-<StyleInfo styleName="glyphs" />
+</SiteStylePage>

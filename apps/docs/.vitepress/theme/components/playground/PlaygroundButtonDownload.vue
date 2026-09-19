@@ -1,29 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Archive, Download } from '@lucide/vue';
+import { computed, ref } from 'vue';
+import { Download } from '@lucide/vue';
 import { Avatar } from '@dicebear/core';
 import { getAvatarApiUrl } from '@theme/utils/avatar/api';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
 import { track, styleLabel } from '@theme/utils/track';
-import { UiAvatar, UiConfetti, UiDialog } from '../ui';
-import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
-import PlaygroundStarCta from './PlaygroundStarCta.vue';
+import SiteDialog from '../site/SiteDialog.vue';
+import SiteMenu, { type SiteMenuItem } from '../site/SiteMenu.vue';
 import PlaygroundBatchDownload from './PlaygroundBatchDownload.vue';
+import PlaygroundDone from './PlaygroundDone.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
-import Button from 'primevue/button';
-import Menu from 'primevue/menu';
-import type { MenuItem } from 'primevue/menuitem';
-import { DIALOG_PREVIEW_AVATAR_SIZE, DOWNLOAD_AVATAR_SIZE } from './constants';
+import { DOWNLOAD_AVATAR_SIZE } from './constants';
 
 const props = defineProps<{
   seed: string;
 }>();
 
-const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(
+const { store, open, options, showDialog } = usePlaygroundDialog(
   () => props.seed,
 );
-const menu = ref();
 const batchOpen = ref(false);
 
 async function downloadSvg() {
@@ -63,97 +59,75 @@ async function downloadBinary(format: string) {
   triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.${format}`);
 }
 
-function openBatch() {
-  batchOpen.value = true;
-}
+const svgItem: SiteMenuItem = {
+  label: 'SVG',
+  hint: 'Vector, any size',
+  command: () => downloadSvg(),
+};
 
-// For built-in styles the API serves PNG/JPEG/WebP/AVIF; for custom styles we
-// can only produce SVGs locally — so the format choices collapse to SVG +
-// Batch. Batch stays available in both modes via a separator at the bottom.
-// `iconComponent` rather than PrimeVue's `icon`, which is typed as a CSS class
-// name — the `#item` slot below renders the Lucide component directly.
-const builtInMenuItems: MenuItem[] = [
-  { label: 'SVG', command: () => downloadSvg() },
+const batchItems: SiteMenuItem[] = [
+  { separator: true },
+  { label: 'Batch download', command: () => (batchOpen.value = true) },
+];
+
+// The API serves the raster formats of the packaged styles. An uploaded style
+// only renders in the browser, which leaves SVG and the batch download.
+const rasterItems: SiteMenuItem[] = [
   { label: 'PNG', command: () => downloadBinary('png') },
   { label: 'JPEG', command: () => downloadBinary('jpg') },
   { label: 'WebP', command: () => downloadBinary('webp') },
   { label: 'AVIF', command: () => downloadBinary('avif') },
-  { separator: true },
-  {
-    label: 'Batch download…',
-    iconComponent: Archive,
-    command: () => openBatch(),
-  },
 ];
 
-const customMenuItems: MenuItem[] = [
-  { label: 'SVG', command: () => downloadSvg() },
-  { separator: true },
-  {
-    label: 'Batch download…',
-    iconComponent: Archive,
-    command: () => openBatch(),
-  },
-];
-
-function onDownloadClick(e: Event) {
-  menu.value.toggle(e);
-}
+const items = computed<SiteMenuItem[]>(() =>
+  store.isCustomStyle
+    ? [svgItem, ...batchItems]
+    : [svgItem, ...rasterItems, ...batchItems],
+);
 </script>
 
 <template>
-  <Button label="Download" severity="secondary" @click="onDownloadClick">
-    <template #icon>
-      <Download :size="15" />
+  <SiteMenu class="pg-button-download" :items="items" label="Download">
+    <template #trigger="{ open: menuOpen, toggle }">
+      <button
+        type="button"
+        class="site-btn site-btn-secondary pg-button-download-trigger"
+        aria-haspopup="menu"
+        :aria-expanded="menuOpen"
+        @click="toggle"
+      >
+        <Download :size="16" aria-hidden="true" />
+        Download
+      </button>
     </template>
-  </Button>
-  <Menu
-    ref="menu"
-    :model="store.isCustomStyle ? customMenuItems : builtInMenuItems"
-    :popup="true"
+  </SiteMenu>
+
+  <PlaygroundDone
+    v-model:open="open"
+    title="Your avatar will be downloaded"
+    :options="options"
+    source="download"
+  />
+
+  <SiteDialog
+    v-model:open="batchOpen"
+    header="Batch download"
+    max-width="760px"
   >
-    <template #item="{ item, props }">
-      <a v-bind="props.action" class="pg-download-menu-item">
-        <component
-          :is="item.iconComponent"
-          v-if="item.iconComponent"
-          :size="14"
-        />
-        <span>{{ item.label }}</span>
-      </a>
-    </template>
-  </Menu>
-
-  <UiDialog v-model:open="open">
-    <UiConfetti :key="confettiKey" />
-    <div class="dialog-preview">
-      <UiAvatar
-        :style-name="store.avatarStyleName"
-        :style-options="options"
-        :size="DIALOG_PREVIEW_AVATAR_SIZE"
-        mode="library"
-      />
-    </div>
-    <div class="dialog-title">Your avatar will be downloaded! 🎉</div>
-    <div class="dialog-subtitle">
-      Please note the license below before using.
-    </div>
-    <div class="dialog-text">
-      <PlaygroundLicenseAlert />
-      <PlaygroundStarCta source="download" />
-    </div>
-  </UiDialog>
-
-  <UiDialog v-model:open="batchOpen" header="Batch download" max-width="640px">
     <PlaygroundBatchDownload v-if="batchOpen" />
-  </UiDialog>
+  </SiteDialog>
 </template>
 
 <style scoped lang="scss">
-.pg-download-menu-item {
+.pg-button-download {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
+  min-width: 0;
+
+  &-trigger {
+    width: 100%;
+    min-width: 0;
+    padding: 0 12px;
+    font-size: 15px;
+  }
 }
 </style>

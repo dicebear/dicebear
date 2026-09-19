@@ -4,40 +4,18 @@ description: >
   Free flat illustration avatar generator with chunky outlined faces on
   saturated colors. Create Dylan avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Dylan
+<SiteStylePage styleName="dylan">
 
-Dylan is a bold, flat-illustrated vector avatar style with chunky outlined
-faces, hand-drawn stubble, and minimal facial features on saturated backgrounds.
-Generate distinctive SVG profile icons for creative projects and modern apps.
+Flat, bold faces with chunky outlines, hand-drawn stubble and minimal features
+on saturated backgrounds.
 
-<StylePreview styleName="dylan" />
-
-<StyleDescription styleName="dylan" />
-
-## Usage
-
-<StyleUsage styleName="dylan" />
-
-## Presets
-
-<StylePresets styleName="dylan" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="dylan" />
-
-## Details
-
-<StyleInfo styleName="dylan" />
+</SiteStylePage>

@@ -1,0 +1,162 @@
+/**
+ * The type scale. Inter carries the whole site, so only size, leading and
+ * tracking change between steps. Headings: 152 hero, 96 page title,
+ * 80 section, 48 group, 32 heading, 24 item. Text: one line height per size.
+ */
+%site-heading {
+  margin: 0;
+  font-weight: 700;
+  color: var(--db-ink);
+  text-wrap: balance;
+}
+
+/* Homepage hero only. */
+.site-hero {
+  @extend %site-heading;
+  font-size: clamp(56px, 10.56vw, 152px);
+  line-height: 0.947;
+  letter-spacing: -0.055em;
+}
+
+/* Page title. */
+.site-display {
+  @extend %site-heading;
+  font-size: clamp(48px, 6.67vw, 96px);
+  line-height: 0.958;
+  letter-spacing: -0.05em;
+
+  @media (max-width: 767px) {
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+  }
+}
+
+/* Section heading of the marketing pages. */
+.site-headline {
+  @extend %site-heading;
+  font-size: clamp(32px, 5.56vw, 80px);
+  line-height: 0.975;
+  letter-spacing: -0.045em;
+
+  @media (max-width: 767px) {
+    line-height: 1.0625;
+    letter-spacing: -0.035em;
+  }
+}
+
+/* Group heading, and the title of docs and tool pages. */
+.site-h2 {
+  @extend %site-heading;
+  font-size: clamp(32px, 3.34vw, 48px);
+  line-height: 1.083;
+  letter-spacing: -0.04em;
+
+  @media (max-width: 767px) {
+    line-height: 1.125;
+  }
+}
+
+/* Docs section heading, tab index. */
+.site-heading {
+  @extend %site-heading;
+  font-size: 32px;
+  line-height: 38px;
+  letter-spacing: -0.02em;
+
+  @media (max-width: 767px) {
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Item heading. */
+.site-h3 {
+  @extend %site-heading;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  text-wrap: wrap;
+}
+
+.site-lead {
+  margin: 0;
+  font-size: 24px;
+  line-height: 36px;
+  color: var(--db-ink-2);
+  text-wrap: pretty;
+
+  p {
+    margin: 0;
+  }
+
+  p + p {
+    margin-top: 12px;
+  }
+
+  a {
+    color: var(--db-brand-text);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    font-size: 18px;
+    line-height: 30px;
+  }
+}
+
+.site-body {
+  margin: 0;
+  font-size: 20px;
+  line-height: 32px;
+  color: var(--db-ink-2);
+  text-wrap: pretty;
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}
+
+.site-text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--db-ink-2);
+  text-wrap: pretty;
+}
+
+.site-small {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--db-muted);
+}
+
+.site-label {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--db-muted);
+}
+
+.site-mono {
+  font-family: var(--db-font-mono);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--db-muted);
+}
+
+/* Button and control text. */
+.site-control {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+}

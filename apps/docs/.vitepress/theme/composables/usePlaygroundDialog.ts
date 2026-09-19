@@ -5,7 +5,6 @@ export function usePlaygroundDialog(seed: () => string) {
   const store = useStore();
 
   const open = ref(false);
-  const confettiKey = ref(0);
 
   const options = computed(() => ({
     ...store.avatarStyleOptionsWithoutDefaults,
@@ -13,14 +12,12 @@ export function usePlaygroundDialog(seed: () => string) {
   }));
 
   function showDialog() {
-    confettiKey.value++;
     open.value = true;
   }
 
   return {
     store,
     open,
-    confettiKey,
     options,
     showDialog,
   };

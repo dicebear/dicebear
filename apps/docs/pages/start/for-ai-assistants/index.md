@@ -9,9 +9,11 @@ description: >
 # DiceBear for AI assistants
 
 Coding assistants write DiceBear from memory, and that memory mostly predates
-version 10. The block below is the fix: paste it into your project and the
-assistant has the current package for your language, the shape of the API, and
-the address to look options up at.
+version 10.
+
+The block below is the fix: paste it into your project and the assistant has the
+current package for your language, the shape of the API, and the address to look
+options up at.
 
 ## Rules for your project
 
@@ -103,7 +105,7 @@ so one page covers whichever you are working in.
 The Markdown version of a page sits next to its HTML, so appending `index.md` to
 the address is enough:
 
-```
+```http
 https://www.dicebear.com/integrations/http-api/index.md
 ```
 
@@ -113,7 +115,7 @@ to edit the address yourself.
 Option names are what assistants invent most often, and the API answers that
 question directly, without a page to parse:
 
-```
+```http
 https://api.dicebear.com/11.x
 https://api.dicebear.com/11.x/<styleName>/options.json
 https://api.dicebear.com/11.x/<styleName>/definition.json

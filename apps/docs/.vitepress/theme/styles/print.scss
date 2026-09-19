@@ -1,0 +1,15 @@
+@media print {
+  .theme-header,
+  .theme-footer,
+  .docs-sidebar,
+  .docs-aside,
+  .docs-local-nav,
+  .docs-pager,
+  .theme-skip-link {
+    display: none !important;
+  }
+
+  .docs-shell {
+    display: block !important;
+  }
+}

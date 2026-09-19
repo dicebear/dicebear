@@ -1,14 +1,15 @@
 <script setup lang="ts">
-// We deliberately do NOT use PrimeVue's ColorPicker here: it cannot host the
-// iso-contrast overlay polyline that maps WCAG pick boundaries onto the
-// saturation/value plane.
+// A hand-built saturation and value square: it has to host the iso-contrast
+// overlay that maps the WCAG pick boundary onto the plane.
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Color } from '@dicebear/core';
+import SiteSlider from '@theme/components/site/SiteSlider.vue';
 import { clamp, hsvToHex } from '@theme/utils/colorSpaces';
 import type { Hsv } from '@theme/utils/colorSpaces';
 
 const props = defineProps<{
   hsv: Hsv;
+  hex: string;
   contrastA: string;
   contrastB: string;
 }>();
@@ -73,6 +74,11 @@ function onKeydown(event: KeyboardEvent) {
     if (s === props.hsv.s && v === props.hsv.v) return;
     emit('update:hsv', { h: props.hsv.h, s, v });
   }
+}
+
+function setHue(h: number) {
+  if (h === props.hsv.h) return;
+  emit('update:hsv', { ...props.hsv, h });
 }
 
 // Tracks the surface dimensions so the SVG overlay scales correctly.
@@ -196,6 +202,24 @@ const isoContrastPath = computed<string | null>(() => {
         aria-hidden="true"
       />
     </div>
+
+    <div class="contrast-canvas-hue">
+      <span class="contrast-canvas-hue-label">Hue</span>
+      <SiteSlider
+        :model-value="Math.round(hsv.h)"
+        :min="0"
+        :max="359"
+        aria-label="Hue"
+        class="contrast-canvas-hue-slider"
+        @update:model-value="setHue"
+      />
+      <span class="contrast-canvas-hue-hex">{{ hex }}</span>
+    </div>
+
+    <p class="contrast-canvas-hint">
+      The dashed line marks where the pick switches from one contrast color to
+      the other.
+    </p>
   </div>
 </template>
 
@@ -203,22 +227,22 @@ const isoContrastPath = computed<string | null>(() => {
 .contrast-canvas {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  min-width: 0;
 
   &-surface {
     position: relative;
     width: 100%;
     aspect-ratio: 1;
-    border-radius: var(--vp-radius-md);
+    overflow: hidden;
+    border-radius: var(--db-radius-6);
     cursor: crosshair;
     touch-action: none;
-    overflow: hidden;
-    border: 1px solid var(--vp-c-border);
     user-select: none;
 
     &:focus-visible {
-      outline: 3px solid var(--p-primary-color);
-      outline-offset: 2px;
+      outline: 2px solid var(--db-brand);
+      outline-offset: 3px;
     }
   }
 
@@ -231,7 +255,7 @@ const isoContrastPath = computed<string | null>(() => {
 
     &-outline {
       fill: none;
-      stroke: rgba(0, 0, 0, 0.6);
+      stroke: rgba(0, 0, 0, 0.35);
       stroke-width: 4;
       stroke-linejoin: round;
       stroke-linecap: round;
@@ -239,25 +263,103 @@ const isoContrastPath = computed<string | null>(() => {
 
     &-stroke {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.95);
+      stroke: #fff;
       stroke-width: 2;
       stroke-linejoin: round;
-      stroke-linecap: round;
-      stroke-dasharray: 4 3;
+      stroke-dasharray: 8 6;
     }
   }
 
   &-cursor {
     position: absolute;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #fff;
+    width: 22px;
+    height: 22px;
+    box-sizing: border-box;
+    border: 3px solid #fff;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
     box-shadow:
-      0 0 0 1px rgba(0, 0, 0, 0.4),
-      0 2px 6px rgba(0, 0, 0, 0.3);
+      0 0 0 1px rgba(0, 0, 0, 0.35),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+    transform: translate(-50%, -50%);
     pointer-events: none;
+  }
+
+  &-hue {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    &-label {
+      flex-shrink: 0;
+      width: 40px;
+      font-size: 16px;
+      line-height: 26px;
+      font-weight: 600;
+      color: var(--db-ink-2);
+    }
+
+    &-hex {
+      flex-shrink: 0;
+      width: 80px;
+      font-family: var(--db-font-mono);
+      font-size: 15px;
+      line-height: 24px;
+      text-align: right;
+      color: var(--db-ink);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  // The hue slider shows the spectrum as its track and no filled part.
+  & &-hue-slider {
+    flex: 1;
+    min-width: 0;
+
+    &::before {
+      top: 4px;
+      height: 12px;
+      border-radius: 6px;
+      background: linear-gradient(
+        to right,
+        #f00,
+        #ff0,
+        #0f0,
+        #0ff,
+        #00f,
+        #f0f,
+        #f00
+      );
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
+  &-hint {
+    margin: 0;
+    font-size: 16px;
+    line-height: 26px;
+    color: var(--db-muted);
+  }
+
+  @media (max-width: 959px) {
+    max-width: 560px;
+  }
+
+  @media (max-width: 767px) {
+    &-surface {
+      border-radius: var(--db-radius-5);
+    }
+
+    &-hue {
+      gap: 12px;
+    }
+
+    &-hint {
+      font-size: 14px;
+      line-height: 20px;
+    }
   }
 }
 </style>

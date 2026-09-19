@@ -4,40 +4,17 @@ description: >
   Free abstract avatar generator that tiles arcs and wavy strokes into a
   two-tone pattern. Create Loops avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Loops
+<SiteStylePage styleName="loops">
 
-Loops is an abstract vector avatar style that tiles rounded arcs and wavy
-strokes into a two-tone geometric pattern. Generate bold SVG profile icons that
-work as avatar placeholders or minimalist user identifiers.
+Rounded arcs and wavy strokes tiled into a two-tone geometric pattern.
 
-<StylePreview styleName="loops" />
-
-<StyleDescription styleName="loops" />
-
-## Usage
-
-<StyleUsage styleName="loops" />
-
-## Presets
-
-<StylePresets styleName="loops" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="loops" />
-
-## Details
-
-<StyleInfo styleName="loops" />
+</SiteStylePage>

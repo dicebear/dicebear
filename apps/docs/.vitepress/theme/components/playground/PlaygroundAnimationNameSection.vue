@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import SelectButton from 'primevue/selectbutton';
-import Button from 'primevue/button';
+import SiteSegmented from '@theme/components/site/SiteSegmented.vue';
 import useStore from '@theme/stores/playground';
 import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
@@ -90,8 +89,32 @@ function formatInherited(value: RangeValue, unit: string): string {
     : `${value[0]}${unit} to ${value[1]}${unit}`;
 }
 
-const inheritedSpeed = computed(() => inherited('animationSpeed', 1));
-const inheritedDelay = computed(() => inherited('animationDelay', 0));
+// Speed and delay are the same field twice: a range field once the animation
+// has its own value, the inherited value with an override action before that.
+const fields = computed(() => [
+  {
+    label: 'Speed',
+    key: speedKey.value,
+    min: 0.1,
+    max: 10,
+    step: 0.05,
+    unit: '×',
+    fallback: 1,
+    inherited: inherited('animationSpeed', 1),
+    help: 'Follows the speed under all animations.',
+  },
+  {
+    label: 'Delay',
+    key: delayKey.value,
+    min: -10,
+    max: 10,
+    step: 0.1,
+    unit: 's',
+    fallback: 0,
+    inherited: inherited('animationDelay', 0),
+    help: 'Follows the delay under all animations.',
+  },
+]);
 
 // Overriding starts from the inherited value, so the slider does not jump.
 function override(key: string, value: RangeValue) {
@@ -119,76 +142,51 @@ function resetAll() {
     <div class="pg-field">
       <div class="pg-field-label">
         <span>Switch</span>
-        <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
+        <span class="pg-field-tools">
+          <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
+        </span>
       </div>
-      <SelectButton
+      <SiteSegmented
         v-model="choice"
         :options="choices"
-        option-label="label"
-        option-value="value"
-        :allow-empty="false"
-        class="pg-animation-name-switch"
+        aria-label="Switch"
+        fluid
       />
       <p class="pg-help">{{ status }}</p>
     </div>
 
-    <template v-if="plays">
-      <PlaygroundRangeField
-        v-if="store.isOptionSet(speedKey)"
-        label="Speed"
-        :option-key="speedKey"
-        :min="0.1"
-        :max="10"
-        :step="0.05"
-        unit="×"
-        :default-single="1"
-      />
-      <div v-else class="pg-field">
-        <div class="pg-field-label">
-          <span>Speed</span>
-          <Button
-            label="Override"
-            size="small"
-            severity="secondary"
-            variant="outlined"
-            class="pg-field-toggle"
-            @click="override(speedKey, inheritedSpeed)"
-          />
-          <span class="pg-field-value">
-            {{ formatInherited(inheritedSpeed, '×') }}
-          </span>
+    <div v-if="plays" class="pg-animation-name-pair">
+      <template v-for="field in fields" :key="field.label">
+        <PlaygroundRangeField
+          v-if="store.isOptionSet(field.key)"
+          :label="field.label"
+          :option-key="field.key"
+          :min="field.min"
+          :max="field.max"
+          :step="field.step"
+          :unit="field.unit"
+          :default-single="field.fallback"
+        />
+        <div v-else class="pg-field">
+          <div class="pg-field-label">
+            <span>{{ field.label }}</span>
+            <span class="pg-field-tools">
+              <span class="pg-field-value">
+                {{ formatInherited(field.inherited, field.unit) }}
+              </span>
+              <button
+                type="button"
+                class="pg-field-action hv-ghost"
+                @click="override(field.key, field.inherited)"
+              >
+                Override
+              </button>
+            </span>
+          </div>
+          <p class="pg-help">{{ field.help }}</p>
         </div>
-        <p class="pg-help">Follows the speed under all animations.</p>
-      </div>
-
-      <PlaygroundRangeField
-        v-if="store.isOptionSet(delayKey)"
-        label="Delay"
-        :option-key="delayKey"
-        :min="-10"
-        :max="10"
-        :step="0.1"
-        unit="s"
-        :default-single="0"
-      />
-      <div v-else class="pg-field">
-        <div class="pg-field-label">
-          <span>Delay</span>
-          <Button
-            label="Override"
-            size="small"
-            severity="secondary"
-            variant="outlined"
-            class="pg-field-toggle"
-            @click="override(delayKey, inheritedDelay)"
-          />
-          <span class="pg-field-value">
-            {{ formatInherited(inheritedDelay, 's') }}
-          </span>
-        </div>
-        <p class="pg-help">Follows the delay under all animations.</p>
-      </div>
-    </template>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -199,11 +197,15 @@ function resetAll() {
   gap: 20px;
 }
 
-.pg-animation-name-switch {
-  display: flex;
+.pg-animation-name-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
 
-  :deep(.p-togglebutton) {
-    flex: 1;
+@container pg-options (max-width: 520px) {
+  .pg-animation-name-pair {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>

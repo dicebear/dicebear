@@ -1,120 +1,136 @@
 <script setup lang="ts">
-import { Lock } from '@lucide/vue';
+/**
+ * A result row for an HTTP API URL: the avatar the URL returns, the URL with
+ * its style and parameters picked out, and the whole row opens it.
+ */
+import { computed } from 'vue';
+import { ArrowUpRight } from '@lucide/vue';
 
-defineProps<{
+const props = defineProps<{
   url: string;
 }>();
+
+const parts = computed(() => {
+  const [base, query = ''] = props.url.split('?');
+  const segments = base.split('/');
+
+  // https://api.dicebear.com/<version>/<style>/<format>
+  const hasStyle = segments.length >= 6;
+
+  return {
+    head: hasStyle ? `${segments.slice(0, 4).join('/')}/` : base,
+    style: hasStyle ? segments[4] : '',
+    tail: hasStyle ? `/${segments.slice(5).join('/')}` : '',
+    params: query
+      .split('&')
+      .filter(Boolean)
+      .map((pair) => {
+        const index = pair.indexOf('=');
+
+        return index < 0
+          ? { key: pair, value: '' }
+          : { key: pair.slice(0, index), value: pair.slice(index + 1) };
+      }),
+  };
+});
 </script>
 
 <template>
-  <div class="ui-browser-preview">
-    <div class="ui-browser-preview-header">
-      <div class="ui-browser-preview-dots">
-        <span class="ui-browser-preview-dot ui-browser-preview-dot-red"></span>
-        <span
-          class="ui-browser-preview-dot ui-browser-preview-dot-yellow"
-        ></span>
-        <span
-          class="ui-browser-preview-dot ui-browser-preview-dot-green"
-        ></span>
-      </div>
-      <a
-        :href="url"
-        target="_blank"
-        rel="noopener"
-        class="ui-browser-preview-url"
-      >
-        <Lock class="ui-browser-preview-url-lock" :size="12" />
-        <span class="ui-browser-preview-url-text">{{ url }}</span>
-      </a>
-    </div>
-    <div class="ui-browser-preview-body">
-      <a
-        :href="url"
-        target="_blank"
-        rel="noopener"
-        class="ui-browser-preview-body-anchor"
-      >
-        <img :src="url" width="94" height="94" alt="preview" loading="lazy" />
-      </a>
-    </div>
-  </div>
+  <a
+    :href="url"
+    target="_blank"
+    rel="noopener"
+    class="ui-browser-preview hv-thumb"
+  >
+    <span class="ui-browser-preview-tile">
+      <img
+        :src="url"
+        width="80"
+        height="80"
+        alt="Avatar returned by this URL"
+        loading="lazy"
+      />
+    </span>
+    <code class="ui-browser-preview-url"
+      >{{ parts.head }}<b>{{ parts.style }}</b
+      >{{ parts.tail
+      }}<template v-for="(param, index) in parts.params" :key="index"
+        >{{ index === 0 ? '?' : '&'
+        }}<span class="ui-browser-preview-key">{{ param.key }}</span
+        >=<b>{{ param.value }}</b></template
+      ></code
+    >
+    <ArrowUpRight class="ui-browser-preview-arrow" :size="16" />
+  </a>
 </template>
 
 <style lang="scss" scoped>
 .ui-browser-preview {
-  border-radius: var(--vp-radius-sm);
-  overflow: hidden;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--ui-window-border-color);
-  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 16px 10px 10px;
+  border: 1px solid var(--db-line);
+  border-radius: 14px;
+  background: var(--db-paper);
+  text-decoration: none;
 
-  &-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 20px;
-    background: var(--vp-c-bg-soft);
-    border-bottom: 1px solid var(--ui-window-border-color);
+  &:hover {
+    border-color: var(--db-hover-border);
   }
 
-  &-dots {
-    display: flex;
-    gap: 8px;
+  /* Rows that follow each other in a page read as one group. */
+  & + & {
+    margin-top: 10px;
+  }
+
+  &-tile {
     flex-shrink: 0;
-  }
+    display: block;
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    background: var(--db-tile);
+    overflow: hidden;
 
-  &-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-
-    &-red {
-      background: #ff5f57;
-    }
-    &-yellow {
-      background: #febc2e;
-    }
-    &-green {
-      background: #28c840;
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
   }
 
   &-url {
-    display: flex;
-    align-items: center;
-    gap: 6px;
     flex: 1;
     min-width: 0;
-    text-decoration: none;
+    font-family: var(--db-font-mono);
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--db-muted);
+    overflow-wrap: anywhere;
 
-    &::after {
-      display: none !important;
-    }
-
-    &-lock {
-      flex-shrink: 0;
-      color: var(--vp-c-text-3);
-    }
-
-    &-text {
-      font-size: 13px;
-      color: var(--vp-c-text-2);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    b {
+      font-weight: 600;
+      color: var(--db-ink);
     }
   }
 
-  &-body {
-    padding: 24px;
+  &-key {
+    color: var(--db-brand-text);
+  }
 
-    &-anchor {
-      display: inline-block;
+  &-arrow {
+    flex-shrink: 0;
+    color: var(--db-muted);
+  }
 
-      &::after {
-        display: none !important;
-      }
+  @media (max-width: 767px) {
+    gap: 12px;
+    padding-right: 12px;
+
+    &-tile {
+      width: 64px;
+      height: 64px;
     }
   }
 }

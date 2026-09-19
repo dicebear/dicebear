@@ -4,41 +4,18 @@ description: >
   Free pixel art avatar generator: 8-bit half-body characters with retro
   hairstyles and tops. Create Pixel Art avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Pixel Art
+<SiteStylePage styleName="pixel-art">
 
-Pixel Art is a low-resolution vector avatar style that renders half-body
-characters as crisp pixel sprites with retro hairstyles, eyes, and colored tops.
-Generate 8-bit-style SVG profile icons popular in gaming communities and
-developer tools.
+Half-body characters as crisp pixel sprites with retro hairstyles, eyes and
+colored tops.
 
-<StylePreview styleName="pixel-art" />
-
-<StyleDescription styleName="pixel-art" />
-
-## Usage
-
-<StyleUsage styleName="pixel-art" />
-
-## Presets
-
-<StylePresets styleName="pixel-art" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="pixel-art" />
-
-## Details
-
-<StyleInfo styleName="pixel-art" />
+</SiteStylePage>

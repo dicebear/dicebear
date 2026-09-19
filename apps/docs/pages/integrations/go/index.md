@@ -8,10 +8,11 @@ description: >
 # Go avatar library
 
 Generate avatars right in your Go services (1.23 or higher), with no external
-service involved. The API mirrors the
-[JavaScript library](/integrations/javascript/), and the output is
-byte-identical: the same seed and style produce the same SVG in every DiceBear
-library.
+service involved.
+
+The API mirrors the [JavaScript library](/integrations/javascript/), and the
+output is byte-identical: the same seed and style produce the same SVG in every
+DiceBear library.
 
 ## Installation
 

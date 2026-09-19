@@ -4,41 +4,17 @@ description: >
   Free icon avatar generator that places a single pictogram on a tinted
   background. Create Icons avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Icons
+<SiteStylePage styleName="icons">
 
-Icons is a clean vector avatar style that drops a single Bootstrap Icons
-pictogram onto a tinted background. Generate scalable profile icons ideal for
-dashboards, admin panels, and enterprise tools where character faces would feel
-out of place.
+A single Bootstrap Icons pictogram on a tinted background.
 
-<StylePreview styleName="icons" />
-
-<StyleDescription styleName="icons" />
-
-## Usage
-
-<StyleUsage styleName="icons" />
-
-## Presets
-
-<StylePresets styleName="icons" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="icons" />
-
-## Details
-
-<StyleInfo styleName="icons" />
+</SiteStylePage>

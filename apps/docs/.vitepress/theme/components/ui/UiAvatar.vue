@@ -20,13 +20,15 @@ const props = withDefaults(
 
 const svg = computedAsync(() => {
   const styleName = props.styleName;
-  const styleOptions = props.styleOptions;
+  // Cloned here, not in the callback below: values read after an await no
+  // longer count as dependencies of the computed.
+  const styleOptions = clonePlain(props.styleOptions);
 
   switch (props.mode) {
     case 'library':
       return loadAvatarStyle(styleName)
         .then((avatarStyle) =>
-          new Avatar(avatarStyle, clonePlain(styleOptions)).toDataUri(),
+          new Avatar(avatarStyle, styleOptions).toDataUri(),
         )
         .catch((e) => {
           if (import.meta.env.DEV) {
@@ -49,13 +51,13 @@ const svg = computedAsync(() => {
 
 <style>
 :root {
-  --ui-avatar-bg-1: rgba(0, 0, 0, 0.02);
-  --ui-avatar-bg-2: rgba(0, 0, 0, 0.07);
+  --db-avatar-checker-1: rgba(0, 0, 0, 0.02);
+  --db-avatar-checker-2: rgba(0, 0, 0, 0.07);
 }
 
 .dark {
-  --ui-avatar-bg-1: rgba(255, 255, 255, 0.02);
-  --ui-avatar-bg-2: rgba(255, 255, 255, 0.07);
+  --db-avatar-checker-1: rgba(255, 255, 255, 0.02);
+  --db-avatar-checker-2: rgba(255, 255, 255, 0.07);
 }
 </style>
 
@@ -65,8 +67,8 @@ const svg = computedAsync(() => {
   height: calc(v-bind(size) * 1px);
   border-radius: 3px;
   background: repeating-conic-gradient(
-      var(--ui-avatar-bg-1) 0% 25%,
-      var(--ui-avatar-bg-2) 0% 50%
+      var(--db-avatar-checker-1) 0% 25%,
+      var(--db-avatar-checker-2) 0% 50%
     )
     50% / 12px 12px;
   line-height: 0;

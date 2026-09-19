@@ -4,18 +4,21 @@ import { capitalCase } from 'change-case';
 import { useData } from 'vitepress';
 import { storeToRefs } from 'pinia';
 import { Plus, Trash2 } from '@lucide/vue';
-import ChevronRightIcon from '@primevue/icons/chevronright';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
-import { CUSTOM_CATEGORY, exampleSeeds } from '@theme/config/styleCategories';
+import {
+  CUSTOM_CATEGORY,
+  exampleSeeds,
+  type LicenseBucket,
+} from '@theme/config/styleCategories';
 import useStore from '@theme/stores/playground';
 import { ThemeOptions } from '@theme/types';
-import { UiAvatar } from '../ui';
 import { track, styleLabel } from '@theme/utils/track';
+import SiteDialog from '../site/SiteDialog.vue';
+import SiteSearch from '../site/SiteSearch.vue';
+import SiteSelect from '../site/SiteSelect.vue';
 import PlaygroundCustomStyleUpload from './PlaygroundCustomStyleUpload.vue';
-import Dialog from 'primevue/dialog';
-import InputText from 'primevue/inputtext';
-import MultiSelect from 'primevue/multiselect';
-import Tag from 'primevue/tag';
+import PlaygroundPickerTrigger from './PlaygroundPickerTrigger.vue';
+import PlaygroundThumb from './PlaygroundThumb.vue';
 
 const store = useStore();
 const { avatarStyleName, customStyles } = storeToRefs(store);
@@ -46,411 +49,417 @@ function onCustomStyleAdded(key: string) {
   selectStyle(key);
 }
 
-function deleteCustomStyle(key: string, event: Event) {
-  event.stopPropagation();
-  store.removeCustomStyle(key);
+const ALL = 'all';
+
+// Each select picks one value or all of them. The filter itself keeps lists,
+// so one value becomes a list of one and "all" the empty list.
+function singleChoice(list: typeof selectedCategories) {
+  return computed<string>({
+    get: () => list.value[0] ?? ALL,
+    set: (value) => (list.value = value === ALL ? [] : [value]),
+  });
 }
 
-const customStyleList = computed(() => {
+const category = singleChoice(selectedCategories);
+const license = singleChoice(selectedLicenses);
+
+const categoryOptions = computed(() => [
+  { value: ALL, label: 'All categories' },
+  ...availableCategories.value.map((name) => ({ value: name, label: name })),
+]);
+
+const licenseOptions = computed(() => [
+  { value: ALL, label: 'All licenses' },
+  ...availableLicenses.value.map((name) => ({ value: name, label: name })),
+]);
+
+const licenseTones: Record<LicenseBucket, string> = {
+  'CC0 1.0': 'site-chip-ok',
+  'CC BY 4.0': 'site-chip-brand',
+  MIT: 'site-chip-muted',
+  Other: 'site-chip-warn',
+};
+
+interface Tile {
+  name: string;
+  displayName: string;
+  creator?: string;
+  custom: boolean;
+  chip: string;
+  chipTone: string;
+  /** Held per tile, so the thumbnail keeps its options between renders. */
+  options: { seed: string };
+}
+
+interface Group {
+  name: string;
+  custom: boolean;
+  tiles: Tile[];
+}
+
+// The search is the only filter for uploaded styles, they carry neither a
+// license bucket nor a creator.
+const customTiles = computed<Tile[]>(() => {
   const query = searchQuery.value.toLowerCase().trim();
 
   return Object.entries(store.customStyles)
     .map(([key, entry]) => ({ key, name: entry.name }))
-    .filter((cs) => !query || cs.name.toLowerCase().includes(query));
+    .filter((cs) => !query || cs.name.toLowerCase().includes(query))
+    .map((cs) => ({
+      name: cs.key,
+      displayName: cs.name,
+      custom: true,
+      chip: 'Custom',
+      chipTone: 'site-chip-warn',
+      options: { seed: exampleSeeds[0] },
+    }));
 });
 
-const builtInGroupedStyles = computed(() => {
-  const result: Record<string, (typeof groupedStyles.value)[string]> = {};
+const groups = computed<Group[]>(() => {
+  const result: Group[] = [];
 
-  for (const [category, styles] of Object.entries(groupedStyles.value)) {
-    if (category !== CUSTOM_CATEGORY) {
-      result[category] = styles;
-    }
+  // The Custom group always holds the entry that adds a style, so it shows
+  // even while it has no styles.
+  if (
+    selectedCategories.value.length === 0 ||
+    selectedCategories.value.includes(CUSTOM_CATEGORY)
+  ) {
+    result.push({
+      name: CUSTOM_CATEGORY,
+      custom: true,
+      tiles: customTiles.value,
+    });
+  }
+
+  for (const [name, styles] of Object.entries(groupedStyles.value)) {
+    if (name === CUSTOM_CATEGORY) continue;
+
+    result.push({
+      name,
+      custom: false,
+      tiles: styles.map((style) => ({
+        name: style.name,
+        displayName: style.displayName,
+        creator: style.creator,
+        custom: false,
+        chip: style.licenseNormalized,
+        chipTone:
+          licenseTones[style.licenseNormalized as LicenseBucket] ??
+          'site-chip-muted',
+        options: { seed: style.avatars[0]?.seed ?? exampleSeeds[0] },
+      })),
+    });
   }
 
   return result;
 });
 
-const currentDisplayName = computed(() => {
+const current = computed(() => {
   if (store.isCustomStyle) {
-    return store.customStyles[avatarStyleName.value]?.name ?? 'Custom Style';
+    return {
+      name: store.customStyles[avatarStyleName.value]?.name ?? 'Custom Style',
+      hint: 'Custom',
+    };
   }
 
-  return capitalCase(avatarStyleName.value);
+  const creator = theme.value.avatarStyles[avatarStyleName.value]?.meta.creator;
+
+  return {
+    name: capitalCase(avatarStyleName.value),
+    hint: creator ? `by ${creator}` : undefined,
+  };
 });
+
+const triggerOptions = { seed: exampleSeeds[0] };
 </script>
 
 <template>
-  <button type="button" class="pg-style-select-trigger" @click="open = true">
-    <span class="pg-style-select-trigger-avatar">
-      <UiAvatar
-        :size="40"
+  <PlaygroundPickerTrigger
+    :title="current.name"
+    :hint="current.hint"
+    @click="open = true"
+  >
+    <template #thumb>
+      <PlaygroundThumb
         :style-name="avatarStyleName"
-        :style-options="{ seed: exampleSeeds[0] }"
-        mode="library"
+        :options="triggerOptions"
+        surface="tile"
       />
-    </span>
+    </template>
+  </PlaygroundPickerTrigger>
 
-    <span class="pg-style-select-trigger-name">{{ currentDisplayName }}</span>
-
-    <ChevronRightIcon class="pg-style-select-trigger-chevron" />
-  </button>
-
-  <Dialog
-    v-model:visible="open"
-    modal
-    :closable="true"
-    dismissable-mask
-    header="Choose Avatar Style"
-    :style="{ width: '900px', maxWidth: 'calc(100vw - 32px)' }"
-    :pt="{ content: { class: 'pg-style-select-dialog-content' } }"
+  <SiteDialog
+    v-model:open="open"
+    header="Choose an avatar style"
+    max-width="1000px"
   >
     <div class="pg-style-select">
       <div class="pg-style-select-toolbar">
-        <InputText v-model="searchQuery" placeholder="Search styles..." fluid />
-
-        <MultiSelect
-          v-model="selectedCategories"
-          :options="availableCategories"
-          placeholder="Filter by category"
-          :showToggleAll="false"
+        <SiteSearch
+          v-model="searchQuery"
+          class="pg-style-select-search"
+          placeholder="Search styles..."
+          label="Search styles"
+        />
+        <SiteSelect
+          v-model="category"
+          class="pg-style-select-filter"
+          :options="categoryOptions"
+          label="Filter by category"
           fluid
         />
-
-        <MultiSelect
-          v-model="selectedLicenses"
-          :options="availableLicenses"
-          placeholder="Filter by license"
-          :showToggleAll="false"
+        <SiteSelect
+          v-model="license"
+          class="pg-style-select-filter"
+          :options="licenseOptions"
+          label="Filter by license"
           fluid
         />
       </div>
 
-      <div class="pg-style-select-body">
-        <div
-          v-if="
-            selectedCategories.length === 0 ||
-            selectedCategories.includes(CUSTOM_CATEGORY)
-          "
-          class="pg-style-select-group"
-        >
-          <h3 class="pg-style-select-group-title">Custom</h3>
-          <div class="pg-style-select-grid">
+      <section
+        v-for="group in groups"
+        :key="group.name"
+        class="pg-style-select-group"
+      >
+        <h3 class="site-label pg-style-select-group-title">{{ group.name }}</h3>
+        <div class="pg-style-select-grid">
+          <button
+            v-if="group.custom"
+            type="button"
+            class="pg-style-select-add hv-dashed"
+            @click="uploadOpen = true"
+          >
+            <Plus :size="28" aria-hidden="true" />
+            Add a custom style
+          </button>
+
+          <div
+            v-for="tile in group.tiles"
+            :key="tile.name"
+            class="pg-style-select-item"
+          >
             <button
-              class="pg-style-select-card pg-style-select-card-add"
-              @click="uploadOpen = true"
+              type="button"
+              class="pg-style-select-tile hv-tile"
+              :aria-pressed="tile.name === avatarStyleName"
+              @click="selectStyle(tile.name)"
             >
-              <div class="pg-style-select-card-add-icon">
-                <Plus :size="24" />
-              </div>
-              <span class="pg-style-select-card-name">Add Custom Style</span>
+              <PlaygroundThumb
+                :style-name="tile.name"
+                :options="tile.options"
+                :mode="tile.custom ? 'library' : 'http-api'"
+                surface="tile"
+              />
+              <span class="pg-style-select-name">{{ tile.displayName }}</span>
+              <span v-if="tile.creator" class="pg-style-select-creator">
+                {{ tile.creator }}
+              </span>
+              <span class="site-chip" :class="tile.chipTone">
+                {{ tile.chip }}
+              </span>
             </button>
-
-            <div
-              v-for="cs in customStyleList"
-              :key="cs.key"
-              class="pg-style-select-card"
-              :class="{
-                'pg-style-select-card-selected': cs.key === avatarStyleName,
-              }"
-              @click="selectStyle(cs.key)"
-            >
-              <button
-                class="pg-style-select-card-delete"
-                @click="deleteCustomStyle(cs.key, $event)"
-                v-tooltip="'Remove'"
-              >
-                <Trash2 :size="12" />
-              </button>
-              <div class="pg-style-select-card-avatars">
-                <UiAvatar
-                  v-for="seed in ['Felix', 'Aneka', 'Milo', 'Luna']"
-                  :key="seed"
-                  :size="40"
-                  :style-name="cs.key"
-                  :style-options="{ seed }"
-                  mode="library"
-                />
-              </div>
-              <div class="pg-style-select-card-info">
-                <span class="pg-style-select-card-name">{{ cs.name }}</span>
-                <Tag
-                  value="Custom"
-                  severity="warn"
-                  class="pg-style-select-card-tag"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          v-for="(styles, category) in builtInGroupedStyles"
-          :key="category"
-          class="pg-style-select-group"
-        >
-          <h3 class="pg-style-select-group-title">{{ category }}</h3>
-          <div class="pg-style-select-grid">
             <button
-              v-for="style in styles"
-              :key="style.name"
-              class="pg-style-select-card"
-              :class="{
-                'pg-style-select-card-selected': style.name === avatarStyleName,
-              }"
-              @click="selectStyle(style.name)"
+              v-if="tile.custom"
+              type="button"
+              class="pg-style-select-remove hv-ghost"
+              aria-label="Remove"
+              data-tip="Remove"
+              @click="store.removeCustomStyle(tile.name)"
             >
-              <div class="pg-style-select-card-avatars">
-                <UiAvatar
-                  v-for="avatar in style.avatars"
-                  :key="avatar.seed"
-                  :size="40"
-                  :style-name="style.name"
-                  :style-options="{ seed: avatar.seed }"
-                  mode="http-api"
-                />
-              </div>
-              <div class="pg-style-select-card-info">
-                <span class="pg-style-select-card-name">{{
-                  style.displayName
-                }}</span>
-              </div>
-              <span class="pg-style-select-card-creator">{{
-                style.creator
-              }}</span>
+              <Trash2 :size="16" aria-hidden="true" />
             </button>
           </div>
         </div>
+      </section>
 
-        <div
-          v-if="styleList.length === 0 && searchQuery"
-          class="pg-style-select-empty"
-        >
-          No styles found matching "{{ searchQuery }}"
-        </div>
-      </div>
+      <p
+        v-if="styleList.length === 0 && searchQuery"
+        class="pg-style-select-empty"
+      >
+        No styles found matching "{{ searchQuery }}"
+      </p>
     </div>
-  </Dialog>
 
-  <PlaygroundCustomStyleUpload
-    v-model:open="uploadOpen"
-    @added="onCustomStyleAdded"
-  />
+    <!-- Inside this dialog, so the upload dialog stacks above it. -->
+    <PlaygroundCustomStyleUpload
+      v-model:open="uploadOpen"
+      @added="onCustomStyleAdded"
+    />
+  </SiteDialog>
 </template>
 
 <style scoped lang="scss">
-.pg-style-select-trigger {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 8px 16px 8px 8px;
-  background: var(--p-content-background);
-  border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-xs);
-  color: var(--p-accordion-header-color);
-  cursor: pointer;
-  text-align: left;
-  transition: color var(--duration-fast);
-
-  &:hover {
-    color: var(--p-accordion-header-hover-color);
-  }
-
-  &:hover &-chevron {
-    color: var(--p-accordion-header-toggle-icon-hover-color);
-  }
-
-  &:focus-visible {
-    outline: none;
-    border-color: var(--p-form-field-focus-border-color);
-  }
-
-  &-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    background: var(--vp-c-bg-soft);
-    border-radius: var(--vp-radius-xs);
-    overflow: hidden;
-  }
-
-  &-name {
-    flex: 1;
-    min-width: 0;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &-chevron {
-    flex-shrink: 0;
-    margin-left: auto;
-    color: var(--p-accordion-header-toggle-icon-color);
-    transition: color var(--duration-fast);
-  }
-}
-
 .pg-style-select {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+  padding: 0 28px 28px;
 
-.pg-style-select-toolbar {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 12px;
-
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.pg-style-select-body {
-  max-height: 60vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.pg-style-select-group-title {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ui-c-text-subtle);
-  margin: 0 0 8px;
-}
-
-.pg-style-select-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-}
-
-.pg-style-select-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  background: var(--vp-c-bg-soft);
-  border: 2px solid transparent;
-  border-radius: var(--vp-radius-sm);
-  cursor: pointer;
-  text-align: left;
-  transition: all var(--duration-fast);
-
-  &:hover {
-    border-color: var(--vp-c-brand-1);
+  @media (max-width: 640px) {
+    padding: 0 20px 20px;
   }
 
-  &-selected {
-    border-color: var(--vp-c-brand-1);
-    background: var(--vp-c-brand-soft);
+  // The filters stay in view while the list scrolls below them.
+  &-toolbar {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    padding: 20px 0 8px;
+    background: var(--db-panel);
+
+    @media (max-width: 640px) {
+      grid-template-columns: minmax(0, 1fr);
+      padding-top: 16px;
+    }
   }
 
-  &-avatars {
+  & &-search {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border-radius: var(--db-radius-3);
+
+    :deep(.site-search-input) {
+      font-size: 16px;
+    }
+  }
+
+  &-filter :deep(.site-select-input) {
+    height: 48px;
+    padding-left: 14px;
+    border-radius: var(--db-radius-3);
+  }
+
+  &-group {
+    padding-top: 20px;
+
+    &-title {
+      margin: 0;
+    }
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+
+    @media (max-width: 959px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &-item {
+    position: relative;
+    min-width: 0;
+  }
+
+  &-tile {
+    box-sizing: border-box;
     display: flex;
-    gap: 6px;
-  }
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    padding: 8px 8px 10px;
+    border: 1px solid var(--db-line);
+    border-radius: 14px;
+    background: transparent;
+    font: inherit;
+    color: var(--db-ink);
+    text-align: left;
+    cursor: pointer;
 
-  &-info {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    // The ring is drawn inside the border, so a selected tile keeps its size.
+    &[aria-pressed='true'] {
+      border-color: var(--db-brand);
+      box-shadow: inset 0 0 0 1px var(--db-brand);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--db-brand);
+      outline-offset: 2px;
+    }
   }
 
   &-name {
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 20px;
     font-weight: 600;
-    color: var(--vp-c-text-1);
-  }
-
-  &-tag {
-    font-size: 10px;
   }
 
   &-creator {
+    max-width: 100%;
+    margin-top: -6px;
     font-size: 12px;
-    color: var(--ui-c-text-subtle);
+    line-height: 16px;
+    color: var(--db-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  &-delete {
+  &-remove {
     position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 24px;
-    height: 24px;
+    top: 14px;
+    right: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--vp-c-bg);
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-xs);
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--db-line);
+    border-radius: var(--db-radius-2);
+    background: var(--db-paper);
+    color: var(--db-muted);
     cursor: pointer;
-    opacity: 0;
-    transition: all var(--duration-fast);
-    color: var(--ui-c-text-subtle);
-
-    &:hover {
-      color: var(--vp-c-danger-1);
-      border-color: var(--vp-c-danger-1);
-    }
-  }
-
-  &:hover &-delete {
-    opacity: 1;
   }
 
   &-add {
-    border-style: dashed;
-    border-color: var(--vp-c-border);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 120px;
+    gap: 8px;
+    min-height: 180px;
+    padding: 10px;
+    border: 1px dashed var(--db-btn-border);
+    border-radius: 14px;
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    color: var(--db-ink-2);
+    text-align: center;
+    cursor: pointer;
 
-    &:hover {
-      border-color: var(--vp-c-brand-1);
+    svg {
+      color: var(--db-muted);
     }
 
-    &-icon {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--vp-c-bg);
-      color: var(--ui-c-text-subtle);
-      transition: all var(--duration-fast);
+    &:focus-visible {
+      outline: 2px solid var(--db-brand);
+      outline-offset: 2px;
     }
   }
 
-  &-add:hover &-add-icon {
-    color: var(--vp-c-brand-1);
-    background: var(--vp-c-brand-soft);
-  }
-}
-
-.pg-style-select-empty {
-  text-align: center;
-  padding: 40px;
-  color: var(--ui-c-text-subtle);
-  font-size: 14px;
-}
-
-@media (max-width: 640px) {
-  .pg-style-select-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  &-empty {
+    margin: 0;
+    padding: 40px 0 12px;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--db-muted);
+    text-align: center;
   }
 }
 </style>

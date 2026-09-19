@@ -3,22 +3,19 @@ title: Gaze Presets – Avatar Style
 description: >
   Ready-made option sets for the Gaze avatar style. Copy a preset into your code
   or open it in the DiceBear playground and keep tuning from there.
+layout: page
+sidebar: false
 aside: false
 ---
 
 <script setup lang="ts">
-import StylePresets from "@theme/components/styles/StylePresets.vue";
+import SitePresetsPage from "@theme/components/site/SitePresetsPage.vue";
 </script>
 
-# Gaze presets
+<SitePresetsPage styleName="gaze">
 
-Every preset here is an ordinary set of render options. Nothing needs to be
-installed, and the same values work in all seven libraries and as HTTP-API query
-parameters. Pick one to read its code, or open it in the playground and change
-whatever you like.
+A preset is an ordinary set of render options. Pick one, read its code or open
+it in the Playground and keep tuning. Options a preset leaves alone keep varying
+with the seed, so each row lists how many distinct avatars it still gives you.
 
-Options a preset does not set keep varying with the seed, so most of these stay
-as unique per user as the plain style does. Each preset lists how many distinct
-avatars it still leaves you.
-
-<StylePresets styleName="gaze" large />
+</SitePresetsPage>

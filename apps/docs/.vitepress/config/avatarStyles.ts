@@ -34,6 +34,7 @@ for (const file of fs.readdirSync(definitionsDir)) {
   avatarStyles[name] = {
     definitionUrl: style.id(),
     animated: style.hasAnimations(),
+    animations: style.animationNames(),
     meta: {
       title: meta.source().name(),
       creator: meta.creator().name(),

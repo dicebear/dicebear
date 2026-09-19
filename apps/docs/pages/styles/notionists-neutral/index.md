@@ -4,40 +4,18 @@ description: >
   Hand-drawn face avatar generator: eyes, nose and mouth in loose black lines,
   no head or body. Create Notionists Neutral avatars with the DiceBear avatar
   API or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Notionists Neutral
+<SiteStylePage styleName="notionists-neutral">
 
-Notionists Neutral is a reduced variant of the Notionists style, drawing only
-the eyes, nose, and mouth in loose black ink lines on a plain background, with
-no head, hair, or body.
+The Notionists face on its own: eyes, nose and mouth in loose black lines on a
+plain background, without head, hair or body.
 
-<StylePreview styleName="notionists-neutral" />
-
-<StyleDescription styleName="notionists-neutral" />
-
-## Usage
-
-<StyleUsage styleName="notionists-neutral" />
-
-## Presets
-
-<StylePresets styleName="notionists-neutral" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="notionists-neutral" />
-
-## Details
-
-<StyleInfo styleName="notionists-neutral" />
+</SiteStylePage>

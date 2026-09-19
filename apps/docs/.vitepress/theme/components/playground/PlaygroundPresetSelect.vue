@@ -10,15 +10,16 @@
  */
 import { computed, ref, shallowRef, watch } from 'vue';
 import { storeToRefs } from 'pinia';
-import ChevronRightIcon from '@primevue/icons/chevronright';
 import { loadStylePresets, type StylePreset } from '@theme/config/presets';
 import { getPreviewRowSeeds } from '@theme/config/previewRowSeeds';
 import useStore from '@theme/stores/playground';
-import { UiAvatar, UiDialog } from '../ui';
+import SiteDialog from '../site/SiteDialog.vue';
 import StylePresetTile from '@theme/components/styles/StylePresetTile.vue';
+import PlaygroundPickerTrigger from './PlaygroundPickerTrigger.vue';
+import PlaygroundThumb from './PlaygroundThumb.vue';
 
 const store = useStore();
-const { avatarStyleName, avatarStyleOptionsWithoutDefaults } =
+const { avatarStyleName, avatarStyleOptionsWithoutDefaults, seed } =
   storeToRefs(store);
 
 /**
@@ -116,12 +117,13 @@ const active = computed<StylePreset | undefined>(() => {
 
 const choices = computed(() => [DEFAULT_PRESET, ...presets.value]);
 
-// Without a matching preset the trigger says "Custom", so it has to show the
-// options the reader actually set. Falling back to the preset's options would
-// pair that label with the untouched default avatar.
+// The thumbnails draw the seed of the playground, so every tile shows what
+// the preset does to the avatar the reader is working on.
+const tileSeeds = computed(() => [seed.value || (seeds.value[0] ?? '')]);
+
 const triggerOptions = computed(() => ({
-  seed: seeds.value[0] ?? '',
-  ...(active.value?.options ?? avatarStyleOptionsWithoutDefaults.value),
+  ...avatarStyleOptionsWithoutDefaults.value,
+  seed: tileSeeds.value[0],
 }));
 
 function choose(preset: StylePreset) {
@@ -132,141 +134,67 @@ function choose(preset: StylePreset) {
 
 <template>
   <div v-if="shown">
-    <button type="button" class="pg-preset-trigger" @click="open = true">
-      <span class="pg-preset-trigger-avatar">
-        <UiAvatar
-          :size="40"
+    <PlaygroundPickerTrigger
+      :title="active ? active.name : 'Custom'"
+      :hint="active ? active.summary : 'Options changed by hand'"
+      @click="open = true"
+    >
+      <template #thumb>
+        <PlaygroundThumb
           :style-name="avatarStyleName"
-          :style-options="triggerOptions"
-          mode="library"
-          alt=""
+          :options="triggerOptions"
         />
-      </span>
+      </template>
+    </PlaygroundPickerTrigger>
 
-      <span class="pg-preset-trigger-text">
-        <span class="pg-preset-trigger-name">{{
-          active ? active.name : 'Custom'
-        }}</span>
-        <span class="pg-preset-trigger-hint">{{
-          active ? active.summary : 'Options changed by hand'
-        }}</span>
-      </span>
+    <SiteDialog v-model:open="open" header="Choose a preset" max-width="860px">
+      <div class="pg-preset-dialog">
+        <p class="pg-preset-dialog-intro">
+          A preset replaces the options below with a complete set of its own,
+          and Default clears them again. Your seed stays either way, so you
+          keep looking at the same avatars.
+        </p>
 
-      <ChevronRightIcon class="pg-preset-trigger-chevron" />
-    </button>
-
-    <UiDialog v-model:open="open" header="Choose a preset" max-width="760px">
-      <p class="pg-preset-dialog-intro">
-        A preset replaces the options below with a complete set of its own, and
-        Default clears them again. Your seed stays either way, so you keep
-        looking at the same avatars.
-      </p>
-
-      <div class="pg-preset-dialog-grid">
-        <StylePresetTile
-          v-for="preset in choices"
-          :key="preset.id"
-          :style-name="avatarStyleName"
-          :preset="preset"
-          :seeds="seeds"
-          :opens-dialog="false"
-          :class="{ 'is-active': active?.id === preset.id }"
-          @open="choose(preset)"
-        />
+        <div class="pg-preset-dialog-grid">
+          <StylePresetTile
+            v-for="preset in choices"
+            :key="preset.id"
+            :style-name="avatarStyleName"
+            :preset="preset"
+            :seeds="tileSeeds"
+            :opens-dialog="false"
+            :aria-pressed="active?.id === preset.id"
+            @open="choose(preset)"
+          />
+        </div>
       </div>
-    </UiDialog>
+    </SiteDialog>
   </div>
 </template>
 
 <style scoped lang="scss">
-.pg-preset-trigger {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 8px 16px 8px 8px;
-  background: var(--p-content-background);
-  border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-xs);
-  color: var(--p-accordion-header-color);
-  cursor: pointer;
-  text-align: left;
-  transition: color var(--duration-fast);
+.pg-preset-dialog {
+  padding: 20px 28px 28px;
 
-  &:hover {
-    color: var(--p-accordion-header-hover-color);
+  @media (max-width: 640px) {
+    padding: 16px 20px 20px;
   }
 
-  &:hover &-chevron {
-    color: var(--p-accordion-header-toggle-icon-hover-color);
+  &-intro {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--db-ink-2);
   }
 
-  &:focus-visible {
-    outline: none;
-    border-color: var(--p-form-field-focus-border-color);
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+
+    @media (max-width: 767px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
-
-  &-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--vp-radius-xs);
-    overflow: hidden;
-  }
-
-  &-text {
-    flex: 1;
-    min-width: 0;
-  }
-
-  &-name {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &-hint {
-    display: block;
-    margin-top: 2px;
-    font-size: 12px;
-    line-height: 1.3;
-    color: var(--ui-c-text-subtle);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &-chevron {
-    flex-shrink: 0;
-    margin-left: auto;
-    color: var(--p-accordion-header-toggle-icon-color);
-    transition: color var(--duration-fast);
-  }
-}
-
-.pg-preset-dialog-intro {
-  margin: 0 0 16px;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--vp-c-text-2);
-}
-
-.pg-preset-dialog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-}
-
-// The tile marks the applied preset with the same brand border it uses for
-// hover, so the state reads without adding a second visual language.
-:deep(.preset-tile.is-active) {
-  border-color: var(--vp-c-brand-1);
 }
 </style>

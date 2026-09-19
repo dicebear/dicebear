@@ -7,10 +7,11 @@ description: >
 
 # Svelte avatar library: using DiceBear with Svelte
 
-DiceBear works with both Svelte 4 and Svelte 5. Use `$derived` (Svelte 5) or
-reactive statements (Svelte 4) to keep SVG profile pictures in sync with prop
-changes, either via the JS library for client-side generation or the HTTP API
-for a zero-dependency approach.
+DiceBear works with both Svelte 4 and Svelte 5.
+
+Use `$derived` (Svelte 5) or reactive statements (Svelte 4) to keep SVG profile
+pictures in sync with prop changes, either via the JS library for client-side
+generation or the HTTP API for a zero-dependency approach.
 
 ## With the JS library
 

@@ -4,41 +4,18 @@ description: >
   Free flat cartoon avatar generator with chunky characters that read clearly at
   small sizes. Create Miniavs avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Miniavs
+<SiteStylePage styleName="miniavs">
 
-Miniavs is a flat-design vector avatar style with chunky half-body characters
-sporting bold hairstyles, simple expressions, and colorful tops. Generate
-friendly SVG profile icons that read clearly even at small sizes, well suited to
-compact user lists and mobile UIs.
+Chunky flat half-body characters with bold hairstyles, simple expressions and
+colorful tops.
 
-<StylePreview styleName="miniavs" />
-
-<StyleDescription styleName="miniavs" />
-
-## Usage
-
-<StyleUsage styleName="miniavs" />
-
-## Presets
-
-<StylePresets styleName="miniavs" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="miniavs" />
-
-## Details
-
-<StyleInfo styleName="miniavs" />
+</SiteStylePage>

@@ -170,16 +170,12 @@ function lineTitle(line: VersionLine): string {
 </template>
 
 <style lang="scss" scoped>
-.vt {
-  margin: 24px 0;
-}
-
 .vt-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border: 1px solid var(--ui-window-border-color);
-  border-radius: var(--vp-radius-md, 16px);
-  background: var(--ui-window-bg);
+  border: 1px solid var(--db-line);
+  border-radius: 14px;
+  background: var(--db-panel);
 }
 
 .vt-chart {
@@ -220,13 +216,13 @@ function lineTitle(line: VersionLine): string {
   top: 0;
   font-size: 12px;
   line-height: 20px;
-  color: var(--ui-c-text-subtle);
+  color: var(--db-muted);
   transform: translateX(-50%);
   white-space: nowrap;
 }
 
 .vt-axis-today {
-  color: var(--vp-c-text-1);
+  color: var(--db-ink);
   font-weight: 600;
 }
 
@@ -240,7 +236,7 @@ function lineTitle(line: VersionLine): string {
     24px + var(--vt-gutter) + (100% - 48px - var(--vt-gutter)) * var(--vt-today)
   );
   width: 1px;
-  background: var(--vp-c-text-1);
+  background: var(--db-ink);
   opacity: 0.35;
 }
 
@@ -251,7 +247,8 @@ function lineTitle(line: VersionLine): string {
   gap: 4px 14px;
   margin: 0 0 12px;
   font-size: 12px;
-  color: var(--ui-c-text-subtle);
+  line-height: 16px;
+  color: var(--db-muted);
 
   span {
     display: inline-flex;
@@ -278,13 +275,15 @@ function lineTitle(line: VersionLine): string {
   justify-content: space-between;
   gap: 0.5rem;
   font-size: 13px;
+  line-height: 18px;
 
   strong {
     font-weight: 600;
+    color: var(--db-ink);
   }
 
   span {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--vt-text);
     white-space: nowrap;
   }
@@ -298,7 +297,7 @@ function lineTitle(line: VersionLine): string {
   // repeating gradient lands on the same lines the axis labels use.
   background-image: repeating-linear-gradient(
     to right,
-    var(--vp-c-divider) 0 1px,
+    var(--db-line) 0 1px,
     transparent 1px calc(100% / 6)
   );
   background-position: 0 0;
@@ -310,12 +309,12 @@ function lineTitle(line: VersionLine): string {
 .vt-legend span {
   &.is-maintained,
   &.is-served {
-    --vt-fill: var(--vp-c-green-2);
+    --vt-fill: var(--db-ok);
   }
 
   &.is-security,
   &.is-deprecated {
-    --vt-fill: var(--vp-c-yellow-2);
+    --vt-fill: var(--db-warn);
   }
 }
 
@@ -348,32 +347,55 @@ function lineTitle(line: VersionLine): string {
 // the color its current phase carries.
 .vt-row,
 .vt-table tr {
-  --vt-text: var(--ui-c-text-subtle);
+  --vt-text: var(--db-muted);
 
   &.is-maintained,
   &.is-served {
-    --vt-text: var(--vp-c-green-1);
+    --vt-text: var(--db-ok);
   }
 
   &.is-security,
   &.is-deprecated {
-    --vt-text: var(--vp-c-yellow-1);
+    --vt-text: var(--db-warn);
   }
 }
 
 .vt-table {
-  margin-top: 16px;
+  margin-top: 22px;
 
   table {
-    display: table;
     width: 100%;
     min-width: 460px;
-    margin: 0;
+    border-collapse: collapse;
   }
 
-  td,
   th {
-    font-size: 14px;
+    padding: 0 16px 10px 0;
+    border-bottom: 1px solid var(--db-line);
+    text-align: left;
+    vertical-align: bottom;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 600;
+    color: var(--db-muted);
+  }
+
+  td {
+    padding: 12px 16px 12px 0;
+    border-top: 1px solid var(--db-line);
+    vertical-align: top;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--db-ink-2);
+  }
+
+  tbody tr:first-child td {
+    border-top: 0;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 0;
   }
 }
 

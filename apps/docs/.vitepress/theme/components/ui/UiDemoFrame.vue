@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sparkles } from '@lucide/vue';
+import { ArrowUpRight } from '@lucide/vue';
 import UiWindow from './UiWindow.vue';
 
 defineProps<{
@@ -14,10 +14,10 @@ defineProps<{
       <a
         v-if="playgroundUrl"
         :href="playgroundUrl"
-        class="ui-demo-frame-action no-icon"
+        class="ui-demo-frame-action"
       >
-        <Sparkles :size="14" />
-        <span class="ui-demo-frame-action-label">Open Playground</span>
+        Open in Playground
+        <ArrowUpRight :size="14" />
       </a>
       <slot name="actions" />
     </template>
@@ -29,55 +29,44 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.ui-demo-frame {
-  margin: 20px 0 16px;
-}
-
 .ui-demo-frame-body {
-  padding: 20px;
-  /* Faint dotted backdrop (theme-aware); avatars sit centered on top. */
-  background-image: radial-gradient(var(--vp-c-divider) 1px, transparent 1px);
+  padding: 24px;
+  /* A faint dot grid, so the frame reads as a stage for the demo. */
+  background-image: radial-gradient(var(--db-line) 1px, transparent 1px);
   background-size: 16px 16px;
   background-position: center;
+
+  @media (max-width: 767px) {
+    padding: 16px;
+  }
 }
 
-/* The same chrome for the built-in link and for whatever the `actions` slot
-   brings, which is why the slotted twin is listed alongside every rule. */
+/* The built-in link and whatever the `actions` slot brings look the same,
+   which is why the slotted twin is listed alongside. */
 .ui-demo-frame-action,
 :slotted(.ui-demo-frame-action) {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
+  gap: 6px;
+  padding: 0;
   border: 0;
-  border-radius: var(--vp-radius-chrome);
   background: none;
   font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--ui-c-text-muted);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--db-brand-text);
   text-decoration: none;
   cursor: pointer;
-  transition:
-    color var(--duration-fast) var(--ease-smooth),
-    background-color var(--duration-fast) var(--ease-smooth);
 
   &:hover:not(:disabled) {
-    color: var(--vp-c-brand-1);
-    background: var(--vp-c-brand-soft);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   &:disabled {
     cursor: default;
     opacity: 0.6;
-  }
-}
-
-@media (max-width: 640px) {
-  .ui-demo-frame-action-label,
-  :slotted(.ui-demo-frame-action-label) {
-    display: none;
   }
 }
 </style>

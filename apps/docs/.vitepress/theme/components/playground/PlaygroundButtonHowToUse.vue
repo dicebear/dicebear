@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { Code as CodeIcon } from '@lucide/vue';
-import { computed, ref, watch } from 'vue';
-import { UiCard, UiCode, UiDialog } from '../ui';
+import { ArrowRight, Code as CodeIcon } from '@lucide/vue';
+import { computed, watch } from 'vue';
+import { UiCode, type UiCodeTab } from '../ui';
+import SiteDialog from '../site/SiteDialog.vue';
+import SiteNotice from '../site/SiteNotice.vue';
 import {
   getAvatarApiUrl,
   getAvatarApiCommand,
@@ -14,16 +16,10 @@ import {
   formatDartValue,
   formatCSharpValue,
 } from '@theme/utils/code-examples';
-import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import { track, styleLabel } from '@theme/utils/track';
-import Message from 'primevue/message';
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
+import { useCodeTab } from '@theme/composables/useCodeTab';
 
 const props = defineProps<{
   seed: string;
@@ -31,16 +27,8 @@ const props = defineProps<{
 
 const { store, open, options } = usePlaygroundDialog(() => props.seed);
 
-const tab = ref<string>(store.isCustomStyle ? 'js-library' : 'http-api');
-
-watch(
-  () => store.isCustomStyle,
-  (isCustom) => {
-    if (isCustom && tab.value === 'http-api') {
-      tab.value = 'js-library';
-    }
-  },
-);
+// The language is the one the reader picked last anywhere on the site.
+const active = useCodeTab();
 
 watch(open, (isOpen) => {
   if (isOpen) {
@@ -50,17 +38,6 @@ watch(open, (isOpen) => {
   }
 });
 
-// Only count tabs the user actively picks while the dialog is open, not the
-// automatic http-api → js-library switch for custom styles.
-watch(tab, (value) => {
-  if (open.value) {
-    track('Playground: How To Use Tab', { tab: value });
-  }
-});
-
-const exampleHttpApi = computed(() =>
-  getAvatarApiUrl(store.avatarStyleName, options.value),
-);
 const hasExcludedOptions = computed(() => {
   const opts = options.value as Record<string, unknown>;
   return Object.keys(opts).some(
@@ -285,246 +262,243 @@ const exampleCli = computed(() =>
     options.value,
   ),
 );
+
+interface HowToUseTab extends UiCodeTab {
+  docs: string;
+}
+
+/** The install command as the first lines of the snippet, as comments. */
+function withInstall(code: string, install: string, lang?: string): string {
+  const marker = lang === 'python' || lang === undefined ? '#' : '//';
+  const lines = install
+    .split('\n')
+    .map((line) => `${marker} ${line}`)
+    .join('\n');
+
+  // A PHP file has to open with its tag, so the comment follows it.
+  if (lang === 'php') {
+    return code.replace('<?php\n', `<?php\n\n${lines}\n`);
+  }
+
+  return `${lines}\n\n${code}`;
+}
+
+// The API only knows the packaged styles, so an uploaded style has no HTTP tab.
+const tabs = computed<HowToUseTab[]>(() => {
+  const custom = store.isCustomStyle;
+
+  const list: (HowToUseTab & { install?: string })[] = [
+    {
+      id: 'js-library',
+      label: 'JavaScript',
+      lang: 'js',
+      install: custom
+        ? 'npm install @dicebear/core --save'
+        : 'npm install @dicebear/core @dicebear/styles --save',
+      code: exampleJsLibrary.value,
+      docs: '/integrations/javascript/',
+    },
+    {
+      id: 'php-library',
+      label: 'PHP',
+      lang: 'php',
+      install: custom
+        ? 'composer require dicebear/core'
+        : 'composer require dicebear/core dicebear/styles',
+      code: examplePhp.value,
+      docs: '/integrations/php/',
+    },
+    {
+      id: 'python-library',
+      label: 'Python',
+      lang: 'python',
+      install: custom
+        ? 'pip install dicebear-core'
+        : 'pip install dicebear-core dicebear-styles',
+      code: examplePython.value,
+      docs: '/integrations/python/',
+    },
+    {
+      id: 'rust-library',
+      label: 'Rust',
+      lang: 'rust',
+      install: installRust.value,
+      code: exampleRust.value,
+      docs: '/integrations/rust/',
+    },
+    {
+      id: 'go-library',
+      label: 'Go',
+      lang: 'go',
+      install: custom
+        ? 'go get github.com/dicebear/dicebear-go/v11'
+        : 'go get github.com/dicebear/dicebear-go/v11\ngo get github.com/dicebear/styles/v11',
+      code: exampleGo.value,
+      docs: '/integrations/go/',
+    },
+    {
+      id: 'dart-library',
+      label: 'Dart',
+      lang: 'dart',
+      install: custom
+        ? 'dart pub add dicebear_core'
+        : 'dart pub add dicebear_core dicebear_styles',
+      code: exampleDart.value,
+      docs: '/integrations/dart/',
+    },
+    {
+      id: 'csharp-library',
+      label: 'C#',
+      lang: 'csharp',
+      install: custom
+        ? 'dotnet add package DiceBear.Core'
+        : 'dotnet add package DiceBear.Core\ndotnet add package DiceBear.Styles',
+      code: exampleCSharp.value,
+      docs: '/integrations/csharp/',
+    },
+    {
+      id: 'cli',
+      label: 'CLI',
+      install: 'npm install --global dicebear',
+      code: exampleCli.value,
+      docs: '/integrations/cli/',
+    },
+  ];
+
+  const libraries = list.map(({ install, ...tab }) => ({
+    ...tab,
+    code: install ? withInstall(tab.code, install, tab.lang) : tab.code,
+  }));
+
+  if (custom) {
+    return libraries;
+  }
+
+  return [
+    {
+      id: 'http-api',
+      label: 'HTTP API',
+      lang: 'html',
+      code: exampleHttpApiHtml.value,
+      docs: '/integrations/http-api/',
+    },
+    ...libraries,
+  ];
+});
+
+const current = computed(
+  () => tabs.value.find((tab) => tab.id === active.value) ?? tabs.value[0],
+);
+
+function onTab(id: string | undefined) {
+  active.value = id ?? tabs.value[0].id;
+
+  track('Playground: How To Use Tab', { tab: active.value });
+}
 </script>
 
 <template>
-  <Button label="How to use" severity="contrast" @click="open = true">
-    <template #icon>
-      <CodeIcon :size="15" />
-    </template>
-  </Button>
+  <button
+    type="button"
+    class="site-btn site-btn-primary pg-how-to-use-button"
+    aria-haspopup="dialog"
+    @click="open = true"
+  >
+    <CodeIcon :size="16" aria-hidden="true" />
+    How to use
+  </button>
 
-  <UiDialog v-model:open="open" max-width="800px" header="How to use">
-    <div class="playground-button-how-to-use-text">
-      <UiCard flush class="playground-button-how-to-use-tabs-card">
-        <Tabs v-model:value="tab">
-          <TabList>
-            <Tab v-if="!store.isCustomStyle" value="http-api">HTTP-API</Tab>
-            <Tab value="js-library">JS</Tab>
-            <Tab value="php-library">PHP</Tab>
-            <Tab value="python-library">Python</Tab>
-            <Tab value="rust-library">Rust</Tab>
-            <Tab value="go-library">Go</Tab>
-            <Tab value="dart-library">Dart</Tab>
-            <Tab value="csharp-library">C#</Tab>
-            <Tab value="cli">CLI</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel v-if="!store.isCustomStyle" value="http-api">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>
-                  Use this URL to request this avatar style via our HTTP API.
-                </p>
-                <UiCode :code="exampleHttpApi" />
-                <p>You can use the URL directly as image source.</p>
-                <UiCode :code="exampleHttpApiHtml" lang="html" />
-                <Message
-                  v-if="hasExcludedOptions"
-                  severity="warn"
-                  :closable="false"
-                  :style="{ '--p-message-text-font-size': '13px' }"
-                >
-                  Some options you selected are not supported by our public
-                  HTTP-API and have been omitted from the URL. You can enable
-                  them by
-                  <a href="/recipes/self-host-the-http-api/"
-                    >hosting your own instance</a
-                  >.
-                </Message>
-                <p>
-                  See <a href="/integrations/http-api">HTTP-API</a> docs for
-                  more information.
-                </p>
-              </div>
-            </TabPanel>
-            <TabPanel value="js-library">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>First install the required packages via npm:</p>
-                <UiCode
-                  :code="
-                    store.isCustomStyle
-                      ? 'npm install @dicebear/core --save'
-                      : 'npm install @dicebear/core @dicebear/styles --save'
-                  "
-                />
-                <p>Then you can create this avatar as follows:</p>
-                <UiCode :code="exampleJsLibrary" lang="js" />
-                <p>
-                  See <a href="/integrations/javascript">JS</a> docs for more
-                  information.
-                </p>
-              </div>
-            </TabPanel>
-            <TabPanel value="php-library">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>First install the required packages via Composer:</p>
-                <UiCode
-                  :code="
-                    store.isCustomStyle
-                      ? 'composer require dicebear/core'
-                      : 'composer require dicebear/core dicebear/styles'
-                  "
-                />
-                <p>Then you can create this avatar as follows:</p>
-                <UiCode :code="examplePhp" lang="php" />
-                <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your
-                  style definition.
-                </p>
-              </div>
-            </TabPanel>
-            <TabPanel value="python-library">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>First install the required packages via pip:</p>
-                <UiCode
-                  :code="
-                    store.isCustomStyle
-                      ? 'pip install dicebear-core'
-                      : 'pip install dicebear-core dicebear-styles'
-                  "
-                />
-                <p>Then you can create this avatar as follows:</p>
-                <UiCode :code="examplePython" lang="python" />
-                <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your
-                  style definition.
-                </p>
-                <p>
-                  See <a href="/integrations/python">Python</a> docs for more
-                  information.
-                </p>
-              </div>
-            </TabPanel>
-            <TabPanel value="rust-library">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>First add the required crates with Cargo:</p>
-                <UiCode :code="installRust" />
-                <p>Then you can create this avatar as follows:</p>
-                <UiCode :code="exampleRust" lang="rust" />
-                <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your
-                  style definition.
-                </p>
-                <p>
-                  See <a href="/integrations/rust">Rust</a> docs for more
-                  information.
-                </p>
-              </div>
-            </TabPanel>
-            <TabPanel value="go-library">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>First add the required modules with go get:</p>
-                <UiCode
-                  :code="
-                    store.isCustomStyle
-                      ? 'go get github.com/dicebear/dicebear-go/v11'
-                      : 'go get github.com/dicebear/dicebear-go/v11\ngo get github.com/dicebear/styles/v11'
-                  "
-                />
-                <p>Then you can create this avatar as follows:</p>
-                <UiCode :code="exampleGo" lang="go" />
-                <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your
-                  style definition.
-                </p>
-                <p>
-                  See <a href="/integrations/go">Go</a> docs for more
-                  information.
-                </p>
-              </div>
-            </TabPanel>
-            <TabPanel value="dart-library">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>First add the required packages with dart pub:</p>
-                <UiCode
-                  :code="
-                    store.isCustomStyle
-                      ? 'dart pub add dicebear_core'
-                      : 'dart pub add dicebear_core dicebear_styles'
-                  "
-                />
-                <p>Then you can create this avatar as follows:</p>
-                <UiCode :code="exampleDart" lang="dart" />
-                <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your
-                  style definition.
-                </p>
-                <p>
-                  See <a href="/integrations/dart">Dart</a> docs for more
-                  information.
-                </p>
-              </div>
-            </TabPanel>
-            <TabPanel value="csharp-library">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>First add the required packages with the dotnet CLI:</p>
-                <UiCode
-                  :code="
-                    store.isCustomStyle
-                      ? 'dotnet add package DiceBear.Core'
-                      : 'dotnet add package DiceBear.Core\ndotnet add package DiceBear.Styles'
-                  "
-                />
-                <p>Then you can create this avatar as follows:</p>
-                <UiCode :code="exampleCSharp" lang="csharp" />
-                <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your
-                  style definition.
-                </p>
-                <p>
-                  See <a href="/integrations/csharp">C#</a> docs for more
-                  information.
-                </p>
-              </div>
-            </TabPanel>
-            <TabPanel value="cli">
-              <div class="playground-button-how-to-use-tab-content">
-                <p>First install the CLI package via npm:</p>
-                <UiCode code="npm install --global dicebear" />
-                <p>Then you can create this avatar as follows:</p>
-                <UiCode :code="exampleCli" />
-                <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your
-                  style definition.
-                </p>
-                <p>
-                  See <a href="/integrations/cli">CLI</a> docs for more
-                  information.
-                </p>
-              </div>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </UiCard>
+  <SiteDialog v-model:open="open" header="How to use" max-width="860px">
+    <div class="pg-how-to-use">
+      <UiCode
+        class="pg-how-to-use-code"
+        :tabs="tabs"
+        :model-value="active"
+        @update:model-value="onTab"
+      />
+
+      <SiteNotice
+        v-if="current.id === 'http-api' && hasExcludedOptions"
+        tone="warn"
+        compact
+      >
+        Some options you selected are not supported by our public HTTP-API and
+        have been omitted from the URL. You can enable them by
+        <a href="/recipes/self-host-the-http-api/">hosting your own instance</a
+        >.
+      </SiteNotice>
+
+      <p
+        v-if="store.isCustomStyle && current.id !== 'js-library'"
+        class="pg-how-to-use-hint"
+      >
+        Replace <code>./my-style.json</code> with the path to your style
+        definition.
+      </p>
+
+      <a :href="current.docs" class="pg-how-to-use-docs hv-link">
+        {{ current.label }} documentation
+        <ArrowRight :size="16" aria-hidden="true" />
+      </a>
 
       <PlaygroundLicenseAlert />
     </div>
-  </UiDialog>
+  </SiteDialog>
 </template>
 
 <style scoped lang="scss">
-.playground-button-how-to-use {
-  &-text {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    a {
-      color: var(--vp-c-brand-1);
+.pg-how-to-use-button {
+  width: 100%;
+  min-width: 0;
+  padding: 0 12px;
+  font-size: 15px;
+}
 
-      &:hover {
-        color: var(--vp-c-brand-2);
-      }
+.pg-how-to-use {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 20px 28px 28px;
+
+  @media (max-width: 640px) {
+    padding: 16px 20px 20px;
+  }
+
+  // The code scrolls inside its window, so a long option list keeps the
+  // license below it in view.
+  &-code :deep(.ui-code-text) {
+    max-height: 420px;
+  }
+
+  :deep(.site-notice a) {
+    font-weight: 500;
+    color: var(--db-brand-text);
+  }
+
+  &-hint {
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--db-ink-2);
+
+    code {
+      font-family: var(--db-font-mono);
+      font-size: 13px;
+      color: var(--db-ink);
     }
   }
 
-  &-tab-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    p {
-      margin: 0;
-    }
+  &-docs {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 500;
+    color: var(--db-brand-text);
+    text-decoration: none;
   }
 }
 </style>

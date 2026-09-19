@@ -4,39 +4,18 @@ description: >
   Cartoon face avatar generator: eyes and mouth on a colored square, no head,
   hair or ears. Create Big Ears Neutral avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Big Ears Neutral
+<SiteStylePage styleName="big-ears-neutral">
 
-Big Ears Neutral is a reduced variant of the Big Ears style, showing only the
-eyes and mouth on a solid colored square, with no head outline, hair, or ears.
+The Big Ears face on its own: eyes and mouth on a colored square, without head,
+hair or ears.
 
-<StylePreview styleName="big-ears-neutral" />
-
-<StyleDescription styleName="big-ears-neutral" />
-
-## Usage
-
-<StyleUsage styleName="big-ears-neutral" />
-
-## Presets
-
-<StylePresets styleName="big-ears-neutral" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="big-ears-neutral" />
-
-## Details
-
-<StyleInfo styleName="big-ears-neutral" />
+</SiteStylePage>

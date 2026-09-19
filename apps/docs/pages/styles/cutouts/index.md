@@ -3,41 +3,18 @@ title: Cutouts – Avatar Style
 description: >
   Free paper collage avatar generator: faces assembled from torn craft paper.
   Create Cutouts avatars with the DiceBear avatar API or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Cutouts
+<SiteStylePage styleName="cutouts">
 
-Cutouts is a paper collage avatar style. Every face is assembled from torn craft
-paper: a colored head, hair laid over it, and eyes, nose and mouth cut out
-separately. The two eyes never match, which is the point of the style. Generate
-warm, handmade profile pictures for communities and editorial sites.
+Faces assembled from torn craft paper: a colored head, hair laid over it, and
+eyes, nose and mouth cut out separately. The two eyes never match.
 
-<StylePreview styleName="cutouts" />
-
-<StyleDescription styleName="cutouts" />
-
-## Usage
-
-<StyleUsage styleName="cutouts" />
-
-## Presets
-
-<StylePresets styleName="cutouts" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="cutouts" />
-
-## Details
-
-<StyleInfo styleName="cutouts" />
+</SiteStylePage>

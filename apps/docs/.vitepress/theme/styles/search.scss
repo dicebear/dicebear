@@ -1,0 +1,83 @@
+/**
+ * The search dialog is VitePress's own component. It reads these variables,
+ * so they are set on it and nowhere else.
+ */
+
+.VPLocalSearchBox {
+  --vp-backdrop-bg-color: rgba(11, 22, 32, 0.45);
+  --vp-c-brand-1: var(--db-brand-text);
+  --vp-c-divider: var(--db-line);
+  --vp-c-bg: var(--db-paper);
+  --vp-c-text-1: var(--db-ink);
+  --vp-c-text-2: var(--db-ink-2);
+  --vp-c-text-3: var(--db-muted);
+  --vp-local-search-bg: var(--db-paper);
+  --vp-local-search-highlight-bg: var(--db-tint);
+  --vp-local-search-highlight-text: var(--db-tint-text);
+  --vp-local-search-result-bg: var(--db-paper);
+  --vp-local-search-result-border: var(--db-line);
+  --vp-local-search-result-selected-bg: var(--db-soft);
+  --vp-local-search-result-selected-border: var(--db-brand);
+  --vp-nav-height: var(--db-header-h);
+
+  color: var(--db-ink);
+
+  .shell {
+    border: 1px solid var(--db-line);
+    border-radius: var(--db-radius-4);
+    box-shadow: var(--db-shadow-pop);
+  }
+}
+
+.dark .VPLocalSearchBox {
+  --vp-backdrop-bg-color: rgba(0, 0, 0, 0.6);
+}
+
+/* The box draws its own focus state around the whole field. */
+.VPLocalSearchBox .search-input:focus-visible,
+.VPLocalSearchBox .search-bar :focus-visible {
+  outline: none;
+}
+
+// The icon classes the search box renders, drawn with Lucide.
+.VPLocalSearchBox [class*='vpi-'] {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask: var(--db-search-icon) center / contain no-repeat;
+  mask: var(--db-search-icon) center / contain no-repeat;
+}
+
+.VPLocalSearchBox .vpi-search {
+  --db-search-icon: url('lucide-static/icons/search.svg');
+}
+
+.VPLocalSearchBox .vpi-arrow-left {
+  --db-search-icon: url('lucide-static/icons/arrow-left.svg');
+}
+
+.VPLocalSearchBox .vpi-layout-list {
+  --db-search-icon: url('lucide-static/icons/layout-list.svg');
+}
+
+.VPLocalSearchBox .vpi-delete {
+  --db-search-icon: url('lucide-static/icons/delete.svg');
+}
+
+.VPLocalSearchBox .vpi-chevron-right {
+  --db-search-icon: url('lucide-static/icons/chevron-right.svg');
+}
+
+.VPLocalSearchBox .vpi-arrow-up {
+  --db-search-icon: url('lucide-static/icons/arrow-up.svg');
+}
+
+.VPLocalSearchBox .vpi-arrow-down {
+  --db-search-icon: url('lucide-static/icons/arrow-down.svg');
+}
+
+.VPLocalSearchBox .vpi-corner-down-left {
+  --db-search-icon: url('lucide-static/icons/corner-down-left.svg');
+}

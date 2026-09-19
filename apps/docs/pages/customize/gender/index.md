@@ -9,10 +9,12 @@ description: >
 # How do I set a gender?
 
 DiceBear has no single `gender` switch, but you can shape any avatar to look
-more masculine or feminine. Every feature is its own option you can set
-directly, so you pick the traits that fit the look you want, such as the hair or
-facial hair, and leave out the rest. An upcoming release adds descriptive
-variant tags that turn the common cases into a one-liner.
+more masculine or feminine.
+
+Every feature is its own option you can set directly, so you pick the traits
+that fit the look you want, such as the hair or facial hair, and leave out the
+rest. An upcoming release adds descriptive variant tags that turn the common
+cases into a one-liner.
 
 ## Find and apply the options
 
@@ -29,7 +31,7 @@ options in the [JS library](/integrations/javascript/) and the other libraries.
 The Avataaars style, for example, lets you turn facial hair off with
 `facialHairProbability=0`:
 
-```
+```http
 https://api.dicebear.com/11.x/avataaars/svg?seed=Casey&facialHairProbability=0
 ```
 
@@ -61,7 +63,7 @@ const avatar = new Avatar(style, {
 
 The same filter works as a query parameter in the HTTP API:
 
-```
+```http
 https://api.dicebear.com/11.x/adventurer/svg?seed=Casey&tags=hairLength:long,!facialHair
 ```
 

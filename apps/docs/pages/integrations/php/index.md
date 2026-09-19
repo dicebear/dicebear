@@ -8,17 +8,18 @@ description: >
 # PHP avatar library
 
 Generate avatars on your own server, in plain PHP (8.2 or higher), with no
-external service involved. The API mirrors the
-[JavaScript library](/integrations/javascript/), and the output is
-byte-identical: the same seed and style produce the same SVG in every DiceBear
-library.
+external service involved.
+
+The API mirrors the [JavaScript library](/integrations/javascript/), and the
+output is byte-identical: the same seed and style produce the same SVG in every
+DiceBear library.
 
 ## Installation
 
 You need two packages: the core library `dicebear/core` and the avatar style
 definitions `dicebear/styles`.
 
-```
+```sh
 composer require dicebear/core dicebear/styles
 ```
 

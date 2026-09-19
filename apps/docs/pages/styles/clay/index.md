@@ -3,41 +3,18 @@ title: Clay – Avatar Style
 description: >
   Free clay character avatar generator with rounded lumps, simple faces and tiny
   horns. Create Clay avatars with the DiceBear avatar API or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Clay
+<SiteStylePage styleName="clay">
 
-Clay is a soft vector avatar style of rounded lumps that look pinched from
-modeling clay, with simple faces, small horns or curls on top, and pressed-in
-surface marks. Generate warm SVG profile icons for chat apps and community
-profiles.
+Rounded lumps that look pinched from modeling clay, with simple faces, small
+horns or curls on top, and pressed-in marks.
 
-<StylePreview styleName="clay" />
-
-<StyleDescription styleName="clay" />
-
-## Usage
-
-<StyleUsage styleName="clay" />
-
-## Presets
-
-<StylePresets styleName="clay" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="clay" />
-
-## Details
-
-<StyleInfo styleName="clay" />
+</SiteStylePage>

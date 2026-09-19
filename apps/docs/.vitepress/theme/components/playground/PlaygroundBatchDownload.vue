@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
-import Button from 'primevue/button';
-import InputNumber from 'primevue/inputnumber';
-import SelectButton from 'primevue/selectbutton';
-import Textarea from 'primevue/textarea';
 import { Download, Shuffle } from '@lucide/vue';
 import JSZip from 'jszip';
 import { Avatar } from '@dicebear/core';
-import { UiAvatar, UiConfetti, UiLicenseAlert } from '@theme/components/ui';
+import { UiLicenseAlert } from '@theme/components/ui';
+import SiteNotice from '../site/SiteNotice.vue';
+import SiteNumberField from '../site/SiteNumberField.vue';
+import SiteSegmented from '../site/SiteSegmented.vue';
+import SiteTextarea from '../site/SiteTextarea.vue';
+import PlaygroundThumb from './PlaygroundThumb.vue';
 import useStore from '@theme/stores/playground';
 import { clonePlain, loadAvatarStyle } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
@@ -47,6 +48,13 @@ watch(mode, (m) => {
     shuffleRandom();
   }
 });
+
+// The field reports null while it is empty, and the count keeps its value.
+function onRandomCount(value: number | null) {
+  if (value !== null) {
+    randomCount.value = value;
+  }
+}
 
 watch(randomCount, (n) => {
   if (mode.value === 'random' && Number.isFinite(n) && n > 0) {
@@ -93,14 +101,18 @@ const cleanStyleName = computed(() =>
   store.avatarStyleName.replace(/^custom:/, ''),
 );
 
-const previewStyleOptions = computed(() => ({
-  ...store.avatarStyleOptionsWithoutDefaults,
-}));
+// One option set per tile, held here. An object literal in the template would
+// be a new one on every render, and the thumbnail renders again whenever its
+// options change identity.
+const previewItems = computed(() =>
+  previewSeeds.value.map((seed) => ({
+    seed,
+    options: { ...store.avatarStyleOptionsWithoutDefaults, seed },
+  })),
+);
 
-// Some ancestor (likely VitePress local search or a PrimeVue listener) is
-// suppressing the default Enter newline in capture phase. Manually insert
-// the newline so the textarea behaves normally regardless of who calls
-// preventDefault upstream.
+// A listener further up suppresses the default Enter newline in the capture
+// phase, so the handler inserts the newline itself.
 async function onTextareaEnter(event: KeyboardEvent) {
   event.preventDefault();
   event.stopPropagation();
@@ -143,7 +155,7 @@ async function generate() {
 
     const zip = new JSZip();
     const used = new Set<string>();
-    // The options object is deep-reactive; nested arrays are proxies, and the
+    // The options object is deep-reactive. Nested arrays are proxies, and the
     // structuredClone inside Avatar refuses those.
     const baseOptions = clonePlain(store.avatarStyleOptionsWithoutDefaults);
 
@@ -173,153 +185,109 @@ async function generate() {
   }
 }
 
-function reset() {
-  successState.value = false;
-  errorMessage.value = '';
-  progress.value = { done: 0, total: 0 };
-}
+const previewLabel = computed(() =>
+  seedCount.value > PREVIEW_LIMIT
+    ? `First ${PREVIEW_LIMIT} of ${seedCount.value}`
+    : `All ${seedCount.value} avatar${seedCount.value === 1 ? '' : 's'}`,
+);
+
+// The confirmation belongs to the list it was downloaded for.
+watch(seeds, () => (successState.value = false));
 </script>
 
 <template>
   <div class="pg-batch">
-    <template v-if="!successState">
-      <header class="pg-batch-top">
-        <SelectButton
-          v-model="mode"
-          :options="modeOptions"
-          option-label="label"
-          option-value="value"
-          :allow-empty="false"
-          size="small"
-          aria-label="Seed source"
-        />
-      </header>
+    <SiteSegmented
+      v-model="mode"
+      class="pg-batch-mode"
+      :options="modeOptions"
+      aria-label="Seed source"
+      size="sm"
+      fluid
+    />
 
-      <section class="pg-batch-section">
-        <div v-if="mode === 'random'" class="pg-batch-random">
-          <InputNumber
-            v-model="randomCount"
-            :min="1"
-            :max="SEED_CAP"
-            :step="1"
-            :show-buttons="true"
-            button-layout="horizontal"
-            :input-style="{ width: '5em', textAlign: 'center' }"
-            decrement-button-class="pg-batch-step-button"
-            increment-button-class="pg-batch-step-button"
-            aria-label="Number of random seeds"
-          >
-            <template #incrementicon>+</template>
-            <template #decrementicon>−</template>
-          </InputNumber>
-          <span class="pg-batch-random-suffix">
-            random seed{{ randomCount === 1 ? '' : 's' }}
-          </span>
-          <button
-            type="button"
-            class="pg-batch-shuffle"
-            @click="shuffleRandom"
-            aria-label="Regenerate random seeds"
-          >
-            <Shuffle :size="14" />
-            <span>Shuffle</span>
-          </button>
-        </div>
-
-        <div v-else class="pg-batch-paste">
-          <Textarea
-            id="pg-batch-seeds"
-            v-model="seedsInput"
-            :rows="6"
-            placeholder="One seed per line — a username, email, user ID, anything."
-            class="pg-batch-textarea"
-            spellcheck="false"
-            autocomplete="off"
-            fluid
-            @keydown.enter="onTextareaEnter"
-          />
-          <span class="pg-batch-counter" :class="{ 'is-over': overCap }">
-            {{ seedCount }} / {{ SEED_CAP }}
-          </span>
-        </div>
-
-        <p v-if="overCap" class="pg-batch-hint is-error">
-          That's more than the {{ SEED_CAP }}-seed cap. Trim the list and try
-          again.
-        </p>
-      </section>
-
-      <section
-        v-if="previewSeeds.length > 0"
-        class="pg-batch-section pg-batch-preview-section"
+    <div v-if="mode === 'random'" class="pg-batch-random">
+      <SiteNumberField
+        :model-value="randomCount"
+        class="pg-batch-count"
+        :min="1"
+        :max="SEED_CAP"
+        :step="1"
+        aria-label="Number of random seeds"
+        @update:model-value="onRandomCount"
+      />
+      <span class="pg-batch-random-suffix">
+        random seed{{ randomCount === 1 ? '' : 's' }}
+      </span>
+      <button
+        type="button"
+        class="site-btn site-btn-secondary pg-batch-shuffle"
+        aria-label="Regenerate random seeds"
+        @click="shuffleRandom"
       >
-        <header class="pg-batch-section-header">
-          <span class="pg-batch-eyebrow">Preview</span>
-          <span class="pg-batch-preview-count">
-            <span v-if="seedCount > PREVIEW_LIMIT">
-              first {{ previewSeeds.length }} of {{ seedCount }}
-            </span>
-            <span v-else>
-              all {{ seedCount }} avatar{{ seedCount === 1 ? '' : 's' }}
-            </span>
-          </span>
-        </header>
+        <Shuffle :size="16" aria-hidden="true" />
+        Shuffle
+      </button>
+    </div>
 
-        <ul class="pg-batch-preview-grid">
-          <li
-            v-for="seed in previewSeeds"
-            :key="seed"
-            class="pg-batch-preview-tile"
-          >
-            <div class="pg-batch-preview-tile-avatar">
-              <UiAvatar
-                :size="64"
-                :style-name="store.avatarStyleName"
-                :style-options="{ ...previewStyleOptions, seed }"
-                mode="library"
-              />
-            </div>
-            <code class="pg-batch-preview-tile-seed">{{ seed }}</code>
-          </li>
-        </ul>
-      </section>
+    <div v-else class="pg-batch-paste">
+      <SiteTextarea
+        id="pg-batch-seeds"
+        v-model="seedsInput"
+        :rows="6"
+        mono
+        :invalid="overCap"
+        aria-label="Seeds, one per line"
+        placeholder="One seed per line, for example a user ID"
+        spellcheck="false"
+        autocomplete="off"
+        @keydown.enter="onTextareaEnter"
+      />
+      <span class="pg-batch-counter" :class="{ 'is-over': overCap }">
+        {{ seedCount }} / {{ SEED_CAP }}
+      </span>
+      <p v-if="overCap" class="pg-batch-error" role="alert">
+        That's more than the {{ SEED_CAP }}-seed cap. Trim the list and try
+        again.
+      </p>
+    </div>
 
-      <footer class="pg-batch-footer">
-        <Button
-          :label="generateLabel"
-          :disabled="!canGenerate"
-          :loading="isGenerating"
-          severity="contrast"
-          @click="generate"
-        >
-          <template #icon><Download :size="16" /></template>
-        </Button>
-        <p v-if="errorMessage" class="pg-batch-hint is-error">
-          {{ errorMessage }}
-        </p>
-      </footer>
-    </template>
-
-    <template v-else>
-      <div class="pg-batch-success">
-        <UiConfetti />
-        <div class="dialog-title">Your avatars will be downloaded! 🎉</div>
-        <div class="dialog-subtitle">
-          Please note the license below before using.
-        </div>
-        <div class="dialog-text">
-          <UiLicenseAlert :style-name="store.avatarStyleName" />
-        </div>
-        <div class="pg-batch-success-actions">
-          <Button
-            label="Download another batch"
-            severity="secondary"
-            variant="outlined"
-            @click="reset"
+    <div v-if="previewItems.length > 0" class="pg-batch-preview">
+      <span class="site-label">{{ previewLabel }}</span>
+      <ul class="pg-batch-preview-grid">
+        <li v-for="item in previewItems" :key="item.seed" class="pg-batch-tile">
+          <PlaygroundThumb
+            class="pg-batch-tile-avatar"
+            :style-name="store.avatarStyleName"
+            :options="item.options"
           />
-        </div>
-      </div>
-    </template>
+          <code class="pg-batch-tile-seed">{{ item.seed }}</code>
+        </li>
+      </ul>
+    </div>
+
+    <SiteNotice v-if="successState" tone="success" compact role="status">
+      Your avatars will be downloaded. Please note the license below before
+      using.
+    </SiteNotice>
+
+    <button
+      type="button"
+      class="site-btn site-btn-primary pg-batch-submit"
+      :class="{ 'is-loading': isGenerating }"
+      :disabled="!canGenerate"
+      :aria-busy="isGenerating"
+      @click="generate"
+    >
+      <Download :size="16" aria-hidden="true" />
+      {{ generateLabel }}
+    </button>
+
+    <p v-if="errorMessage" class="pg-batch-error" role="alert">
+      {{ errorMessage }}
+    </p>
+
+    <UiLicenseAlert :style-name="store.avatarStyleName" />
   </div>
 </template>
 
@@ -328,208 +296,118 @@ function reset() {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
+  padding: 20px 28px 28px;
 
-.pg-batch-top {
-  display: flex;
-  justify-content: flex-start;
-}
+  @media (max-width: 640px) {
+    padding: 16px 20px 20px;
+  }
 
-.pg-batch-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  &-mode {
+    max-width: 320px;
+  }
 
-  &-header {
+  &-random {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 12px;
-  }
-}
 
-.pg-batch-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ui-c-text-subtle);
-}
-
-.pg-batch-random {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.pg-batch-random-suffix {
-  font-size: 14px;
-  color: var(--ui-c-text-muted);
-}
-
-.pg-batch-shuffle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: auto;
-  padding: 8px 14px;
-  background: transparent;
-  border: 1px dashed var(--vp-c-border);
-  border-radius: var(--vp-radius-xs);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ui-c-text-muted);
-  cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-smooth);
-
-  &:hover {
-    border-color: var(--vp-c-brand-1);
-    color: var(--vp-c-brand-1);
-    border-style: solid;
+    &-suffix {
+      font-size: 15px;
+      line-height: 24px;
+      color: var(--db-ink-2);
+    }
   }
 
-  &:active svg {
-    transform: rotate(-20deg);
+  // Two classes, so the width outranks the default of the field.
+  & &-count {
+    width: 110px;
   }
 
-  svg {
-    transition: transform var(--duration-fast) var(--ease-smooth);
+  &-shuffle {
+    height: 44px;
+    margin-left: auto;
+    padding: 0 18px;
+    border-radius: var(--db-radius-3);
+    font-size: 15px;
   }
-}
 
-.pg-batch-paste {
-  display: flex;
-  flex-direction: column;
-}
-
-.pg-batch-textarea {
-  font-family: var(--vp-font-family-mono);
-  font-size: 13px;
-  line-height: 1.55;
-  min-height: 160px;
-  resize: vertical;
-}
-
-.pg-batch-counter {
-  align-self: flex-end;
-  margin-top: 6px;
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-  color: var(--ui-c-text-subtle);
-
-  &.is-over {
-    color: var(--vp-c-danger-1, #dc2626);
-    font-weight: 600;
-  }
-}
-
-.pg-batch-hint {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--ui-c-text-subtle);
-
-  &.is-error {
-    color: var(--vp-c-danger-1, #dc2626);
-  }
-}
-
-.pg-batch-preview-section {
-  padding-top: 12px;
-  border-top: 1px solid var(--vp-c-divider);
-}
-
-.pg-batch-preview-count {
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-  color: var(--ui-c-text-muted);
-}
-
-.pg-batch-preview-grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-  gap: 10px;
-}
-
-.pg-batch-preview-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 6px 8px;
-  margin: 0;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: var(--vp-radius-sm);
-
-  &-avatar {
-    width: 64px;
-    height: 64px;
+  &-paste {
     display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &-counter {
+    align-self: flex-end;
+    font-family: var(--db-font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    font-variant-numeric: tabular-nums;
+    color: var(--db-muted);
+
+    &.is-over {
+      color: var(--db-danger);
+    }
+  }
+
+  &-error {
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--db-danger);
+  }
+
+  &-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      @media (max-width: 640px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+  }
+
+  &-tile {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background:
-      linear-gradient(45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0 / 8px
-        8px,
-      linear-gradient(-45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0 /
-        8px 8px,
-      var(--vp-c-bg);
-    border-radius: var(--vp-radius-xs);
-    overflow: hidden;
+    gap: 4px;
+    min-width: 0;
+    margin: 0;
+
+    & &-avatar {
+      width: 64px;
+      border: 1px solid var(--db-line);
+      border-radius: var(--db-radius-3);
+    }
+
+    &-seed {
+      max-width: 100%;
+      padding: 0;
+      background: transparent;
+      font-family: var(--db-font-mono);
+      font-size: 11px;
+      line-height: 16px;
+      color: var(--db-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
-  &-seed {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: var(--vp-font-family-mono);
-    font-size: 10px;
-    color: var(--ui-c-text-muted);
-    padding: 0;
-    background: transparent;
-  }
-}
-
-.pg-batch-footer {
-  padding-top: 12px;
-  border-top: 1px solid var(--vp-c-divider);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  :deep(.p-button) {
+  &-submit {
     width: 100%;
-    justify-content: center;
-  }
-}
-
-.pg-batch-success {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  text-align: center;
-}
-
-.pg-batch-success-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 8px;
-}
-</style>
-
-<style lang="scss">
-html.dark {
-  .pg-batch-step-button {
-    background: var(--p-form-field-background);
+    font-size: 15px;
   }
 }
 </style>

@@ -15,6 +15,8 @@ export type AvatarStyleMeta = {
 export type AvatarStyle = {
   definitionUrl?: string;
   animated?: boolean;
+  /** Names of the style's animations, each one has an option of its own. */
+  animations?: readonly string[];
   meta: AvatarStyleMeta;
 };
 
@@ -32,6 +34,8 @@ export type AvatarStyleSize = {
 
 export type AvatarStyleSizeBundle = {
   core: AvatarStyleSize;
+  /** The core entry without the schema validators. */
+  coreLite: AvatarStyleSize;
   converter: AvatarStyleSize;
   styles: Record<string, AvatarStyleSize>;
 };

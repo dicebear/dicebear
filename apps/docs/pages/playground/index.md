@@ -13,6 +13,4 @@ description: >
 import Playground from "@playground/Playground.vue";
 </script>
 
-<h1 class="sr-only">Playground</h1>
-
 <Playground />

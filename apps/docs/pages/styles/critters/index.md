@@ -4,40 +4,18 @@ description: >
   Free cute monster avatar generator: colorful creatures with big eyes, horns,
   ears or antennae. Create Critters avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Critters
+<SiteStylePage styleName="critters">
 
-Critters is a cute vector avatar style with colorful creatures that combine
-rounded bodies, big eyes, and expressive mouths with horns, ears, or antennae.
-Generate playful SVG profile icons for communities and games.
+Colorful creatures with rounded bodies, big eyes and expressive mouths, topped
+with horns, ears or antennae.
 
-<StylePreview styleName="critters" />
-
-<StyleDescription styleName="critters" />
-
-## Usage
-
-<StyleUsage styleName="critters" />
-
-## Presets
-
-<StylePresets styleName="critters" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="critters" />
-
-## Details
-
-<StyleInfo styleName="critters" />
+</SiteStylePage>

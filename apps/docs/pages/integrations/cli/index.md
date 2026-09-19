@@ -16,7 +16,7 @@ in one run, compresses definition files, and compares two versions of a style.
 Make sure you have [Node.js](https://nodejs.org/en/) (version 22 or higher) and
 npm installed.
 
-```
+```sh
 npm install dicebear --global
 ```
 
@@ -25,7 +25,7 @@ npm install dicebear --global
 For the latest features and avatar styles, make sure you update the CLI
 regularly.
 
-```
+```sh
 npm install dicebear --global
 ```
 
@@ -36,21 +36,21 @@ npm install dicebear --global
 Replace `<style>` with an avatar style name (lowercase, kebab-case for
 multi-word styles, e.g. `lorelei`, `pixel-art`, `adventurer-neutral`).
 
-```
+```sh
 dicebear create <style>
 ```
 
 Without an output path the avatar goes to stdout. So this prints one SVG for the
 [lorelei](/styles/lorelei/) style:
 
-```
+```sh
 dicebear create lorelei --seed "Alice"
 ```
 
 Pipe it wherever you need it. The license banner goes to stderr, so it never
 ends up in the file:
 
-```
+```sh
 dicebear create lorelei --seed "Alice" > alice.svg
 dicebear create lorelei --seed "Alice" --format png | pbcopy
 ```
@@ -67,7 +67,7 @@ place.
 
 `-o` (or `--output`) names the file to write. The extension picks the format:
 
-```
+```sh
 dicebear create lorelei --seed "Alice" -o ./alice.png
 ```
 
@@ -78,7 +78,7 @@ way.
 
 Point `-o` at a directory and add `--count`:
 
-```
+```sh
 dicebear create lorelei -o ./avatars --count 100
 ```
 
@@ -116,7 +116,7 @@ avatars generate quickly.
 | `avif` | AVIF image                         |
 | `json` | JSON with avatar metadata          |
 
-```
+```sh
 dicebear create lorelei -o ./avatars --count 10 --format png
 ```
 
@@ -128,7 +128,7 @@ An extension that contradicts `--format` is an error.
 formats. The default is `512`. For rasterized formats (PNG, JPEG, WebP, AVIF)
 the value is capped at `2048`.
 
-```
+```sh
 dicebear create lorelei --format png --size 256 > alice.png
 ```
 
@@ -136,7 +136,7 @@ dicebear create lorelei --format png --size 256 > alice.png
 
 When creating PNG, JPEG, WebP, or AVIF images, you can include Exif metadata:
 
-```
+```sh
 dicebear create lorelei -o ./avatars --format png --exif
 ```
 
@@ -145,7 +145,7 @@ dicebear create lorelei -o ./avatars --format png --exif
 In directory mode, `--json` saves a JSON file with avatar metadata next to each
 image:
 
-```
+```sh
 dicebear create lorelei -o ./avatars --count 10 --format png --json
 ```
 
@@ -157,13 +157,13 @@ the metadata of a single avatar use `--format json` instead.
 Each avatar style has its own customization options. To see all available
 options for a specific style, use `--help`:
 
-```
+```sh
 dicebear create lorelei --help
 ```
 
 Example output:
 
-```
+```text
 dicebear create <style>
 
 Create avatars from a built-in style or a definition file
@@ -197,7 +197,7 @@ Options:
 
 List options take a comma-separated value or repeated flags:
 
-```
+```sh
 dicebear create lorelei --backgroundColor b6e3f4,c0aede,d1d4f9 --size 128
 dicebear create lorelei --backgroundColor b6e3f4 --backgroundColor c0aede
 ```
@@ -226,7 +226,7 @@ Before generating avatars, the CLI displays a license banner with information
 about the style's creator and license. The banner goes to stderr, so it never
 mixes with an avatar printed to stdout.
 
-```
+```text
 ----------------------------------------------------------------
 Lorelei by Lisa Wischofsky
 Homepage: https://www.instagram.com/lischi_art/
@@ -239,11 +239,11 @@ License: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
 
 For general help and the list of commands:
 
-```
+```sh
 dicebear --help
 ```
 
-```
+```text
 dicebear <command>
 
 Commands:
@@ -268,20 +268,20 @@ style, including your own custom styles or styles exported from
 
 Just pass the path to the JSON file instead of a style name:
 
-```
+```sh
 dicebear create ./my-style.json -o ./avatars
 ```
 
 All available options are automatically detected from the definition. Use
 `--help` to see them:
 
-```
+```sh
 dicebear create ./my-style.json --help
 ```
 
 Generate multiple avatars in PNG format:
 
-```
+```sh
 dicebear create ./my-style.json -o ./avatars --count 20 --format png
 ```
 
@@ -293,32 +293,32 @@ and its path data usually has a lot of room left. `optimize` runs the same
 [svgo](https://github.com/svg/svgo) pass over every element tree in the file.
 Without an output path the result goes to stdout:
 
-```
+```sh
 dicebear optimize ./my-style.json > ./my-style.min.json
 ```
 
 `-o` writes it to a file instead. Pointing `-o` at the source file rewrites it
 in place, and a size report goes to the terminal:
 
-```
+```sh
 dicebear optimize ./my-style.json -o ./my-style.json
 ```
 
-```
+```text
   my-style.json   25.5 KB -> 22.1 KB (-12.8%)
 ```
 
 Several definitions need a directory. Each file keeps its name, so this rewrites
 a whole source tree in place:
 
-```
+```sh
 dicebear optimize ./src/*.json -o ./src
 ```
 
 Use `--precision` to control how many decimals path and transform data keep. The
 default is `3`. Lower values compress harder at the cost of accuracy:
 
-```
+```sh
 dicebear optimize ./my-style.json -o ./my-style.json --precision 1
 ```
 
@@ -326,7 +326,7 @@ dicebear optimize ./my-style.json -o ./my-style.json --precision 1
 exits with a non-zero status if one is not. This is what you want in continuous
 integration:
 
-```
+```sh
 dicebear optimize ./src/*.json --check
 ```
 
@@ -347,7 +347,7 @@ Built-in styles have no definition file of their own and cannot be optimized.
 `compare` tells you whether a new version of a style still renders like the old
 one. Pass the earlier definition first:
 
-```
+```sh
 dicebear compare ./lorelei-v1.json ./lorelei.json
 ```
 
@@ -355,7 +355,7 @@ Two directories work too. Files are paired by name, and `.min.json` counts as
 `.json`, so the package build of every style can be checked against a source
 tree in one call:
 
-```
+```sh
 dicebear compare ./node_modules/@dicebear/styles/dist ./src
 ```
 
@@ -374,7 +374,7 @@ For every pair the CLI runs three checks:
 The renders are compared pixel by pixel. The result is a table with one row per
 style and a detail block for every style that changed:
 
-```
+```text
 Style      Seeds   Variants   Components   Colors       Result
 lorelei    2/20    1/133      +0 -1 ~1     +0 -0 ~1     changed
 bottts     0/20    0/53       -            -            identical
@@ -401,7 +401,7 @@ re-exported file and a hand-edited file can all render the same avatar.
 A re-export often moves a path by a fraction of a pixel. `--tolerance` sets the
 share of pixels, in percent, a render may differ by before it is reported:
 
-```
+```sh
 dicebear compare ./before ./after --tolerance 0.5
 ```
 
@@ -413,11 +413,11 @@ to `1` (lenient), and `--size` the render size in pixels (default `128`).
 `-o` writes the before, after and diff images of every reported render into a
 directory, one folder per style:
 
-```
+```sh
 dicebear compare ./before ./after -o ./diff
 ```
 
-```
+```text
 diff/lorelei/eyebrows-variant01.before.png
 diff/lorelei/eyebrows-variant01.after.png
 diff/lorelei/eyebrows-variant01.diff.png
@@ -427,7 +427,7 @@ diff/lorelei/eyebrows-variant01.diff.png
 
 `--json` prints the whole report as JSON for other tools:
 
-```
+```sh
 dicebear compare ./before ./after --json
 ```
 

@@ -4,40 +4,17 @@ description: >
   Free cartoon avatar generator with rounded faces, full hairstyles and big
   toothy smiles. Create Big Smile avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Big Smile
+<SiteStylePage styleName="big-smile">
 
-Big Smile is an illustrated vector avatar style with rounded cartoon faces, full
-hairstyles, and oversized toothy smiles. Generate cheerful SVG profile icons
-that stand out in user feeds and comment sections.
+Rounded cartoon faces with full hairstyles and oversized toothy smiles.
 
-<StylePreview styleName="big-smile" />
-
-<StyleDescription styleName="big-smile" />
-
-## Usage
-
-<StyleUsage styleName="big-smile" />
-
-## Presets
-
-<StylePresets styleName="big-smile" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="big-smile" />
-
-## Details
-
-<StyleInfo styleName="big-smile" />
+</SiteStylePage>

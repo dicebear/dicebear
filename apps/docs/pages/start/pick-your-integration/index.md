@@ -56,10 +56,11 @@ const highlights = [
 # Pick your integration
 
 DiceBear runs as an API, as a library in seven languages, as a CLI, as a
-browser-based editor, and as a plugin for Figma. They all produce identical
-avatars from the same seed, so this is not a decision you can get wrong, and you
-can switch later without your avatars changing. It's only a question of what
-fits your project best.
+browser-based editor, and as a plugin for Figma.
+
+They all produce identical avatars from the same seed, so this is not a decision
+you can get wrong, and you can switch later without your avatars changing. It's
+only a question of what fits your project best.
 
 Three questions narrow it down:
 

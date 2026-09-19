@@ -1,0 +1,140 @@
+/**
+ * The one token set of the site. Everything new reads these names. The
+ * palette is a cool blue-grey, brand blue is #0284C7.
+ */
+:root {
+  /* Surfaces */
+  --db-paper: #ffffff;
+  --db-panel: #ffffff;
+  --db-soft: #f1f4f6;
+  --db-tile: #eef2f5;
+  --db-line: #e4e9ed;
+
+  /* Text */
+  --db-ink: #0b1620;
+  --db-ink-2: #3e4c58;
+  --db-muted: #5f6d79;
+  --db-chevron: #a7b3bc;
+  --db-on-ink: #a9bac5;
+
+  /* Brand */
+  --db-brand: #0284c7;
+  --db-brand-text: #0369a1;
+  --db-tint: #e0f2fe;
+  --db-tint-text: #0369a1;
+
+  /* Controls */
+  --db-btn-bg: #0b1620;
+  --db-btn-fg: #ffffff;
+  --db-btn-hover: #26333f;
+  --db-btn-border: #c9d3da;
+  --db-hover-border: #a3b1bc;
+  --db-switch-bg: #e7ecf0;
+  --db-switch-border: #d5dde3;
+  --db-knob: #ffffff;
+
+  /* Status. Text colors pass AA on paper and panel. */
+  --db-ok: #15803d;
+  --db-ok-soft: #dcfce7;
+  --db-warn: #b45309;
+  --db-warn-soft: #fef3c7;
+  --db-danger: #b91c1c;
+  --db-danger-soft: #fee2e2;
+  --db-note: #6d28d9;
+  --db-note-soft: #ede9fe;
+
+  /* Code */
+  --db-code-bg: #f1f4f6;
+  --db-code-bar: #f1f4f6;
+  --db-code-line: #e4e9ed;
+  --db-code-ink: #0b1620;
+  --db-code-string: #9a3412;
+
+  /* Third-party marks that may only appear in black or white */
+  --db-logo-mono: #000000;
+
+  /* Shape */
+  --db-radius-1: 6px;
+  --db-radius-2: 8px;
+  --db-radius-3: 12px;
+  --db-radius-4: 16px;
+  --db-radius-5: 20px;
+  --db-radius-6: 24px;
+  --db-shadow-pop:
+    0 24px 48px -24px rgba(11, 22, 32, 0.35), 0 2px 8px rgba(11, 22, 32, 0.08);
+
+  /* Layout */
+  --db-header-h: 64px;
+  --db-container: 84rem;
+  --db-gutter: 2rem;
+
+  /* Type */
+  --db-font:
+    'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
+    sans-serif;
+  --db-font-mono:
+    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Motion */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 0.2s;
+  --duration-mid: 0.35s;
+  --duration-slow: 0.6s;
+  --duration-reveal: 0.8s;
+}
+
+.dark {
+  --db-paper: #0c141b;
+  --db-panel: #121c25;
+  --db-soft: #16202a;
+  /* Avatar tiles stay light, or styles drawn in black line work vanish. */
+  --db-tile: #e9eef2;
+  --db-line: #1e2a35;
+
+  --db-ink: #e6edf3;
+  --db-ink-2: #a9b7c3;
+  --db-muted: #8595a3;
+  --db-chevron: #5a6c7a;
+  --db-on-ink: #5c6b78;
+
+  --db-brand: #4cb3e6;
+  --db-brand-text: #7dd3fc;
+  --db-tint: #16354b;
+  --db-tint-text: #9fdbfa;
+
+  --db-btn-bg: #e6edf3;
+  --db-btn-fg: #0c141b;
+  --db-btn-hover: #ffffff;
+  --db-btn-border: #2e3d4a;
+  --db-hover-border: #465a6b;
+  --db-switch-bg: #22303c;
+  --db-switch-border: #2e3d4a;
+  --db-knob: #e6edf3;
+
+  --db-ok: #4ade80;
+  --db-ok-soft: #12301f;
+  --db-warn: #fbbf24;
+  --db-warn-soft: #33270b;
+  --db-danger: #f87171;
+  --db-danger-soft: #3a1618;
+  --db-note: #c4b5fd;
+  --db-note-soft: #261c45;
+
+  --db-code-bg: #16202a;
+  --db-code-bar: #16202a;
+  --db-code-line: #1e2a35;
+  --db-code-ink: #e6edf3;
+  --db-code-string: #fdba74;
+
+  --db-logo-mono: #ffffff;
+
+  --db-shadow-pop:
+    0 24px 48px -24px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --db-gutter: 1rem;
+  }
+}

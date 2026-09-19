@@ -1,0 +1,592 @@
+/**
+ * Rendered Markdown. The renderer's class names stay (.vp-doc, .custom-block,
+ * .vp-code-group, div.language-*), the look is ours. Element rules target
+ * direct children of the prose root and a few prose containers, so components
+ * mounted inside a docs page keep their own styles.
+ */
+// Icons come from Lucide. The files serve as masks, so the icon takes the
+// text color of the element it sits on.
+$icon-copy: url('lucide-static/icons/copy.svg');
+$icon-check: url('lucide-static/icons/check.svg');
+$icon-tip: url('lucide-static/icons/lightbulb.svg');
+$icon-info: url('lucide-static/icons/info.svg');
+$icon-warning: url('lucide-static/icons/triangle-alert.svg');
+$icon-danger: url('lucide-static/icons/octagon-alert.svg');
+$icon-chevron: url('lucide-static/icons/chevron-right.svg');
+$icon-external: url('lucide-static/icons/arrow-up-right.svg');
+
+@mixin icon($image, $size) {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: $size;
+  height: $size;
+  background: currentColor;
+  -webkit-mask: $image center / contain no-repeat;
+  mask: $image center / contain no-repeat;
+}
+
+.vp-doc {
+  font-size: 17px;
+  line-height: 28px;
+  color: var(--db-ink-2);
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  /* The renderer wraps the page in one div, its children are the blocks. */
+  /* :not(:first-child) rather than * + *, so the rule outranks the scoped
+     margin reset of a component mounted between two blocks. */
+  > div > :not(:first-child) {
+    margin-top: 22px;
+  }
+
+  > div > h2:not(:first-child) {
+    margin-top: 54px;
+  }
+
+  > div > h3:not(:first-child) {
+    margin-top: 34px;
+  }
+
+  > div > :is(h4, h5, h6):not(:first-child) {
+    margin-top: 28px;
+  }
+
+  > div > hr:not(:first-child) {
+    margin-top: 40px;
+  }
+
+  /* Headings */
+  > div > h1 {
+    font-size: 48px;
+    line-height: 52px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--db-ink);
+    text-wrap: balance;
+
+    @media (max-width: 767px) {
+      font-size: 32px;
+      line-height: 36px;
+    }
+  }
+
+  /* The paragraph under the title is the lead. */
+  > div > h1 + p {
+    font-size: 20px;
+    line-height: 32px;
+
+    @media (max-width: 767px) {
+      font-size: 18px;
+      line-height: 30px;
+    }
+  }
+
+  > div > h2 {
+    font-size: 32px;
+    line-height: 38px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--db-ink);
+    text-wrap: balance;
+
+    @media (max-width: 767px) {
+      font-size: 24px;
+      line-height: 30px;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  > div > h3 {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--db-ink);
+  }
+
+  > div > h4,
+  > div > h5,
+  > div > h6 {
+    font-size: 17px;
+    line-height: 28px;
+    font-weight: 600;
+    color: var(--db-ink);
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: calc(var(--db-header-h) + 24px);
+  }
+
+  .header-anchor {
+    margin-left: 10px;
+    font-weight: 500;
+    color: var(--db-brand-text);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+
+    &::before {
+      content: '#';
+    }
+  }
+
+  :where(h1, h2, h3, h4, h5, h6):hover .header-anchor,
+  .header-anchor:focus-visible {
+    opacity: 1;
+  }
+
+  /* Text */
+  :where(p, li, td, th, blockquote, summary, h1, h2, h3, h4)
+    > a:not(.header-anchor),
+  :where(p, li, td) > :where(strong, em) > a {
+    color: var(--db-brand-text);
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  :where(p, li, td, th, blockquote, summary)
+    > a[target='_blank']:not(.no-icon, .no-external-icon, :has(img, svg))::after {
+    @include icon($icon-external, 0.95em);
+    margin-left: 0.2em;
+    vertical-align: -0.02em;
+    color: var(--db-muted);
+  }
+
+  :where(p, li, td) > :where(strong, b) {
+    color: var(--db-ink);
+  }
+
+  > div > ul,
+  > div > ol,
+  :where(.custom-block, details, li, blockquote) :where(ul, ol) {
+    padding-left: 1.25rem;
+  }
+
+  > div > ul,
+  :where(.custom-block, details, li, blockquote) ul {
+    list-style: disc;
+  }
+
+  > div > ol,
+  :where(.custom-block, details, li, blockquote) ol {
+    list-style: decimal;
+  }
+
+  > div > :where(ul, ol) li + li,
+  > div > :where(ul, ol) li > :where(ul, ol) {
+    margin-top: 8px;
+  }
+
+  > div > :where(ul, ol) li::marker {
+    color: var(--db-muted);
+  }
+
+  > div > blockquote {
+    padding-left: 20px;
+    color: var(--db-muted);
+
+    > * + * {
+      margin-top: 12px;
+    }
+  }
+
+  > div > hr {
+    border-top: 1px solid var(--db-line);
+  }
+
+  > div > p > img,
+  > div > img {
+    border-radius: var(--db-radius-3);
+  }
+
+  :where(p, li, td, th, summary, h1, h2, h3, h4, strong, .custom-block-title)
+    > code,
+  :where(p, li, td, th, summary) > a > code {
+    padding: 2px 6px;
+    border-radius: var(--db-radius-1);
+    background: var(--db-soft);
+    font-size: 0.875em;
+    color: var(--db-ink);
+    overflow-wrap: anywhere;
+  }
+
+  :where(p, li, td) > kbd {
+    padding: 2px 6px;
+    border: 1px solid var(--db-line);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.8em;
+    font-weight: 500;
+  }
+
+  /* Tables: hairlines, no fills */
+  > div > table,
+  :where(.custom-block, details) table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      padding: 0 16px 10px 0;
+      border-bottom: 1px solid var(--db-line);
+      text-align: left;
+      vertical-align: bottom;
+      font-size: 13px;
+      line-height: 18px;
+      font-weight: 600;
+      color: var(--db-muted);
+    }
+
+    td {
+      padding: 12px 16px 12px 0;
+      border-top: 1px solid var(--db-line);
+      vertical-align: top;
+      font-size: 15px;
+      line-height: 24px;
+    }
+
+    tbody tr:first-child td {
+      border-top: 0;
+    }
+
+    th:last-child,
+    td:last-child {
+      padding-right: 0;
+    }
+
+    @media (max-width: 767px) {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+
+  /* Code blocks: a framed box with a language row and the copy button */
+  div[class*='language-'] {
+    position: relative;
+    border: 1px solid var(--db-line);
+    border-radius: 14px;
+    background: var(--db-code-bg);
+    overflow: hidden;
+
+    > span.lang {
+      position: absolute;
+      top: 0;
+      left: 16px;
+      height: 40px;
+      font-family: var(--db-font-mono);
+      font-size: 12px;
+      line-height: 40px;
+      color: var(--db-muted);
+    }
+
+    > button.copy {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--db-radius-2);
+      color: var(--db-muted);
+      transition:
+        background-color 0.12s,
+        color 0.12s;
+
+      &::after {
+        @include icon($icon-copy, 16px);
+      }
+
+      &:hover {
+        background: var(--db-switch-bg);
+        color: var(--db-ink);
+      }
+
+      &.copied::after {
+        -webkit-mask-image: $icon-check;
+        mask-image: $icon-check;
+      }
+
+      &.copied::before {
+        content: attr(data-copied);
+        position: absolute;
+        right: calc(100% + 6px);
+        padding: 6px 10px;
+        border-radius: var(--db-radius-2);
+        background: var(--db-ink);
+        color: var(--db-paper);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 16px;
+        white-space: nowrap;
+      }
+    }
+
+    > pre {
+      margin-top: 40px;
+      padding: 16px 0 18px;
+      border-top: 1px solid var(--db-code-line);
+      overflow-x: auto;
+      font-size: 14px;
+      line-height: 24px;
+      color: var(--db-code-ink);
+
+      @media (max-width: 767px) {
+        font-size: 13px;
+      }
+    }
+
+    > pre > code {
+      display: block;
+      width: fit-content;
+      min-width: 100%;
+      padding: 0 20px;
+    }
+
+    code .highlighted {
+      display: inline-block;
+      width: calc(100% + 40px);
+      margin: 0 -20px;
+      padding: 0 20px;
+      background: color-mix(in srgb, var(--db-brand) 10%, transparent);
+    }
+
+    code .diff {
+      display: inline-block;
+      width: calc(100% + 40px);
+      margin: 0 -20px;
+      padding: 0 20px;
+    }
+
+    code .diff.add {
+      background: color-mix(in srgb, var(--db-ok) 14%, transparent);
+    }
+
+    code .diff.remove {
+      background: color-mix(in srgb, var(--db-danger) 14%, transparent);
+      opacity: 0.75;
+    }
+
+    .has-focused-lines .line:not(.has-focus) {
+      opacity: 0.45;
+      transition: opacity 0.2s;
+    }
+
+    &:hover .has-focused-lines .line:not(.has-focus) {
+      opacity: 1;
+    }
+  }
+
+  /* Code groups: the same frame with tabs in the top row */
+  .vp-code-group {
+    border: 1px solid var(--db-line);
+    border-radius: 14px;
+    background: var(--db-code-bg);
+    overflow: hidden;
+
+    .tabs {
+      display: flex;
+      height: 44px;
+      padding: 0 46px 0 8px;
+      border-bottom: 1px solid var(--db-code-line);
+      overflow-x: auto;
+
+      input {
+        position: fixed;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      label {
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        border-bottom: 2px solid transparent;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--db-muted);
+        white-space: nowrap;
+        cursor: pointer;
+        transition: color 0.12s;
+
+        &:hover {
+          color: var(--db-ink);
+        }
+      }
+
+      input:checked + label {
+        border-bottom-color: var(--db-brand);
+        font-weight: 600;
+        color: var(--db-ink);
+      }
+
+      input:focus-visible + label {
+        outline: 2px solid var(--db-brand);
+        outline-offset: -2px;
+      }
+    }
+
+    .blocks > div[class*='language-'] {
+      display: none;
+      border: 0;
+      border-radius: 0;
+      overflow: visible;
+
+      &.active {
+        display: block;
+      }
+
+      > span.lang {
+        display: none;
+      }
+
+      > button.copy {
+        top: -38px;
+      }
+
+      > pre {
+        margin-top: 0;
+        border-top: 0;
+      }
+    }
+  }
+
+  /* Callouts: a framed box, the kind shows in the icon and label */
+  .custom-block {
+    padding: 18px 20px;
+    border: 1px solid var(--db-line);
+    border-radius: 14px;
+    background: var(--db-paper);
+    font-size: 16px;
+    line-height: 26px;
+
+    > * + * {
+      margin-top: 8px;
+    }
+
+    .custom-block-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      line-height: 24px;
+      font-weight: 600;
+      color: var(--db-brand-text);
+
+      &::before {
+        @include icon($icon-info, 18px);
+      }
+    }
+
+    &.tip .custom-block-title,
+    &.important .custom-block-title {
+      color: var(--db-ok);
+
+      &::before {
+        -webkit-mask-image: $icon-tip;
+        mask-image: $icon-tip;
+      }
+    }
+
+    &.warning .custom-block-title,
+    &.caution .custom-block-title {
+      color: var(--db-warn);
+
+      &::before {
+        -webkit-mask-image: $icon-warning;
+        mask-image: $icon-warning;
+      }
+    }
+
+    &.danger .custom-block-title {
+      color: var(--db-danger);
+
+      &::before {
+        -webkit-mask-image: $icon-danger;
+        mask-image: $icon-danger;
+      }
+    }
+  }
+
+  details.custom-block {
+    padding: 0;
+
+    > summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      font-weight: 600;
+      color: var(--db-ink);
+      list-style: none;
+      cursor: pointer;
+      transition: color 0.12s;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::before {
+        @include icon($icon-chevron, 16px);
+        color: var(--db-muted);
+        transition: transform 0.15s;
+      }
+
+      &:hover,
+      &:hover::before {
+        color: var(--db-brand-text);
+      }
+    }
+
+    &[open] > summary::before {
+      transform: rotate(90deg);
+    }
+
+    > summary ~ * {
+      margin-top: 14px;
+      margin-left: 46px;
+      margin-right: 20px;
+    }
+
+    > summary + * {
+      margin-top: 0;
+    }
+
+    > :last-child:not(summary) {
+      margin-bottom: 20px;
+    }
+  }
+
+  .footnotes {
+    margin-top: 48px;
+    font-size: 15px;
+    line-height: 24px;
+  }
+}
+
+/* Shiki ships both themes as custom properties, the page picks one. */
+.dark .shiki span {
+  color: var(--shiki-dark, inherit);
+  font-style: var(--shiki-dark-font-style, inherit);
+  font-weight: var(--shiki-dark-font-weight, inherit);
+}
+
+html:not(.dark) .shiki span {
+  color: var(--shiki-light, inherit);
+  font-style: var(--shiki-light-font-style, inherit);
+  font-weight: var(--shiki-light-font-weight, inherit);
+}
+
+.shiki span {
+  unicode-bidi: isolate;
+}

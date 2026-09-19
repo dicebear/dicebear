@@ -4,40 +4,18 @@ description: >
   Free mood avatar generator: pastel shapes with faces from cheerful to sleepy
   to grumpy. Create Moods avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Moods
+<SiteStylePage styleName="moods">
 
-Moods is a friendly vector avatar style of soft pastel shapes with simple faces
-that range from cheerful to sleepy to grumpy. Generate expressive SVG profile
-icons for chat apps, feedback tools, and communities.
+Soft pastel shapes with simple faces that range from cheerful to sleepy to
+grumpy.
 
-<StylePreview styleName="moods" />
-
-<StyleDescription styleName="moods" />
-
-## Usage
-
-<StyleUsage styleName="moods" />
-
-## Presets
-
-<StylePresets styleName="moods" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="moods" />
-
-## Details
-
-<StyleInfo styleName="moods" />
+</SiteStylePage>

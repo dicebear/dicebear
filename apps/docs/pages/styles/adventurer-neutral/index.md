@@ -4,40 +4,18 @@ description: >
   Cartoon face avatar generator: eyes, eyebrows and mouth on a solid background,
   no head or hair. Create Adventurer Neutral avatars with the DiceBear avatar
   API or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Adventurer Neutral
+<SiteStylePage styleName="adventurer-neutral">
 
-Adventurer Neutral is a reduced variant of the Adventurer style, showing only
-the eyes, eyebrows, and mouth on a solid background, with no head outline or
-hair.
+The Adventurer face on its own: eyes, eyebrows and mouth on a solid background,
+without head outline or hair.
 
-<StylePreview styleName="adventurer-neutral" />
-
-<StyleDescription styleName="adventurer-neutral" />
-
-## Usage
-
-<StyleUsage styleName="adventurer-neutral" />
-
-## Presets
-
-<StylePresets styleName="adventurer-neutral" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="adventurer-neutral" />
-
-## Details
-
-<StyleInfo styleName="adventurer-neutral" />
+</SiteStylePage>

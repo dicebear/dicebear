@@ -3,40 +3,17 @@ title: Landscape – Avatar Style
 description: >
   Free landscape avatar generator with layered mountain ridges under a soft sun.
   Create Landscape avatars with the DiceBear avatar API or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Landscape
+<SiteStylePage styleName="landscape">
 
-Landscape is a scenic vector avatar style that stacks wavy mountain ridges
-beneath a sun in soft daylight palettes. Generate peaceful SVG profile icons
-that stand out in interfaces full of faces.
+Wavy mountain ridges stacked beneath a sun in soft daylight palettes.
 
-<StylePreview styleName="landscape" />
-
-<StyleDescription styleName="landscape" />
-
-## Usage
-
-<StyleUsage styleName="landscape" />
-
-## Presets
-
-<StylePresets styleName="landscape" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="landscape" />
-
-## Details
-
-<StyleInfo styleName="landscape" />
+</SiteStylePage>

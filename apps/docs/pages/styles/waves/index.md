@@ -4,40 +4,17 @@ description: >
   Free abstract avatar generator that layers rippling wave bands in shades of
   one color. Create Waves avatars with the DiceBear avatar API or JavaScript
   library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Waves
+<SiteStylePage styleName="waves">
 
-Waves is an abstract vector avatar style that layers rippling wave bands in
-shades of a single color. Generate serene SVG profile icons that work as avatar
-placeholders or decorative backgrounds.
+Rippling wave bands layered in shades of a single color.
 
-<StylePreview styleName="waves" />
-
-<StyleDescription styleName="waves" />
-
-## Usage
-
-<StyleUsage styleName="waves" />
-
-## Presets
-
-<StylePresets styleName="waves" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="waves" />
-
-## Details
-
-<StyleInfo styleName="waves" />
+</SiteStylePage>

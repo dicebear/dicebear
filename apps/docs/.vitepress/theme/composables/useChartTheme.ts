@@ -10,23 +10,25 @@ export function useChartTheme() {
 
   function tooltipConfig() {
     return {
-      backgroundColor: isDark.value ? '#1a1a1a' : '#fff',
-      titleColor: isDark.value ? '#e5e5e5' : '#333',
-      bodyColor: isDark.value ? '#ccc' : '#666',
-      borderColor: isDark.value ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+      // A canvas cannot read custom properties, so these repeat the tokens
+      // panel, muted, ink and line.
+      backgroundColor: isDark.value ? '#121c25' : '#ffffff',
+      titleColor: isDark.value ? '#8595a3' : '#5f6d79',
+      bodyColor: isDark.value ? '#e6edf3' : '#0b1620',
+      borderColor: isDark.value ? '#1e2a35' : '#e4e9ed',
       borderWidth: 1,
       padding: 12,
     };
   }
 
   function gridColor() {
-    return isDark.value ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+    return isDark.value ? '#1e2a35' : '#e4e9ed';
   }
 
-  function tickColor(opacity = 0.4) {
+  function tickColor(opacity = 1) {
     return isDark.value
-      ? `rgba(255,255,255,${opacity})`
-      : `rgba(0,0,0,${opacity})`;
+      ? `rgba(133,149,163,${opacity})`
+      : `rgba(95,109,121,${opacity})`;
   }
 
   return { chartKey, tooltipConfig, gridColor, tickColor };

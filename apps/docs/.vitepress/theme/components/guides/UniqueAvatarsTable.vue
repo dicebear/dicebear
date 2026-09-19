@@ -94,13 +94,54 @@ function sortIndicator(column: SortColumn): string {
   </table>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  padding: 0 16px 10px 0;
+  border-bottom: 1px solid var(--db-line);
+  text-align: left;
+  vertical-align: bottom;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--db-muted);
+}
+
+td {
+  padding: 12px 16px 12px 0;
+  border-top: 1px solid var(--db-line);
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--db-ink-2);
+}
+
+tbody tr:first-child td {
+  border-top: 0;
+}
+
+th:last-child,
+td:last-child {
+  padding-right: 0;
+}
+
 .numeric {
   text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .sortable {
   cursor: pointer;
   user-select: none;
+  transition: color 0.12s;
+
+  &:hover,
+  &[aria-sort='ascending'],
+  &[aria-sort='descending'] {
+    color: var(--db-ink);
+  }
 }
 </style>

@@ -4,40 +4,18 @@ description: >
   Hand-drawn face avatar generator: eyes, nose and mouth in delicate ink lines,
   no head or hair. Create Lorelei Neutral avatars with the DiceBear avatar API
   or JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Lorelei Neutral
+<SiteStylePage styleName="lorelei-neutral">
 
-Lorelei Neutral is a reduced variant of the Lorelei style, drawing only the
-eyes, nose, and mouth in delicate ink lines on a plain background, with no head
-outline or hair.
+The Lorelei face on its own: eyes, nose and mouth in delicate ink lines on a
+plain background, without head outline or hair.
 
-<StylePreview styleName="lorelei-neutral" />
-
-<StyleDescription styleName="lorelei-neutral" />
-
-## Usage
-
-<StyleUsage styleName="lorelei-neutral" />
-
-## Presets
-
-<StylePresets styleName="lorelei-neutral" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="lorelei-neutral" />
-
-## Details
-
-<StyleInfo styleName="lorelei-neutral" />
+</SiteStylePage>

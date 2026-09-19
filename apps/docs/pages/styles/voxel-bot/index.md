@@ -4,40 +4,18 @@ description: >
   Free voxel robot avatar generator with glowing screen faces and two-tone
   blocky bodies. Create Voxel Bot avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Voxel Bot
+<SiteStylePage styleName="voxel-bot">
 
-Voxel Bot is a blocky vector avatar style of small 3D robots with glowing screen
-faces, antennas, and two-tone bodies. Generate friendly SVG robot icons for
-developer tools, chat bots, and tech products.
+Small 3D robots built from cubes, with glowing screen faces, antennas and
+two-tone bodies.
 
-<StylePreview styleName="voxel-bot" />
-
-<StyleDescription styleName="voxel-bot" />
-
-## Usage
-
-<StyleUsage styleName="voxel-bot" />
-
-## Presets
-
-<StylePresets styleName="voxel-bot" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="voxel-bot" />
-
-## Details
-
-<StyleInfo styleName="voxel-bot" />
+</SiteStylePage>

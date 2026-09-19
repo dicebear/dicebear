@@ -4,41 +4,18 @@ description: >
   Free Avataaars avatar generator: cartoon characters with hairstyles, clothing
   and accessories. Create Avataaars avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Avataaars
+<SiteStylePage styleName="avataaars">
 
-Avataaars is a popular cartoon vector avatar style with half-body characters and
-a wide range of hairstyles, clothing, accessories, and facial expressions.
-Generate customizable SVG profile icons for user accounts, dashboards, and
-social applications.
+Cartoon half-body characters with a wide range of hairstyles, clothing,
+accessories and expressions.
 
-<StylePreview styleName="avataaars" />
-
-<StyleDescription styleName="avataaars" />
-
-## Usage
-
-<StyleUsage styleName="avataaars" />
-
-## Presets
-
-<StylePresets styleName="avataaars" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="avataaars" />
-
-## Details
-
-<StyleInfo styleName="avataaars" />
+</SiteStylePage>

@@ -8,8 +8,10 @@ description: >
 # Create an avatar style from scratch
 
 We highly recommend our [plugin for Figma](/create-styles/with-figma/) to create
-an avatar style. Most of DiceBear's official avatar styles were created with the
-plugin. But you can also create an avatar style by writing a JSON
+an avatar style.
+
+Most of DiceBear's official avatar styles were created with the plugin. But you
+can also create an avatar style by writing a JSON
 [definition file](/create-styles/definition-schema/) by hand.
 
 ## Minimal example
@@ -44,7 +46,7 @@ A minimal style definition with a colored circle:
 
 Save this as `my-style.json` and test it:
 
-```
+```sh
 dicebear ./my-style.json ./output --count 5
 ```
 
@@ -331,7 +333,7 @@ validation for your definition file.
 
 ### With the CLI
 
-```
+```sh
 dicebear ./my-style.json ./output --count 10
 dicebear ./my-style.json ./output --seed "Alice" --format png
 ```

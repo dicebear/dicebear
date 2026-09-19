@@ -4,42 +4,18 @@ description: >
   Free silhouette avatar generator: a bust in one ink with hats and hairstyles
   on a pale ground. Create Shadows avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Shadows
+<SiteStylePage styleName="shadows">
 
-Shadows draws a bust as one filled silhouette, all of it in a single ink on a
-pale ground. Seven shoulder lines and five head shapes meet a hat or a hairstyle
-on three of four seeds, and the top sits behind the head so the two merge into
-one outline. There are eleven inks and ten backgrounds. Generate calm,
-high-contrast placeholder avatars for user lists and comment threads.
+A bust as one filled silhouette in a single ink on a pale ground. A hat or
+hairstyle sits behind the head on most seeds, so the two merge into one outline.
 
-<StylePreview styleName="shadows" />
-
-<StyleDescription styleName="shadows" />
-
-## Usage
-
-<StyleUsage styleName="shadows" />
-
-## Presets
-
-<StylePresets styleName="shadows" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="shadows" />
-
-## Details
-
-<StyleInfo styleName="shadows" />
+</SiteStylePage>

@@ -4,40 +4,18 @@ description: >
   Doodle face avatar generator: eyes, nose and mouth in loose ink lines, no head
   or hair. Create Croodles Neutral avatars with the DiceBear avatar API or
   JavaScript library.
-outline: [2, 3]
+layout: page
+sidebar: false
+aside: false
 ---
 
 <script setup lang="ts">
-import StylePreview from "@theme/components/styles/StylePreview.vue";
-import StyleInfo from "@theme/components/styles/StyleInfo.vue";
-import StyleDescription from "@theme/components/styles/StyleDescription.vue";
-import StyleUsage from "@theme/components/styles/StyleUsage.vue";
-import StylePresets from "@theme/components/styles/StylePresets.vue";
-import StyleOptions from "@theme/components/styles/StyleOptions.vue";
+import SiteStylePage from "@theme/components/site/SiteStylePage.vue";
 </script>
 
-# Croodles Neutral
+<SiteStylePage styleName="croodles-neutral">
 
-Croodles Neutral is a reduced variant of the Croodles style, drawing only the
-eyes, nose, and mouth in loose black ink lines on a plain background, with no
-head outline or hair.
+The Croodles face on its own: eyes, nose and mouth in loose ink lines on a plain
+background, without head outline or hair.
 
-<StylePreview styleName="croodles-neutral" />
-
-<StyleDescription styleName="croodles-neutral" />
-
-## Usage
-
-<StyleUsage styleName="croodles-neutral" />
-
-## Presets
-
-<StylePresets styleName="croodles-neutral" :limit="5" />
-
-## Options
-
-<StyleOptions styleName="croodles-neutral" />
-
-## Details
-
-<StyleInfo styleName="croodles-neutral" />
+</SiteStylePage>
