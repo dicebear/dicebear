@@ -30,12 +30,6 @@ const active = computed(
     isActive(page.value.relativePath, '', props.item.link, false, true),
 );
 
-const containsActive = computed(
-  () =>
-    children.value.length > 0 &&
-    hasActiveLink(page.value.relativePath, '', children.value, true),
-);
-
 const foldable = computed(() => children.value.length > 0);
 
 const isOpen = computed(() => props.open === true);
@@ -59,9 +53,7 @@ const activeChild = computed(() =>
   ),
 );
 
-const openChild = ref(
-  activeChild.value ? keyOf(activeChild.value) : undefined,
-);
+const openChild = ref(activeChild.value ? keyOf(activeChild.value) : undefined);
 
 function toggleChild(key: string) {
   openChild.value = openChild.value === key ? undefined : key;
@@ -90,7 +82,11 @@ watch(activeChild, (child) => {
       @click="toggle"
     >
       {{ item.text }}
-      <ChevronRight :size="14" aria-hidden="true" class="docs-sidebar-chevron" />
+      <ChevronRight
+        :size="14"
+        aria-hidden="true"
+        class="docs-sidebar-chevron"
+      />
     </button>
     <span v-else class="docs-sidebar-row">
       <a

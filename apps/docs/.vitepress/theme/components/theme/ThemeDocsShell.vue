@@ -59,10 +59,7 @@ onKeyStroke('Escape', () => {
 </script>
 
 <template>
-  <div
-    v-if="hasSidebar || (hasAside && items.length)"
-    class="docs-local-nav"
-  >
+  <div v-if="hasSidebar || (hasAside && items.length)" class="docs-local-nav">
     <button
       v-if="hasSidebar"
       type="button"

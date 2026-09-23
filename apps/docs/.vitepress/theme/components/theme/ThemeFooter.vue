@@ -104,7 +104,10 @@ function licenseName(name?: string) {
         </nav>
       </div>
 
-      <section class="theme-footer-credits" aria-label="Styles by other artists">
+      <section
+        class="theme-footer-credits"
+        aria-label="Styles by other artists"
+      >
         <div class="theme-footer-credits-head">
           <h3>Styles by other artists</h3>
           <span>

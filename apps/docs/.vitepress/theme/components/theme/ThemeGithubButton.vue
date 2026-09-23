@@ -23,7 +23,9 @@ const stars = computed(
     class="theme-github hv-primary"
     :class="{ 'theme-github-compact': compact }"
     :aria-label="
-      stars ? `Star DiceBear on GitHub, ${stars} stars` : 'Star DiceBear on GitHub'
+      stars
+        ? `Star DiceBear on GitHub, ${stars} stars`
+        : 'Star DiceBear on GitHub'
     "
   >
     <UiIcon :path="siGithub.path" :size="18" aria-hidden="true" />

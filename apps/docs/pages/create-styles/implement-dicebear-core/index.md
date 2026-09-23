@@ -1006,7 +1006,7 @@ After the body has been rendered and wrapped, and before `<defs>` is serialized,
 register the accumulated CSS as one more `<defs>` entry if at least one
 keyframes block exists:
 
-```html
+```text
 <style>@media (prefers-reduced-motion:no-preference){<keyframes blocks in registration order><class rules in emission order>}</style>
 ```
 

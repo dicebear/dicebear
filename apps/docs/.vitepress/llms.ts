@@ -808,9 +808,7 @@ async function buildPage(
     );
     const list = tools
       .map((tool) => {
-        const href = tool.href.startsWith('/')
-          ? siteUrl(tool.href)
-          : tool.href;
+        const href = tool.href.startsWith('/') ? siteUrl(tool.href) : tool.href;
         const text = tool.text.replace(/<\/?code>/g, '`');
 
         return `- [${tool.name}](${href}): ${text}`;
