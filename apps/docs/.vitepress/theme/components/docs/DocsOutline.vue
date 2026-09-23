@@ -49,9 +49,9 @@ a {
   margin-left: -1px;
   padding: 4px 0 4px 14px;
   border-left: 2px solid transparent;
-  font-size: 16px;
-  line-height: 26px;
-  color: var(--db-ink-2);
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--db-muted);
 
   &.is-active {
     border-left-color: var(--db-brand);

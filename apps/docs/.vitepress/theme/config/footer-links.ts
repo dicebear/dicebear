@@ -28,7 +28,7 @@ function buildLegalLink(
   return { label, href: rawHref, external: isExternal || undefined };
 }
 
-const legalLinks: FooterLink[] = [
+export const legalLinks: FooterLink[] = [
   { label: 'Licenses', href: '/licenses/' },
   buildLegalLink('Privacy Policy', import.meta.env.VITE_PRIVACY_POLICY_URL),
   buildLegalLink('Cookie Policy', import.meta.env.VITE_COOKIE_POLICY_URL),

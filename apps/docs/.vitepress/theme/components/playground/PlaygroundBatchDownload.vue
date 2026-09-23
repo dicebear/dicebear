@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Many avatars at once: random seeds or a pasted list, a look at the first
+ * of them, the format, and one ZIP.
+ */
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { Download, Shuffle } from '@lucide/vue';
 import JSZip from 'jszip';
@@ -12,11 +16,13 @@ import PlaygroundThumb from './PlaygroundThumb.vue';
 import useStore from '@theme/stores/playground';
 import { clonePlain, loadAvatarStyle } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
+import { DOWNLOAD_AVATAR_SIZE } from './constants';
 
 const SEED_CAP = 500;
 const PREVIEW_LIMIT = 12;
 
 type Mode = 'paste' | 'random';
+type Format = 'svg' | 'png' | 'jpeg' | 'webp';
 
 const store = useStore();
 
@@ -25,8 +31,19 @@ const modeOptions: { label: string; value: Mode }[] = [
   { label: 'Random', value: 'random' },
   { label: 'Paste', value: 'paste' },
 ];
+
+// The raster formats are drawn in the browser, so the list is what a canvas
+// can encode.
+const format = ref<Format>('svg');
+const formatOptions: { label: string; value: Format }[] = [
+  { label: 'SVG', value: 'svg' },
+  { label: 'PNG', value: 'png' },
+  { label: 'JPEG', value: 'jpeg' },
+  { label: 'WebP', value: 'webp' },
+];
+
 const seedsInput = ref('');
-const randomCount = ref(12);
+const randomCount = ref(24);
 const randomSeeds = ref<string[]>([]);
 
 function generateRandomSeeds(n: number): string[] {
@@ -94,7 +111,7 @@ const generateLabel = computed(() => {
     return `Bundling ${progress.value.done} / ${progress.value.total}…`;
   }
   if (seedCount.value === 0) return 'Add seeds to begin';
-  return `Download ${seedCount.value} SVG${seedCount.value === 1 ? '' : 's'} as ZIP`;
+  return `Download ${seedCount.value} file${seedCount.value === 1 ? '' : 's'}`;
 });
 
 const cleanStyleName = computed(() =>
@@ -125,15 +142,68 @@ async function onTextareaEnter(event: KeyboardEvent) {
   ta.scrollTop = ta.scrollHeight;
 }
 
-function safeName(seed: string, used: Set<string>): string {
+function safeName(seed: string, used: Set<string>, ext: string): string {
   // eslint-disable-next-line no-control-regex
   const cleaned = seed.replace(/[/\\:*?"<>|\x00-\x1f]/g, '-').slice(0, 200);
   const base = cleaned || 'avatar';
-  let name = `${base}.svg`;
+  let name = `${base}.${ext}`;
   let i = 2;
-  while (used.has(name)) name = `${base}-${i++}.svg`;
+  while (used.has(name)) name = `${base}-${i++}.${ext}`;
   used.add(name);
   return name;
+}
+
+const MIME: Record<Exclude<Format, 'svg'>, string> = {
+  png: 'image/png',
+  jpeg: 'image/jpeg',
+  webp: 'image/webp',
+};
+
+// The SVG drawn onto a canvas of the download size. JPEG has no
+// transparency, so it gets a white ground first.
+async function rasterize(svg: string, kind: Exclude<Format, 'svg'>) {
+  const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+
+  try {
+    const image = new Image();
+
+    await new Promise<void>((resolve, reject) => {
+      image.onload = () => resolve();
+      image.onerror = () => reject(new Error('The avatar could not be drawn.'));
+      image.src = url;
+    });
+
+    const canvas = document.createElement('canvas');
+    const size = DOWNLOAD_AVATAR_SIZE;
+
+    canvas.width = size;
+    canvas.height = size;
+
+    const context = canvas.getContext('2d');
+
+    if (!context) throw new Error('The avatar could not be drawn.');
+
+    if (kind === 'jpeg') {
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, size, size);
+    }
+
+    context.drawImage(image, 0, 0, size, size);
+
+    return await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (blob) =>
+          blob
+            ? resolve(blob)
+            : reject(
+                new Error(`The browser cannot write ${kind.toUpperCase()}.`),
+              ),
+        MIME[kind],
+      );
+    });
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 let aborted = false;
@@ -155,14 +225,28 @@ async function generate() {
 
     const zip = new JSZip();
     const used = new Set<string>();
+    const kind = format.value;
     // The options object is deep-reactive. Nested arrays are proxies, and the
     // structuredClone inside Avatar refuses those.
     const baseOptions = clonePlain(store.avatarStyleOptionsWithoutDefaults);
 
     for (const seed of seeds.value) {
       if (aborted) return;
-      const svg = new Avatar(style, { ...baseOptions, seed }).toString();
-      zip.file(safeName(seed, used), svg);
+
+      if (kind === 'svg') {
+        const svg = new Avatar(style, { ...baseOptions, seed }).toString();
+
+        zip.file(safeName(seed, used, 'svg'), svg);
+      } else {
+        const svg = new Avatar(style, {
+          ...baseOptions,
+          size: DOWNLOAD_AVATAR_SIZE,
+          seed,
+        }).toString();
+
+        zip.file(safeName(seed, used, kind), await rasterize(svg, kind));
+      }
+
       progress.value = {
         done: progress.value.done + 1,
         total: seedCount.value,
@@ -188,49 +272,51 @@ async function generate() {
 const previewLabel = computed(() =>
   seedCount.value > PREVIEW_LIMIT
     ? `First ${PREVIEW_LIMIT} of ${seedCount.value}`
-    : `All ${seedCount.value} avatar${seedCount.value === 1 ? '' : 's'}`,
+    : `${seedCount.value} avatar${seedCount.value === 1 ? '' : 's'}`,
 );
 
 // The confirmation belongs to the list it was downloaded for.
-watch(seeds, () => (successState.value = false));
+watch([seeds, format], () => (successState.value = false));
 </script>
 
 <template>
   <div class="pg-batch">
-    <SiteSegmented
-      v-model="mode"
-      class="pg-batch-mode"
-      :options="modeOptions"
-      aria-label="Seed source"
-      size="sm"
-      fluid
-    />
-
-    <div v-if="mode === 'random'" class="pg-batch-random">
-      <SiteNumberField
-        :model-value="randomCount"
-        class="pg-batch-count"
-        :min="1"
-        :max="SEED_CAP"
-        :step="1"
-        aria-label="Number of random seeds"
-        @update:model-value="onRandomCount"
+    <div class="pg-batch-source">
+      <SiteSegmented
+        v-model="mode"
+        class="pg-batch-mode"
+        :options="modeOptions"
+        aria-label="Seed source"
+        fluid
       />
-      <span class="pg-batch-random-suffix">
-        random seed{{ randomCount === 1 ? '' : 's' }}
-      </span>
-      <button
-        type="button"
-        class="site-btn site-btn-secondary pg-batch-shuffle"
-        aria-label="Regenerate random seeds"
-        @click="shuffleRandom"
-      >
-        <Shuffle :size="16" aria-hidden="true" />
-        Shuffle
-      </button>
+
+      <template v-if="mode === 'random'">
+        <SiteNumberField
+          :model-value="randomCount"
+          class="pg-batch-count"
+          :min="1"
+          :max="SEED_CAP"
+          :step="1"
+          suffix="seeds"
+          show-buttons
+          aria-label="Number of random seeds"
+          @update:model-value="onRandomCount"
+        />
+        <button
+          type="button"
+          class="site-btn site-btn-secondary pg-batch-shuffle"
+          aria-label="Regenerate random seeds"
+          @click="shuffleRandom"
+        >
+          <Shuffle :size="16" aria-hidden="true" />
+          Regenerate
+        </button>
+      </template>
+
+      <span class="pg-batch-cap">up to {{ SEED_CAP }}</span>
     </div>
 
-    <div v-else class="pg-batch-paste">
+    <div v-if="mode === 'paste'" class="pg-batch-paste">
       <SiteTextarea
         id="pg-batch-seeds"
         v-model="seedsInput"
@@ -255,13 +341,17 @@ watch(seeds, () => (successState.value = false));
     <div v-if="previewItems.length > 0" class="pg-batch-preview">
       <span class="site-label">{{ previewLabel }}</span>
       <ul class="pg-batch-preview-grid">
-        <li v-for="item in previewItems" :key="item.seed" class="pg-batch-tile">
+        <li
+          v-for="item in previewItems"
+          :key="item.seed"
+          class="pg-batch-tile"
+          :title="item.seed"
+        >
           <PlaygroundThumb
             class="pg-batch-tile-avatar"
             :style-name="store.avatarStyleName"
             :options="item.options"
           />
-          <code class="pg-batch-tile-seed">{{ item.seed }}</code>
         </li>
       </ul>
     </div>
@@ -271,21 +361,30 @@ watch(seeds, () => (successState.value = false));
       using.
     </SiteNotice>
 
-    <button
-      type="button"
-      class="site-btn site-btn-primary pg-batch-submit"
-      :class="{ 'is-loading': isGenerating }"
-      :disabled="!canGenerate"
-      :aria-busy="isGenerating"
-      @click="generate"
-    >
-      <Download :size="16" aria-hidden="true" />
-      {{ generateLabel }}
-    </button>
-
     <p v-if="errorMessage" class="pg-batch-error" role="alert">
       {{ errorMessage }}
     </p>
+
+    <div class="pg-batch-foot">
+      <SiteSegmented
+        v-model="format"
+        class="pg-batch-format"
+        :options="formatOptions"
+        aria-label="File format"
+        fluid
+      />
+      <button
+        type="button"
+        class="site-btn site-btn-primary pg-batch-submit"
+        :class="{ 'is-loading': isGenerating }"
+        :disabled="!canGenerate"
+        :aria-busy="isGenerating"
+        @click="generate"
+      >
+        <Download :size="16" aria-hidden="true" />
+        {{ generateLabel }}
+      </button>
+    </div>
 
     <UiLicenseAlert :style-name="store.avatarStyleName" />
   </div>
@@ -295,41 +394,34 @@ watch(seeds, () => (successState.value = false));
 .pg-batch {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   padding: 20px 28px 28px;
 
   @media (max-width: 640px) {
     padding: 16px 20px 20px;
   }
 
-  &-mode {
-    max-width: 320px;
+  &-source {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
   }
 
-  &-random {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-
-    &-suffix {
-      font-size: 15px;
-      line-height: 24px;
-      color: var(--db-ink-2);
-    }
+  & &-mode {
+    width: 200px;
   }
 
   // Two classes, so the width outranks the default of the field.
   & &-count {
-    width: 110px;
+    width: 150px;
   }
 
-  &-shuffle {
-    height: 44px;
+  &-cap {
     margin-left: auto;
-    padding: 0 18px;
-    border-radius: var(--db-radius-3);
-    font-size: 15px;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--db-muted);
   }
 
   &-paste {
@@ -365,48 +457,46 @@ watch(seeds, () => (successState.value = false));
 
     &-grid {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 8px;
       margin: 0;
       padding: 0;
       list-style: none;
 
       @media (max-width: 640px) {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(6, minmax(0, 1fr));
       }
     }
   }
 
   &-tile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
     min-width: 0;
     margin: 0;
 
     & &-avatar {
-      width: 64px;
+      width: 100%;
       border: 1px solid var(--db-line);
-      border-radius: var(--db-radius-3);
-    }
-
-    &-seed {
-      max-width: 100%;
-      padding: 0;
-      background: transparent;
-      font-family: var(--db-font-mono);
-      font-size: 11px;
-      line-height: 16px;
-      color: var(--db-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      border-radius: 10px;
     }
   }
 
+  /* The format and the one button, behind a line. */
+  &-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--db-line);
+  }
+
+  & &-format {
+    width: 320px;
+    max-width: 100%;
+  }
+
   &-submit {
-    width: 100%;
+    margin-left: auto;
     font-size: 15px;
   }
 }

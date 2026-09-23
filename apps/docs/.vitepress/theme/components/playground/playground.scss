@@ -62,52 +62,6 @@
   cursor: pointer;
 }
 
-/* Square icon toggle, filled while pressed. */
-.pg-field-toggle {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
-  border-radius: var(--db-radius-2);
-  background: transparent;
-  color: var(--db-muted);
-  cursor: pointer;
-
-  &[aria-pressed='true'] {
-    border-color: transparent;
-    background: var(--db-btn-bg);
-    color: var(--db-btn-fg);
-  }
-}
-
-/* Quiet text action in a label row, for example "All" and "None". */
-.pg-field-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 30px;
-  padding: 0 10px;
-  border: 0;
-  border-radius: var(--db-radius-2);
-  background: transparent;
-  font: inherit;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-  color: var(--db-muted);
-  white-space: nowrap;
-  cursor: pointer;
-
-  &[aria-pressed='true'] {
-    color: var(--db-brand-text);
-  }
-}
-
 /* Muted help text under a control or at the top of a section. */
 .pg-help {
   margin: 0;
@@ -130,4 +84,51 @@
     font-family: var(--db-font-mono);
     font-size: 13px;
   }
+}
+
+/* A titled group inside an entry, the ones after the first behind a line. */
+.pg-group {
+  padding-top: 20px;
+  border-top: 1px solid var(--db-line);
+}
+
+.pg-group-first {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.pg-group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+
+  .pg-field-reset {
+    margin-left: auto;
+  }
+}
+
+.pg-group-title {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--db-ink-2);
+}
+
+/* Fields one under the other, each with the full width for its slider,
+   which a range needs. */
+.pg-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* The list of styles in its sheet on a phone. The dialog renders the
+   content box, so this rule is not scoped. */
+.pg-style-sheet {
+  height: min(640px, 78vh);
+  padding: 0;
 }

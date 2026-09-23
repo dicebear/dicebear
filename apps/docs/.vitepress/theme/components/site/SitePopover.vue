@@ -15,8 +15,11 @@ const props = withDefaults(
     align?: PopoverAlign;
     /** Accessible name of the panel. */
     label?: string;
+    // No padding and no scrolling of its own, for content that lays out
+    // its own regions, like a list with a fixed head and foot.
+    bare?: boolean;
   }>(),
-  { align: 'left', label: undefined },
+  { align: 'left', label: undefined, bare: false },
 );
 
 const emit = defineEmits<{
@@ -47,7 +50,7 @@ defineExpose({ toggle, show, hide });
     v-show="native || open"
     ref="panel"
     class="site-popover"
-    :class="{ 'site-popover-fallback': !native }"
+    :class="{ 'site-popover-fallback': !native, 'site-popover-bare': bare }"
     :popover="native ? 'auto' : undefined"
     :style="style"
     role="dialog"
@@ -68,7 +71,7 @@ defineExpose({ toggle, show, hide });
   margin: 0;
   padding: 16px;
   border: 1px solid var(--db-line);
-  border-radius: 14px;
+  border-radius: var(--db-radius-3);
   background: var(--db-panel);
   color: var(--db-ink);
   box-shadow: var(--db-shadow-pop);
@@ -76,6 +79,11 @@ defineExpose({ toggle, show, hide });
 
   &-fallback {
     z-index: 60;
+  }
+
+  &-bare {
+    padding: 0;
+    overflow: hidden;
   }
 }
 </style>

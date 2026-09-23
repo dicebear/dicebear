@@ -37,15 +37,9 @@ const GROUP_LINKS: Record<string, string> = {
 
 type Crumb = { label: string; href?: string };
 
-/**
- * Sidebar entries carry a "New" badge as inline markup. The trail wants the
- * label alone, so the badge goes with its text and not just its tags.
- */
+/** The trail shows the label of a sidebar entry, and nothing else. */
 function plain(text: string): string {
-  return text
-    .replace(/<span[^>]*vp-sidebar-badge[^>]*>.*?<\/span>/g, '')
-    .replace(/<[^>]*>/g, '')
-    .trim();
+  return text.trim();
 }
 
 /** `styles/lorelei` and `/styles/lorelei` both become `/styles/lorelei/`. */

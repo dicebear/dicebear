@@ -1,12 +1,5 @@
 import type { DefaultTheme } from 'vitepress';
 
-// NOTE: VitePress renders sidebar item `text` with `v-html`, so inline markup is
-// allowed, and we use it to attach small status badges (styled via
-// `.vp-sidebar-badge` in theme/styles/main.scss). A "New" badge marks what a
-// 10.x minor added. Anything that shipped with 10.0.0 is as old as v10 itself
-// and carries none, which is why the PHP library has no badge while the ports
-// that followed it do.
-//
 // Top-level groups always stay expanded (no `collapsed` key, so VitePress
 // renders them without a toggle). Nested levels such as the framework guides
 // start closed (`collapsed: true`) to keep the tree scannable; VitePress
@@ -23,7 +16,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/start/pick-your-integration/',
       },
       {
-        text: 'For AI assistants <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'For AI assistants',
         link: '/start/for-ai-assistants/',
       },
     ],
@@ -55,41 +48,41 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       },
       { text: 'PHP', link: '/integrations/php/' },
       {
-        text: 'Python <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'Python',
         link: '/integrations/python/',
       },
       {
-        text: 'Rust <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'Rust',
         link: '/integrations/rust/',
       },
       {
-        text: 'Go <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'Go',
         link: '/integrations/go/',
       },
       {
-        text: 'Dart <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'Dart',
         link: '/integrations/dart/',
         collapsed: true,
         items: [{ text: 'Flutter', link: '/integrations/dart/flutter/' }],
       },
       {
-        text: 'C# <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'C#',
         link: '/integrations/csharp/',
         collapsed: true,
         items: [
           {
-            text: 'Unity <span class="vp-sidebar-badge is-new">New</span>',
+            text: 'Unity',
             link: '/integrations/csharp/unity/',
           },
           {
-            text: 'Godot <span class="vp-sidebar-badge is-new">New</span>',
+            text: 'Godot',
             link: '/integrations/csharp/godot/',
           },
         ],
       },
       { text: 'CLI', link: '/integrations/cli/' },
       {
-        text: 'Plugin for Figma <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'Plugin for Figma',
         link: '/integrations/figma/',
       },
     ],
@@ -100,7 +93,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       { text: 'Options', link: '/customize/options/' },
       { text: 'Style options', link: '/customize/style-options/' },
       {
-        text: 'Tags <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'Tags',
         link: '/customize/tags/',
         collapsed: true,
         items: [{ text: 'Tag reference', link: '/customize/tags/reference/' }],
@@ -145,7 +138,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     items: [
       { text: 'Create with Figma', link: '/create-styles/with-figma/' },
       {
-        text: 'Edit a style <span class="vp-sidebar-badge is-new">New</span>',
+        text: 'Edit a style',
         link: '/create-styles/edit-a-style/',
       },
       { text: 'From scratch', link: '/create-styles/from-scratch/' },

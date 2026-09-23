@@ -6,19 +6,27 @@
  */
 import { ChevronDown } from '@lucide/vue';
 
-defineProps<{
-  options: { label: string; value: T }[];
-  label: string;
-  fluid?: boolean;
-}>();
+withDefaults(
+  defineProps<{
+    options: { label: string; value: T }[];
+    label: string;
+    fluid?: boolean;
+    size?: 'sm' | 'md' | 'lg';
+  }>(),
+  { size: 'md' },
+);
 
 const model = defineModel<T>({ required: true });
 </script>
 
 <template>
-  <span class="site-select" :class="{ 'is-fluid': fluid }">
+  <span class="site-select" :class="[`is-${size}`, { 'is-fluid': fluid }]">
     <select v-model="model" class="site-select-input" :aria-label="label">
-      <option v-for="option in options" :key="option.value" :value="option.value">
+      <option
+        v-for="option in options"
+        :key="option.value"
+        :value="option.value"
+      >
         {{ option.label }}
       </option>
     </select>
@@ -27,6 +35,8 @@ const model = defineModel<T>({ required: true });
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/control' as c;
+
 .site-select {
   position: relative;
   display: inline-flex;
@@ -41,26 +51,34 @@ const model = defineModel<T>({ required: true });
   }
 
   &-input {
-    height: 36px;
-    padding: 0 38px 0 12px;
-    border: 1px solid var(--db-btn-border);
-    border-radius: var(--db-radius-2);
-    background: var(--db-panel);
-    font: inherit;
-    font-size: 15px;
-    color: var(--db-ink);
+    @include c.control;
+    @include c.control-size(md);
+
+    padding-right: 38px;
     cursor: pointer;
     appearance: none;
-    transition: border-color var(--duration-fast);
-
-    &:hover {
-      border-color: var(--db-muted);
-    }
 
     &:focus-visible {
+      border-color: var(--db-brand);
       outline: 2px solid var(--db-brand);
-      outline-offset: 2px;
+      outline-offset: 0;
     }
+
+    &:disabled {
+      @include c.control-disabled;
+    }
+  }
+
+  &.is-sm &-input {
+    @include c.control-size(sm);
+
+    padding-right: 32px;
+  }
+
+  &.is-lg &-input {
+    @include c.control-size(lg);
+
+    padding-right: 44px;
   }
 
   &-icon {

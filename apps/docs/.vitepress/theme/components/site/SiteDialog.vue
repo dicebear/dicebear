@@ -45,8 +45,16 @@ const props = withDefaults(
     maxWidth?: string;
     contentClass?: string;
     closable?: boolean;
+    /** A sheet rising from the bottom of the window, for phones. */
+    sheet?: boolean;
   }>(),
-  { header: undefined, maxWidth: '640px', contentClass: undefined, closable: true },
+  {
+    header: undefined,
+    maxWidth: '640px',
+    contentClass: undefined,
+    closable: true,
+    sheet: false,
+  },
 );
 
 const emit = defineEmits<{
@@ -135,7 +143,10 @@ onBeforeUnmount(() => {
   <dialog
     ref="dialog"
     class="site-dialog"
-    :class="{ 'site-dialog-headerless': !hasHeader }"
+    :class="{
+      'site-dialog-headerless': !hasHeader,
+      'site-dialog-sheet': sheet,
+    }"
     :style="{ '--site-dialog-width': maxWidth }"
     :aria-labelledby="hasHeader ? titleId : undefined"
     @cancel="onCancel"
@@ -244,7 +255,7 @@ onBeforeUnmount(() => {
     height: 40px;
     padding: 0;
     border: 0;
-    border-radius: 10px;
+    border-radius: var(--db-radius-2);
     background: transparent;
     color: var(--db-muted);
 
@@ -262,6 +273,51 @@ onBeforeUnmount(() => {
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
+  }
+
+  /* The sheet: full width at the bottom, a handle on top, a lighter head
+     and no floating close because its content brings one. */
+  &-sheet {
+    inset: auto 0 0;
+    width: 100%;
+    max-height: 88vh;
+    max-height: 88dvh;
+    margin: 0;
+    border-bottom: 0;
+    border-radius: var(--db-radius-6) var(--db-radius-6) 0 0;
+
+    &[open] {
+      animation: site-sheet-in var(--duration-fast) var(--ease-smooth);
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      flex-shrink: 0;
+      width: 40px;
+      height: 4px;
+      margin: 10px auto 0;
+      border-radius: 2px;
+      background: var(--db-line);
+    }
+
+    .site-dialog-header {
+      min-height: 48px;
+      padding: 0 8px 0 16px;
+      border-bottom: 0;
+    }
+
+    .site-dialog-title {
+      padding: 8px 0;
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .site-dialog-close-floating {
+      display: none;
+    }
   }
 
   @media (max-width: 640px) {
@@ -289,6 +345,13 @@ onBeforeUnmount(() => {
 @keyframes site-dialog-in {
   from {
     opacity: 0;
+  }
+}
+
+@keyframes site-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
   }
 }
 </style>

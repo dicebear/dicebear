@@ -64,48 +64,53 @@ const fontWeight = computed({
 
 <template>
   <div class="pg-font">
-    <div v-if="hasFontFamily" class="pg-field">
-      <div class="pg-field-label">
-        <span>Font family</span>
-        <span class="pg-field-tools">
-          <PlaygroundFieldReset
-            v-if="store.isOptionSet(fontFamilyKey)"
-            @click="store.resetOption(fontFamilyKey)"
-          />
-        </span>
+    <div class="pg-fields">
+      <div v-if="hasFontFamily" class="pg-field">
+        <div class="pg-field-label">
+          <span>Family</span>
+          <span class="pg-field-tools">
+            <PlaygroundFieldReset
+              v-if="store.isOptionSet(fontFamilyKey)"
+              @click="store.resetOption(fontFamilyKey)"
+            />
+          </span>
+        </div>
+        <SiteSelect
+          v-model="fontFamily"
+          :options="fontFamilyOptions"
+          label="Font family"
+          fluid
+        />
       </div>
-      <SiteSelect
-        v-model="fontFamily"
-        :options="fontFamilyOptions"
-        label="Font family"
-        fluid
-      />
-    </div>
 
-    <div v-if="hasFontWeight" class="pg-field">
-      <div class="pg-field-label">
-        <span>Font weight</span>
-        <span class="pg-field-tools">
-          <PlaygroundFieldReset
-            v-if="store.isOptionSet(fontWeightKey)"
-            @click="store.resetOption(fontWeightKey)"
-          />
-        </span>
+      <div v-if="hasFontWeight" class="pg-field">
+        <div class="pg-field-label">
+          <span>Weight</span>
+          <span class="pg-field-tools">
+            <PlaygroundFieldReset
+              v-if="store.isOptionSet(fontWeightKey)"
+              @click="store.resetOption(fontWeightKey)"
+            />
+          </span>
+        </div>
+        <SiteSelect
+          v-model="fontWeight"
+          :options="fontWeightOptions"
+          label="Font weight"
+          fluid
+        />
       </div>
-      <SiteSelect
-        v-model="fontWeight"
-        :options="fontWeightOptions"
-        label="Font weight"
-        fluid
-      />
     </div>
+    <p class="pg-help">
+      Only styles with text, such as Initials, read the font.
+    </p>
   </div>
 </template>
 
 <style scoped lang="scss">
 .pg-font {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 </style>

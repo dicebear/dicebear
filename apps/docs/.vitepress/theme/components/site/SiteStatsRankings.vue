@@ -200,7 +200,7 @@ const shown = computed(() =>
       <button
         v-if="!query.trim() && filtered.length > SHOWN"
         type="button"
-        class="site-stats-rankings-more hv-outline"
+        class="site-btn site-btn-secondary"
         @click="expanded = !expanded"
       >
         {{ expanded ? 'Show the top 10' : `Show all ${rows.length} styles` }}
@@ -374,26 +374,6 @@ const shown = computed(() =>
     justify-content: space-between;
     gap: 16px;
     margin-top: 20px;
-  }
-
-  &-more {
-    display: inline-flex;
-    align-items: center;
-    height: 40px;
-    padding: 0 16px;
-    border: 1px solid var(--db-btn-border);
-    border-radius: 10px;
-    background: transparent;
-    font: inherit;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--db-ink);
-    cursor: pointer;
-
-    &:focus-visible {
-      outline: 2px solid var(--db-brand);
-      outline-offset: 2px;
-    }
   }
 
   &-total {

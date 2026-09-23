@@ -1,0 +1,52 @@
+/**
+ * The one shape every field takes: the soft ground with a quiet line, like
+ * the search in the header. Hover lifts the line to the button line, focus
+ * turns it brand, invalid red, disabled halves the strength. Three sizes
+ * share it with the buttons: sm 32, md 40, lg 48.
+ */
+@mixin control {
+  box-sizing: border-box;
+  border: 1px solid var(--db-field-border);
+  background: var(--db-soft);
+  color: var(--db-ink);
+  transition:
+    background-color 0.12s,
+    border-color 0.12s;
+
+  &:hover:not(:focus-within):not(.is-invalid) {
+    border-color: var(--db-btn-border);
+  }
+
+  &:focus-within {
+    border-color: var(--db-brand);
+  }
+
+  &.is-invalid,
+  &.is-invalid:hover {
+    border-color: var(--db-danger);
+  }
+}
+
+@mixin control-size($size) {
+  @if $size == sm {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: var(--db-radius-1);
+    font-size: 14px;
+  } @else if $size == lg {
+    height: 48px;
+    padding: 0 22px;
+    border-radius: var(--db-radius-3);
+    font-size: 16px;
+  } @else {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--db-radius-2);
+    font-size: 15px;
+  }
+}
+
+@mixin control-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -18,6 +18,7 @@ import DocsOutline from '../docs/DocsOutline.vue';
 import DocsPageHeader from '../docs/DocsPageHeader.vue';
 import DocsPager from '../docs/DocsPager.vue';
 import DocsSidebar from '../docs/DocsSidebar.vue';
+import ThemeFooter from './ThemeFooter.vue';
 import ThemeSponsor from './ThemeSponsor.vue';
 
 const { theme, page, frontmatter } = useData<ThemeOptions>();
@@ -101,15 +102,17 @@ onKeyStroke('Escape', () => {
       class="docs-sidebar"
       :class="{ 'is-open': drawerOpen }"
     >
-      <button
-        type="button"
-        class="docs-sidebar-close"
-        aria-label="Close menu"
-        @click="drawerOpen = false"
-      >
-        <X :size="20" :stroke-width="1.8" aria-hidden="true" />
-      </button>
-      <DocsSidebar />
+      <div class="docs-sidebar-inner">
+        <button
+          type="button"
+          class="docs-sidebar-close"
+          aria-label="Close menu"
+          @click="drawerOpen = false"
+        >
+          <X :size="20" :stroke-width="1.8" aria-hidden="true" />
+        </button>
+        <DocsSidebar />
+      </div>
     </div>
     <div
       v-if="hasSidebar && drawerOpen"
@@ -127,9 +130,13 @@ onKeyStroke('Escape', () => {
     </article>
 
     <div v-if="hasAside" class="docs-aside">
-      <DocsOutline :items="items" :active="active" />
-      <ThemeSponsor :logo-height="40" class="docs-aside-sponsor" />
+      <div class="docs-aside-inner">
+        <DocsOutline :items="items" :active="active" />
+        <ThemeSponsor :logo-height="40" class="docs-aside-sponsor" />
+      </div>
     </div>
+
+    <ThemeFooter class="docs-shell-footer" />
   </div>
 </template>
 
@@ -141,31 +148,79 @@ onKeyStroke('Escape', () => {
   align-items: start;
   --docs-shell-pad: 40px;
 
+  /* Two rows: the page, then its footer. The navigation column spans both. */
+  grid-template-rows: auto auto;
   gap: 48px;
   max-width: var(--db-container);
   margin: 0 auto;
-  padding: var(--docs-shell-pad) var(--db-gutter) 120px;
+  padding: var(--docs-shell-pad) var(--db-gutter) 0;
 
   &.has-aside {
     grid-template-columns: minmax(0, 720px) 200px;
   }
 
   &.has-sidebar {
-    grid-template-columns: 232px minmax(0, 720px);
+    grid-template-columns: 260px minmax(0, 720px);
     justify-content: space-between;
   }
 
   &.has-sidebar.has-aside {
-    grid-template-columns: 232px minmax(0, 720px) 200px;
+    grid-template-columns: 260px minmax(0, 720px) 200px;
   }
 }
 
-/* The columns use the whole window below the header. The negative margin
-   cancels the padding of the shell, so a column stands right under the header
-   from the start and nothing moves once it sticks. The space above the first
-   line is padding inside the scroll container. */
-.docs-sidebar,
+/* Every cell is placed by hand. An item that spans rows, as the navigation
+   does, would otherwise push the ones after it into the wrong column. */
+.docs-article {
+  grid-column: 1;
+  grid-row: 1;
+}
+
 .docs-aside {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: stretch;
+}
+
+/* The footer sits in the content column, the way the article does. */
+.docs-shell-footer {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin-top: 120px;
+}
+
+/* The hairline sets the navigation apart from the article. The column spans
+   the footer row as well, so the navigation runs down the whole page instead
+   of stopping above it. */
+.docs-sidebar {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  align-self: stretch;
+  padding-right: 28px;
+  border-right: 1px solid var(--db-line);
+}
+
+.docs-shell.has-sidebar {
+  > .docs-article {
+    grid-column: 2;
+  }
+
+  > .docs-aside {
+    grid-column: 3;
+  }
+
+  > .docs-shell-footer {
+    grid-column: 2 / -1;
+  }
+}
+
+/* The box inside a column is what sticks, so its travel ends with its own
+   column: the navigation runs past the footer, the outline stops at the end
+   of the article. Both use the whole window below the header, and the space
+   above the first line is padding inside the scroll box, so nothing moves
+   once a box sticks. */
+.docs-sidebar-inner,
+.docs-aside-inner {
   position: sticky;
   top: var(--db-header-h);
   margin-top: calc(-1 * var(--docs-shell-pad));
@@ -202,7 +257,7 @@ onKeyStroke('Escape', () => {
 
 @media (max-width: 1279px) {
   .docs-shell.has-sidebar.has-aside {
-    grid-template-columns: 232px minmax(0, 720px);
+    grid-template-columns: 260px minmax(0, 720px);
   }
 
   .docs-shell.has-aside:not(.has-sidebar) {
@@ -221,7 +276,12 @@ onKeyStroke('Escape', () => {
     --docs-shell-pad: 24px;
 
     grid-template-columns: minmax(0, 1fr);
-    padding-bottom: 56px;
+  }
+
+  .docs-shell-footer,
+  .docs-shell.has-sidebar > .docs-shell-footer {
+    grid-column: 1 / -1;
+    margin-top: 56px;
   }
 
   .docs-local-nav {
@@ -265,17 +325,43 @@ onKeyStroke('Escape', () => {
     position: fixed;
     inset: 0 auto 0 0;
     z-index: 70;
-    margin-top: 0;
+    grid-row: auto;
     display: none;
     width: min(320px, 86vw);
-    max-height: none;
-    padding: 64px 24px 32px;
+    padding: 0;
+    border-right: 0;
     background: var(--db-paper);
     box-shadow: var(--db-shadow-pop);
+    overflow-y: auto;
 
     &.is-open {
       display: block;
     }
+  }
+
+  /* One column, so everything lines up in source order again. */
+  .docs-shell,
+  .docs-shell.has-sidebar,
+  .docs-shell.has-sidebar.has-aside {
+    grid-template-rows: none;
+  }
+
+  .docs-article,
+  .docs-aside,
+  .docs-shell-footer,
+  .docs-shell.has-sidebar > .docs-article,
+  .docs-shell.has-sidebar > .docs-aside,
+  .docs-shell.has-sidebar > .docs-shell-footer {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .docs-sidebar-inner {
+    position: static;
+    max-height: none;
+    margin-top: 0;
+    padding: 64px 24px 32px;
+    overflow: visible;
   }
 
   .docs-sidebar-close {

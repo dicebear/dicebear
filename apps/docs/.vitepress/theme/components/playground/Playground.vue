@@ -1,15 +1,12 @@
 <script setup lang="ts">
 /**
- * The page shell. The title is server-rendered. The tool itself reads
- * sessionStorage and IndexedDB, so it only mounts in the browser and a
- * skeleton of the same size holds its place until then.
- *
- * Content and loader both render several root elements that place themselves
- * in the grid below: the actions next to the title, the body underneath.
+ * The page: the playground fills the window under the site header. The tool
+ * reads sessionStorage and IndexedDB, so it only mounts in the browser and a
+ * frame of the same shape holds its place until then.
  */
 import { onMounted, ref } from 'vue';
 import PlaygroundLoader from './PlaygroundLoader.vue';
-import PlaygroundContent from './PlaygroundContent.vue';
+import PlaygroundApp from './PlaygroundApp.vue';
 
 const mounted = ref(false);
 
@@ -19,39 +16,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="site-container pg-page">
-    <div class="pg-page-grid">
-      <h1 class="site-h2 pg-page-title">Playground</h1>
-      <PlaygroundContent v-if="mounted" />
-      <PlaygroundLoader v-else />
-    </div>
+  <div class="pg-page">
+    <h1 class="sr-only">Playground</h1>
+    <PlaygroundApp v-if="mounted" />
+    <PlaygroundLoader v-else />
   </div>
 </template>
 
 <style scoped lang="scss">
+/* The window minus the header. On a phone the page scrolls instead. */
 .pg-page {
-  padding-top: 40px;
-  padding-bottom: 160px;
+  height: calc(100dvh - var(--db-header-h));
+  min-height: 560px;
 
-  &-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: 32px 24px;
-  }
-
-  &-title {
-    margin: 0;
-  }
-
-  @media (max-width: 767px) {
-    padding-top: 24px;
-    padding-bottom: 64px;
-
-    &-grid {
-      align-items: center;
-      gap: 16px 12px;
-    }
+  @media (max-width: 959px) {
+    height: auto;
+    min-height: calc(100dvh - var(--db-header-h));
   }
 }
 </style>

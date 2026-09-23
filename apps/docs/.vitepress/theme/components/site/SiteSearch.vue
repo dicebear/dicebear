@@ -5,16 +5,21 @@
  */
 import { Search } from '@lucide/vue';
 
-defineProps<{
-  placeholder: string;
-  label: string;
-}>();
+withDefaults(
+  defineProps<{
+    placeholder: string;
+    label: string;
+    size?: 'md' | 'lg';
+    fluid?: boolean;
+  }>(),
+  { size: 'md' },
+);
 
 const model = defineModel<string>({ required: true });
 </script>
 
 <template>
-  <span class="site-search hv-border">
+  <span class="site-search" :class="[`is-${size}`, { 'is-fluid': fluid }]">
     <Search :size="16" aria-hidden="true" class="site-search-icon" />
     <input
       v-model="model"
@@ -27,21 +32,25 @@ const model = defineModel<string>({ required: true });
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/control' as c;
+
 .site-search {
+  @include c.control;
+  @include c.control-size(md);
+
   display: inline-flex;
   align-items: center;
   gap: 10px;
   width: 280px;
   max-width: 100%;
-  height: 40px;
-  padding: 0 12px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
-  border-radius: var(--db-radius-2);
-  background: var(--db-panel);
 
-  &:focus-within {
-    border-color: var(--db-brand);
+  &.is-lg {
+    @include c.control-size(lg);
+  }
+
+  &.is-fluid {
+    display: flex;
+    width: 100%;
   }
 
   &-icon {
@@ -58,7 +67,7 @@ const model = defineModel<string>({ required: true });
     outline: none;
     background: transparent;
     font: inherit;
-    font-size: 15px;
+    font-size: inherit;
     color: var(--db-ink);
 
     &::placeholder {

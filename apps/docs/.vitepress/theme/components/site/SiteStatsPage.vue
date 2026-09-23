@@ -96,7 +96,7 @@ const numbers = computed(() =>
             v-for="tab in tabs"
             :key="tab.key"
             type="button"
-            class="site-stats-page-tab hv-outline"
+            class="site-chip site-chip-lg hv-outline"
             :aria-pressed="activeTab === tab.key"
             @click="activeTab = tab.key"
           >
@@ -208,32 +208,6 @@ const numbers = computed(() =>
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-  }
-
-  &-tab {
-    display: inline-flex;
-    align-items: center;
-    height: 40px;
-    padding: 0 16px;
-    border: 1px solid var(--db-line);
-    border-radius: 999px;
-    background: var(--db-paper);
-    font: inherit;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--db-ink);
-    cursor: pointer;
-
-    &[aria-pressed='true'] {
-      border-color: var(--db-ink);
-      background: var(--db-ink);
-      color: var(--db-paper);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--db-brand);
-      outline-offset: 2px;
-    }
   }
 
   &-plot {

@@ -211,7 +211,12 @@ function scanForVariable(obj: unknown, variableName: string): boolean {
 
   const record = obj as Record<string, unknown>;
 
-  if (record.type === 'variable' && record.value === variableName) {
+  // A reference names its variable under `name`. Older definitions wrote
+  // `value`, so both count.
+  if (
+    record.type === 'variable' &&
+    (record.name === variableName || record.value === variableName)
+  ) {
     return true;
   }
 

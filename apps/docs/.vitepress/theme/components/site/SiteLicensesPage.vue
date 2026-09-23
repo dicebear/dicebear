@@ -172,7 +172,7 @@ function reflowParagraphs(text: string): string {
           v-for="group in groups"
           :key="group.id"
           :href="`#${group.id}`"
-          class="site-licenses-nav-item hv-outline"
+          class="site-btn site-btn-secondary site-licenses-nav-item"
         >
           {{ group.title }}
           <span>{{ group.styles.length }}</span>
@@ -344,21 +344,9 @@ function reflowParagraphs(text: string): string {
     gap: 10px;
     margin-top: 40px;
 
-    &-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 16px;
-      border: 1px solid var(--db-line);
-      border-radius: var(--db-radius-3);
-      font-size: 15px;
-      font-weight: 600;
-
-      span {
-        font-weight: 500;
-        color: var(--db-muted);
-      }
+    &-item span {
+      font-weight: 500;
+      color: var(--db-muted);
     }
   }
 

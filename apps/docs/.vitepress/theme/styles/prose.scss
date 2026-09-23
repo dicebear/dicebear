@@ -154,7 +154,11 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
   }
 
   :where(p, li, td, th, blockquote, summary)
-    > a[target='_blank']:not(.no-icon, .no-external-icon, :has(img, svg))::after {
+    > a[target='_blank']:not(
+      .no-icon,
+      .no-external-icon,
+      :has(img, svg)
+    )::after {
     @include icon($icon-external, 0.95em);
     margin-left: 0.2em;
     vertical-align: -0.02em;
@@ -268,7 +272,8 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
     }
   }
 
-  /* Code blocks: a framed box with a language row and the copy button */
+  /* Code blocks: a plain frame. The language sits in the corner and gives
+     way to the copy button while the pointer is on the block. */
   div[class*='language-'] {
     position: relative;
     border: 1px solid var(--db-line);
@@ -278,20 +283,27 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
 
     > span.lang {
       position: absolute;
-      top: 0;
-      left: 16px;
-      height: 40px;
+      top: 10px;
+      right: 14px;
+      z-index: 1;
       font-family: var(--db-font-mono);
       font-size: 12px;
-      line-height: 40px;
+      line-height: 20px;
       color: var(--db-muted);
+      transition: opacity 0.12s;
+    }
+
+    &:hover > span.lang,
+    &:focus-within > span.lang {
+      opacity: 0;
     }
 
     > button.copy {
       position: absolute;
-      top: 4px;
-      right: 6px;
+      top: 6px;
+      right: 8px;
       z-index: 2;
+      opacity: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -310,6 +322,10 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       &:hover {
         background: var(--db-switch-bg);
         color: var(--db-ink);
+      }
+
+      &.copied {
+        opacity: 1;
       }
 
       &.copied::after {
@@ -332,10 +348,13 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       }
     }
 
+    &:hover > button.copy,
+    &:focus-within > button.copy {
+      opacity: 1;
+    }
+
     > pre {
-      margin-top: 40px;
-      padding: 16px 0 18px;
-      border-top: 1px solid var(--db-code-line);
+      padding: 18px 0;
       overflow-x: auto;
       font-size: 14px;
       line-height: 24px;

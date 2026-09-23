@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { computed, nextTick, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useSessionStorage, watchDebounced } from '@vueuse/core';
 import { useIDBKeyval } from '@vueuse/integrations/useIDBKeyval';
 import type {
@@ -209,6 +209,99 @@ export default defineStore('playground', () => {
 
   watch(avatarStyleName, resetOptions);
 
+  // Undo and redo. A step is the style, the options and the seed together,
+  // taken once a change has settled, so a slider drag or a typed seed counts
+  // as one step. Going back replaces all three; the resulting state equals the
+  // step it came from, so the watcher below records nothing for it.
+  type Step = {
+    style: PlaygroundStoreStyle;
+    options: PlaygroundStoreOptions;
+    seed: string;
+  };
+
+  const HISTORY_LIMIT = 100;
+
+  function takeStep(): Step {
+    return {
+      style: avatarStyleName.value,
+      options: clonePlain(avatarStyleOptions.value),
+      seed: seed.value,
+    };
+  }
+
+  function sameStep(a: Step, b: Step): boolean {
+    return (
+      a.style === b.style &&
+      a.seed === b.seed &&
+      JSON.stringify(a.options) === JSON.stringify(b.options)
+    );
+  }
+
+  const past = ref<Step[]>([]);
+  const future = ref<Step[]>([]);
+  let present = takeStep();
+
+  watchDebounced(
+    [avatarStyleName, seed, avatarStyleOptions],
+    () => {
+      const next = takeStep();
+
+      if (sameStep(next, present)) {
+        return;
+      }
+
+      past.value.push(present);
+
+      if (past.value.length > HISTORY_LIMIT) {
+        past.value.shift();
+      }
+
+      present = next;
+      future.value = [];
+    },
+    { deep: true, debounce: 300 },
+  );
+
+  async function restoreStep(step: Step) {
+    if (avatarStyleName.value !== step.style) {
+      avatarStyleName.value = step.style;
+
+      // The style watcher clears the options on the next tick.
+      await nextTick();
+    }
+
+    clearOptions();
+    Object.assign(avatarStyleOptions.value, clonePlain(step.options));
+    seed.value = step.seed;
+
+    syncOptionSnapshot();
+  }
+
+  const canUndo = computed(() => past.value.length > 0);
+  const canRedo = computed(() => future.value.length > 0);
+
+  function undo() {
+    const step = past.value.pop();
+
+    if (!step) return;
+
+    future.value.push(present);
+    present = step;
+
+    void restoreStep(step);
+  }
+
+  function redo() {
+    const step = future.value.pop();
+
+    if (!step) return;
+
+    past.value.push(present);
+    present = step;
+
+    void restoreStep(step);
+  }
+
   // Track which options users tune. Debounced so dragging a slider collapses
   // into one event, and diffed per key so only newly changed keys are sent.
   // Removed keys (reset / style switch clears options) are intentionally not
@@ -257,5 +350,9 @@ export default defineStore('playground', () => {
     applyPreset,
     applyConfig,
     isOptionSet,
+    canUndo,
+    canRedo,
+    undo,
+    redo,
   };
 });

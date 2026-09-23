@@ -1,6 +1,10 @@
 <script setup lang="ts">
+/**
+ * One color in the inspector: the values the seed picks from as a list, the
+ * fill for gradients, and a note when it is tied to another color.
+ */
 import { computed, inject, watch } from 'vue';
-import { Link2 } from '@lucide/vue';
+import { X } from '@lucide/vue';
 import SiteSegmented from '@theme/components/site/SiteSegmented.vue';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
@@ -18,14 +22,14 @@ const props = defineProps<{
   hasFillStops: boolean;
   hasOrder: boolean;
   contrastTo?: string | null;
+  // The colors that are chosen to contrast with this one.
+  contrastedBy?: string[];
 }>();
 
 const navigateToColor = inject(navigateToColorKey, null);
 
-function onContrastLinkClick() {
-  if (props.contrastTo && navigateToColor) {
-    navigateToColor(props.contrastTo);
-  }
+function goTo(name: string) {
+  navigateToColor?.(name);
 }
 
 const store = useStore();
@@ -67,33 +71,8 @@ function addColor(hex: string) {
   colors.value = [...colors.value, clean];
 }
 
-// Every color of the style stays visible as a swatch, pressed while it is
-// in use. Colors added by hand follow and leave again with a click.
-const swatches = computed(() => {
-  const customs = colors.value.filter((c) => !props.defaultValues.includes(c));
-
-  return [...props.defaultValues, ...customs].map((hex) => ({
-    hex,
-    on: colors.value.includes(hex),
-    custom: !props.defaultValues.includes(hex),
-  }));
-});
-
-function toggleColor(hex: string) {
-  if (colors.value.includes(hex)) {
-    colors.value = colors.value.filter((c) => c !== hex);
-
-    return;
-  }
-
-  // A color of the style returns to its place in the style's order, ahead of
-  // the colors added by hand.
-  const customs = colors.value.filter((c) => !props.defaultValues.includes(c));
-
-  colors.value = [
-    ...props.defaultValues.filter((c) => c === hex || colors.value.includes(c)),
-    ...customs,
-  ];
+function removeColor(hex: string) {
+  colors.value = colors.value.filter((c) => c !== hex);
 }
 
 const fillOptions = [
@@ -150,123 +129,137 @@ watch(fill, (val) => {
     delete store.avatarStyleOptions[orderKey];
   }
 });
+
+const fillKeys = [fillKey, angleKey, fillStopsKey, orderKey];
+const fillSet = computed(() => fillKeys.some((key) => store.isOptionSet(key)));
+
+function resetFill() {
+  for (const key of fillKeys) {
+    if (store.isOptionSet(key)) store.resetOption(key);
+  }
+}
+
+const contrastedNames = computed(() =>
+  (props.contrastedBy ?? []).map((name) => ({
+    name,
+    label: capitalCase(name),
+  })),
+);
 </script>
 
 <template>
   <div class="pg-color">
-    <p v-if="contrastTo" class="pg-color-contrast" role="note">
-      <Link2 :size="16" aria-hidden="true" class="pg-color-contrast-icon" />
-      <span>
-        Linked to
-        <button
-          type="button"
-          class="pg-color-contrast-link hv-link"
-          @click="onContrastLinkClick"
-        >
-          {{ capitalCase(contrastTo) }}</button
-        >. The value with the strongest contrast against the chosen
-        {{ capitalCase(contrastTo).toLowerCase() }} is preferred. Adding more
-        options here introduces variation, but the highest-contrast value still
-        dominates.
-      </span>
-    </p>
-
-    <div class="pg-field">
-      <div class="pg-field-label">
-        <span>Color</span>
-        <span class="pg-field-tools">
-          <PlaygroundFieldReset
-            v-if="store.isOptionSet(colorKey)"
-            @click="store.resetOption(colorKey)"
-          />
-        </span>
+    <div class="pg-group pg-group-first">
+      <div class="pg-group-head">
+        <h3 class="pg-group-title">Values</h3>
+        <PlaygroundFieldReset
+          v-if="store.isOptionSet(colorKey)"
+          @click="store.resetOption(colorKey)"
+        />
       </div>
-      <div class="pg-color-swatches">
-        <button
-          v-for="swatch in swatches"
-          :key="swatch.hex"
-          type="button"
-          class="pg-color-swatch hv-swatch"
-          :aria-pressed="swatch.on"
-          :aria-label="`#${swatch.hex}`"
-          :title="
-            swatch.custom
-              ? `#${swatch.hex} (click to remove)`
-              : `#${swatch.hex}`
-          "
-          :style="{ '--swatch': `#${swatch.hex}` }"
-          @click="toggleColor(swatch.hex)"
-        ></button>
+      <div class="pg-color-values">
+        <div v-for="hex in colors" :key="hex" class="pg-color-value">
+          <span
+            class="pg-color-value-swatch"
+            :style="{ '--swatch': `#${hex}` }"
+            aria-hidden="true"
+          />
+          <span class="pg-color-value-hex">#{{ hex }}</span>
+          <button
+            type="button"
+            class="site-btn site-btn-ghost site-btn-icon site-btn-sm pg-color-value-remove"
+            :aria-label="`Remove #${hex}`"
+            @click="removeColor(hex)"
+          >
+            <X :size="14" aria-hidden="true" />
+          </button>
+        </div>
         <PlaygroundColorPicker
           :preset-colors="props.defaultValues"
           :colors="colors"
+          row
           @add="addColor"
         />
       </div>
+      <p class="pg-help">The seed picks one of these. One value pins it.</p>
     </div>
 
-    <template v-if="hasFill && colors.length > 0">
-      <div class="pg-field">
-        <div class="pg-field-label">
-          <span>Fill</span>
-          <span class="pg-field-tools">
-            <PlaygroundFieldReset
-              v-if="store.isOptionSet(fillKey)"
-              @click="store.resetOption(fillKey)"
-            />
-          </span>
-        </div>
+    <div v-if="hasFill && colors.length > 0" class="pg-group">
+      <div class="pg-group-head">
+        <h3 class="pg-group-title">Fill</h3>
+        <PlaygroundFieldReset v-if="fillSet" @click="resetFill" />
+      </div>
+      <div class="pg-color-fill">
         <SiteSegmented
           v-model="fill"
           :options="fillOptions"
           aria-label="Fill"
           fluid
         />
-      </div>
 
-      <div v-if="hasOrder && fill !== 'solid'" class="pg-field">
-        <div class="pg-field-label">
-          <span>Order</span>
-          <span class="pg-field-tools">
-            <PlaygroundFieldReset
-              v-if="store.isOptionSet(orderKey)"
-              @click="store.resetOption(orderKey)"
-            />
-          </span>
+        <div
+          v-if="(hasAngle || hasFillStops) && fill !== 'solid'"
+          class="pg-fields"
+        >
+          <PlaygroundRangeField
+            v-if="hasAngle"
+            label="Angle"
+            :option-key="angleKey"
+            :min="-360"
+            :max="360"
+            :step="1"
+            unit="°"
+            :default-single="0"
+          />
+          <PlaygroundRangeField
+            v-if="hasFillStops"
+            label="Stops"
+            :option-key="fillStopsKey"
+            :min="2"
+            :max="5"
+            :step="1"
+            :default-single="2"
+          />
         </div>
-        <SiteSegmented
-          v-model="order"
-          :options="orderOptions"
-          aria-label="Order"
-          fluid
-        />
-      </div>
 
-      <div
-        v-if="(hasAngle || hasFillStops) && fill !== 'solid'"
-        class="pg-color-pair"
-      >
-        <PlaygroundRangeField
-          v-if="hasAngle"
-          label="Angle"
-          :option-key="angleKey"
-          :min="-360"
-          :max="360"
-          :step="1"
-          unit="°"
-          :default-single="0"
-        />
-        <PlaygroundRangeField
-          v-if="hasFillStops"
-          label="Stops"
-          :option-key="fillStopsKey"
-          :min="2"
-          :max="5"
-          :step="1"
-          :default-single="2"
-        />
+        <div v-if="hasOrder && fill !== 'solid'" class="pg-field">
+          <div class="pg-field-label">
+            <span>Order</span>
+          </div>
+          <SiteSegmented
+            v-model="order"
+            :options="orderOptions"
+            aria-label="Order"
+            fluid
+          />
+        </div>
       </div>
-    </template>
+    </div>
+
+    <p v-if="contrastTo" class="pg-help">
+      Chosen to contrast with
+      <button
+        type="button"
+        class="pg-color-link hv-link"
+        @click="goTo(contrastTo)"
+      >
+        {{ capitalCase(contrastTo) }}</button
+      >. The value with the strongest contrast wins.
+    </p>
+    <p v-if="contrastedNames.length > 0" class="pg-help">
+      <template v-for="(item, index) in contrastedNames" :key="item.name">
+        <template v-if="index > 0">, </template>
+        <button
+          type="button"
+          class="pg-color-link hv-link"
+          @click="goTo(item.name)"
+        >
+          {{ item.label }}
+        </button>
+      </template>
+      {{ contrastedNames.length > 1 ? 'are' : 'is' }} chosen to contrast with
+      this color.
+    </p>
   </div>
 </template>
 
@@ -277,29 +270,33 @@ watch(fill, (val) => {
   gap: 16px;
 }
 
-.pg-color-swatches {
+.pg-color-values {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  padding: 4px;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.pg-color-value {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
 }
 
 /* The checker shows through a color with reduced opacity. */
-.pg-color-swatch {
+.pg-color-value-swatch {
   position: relative;
-  width: 36px;
-  height: 36px;
-  padding: 0;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
   overflow: hidden;
-  box-sizing: border-box;
-  border: 1px solid var(--db-line);
-  border-radius: 10px;
+  border-radius: 7px;
   background: repeating-conic-gradient(
       var(--db-soft) 0% 25%,
       var(--db-paper) 0% 50%
     )
-    50% / 10px 10px;
-  cursor: pointer;
+    50% / 8px 8px;
+  box-shadow: inset 0 0 0 1px rgba(11, 22, 32, 0.08);
 
   &::before {
     content: '';
@@ -307,46 +304,26 @@ watch(fill, (val) => {
     inset: 0;
     background: var(--swatch);
   }
-
-  &[aria-pressed='false'] {
-    opacity: 0.35;
-  }
-
-  &[aria-pressed='true'] {
-    box-shadow:
-      0 0 0 2px var(--db-paper),
-      0 0 0 4px var(--db-brand);
-  }
 }
 
-.pg-color-pair {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 20px;
+.pg-color-value-hex {
+  font-family: var(--db-font-mono);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--db-ink);
 }
 
-@container pg-options (max-width: 520px) {
-  .pg-color-pair {
-    grid-auto-flow: row;
-  }
+.pg-color-value-remove {
+  margin-left: auto;
 }
 
-.pg-color-contrast {
+.pg-color-fill {
   display: flex;
-  gap: 10px;
-  margin: 0;
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--db-muted);
+  flex-direction: column;
+  gap: 16px;
 }
 
-.pg-color-contrast-icon {
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.pg-color-contrast-link {
+.pg-color-link {
   display: inline;
   padding: 0;
   margin: 0;

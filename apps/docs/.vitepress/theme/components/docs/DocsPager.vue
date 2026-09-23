@@ -18,8 +18,7 @@ const control = usePrevNext();
       class="docs-pager-link hv-outline"
     >
       <span class="docs-pager-label">Previous page</span>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <span class="docs-pager-title" v-html="control.prev.text" />
+      <span class="docs-pager-title">{{ control.prev.text }}</span>
     </a>
     <span v-else></span>
     <a
@@ -28,8 +27,7 @@ const control = usePrevNext();
       class="docs-pager-link docs-pager-next hv-outline"
     >
       <span class="docs-pager-label">Next page</span>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <span class="docs-pager-title" v-html="control.next.text" />
+      <span class="docs-pager-title">{{ control.next.text }}</span>
     </a>
   </nav>
 </template>
@@ -69,9 +67,5 @@ const control = usePrevNext();
   line-height: 28px;
   font-weight: 600;
   color: var(--db-brand-text);
-
-  :deep(.vp-sidebar-badge) {
-    display: none;
-  }
 }
 </style>

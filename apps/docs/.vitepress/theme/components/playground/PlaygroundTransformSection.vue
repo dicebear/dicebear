@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * The Canvas entry: what moves the whole picture. Flip on its own row, the
+ * four sliders in pairs, the radius across.
+ */
 import { computed } from 'vue';
 import SiteSlider from '@theme/components/site/SiteSlider.vue';
 import SiteSegmented from '@theme/components/site/SiteSegmented.vue';
@@ -39,7 +43,7 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
 </script>
 
 <template>
-  <div class="pg-transform-body">
+  <div class="pg-transform">
     <div class="pg-field">
       <div class="pg-field-label">
         <span>Flip</span>
@@ -59,28 +63,47 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
       />
     </div>
 
-    <PlaygroundRangeField
-      label="Rotate"
-      option-key="rotate"
-      :min="-360"
-      :max="360"
-      :step="1"
-      unit="°"
-      :default-single="0"
-    />
-
-    <PlaygroundRangeField
-      label="Scale"
-      option-key="scale"
-      :min="0"
-      :max="10"
-      :step="0.01"
-      :default-single="1"
-    />
+    <div class="pg-fields">
+      <PlaygroundRangeField
+        label="Rotate"
+        option-key="rotate"
+        :min="-360"
+        :max="360"
+        :step="1"
+        unit="°"
+        :default-single="0"
+      />
+      <PlaygroundRangeField
+        label="Scale"
+        option-key="scale"
+        :min="0"
+        :max="10"
+        :step="0.01"
+        :default-single="1"
+      />
+      <PlaygroundRangeField
+        label="Translate X"
+        option-key="translateX"
+        :min="-100"
+        :max="100"
+        :step="1"
+        unit="%"
+        :default-single="0"
+      />
+      <PlaygroundRangeField
+        label="Translate Y"
+        option-key="translateY"
+        :min="-100"
+        :max="100"
+        :step="1"
+        unit="%"
+        :default-single="0"
+      />
+    </div>
 
     <div class="pg-field">
       <div class="pg-field-label">
-        <span>Border radius</span>
+        <span>Radius</span>
         <span class="pg-field-tools">
           <span class="pg-field-value">{{ borderRadius }}</span>
           <PlaygroundFieldReset
@@ -94,43 +117,28 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
         :min="0"
         :max="50"
         :step="1"
-        aria-label="Border radius"
+        aria-label="Radius"
       />
     </div>
-
-    <PlaygroundRangeField
-      label="Translate X"
-      option-key="translateX"
-      :min="-100"
-      :max="100"
-      :step="1"
-      unit="%"
-      :default-single="0"
-    />
-
-    <PlaygroundRangeField
-      label="Translate Y"
-      option-key="translateY"
-      :min="-100"
-      :max="100"
-      :step="1"
-      unit="%"
-      :default-single="0"
-    />
   </div>
 </template>
 
 <style scoped lang="scss">
-.pg-transform-body {
+.pg-transform {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
-/* Four labels share a phone column, so the segments give up their padding. */
+/* Four labels share a narrow column, so each segment takes the width of its
+   own label instead of a quarter of the row. */
 @container pg-options (max-width: 520px) {
+  .pg-transform-flip {
+    grid-auto-columns: auto;
+  }
+
   .pg-transform-flip :deep(.site-segmented-item) {
-    padding: 0 4px;
+    padding: 0 8px;
     font-size: 13px;
   }
 }

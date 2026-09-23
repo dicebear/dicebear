@@ -264,12 +264,12 @@ function updateActiveChannel(key: string, value: number | null) {
 
     &-swatch {
       flex-shrink: 0;
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       padding: 0;
       overflow: hidden;
       border: 1px solid var(--db-btn-border);
-      border-radius: var(--db-radius-3);
+      border-radius: var(--db-radius-2);
       background: transparent;
       cursor: pointer;
 

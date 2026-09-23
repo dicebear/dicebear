@@ -61,35 +61,27 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/control' as c;
+
 .site-field {
+  @include c.control;
+  @include c.control-size(md);
+
   display: inline-flex;
   align-items: center;
   gap: 10px;
   width: 280px;
   max-width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
-  border-radius: 10px;
-  background: var(--db-panel);
   color: var(--db-muted);
-  transition: border-color 0.12s;
-
-  &:hover:not(:focus-within) {
-    border-color: var(--db-hover-border);
-  }
 
   &.is-sm {
+    @include c.control-size(sm);
+
     gap: 8px;
-    height: 36px;
-    padding: 0 10px;
-    border-radius: var(--db-radius-2);
   }
 
   &.is-lg {
-    height: 48px;
-    border-radius: var(--db-radius-3);
+    @include c.control-size(lg);
   }
 
   &.is-fluid {
@@ -97,27 +89,17 @@ defineExpose({
     width: 100%;
   }
 
-  &:focus-within {
-    border-color: var(--db-brand);
-  }
-
   &:has(.site-field-input:focus-visible) {
     outline: 2px solid var(--db-brand);
     outline-offset: 0;
   }
 
-  &.is-invalid,
-  &.is-invalid:hover {
-    border-color: var(--db-danger);
-
-    &:has(.site-field-input:focus-visible) {
-      outline-color: var(--db-danger);
-    }
+  &.is-invalid:has(.site-field-input:focus-visible) {
+    outline-color: var(--db-danger);
   }
 
   &:has(.site-field-input:disabled) {
-    background: var(--db-soft);
-    cursor: not-allowed;
+    @include c.control-disabled;
   }
 
   &-icon {
@@ -134,7 +116,7 @@ defineExpose({
     outline: none;
     background: transparent;
     font: inherit;
-    font-size: 15px;
+    font-size: inherit;
     line-height: 24px;
     color: var(--db-ink);
 
@@ -143,7 +125,6 @@ defineExpose({
     }
 
     &:disabled {
-      color: var(--db-muted);
       cursor: not-allowed;
     }
 
@@ -151,11 +132,6 @@ defineExpose({
     &::-webkit-search-cancel-button {
       display: none;
     }
-  }
-
-  &.is-lg &-input {
-    font-size: 16px;
-    line-height: 26px;
   }
 
   // Below 16px iOS zooms into a focused field.
@@ -178,7 +154,7 @@ defineExpose({
       height: 32px;
       padding: 0;
       border: 0;
-      border-radius: var(--db-radius-2);
+      border-radius: var(--db-radius-1);
       background: transparent;
       color: var(--db-muted);
       cursor: pointer;
@@ -187,7 +163,7 @@ defineExpose({
         color 0.12s;
 
       &:hover {
-        background: var(--db-soft);
+        background: var(--db-switch-bg);
         color: var(--db-ink);
       }
 
@@ -201,8 +177,8 @@ defineExpose({
     margin-right: -6px;
 
     :deep(button) {
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
     }
   }
 }

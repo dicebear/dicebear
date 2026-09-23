@@ -14,7 +14,8 @@
   --db-ink: #0b1620;
   --db-ink-2: #3e4c58;
   --db-muted: #5f6d79;
-  --db-chevron: #a7b3bc;
+  /* Separators are text, so they clear AA as well: 4.5:1 on paper. */
+  --db-chevron: #6b7885;
   --db-on-ink: #a9bac5;
 
   /* Brand */
@@ -27,10 +28,15 @@
   --db-btn-bg: #0b1620;
   --db-btn-fg: #ffffff;
   --db-btn-hover: #26333f;
-  --db-btn-border: #c9d3da;
-  --db-hover-border: #a3b1bc;
+  /* The outline of a control is what identifies it, so it clears the 3:1 of
+     the non-text rule. Plain dividers stay light, they carry no function. */
+  --db-btn-border: #8695a2;
+  --db-hover-border: #6b7885;
+  /* The quiet edge of a field or a secondary button: 1.5:1 on paper, so it
+     shows without drawing attention. Hover lifts it to the button line. */
+  --db-field-border: #cbd3da;
   --db-switch-bg: #e7ecf0;
-  --db-switch-border: #d5dde3;
+  --db-switch-border: #8695a2;
   --db-knob: #ffffff;
 
   /* Status. Text colors pass AA on paper and panel. */
@@ -85,46 +91,53 @@
 }
 
 .dark {
-  --db-paper: #0c141b;
-  --db-panel: #121c25;
-  --db-soft: #16202a;
+  /* Lifted off the near-black ground the theme started with: the same cool
+     grey, two steps brighter, so the page stops reading as a hole. */
+  --db-paper: #131d26;
+  --db-panel: #18242e;
+  --db-soft: #1d2a35;
   /* Avatar tiles stay light, or styles drawn in black line work vanish. */
   --db-tile: #e9eef2;
-  --db-line: #1e2a35;
+  --db-line: #27343f;
 
-  --db-ink: #e6edf3;
-  --db-ink-2: #a9b7c3;
-  --db-muted: #8595a3;
-  --db-chevron: #5a6c7a;
-  --db-on-ink: #5c6b78;
+  /* Softer than the old #e6edf3, which met the ground at 15.7:1 and glared.
+     Text sits at 11.7:1 now, headings included. */
+  --db-ink: #ccd7e0;
+  --db-ink-2: #a2b0bc;
+  --db-muted: #87949f;
+  --db-chevron: #7a8791;
+  --db-on-ink: #69767f;
 
   --db-brand: #4cb3e6;
   --db-brand-text: #7dd3fc;
-  --db-tint: #16354b;
+  --db-tint: #1b3a4f;
   --db-tint-text: #9fdbfa;
 
-  --db-btn-bg: #e6edf3;
-  --db-btn-fg: #0c141b;
-  --db-btn-hover: #ffffff;
-  --db-btn-border: #2e3d4a;
-  --db-hover-border: #465a6b;
-  --db-switch-bg: #22303c;
-  --db-switch-border: #2e3d4a;
-  --db-knob: #e6edf3;
+  /* A filled button is a large surface, so it follows the text down instead
+     of shining at 15.7:1, and its hover stops short of white. */
+  --db-btn-bg: #ccd7e0;
+  --db-btn-fg: #131d26;
+  --db-btn-hover: #dbe3ea;
+  --db-btn-border: #5b6c7a;
+  --db-hover-border: #7a8b99;
+  --db-field-border: #364552;
+  --db-switch-bg: #27343f;
+  --db-switch-border: #5b6c7a;
+  --db-knob: #ccd7e0;
 
   --db-ok: #4ade80;
-  --db-ok-soft: #12301f;
+  --db-ok-soft: #17331f;
   --db-warn: #fbbf24;
-  --db-warn-soft: #33270b;
+  --db-warn-soft: #352a12;
   --db-danger: #f87171;
-  --db-danger-soft: #3a1618;
+  --db-danger-soft: #3b1f21;
   --db-note: #c4b5fd;
-  --db-note-soft: #261c45;
+  --db-note-soft: #2a2348;
 
-  --db-code-bg: #16202a;
-  --db-code-bar: #16202a;
-  --db-code-line: #1e2a35;
-  --db-code-ink: #e6edf3;
+  --db-code-bg: #1d2a35;
+  --db-code-bar: #1d2a35;
+  --db-code-line: #27343f;
+  --db-code-ink: #d3dce4;
   --db-code-string: #fdba74;
 
   --db-logo-mono: #ffffff;

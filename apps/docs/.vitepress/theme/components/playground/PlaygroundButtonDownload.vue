@@ -1,6 +1,10 @@
 <script setup lang="ts">
+/**
+ * One split button: the wide part saves the SVG, the arrow opens the raster
+ * formats and the batch download.
+ */
 import { computed, ref } from 'vue';
-import { Download } from '@lucide/vue';
+import { ChevronDown, Download } from '@lucide/vue';
 import { Avatar } from '@dicebear/core';
 import { getAvatarApiUrl } from '@theme/utils/avatar/api';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
@@ -20,6 +24,7 @@ const props = defineProps<{
 const { store, open, options, showDialog } = usePlaygroundDialog(
   () => props.seed,
 );
+
 const batchOpen = ref(false);
 
 async function downloadSvg() {
@@ -40,6 +45,7 @@ async function downloadSvg() {
   );
 
   const blob = new Blob([avatar.toString()], { type: 'image/svg+xml' });
+
   triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.svg`);
 }
 
@@ -54,53 +60,71 @@ async function downloadBinary(format: string) {
   const response = await fetch(
     getAvatarApiUrl(store.avatarStyleName, options.value, format),
   );
-
   const blob = await response.blob();
+
   triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.${format}`);
 }
 
-const svgItem: SiteMenuItem = {
-  label: 'SVG',
-  hint: 'Vector, any size',
-  command: () => downloadSvg(),
-};
-
 const batchItems: SiteMenuItem[] = [
   { separator: true },
-  { label: 'Batch download', command: () => (batchOpen.value = true) },
+  {
+    label: 'Batch download',
+    hint: 'many seeds',
+    command: () => (batchOpen.value = true),
+  },
 ];
 
 // The API serves the raster formats of the packaged styles. An uploaded style
 // only renders in the browser, which leaves SVG and the batch download.
 const rasterItems: SiteMenuItem[] = [
-  { label: 'PNG', command: () => downloadBinary('png') },
-  { label: 'JPEG', command: () => downloadBinary('jpg') },
-  { label: 'WebP', command: () => downloadBinary('webp') },
-  { label: 'AVIF', command: () => downloadBinary('avif') },
+  {
+    label: 'PNG',
+    hint: `${DOWNLOAD_AVATAR_SIZE} px`,
+    command: () => downloadBinary('png'),
+  },
+  {
+    label: 'JPEG',
+    hint: `${DOWNLOAD_AVATAR_SIZE} px`,
+    command: () => downloadBinary('jpg'),
+  },
+  {
+    label: 'WebP',
+    hint: `${DOWNLOAD_AVATAR_SIZE} px`,
+    command: () => downloadBinary('webp'),
+  },
+  {
+    label: 'AVIF',
+    hint: `${DOWNLOAD_AVATAR_SIZE} px`,
+    command: () => downloadBinary('avif'),
+  },
 ];
 
 const items = computed<SiteMenuItem[]>(() =>
-  store.isCustomStyle
-    ? [svgItem, ...batchItems]
-    : [svgItem, ...rasterItems, ...batchItems],
+  store.isCustomStyle ? batchItems.slice(1) : [...rasterItems, ...batchItems],
 );
 </script>
 
 <template>
-  <SiteMenu class="pg-button-download" :items="items" label="Download">
-    <template #trigger="{ open: menuOpen, toggle }">
-      <button
-        type="button"
-        class="site-btn site-btn-secondary pg-button-download-trigger"
-        aria-haspopup="menu"
-        :aria-expanded="menuOpen"
-        @click="toggle"
-      >
-        <Download :size="16" aria-hidden="true" />
-        Download
-      </button>
-    </template>
-  </SiteMenu>
+  <span class="pg-download">
+    <button type="button" class="pg-download-main" @click="downloadSvg">
+      <Download :size="16" aria-hidden="true" />
+      Download SVG
+    </button>
+    <SiteMenu :items="items" label="Other formats" align="right">
+      <template #trigger="{ open: menuOpen, toggle }">
+        <button
+          type="button"
+          class="pg-download-more"
+          aria-label="Other formats"
+          aria-haspopup="menu"
+          :aria-expanded="menuOpen"
+          @click="toggle"
+        >
+          <ChevronDown :size="16" aria-hidden="true" />
+        </button>
+      </template>
+    </SiteMenu>
+  </span>
 
   <PlaygroundDone
     v-model:open="open"
@@ -119,15 +143,51 @@ const items = computed<SiteMenuItem[]>(() =>
 </template>
 
 <style scoped lang="scss">
-.pg-button-download {
+.pg-download {
   display: flex;
-  min-width: 0;
+  width: 100%;
+  height: 48px;
+  border-radius: var(--db-radius-3);
+  background: var(--db-btn-bg);
+  color: var(--db-btn-fg);
+  overflow: hidden;
 
-  &-trigger {
-    width: 100%;
+  &-main,
+  &-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-smooth);
+
+    &:hover {
+      background: var(--db-btn-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--db-brand);
+      outline-offset: -3px;
+    }
+  }
+
+  &-main {
+    flex: 1;
+    gap: 8px;
     min-width: 0;
-    padding: 0 12px;
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  &-more {
+    flex-shrink: 0;
+    width: 44px;
+    border-left: 1px solid color-mix(in srgb, var(--db-btn-fg) 22%, transparent);
   }
 }
 </style>

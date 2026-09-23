@@ -35,22 +35,21 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/control' as c;
+
 .site-textarea {
+  @include c.control;
+
   display: block;
   width: 100%;
   min-height: 48px;
   margin: 0;
-  padding: 12px 14px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
-  border-radius: var(--db-radius-3);
-  background: var(--db-panel);
+  padding: 8px 16px;
+  border-radius: var(--db-radius-2);
   font: inherit;
   font-size: 15px;
   line-height: 24px;
-  color: var(--db-ink);
   resize: vertical;
-  transition: border-color 0.12s;
 
   &.is-mono {
     font-family: var(--db-font-mono);
@@ -62,17 +61,9 @@ defineExpose({
     color: var(--db-muted);
   }
 
-  &:hover:not(:focus) {
-    border-color: var(--db-hover-border);
-  }
-
   &:focus {
     border-color: var(--db-brand);
-  }
-
-  &.is-invalid,
-  &.is-invalid:hover {
-    border-color: var(--db-danger);
+    outline: none;
   }
 
   &.is-invalid:focus-visible {
@@ -80,9 +71,8 @@ defineExpose({
   }
 
   &:disabled {
-    background: var(--db-soft);
-    color: var(--db-muted);
-    cursor: not-allowed;
+    @include c.control-disabled;
+
     resize: none;
   }
 

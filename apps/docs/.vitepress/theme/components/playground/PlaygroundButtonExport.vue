@@ -17,9 +17,14 @@ import { serializePlaygroundConfig } from '@theme/utils/playgroundConfig';
 import { triggerDownload } from '@theme/utils/download';
 import { track, styleLabel } from '@theme/utils/track';
 
-const props = defineProps<{
-  seed: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    seed: string;
+    /** Without its own button the dialog opens through `show()`. */
+    trigger?: boolean;
+  }>(),
+  { trigger: true },
+);
 
 // The same composable the "How to use" dialog builds its snippets from, so
 // what gets written out here is the block those snippets print, seed and all.
@@ -67,10 +72,12 @@ async function copyOptions() {
     });
   }
 }
+defineExpose({ show: () => (open.value = true) });
 </script>
 
 <template>
   <button
+    v-if="trigger"
     type="button"
     class="site-btn site-btn-ghost site-btn-sm pg-quiet"
     @click="open = true"

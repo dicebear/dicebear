@@ -46,7 +46,7 @@ function onPlayground() {
     <div class="site-style-card-actions">
       <a
         :href="playgroundUrl"
-        class="site-btn site-btn-sm site-btn-primary site-btn-fluid"
+        class="site-btn site-btn-primary site-btn-fluid"
         @click="onPlayground"
       >
         Playground
@@ -54,7 +54,7 @@ function onPlayground() {
       <button
         v-if="definitionUrl"
         type="button"
-        class="site-btn site-btn-sm site-btn-secondary site-btn-fluid"
+        class="site-btn site-btn-secondary site-btn-fluid"
         :disabled="pending"
         @click="download"
       >
@@ -100,8 +100,6 @@ function onPlayground() {
     > * {
       flex: 1 1 0;
       min-width: 0;
-      height: 40px;
-      padding: 0 16px;
       white-space: nowrap;
     }
   }

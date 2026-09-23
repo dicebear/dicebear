@@ -173,6 +173,12 @@ function licenseName(name?: string) {
   padding: 80px var(--db-gutter) 40px;
 }
 
+/* Inside the docs shell the grid already holds the column and its gutter. */
+.theme-footer.docs-shell-footer .theme-footer-inner {
+  max-width: none;
+  padding: 64px 0 40px;
+}
+
 .theme-footer-top {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr);

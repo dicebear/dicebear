@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * The switch for every animation of the style, with the speed and delay
+ * they share.
+ */
 import { computed, useId } from 'vue';
 import SiteSwitch from '@theme/components/site/SiteSwitch.vue';
 import useStore from '@theme/stores/playground';
@@ -64,26 +68,13 @@ function resetAll() {
 
 <template>
   <div class="pg-animation">
-    <div class="pg-field">
-      <div class="pg-field-label">
-        <label :for="switchId">Play animations</label>
-        <span class="pg-field-tools">
-          <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
-          <SiteSwitch :id="switchId" v-model="animation" />
-        </span>
-      </div>
-      <p class="pg-help">
-        Plays the style's built-in animations in the SVG output. Raster formats
-        (PNG, JPEG, WebP, AVIF) always show the resting state, and viewers with
-        a reduced motion preference see the avatar still.
-        <template v-if="names.length > 0">
-          Each animation below can override this switch, the speed and the delay
-          for itself.
-        </template>
-      </p>
+    <div class="pg-animation-switch">
+      <label :for="switchId">Play animations</label>
+      <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
+      <SiteSwitch :id="switchId" v-model="animation" />
     </div>
 
-    <div v-if="anythingPlays" class="pg-animation-pair">
+    <div v-if="anythingPlays" class="pg-fields">
       <PlaygroundRangeField
         label="Speed"
         option-key="animationSpeed"
@@ -104,6 +95,13 @@ function resetAll() {
         :default-single="0"
       />
     </div>
+
+    <p class="pg-help">
+      <template v-if="names.length > 0">
+        Each animation follows the switch above unless it has one of its own.
+      </template>
+      Raster downloads show the resting frame.
+    </p>
   </div>
 </template>
 
@@ -111,18 +109,21 @@ function resetAll() {
 .pg-animation {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
-.pg-animation-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
+.pg-animation-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
-@container pg-options (max-width: 520px) {
-  .pg-animation-pair {
-    grid-template-columns: minmax(0, 1fr);
+  label {
+    flex: 1;
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 600;
+    color: var(--db-ink);
+    cursor: pointer;
   }
 }
 </style>

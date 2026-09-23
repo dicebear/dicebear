@@ -1,6 +1,6 @@
 import { nextTick, onBeforeUnmount, onMounted, ref, type Ref } from 'vue';
 
-export type PopoverAlign = 'left' | 'right';
+export type PopoverAlign = 'left' | 'right' | 'center';
 
 interface PopoverPositionOptions {
   /** The floating panel. It has to exist once `ready` is true. */
@@ -59,7 +59,12 @@ export function usePopoverPosition(options: PopoverPositionOptions) {
     const height = el.offsetHeight;
     const align = options.align?.() ?? 'left';
 
-    let left = align === 'right' ? rect.right - width : rect.left;
+    let left =
+      align === 'right'
+        ? rect.right - width
+        : align === 'center'
+          ? rect.left + (rect.width - width) / 2
+          : rect.left;
     left = Math.max(GAP, Math.min(left, viewportWidth - width - GAP));
 
     let top = rect.bottom + GAP;
@@ -69,7 +74,10 @@ export function usePopoverPosition(options: PopoverPositionOptions) {
       top = above;
     }
 
-    style.value = { top: `${Math.round(top)}px`, left: `${Math.round(left)}px` };
+    style.value = {
+      top: `${Math.round(top)}px`,
+      left: `${Math.round(left)}px`,
+    };
   }
 
   function schedulePlace() {

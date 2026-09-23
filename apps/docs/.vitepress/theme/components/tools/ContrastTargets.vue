@@ -108,19 +108,19 @@ function emitUpdate(id: 'a' | 'b', value: string) {
 
 .contrast-target {
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) auto;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
   gap: 20px;
   align-items: center;
   padding: 20px 0;
   border-top: 1px solid var(--db-line);
 
   &-input {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     padding: 0;
     overflow: hidden;
     border: 1px solid var(--db-btn-border);
-    border-radius: 14px;
+    border-radius: var(--db-radius-3);
     background: transparent;
     cursor: pointer;
 
@@ -191,13 +191,13 @@ function emitUpdate(id: 'a' | 'b', value: string) {
   }
 
   @media (max-width: 767px) {
-    grid-template-columns: 48px minmax(0, 1fr) auto;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
     gap: 12px;
 
     &-input {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--db-radius-3);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--db-radius-2);
     }
   }
 }

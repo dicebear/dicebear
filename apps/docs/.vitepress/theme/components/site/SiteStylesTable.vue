@@ -200,7 +200,7 @@ function peek(group: Group, slug: string) {
         >
           <button
             type="button"
-            class="site-styles-filter-chip hv-outline"
+            class="site-chip site-chip-lg hv-outline"
             :aria-pressed="selectedCategories.length === 0"
             @click="selectedCategories = []"
           >
@@ -210,7 +210,7 @@ function peek(group: Group, slug: string) {
             v-for="category in availableCategories"
             :key="category"
             type="button"
-            class="site-styles-filter-chip hv-outline"
+            class="site-chip site-chip-lg hv-outline"
             :aria-pressed="selectedCategories.includes(category)"
             @click="toggleCategory(category)"
           >
@@ -305,41 +305,14 @@ function peek(group: Group, slug: string) {
     margin-left: 12px;
   }
 
-  &-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    height: 40px;
-    padding: 0 16px;
-    border-radius: 999px;
-    border: 1px solid var(--db-line);
-    background: var(--db-paper);
-    font: inherit;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--db-ink);
-    cursor: pointer;
-
-    &[aria-pressed='true'] {
-      background: var(--db-ink);
-      border-color: var(--db-ink);
-      color: var(--db-paper);
-
-      .site-styles-filter-count {
-        color: inherit;
-        opacity: 0.7;
-      }
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--db-brand);
-      outline-offset: 2px;
-    }
-  }
-
   &-count {
     font-weight: 400;
     color: var(--db-muted);
+
+    .site-chip[aria-pressed='true'] & {
+      color: inherit;
+      opacity: 0.7;
+    }
   }
 
   &-controls {

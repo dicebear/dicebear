@@ -157,7 +157,11 @@ defineExpose({ toggle, show, hide });
       @keydown="onKeyDown"
     >
       <template v-for="(item, index) in items" :key="index">
-        <div v-if="item.separator" class="site-menu-separator" role="separator" />
+        <div
+          v-if="item.separator"
+          class="site-menu-separator"
+          role="separator"
+        />
         <button
           v-else
           type="button"
@@ -203,7 +207,7 @@ defineExpose({ toggle, show, hide });
     margin: 0;
     padding: 6px;
     border: 1px solid var(--db-line);
-    border-radius: 14px;
+    border-radius: var(--db-radius-3);
     background: var(--db-panel);
     color: var(--db-ink);
     box-shadow: var(--db-shadow-pop);
@@ -222,7 +226,7 @@ defineExpose({ toggle, show, hide });
     height: 40px;
     padding: 0 12px;
     border: 0;
-    border-radius: 9px;
+    border-radius: var(--db-radius-1);
     background: transparent;
     color: var(--db-ink);
     font-size: 15px;

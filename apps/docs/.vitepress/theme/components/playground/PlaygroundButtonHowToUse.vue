@@ -21,9 +21,14 @@ import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import { track, styleLabel } from '@theme/utils/track';
 import { useCodeTab } from '@theme/composables/useCodeTab';
 
-const props = defineProps<{
-  seed: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    seed: string;
+    /** Without its own button the dialog opens through `show()`. */
+    trigger?: boolean;
+  }>(),
+  { trigger: true },
+);
 
 const { store, open, options } = usePlaygroundDialog(() => props.seed);
 
@@ -265,29 +270,15 @@ const exampleCli = computed(() =>
 
 interface HowToUseTab extends UiCodeTab {
   docs: string;
-}
-
-/** The install command as the first lines of the snippet, as comments. */
-function withInstall(code: string, install: string, lang?: string): string {
-  const marker = lang === 'python' || lang === undefined ? '#' : '//';
-  const lines = install
-    .split('\n')
-    .map((line) => `${marker} ${line}`)
-    .join('\n');
-
-  // A PHP file has to open with its tag, so the comment follows it.
-  if (lang === 'php') {
-    return code.replace('<?php\n', `<?php\n\n${lines}\n`);
-  }
-
-  return `${lines}\n\n${code}`;
+  /** The command that installs the packages, shown under the code. */
+  install?: string;
 }
 
 // The API only knows the packaged styles, so an uploaded style has no HTTP tab.
 const tabs = computed<HowToUseTab[]>(() => {
   const custom = store.isCustomStyle;
 
-  const list: (HowToUseTab & { install?: string })[] = [
+  const list: HowToUseTab[] = [
     {
       id: 'js-library',
       label: 'JavaScript',
@@ -365,10 +356,7 @@ const tabs = computed<HowToUseTab[]>(() => {
     },
   ];
 
-  const libraries = list.map(({ install, ...tab }) => ({
-    ...tab,
-    code: install ? withInstall(tab.code, install, tab.lang) : tab.code,
-  }));
+  const libraries = list;
 
   if (custom) {
     return libraries;
@@ -395,12 +383,14 @@ function onTab(id: string | undefined) {
 
   track('Playground: How To Use Tab', { tab: active.value });
 }
+defineExpose({ show: () => (open.value = true) });
 </script>
 
 <template>
   <button
+    v-if="trigger"
     type="button"
-    class="site-btn site-btn-primary pg-how-to-use-button"
+    class="site-btn site-btn-secondary pg-how-to-use-button"
     aria-haspopup="dialog"
     @click="open = true"
   >
@@ -410,12 +400,36 @@ function onTab(id: string | undefined) {
 
   <SiteDialog v-model:open="open" header="How to use" max-width="860px">
     <div class="pg-how-to-use">
+      <div class="pg-how-to-use-tabs" role="tablist" aria-label="Language">
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          type="button"
+          role="tab"
+          class="pg-how-to-use-tab"
+          :aria-selected="tab.id === current.id"
+          @click="onTab(tab.id)"
+        >
+          {{ tab.label }}
+        </button>
+      </div>
+
       <UiCode
+        :key="current.id"
         class="pg-how-to-use-code"
-        :tabs="tabs"
-        :model-value="active"
-        @update:model-value="onTab"
+        :lang="current.lang"
+        :code="current.code"
       />
+
+      <div class="pg-how-to-use-foot">
+        <code v-if="current.install" class="pg-how-to-use-install">{{
+          current.install
+        }}</code>
+        <a :href="current.docs" class="pg-how-to-use-docs hv-link">
+          {{ current.label }} documentation
+          <ArrowRight :size="16" aria-hidden="true" />
+        </a>
+      </div>
 
       <SiteNotice
         v-if="current.id === 'http-api' && hasExcludedOptions"
@@ -435,11 +449,6 @@ function onTab(id: string | undefined) {
         Replace <code>./my-style.json</code> with the path to your style
         definition.
       </p>
-
-      <a :href="current.docs" class="pg-how-to-use-docs hv-link">
-        {{ current.label }} documentation
-        <ArrowRight :size="16" aria-hidden="true" />
-      </a>
 
       <PlaygroundLicenseAlert />
     </div>
@@ -489,16 +498,73 @@ function onTab(id: string | undefined) {
     }
   }
 
+  /* The languages, underlined where chosen. */
+  &-tabs {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--db-line);
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &-tab {
+    flex-shrink: 0;
+    padding: 0 2px 10px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    color: var(--db-muted);
+    white-space: nowrap;
+    cursor: pointer;
+
+    &[aria-selected='true'] {
+      border-bottom-color: var(--db-ink);
+      font-weight: 600;
+      color: var(--db-ink);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--db-brand);
+      outline-offset: 2px;
+    }
+  }
+
+  &-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+  }
+
+  &-install {
+    min-width: 0;
+    font-family: var(--db-font-mono);
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--db-muted);
+    white-space: pre-line;
+  }
+
   &-docs {
-    align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 15px;
-    line-height: 24px;
+    margin-left: auto;
+    font-size: 14px;
+    line-height: 20px;
     font-weight: 500;
     color: var(--db-brand-text);
     text-decoration: none;
+    white-space: nowrap;
   }
 }
 </style>

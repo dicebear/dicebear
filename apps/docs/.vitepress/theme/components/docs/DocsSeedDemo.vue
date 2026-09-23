@@ -110,18 +110,15 @@ const sources = computedAsync<Record<string, string>>(async () => {
           >{{ urlParts.head }}<b>{{ selectedStyle }}</b
           >{{ urlParts.tail }}</code
         >
-        <UiCopyButton
-          :text="apiUrl"
-          :duration="1600"
-          label="Copy URL"
-          class="docs-seed-demo-copy"
-        />
+        <UiCopyButton :text="apiUrl" :duration="1600" label="Copy URL" />
       </div>
     </div>
   </UiDemoFrame>
 </template>
 
 <style lang="scss" scoped>
+@use '../../styles/control' as c;
+
 .docs-seed-demo {
   display: flex;
   flex-direction: column;
@@ -129,23 +126,12 @@ const sources = computedAsync<Record<string, string>>(async () => {
 }
 
 .docs-seed-demo-field {
+  @include c.control;
+  @include c.control-size(lg);
+
   display: flex;
   align-items: center;
   gap: 14px;
-  height: 52px;
-  padding: 0 16px;
-  border: 1px solid var(--db-btn-border);
-  border-radius: 10px;
-  background: var(--db-paper);
-  transition: border-color 0.12s;
-
-  &:hover {
-    border-color: var(--db-hover-border);
-  }
-
-  &:focus-within {
-    border-color: var(--db-brand);
-  }
 
   span {
     font-size: 12px;
@@ -159,13 +145,13 @@ const sources = computedAsync<Record<string, string>>(async () => {
   input {
     flex: 1;
     min-width: 0;
-    height: 48px;
+    align-self: stretch;
     padding: 0;
     border: 0;
     outline: none;
     background: transparent;
     font-family: inherit;
-    font-size: 18px;
+    font-size: inherit;
     font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--db-ink);
@@ -249,9 +235,9 @@ const sources = computedAsync<Record<string, string>>(async () => {
   align-items: center;
   gap: 8px;
   min-height: 48px;
-  padding: 0 6px 0 14px;
+  padding: 0 8px 0 14px;
   border: 1px solid var(--db-line);
-  border-radius: 10px;
+  border-radius: var(--db-radius-3);
   background: var(--db-paper);
 
   code {
@@ -268,11 +254,6 @@ const sources = computedAsync<Record<string, string>>(async () => {
   b {
     font-weight: 600;
     color: var(--db-brand-text);
-  }
-
-  .docs-seed-demo-copy {
-    width: 36px;
-    height: 36px;
   }
 }
 </style>

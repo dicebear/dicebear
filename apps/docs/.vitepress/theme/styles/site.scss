@@ -20,23 +20,53 @@
   box-sizing: border-box;
 }
 
-/* Outlined chip for facts in a page head (creator, license, category). */
+/* Chips. The plain one is a pill for a fact or a filter, 32px like a small
+   button, in the tint while it is on. The toned ones are small marks. */
 .site-chip {
   display: inline-flex;
   align-items: center;
-  height: 36px;
-  padding: 0 14px;
-  border-radius: var(--db-radius-2);
-  border: 1px solid var(--db-line);
-  font-size: 14px;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--db-field-border);
+  border-radius: 16px;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
   font-weight: 500;
-  color: var(--db-ink);
+  line-height: 18px;
+  color: var(--db-ink-2);
   white-space: nowrap;
   text-decoration: none;
 
   &:hover {
     border-color: var(--db-hover-border);
   }
+
+  &[aria-pressed='true'] {
+    border-color: var(--db-brand);
+    background: var(--db-tint);
+    color: var(--db-tint-text);
+  }
+
+  &:is(button, a) {
+    cursor: pointer;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--db-brand);
+    outline-offset: 2px;
+  }
+}
+
+/* The chip of a filter row, one step up so it stands level with the fields. */
+.site-chip-lg {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 20px;
+  font-size: 15px;
+  line-height: 24px;
 }
 
 .site-chip-ok,
@@ -50,6 +80,7 @@
   border-radius: var(--db-radius-1);
   font-size: 12px;
   font-weight: 600;
+  color: var(--db-ink);
 }
 
 .site-chip-ok {
@@ -112,20 +143,22 @@
   }
 }
 
-/* Buttons: an ink fill, a hairline outline or plain text, one shape in three
-   sizes. Plain anchors and buttons, no component. */
+/* Buttons: an ink fill, the soft ground and quiet line the fields have, or
+   plain text. One shape in three sizes, sm 32, md 40, lg 48, and a square icon
+   form of each. Plain anchors and buttons, no component. */
 .site-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  height: 48px;
-  padding: 0 22px;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  box-sizing: border-box;
   border: 1px solid transparent;
-  border-radius: 14px;
+  border-radius: var(--db-radius-2);
   background: none;
   font: inherit;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1;
   color: var(--db-ink);
@@ -138,13 +171,18 @@
     color 0.12s;
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: default;
   }
 
   &.is-loading {
     cursor: progress;
     opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--db-brand);
+    outline-offset: 2px;
   }
 
   &-primary {
@@ -158,16 +196,15 @@
   }
 
   &-secondary {
-    border-color: var(--db-btn-border);
+    border-color: var(--db-field-border);
+    background: var(--db-soft);
 
     &:hover:not(:disabled) {
-      background: var(--db-soft);
-      border-color: var(--db-hover-border);
+      border-color: var(--db-btn-border);
     }
   }
 
   &-ghost {
-    padding: 0 12px;
     color: var(--db-muted);
 
     &:hover:not(:disabled) {
@@ -185,24 +222,30 @@
   }
 
   &-sm {
-    height: 36px;
-    padding: 0 14px;
-    border-radius: var(--db-radius-2);
-    font-size: 14px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: var(--db-radius-1);
+    font-size: 13px;
   }
 
   &-lg {
-    height: 56px;
-    padding: 0 28px;
-    border-radius: 16px;
-    font-size: 18px;
+    height: 48px;
+    padding: 0 22px;
+    border-radius: var(--db-radius-3);
+    font-size: 16px;
   }
 
   &-icon {
-    width: 36px;
-    height: 36px;
+    width: 40px;
     padding: 0;
-    border-radius: var(--db-radius-2);
+
+    &.site-btn-sm {
+      width: 32px;
+    }
+
+    &.site-btn-lg {
+      width: 48px;
+    }
   }
 
   &-fluid {

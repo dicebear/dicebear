@@ -1,6 +1,12 @@
 <script setup lang="ts">
+/**
+ * One named animation as a row: its name, whether it plays, and the switch
+ * that lets it follow the global one or go its own way. While it plays, its
+ * own speed and delay sit under the row.
+ */
 import { computed } from 'vue';
 import SiteSegmented from '@theme/components/site/SiteSegmented.vue';
+import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
 import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
@@ -17,7 +23,7 @@ const speedKey = computed(() => `${props.name}AnimationSpeed`);
 const delayKey = computed(() => `${props.name}AnimationDelay`);
 
 // `follow` leaves the option unset, so the animation takes the switch under
-// "All animations". `on` and `off` write the option and win over it.
+// "Play animations". `on` and `off` write the option and win over it.
 type Choice = 'follow' | 'on' | 'off';
 
 const choices: { label: string; value: Choice }[] = [
@@ -51,21 +57,16 @@ const choice = computed<Choice>({
 const plays = computed(() =>
   animationPlays(store.avatarStyleOptions, props.name),
 );
-const globalOn = computed(() => store.avatarStyleOptions.animation === true);
 
-const status = computed(() => {
-  if (choice.value === 'follow') {
-    return globalOn.value
-      ? 'Plays, because all animations are on.'
-      : 'Still, because all animations are off.';
-  }
+// What the row says next to the name: the state the core resolves, and
+// "own" when the animation's own switch decides it.
+const state = computed(() => {
+  const word = plays.value ? 'plays' : 'still';
 
-  return choice.value === 'on'
-    ? 'Plays on its own switch, whatever the setting for all animations.'
-    : 'Stays still, whatever the setting for all animations.';
+  return choice.value === 'follow' ? word : `${word} · own`;
 });
 
-// The value an unset field inherits: the option under "All animations" as
+// The value an unset field inherits: the option under "Play animations" as
 // the user wrote it, or the core's default.
 type RangeValue = number | [number, number];
 
@@ -101,7 +102,6 @@ const fields = computed(() => [
     unit: '×',
     fallback: 1,
     inherited: inherited('animationSpeed', 1),
-    help: 'Follows the speed under all animations.',
   },
   {
     label: 'Delay',
@@ -112,7 +112,6 @@ const fields = computed(() => [
     unit: 's',
     fallback: 0,
     inherited: inherited('animationDelay', 0),
-    help: 'Follows the delay under all animations.',
   },
 ]);
 
@@ -138,24 +137,21 @@ function resetAll() {
 </script>
 
 <template>
-  <div class="pg-animation-name">
-    <div class="pg-field">
-      <div class="pg-field-label">
-        <span>Switch</span>
-        <span class="pg-field-tools">
-          <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
-        </span>
-      </div>
+  <div class="pg-anim-row">
+    <div class="pg-anim-row-head">
+      <span class="pg-anim-row-name">{{ capitalCase(name) }}</span>
+      <span class="pg-anim-row-state">{{ state }}</span>
+      <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
       <SiteSegmented
         v-model="choice"
         :options="choices"
-        aria-label="Switch"
-        fluid
+        size="sm"
+        :aria-label="`${capitalCase(name)} switch`"
+        class="pg-anim-row-switch"
       />
-      <p class="pg-help">{{ status }}</p>
     </div>
 
-    <div v-if="plays" class="pg-animation-name-pair">
+    <div v-if="plays" class="pg-fields pg-anim-row-fields">
       <template v-for="field in fields" :key="field.label">
         <PlaygroundRangeField
           v-if="store.isOptionSet(field.key)"
@@ -176,14 +172,13 @@ function resetAll() {
               </span>
               <button
                 type="button"
-                class="pg-field-action hv-ghost"
+                class="site-btn site-btn-ghost site-btn-sm"
                 @click="override(field.key, field.inherited)"
               >
-                Override
+                Own
               </button>
             </span>
           </div>
-          <p class="pg-help">{{ field.help }}</p>
         </div>
       </template>
     </div>
@@ -191,21 +186,55 @@ function resetAll() {
 </template>
 
 <style scoped lang="scss">
-.pg-animation-name {
+.pg-anim-row {
+  padding: 12px 0;
+  border-top: 1px solid var(--db-line);
+}
+
+.pg-anim-row-head {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  gap: 10px;
+  min-height: 30px;
 }
 
-.pg-animation-name-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+.pg-anim-row-name {
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--db-ink);
 }
 
-@container pg-options (max-width: 520px) {
-  .pg-animation-name-pair {
-    grid-template-columns: minmax(0, 1fr);
+.pg-anim-row-state {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--db-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pg-anim-row-switch {
+  flex-shrink: 0;
+  grid-auto-columns: auto;
+}
+
+.pg-anim-row-fields {
+  margin-top: 10px;
+}
+
+/* A narrow column stacks the switch under the name. */
+@container pg-options (max-width: 300px) {
+  .pg-anim-row-head {
+    flex-wrap: wrap;
+  }
+
+  .pg-anim-row-switch {
+    width: 100%;
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
   }
 }
 </style>

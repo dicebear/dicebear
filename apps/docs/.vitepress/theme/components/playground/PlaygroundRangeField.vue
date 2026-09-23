@@ -62,7 +62,7 @@ const rangeLabel = computed(() =>
         />
         <button
           type="button"
-          class="pg-field-toggle hv-outline"
+          class="site-btn site-btn-ghost site-btn-icon site-btn-sm"
           :aria-pressed="isRangeMode(optionKey)"
           :aria-label="rangeLabel"
           :data-tip="rangeLabel"

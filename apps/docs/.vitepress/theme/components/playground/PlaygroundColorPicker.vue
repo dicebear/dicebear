@@ -8,6 +8,8 @@ import { stripHash } from '@theme/utils/avatar/colors';
 const props = defineProps<{
   presetColors: string[];
   colors: string[];
+  // A row with a label instead of the square button.
+  row?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -51,6 +53,16 @@ function addFromPicker() {
 
 <template>
   <button
+    v-if="row"
+    type="button"
+    class="pg-color-picker-row hv-link"
+    @click="toggle"
+  >
+    <Plus :size="16" aria-hidden="true" />
+    Add a color
+  </button>
+  <button
+    v-else
     type="button"
     class="pg-color-picker-trigger hv-dashed"
     aria-label="Add a color"
@@ -113,16 +125,32 @@ function addFromPicker() {
 </template>
 
 <style scoped lang="scss">
+.pg-color-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--db-brand-text);
+  cursor: pointer;
+}
+
 .pg-color-picker-trigger {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   box-sizing: border-box;
   border: 1px dashed var(--db-btn-border);
-  border-radius: 10px;
+  border-radius: var(--db-radius-1);
   background: transparent;
   color: var(--db-muted);
   cursor: pointer;

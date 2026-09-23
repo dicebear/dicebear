@@ -1,22 +1,27 @@
 <script setup lang="ts">
+/**
+ * Adds a style of one's own from its definition, pasted or from a file. A
+ * dropped file that could not be added opens this dialog with its content
+ * and the reason.
+ */
 import { ref, computed, watch } from 'vue';
-import { Style } from '@dicebear/core';
-import { registerCustomStyle } from '@theme/utils/avatar/style';
-import useStore from '@theme/stores/playground';
-import { Upload } from '@lucide/vue';
+import {
+  StyleUploadError,
+  usePlaygroundStyles,
+} from '@theme/composables/usePlaygroundStyles';
+import { Plus, Upload } from '@lucide/vue';
 import SiteDialog from '../site/SiteDialog.vue';
 import SiteNotice from '../site/SiteNotice.vue';
 import SiteTextarea from '../site/SiteTextarea.vue';
 import SiteTextField from '../site/SiteTextField.vue';
 import { MAX_CUSTOM_STYLE_UPLOAD_BYTES } from './constants';
 
-const open = defineModel<boolean>('open', { required: true });
-
-const emit = defineEmits<{
-  added: [key: string];
-}>();
-
-const store = useStore();
+const {
+  uploadOpen: open,
+  uploadDraft,
+  addStyle,
+  chooseStyle,
+} = usePlaygroundStyles();
 
 const jsonInput = ref('');
 const styleName = ref('');
@@ -24,70 +29,30 @@ const error = ref('');
 const loading = ref(false);
 
 watch(open, (val) => {
-  if (val) {
-    jsonInput.value = '';
-    styleName.value = '';
-    error.value = '';
-  }
+  if (!val) return;
+
+  const draft = uploadDraft.value;
+
+  jsonInput.value = draft?.json ?? '';
+  styleName.value = draft?.name ?? '';
+  error.value = draft?.error ?? '';
+  uploadDraft.value = undefined;
 });
 
-function extractName(definition: Record<string, unknown>): string {
-  const meta = definition.meta as Record<string, unknown> | undefined;
-
-  if (meta) {
-    const source = meta.source as Record<string, unknown> | undefined;
-
-    if (source?.name && typeof source.name === 'string') {
-      return source.name;
-    }
-
-    const creator = meta.creator as Record<string, unknown> | undefined;
-
-    if (creator?.name && typeof creator.name === 'string') {
-      return creator.name;
-    }
-  }
-
-  if (definition.$id && typeof definition.$id === 'string') {
-    return definition.$id;
-  }
-
-  return 'Custom Style';
-}
-
-async function submit() {
+function submit() {
   error.value = '';
-
-  if (
-    new TextEncoder().encode(jsonInput.value).length >
-    MAX_CUSTOM_STYLE_UPLOAD_BYTES
-  ) {
-    error.value = 'Style definition is too large (max 1 MB).';
-
-    return;
-  }
-
   loading.value = true;
 
   try {
-    const parsed = JSON.parse(jsonInput.value);
-    const name = styleName.value.trim() || extractName(parsed);
+    const key = addStyle(jsonInput.value, styleName.value);
 
-    new Style(parsed);
-
-    const key = store.addCustomStyle(name, parsed);
-    registerCustomStyle(key, parsed);
-
-    emit('added', key);
+    chooseStyle(key);
+    open.value = false;
   } catch (err: unknown) {
-    if (err instanceof SyntaxError) {
-      error.value = 'Invalid JSON: ' + err.message;
-    } else if (err instanceof Error) {
-      error.value =
-        'Invalid style definition. Check format and required fields.';
-    } else {
-      error.value = 'An unknown error occurred.';
-    }
+    error.value =
+      err instanceof StyleUploadError
+        ? err.message
+        : 'An unknown error occurred.';
   } finally {
     loading.value = false;
   }
@@ -129,7 +94,7 @@ const canSubmit = computed(
     <div class="pg-custom-upload">
       <div class="pg-custom-upload-field">
         <label class="pg-custom-upload-label" for="pg-custom-upload-name">
-          Style name (optional)
+          Name
         </label>
         <SiteTextField
           id="pg-custom-upload-name"
@@ -141,7 +106,7 @@ const canSubmit = computed(
 
       <div class="pg-custom-upload-field">
         <label class="pg-custom-upload-label" for="pg-custom-upload-json">
-          Style definition (JSON)
+          Definition
         </label>
         <SiteTextarea
           id="pg-custom-upload-json"
@@ -154,39 +119,36 @@ const canSubmit = computed(
         />
       </div>
 
-      <div class="pg-custom-upload-or">or</div>
-
-      <label class="site-btn site-btn-secondary pg-custom-upload-file">
-        <Upload :size="16" aria-hidden="true" />
-        Choose JSON file
-        <input
-          type="file"
-          accept=".json,application/json"
-          class="pg-custom-upload-file-input"
-          @change="onFileSelect"
-        />
-      </label>
-
       <SiteNotice v-if="error" tone="error" compact role="alert">
         {{ error }}
       </SiteNotice>
 
-      <button
-        type="button"
-        class="site-btn site-btn-primary pg-custom-upload-submit"
-        :class="{ 'is-loading': loading }"
-        :disabled="!canSubmit"
-        :aria-busy="loading"
-        @click="submit"
-      >
-        Add style
-      </button>
-
-      <p class="pg-custom-upload-notice">
-        Please only upload styles for which you hold the necessary copyrights.
-        Your data is processed and stored exclusively in your local browser and
-        never reaches our server.
-      </p>
+      <div class="pg-custom-upload-actions">
+        <label class="site-btn site-btn-secondary pg-custom-upload-file">
+          <Upload :size="16" aria-hidden="true" />
+          Choose a file
+          <input
+            type="file"
+            accept=".json,application/json"
+            class="pg-custom-upload-file-input"
+            @change="onFileSelect"
+          />
+        </label>
+        <span class="pg-custom-upload-notice">
+          Stays in this browser only. Upload styles you hold the rights to.
+        </span>
+        <button
+          type="button"
+          class="site-btn site-btn-primary pg-custom-upload-submit"
+          :class="{ 'is-loading': loading }"
+          :disabled="!canSubmit"
+          :aria-busy="loading"
+          @click="submit"
+        >
+          <Plus :size="16" aria-hidden="true" />
+          Add style
+        </button>
+      </div>
     </div>
   </SiteDialog>
 </template>
@@ -215,21 +177,11 @@ const canSubmit = computed(
     color: var(--db-ink);
   }
 
-  &-or {
+  &-actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 12px;
-    font-size: 13px;
-    line-height: 18px;
-    color: var(--db-muted);
-
-    &::before,
-    &::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--db-line);
-    }
   }
 
   &-file {
@@ -251,11 +203,13 @@ const canSubmit = computed(
   }
 
   &-submit {
+    margin-left: auto;
     font-size: 15px;
   }
 
   &-notice {
-    margin: 0;
+    flex: 1;
+    min-width: 160px;
     font-size: 13px;
     line-height: 18px;
     color: var(--db-muted);

@@ -98,9 +98,10 @@ function onKeydown(event: KeyboardEvent, index: number) {
   grid-auto-columns: minmax(0, 1fr);
   gap: 4px;
   max-width: 100%;
-  padding: 4px;
+  padding: 3px;
   box-sizing: border-box;
-  border-radius: var(--db-radius-3);
+  border: 1px solid var(--db-field-border);
+  border-radius: var(--db-radius-2);
   background: var(--db-soft);
 
   &.is-fluid {
@@ -109,16 +110,16 @@ function onKeydown(event: KeyboardEvent, index: number) {
   }
 
   &.is-sm {
-    border-radius: 10px;
+    border-radius: var(--db-radius-1);
   }
 
   &-item {
     min-width: 0;
-    height: 34px;
-    padding: 0 14px;
+    height: 32px;
+    padding: 0 12px;
     box-sizing: border-box;
-    border: 1px solid transparent;
-    border-radius: 9px;
+    border: 0;
+    border-radius: var(--db-radius-1);
     background: transparent;
     font: inherit;
     font-size: 14px;
@@ -131,7 +132,6 @@ function onKeydown(event: KeyboardEvent, index: number) {
     cursor: pointer;
 
     &[aria-checked='true'] {
-      border-color: var(--db-line);
       background: var(--db-paper);
       color: var(--db-ink);
       cursor: default;
@@ -148,9 +148,9 @@ function onKeydown(event: KeyboardEvent, index: number) {
   }
 
   &.is-sm &-item {
-    height: 30px;
+    height: 24px;
     padding: 0 10px;
-    border-radius: var(--db-radius-2);
+    border-radius: 4px;
     font-size: 13px;
     line-height: 18px;
   }

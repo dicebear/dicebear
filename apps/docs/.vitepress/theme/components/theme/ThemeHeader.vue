@@ -61,7 +61,11 @@ onKeyStroke('Escape', () => {
   <header class="theme-header">
     <div class="theme-header-inner">
       <div class="theme-header-left">
-        <a :href="withBase('/')" class="theme-header-logo" aria-label="DiceBear home">
+        <a
+          :href="withBase('/')"
+          class="theme-header-logo"
+          aria-label="DiceBear home"
+        >
           <img
             class="only-light"
             :src="withBase('/logo.svg')"
@@ -77,7 +81,11 @@ onKeyStroke('Escape', () => {
             height="32"
           />
         </a>
-        <button type="button" class="theme-header-search hv-fill" @click="show">
+        <button
+          type="button"
+          class="theme-header-search hv-border"
+          @click="show"
+        >
           <Search :size="18" :stroke-width="1.8" aria-hidden="true" />
           <span class="theme-header-search-label">Search</span>
           <span class="theme-header-search-keys" aria-hidden="true">
@@ -119,17 +127,18 @@ onKeyStroke('Escape', () => {
           :aria-label="menuOpen ? 'Close menu' : 'Menu'"
           @click="menuOpen = !menuOpen"
         >
-          <X v-if="menuOpen" :size="22" :stroke-width="1.8" aria-hidden="true" />
+          <X
+            v-if="menuOpen"
+            :size="22"
+            :stroke-width="1.8"
+            aria-hidden="true"
+          />
           <Menu v-else :size="22" :stroke-width="1.8" aria-hidden="true" />
         </button>
       </div>
     </div>
 
-    <div
-      v-show="menuOpen"
-      id="theme-header-menu"
-      class="theme-header-menu"
-    >
+    <div v-show="menuOpen" id="theme-header-menu" class="theme-header-menu">
       <nav class="theme-header-menu-nav" aria-label="Main">
         <a
           v-for="link in links"
@@ -187,13 +196,17 @@ onKeyStroke('Escape', () => {
   }
 }
 
+/* The search is a field of the set: the soft ground with the quiet line,
+   40px like every other field. */
 .theme-header-search {
   display: flex;
   align-items: center;
   gap: 8px;
   width: 220px;
-  height: 36px;
+  height: 40px;
   padding: 0 8px 0 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--db-field-border);
   border-radius: var(--db-radius-2);
   background: var(--db-soft);
   color: var(--db-muted);
