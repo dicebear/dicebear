@@ -4,10 +4,9 @@
  * the name, a sentence and where the link leads.
  */
 import { ArrowRight, ArrowUpRight, Frame } from '@lucide/vue';
-import { Color } from '@dicebear/core';
 import SiteAvatar from '@theme/components/site/SiteAvatar.vue';
 import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
-import { hsvToHex } from '@theme/utils/colorSpaces';
+import { hsvToHex, luminance } from '@theme/utils/colorSpaces';
 import { tools as toolEntries, type ToolEntry } from '@theme/config/tools';
 
 type Visual =
@@ -69,7 +68,7 @@ function miniBoundary(): string {
     for (let k = 0; k < 20; k++) {
       const mid = (lo + hi) / 2;
 
-      if (Color.luminance(hsvToHex({ h: MINI_HUE, s, v: mid })) < target) {
+      if (luminance(hsvToHex({ h: MINI_HUE, s, v: mid })) < target) {
         lo = mid;
       } else {
         hi = mid;

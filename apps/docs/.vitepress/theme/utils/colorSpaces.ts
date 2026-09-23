@@ -1,5 +1,3 @@
-import { Color } from '@dicebear/core';
-
 export type Rgb = { r: number; g: number; b: number };
 export type Hsl = { h: number; s: number; l: number };
 export type Hsv = { h: number; s: number; v: number };
@@ -10,9 +8,20 @@ export function clamp(value: number, min: number, max: number): number {
   return value;
 }
 
+// Takes the 3-, 4-, 6- and 8-digit forms, with or without `#`, and drops the
+// alpha channel.
 export function hexToRgb(hex: string): Rgb {
-  const [r, g, b] = Color.parseHex(hex);
-  return { r, g, b };
+  let h = hex.replace(/^#/, '');
+
+  if (h.length === 3 || h.length === 4) {
+    h = h.replace(/./g, (c) => c + c);
+  }
+
+  return {
+    r: parseInt(h.slice(0, 2), 16),
+    g: parseInt(h.slice(2, 4), 16),
+    b: parseInt(h.slice(4, 6), 16),
+  };
 }
 
 export function rgbToHex({ r, g, b }: Rgb): string {
@@ -123,6 +132,29 @@ function hueFromRgb(rgb: Rgb, max: number, min: number): number {
   h *= 60;
   if (h < 0) h += 360;
   return h;
+}
+
+// WCAG 2.1 relative luminance, the measure the core ranks `contrastTo`
+// candidates by. The core reads the linearized channels from a lookup table so
+// every language gets the same bits. Computing them here can differ in the
+// last bit, far below anything the picker shows.
+export function luminance(hex: string): number {
+  const { r, g, b } = hexToRgb(hex);
+
+  return 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
+}
+
+export function contrastRatio(luminanceA: number, luminanceB: number): number {
+  return (
+    (Math.max(luminanceA, luminanceB) + 0.05) /
+    (Math.min(luminanceA, luminanceB) + 0.05)
+  );
+}
+
+function linearize(channel: number): number {
+  const s = channel / 255;
+
+  return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
 }
 
 export function isValidHex(value: string): boolean {

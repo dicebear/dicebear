@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Removed
+
+- **Core (JS, Python, Rust, Go, Dart):** The color helpers are no longer public.
+  `@dicebear/core` and `@dicebear/core/lite` drop the `Color` export, the Python
+  package and the Dart library drop `Color`, the Rust crate drops the `color`
+  module, and the Go package `github.com/dicebear/dicebear-go/v11/color` moves
+  to `internal/color`. The renderer still uses them, so avatars don't change.
+  PHP and C# already kept them internal. Code that called them can copy the
+  functions it needs from the source.
+
 ### Changed
 
 - **Styles:** Bumped `@dicebear/styles` to `11.0.0-rc.3` for the CLI, the docs,

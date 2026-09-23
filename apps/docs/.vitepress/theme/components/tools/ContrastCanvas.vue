@@ -2,9 +2,8 @@
 // A hand-built saturation and value square: it has to host the iso-contrast
 // overlay that maps the WCAG pick boundary onto the plane.
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import { Color } from '@dicebear/core';
 import SiteSlider from '@theme/components/site/SiteSlider.vue';
-import { clamp, hsvToHex } from '@theme/utils/colorSpaces';
+import { clamp, hsvToHex, luminance } from '@theme/utils/colorSpaces';
 import type { Hsv } from '@theme/utils/colorSpaces';
 
 const props = defineProps<{
@@ -123,14 +122,14 @@ const hueOnlyBackground = computed(() => {
 // where contrast against A equals contrast against B. The equal-contrast
 // luminance is L* = sqrt((L_a + 0.05) * (L_b + 0.05)) - 0.05. We binary
 // search V along each S step so the curve plots exactly the points where
-// Color.sortByContrast would swap its pick. Tracks only hue (not s/v) so
+// the core's contrast sort would swap its pick. Tracks only hue (not s/v) so
 // dragging the crosshair doesn't retrigger ~1.9k luminance calls.
 const isoContrastPath = computed<string | null>(() => {
   if (surfaceSize.value.width === 0) return null;
 
   const hue = props.hsv.h;
-  const la = Color.luminance(props.contrastA);
-  const lb = Color.luminance(props.contrastB);
+  const la = luminance(props.contrastA);
+  const lb = luminance(props.contrastB);
   const target = Math.sqrt((la + 0.05) * (lb + 0.05)) - 0.05;
 
   if (target <= 0 || target >= 1) return null;
@@ -145,7 +144,7 @@ const isoContrastPath = computed<string | null>(() => {
 
     for (let iter = 0; iter < 24; iter++) {
       const mid = (lo + hi) / 2;
-      const lum = Color.luminance(hsvToHex({ h: hue, s, v: mid }));
+      const lum = luminance(hsvToHex({ h: hue, s, v: mid }));
       if (lum < target) lo = mid;
       else hi = mid;
     }

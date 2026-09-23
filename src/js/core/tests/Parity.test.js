@@ -12,12 +12,13 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { Avatar, Color, OptionsDescriptor, Style } from '../lib/index.js';
+import { Avatar, OptionsDescriptor, Style } from '../lib/index.js';
 import { Prng } from '../lib/Prng.js';
 import { Fnv1a } from '../lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../lib/Prng/Mulberry32.js';
 import { Number } from '../lib/Utils/Number.js';
 import { Initials } from '../lib/Utils/Initials.js';
+import { Color } from '../lib/Utils/Color.js';
 import { ValidationError } from '../lib/Error/ValidationError.js';
 import { CircularColorReferenceError } from '../lib/Error/CircularColorReferenceError.js';
 

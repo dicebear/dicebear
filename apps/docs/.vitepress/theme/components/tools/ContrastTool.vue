@@ -5,8 +5,7 @@
  * right.
  */
 import { computed, ref } from 'vue';
-import { Color } from '@dicebear/core';
-import { hsvToHex } from '@theme/utils/colorSpaces';
+import { contrastRatio, hsvToHex, luminance } from '@theme/utils/colorSpaces';
 import type { Hsv } from '@theme/utils/colorSpaces';
 import ContrastCanvas from './ContrastCanvas.vue';
 import ContrastSliders from './ContrastSliders.vue';
@@ -20,13 +19,13 @@ const contrastB = ref('#ffffff');
 
 const hex = computed(() => hsvToHex(hsv.value));
 
-// sortByContrast keeps the first color on a tie.
+// The core keeps the first color on a tie.
 const picked = computed<'a' | 'b'>(() => {
-  const sorted = Color.sortByContrast(
-    [contrastA.value, contrastB.value],
-    hex.value,
-  );
-  return sorted[0] === contrastA.value ? 'a' : 'b';
+  const l = luminance(hex.value);
+  const ratioA = contrastRatio(luminance(contrastA.value), l);
+  const ratioB = contrastRatio(luminance(contrastB.value), l);
+
+  return ratioA >= ratioB ? 'a' : 'b';
 });
 
 const previewStyle = computed(() => ({

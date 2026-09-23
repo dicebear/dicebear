@@ -1,8 +1,6 @@
 // Package color holds the color helpers used by the DiceBear renderer and the
 // option resolver: hex normalization, WCAG relative luminance, contrast sorting,
-// and exclusion filtering. They are exported so consumers can reproduce the
-// engine's color math, mirroring the `Color` utility in the JS core and the
-// `color` module in the Rust core.
+// and exclusion filtering.
 package color
 
 import (

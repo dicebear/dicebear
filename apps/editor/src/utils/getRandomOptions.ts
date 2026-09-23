@@ -1,11 +1,12 @@
-import { Color } from '@dicebear/core';
 import type {
   ConfigStyleOption,
   ConfigStyleOptions,
   SelectedStyleOptions,
 } from '@/types';
+import filterNotEqualTo from '@/utils/filterNotEqualTo';
 import getRandomBoolean from '@/utils/getRandomBoolean';
 import getRandomNumber from '@/utils/getRandomNumber';
+import sortByContrast from '@/utils/sortByContrast';
 
 export default function getRandomOptions(
   configStyleOptions: ConfigStyleOptions,
@@ -74,7 +75,7 @@ export default function getRandomOptions(
     const refColor = contrastTo ? resolve(`${contrastTo}Color`) : '';
 
     if (refColor) {
-      candidates = Color.sortByContrast(candidates, refColor);
+      candidates = sortByContrast(candidates, refColor);
     }
 
     const excluded = (styleOption.notEqualTo ?? [])
@@ -82,7 +83,7 @@ export default function getRandomOptions(
       .filter(Boolean);
 
     if (excluded.length > 0) {
-      candidates = Color.filterNotEqualTo(candidates, excluded);
+      candidates = filterNotEqualTo(candidates, excluded);
     }
 
     // Contrast sorting already ranks the candidates by how well they read

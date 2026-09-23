@@ -26,4 +26,3 @@ export 'src/error/validation_error.dart'
     show ValidationError, ValidationErrorDetail;
 export 'src/options_descriptor.dart' show OptionsDescriptor;
 export 'src/style.dart' show Style;
-export 'src/utils/color.dart' show Color;

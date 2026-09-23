@@ -8,10 +8,9 @@
 //
 // This package is a thin public façade: [Avatar], [Style], [OptionsDescriptor]
 // and the typed errors ([ValidationError], [CircularColorReferenceError]). The
-// engine — PRNG, resolver, renderer, options reader, style model, validation —
-// lives under internal/ so it can be refactored freely without affecting the
-// public API. The color helpers are the one other public surface, in the
-// sub-package github.com/dicebear/dicebear-go/v11/color.
+// engine (PRNG, resolver, renderer, options reader, style model, validation and
+// the color helpers) lives under internal/ so it can be refactored freely
+// without affecting the public API.
 //
 // Style definitions and option sets are the same JSON the npm, Composer, PyPI,
 // crates.io and pub.dev packages consume; the pure-data style definitions ship

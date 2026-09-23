@@ -11,7 +11,6 @@ import { dirname, join } from 'node:path';
 
 import {
   Avatar,
-  Color,
   OptionsDescriptor,
   Style,
 } from '../../../src/js/core/lib/index.js';
@@ -20,6 +19,7 @@ import { Fnv1a } from '../../../src/js/core/lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../../../src/js/core/lib/Prng/Mulberry32.js';
 import { Number } from '../../../src/js/core/lib/Utils/Number.js';
 import { Initials } from '../../../src/js/core/lib/Utils/Initials.js';
+import { Color } from '../../../src/js/core/lib/Utils/Color.js';
 
 const definitionsDir = join(
   import.meta.dirname,

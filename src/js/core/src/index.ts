@@ -29,6 +29,5 @@ export class Avatar<D = unknown> extends AvatarBase<D> {
 }
 
 export type { StyleDefinition };
-export { Color } from './Utils/Color.js';
 export { OptionsDescriptor } from './OptionsDescriptor.js';
 export type { StyleOptions } from './StyleOptions.js';

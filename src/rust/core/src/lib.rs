@@ -7,8 +7,8 @@
 //! `<repo>/tests/fixtures/parity/`.
 //!
 //! The public API mirrors the reference: [`Avatar`], [`Style`],
-//! [`OptionsDescriptor`], the [`color`] utilities and [`Error`]. Everything else
-//! (the PRNG, resolver, renderer, options, and the other utilities) is internal.
+//! [`OptionsDescriptor`] and [`Error`]. Everything else (the PRNG, resolver,
+//! renderer, options, and the utilities) is internal.
 
 mod avatar;
 mod error;
@@ -25,4 +25,3 @@ pub use avatar::Avatar;
 pub use error::Error;
 pub use options_descriptor::OptionsDescriptor;
 pub use style::Style;
-pub use utils::color;

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dicebear/dicebear-go/v11/color"
+	"github.com/dicebear/dicebear-go/v11/internal/color"
 	"github.com/dicebear/dicebear-go/v11/internal/initials"
 	"github.com/dicebear/dicebear-go/v11/internal/num"
 	"github.com/dicebear/dicebear-go/v11/internal/prng"

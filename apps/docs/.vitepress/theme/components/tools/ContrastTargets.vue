@@ -5,7 +5,7 @@
  * DiceBear picks.
  */
 import { computed } from 'vue';
-import { Color } from '@dicebear/core';
+import { contrastRatio, luminance } from '@theme/utils/colorSpaces';
 
 const props = defineProps<{
   pickedHex: string;
@@ -25,12 +25,10 @@ const levels = [
   { name: 'AAA', min: 7 },
 ];
 
-const pickedLuminance = computed(() => Color.luminance(props.pickedHex));
+const pickedLuminance = computed(() => luminance(props.pickedHex));
 
 function ratioFor(hex: string): number {
-  const l = Color.luminance(hex);
-  const lp = pickedLuminance.value;
-  return (Math.max(l, lp) + 0.05) / (Math.min(l, lp) + 0.05);
+  return contrastRatio(luminance(hex), pickedLuminance.value);
 }
 
 const targets = computed(() =>

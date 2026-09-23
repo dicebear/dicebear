@@ -15,16 +15,14 @@ from .errors import (
 )
 from .options_descriptor import OptionsDescriptor
 from .style import Style
-from .utils.color import Color
 
-# Public surface mirrors the JS index (Avatar, Style, Color, OptionsDescriptor)
-# plus the exception types Python consumers catch. Internals — Options, Prng,
-# Resolver, Renderer — remain importable from their submodules but are not
-# re-exported here.
+# Public surface mirrors the JS index (Avatar, Style, OptionsDescriptor) plus
+# the exception types Python consumers catch. Internals (Options, Prng,
+# Resolver, Renderer and the color helpers) remain importable from their
+# submodules but are not re-exported here.
 __all__ = [
     "Avatar",
     "CircularColorReferenceError",
-    "Color",
     "OptionsDescriptor",
     "OptionsValidationError",
     "Style",

@@ -8,20 +8,6 @@ namespace DiceBear.Internal
     /// <summary>
     /// Color helpers used by the renderer and the option resolver.
     /// </summary>
-    /// <remarks>
-    /// The other ports export these so a consumer can reproduce the engine's
-    /// color math, and each of them puts the helpers behind a boundary the
-    /// consumer names: a named export in JavaScript, the <c>color</c> package
-    /// in Go, the <c>color</c> module in Rust. C# offers no equivalent,
-    /// because <c>using DiceBear;</c> imports every type in the namespace at
-    /// once. A public <c>Color</c> would land in the consumer's file unasked
-    /// and turn every bare <c>Color</c> into CS0104 against
-    /// <c>Godot.Color</c>, <c>UnityEngine.Color</c> or
-    /// <c>System.Drawing.Color</c>, in exactly the runtimes this package
-    /// targets. So the helpers stay internal here. That costs the port a
-    /// public helper the other cores offer, which is worth revisiting under a
-    /// name that does not collide if anyone asks for it.
-    /// </remarks>
     internal static class Color
     {
         /// <summary>

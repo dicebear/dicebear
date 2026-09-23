@@ -1,7 +1,7 @@
 package render
 
 import (
-	"github.com/dicebear/dicebear-go/v11/color"
+	"github.com/dicebear/dicebear-go/v11/internal/color"
 	"github.com/dicebear/dicebear-go/v11/internal/errs"
 	"github.com/dicebear/dicebear-go/v11/internal/prng"
 	"github.com/dicebear/dicebear-go/v11/internal/style"

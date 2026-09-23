@@ -1,7 +1,6 @@
 /// Color helpers used by the renderer and the option resolver: hex
 /// normalization, WCAG relative luminance, contrast sorting, and exclusion
-/// filtering. Exported so consumers can reproduce the engine's color math,
-/// mirroring the `Color` utility in the JS core.
+/// filtering.
 library;
 
 import 'dart:math' as math;
