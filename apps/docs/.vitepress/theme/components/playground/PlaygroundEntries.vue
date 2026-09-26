@@ -2,11 +2,12 @@
 /**
  * The list on the left: the general entries, the components with their eye,
  * the colors. One entry is selected at a time and the inspector shows it.
- * On a phone the same list runs as a row of chips under the picture.
+ * On a tablet the same list runs as a row of chips under the picture, and a
+ * phone shows it as a list there.
  */
 import { inject } from 'vue';
 import { capitalCase } from 'change-case';
-import { Eye, EyeOff, List } from '@lucide/vue';
+import { ChevronRight, Eye, EyeOff } from '@lucide/vue';
 import {
   playgroundEntriesKey,
   type PlaygroundEntries,
@@ -16,16 +17,16 @@ import {
   type PlaygroundEntry,
 } from '@theme/composables/usePlaygroundSelection';
 
-defineProps<{
-  // Always the list, also on a phone, for the sheet that holds it.
+const props = defineProps<{
+  // Always the list, never the row of chips.
   list?: boolean;
-  // The first chip on a phone opens the list as a sheet.
-  listButton?: boolean;
+  // Each row leads on to its options instead of choosing them in place, as
+  // on a phone. No row shows as chosen, and each ends in an arrow.
+  drill?: boolean;
 }>();
 
 const emit = defineEmits<{
   pick: [entry: PlaygroundEntry];
-  'open-list': [];
 }>();
 
 const injected = inject(playgroundEntriesKey);
@@ -38,6 +39,10 @@ const entries: PlaygroundEntries = injected;
 
 const { select, isSelected } = usePlaygroundSelection();
 
+function pressed(entry: PlaygroundEntry): boolean | undefined {
+  return props.drill ? undefined : isSelected(entry);
+}
+
 function pick(entry: PlaygroundEntry) {
   select(entry);
   emit('pick', entry);
@@ -46,15 +51,6 @@ function pick(entry: PlaygroundEntry) {
 
 <template>
   <nav class="pg-entries" :class="{ 'is-list': list }" aria-label="Options">
-    <button
-      v-if="listButton && !list"
-      type="button"
-      class="site-btn site-btn-secondary site-btn-icon pg-entries-list-button"
-      aria-label="All options"
-      @click="emit('open-list')"
-    >
-      <List :size="18" aria-hidden="true" />
-    </button>
     <div class="pg-entries-group">
       <h2 class="pg-entries-heading">General</h2>
       <button
@@ -62,7 +58,7 @@ function pick(entry: PlaygroundEntry) {
         :key="entry.id"
         type="button"
         class="pg-entries-row hv-fill"
-        :aria-pressed="isSelected({ kind: 'general', id: entry.id })"
+        :aria-pressed="pressed({ kind: 'general', id: entry.id })"
         @click="pick({ kind: 'general', id: entry.id })"
       >
         <span class="pg-entries-name">{{ entry.label }}</span>
@@ -73,6 +69,12 @@ function pick(entry: PlaygroundEntry) {
           v-else-if="entries.isChanged({ kind: 'general', id: entry.id })"
           class="pg-entries-dot"
           aria-label="changed"
+        />
+        <ChevronRight
+          v-if="drill"
+          :size="16"
+          aria-hidden="true"
+          class="pg-entries-chevron"
         />
       </button>
     </div>
@@ -88,13 +90,19 @@ function pick(entry: PlaygroundEntry) {
         <button
           type="button"
           class="pg-entries-row hv-fill"
-          :aria-pressed="isSelected({ kind: 'component', name: comp.name })"
+          :aria-pressed="pressed({ kind: 'component', name: comp.name })"
           @click="pick({ kind: 'component', name: comp.name })"
         >
           <span class="pg-entries-name">{{ capitalCase(comp.name) }}</span>
           <span class="pg-entries-count"
             >{{ entries.activeCount(comp) }}/{{ comp.variants.length }}</span
           >
+          <ChevronRight
+            v-if="drill"
+            :size="16"
+            aria-hidden="true"
+            class="pg-entries-chevron"
+          />
         </button>
         <button
           v-if="comp.hasProbability"
@@ -123,11 +131,17 @@ function pick(entry: PlaygroundEntry) {
         :key="color.key"
         type="button"
         class="pg-entries-row hv-fill"
-        :aria-pressed="isSelected({ kind: 'color', name: color.name })"
+        :aria-pressed="pressed({ kind: 'color', name: color.name })"
         @click="pick({ kind: 'color', name: color.name })"
       >
         <span class="pg-entries-name">{{ capitalCase(color.name) }}</span>
         <span class="pg-entries-count">{{ entries.colorCount(color) }}</span>
+        <ChevronRight
+          v-if="drill"
+          :size="16"
+          aria-hidden="true"
+          class="pg-entries-chevron"
+        />
       </button>
     </div>
   </nav>
@@ -271,14 +285,10 @@ function pick(entry: PlaygroundEntry) {
   }
 
   /* The phone's list button, only next to the chips. */
-  & &-list-button {
-    display: none;
-    flex-shrink: 0;
-  }
 }
 
-/* A row of chips: no headings, no eye, sideways scroll. The list in the
-   phone's sheet keeps the list layout. */
+/* A row of chips: no headings, no eye, sideways scroll. The list under
+   the picture on a phone keeps the list layout. */
 @media (max-width: 959px) {
   .pg-entries:not(.is-list) {
     flex-direction: row;
@@ -330,10 +340,12 @@ function pick(entry: PlaygroundEntry) {
   }
 }
 
-@media (max-width: 767px) {
-  .pg-entries:not(.is-list) .pg-entries-list-button {
-    display: flex;
-  }
+/* The arrow of a row that leads on, at the far end. The eye of a
+   component keeps its place after it. */
+.pg-entries-chevron {
+  flex-shrink: 0;
+  margin-right: -2px;
+  color: var(--db-muted);
 }
 
 .pg-entries.is-list {

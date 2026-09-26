@@ -1,12 +1,13 @@
 <script setup lang="ts">
 /**
  * The column on the right: the options of the selected entry, and under
- * them, fixed, the three ways out. On a phone the same column sits in a
- * sheet, with a close button in its head.
+ * them, fixed, the three ways out. On a phone the options take the place of
+ * the list under the picture, with a way back to it in their head, and the
+ * ways out stay in the phone's own bar.
  */
 import { computed, inject } from 'vue';
 import { capitalCase } from 'change-case';
-import { X } from '@lucide/vue';
+import { ChevronLeft } from '@lucide/vue';
 import useStore from '@theme/stores/playground';
 import {
   playgroundEntriesKey,
@@ -24,14 +25,19 @@ import PlaygroundPresetSection from './PlaygroundPresetSection.vue';
 import PlaygroundTagsSection from './PlaygroundTagsSection.vue';
 import PlaygroundTransformSection from './PlaygroundTransformSection.vue';
 
-defineProps<{
-  seed: string;
-  closable?: boolean;
-}>();
+withDefaults(
+  defineProps<{
+    seed: string;
+    /** An arrow before the title that leads back to the list. */
+    back?: boolean;
+    actions?: boolean;
+  }>(),
+  { back: false, actions: true },
+);
 
 const emit = defineEmits<{
   'how-to-use': [];
-  close: [];
+  back: [];
 }>();
 
 const injected = inject(playgroundEntriesKey);
@@ -109,6 +115,15 @@ function reset() {
     <div class="pg-inspector-body">
       <template v-if="selected">
         <div class="pg-inspector-head">
+          <button
+            v-if="back"
+            type="button"
+            class="site-btn site-btn-ghost site-btn-icon site-btn-sm pg-inspector-back"
+            aria-label="Back to all options"
+            @click="emit('back')"
+          >
+            <ChevronLeft :size="20" aria-hidden="true" />
+          </button>
           <h2 class="pg-inspector-title">{{ title }}</h2>
           <button
             v-if="changed"
@@ -117,15 +132,6 @@ function reset() {
             @click="reset"
           >
             Reset
-          </button>
-          <button
-            v-if="closable"
-            type="button"
-            class="site-btn site-btn-ghost site-btn-icon site-btn-sm pg-inspector-close"
-            aria-label="Close"
-            @click="emit('close')"
-          >
-            <X :size="18" aria-hidden="true" />
           </button>
         </div>
 
@@ -208,7 +214,7 @@ function reset() {
       </template>
     </div>
 
-    <div class="pg-inspector-actions">
+    <div v-if="actions" class="pg-inspector-actions">
       <PlaygroundActions :seed="seed" @how-to-use="emit('how-to-use')" />
     </div>
   </div>
@@ -248,8 +254,10 @@ function reset() {
     color: var(--db-ink);
   }
 
-  & &-close {
-    margin-right: -6px;
+  /* The arrow stands in the text's margin, so the title keeps its edge. */
+  & &-back {
+    margin-left: -8px;
+    margin-right: -4px;
   }
 
   &-stack {

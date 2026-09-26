@@ -1,17 +1,22 @@
 <script setup lang="ts">
 /**
- * The playground as one screen: the toolbar across the top, the entries on
- * the left, the picture in the middle, the inspector on the right. The
- * dialogs that concern the whole setup live here, so the menu in the toolbar
- * and the button under the inspector open the same ones. A style definition
- * dropped anywhere on the playground becomes a style of one's own.
+ * The playground as one screen: the toolbar across the top, the picture in
+ * the middle. The simple view puts a column of looks next to it, the
+ * advanced view the entries on the left and the inspector on the right. The
+ * editor view has no columns and puts a tray of parts and colors under the
+ * picture. A phone stacks everything in one column, keeps the inspector in a
+ * sheet and the ways out in a bar at the bottom.
+ * The dialogs that concern the whole setup live here, so the menu in the
+ * toolbar and the buttons under the columns open the same ones. A style
+ * definition dropped anywhere on the playground becomes a style of one's
+ * own.
  */
-import { nextTick, provide, ref, watch } from 'vue';
+import { computed, nextTick, provide, ref, watch } from 'vue';
 import { Upload } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
 import { useMediaQuery } from '@vueuse/core';
 import { kebabCase } from 'change-case';
-import useStore from '@theme/stores/playground';
+import useStore, { isPlaygroundMode } from '@theme/stores/playground';
 import { loadStylePreset } from '@theme/config/presets';
 import {
   playgroundEntriesKey,
@@ -30,8 +35,12 @@ import PlaygroundToolbar from './PlaygroundToolbar.vue';
 import PlaygroundEntries from './PlaygroundEntries.vue';
 import PlaygroundStage from './PlaygroundStage.vue';
 import PlaygroundInspector from './PlaygroundInspector.vue';
+import PlaygroundSimplePanel from './PlaygroundSimplePanel.vue';
+import PlaygroundEditor from './PlaygroundEditor.vue';
+import PlaygroundEditorBar from './PlaygroundEditorBar.vue';
+import PlaygroundEditorActions from './PlaygroundEditorActions.vue';
 import PlaygroundActions from './PlaygroundActions.vue';
-import SiteDialog from '@theme/components/site/SiteDialog.vue';
+import PlaygroundStatus from './PlaygroundStatus.vue';
 import PlaygroundButtonExport from './PlaygroundButtonExport.vue';
 import PlaygroundButtonImport from './PlaygroundButtonImport.vue';
 import PlaygroundButtonHowToUse from './PlaygroundButtonHowToUse.vue';
@@ -51,21 +60,47 @@ provide(componentPreviewKey, entries.preview);
 // switch.
 const { selected, select } = usePlaygroundSelection();
 
-// On a phone the inspector is a sheet. It opens when a person picks an
-// entry, not when the playground picks one for them, and closing it keeps
-// the selection. The full list of entries is a sheet behind the first chip.
 const phone = useMediaQuery('(max-width: 767px)');
-const inspectorOpen = ref(false);
-const listOpen = ref(false);
-let preselecting = false;
 
-watch(
-  selected,
-  (entry) => {
-    if (entry && phone.value && !preselecting) inspectorOpen.value = true;
-  },
-  { flush: 'sync' },
+// A view the store does not know, left over from an older visit, opens
+// the simple one.
+const view = computed(() =>
+  isPlaygroundMode(store.mode) ? store.mode : 'simple',
 );
+const simple = computed(() => view.value === 'simple');
+const editor = computed(() => view.value === 'editor');
+
+// The advanced view on a phone keeps the list of options under the picture.
+// Picking an entry puts its options in the list's place, and the arrow in
+// their head leads back to the list where it was left. Nothing opens over
+// the picture, so every change shows on the avatar at once.
+const phoneAdvanced = computed(
+  () => phone.value && !simple.value && !editor.value,
+);
+const detailOpen = ref(false);
+const phonePanel = ref<HTMLElement | null>(null);
+let listScroll = 0;
+
+async function openDetail() {
+  listScroll = phonePanel.value?.scrollTop ?? 0;
+  detailOpen.value = true;
+
+  await nextTick();
+
+  phonePanel.value?.scrollTo({ top: 0 });
+}
+
+async function closeDetail() {
+  detailOpen.value = false;
+
+  await nextTick();
+
+  phonePanel.value?.scrollTo({ top: listScroll });
+}
+
+watch(avatarStyleName, () => {
+  detailOpen.value = false;
+});
 
 // The presets are selected from the start, and again for every other
 // style. They arrive a moment after the style, so Canvas stands in until
@@ -78,9 +113,7 @@ function preselect() {
       ? { kind: 'general', id: 'presets' }
       : { kind: 'general', id: 'canvas' };
 
-  preselecting = true;
   select(entry);
-  preselecting = false;
   standIn = entryKey(entry);
 }
 
@@ -98,10 +131,17 @@ provide(navigateToColorKey, (name: string) => select({ kind: 'color', name }));
 
 // ?style= overrides the persisted style (used by "Open in Playground" links).
 // ?preset= additionally loads one of that style's presets, which is how a
-// card in the style-page gallery hands its options over.
+// card in the style-page gallery hands its options over. ?mode= opens a
+// view, so a link for people who want their own avatar lands in the editor.
+// The view is kept like one chosen in the menu.
 const params = new URL(window.location.href).searchParams;
 const styleParam = params.get('style');
 const presetParam = params.get('preset');
+const modeParam = params.get('mode')?.toLowerCase();
+
+if (isPlaygroundMode(modeParam)) {
+  store.setMode(modeParam, 'link');
+}
 
 if (styleParam) {
   const styleName = kebabCase(styleParam);
@@ -128,7 +168,9 @@ if (styleParam) {
         .catch(() => undefined);
     }
   }
+}
 
+if (styleParam || modeParam) {
   history.replaceState(null, '', window.location.pathname);
 }
 
@@ -194,6 +236,7 @@ const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
 <template>
   <div
     class="pg-app"
+    :class="{ 'is-editor': editor, 'is-fixed': editor || phoneAdvanced }"
     @dragenter="onDragEnter"
     @dragover="onDragOver"
     @dragleave="onDragLeave"
@@ -202,46 +245,79 @@ const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
     <PlaygroundToolbar
       @export="exportDialog?.show()"
       @import="importDialog?.show()"
-      @how-to-use="howToUse?.show()"
     />
 
-    <div class="pg-app-body">
+    <div
+      class="pg-app-body"
+      :class="{ 'is-simple': simple, 'is-editor': editor }"
+    >
       <PlaygroundEntries
+        v-if="!simple && !editor && !phone"
         class="pg-app-entries"
-        list-button
-        @open-list="listOpen = true"
       />
-      <PlaygroundStage :seed="seed" class="pg-app-stage" />
+      <PlaygroundStage
+        :seed="seed"
+        :editor="editor"
+        :status="!phone"
+        :compact="phoneAdvanced"
+        class="pg-app-stage"
+      >
+        <template v-if="editor" #controls>
+          <PlaygroundEditorBar
+            :seed="seed"
+            :actions="!phone"
+            @how-to-use="howToUse?.show()"
+          />
+        </template>
+        <PlaygroundEditor v-if="editor" />
+      </PlaygroundStage>
+      <PlaygroundSimplePanel
+        v-if="simple"
+        :seed="seed"
+        :actions="!phone"
+        class="pg-app-inspector"
+        @how-to-use="howToUse?.show()"
+      />
       <PlaygroundInspector
-        v-if="!phone"
+        v-else-if="!editor && !phone"
         :seed="seed"
         class="pg-app-inspector"
         @how-to-use="howToUse?.show()"
       />
-      <div v-else class="pg-app-actions">
-        <PlaygroundActions :seed="seed" @how-to-use="howToUse?.show()" />
+      <div v-if="phoneAdvanced" ref="phonePanel" class="pg-app-panel">
+        <PlaygroundInspector
+          v-if="detailOpen"
+          :seed="seed"
+          back
+          :actions="false"
+          class="pg-app-panel-inspector"
+          @back="closeDetail"
+        />
+        <PlaygroundEntries
+          v-else
+          list
+          drill
+          class="pg-app-panel-list"
+          @pick="openDetail"
+        />
+      </div>
+      <div v-if="phone" class="pg-app-foot">
+        <PlaygroundStatus :combinations="!editor" />
+        <div class="pg-app-actions">
+          <PlaygroundEditorActions
+            v-if="editor"
+            :seed="seed"
+            fluid
+            @how-to-use="howToUse?.show()"
+          />
+          <PlaygroundActions
+            v-else
+            :seed="seed"
+            @how-to-use="howToUse?.show()"
+          />
+        </div>
       </div>
     </div>
-
-    <SiteDialog v-if="phone" v-model:open="inspectorOpen" sheet>
-      <PlaygroundInspector
-        :seed="seed"
-        closable
-        class="pg-app-sheet-inspector"
-        @how-to-use="howToUse?.show()"
-        @close="inspectorOpen = false"
-      />
-    </SiteDialog>
-
-    <SiteDialog
-      v-if="phone"
-      v-model:open="listOpen"
-      sheet
-      header="Options"
-      content-class="pg-app-sheet-list"
-    >
-      <PlaygroundEntries list @pick="listOpen = false" />
-    </SiteDialog>
 
     <PlaygroundButtonExport ref="exportDialog" :seed="seed" :trigger="false" />
     <PlaygroundButtonImport ref="importDialog" :trigger="false" />
@@ -291,9 +367,23 @@ const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
     border-left: 1px solid var(--db-line);
   }
 
+  /* The simple view leaves the list out and gives its room to the picture. */
+  &-body.is-simple {
+    grid-template-columns: minmax(0, 1fr) 360px;
+  }
+
+  /* The editor view gives the whole width to the picture and its tray. */
+  &-body.is-editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   @media (max-width: 1279px) {
     &-body {
       grid-template-columns: 224px minmax(0, 1fr) 324px;
+    }
+
+    &-body.is-simple {
+      grid-template-columns: minmax(0, 1fr) 324px;
     }
   }
 
@@ -301,7 +391,7 @@ const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
      its actions stuck to the bottom of the window. */
   @media (max-width: 959px) {
     height: auto;
-    min-height: 100%;
+    min-height: calc(100dvh - var(--db-header-h));
 
     &-body {
       display: flex;
@@ -326,15 +416,59 @@ const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
       border-left: 0;
     }
 
-    /* The phone's own bar with the three actions, stuck to the bottom. */
-    &-actions {
+    /* The phone's own foot, stuck to the bottom in every view: the status
+       line with the license, and the actions under it. */
+    &-foot {
       order: 4;
       position: sticky;
       bottom: 0;
       margin-top: auto;
+      background: var(--db-paper);
+    }
+
+    &-actions {
       padding: 12px 16px 16px;
       border-top: 1px solid var(--db-line);
-      background: var(--db-paper);
+    }
+
+    /* The editor, and the advanced view on a phone, keep to the window like
+       on a desktop, so only their tiles or options scroll and the avatar
+       stays in view while picking. */
+    &.is-fixed {
+      height: calc(100dvh - var(--db-header-h));
+      min-height: 0;
+    }
+
+    &.is-fixed &-body {
+      min-height: 0;
+    }
+
+    &.is-editor &-stage {
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* The list of options, or the options of one entry, under the picture. */
+    &-panel {
+      order: 2;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+      overflow-y: auto;
+      border-top: 1px solid var(--db-line);
+    }
+
+    &-panel-inspector {
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* The panel scrolls, not the list in it, so it can keep the list's
+       place while one entry is open. */
+    &-panel-list {
+      flex: none;
+      overflow: visible;
     }
   }
 }
@@ -380,14 +514,5 @@ const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
     font-size: 15px;
     line-height: 24px;
   }
-}
-
-/* The inspector fills its sheet, its actions at the sheet's foot. */
-.pg-app-sheet-inspector {
-  height: 100%;
-}
-
-.pg-app-sheet-list {
-  padding-bottom: 8px;
 }
 </style>

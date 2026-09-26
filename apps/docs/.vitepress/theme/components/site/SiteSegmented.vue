@@ -2,13 +2,18 @@
 /**
  * A segmented control for two to six options, built as a radio group. One
  * segment is always chosen. Tab reaches the chosen segment, and the arrow
- * keys move the choice.
+ * keys move the choice. An option with an icon shows only the icon, its
+ * label becomes the name and the tooltip.
  */
-import { computed, ref } from 'vue';
+import { computed, ref, type Component } from 'vue';
 
 const props = withDefaults(
   defineProps<{
-    options: readonly { value: T; label: string }[];
+    options: readonly {
+      value: T;
+      label: string;
+      icon?: Component;
+    }[];
     ariaLabel?: string;
     size?: 'sm' | 'md';
     fluid?: boolean;
@@ -79,14 +84,23 @@ function onKeydown(event: KeyboardEvent, index: number) {
       type="button"
       role="radio"
       class="site-segmented-item hv-seg"
+      :class="{ 'is-icon': option.icon }"
       :aria-checked="index === chosen"
+      :aria-label="option.icon ? option.label : undefined"
+      :data-tip="option.icon ? option.label : undefined"
       :tabindex="index === tabStop ? 0 : -1"
       :disabled="disabled"
       :data-index="index"
       @click="pick(index)"
       @keydown="onKeydown($event, index)"
     >
-      {{ option.label }}
+      <component
+        :is="option.icon"
+        v-if="option.icon"
+        :size="16"
+        aria-hidden="true"
+      />
+      <span v-else class="site-segmented-label">{{ option.label }}</span>
     </button>
   </span>
 </template>
@@ -127,8 +141,6 @@ function onKeydown(event: KeyboardEvent, index: number) {
     line-height: 20px;
     color: var(--db-muted);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     cursor: pointer;
 
     &[aria-checked='true'] {
@@ -145,6 +157,22 @@ function onKeydown(event: KeyboardEvent, index: number) {
       opacity: 0.5;
       pointer-events: none;
     }
+
+    /* The label clips a long text rather than the segment, whose tooltip
+       has to reach past its edge. */
+    &.is-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      padding: 0;
+    }
+  }
+
+  &-label {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &.is-sm &-item {

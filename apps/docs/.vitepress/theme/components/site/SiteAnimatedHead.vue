@@ -6,7 +6,6 @@
  */
 import { computed } from 'vue';
 import { useData } from 'vitepress';
-import { ArrowRight } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
 import SitePageHead from './SitePageHead.vue';
 
@@ -45,7 +44,6 @@ const letters = ['m', 'o', 'v', 'e'];
     <template #actions>
       <a href="/playground/" class="site-btn site-btn-lg site-btn-primary">
         Playground
-        <ArrowRight :size="20" />
       </a>
       <a
         href="/customize/options/"

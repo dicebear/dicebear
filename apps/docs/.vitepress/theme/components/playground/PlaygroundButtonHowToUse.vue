@@ -49,10 +49,10 @@ const hasExcludedOptions = computed(() => {
     (k) => unsupportedHttpApiOptions.has(k) && opts[k] !== undefined,
   );
 });
-const exampleHttpApiHtml = computed(
-  () => `<img
-  src="${getAvatarApiUrl(store.avatarStyleName, options.value)}"
-  alt="avatar" />`,
+// The URL on its own: it goes into an img tag as much as into CSS, Markdown
+// or an app, so no one has to cut a tag away first.
+const exampleHttpApiUrl = computed(() =>
+  getAvatarApiUrl(store.avatarStyleName, options.value),
 );
 const exampleJsLibrary = computed(() => {
   if (store.isCustomStyle) {
@@ -272,6 +272,8 @@ interface HowToUseTab extends UiCodeTab {
   docs: string;
   /** The command that installs the packages, shown under the code. */
   install?: string;
+  /** A sentence under the code, where there is nothing to install. */
+  note?: string;
 }
 
 // The API only knows the packaged styles, so an uploaded style has no HTTP tab.
@@ -366,8 +368,8 @@ const tabs = computed<HowToUseTab[]>(() => {
     {
       id: 'http-api',
       label: 'HTTP API',
-      lang: 'html',
-      code: exampleHttpApiHtml.value,
+      code: exampleHttpApiUrl.value,
+      note: 'The URL works wherever an image URL does, and there is nothing to install.',
       docs: '/integrations/http-api/',
     },
     ...libraries,
@@ -425,6 +427,9 @@ defineExpose({ show: () => (open.value = true) });
         <code v-if="current.install" class="pg-how-to-use-install">{{
           current.install
         }}</code>
+        <span v-else-if="current.note" class="pg-how-to-use-note">{{
+          current.note
+        }}</span>
         <a :href="current.docs" class="pg-how-to-use-docs hv-link">
           {{ current.label }} documentation
           <ArrowRight :size="16" aria-hidden="true" />
@@ -552,6 +557,13 @@ defineExpose({ show: () => (open.value = true) });
     line-height: 20px;
     color: var(--db-muted);
     white-space: pre-line;
+  }
+
+  &-note {
+    min-width: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--db-muted);
   }
 
   &-docs {

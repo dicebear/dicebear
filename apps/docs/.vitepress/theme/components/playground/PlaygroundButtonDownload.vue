@@ -1,10 +1,13 @@
 <script setup lang="ts">
 /**
- * One split button: the wide part saves the SVG, the arrow opens the raster
- * formats and the batch download.
+ * One split button. The wide part saves the avatar as PNG, the format most
+ * downloads ask for. The arrow holds SVG and the other formats, copying the
+ * SVG and the batch download. An uploaded style only renders in the
+ * browser, so it saves SVG and has no raster formats.
  */
 import { computed, ref } from 'vue';
-import { ChevronDown, Download } from '@lucide/vue';
+import copy from 'copy-to-clipboard';
+import { ChevronDown, Copy, Download } from '@lucide/vue';
 import { Avatar } from '@dicebear/core';
 import { getAvatarApiUrl } from '@theme/utils/avatar/api';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
@@ -15,10 +18,12 @@ import SiteMenu, { type SiteMenuItem } from '../site/SiteMenu.vue';
 import PlaygroundBatchDownload from './PlaygroundBatchDownload.vue';
 import PlaygroundDone from './PlaygroundDone.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
-import { DOWNLOAD_AVATAR_SIZE } from './constants';
+import { DOWNLOAD_AVATAR_SIZE, RASTER_DOWNLOAD_SIZE } from './constants';
 
 const props = defineProps<{
   seed: string;
+  /** The filled look of the main action, where saving comes first. */
+  primary?: boolean;
 }>();
 
 const { store, open, options, showDialog } = usePlaygroundDialog(
@@ -26,96 +31,136 @@ const { store, open, options, showDialog } = usePlaygroundDialog(
 );
 
 const batchOpen = ref(false);
+const raster = computed(() => !store.isCustomStyle);
 
-async function downloadSvg() {
-  showDialog();
+// The dialog after a download or a copy, with the words for either.
+const done = ref({
+  title: 'Your avatar will be downloaded',
+  source: 'download',
+});
 
-  track('Playground: Download', {
-    style: styleLabel(store.avatarStyleName),
-    format: 'svg',
-  });
-
+async function svgMarkup(): Promise<string> {
   const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
-  const avatar = new Avatar(
+
+  return new Avatar(
     avatarStyle,
     clonePlain({
       size: DOWNLOAD_AVATAR_SIZE,
       ...options.value,
     }),
-  );
-
-  const blob = new Blob([avatar.toString()], { type: 'image/svg+xml' });
-
-  triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.svg`);
+  ).toString();
 }
 
-async function downloadBinary(format: string) {
+function announceDownload(format: string) {
+  done.value = { title: 'Your avatar will be downloaded', source: 'download' };
   showDialog();
 
   track('Playground: Download', {
     style: styleLabel(store.avatarStyleName),
     format,
   });
+}
 
+async function downloadSvg() {
+  announceDownload('svg');
+
+  const blob = new Blob([await svgMarkup()], { type: 'image/svg+xml' });
+
+  triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.svg`);
+}
+
+async function downloadBinary(format: string) {
+  announceDownload(format);
+
+  // A size set under Output wins, otherwise the largest the API renders.
   const response = await fetch(
-    getAvatarApiUrl(store.avatarStyleName, options.value, format),
+    getAvatarApiUrl(
+      store.avatarStyleName,
+      { size: RASTER_DOWNLOAD_SIZE, ...options.value },
+      format,
+    ),
   );
   const blob = await response.blob();
 
   triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.${format}`);
 }
 
-const batchItems: SiteMenuItem[] = [
+async function copySvg() {
+  const successful = await copy(await svgMarkup());
+
+  if (successful) {
+    track('Playground: Copy SVG', {
+      style: styleLabel(store.avatarStyleName),
+    });
+  }
+
+  done.value = {
+    title: successful
+      ? 'Your avatar was copied'
+      : 'Your avatar could not be copied',
+    source: 'copy',
+  };
+  showDialog();
+}
+
+function downloadMain() {
+  if (raster.value) {
+    void downloadBinary('png');
+  } else {
+    void downloadSvg();
+  }
+}
+
+const mainLabel = computed(() =>
+  raster.value ? 'Download PNG' : 'Download SVG',
+);
+
+const size = `${RASTER_DOWNLOAD_SIZE} px`;
+
+const items = computed<SiteMenuItem[]>(() => [
+  ...(raster.value
+    ? ([
+        { label: 'SVG', hint: 'vector', command: () => void downloadSvg() },
+        {
+          label: 'JPEG',
+          hint: size,
+          command: () => void downloadBinary('jpg'),
+        },
+        {
+          label: 'WebP',
+          hint: size,
+          command: () => void downloadBinary('webp'),
+        },
+        {
+          label: 'AVIF',
+          hint: size,
+          command: () => void downloadBinary('avif'),
+        },
+        { separator: true },
+      ] satisfies SiteMenuItem[])
+    : []),
+  { label: 'Copy SVG', icon: Copy, command: () => void copySvg() },
   { separator: true },
   {
     label: 'Batch download',
     hint: 'many seeds',
     command: () => (batchOpen.value = true),
   },
-];
-
-// The API serves the raster formats of the packaged styles. An uploaded style
-// only renders in the browser, which leaves SVG and the batch download.
-const rasterItems: SiteMenuItem[] = [
-  {
-    label: 'PNG',
-    hint: `${DOWNLOAD_AVATAR_SIZE} px`,
-    command: () => downloadBinary('png'),
-  },
-  {
-    label: 'JPEG',
-    hint: `${DOWNLOAD_AVATAR_SIZE} px`,
-    command: () => downloadBinary('jpg'),
-  },
-  {
-    label: 'WebP',
-    hint: `${DOWNLOAD_AVATAR_SIZE} px`,
-    command: () => downloadBinary('webp'),
-  },
-  {
-    label: 'AVIF',
-    hint: `${DOWNLOAD_AVATAR_SIZE} px`,
-    command: () => downloadBinary('avif'),
-  },
-];
-
-const items = computed<SiteMenuItem[]>(() =>
-  store.isCustomStyle ? batchItems.slice(1) : [...rasterItems, ...batchItems],
-);
+]);
 </script>
 
 <template>
-  <span class="pg-download">
-    <button type="button" class="pg-download-main" @click="downloadSvg">
+  <span class="pg-download" :class="{ 'is-primary': primary }">
+    <button type="button" class="pg-download-main" @click="downloadMain">
       <Download :size="16" aria-hidden="true" />
-      Download SVG
+      {{ mainLabel }}
     </button>
-    <SiteMenu :items="items" label="Other formats" align="right">
+    <SiteMenu :items="items" label="More ways to save" align="right">
       <template #trigger="{ open: menuOpen, toggle }">
         <button
           type="button"
           class="pg-download-more"
-          aria-label="Other formats"
+          aria-label="More ways to save"
           aria-haspopup="menu"
           :aria-expanded="menuOpen"
           @click="toggle"
@@ -128,9 +173,9 @@ const items = computed<SiteMenuItem[]>(() =>
 
   <PlaygroundDone
     v-model:open="open"
-    title="Your avatar will be downloaded"
+    :title="done.title"
     :options="options"
-    source="download"
+    :source="done.source"
   />
 
   <SiteDialog
@@ -143,14 +188,23 @@ const items = computed<SiteMenuItem[]>(() =>
 </template>
 
 <style scoped lang="scss">
+/* A secondary button of the set, split in two: the soft ground with the
+   quiet line, a line between the parts. */
 .pg-download {
   display: flex;
   width: 100%;
-  height: 48px;
-  border-radius: var(--db-radius-3);
-  background: var(--db-btn-bg);
-  color: var(--db-btn-fg);
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid var(--db-field-border);
+  border-radius: var(--db-radius-2);
+  background: var(--db-soft);
+  color: var(--db-ink);
   overflow: hidden;
+  transition: border-color 0.12s;
+
+  &:hover {
+    border-color: var(--db-btn-border);
+  }
 
   &-main,
   &-more {
@@ -164,10 +218,10 @@ const items = computed<SiteMenuItem[]>(() =>
     font: inherit;
     color: inherit;
     cursor: pointer;
-    transition: background var(--duration-fast) var(--ease-smooth);
+    transition: background-color 0.12s;
 
     &:hover {
-      background: var(--db-btn-hover);
+      background: var(--db-switch-bg);
     }
 
     &:focus-visible {
@@ -180,14 +234,34 @@ const items = computed<SiteMenuItem[]>(() =>
     flex: 1;
     gap: 8px;
     min-width: 0;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
   }
 
   &-more {
     flex-shrink: 0;
-    width: 44px;
-    border-left: 1px solid color-mix(in srgb, var(--db-btn-fg) 22%, transparent);
+    width: 40px;
+    border-left: 1px solid var(--db-field-border);
+  }
+
+  /* The ink of the primary button, with a faint line between the parts. */
+  &.is-primary {
+    border-color: var(--db-btn-bg);
+    background: var(--db-btn-bg);
+    color: var(--db-btn-fg);
+
+    &:hover {
+      border-color: var(--db-btn-bg);
+    }
+  }
+
+  &.is-primary &-main:hover,
+  &.is-primary &-more:hover {
+    background: var(--db-btn-hover);
+  }
+
+  &.is-primary &-more {
+    border-left-color: color-mix(in srgb, var(--db-btn-fg) 25%, transparent);
   }
 }
 </style>

@@ -10,6 +10,8 @@ import {
 } from '@theme/config/styleCategories';
 import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 
+type StyleFilter = 'license' | 'category' | 'animated';
+
 interface StyleMeta {
   animated?: boolean;
   meta: {
@@ -89,39 +91,50 @@ export function useStyleFiltering(
     );
   });
 
-  const styleList = computed(() => {
+  /**
+   * Whether a style passes the current filters. `ignore` leaves one filter
+   * out, which gives the count a filter option would show if it were chosen.
+   */
+  function matches(
+    style: (typeof allStyles.value)[number],
+    ignore?: StyleFilter,
+  ): boolean {
     const query = searchQuery.value.toLowerCase().trim();
 
-    return allStyles.value.filter((style) => {
-      if (
-        query &&
-        !style.displayName.toLowerCase().includes(query) &&
-        !style.creator.toLowerCase().includes(query)
-      ) {
-        return false;
-      }
+    if (
+      query &&
+      !style.displayName.toLowerCase().includes(query) &&
+      !style.creator.toLowerCase().includes(query)
+    ) {
+      return false;
+    }
 
-      if (
-        selectedLicenses.value.length > 0 &&
-        !selectedLicenses.value.includes(style.licenseNormalized)
-      ) {
-        return false;
-      }
+    if (
+      ignore !== 'license' &&
+      selectedLicenses.value.length > 0 &&
+      !selectedLicenses.value.includes(style.licenseNormalized)
+    ) {
+      return false;
+    }
 
-      if (
-        selectedCategories.value.length > 0 &&
-        !selectedCategories.value.includes(style.category)
-      ) {
-        return false;
-      }
+    if (
+      ignore !== 'category' &&
+      selectedCategories.value.length > 0 &&
+      !selectedCategories.value.includes(style.category)
+    ) {
+      return false;
+    }
 
-      if (animatedOnly.value && !style.animated) {
-        return false;
-      }
+    if (ignore !== 'animated' && animatedOnly.value && !style.animated) {
+      return false;
+    }
 
-      return true;
-    });
-  });
+    return true;
+  }
+
+  const styleList = computed(() =>
+    allStyles.value.filter((style) => matches(style)),
+  );
 
   const groupedStyles = computed(() => {
     const groups: Record<string, typeof styleList.value> = {};
@@ -151,6 +164,7 @@ export function useStyleFiltering(
     selectedCategories,
     animatedOnly,
     allStyles,
+    matches,
     availableLicenses,
     availableCategories,
     styleList,

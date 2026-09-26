@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia';
 import { computed, nextTick, ref, watch } from 'vue';
-import { useSessionStorage, watchDebounced } from '@vueuse/core';
+import {
+  useLocalStorage,
+  useSessionStorage,
+  watchDebounced,
+} from '@vueuse/core';
 import { useIDBKeyval } from '@vueuse/integrations/useIDBKeyval';
 import type {
   CustomStyleEntry,
@@ -22,11 +26,31 @@ import type { PlaygroundConfig } from '@theme/utils/playgroundConfig';
 const STYLE_KEY = 'dicebear-playground-style';
 const OPTIONS_KEY = 'dicebear-playground-options';
 const SEED_KEY = 'dicebear-playground-seed';
+const MODE_KEY = 'dicebear-playground-mode';
+
+/**
+ * How much of the playground shows: a few looks, every option, or the parts
+ * and colors to pick one by one.
+ */
+export type PlaygroundMode = 'simple' | 'advanced' | 'editor';
+
+const PLAYGROUND_MODES: readonly string[] = ['simple', 'advanced', 'editor'];
+
+export function isPlaygroundMode(value: unknown): value is PlaygroundMode {
+  return typeof value === 'string' && PLAYGROUND_MODES.includes(value);
+}
 
 export default defineStore('playground', () => {
   const data = useData<ThemeOptions>();
 
   const availableAvatarStyles = Object.keys(data.theme.value.avatarStyles);
+
+  // The style a first visit opens with. It is chosen rather than the first
+  // one in the list: a CC0 style keeps the license line short, and its
+  // presets fill the simple view.
+  const defaultStyle = availableAvatarStyles.includes('lorelei')
+    ? 'lorelei'
+    : availableAvatarStyles[0];
 
   // What the reader is looking at only has to survive a reload and a trip into
   // the docs and back, so it ends with the tab. Keeping a look past that is
@@ -35,7 +59,7 @@ export default defineStore('playground', () => {
   // to hand in again, and losing them would take the picker entry with them.
   const avatarStyleName = useSessionStorage<PlaygroundStoreStyle>(
     STYLE_KEY,
-    availableAvatarStyles[0],
+    defaultStyle,
   );
   const avatarStyleOptions = useSessionStorage<PlaygroundStoreOptions>(
     OPTIONS_KEY,
@@ -50,6 +74,22 @@ export default defineStore('playground', () => {
     for (const key of [STYLE_KEY, OPTIONS_KEY, SEED_KEY]) {
       localStorage.removeItem(key);
     }
+  }
+
+  // The view is a habit of the reader rather than part of the look, so it
+  // outlasts the tab: whoever switched to another view finds it again.
+  const mode = useLocalStorage<PlaygroundMode>(MODE_KEY, 'simple');
+
+  /**
+   * Switches the view. The menu in the toolbar does it, and so can a link,
+   * and the event says which of the two it was.
+   */
+  function setMode(next: PlaygroundMode, via: 'menu' | 'link' = 'menu') {
+    if (mode.value === next) return;
+
+    mode.value = next;
+
+    track('Playground: Mode Changed', { mode: next, via });
   }
 
   const { data: customStyles, isFinished: customStylesReady } = useIDBKeyval<
@@ -108,7 +148,7 @@ export default defineStore('playground', () => {
     unregisterCustomStyle(key);
 
     if (avatarStyleName.value === key) {
-      avatarStyleName.value = availableAvatarStyles[0];
+      avatarStyleName.value = defaultStyle;
     }
   }
 
@@ -340,6 +380,8 @@ export default defineStore('playground', () => {
     avatarStyleOptions,
     avatarStyleOptionsWithoutDefaults,
     seed,
+    mode,
+    setMode,
     customStyles,
     customStylesReady,
     isCustomStyle,

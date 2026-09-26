@@ -3,6 +3,9 @@
  * A rounded avatar tile. Renders through the HTTP API by default, which the
  * CDN caches, or locally through the library where a page shows many
  * option sets at once (preset tiles, variant previews).
+ *
+ * A parent can resize the tile at a breakpoint through `--site-avatar-size`
+ * and `--site-avatar-radius`, which the inline size would otherwise override.
  */
 import { computedAsync } from '@vueuse/core';
 import { Avatar } from '@dicebear/core';
@@ -54,9 +57,9 @@ const src = computedAsync(async () => {
   <div
     class="site-tile site-avatar"
     :style="{
-      width: `${size}px`,
-      height: `${size}px`,
-      borderRadius: `${radius}px`,
+      width: `var(--site-avatar-size, ${size}px)`,
+      height: `var(--site-avatar-size, ${size}px)`,
+      borderRadius: `var(--site-avatar-radius, ${radius}px)`,
     }"
   >
     <img

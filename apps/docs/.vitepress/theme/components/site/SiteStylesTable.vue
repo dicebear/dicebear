@@ -1,17 +1,15 @@
 <script setup lang="ts">
 /**
- * The styles overview as a table: a filter row, then one hairline list per
- * category with the category's name and a line about it on the left. The
- * usage sorts flatten the list and show the rank instead.
+ * The styles overview: filters in a sidebar and one flat list next to it, so
+ * the first avatars sit right under the page head. The list runs by name,
+ * and the usage sorts number the rows.
  *
- * A column on the right shows more of one style: the one under the pointer,
- * the first of the section before anything is hovered, and the last one
- * touched after the pointer leaves the list. It sits on the right because
- * that is where the eye goes after reading a row. Below the desktop width
- * the column moves above the list.
+ * Phones keep the search above the list and move the rest of the filters
+ * into a sheet.
  */
 import { computed, onMounted, ref } from 'vue';
 import { useData } from 'vitepress';
+import { SlidersHorizontal } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
 import { useStyleRankings } from '@theme/composables/useStyleRankings';
@@ -21,10 +19,11 @@ import {
   trendSortValue,
 } from '@theme/utils/statsTrends';
 import SiteStylesRow, { type SiteStylesBadge } from './SiteStylesRow.vue';
-import SiteStylesPeek from './SiteStylesPeek.vue';
+import SiteStylesFilters, {
+  type SiteStylesFacet,
+} from './SiteStylesFilters.vue';
+import SiteDialog from './SiteDialog.vue';
 import SiteSearch from './SiteSearch.vue';
-import SiteSelect from './SiteSelect.vue';
-import SiteSwitch from './SiteSwitch.vue';
 
 const { theme } = useData<ThemeOptions>();
 
@@ -36,8 +35,8 @@ const {
   availableLicenses,
   availableCategories,
   styleList,
-  groupedStyles,
   allStyles,
+  matches,
 } = useStyleFiltering(theme.value.avatarStyles);
 
 const { rankingByName } = useStyleRankings();
@@ -49,49 +48,81 @@ onMounted(() => {
   }
 });
 
-type SortMode = 'category' | 'popular' | 'trending';
-const sortBy = ref<SortMode>('category');
+type SortMode = 'name' | 'popular' | 'trending';
+const sortBy = ref<SortMode>('name');
 const sortOptions: { label: string; value: SortMode }[] = [
-  { label: 'Category', value: 'category' },
+  { label: 'Name', value: 'name' },
   { label: 'Most used', value: 'popular' },
   { label: 'Trending', value: 'trending' },
 ];
+const sortHints: Record<SortMode, string | undefined> = {
+  name: undefined,
+  popular:
+    'Ranked by the number of websites that requested the style in the last complete week.',
+  trending:
+    'The past four weeks against the four before. New styles come first.',
+};
 
-// One license at a time is enough for a filter row. The composable keeps a
-// list because the playground reuses it with a multi-select.
-const ANY_LICENSE = 'any';
-const license = computed<string>({
-  get: () => selectedLicenses.value[0] ?? ANY_LICENSE,
+// One category at a time, so the sidebar lists them as radios. The composable
+// keeps a list because the playground reuses it with a multi-select.
+const ALL = 'all';
+const category = computed<string>({
+  get: () => selectedCategories.value[0] ?? ALL,
   set: (value) => {
-    selectedLicenses.value = value === ANY_LICENSE ? [] : [value];
+    selectedCategories.value = value === ALL ? [] : [value];
   },
 });
-const licenseOptions = computed(() => [
-  { label: 'Any license', value: ANY_LICENSE },
-  ...availableLicenses.value.map((value) => ({ label: value, value })),
-]);
 
-function toggleCategory(category: string) {
-  selectedCategories.value = selectedCategories.value.includes(category)
-    ? selectedCategories.value.filter((c) => c !== category)
-    : [...selectedCategories.value, category];
+function count(test: (style: (typeof allStyles.value)[number]) => boolean) {
+  return allStyles.value.filter(test).length;
 }
 
-const countByCategory = computed(() => {
-  const counts: Record<string, number> = {};
-  for (const style of allStyles.value) {
-    counts[style.category] = (counts[style.category] ?? 0) + 1;
-  }
-  return counts;
-});
+const categoryFacets = computed<SiteStylesFacet[]>(() => [
+  { value: ALL, label: 'All', count: count((s) => matches(s, 'category')) },
+  ...availableCategories.value.map((value) => ({
+    value,
+    label: value,
+    count: count((s) => s.category === value && matches(s, 'category')),
+  })),
+]);
 
-const blurbs: Record<string, string> = {
-  Minimalist:
-    'Marks, patterns and letters. Quiet enough for tables, sidebars and comment threads.',
-  Characters:
-    'Faces, animals and robots, drawn by different artists in their own hand.',
-  Scenes: 'Small worlds instead of faces. Each one is a complete picture.',
+const licenseOrder = ['CC0 1.0', 'CC BY 4.0', 'MIT', 'Other'];
+const licenseLabels: Record<string, string> = {
+  Other: "Artist's own terms",
 };
+
+const licenseFacets = computed<SiteStylesFacet[]>(() =>
+  [...availableLicenses.value]
+    .sort((a, b) => licenseOrder.indexOf(a) - licenseOrder.indexOf(b))
+    .map((value) => ({
+      value,
+      label: licenseLabels[value] ?? value,
+      count: count(
+        (s) => s.licenseNormalized === value && matches(s, 'license'),
+      ),
+    })),
+);
+
+const animatedCount = computed(() =>
+  count((s) => s.animated && matches(s, 'animated')),
+);
+
+/** How many filters are on, for the button that opens them on phones. */
+const activeFilters = computed(
+  () =>
+    selectedCategories.value.length +
+    selectedLicenses.value.length +
+    (animatedOnly.value ? 1 : 0),
+);
+
+function clearFilters() {
+  searchQuery.value = '';
+  selectedCategories.value = [];
+  selectedLicenses.value = [];
+  animatedOnly.value = false;
+}
+
+const sheetOpen = ref(false);
 
 function usageRank(slug: string): number {
   return rankingByName.value?.[slug]?.rank ?? Number.MAX_SAFE_INTEGER;
@@ -114,167 +145,140 @@ function trendBadge(slug: string): SiteStylesBadge | undefined {
   return { text: formatGrowth(row.growth), tone: growthDirection(row.growth) };
 }
 
-interface Group {
-  title: string;
-  hint?: string;
-  count: number;
-  styles: typeof styleList.value;
-  ranked: boolean;
-}
-
-const groups = computed<Group[]>(() => {
-  if (sortBy.value === 'category') {
-    return Object.entries(groupedStyles.value).map(([title, styles]) => ({
-      title,
-      hint: blurbs[title],
-      count: styles.length,
-      styles,
-      ranked: false,
-    }));
+const styles = computed(() => {
+  if (sortBy.value === 'name') {
+    return styleList.value;
   }
   const list = [...styleList.value];
   if (sortBy.value === 'popular') {
-    list.sort(
+    return list.sort(
       (a, b) =>
         usageRank(a.slug) - usageRank(b.slug) ||
         a.displayName.localeCompare(b.displayName),
     );
-    return [
-      {
-        title: 'Most used',
-        hint: 'Ranked by the number of websites that requested the style in the last complete week.',
-        count: list.length,
-        styles: list,
-        ranked: true,
-      },
-    ];
   }
-  list.sort(
+  return list.sort(
     (a, b) =>
       trendScore(b.slug) - trendScore(a.slug) ||
       a.displayName.localeCompare(b.displayName),
   );
-  return [
-    {
-      title: 'Trending',
-      hint: 'The past four weeks against the four before. New styles come first.',
-      count: list.length,
-      styles: list,
-      ranked: true,
-    },
-  ];
 });
 
-const noResults = computed(() => styleList.value.length === 0);
+const ranked = computed(() => sortBy.value !== 'name');
 
-const peeked = ref<Record<string, string>>({});
-
-function peekedStyle(group: Group) {
-  const slug = peeked.value[group.title];
-  return group.styles.find((s) => s.slug === slug) ?? group.styles[0];
-}
-
-/** The first three card seeds of a style, for the avatars in its row. */
+/** The four card seeds of a style, for the avatars in its row. */
 function rowSeeds(avatars: { seed: string }[]): string[] {
-  return avatars.slice(0, 3).map((avatar) => avatar.seed);
-}
-
-function peek(group: Group, slug: string) {
-  peeked.value = { ...peeked.value, [group.title]: slug };
+  return avatars.slice(0, 4).map((avatar) => avatar.seed);
 }
 </script>
 
 <template>
   <div class="site-styles-table">
-    <div class="site-container">
-      <div class="site-styles-filter">
+    <div class="site-container site-styles-layout">
+      <aside class="site-styles-side" aria-label="Filters">
         <SiteSearch
           v-model="searchQuery"
-          :placeholder="`Search ${theme.styleCount} styles`"
+          placeholder="Name or artist"
           label="Search styles"
+          fluid
         />
-        <div
-          class="site-styles-filter-categories"
-          role="group"
-          aria-label="Category"
-        >
+        <SiteStylesFilters
+          v-model:category="category"
+          v-model:licenses="selectedLicenses"
+          v-model:animated="animatedOnly"
+          v-model:sort="sortBy"
+          :category-options="categoryFacets"
+          :license-options="licenseFacets"
+          :animated-count="animatedCount"
+          :sort-options="sortOptions"
+          :sort-hint="sortHints[sortBy]"
+        />
+      </aside>
+
+      <div class="site-styles-main">
+        <div class="site-styles-bar">
+          <SiteSearch
+            v-model="searchQuery"
+            placeholder="Name or artist"
+            label="Search styles"
+            fluid
+          />
           <button
             type="button"
-            class="site-chip site-chip-lg hv-outline"
-            :aria-pressed="selectedCategories.length === 0"
-            @click="selectedCategories = []"
+            class="site-btn site-btn-secondary"
+            aria-haspopup="dialog"
+            @click="sheetOpen = true"
           >
-            All
-          </button>
-          <button
-            v-for="category in availableCategories"
-            :key="category"
-            type="button"
-            class="site-chip site-chip-lg hv-outline"
-            :aria-pressed="selectedCategories.includes(category)"
-            @click="toggleCategory(category)"
-          >
-            {{ category }}
-            <span class="site-styles-filter-count">{{
-              countByCategory[category]
+            <SlidersHorizontal :size="16" aria-hidden="true" />
+            Filters
+            <span v-if="activeFilters" class="site-styles-bar-count">{{
+              activeFilters
             }}</span>
           </button>
         </div>
-        <div class="site-styles-filter-controls">
-          <SiteSelect
-            v-model="license"
-            :options="licenseOptions"
-            label="License"
-          />
-          <SiteSelect v-model="sortBy" :options="sortOptions" label="Sort" />
-          <label class="site-styles-filter-toggle">
-            <SiteSwitch v-model="animatedOnly" />
-            <span>Animated</span>
-          </label>
-        </div>
-      </div>
-    </div>
 
-    <p v-if="noResults" class="site-container site-text site-styles-empty">
-      No styles match these filters.
-    </p>
-
-    <section
-      v-for="group in groups"
-      :key="group.title"
-      class="site-container site-styles-group"
-      :id="group.title.toLowerCase()"
-    >
-      <div class="site-styles-group-head">
-        <h2 class="site-h2">{{ group.title }}</h2>
-        <span class="site-styles-group-count">{{ group.count }} styles</span>
-        <p v-if="group.hint" class="site-text">{{ group.hint }}</p>
-      </div>
-      <div class="site-styles-group-body">
-        <div class="site-styles-group-rows">
+        <div v-if="styles.length" class="site-styles-list">
           <SiteStylesRow
-            v-for="(style, index) in group.styles"
+            v-for="(style, index) in styles"
             :key="style.slug"
             :slug="style.slug"
             :display-name="style.displayName"
             :creator="style.creator"
-            :license="style.licenseNormalized"
+            :license="
+              licenseLabels[style.licenseNormalized] ?? style.licenseNormalized
+            "
             :animated="style.animated"
             :seeds="rowSeeds(style.avatars)"
-            :rank="group.ranked ? index + 1 : undefined"
+            :rank="ranked ? index + 1 : undefined"
             :badge="sortBy === 'trending' ? trendBadge(style.slug) : undefined"
-            @mouseenter="peek(group, style.slug)"
           />
         </div>
-        <aside class="site-styles-group-aside">
-          <SiteStylesPeek
-            v-if="peekedStyle(group)"
-            :slug="peekedStyle(group).slug"
-            :display-name="peekedStyle(group).displayName"
-          />
-        </aside>
+        <div v-else class="site-styles-empty">
+          <p class="site-text">No styles match these filters.</p>
+          <button
+            type="button"
+            class="site-btn site-btn-secondary"
+            @click="clearFilters"
+          >
+            Clear filters
+          </button>
+        </div>
       </div>
-    </section>
+    </div>
+
+    <SiteDialog v-model:open="sheetOpen" sheet header="Filters">
+      <div class="site-styles-sheet">
+        <SiteStylesFilters
+          v-model:category="category"
+          v-model:licenses="selectedLicenses"
+          v-model:animated="animatedOnly"
+          v-model:sort="sortBy"
+          :category-options="categoryFacets"
+          :license-options="licenseFacets"
+          :animated-count="animatedCount"
+          :sort-options="sortOptions"
+          :sort-hint="sortHints[sortBy]"
+        />
+        <div class="site-styles-sheet-foot">
+          <button
+            type="button"
+            class="site-btn site-btn-secondary"
+            :disabled="!activeFilters"
+            @click="clearFilters"
+          >
+            Clear
+          </button>
+          <button
+            type="button"
+            class="site-btn site-btn-primary site-btn-fluid"
+            @click="sheetOpen = false"
+          >
+            Show {{ styleList.length }}
+            {{ styleList.length === 1 ? 'style' : 'styles' }}
+          </button>
+        </div>
+      </div>
+    </SiteDialog>
   </div>
 </template>
 
@@ -288,139 +292,104 @@ function peek(group: Group, slug: string) {
   }
 }
 
-.site-styles-filter {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 56px;
-  padding: 16px 0;
-  border-top: 1px solid var(--db-line);
-  border-bottom: 1px solid var(--db-line);
+.site-styles-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 64px;
+  align-items: start;
+  margin-top: 72px;
 
-  &-categories {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-left: 12px;
-  }
-
-  &-count {
-    font-weight: 400;
-    color: var(--db-muted);
-
-    .site-chip[aria-pressed='true'] & {
-      color: inherit;
-      opacity: 0.7;
-    }
-  }
-
-  &-controls {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-left: auto;
-  }
-
-  &-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    line-height: 24px;
-    color: var(--db-muted);
-    cursor: pointer;
-  }
-
-  @media (max-width: 959px) {
-    &-categories {
-      margin-left: 0;
-    }
-
-    &-controls {
-      margin-left: 0;
-    }
+  @media (max-width: 1099px) {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 40px;
   }
 
   @media (max-width: 767px) {
-    flex-direction: column;
-    align-items: stretch;
-    margin-top: 40px;
-
-    :deep(.site-search) {
-      width: 100%;
-    }
+    display: block;
+    margin-top: 24px;
   }
 }
 
-.site-styles-empty {
-  padding-top: 64px;
-}
-
-.site-styles-group {
+.site-styles-side {
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  padding-top: 96px;
-  scroll-margin-top: calc(var(--db-header-h) + 24px);
+  gap: 28px;
+  min-width: 0;
 
-  &-head {
+  // Sticks only where the whole sidebar fits under the header, so its foot
+  // never ends up out of reach.
+  @media (min-height: 800px) {
+    position: sticky;
+    top: calc(var(--db-header-h) + 32px);
+  }
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+.site-styles-main {
+  min-width: 0;
+}
+
+.site-styles-bar {
+  display: none;
+
+  @media (max-width: 767px) {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 640px;
+    gap: 8px;
+    margin-bottom: 16px;
   }
 
   &-count {
-    font-size: 16px;
-    line-height: 26px;
-    color: var(--db-muted);
+    min-width: 18px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    border-radius: 9px;
+    background: var(--db-brand);
+    color: var(--db-paper);
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
   }
+}
 
-  &-body {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 336px;
-    gap: 80px;
-    align-items: start;
-  }
+// The rows stack their text by the width of the list, not of the window, and
+// paint their hover surface inside the list's own stacking context.
+.site-styles-list {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--db-line);
+  container-type: inline-size;
+  isolation: isolate;
+}
 
-  &-rows {
-    display: flex;
-    flex-direction: column;
-    border-bottom: 1px solid var(--db-line);
-    min-width: 0;
-  }
+.site-styles-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px 0;
+  border-top: 1px solid var(--db-line);
+}
 
-  &-aside {
+.site-styles-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 4px 16px 0;
+
+  // Stays at the bottom of the sheet while the filters scroll behind it, so
+  // the way back to the list is always in reach.
+  &-foot {
     position: sticky;
-    top: calc(var(--db-header-h) + 24px);
-    min-width: 0;
-  }
-
-  @media (max-width: 959px) {
-    gap: 24px;
-    padding-top: 88px;
-
-    &-head {
-      gap: 8px;
-    }
-
-    &-count {
-      font-size: 14px;
-      line-height: 20px;
-    }
-
-    &-body {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 24px;
-    }
-
-    &-aside {
-      position: static;
-      order: -1;
-      max-width: 480px;
-    }
+    bottom: 0;
+    display: flex;
+    gap: 8px;
+    margin-top: -12px;
+    padding: 12px 0 max(16px, env(safe-area-inset-bottom));
+    background: var(--db-panel);
   }
 }
 </style>

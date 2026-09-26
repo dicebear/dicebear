@@ -71,7 +71,7 @@ function thumbOf(style: Style) {
   return options;
 }
 
-const LICENSE_LABELS: Record<string, string> = { Other: 'Other license' };
+const LICENSE_LABELS: Record<string, string> = { Other: "Artist's own terms" };
 
 const counts = computed(() => {
   const result = new Map<string, number>();

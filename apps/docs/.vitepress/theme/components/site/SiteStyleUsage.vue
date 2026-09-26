@@ -22,6 +22,8 @@ const { theme } = useData<ThemeOptions>();
 interface UsageTab extends UiCodeTab {
   docs: string;
   docsLabel: string;
+  /** A sentence under the code, where there is nothing to install. */
+  note?: string;
 }
 
 /** The install command as the first line of the snippet, in that language's comment syntax. */
@@ -41,11 +43,12 @@ function withInstall(
 const tabs = computed<UsageTab[]>(() => {
   const options = { major: theme.value.majorVersion, seed: exampleSeeds[0] };
   const url = httpApiUrl(props.styleName, options);
-  const html: UsageTab = {
+  // The URL on its own, since it goes into far more than an img tag.
+  const http: UsageTab = {
     id: 'http-api',
     label: 'HTTP API',
-    lang: 'html',
-    code: `<!-- any img tag, no install -->\n<img\n  src="${url}"\n  alt="avatar"\n/>`,
+    code: url,
+    note: 'The URL works wherever an image URL does, and there is nothing to install.',
     docs: '/integrations/http-api/',
     docsLabel: 'HTTP API',
   };
@@ -59,7 +62,7 @@ const tabs = computed<UsageTab[]>(() => {
       docs: snippet.docs,
       docsLabel: snippet.label,
     }));
-  return [html, ...rest];
+  return [http, ...rest];
 });
 
 const active = useCodeTab();
@@ -79,6 +82,7 @@ function onTab(id: string | undefined) {
 <template>
   <div class="site-style-usage">
     <UiCode :tabs="tabs" :model-value="active" @update:model-value="onTab" />
+    <p v-if="current.note" class="site-style-usage-note">{{ current.note }}</p>
     <a :href="current.docs" class="site-style-usage-docs hv-link">
       {{ current.docsLabel }} documentation
       <ArrowRight :size="16" />
@@ -92,6 +96,13 @@ function onTab(id: string | undefined) {
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+
+  &-note {
+    margin: 0;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--db-muted);
+  }
 
   &-docs {
     align-self: flex-start;

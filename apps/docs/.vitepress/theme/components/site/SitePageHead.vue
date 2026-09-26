@@ -1,7 +1,9 @@
 <script setup lang="ts">
 /**
- * The head every page below the home shares: a breadcrumb, the headline on
- * the left, facts as outlined chips, the lead, and an aside on the right.
+ * The head every page below the home shares: a breadcrumb, the headline,
+ * facts as outlined chips and the lead. Actions stand beside the lead and
+ * end with it, as on the Studio page. A style page puts its card into an
+ * aside column next to the whole head instead.
  */
 import { ChevronRight } from '@lucide/vue';
 
@@ -80,15 +82,27 @@ function isExternal(href: string): boolean {
           </template>
         </div>
         <div
-          v-if="$slots.default"
-          :class="[
-            leadSize === 'body' ? 'site-body' : 'site-lead',
-            'site-page-head-lead',
-            'site-rise',
-          ]"
-          style="animation-delay: 160ms"
+          v-if="$slots.default || $slots.actions"
+          class="site-page-head-intro"
         >
-          <slot />
+          <div
+            v-if="$slots.default"
+            :class="[
+              leadSize === 'body' ? 'site-body' : 'site-lead',
+              'site-page-head-lead',
+              'site-rise',
+            ]"
+            style="animation-delay: 160ms"
+          >
+            <slot />
+          </div>
+          <div
+            v-if="$slots.actions"
+            class="site-page-head-actions site-rise"
+            style="animation-delay: 240ms"
+          >
+            <slot name="actions" />
+          </div>
         </div>
         <div
           v-if="$slots.note"
@@ -96,13 +110,6 @@ function isExternal(href: string): boolean {
           style="animation-delay: 200ms"
         >
           <slot name="note" />
-        </div>
-        <div
-          v-if="$slots.actions"
-          class="site-page-head-actions site-rise"
-          style="animation-delay: 240ms"
-        >
-          <slot name="actions" />
         </div>
       </div>
       <div
@@ -171,9 +178,23 @@ function isExternal(href: string): boolean {
     gap: 8px;
   }
 
+  /* The lead and the actions beside it, at the far right and level with
+     the lead's last line. */
+  &-intro {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px 64px;
+
+    @media (max-width: 1099px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
   &-lead {
     &.site-lead {
-      max-width: 780px;
+      max-width: 720px;
     }
 
     /* Markdown pages hand the lead over as paragraphs. */
@@ -214,9 +235,9 @@ function isExternal(href: string): boolean {
 
   &-actions {
     display: flex;
+    flex-shrink: 0;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 8px;
   }
 
   &-aside {

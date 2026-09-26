@@ -2,25 +2,33 @@
 /**
  * The middle of the playground: the avatar on a dotted ground, the same
  * options on other seeds below it, and the status line with the license and
- * the legal links. The avatar itself takes no clicks or hovers.
+ * the legal links. The avatar itself takes no clicks or hovers. A phone
+ * shows the status line above its actions instead.
+ *
+ * The editor view puts its own row under the avatar in place of the seed and
+ * its tray between the ground and the status line. The ground then keeps to
+ * its content, and the avatar grows with the height of the window.
  */
 import { computed, ref } from 'vue';
 import { computedAsync } from '@vueuse/core';
-import { Dices, Scale } from '@lucide/vue';
 import { Avatar } from '@dicebear/core';
 import { clonePlain, loadAvatarStyle } from '@theme/utils/avatar/style';
 import useStore from '@theme/stores/playground';
-import { legalLinks } from '@theme/config/footer-links';
-import { useCombinationCount } from '@theme/composables/useCombinationCount';
-import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
 import PlaygroundSeedField from './PlaygroundSeedField.vue';
+import PlaygroundStatus from './PlaygroundStatus.vue';
 
-const props = defineProps<{
-  seed: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    seed: string;
+    editor?: boolean;
+    status?: boolean;
+    /** A smaller avatar, for a phone that shows the options under it. */
+    compact?: boolean;
+  }>(),
+  { editor: false, status: true, compact: false },
+);
 
 const store = useStore();
-const count = useCombinationCount();
 
 const OTHER_SEEDS = ['Aneka', 'Jade', 'Leo', 'Mia', 'Nala', 'Oscar'];
 
@@ -73,13 +81,10 @@ const otherSeeds = computed(
 function pickSeed(seed: string) {
   store.seed = seed;
 }
-
-// The status line carries the legal pages the footer would otherwise hold.
-const legal = legalLinks.filter((link) => link.label !== 'Licenses');
 </script>
 
 <template>
-  <div class="pg-stage">
+  <div class="pg-stage" :class="{ 'is-editor': editor, 'is-compact': compact }">
     <div class="pg-stage-ground">
       <div class="pg-stage-picture">
         <div
@@ -95,48 +100,30 @@ const legal = legalLinks.filter((link) => link.label !== 'Licenses');
         >
       </div>
 
-      <PlaygroundSeedField class="pg-stage-seed-field" />
+      <slot name="controls">
+        <PlaygroundSeedField class="pg-stage-seed-field" />
 
-      <div class="pg-stage-seeds">
-        <div class="pg-stage-seeds-row">
-          <button
-            v-for="other in otherSeeds"
-            :key="other.seed"
-            type="button"
-            class="pg-stage-seed hv-thumb"
-            :aria-label="`Use the seed ${other.seed}`"
-            :title="other.seed"
-            @click="pickSeed(other.seed)"
-          >
-            <img v-if="other.src" :src="other.src" alt="" />
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="pg-stage-status">
-      <div class="pg-stage-status-row">
-        <span v-if="count" class="pg-stage-combos">
-          <Dices :size="14" aria-hidden="true" />
-          {{ count.display }} combinations
-        </span>
-        <span class="pg-stage-legal">
-          <template v-for="(link, index) in legal" :key="link.href">
-            <span v-if="index > 0" aria-hidden="true"> · </span>
-            <a
-              :href="link.href"
-              :target="link.external ? '_blank' : undefined"
-              :rel="link.external ? 'noopener noreferrer' : undefined"
-              >{{ link.label }}</a
+        <div class="pg-stage-seeds">
+          <div class="pg-stage-seeds-row">
+            <button
+              v-for="other in otherSeeds"
+              :key="other.seed"
+              type="button"
+              class="pg-stage-seed hv-thumb"
+              :aria-label="`Use the seed ${other.seed}`"
+              :title="other.seed"
+              @click="pickSeed(other.seed)"
             >
-          </template>
-        </span>
-      </div>
-      <div class="pg-stage-status-row pg-stage-license-row">
-        <Scale :size="14" aria-hidden="true" class="pg-stage-license-icon" />
-        <PlaygroundLicenseText class="pg-stage-license" />
-      </div>
+              <img v-if="other.src" :src="other.src" alt="" />
+            </button>
+          </div>
+        </div>
+      </slot>
     </div>
+
+    <slot />
+
+    <PlaygroundStatus v-if="status" :combinations="!editor" />
   </div>
 </template>
 
@@ -233,78 +220,21 @@ const legal = legalLinks.filter((link) => link.label !== 'Licenses');
     }
   }
 
-  /* Two lines: the count and the legal links first, the license sentence
-     with its own symbol under them, so it keeps clear of the links. */
-  &-status {
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    gap: 4px;
-    box-sizing: border-box;
-    padding: 8px 20px 10px;
-    border-top: 1px solid var(--db-line);
-    font-size: 12px;
-    line-height: 16px;
-    color: var(--db-muted);
-
-    &-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      min-height: 16px;
-    }
+  /* A window 760px high shows the avatar at 200px and two rows of the
+     tray under it. Every pixel more goes to the avatar, up to 320px. */
+  &.is-editor &-ground {
+    flex: none;
+    gap: 14px;
+    padding: 20px 12px 16px;
   }
 
-  &-license-row {
-    align-items: flex-start;
-    gap: 6px;
-  }
-
-  &-license-icon {
-    flex-shrink: 0;
-    margin-top: 1px;
-    color: var(--db-ink-2);
-  }
-
-  /* The license sentence keeps its links, in the quiet color of the line. */
-  &-license {
-    flex: 1;
-    min-width: 0;
-
-    :deep(a) {
-      font-weight: 500;
-      color: var(--db-ink-2);
-      text-decoration: underline;
-      text-decoration-style: solid;
-      text-underline-offset: 3px;
-    }
-  }
-
-  &-legal {
-    flex-shrink: 0;
-    margin-left: auto;
-    white-space: nowrap;
-
-    a {
-      color: var(--db-ink-2);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-  }
-
-  /* How many different avatars the options can produce: a die and the
-     count, at the head of the status line. */
-  &-combos {
-    display: inline-flex;
-    flex-shrink: 0;
-    align-items: center;
-    gap: 5px;
-    font-variant-numeric: tabular-nums;
-    color: var(--db-ink-2);
+  &.is-editor &-picture {
+    width: clamp(160px, calc(100dvh - 560px), 320px);
   }
 
   @media (max-width: 959px) {
-    &-ground {
+    &-ground,
+    &.is-editor &-ground {
       padding: 16px;
     }
 
@@ -316,9 +246,21 @@ const legal = legalLinks.filter((link) => link.label !== 'Licenses');
     &-seeds {
       display: none;
     }
+  }
 
-    &-status {
-      padding: 8px 16px 10px;
+  /* A phone leaves the height to the tray or the options under a smaller
+     avatar. */
+  @media (max-width: 767px) {
+    &.is-editor &-picture {
+      width: 180px;
+    }
+
+    &.is-compact &-ground {
+      gap: 12px;
+    }
+
+    &.is-compact &-picture {
+      width: 150px;
     }
   }
 }

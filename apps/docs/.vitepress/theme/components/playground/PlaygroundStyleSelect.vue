@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * The style field in the toolbar. It opens the list of styles right under
- * it, on a phone as a sheet from the bottom.
+ * it, aligned to its left edge, on a phone as a sheet from the bottom.
  */
 import { computed, ref } from 'vue';
 import { capitalCase } from 'change-case';
@@ -106,7 +106,7 @@ const triggerOptions = { seed: exampleSeeds[0] };
 
   <SitePopover
     ref="popover"
-    align="center"
+    align="left"
     bare
     label="Avatar styles"
     class="pg-style-popover"
@@ -170,6 +170,7 @@ const triggerOptions = { seed: exampleSeeds[0] };
 
   &-chevron {
     flex-shrink: 0;
+    margin-left: auto;
     color: var(--db-muted);
     transition: transform 0.15s;
   }

@@ -1,17 +1,16 @@
 <script setup lang="ts">
 /**
- * The bar across the top of the playground: the menu with everything that
- * concerns the whole setup and the name of the tool on the left, the style
- * as a field in the middle, undo, redo and reset on the right.
+ * The bar across the top of the playground: the style on the left, above
+ * the list whose entries depend on it, undo, redo, reset and a menu for
+ * option files at the right edge of the picture, and the menu of views over
+ * the right column. On a phone the menu moves next to the style.
  */
 import { computed } from 'vue';
-import { capitalCase, kebabCase } from 'change-case';
+import { useMediaQuery } from '@vueuse/core';
 import {
-  Code,
-  ExternalLink,
+  Ellipsis,
   FileDown,
   FileUp,
-  Menu,
   Redo2,
   RotateCcw,
   Undo2,
@@ -19,15 +18,19 @@ import {
 import useStore from '@theme/stores/playground';
 import { track, styleLabel } from '@theme/utils/track';
 import SiteMenu, { type SiteMenuItem } from '../site/SiteMenu.vue';
+import PlaygroundModePicker from './PlaygroundModePicker.vue';
 import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
 
 const emit = defineEmits<{
   export: [];
   import: [];
-  'how-to-use': [];
 }>();
 
 const store = useStore();
+
+// A phone's bar has no room for the reset button, which moves into the
+// menu there.
+const phone = useMediaQuery('(max-width: 767px)');
 
 function onReset() {
   track('Playground: Reset', { style: styleLabel(store.avatarStyleName) });
@@ -39,10 +42,6 @@ const hasChanges = computed(
   () => Object.keys(store.avatarStyleOptionsWithoutDefaults).length > 0,
 );
 
-function openStylePage() {
-  window.location.assign(`/styles/${kebabCase(store.avatarStyleName)}/`);
-}
-
 const menuItems = computed<SiteMenuItem[]>(() => [
   {
     label: 'Export options',
@@ -51,21 +50,17 @@ const menuItems = computed<SiteMenuItem[]>(() => [
     command: () => emit('export'),
   },
   { label: 'Import options', icon: FileUp, command: () => emit('import') },
-  { label: 'Reset everything', icon: RotateCcw, command: onReset },
-  { separator: true },
-  {
-    label: 'How to use',
-    hint: 'code in 9 languages',
-    icon: Code,
-    command: () => emit('how-to-use'),
-  },
-  {
-    label: 'Style page',
-    hint: store.isCustomStyle ? undefined : capitalCase(store.avatarStyleName),
-    icon: ExternalLink,
-    command: openStylePage,
-    disabled: store.isCustomStyle,
-  },
+  ...(phone.value
+    ? ([
+        { separator: true },
+        {
+          label: 'Reset everything',
+          icon: RotateCcw,
+          command: onReset,
+          disabled: !hasChanges.value,
+        },
+      ] satisfies SiteMenuItem[])
+    : []),
 ]);
 </script>
 
@@ -74,28 +69,10 @@ const menuItems = computed<SiteMenuItem[]>(() => [
     <div class="pg-toolbar-inner">
       <div class="pg-toolbar-grid">
         <div class="pg-toolbar-left">
-          <SiteMenu :items="menuItems" label="Playground menu">
-            <template #trigger="{ open, toggle }">
-              <button
-                type="button"
-                class="site-btn site-btn-secondary site-btn-icon"
-                aria-label="Menu"
-                aria-haspopup="menu"
-                :aria-expanded="open"
-                @click="toggle"
-              >
-                <Menu :size="18" aria-hidden="true" />
-              </button>
-            </template>
-          </SiteMenu>
-          <span class="pg-toolbar-title">Playground</span>
-        </div>
-
-        <div class="pg-toolbar-middle">
           <PlaygroundStyleSelect class="pg-toolbar-style" />
         </div>
 
-        <div class="pg-toolbar-right">
+        <div class="pg-toolbar-middle">
           <button
             type="button"
             class="site-btn site-btn-ghost site-btn-icon"
@@ -118,10 +95,10 @@ const menuItems = computed<SiteMenuItem[]>(() => [
           >
             <Redo2 :size="18" aria-hidden="true" />
           </button>
-          <span class="pg-toolbar-divider" aria-hidden="true" />
+          <span class="pg-toolbar-divider pg-toolbar-wide" aria-hidden="true" />
           <button
             type="button"
-            class="site-btn site-btn-ghost site-btn-icon"
+            class="site-btn site-btn-ghost site-btn-icon pg-toolbar-wide"
             aria-label="Reset everything"
             data-tip="Reset everything"
             data-tip-side="bottom"
@@ -130,6 +107,26 @@ const menuItems = computed<SiteMenuItem[]>(() => [
           >
             <RotateCcw :size="18" aria-hidden="true" />
           </button>
+          <SiteMenu :items="menuItems" label="More">
+            <template #trigger="{ open, toggle }">
+              <button
+                type="button"
+                class="site-btn site-btn-ghost site-btn-icon"
+                aria-label="More"
+                data-tip="More"
+                data-tip-side="bottom"
+                aria-haspopup="menu"
+                :aria-expanded="open"
+                @click="toggle"
+              >
+                <Ellipsis :size="18" aria-hidden="true" />
+              </button>
+            </template>
+          </SiteMenu>
+        </div>
+
+        <div class="pg-toolbar-right">
+          <PlaygroundModePicker class="pg-toolbar-view" />
         </div>
       </div>
     </div>
@@ -153,8 +150,10 @@ const menuItems = computed<SiteMenuItem[]>(() => [
     padding: 0 var(--db-gutter);
   }
 
-  /* The same three columns as the body below, so the style and the preset
-     stand centred over the picture, not over the whole bar. */
+  /* The same three columns as the body below: the style over the list, the
+     history over the picture, the switch over the column on the right. That
+     column keeps its place in both views, so nothing in the bar moves when
+     the list comes and goes. */
   &-grid {
     display: grid;
     grid-template-columns: 260px minmax(0, 1fr) 360px;
@@ -174,25 +173,9 @@ const menuItems = computed<SiteMenuItem[]>(() => [
     min-width: 0;
   }
 
-  &-left {
-    gap: 12px;
-  }
-
-  &-middle {
-    justify-content: center;
-    gap: 4px;
-  }
-
+  &-middle,
   &-right {
     justify-content: flex-end;
-  }
-
-  &-title {
-    font-size: 18px;
-    line-height: 24px;
-    font-weight: 600;
-    color: var(--db-ink);
-    white-space: nowrap;
   }
 
   &-divider {
@@ -202,13 +185,28 @@ const menuItems = computed<SiteMenuItem[]>(() => [
     background: var(--db-line);
   }
 
-  &-style {
+  /* As wide as the text of the list below, which starts on the same edge.
+     The field is one of several roots of its component, so the class
+     arrives without this file's scope. */
+  &-left :deep(.pg-toolbar-style) {
+    width: calc(100% - 24px);
     min-width: 0;
   }
 
   @media (min-width: 960px) {
     &-inner {
       padding: 0 calc(var(--db-gutter) - 12px);
+    }
+
+    /* The buttons end as far before the column's line as its content
+       starts after it. */
+    &-middle {
+      margin-right: -12px;
+    }
+
+    /* As wide as the content of the column below. */
+    &-right :deep(.pg-toolbar-view) {
+      width: calc(100% - 24px);
     }
   }
 
@@ -220,28 +218,37 @@ const menuItems = computed<SiteMenuItem[]>(() => [
 
   @media (max-width: 959px) {
     &-grid {
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) auto auto;
       padding: 0;
+    }
+
+    &-left :deep(.pg-toolbar-style) {
+      width: 100%;
+      max-width: 260px;
     }
   }
 
-  /* One row on a phone: the menu, the style across the width, undo and
-     redo. The name makes room for the style. */
+  /* One row on a phone: the style across the width, the view as a small
+     button next to it, then undo, redo and the menu. */
   @media (max-width: 767px) {
     &-grid {
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 4px;
     }
 
-    &-title {
-      display: none;
+    &-right {
+      order: 1;
     }
 
     &-middle {
-      justify-content: stretch;
+      order: 2;
     }
 
-    &-style {
-      width: 100%;
+    &-wide {
+      display: none;
+    }
+
+    &-left :deep(.pg-toolbar-style) {
+      max-width: none;
     }
   }
 }
