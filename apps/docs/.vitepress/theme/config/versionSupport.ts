@@ -11,7 +11,7 @@
  * closed phases are the real npm release dates of `@dicebear/core`, so the
  * chart cannot claim a fix that was never published.
  *
- * The data is read twice, by the timeline on `/versions/` and by the Markdown
+ * The data is read twice, by the timeline on `/understand/supported-versions/` and by the Markdown
  * mirror built in llms.ts, so the two cannot state different dates.
  */
 

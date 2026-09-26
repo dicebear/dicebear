@@ -587,7 +587,7 @@ raw definition at
 }
 
 /**
- * One support table of `/versions/`, built from the data the timeline on that
+ * One support table of `/understand/supported-versions/`, built from the data the timeline on that
  * page reads. Written as a table because the columns are what a reader comes
  * for: when a line was released, where it stands, and when it ends.
  */
@@ -816,7 +816,7 @@ async function buildPage(
       .join('\n');
 
     markdown = `${renderMarkdown(`# Tools\n\n${mount?.[1].trim() ?? ''}`).trimEnd()}\n\n${list}\n`;
-  } else if (route === '/versions/') {
+  } else if (route === '/understand/supported-versions/') {
     // The chart is the page's answer, and a mirror cannot draw one. Its mount
     // point marks where the same data belongs in prose form.
     markdown = renderMarkdown(

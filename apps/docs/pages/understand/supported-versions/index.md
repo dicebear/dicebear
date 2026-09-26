@@ -4,7 +4,6 @@ description: >
   Which DiceBear versions still get releases and which api.dicebear.com URLs
   still answer. 11.x is maintained, 9.x and 10.x get security fixes, everything
   older is end of life.
-aside: false
 ---
 
 <script setup>

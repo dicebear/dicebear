@@ -65,7 +65,7 @@ export const footerColumns: FooterColumn[] = [
     links: [
       { label: 'Why DiceBear?', href: '/why-dicebear/' },
       { label: 'Statistics', href: '/stats/' },
-      { label: 'Supported versions', href: '/versions/' },
+      { label: 'Supported versions', href: '/understand/supported-versions/' },
       { label: 'Support DiceBear', href: '/support/' },
       {
         label: 'GitHub',

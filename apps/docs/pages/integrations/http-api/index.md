@@ -260,8 +260,8 @@ You can set the version in the URL. Just replace the `11.x` from the previous
 examples with the one you want.
 
 Every prefix from `5.x` to `11.x` still answers.
-[Supported versions](/versions/) shows how long each one stays that way, and
-which of them the libraries still cover.
+[Supported versions](/understand/supported-versions/) shows how long each one
+stays that way, and which of them the libraries still cover.
 
 ::: warning
 

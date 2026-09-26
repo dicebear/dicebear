@@ -131,6 +131,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         text: 'DiceBear vs. alternatives',
         link: '/understand/dicebear-vs-alternatives/',
       },
+      {
+        text: 'Supported versions',
+        link: '/understand/supported-versions/',
+      },
     ],
   },
   {
