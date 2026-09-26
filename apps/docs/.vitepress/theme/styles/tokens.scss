@@ -97,12 +97,13 @@
   --db-panel: #18242e;
   --db-soft: #1d2a35;
   /* Avatar tiles stay light, or styles drawn in black line work vanish. */
-  --db-tile: #e9eef2;
+  --db-tile: #eceef0;
   --db-line: #27343f;
 
-  /* Softer than the old #e6edf3, which met the ground at 15.7:1 and glared.
-     Text sits at 11.7:1 now, headings included. */
-  --db-ink: #ccd7e0;
+  /* An almost neutral grey, so text reads as white on the blue ground. It
+     sits at 12.7:1, headings included, below the 15.7:1 at which the old
+     #e6edf3 glared. */
+  --db-ink: #dcdfe1;
   --db-ink-2: #a2b0bc;
   --db-muted: #87949f;
   --db-chevron: #7a8791;
@@ -115,15 +116,15 @@
 
   /* A filled button is a large surface, so it follows the text down instead
      of shining at 15.7:1, and its hover stops short of white. */
-  --db-btn-bg: #ccd7e0;
+  --db-btn-bg: #dcdfe1;
   --db-btn-fg: #131d26;
-  --db-btn-hover: #dbe3ea;
+  --db-btn-hover: #e9ebed;
   --db-btn-border: #5b6c7a;
   --db-hover-border: #7a8b99;
   --db-field-border: #364552;
   --db-switch-bg: #27343f;
   --db-switch-border: #5b6c7a;
-  --db-knob: #ccd7e0;
+  --db-knob: #dcdfe1;
 
   --db-ok: #4ade80;
   --db-ok-soft: #17331f;
@@ -137,7 +138,7 @@
   --db-code-bg: #1d2a35;
   --db-code-bar: #1d2a35;
   --db-code-line: #27343f;
-  --db-code-ink: #d3dce4;
+  --db-code-ink: #e0e2e4;
   --db-code-string: #fdba74;
 
   --db-logo-mono: #ffffff;
