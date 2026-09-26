@@ -141,7 +141,6 @@ const tiles = (() => {
   return list;
 })();
 
-const text = ref(NAMES[0]);
 const seed = ref(NAMES[0]);
 const styleName = ref(DEFAULT_STYLE);
 const pickerOpen = ref(false);
@@ -244,8 +243,8 @@ function step(erasing: boolean) {
   }
 
   if (erasing) {
-    if (text.value.length > 0) {
-      text.value = text.value.slice(0, -1);
+    if (seed.value.length > 0) {
+      seed.value = seed.value.slice(0, -1);
       timer = setTimeout(() => step(true), ERASE_MS);
       return;
     }
@@ -255,14 +254,12 @@ function step(erasing: boolean) {
 
   const name = NAMES[nameIndex];
 
-  if (text.value.length < name.length) {
-    text.value = name.slice(0, text.value.length + 1);
+  if (seed.value.length < name.length) {
+    seed.value = name.slice(0, seed.value.length + 1);
     timer = setTimeout(() => step(false), TYPE_MS);
     return;
   }
 
-  // The avatars only change once the name is complete.
-  seed.value = name;
   timer = setTimeout(() => step(true), HOLD_MS);
 }
 
@@ -273,13 +270,9 @@ function stopTyping() {
 }
 
 function onFocus() {
-  if (!typing.value) {
-    return;
+  if (typing.value) {
+    stopTyping();
   }
-
-  // Focus can land while a name is half typed or half erased.
-  stopTyping();
-  text.value = seed.value;
 }
 
 // The seed text never leaves the browser, only the fact that someone typed.
@@ -289,8 +282,7 @@ const trackSeedEdited = useDebounceFn(() => {
 
 function onInput(event: Event) {
   stopTyping();
-  text.value = (event.target as HTMLInputElement).value;
-  seed.value = text.value;
+  seed.value = (event.target as HTMLInputElement).value;
   trackSeedEdited();
 }
 
@@ -303,7 +295,6 @@ function togglePicker() {
   // while it is open.
   if (!pickerOpen.value && typing.value) {
     stopTyping();
-    text.value = seed.value;
   }
 
   pickerOpen.value = !pickerOpen.value;
@@ -400,7 +391,7 @@ onBeforeUnmount(() => clearTimeout(timer));
           <span class="home-field-input">
             <input
               id="home-field-seed"
-              :value="text"
+              :value="seed"
               type="text"
               maxlength="32"
               autocomplete="off"
@@ -411,7 +402,7 @@ onBeforeUnmount(() => clearTimeout(timer));
               @input="onInput"
             />
             <span v-if="typing" class="home-field-caret" aria-hidden="true">{{
-              text
+              seed
             }}</span>
           </span>
         </span>
