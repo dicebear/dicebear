@@ -156,13 +156,14 @@ onKeyStroke('Escape', () => {
     grid-template-columns: minmax(0, 720px) 200px;
   }
 
+  /* Without the outline, the article fills the room up to the navigation. */
   &.has-sidebar {
-    grid-template-columns: 260px minmax(0, 720px);
-    justify-content: space-between;
+    grid-template-columns: 260px minmax(0, 1fr);
   }
 
   &.has-sidebar.has-aside {
     grid-template-columns: 260px minmax(0, 720px) 200px;
+    justify-content: space-between;
   }
 }
 
@@ -254,7 +255,7 @@ onKeyStroke('Escape', () => {
 
 @media (max-width: 1279px) {
   .docs-shell.has-sidebar.has-aside {
-    grid-template-columns: 260px minmax(0, 720px);
+    grid-template-columns: 260px minmax(0, 1fr);
   }
 
   .docs-shell.has-aside:not(.has-sidebar) {
