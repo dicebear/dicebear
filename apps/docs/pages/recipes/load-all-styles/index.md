@@ -1,59 +1,34 @@
 ---
-title: Load All Avatar Styles from @dicebear/styles
+title: Load All Avatar Styles at Once
 description: >
-  Learn how to load every avatar style shipped with @dicebear/styles at once in
-  Node.js, PHP, Python, Rust, Go, Dart and C#.
+  Load every official DiceBear avatar style at once, for a style picker, a
+  gallery or a batch job. Examples for JavaScript, PHP, Python, Rust, Go, Dart
+  and C#.
 ---
 
-# How to load all avatar styles from `@dicebear/styles`?
+# Load all avatar styles
 
 Most projects need one or two avatar styles. For a style picker, a gallery page
 or a batch job you want all of them at once. The styles package of every
-language ships all official styles, and each section below loads them into a map
-from style name to style.
+language ships all official styles, and each snippet loads them into a map from
+style name to style:
 
-## Node.js
+::: code-group
 
-In Node.js you can read the definitions straight from the installed package. The
-package exports only the definitions themselves, so locate its folder through
-one of them:
-
-```js
-import { readdir, readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
-import path from 'node:path';
+```js [JavaScript]
 import { Style, Avatar } from '@dicebear/core';
-
-const require = createRequire(import.meta.url);
-const stylesDir = path.dirname(
-  require.resolve('@dicebear/styles/lorelei.json'),
-);
-
-const files = (await readdir(stylesDir)).filter((file) =>
-  file.endsWith('.min.json'),
-);
+import { all, get } from '@dicebear/styles';
 
 const styles = Object.fromEntries(
   await Promise.all(
-    files.map(async (file) => {
-      const definition = JSON.parse(
-        await readFile(path.join(stylesDir, file), 'utf8'),
-      );
-
-      return [path.basename(file, '.min.json'), new Style(definition)];
-    }),
+    all().map(async (name) => [name, new Style(await get(name))]),
   ),
 );
 
 const avatar = new Avatar(styles.lorelei, { seed: 'Alice' });
 ```
 
-## PHP
-
-PHP can locate the installed package via Composer and iterate over the JSON
-files in its `src/` directory.
-
-```php
+```php [PHP]
 <?php
 
 use Composer\InstalledVersions;
@@ -73,12 +48,7 @@ foreach ($files as $file) {
 $avatar = new Avatar($styles['lorelei'], ['seed' => 'Alice']);
 ```
 
-## Python
-
-The `dicebear-styles` package ships the definitions as JSON resources under the
-`dicebear_styles` import name. Iterate over them with `importlib.resources`.
-
-```python
+```python [Python]
 from importlib.resources import files
 
 from dicebear import Avatar, Style
@@ -94,21 +64,8 @@ styles = {
 avatar = Avatar(styles["lorelei"], {"seed": "Alice"})
 ```
 
-## Rust
-
-The `dicebear-styles` crate embeds each style behind a Cargo feature of the same
-name, so a binary only ships the styles it opts into. To load _all_ of them, add
-the crate with the `all` feature:
-
-```sh
-cargo add dicebear-core serde_json
-cargo add dicebear-styles --features all
-```
-
-`dicebear_styles::all()` lists every style compiled into the build, and
-`dicebear_styles::get(name)` returns its raw JSON definition.
-
-```rust
+```rust [Rust]
+// cargo add dicebear-styles --features all
 use std::collections::HashMap;
 
 use dicebear_core::{Avatar, Style};
@@ -123,21 +80,7 @@ for name in dicebear_styles::all() {
 let avatar = Avatar::new(&styles["lorelei"], json!({ "seed": "Alice" }))?;
 ```
 
-## Go
-
-The `github.com/dicebear/styles/v11` module embeds every style. Unlike the Rust
-crate, there is no per-style opt-in, so the whole set is available once the
-module is added.
-
-```sh
-go get github.com/dicebear/dicebear-go/v11
-go get github.com/dicebear/styles/v11
-```
-
-`styles.All()` lists every embedded style and `styles.Get(name)` returns its raw
-JSON definition.
-
-```go
+```go [Go]
 import (
 	dicebear "github.com/dicebear/dicebear-go/v11"
 	"github.com/dicebear/styles/v11"
@@ -156,21 +99,7 @@ for _, name := range styles.All() {
 avatar, _ := dicebear.NewAvatar(parsed["lorelei"], map[string]any{"seed": "Alice"})
 ```
 
-## Dart
-
-The `dicebear_styles` package ships each style in its own library, so a compiled
-app only embeds the styles it imports. To load _all_ of them, import the
-umbrella library `package:dicebear_styles/dicebear_styles.dart`, which
-re-exports every style:
-
-```sh
-dart pub add dicebear_core dicebear_styles
-```
-
-`styles.all` lists every embedded style and `styles.get(name)` returns its raw
-JSON definition.
-
-```dart
+```dart [Dart]
 import 'package:dicebear_core/dicebear_core.dart';
 import 'package:dicebear_styles/dicebear_styles.dart' as styles;
 
@@ -181,21 +110,7 @@ final parsed = {
 final avatar = Avatar(parsed['lorelei']!, {'seed': 'Alice'});
 ```
 
-## C#
-
-The `DiceBear.Styles` package embeds every style in the assembly. Like the Go
-module there is no per-style opt-in, so the whole set is available once the
-package is added.
-
-```sh
-dotnet add package DiceBear.Core
-dotnet add package DiceBear.Styles
-```
-
-`Styles.All()` lists every embedded style and `Styles.Get(name)` returns its raw
-JSON definition.
-
-```csharp
+```csharp [C#]
 using System.Text.Json.Nodes;
 using DiceBear;
 
@@ -206,6 +121,13 @@ var parsed = Styles
 var avatar = new Avatar(parsed["lorelei"], new JsonObject { ["seed"] = "Alice" });
 ```
 
-Parsing all %STYLE_COUNT% definitions up front costs time and memory. If you
-only need a handful, reach for the properties instead:
-`Style.Parse(Styles.Lorelei)`.
+:::
+
+Loading every style also ships every style. The Go module and the C# package
+embed all of them anyway. In Rust it takes the `all` feature, and in Dart the
+umbrella library `package:dicebear_styles/dicebear_styles.dart` pulls every
+style into the app. In JavaScript, `get()` imports a definition only when it
+runs, and bundlers keep each one in a chunk of its own. Parsing all
+%STYLE_COUNT% definitions up front costs time and memory too, so if you only
+need a handful, load those directly as the
+[library pages](/start/pick-your-integration/#the-libraries) show.
