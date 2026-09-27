@@ -2,8 +2,8 @@
 title: How Do I Set a Gender?
 description: >
   DiceBear has no single gender switch, but you can shape avatars to look more
-  masculine or feminine by setting each style's options, and soon by filtering
-  variants with tags.
+  masculine or feminine by setting each style's options or by filtering variants
+  with tags.
 ---
 
 # How do I set a gender?
@@ -31,18 +31,9 @@ The options differ from style to style, so check the page of the style you use.
 
 ## Filter by tags
 
-::: warning The character tags are not available yet
-
-No DiceBear style carries tags such as `hairLength` or `facialHair` today, so
-the filters in this section have no effect for now. Until they ship, set the
-per-feature options described above.
-
-:::
-
-An upcoming release tags the variants of the character styles with labels such
-as `hairLength:long` or `headwear:headscarf`. The [`tags`](/customize/tags/)
-option then keeps only the variants you choose, for example long hair without
-facial hair:
+Most character styles tag their variants with labels such as `hairLength:long`
+or `headwear:headscarf`. The [`tags`](/customize/tags/) option keeps only the
+variants you choose, for example long hair without facial hair:
 
 ```js
 const avatar = new Avatar(style, {

@@ -1,9 +1,9 @@
 ---
 title: How DiceBear Tags Variants
 description: >
-  How DiceBear assigns variant tags to its own styles: the planned standard set
-  for the character styles covering mood, hair length, headwear, facial hair,
-  eyewear, and accessory.
+  How DiceBear assigns variant tags to its own styles: one set for the character
+  styles, covering mood, hair length, headwear, facial hair, eyewear, and
+  accessory.
 ---
 
 # How DiceBear tags variants
@@ -30,15 +30,7 @@ A few principles keep the tags consistent:
 The tag grammar is `category` or `category:value`, each segment camelCase and
 alphanumeric. A variant holds at most 32 tags.
 
-## Planned categories
-
-::: warning Not shipped yet
-
-No DiceBear style carries the categories below, so filtering on them has no
-effect for now. They are published ahead of time so custom styles can reuse them
-and stay compatible with the filter examples in the docs.
-
-:::
+## Categories
 
 ### Mood
 

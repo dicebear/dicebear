@@ -2,8 +2,8 @@
 title: Filter Avatar Variants with Tags
 description: >
   Variant tags describe how a variant looks or behaves. The tags option filters
-  the variant pool. An upcoming release tags the character styles with traits
-  like mood and hair length, and custom styles can carry tags today.
+  the variant pool, for example by mood or hair length in the character styles,
+  and custom styles can carry tags of their own.
 ---
 
 # Filter avatar variants with tags
@@ -13,15 +13,9 @@ Avatar styles can describe their variants with tags, short labels like
 narrow the pool of variants an avatar is drawn from, the same way in every style
 that carries them.
 
-::: warning Not shipped yet
-
-No official style carries tags yet, so the filters on this page only affect
-custom styles for now. An upcoming release tags the character styles with mood,
-hair length, headwear, facial hair, eyewear, and accessory.
-[How DiceBear tags variants](/customize/tags/reference/) already defines these
-categories, so custom styles can adopt them today.
-
-:::
+Most of DiceBear's character styles carry tags for mood, hair length, headwear,
+facial hair, eyewear, and accessory.
+[How DiceBear tags variants](/customize/tags/reference/) explains each of them.
 
 ## Filter with the `tags` option
 
@@ -84,8 +78,8 @@ nothing.
 ## Custom styles
 
 A [custom style](/create-styles/with-figma/) can reuse the
-[planned categories](/customize/tags/reference/), add its own values, or define
-entirely different ones. Reusing the planned ones keeps it compatible with the
-filter examples in these docs. The only rule is the grammar: a tag is `category`
-or `category:value`, and each segment is camelCase, for example
+[categories of the DiceBear styles](/customize/tags/reference/), add its own
+values, or define entirely different ones. Reusing them keeps it compatible with
+the filter examples in these docs. The only rule is the grammar: a tag is
+`category` or `category:value`, and each segment is camelCase, for example
 `mouthExpression:smug` or `species:robot`.
