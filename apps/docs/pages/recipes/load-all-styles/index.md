@@ -8,41 +8,29 @@ description: >
 # How to load all avatar styles from `@dicebear/styles`?
 
 Most projects need one or two avatar styles. For a style picker, a gallery page
-or a batch job you want all of them at once.
-
-The [DiceBear styles repository](https://github.com/dicebear/styles) ships every
-official avatar style as a separate JSON file. It is distributed as
-[`@dicebear/styles`](https://www.npmjs.com/package/@dicebear/styles) on npm,
-[`dicebear/styles`](https://packagist.org/packages/dicebear/styles) on
-Packagist, [`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on
-PyPI, [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
-crates.io,
-[`github.com/dicebear/styles/v11`](https://pkg.go.dev/github.com/dicebear/styles/v11)
-as a Go module and [`dicebear_styles`](https://pub.dev/packages/dicebear_styles)
-on pub.dev, and
-[`DiceBear.Styles`](https://www.nuget.org/packages/DiceBear.Styles) on NuGet.
-
-This guide shows how to do that in Node.js, PHP, Python, Rust, Go, Dart and C#.
+or a batch job you want all of them at once. The styles package of every
+language ships all official styles, and each section below loads them into a map
+from style name to style.
 
 ## Node.js
 
-In Node.js you can read the styles straight from the installed package on disk.
-The package ships its source JSON files under `src/`.
+In Node.js you can read the definitions straight from the installed package. The
+package exports only the definitions themselves, so locate its folder through
+one of them:
 
 ```js
 import { readdir, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 
 const require = createRequire(import.meta.url);
-const stylesDir = path.join(
-  path.dirname(require.resolve('@dicebear/styles/package.json')),
-  'src',
+const stylesDir = path.dirname(
+  require.resolve('@dicebear/styles/lorelei.json'),
 );
 
 const files = (await readdir(stylesDir)).filter((file) =>
-  file.endsWith('.json'),
+  file.endsWith('.min.json'),
 );
 
 const styles = Object.fromEntries(
@@ -52,7 +40,7 @@ const styles = Object.fromEntries(
         await readFile(path.join(stylesDir, file), 'utf8'),
       );
 
-      return [path.basename(file, '.json'), definition];
+      return [path.basename(file, '.min.json'), new Style(definition)];
     }),
   ),
 );

@@ -7,13 +7,13 @@ description: >
 
 # React Native avatar library: using DiceBear with React Native
 
-DiceBear can be used in React Native via the JavaScript library with an SVG
-renderer, or via the HTTP API's PNG format using the built-in `Image` component.
-The API approach requires no SVG library.
+DiceBear works in React Native via the JavaScript library with an SVG renderer,
+or via the HTTP API's PNG format with the built-in `Image` component, which
+needs no extra package.
 
 ## With the JS library
 
-You need an SVG library to render the avatars. In our example we use the package
+Rendering the SVG needs an SVG library. This example uses
 [react-native-svg](https://www.npmjs.com/package/react-native-svg).
 
 ```sh
@@ -47,9 +47,6 @@ export default function UserAvatar({ seed = 'Alice' }) {
 ```
 
 ## With the HTTP API
-
-With the HTTP API you can use the PNG format and the built-in `Image` component
-without any additional dependencies.
 
 ```jsx
 import { useMemo } from 'react';

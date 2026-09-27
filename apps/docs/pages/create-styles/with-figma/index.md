@@ -10,15 +10,15 @@ description: >
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787),
 our plugin for Figma, is the easiest way to create an avatar style for DiceBear.
 
-This guide covers its Style tab, the [plugin overview](/integrations/figma/)
-covers the rest. The tutorial requires basic knowledge about
-[Figma](https://www.figma.com/).
+This guide covers its Style tab and assumes basic
+[Figma](https://www.figma.com/) knowledge. The
+[plugin overview](/integrations/figma/) covers the other tabs.
 
-The screenshots below build a small style called "shape-face" out of two
-component groups, `face` and `eyes`, with a color group for each. Your style can
-have as many groups as you like, the steps stay the same.
+The screenshots build a small style called "shape-face" out of two component
+groups, `face` and `eyes`, with a color group for each. Your style can have as
+many groups as you like, the steps stay the same.
 
-## Step 1
+## Step 1: Create the color styles
 
 If you want DiceBear to change the colors of your avatar, create the colors as
 [color styles](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles)
@@ -34,7 +34,7 @@ color from the group, depending on the seed and the settings. For `<group>` and
 
 ![The Styles section of the Design panel with the color groups face and eyes](/create-styles/with-figma/1.webp)
 
-## Step 2
+## Step 2: Assign the colors
 
 Assign a color from one of the groups to every path that should be colored
 dynamically. Which color of the group you pick does not matter, only the group
@@ -42,7 +42,7 @@ counts.
 
 ![A selected rectangle with the color style face/yellow as its fill](/create-styles/with-figma/2.webp)
 
-## Step 3
+## Step 3: Turn the parts into components
 
 Turn the individual parts of your avatar into
 [components](https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-components-in-Figma).
@@ -54,13 +54,13 @@ for every avatar, depending on the seed and the settings.
 
 ![The context menu of a layer named face/rectangle, with Create component highlighted](/create-styles/with-figma/3.webp)
 
-## Step 4
+## Step 4: Give each group one size
 
 Every component of a group needs the same width and height. The fastest way is
 to select all components of a group and set the size once, which changes all of
 them together.
 
-## Step 5
+## Step 5: Assemble the frame
 
 Create as many color and component groups as you like, then bring everything
 together in one
@@ -79,7 +79,7 @@ The frame now holds one instance per group.
 
 ![The Layers panel with the frame and its two instances](/create-styles/with-figma/6.webp)
 
-## Step 6
+## Step 6: Set up the style in the plugin
 
 Select the frame, then start the
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787)
@@ -108,36 +108,22 @@ groups it must not share a color with.
 
 When you are happy with your settings, click Export definition.
 
-## Step 7
+## Step 7: Use your style
 
 The plugin exports a JSON file: your
-[style definition](/create-styles/definition-schema/). This file is ready to use
-immediately, without a build step.
-
-You can test your style right away with the [CLI](/integrations/cli/):
+[style definition](/create-styles/definition-schema/). It works right away,
+without a build step. Test it with the [CLI](/integrations/cli/), which writes
+10 sample avatars into `./test-output`:
 
 ```sh
 dicebear create ./your-style.json -o ./test-output --count 10
 ```
 
-This generates 10 sample avatars in the `./test-output` directory.
+The libraries load it like any other style:
 
-To use the style in Figma itself, upload the definition to the library of the
-plugin's Generate tab. It is then available in every file you open, see
-[Use your own styles](/integrations/figma/#use-your-own-styles).
+::: code-group
 
-## Step 8
-
-Congratulations! You can now use your avatar style with the
-[JS Library](/integrations/javascript/), the [PHP Library](/integrations/php/),
-the [Python Library](/integrations/python/), the
-[Rust Library](/integrations/rust/), the [Go Library](/integrations/go/), the
-[Dart Library](/integrations/dart/), [C# Library](/integrations/csharp/), or the
-[CLI](/integrations/cli/).
-
-### With the JS Library
-
-```js
+```js [JavaScript]
 import { Style, Avatar } from '@dicebear/core';
 import definition from './your-style.json' with { type: 'json' };
 
@@ -148,9 +134,7 @@ const avatar = new Avatar(style, {
 });
 ```
 
-### With the PHP Library
-
-```php
+```php [PHP]
 use DiceBear\Avatar;
 use DiceBear\Style;
 
@@ -162,9 +146,7 @@ $avatar = new Avatar($style, [
 ]);
 ```
 
-### With the Python Library
-
-```python
+```python [Python]
 from pathlib import Path
 
 from dicebear import Avatar, Style
@@ -177,9 +159,7 @@ avatar = Avatar(style, {
 })
 ```
 
-### With the Rust Library
-
-```rust
+```rust [Rust]
 use dicebear_core::{Avatar, Style};
 use serde_json::json;
 use std::fs;
@@ -193,9 +173,7 @@ let avatar = Avatar::new(&style, json!({
 }))?;
 ```
 
-### With the Go Library
-
-```go
+```go [Go]
 import (
 	"os"
 
@@ -211,9 +189,7 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{
 })
 ```
 
-### With the Dart Library
-
-```dart
+```dart [Dart]
 import 'dart:io';
 
 import 'package:dicebear_core/dicebear_core.dart';
@@ -226,9 +202,7 @@ final avatar = Avatar(style, {
 });
 ```
 
-### With the C# Library
-
-```csharp
+```csharp [C#]
 using System.Text.Json.Nodes;
 using DiceBear;
 
@@ -241,19 +215,15 @@ var avatar = new Avatar(style, new JsonObject
 });
 ```
 
-### With the CLI
-
-```sh
+```sh [CLI]
 dicebear create ./your-style.json -o ./avatar.png --seed "dicebear"
 ```
 
-::: tip
-
-The CLI automatically detects all available options from your style definition.
-Use `--help` with your definition file to see them:
-
-```sh
-dicebear create ./your-style.json --help
-```
-
 :::
+
+`dicebear create ./your-style.json --help` lists every option the CLI reads from
+your definition.
+
+To use the style in Figma itself, upload the definition to the library of the
+plugin's Generate tab. It is then available in every file you open, see
+[Use your own styles](/integrations/figma/#use-your-own-styles).

@@ -8,14 +8,11 @@ description: >
 
 # Flutter avatar library: using DiceBear with Flutter
 
-You can generate DiceBear avatars in Flutter two ways.
-
-Use the [Dart library](/integrations/dart/) with an SVG renderer to build
-avatars on the device, or use the [HTTP API](/integrations/http-api/) with
-Flutter's built-in `Image.network` to load ready-made PNGs.
-
-The HTTP API needs no extra packages and is the quickest to set up. The Dart
-library keeps everything local, so it works offline and sends no requests.
+Build avatars on the device with the [Dart library](/integrations/dart/) and an
+SVG renderer, or load ready-made PNGs from the
+[HTTP API](/integrations/http-api/) with Flutter's built-in `Image.network`. The
+HTTP API needs no extra packages and is the quickest to set up. The Dart library
+keeps everything local, so it works offline and sends no requests.
 
 ## With the Dart library
 
@@ -63,8 +60,7 @@ style accepts, see the [Dart library reference](/integrations/dart/).
 
 ## With the HTTP API
 
-The HTTP API returns finished images, so you need no extra packages. Request the
-`png` format and pass the URL to `Image.network`.
+Request the `png` format and pass the URL to `Image.network`:
 
 ```dart
 import 'package:flutter/material.dart';

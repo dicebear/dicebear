@@ -19,10 +19,9 @@ You don't need to install anything. Every DiceBear avatar has a URL, and any
 ```
 
 Two things in that URL shape the avatar: the style, here `lorelei`, and the
-`seed`. The style sets the look, the seed picks a unique avatar within it, and
-the same seed always returns the same result. `Alice` gets the same face today,
-tomorrow, and on every device. Type something into the field below, watch four
-styles react, and click a tile to see its URL:
+`seed`. The style sets the look, and the seed picks one avatar within it.
+`Alice` gets the same face today, tomorrow, and on every device. Type something
+into the field below, watch four styles react, and click a tile to see its URL:
 
 <DocsSeedDemo />
 
@@ -52,7 +51,7 @@ accessories. Options ride along in the URL as query parameters:
 
 ```html
 <img
-  src="https://api.dicebear.com/11.x/lorelei/svg?seed=Alice&flip=true&backgroundColor=b6e3f4"
+  src="https://api.dicebear.com/11.x/lorelei/svg?seed=Alice&flip=horizontal&backgroundColor=b6e3f4"
   alt="avatar"
 />
 ```
@@ -80,11 +79,10 @@ const avatar = new Avatar(style, { seed: 'Alice' });
 const svg = avatar.toString();
 ```
 
-The same libraries exist for PHP, Python, Rust, Go, Dart, and C#, all with the
-same behavior: the seed `Alice` renders the same avatar in every language.
-Unsure which route fits your project? The
-[integration picker](/start/pick-your-integration/) sorts it out in three
-questions.
+The same libraries exist for PHP, Python, Rust, Go, Dart, and C#, and the seed
+`Alice` renders the same avatar in every one of them. Unsure which route fits
+your project? The [integration picker](/start/pick-your-integration/) helps you
+choose.
 
 ## Where to next?
 

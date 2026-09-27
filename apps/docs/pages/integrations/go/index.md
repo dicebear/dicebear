@@ -27,9 +27,8 @@ go get github.com/dicebear/styles/v11
 
 ## Usage
 
-We use the avatar style [lorelei](/styles/lorelei/) in our example. You can find
-more avatar styles [here](/styles/). Each style is exposed as a raw-JSON string
-(e.g. `styles.Lorelei`) that you pass to `NewStyle`.
+Each style is exposed as a raw-JSON string (e.g. `styles.Lorelei`) that you pass
+to `NewStyle`:
 
 ```go
 package main
@@ -60,8 +59,7 @@ func main() {
 }
 ```
 
-Each avatar style comes with several options. You can find them on the details
-page of each [avatar style](/styles/).
+Every style has its own options, listed on its [style page](/styles/).
 
 :::info
 
@@ -71,106 +69,26 @@ place.
 
 :::
 
-## Deterministic avatars
-
-The `seed` option is the key to generating deterministic avatars. The same seed
-always produces the same avatar:
-
-```go
-avatar1, _ := dicebear.NewAvatar(style, map[string]any{"seed": "user-123"})
-avatar2, _ := dicebear.NewAvatar(style, map[string]any{"seed": "user-123"})
-
-// avatar1.SVG() == avatar2.SVG()
-```
-
 ## Types
 
-### `Style`
-
-A validated, immutable wrapper around a style definition. Build it once with
-`NewStyle` (from the definition's JSON bytes), then reuse it when generating
-multiple avatars.
-
-```go
-style, err := dicebear.NewStyle(definitionJSON)
-if err != nil {
-	panic(err)
-}
-
-avatar1, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
-avatar2, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Bob"})
-```
-
-### `Avatar`
-
-The main type for generating avatars. `NewAvatar` takes a `*Style` and a
-`map[string]any` of options, and returns `(*Avatar, error)` (invalid options and
-circular color references surface as an `error`). A `nil` options map is treated
-as empty.
-
-```go
-avatar, err := dicebear.NewAvatar(style, map[string]any{
-	// ... options
-})
-```
-
-### `OptionsDescriptor`
-
-Describes all valid options for a given style. Useful for building UIs or
-validating user input.
-
-```go
-descriptor := dicebear.NewOptionsDescriptor(style).ToJSON()
-```
+- `Style` is a validated, immutable wrapper around a style definition. Build it
+  once with `NewStyle` from the definition's JSON bytes and reuse it for every
+  avatar of that style.
+- `NewAvatar` takes a `*Style` and a `map[string]any` of options and returns
+  `(*Avatar, error)`. Invalid options and circular color references come back as
+  the `error`, and a `nil` options map counts as empty.
+- `OptionsDescriptor` describes all valid options of a style, for building UIs
+  or validating user input: `dicebear.NewOptionsDescriptor(style).ToJSON()`. See
+  [Style options](/customize/style-options/).
 
 ## Methods
 
-### `SVG()` / `String()`
-
-**Return type:** `string`
-
-Returns the avatar as SVG in XML format. `Avatar` also implements
-`fmt.Stringer`, so it can be used directly in string contexts (`fmt.Println`,
-`fmt.Sprintf`).
-
-```go
-avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
-
-svg := avatar.SVG()
-// or
-svg = avatar.String()
-```
-
-### `JSON()`
-
-**Return type:** `[]byte` (JSON with keys `svg` and `options`), `error`
-
-Returns the SVG and the resolved options as JSON.
-
-```go
-avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
-
-result, _ := avatar.JSON()
-
-// result → {"svg":"<svg>...</svg>","options":{"flip":"none",...}}
-```
-
-The resolved options are also available directly as a map via
-`avatar.ResolvedOptions()`.
-
-### `DataURI()`
-
-**Return type:** `string`
-
-Returns the avatar as [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-
-```go
-avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
-
-dataURI := avatar.DataURI()
-
-// <img src="{dataURI}" alt="Avatar" />
-```
+| Method                | Returns                                                                                                |
+| --------------------- | ------------------------------------------------------------------------------------------------------ |
+| `SVG()` or `String()` | The SVG as a `string`. `Avatar` implements `fmt.Stringer`, so `fmt.Println` and `fmt.Sprintf` work too |
+| `JSON()`              | `[]byte` with the SVG under `svg` and the resolved options under `options`, and an `error`             |
+| `ResolvedOptions()`   | The resolved options as a map                                                                          |
+| `DataURI()`           | The SVG as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)                                 |
 
 ## Core options
 
@@ -203,49 +121,12 @@ all available patterns.
 
 ## Examples
 
-### Avatar with custom background
-
-```go
-avatar, _ := dicebear.NewAvatar(style, map[string]any{
-	"seed":            "Alice",
-	"backgroundColor": []string{"#b6e3f4", "#c0aede", "#d1d4f9"},
-})
-```
-
-### Fixed size avatar
-
-```go
-style, _ := dicebear.NewStyle([]byte(styles.Bottts))
-
-avatar, _ := dicebear.NewAvatar(style, map[string]any{
-	"seed":         "robot-42",
-	"size":         128,
-	"borderRadius": 50, // circular avatar
-})
-```
-
-### Avatar with transformations
-
-```go
-style, _ := dicebear.NewStyle([]byte(styles.Avataaars))
-
-avatar, _ := dicebear.NewAvatar(style, map[string]any{
-	"seed":       "Jane",
-	"flip":       "horizontal",
-	"rotate":     10,
-	"scale":      0.9,
-	"translateY": 5,
-})
-```
-
 ### Multiple avatars on the same page
 
-When rendering multiple avatars on the same page, use `idRandomization` to
-prevent SVG ID conflicts:
+When you inline several avatars into one page, use `idRandomization` to keep
+their SVG IDs from colliding:
 
 ```go
-style, _ := dicebear.NewStyle([]byte(styles.Lorelei))
-
 for _, seed := range []string{"alice", "bob", "charlie"} {
 	avatar, _ := dicebear.NewAvatar(style, map[string]any{
 		"seed":            seed,
@@ -257,9 +138,12 @@ for _, seed := range []string{"alice", "bob", "charlie"} {
 
 ### Weighted variant selection
 
+A weight map makes some variants more likely than others. Here lorelei picks
+`happy01` or `happy02` mouths twice as often as `sad01`:
+
 ```go
 avatar, _ := dicebear.NewAvatar(style, map[string]any{
-	"seed":     "Alice",
-	"topVariant": map[string]any{"short01": 2, "short02": 2, "long01": 1},
+	"seed":         "Alice",
+	"mouthVariant": map[string]any{"happy01": 2, "happy02": 2, "sad01": 1},
 })
 ```

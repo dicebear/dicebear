@@ -26,9 +26,6 @@ pip install dicebear-core dicebear-styles
 
 ## Usage
 
-We use the avatar style [lorelei](/styles/lorelei/) in our example. You can find
-more avatar styles [here](/styles/).
-
 ```python
 from importlib.resources import files
 
@@ -46,8 +43,7 @@ avatar = Avatar(style, {
 svg = avatar.to_string()
 ```
 
-Each avatar style comes with several options. You can find them on the details
-page of each [avatar style](/styles/).
+Every style has its own options, listed on its [style page](/styles/).
 
 :::info
 
@@ -57,104 +53,23 @@ place.
 
 :::
 
-## Deterministic avatars
-
-The `seed` option is the key to generating deterministic avatars. The same seed
-will always produce the same avatar:
-
-```python
-avatar1 = Avatar(style, {"seed": "user-123"})
-avatar2 = Avatar(style, {"seed": "user-123"})
-
-avatar1.to_string() == avatar2.to_string()  # True
-```
-
 ## Classes
 
-### `Avatar`
-
-The main class for generating avatars. Pass a `Style` instance and optional
-options.
-
-```python
-from dicebear import Avatar
-
-avatar = Avatar(style, {
-    # ... options
-})
-```
-
-### `Style`
-
-An immutable wrapper around a style definition. Reuse it when generating
-multiple avatars from the same style.
-
-```python
-from dicebear import Avatar, Style
-
-style = Style(definition)
-
-avatar1 = Avatar(style, {"seed": "Alice"})
-avatar2 = Avatar(style, {"seed": "Bob"})
-```
-
-### `OptionsDescriptor`
-
-Describes all valid options for a given style. Useful for building UIs or
-validating user input.
-
-```python
-from dicebear import OptionsDescriptor, Style
-
-descriptor = OptionsDescriptor(Style(definition))
-fields = descriptor.to_json()
-```
+- `Style` is an immutable wrapper around a style definition. `Style.from_json()`
+  reads a JSON string, `Style(definition)` takes the decoded definition. Build
+  it once and reuse it for every avatar of that style.
+- `Avatar` renders one avatar from a `Style` and an optional dict of options.
+- `OptionsDescriptor` describes all valid options of a style, for building UIs
+  or validating user input: `OptionsDescriptor(style).to_json()`. See
+  [Style options](/customize/style-options/).
 
 ## Methods
 
-### `to_string()` / `str(avatar)`
-
-**Return type:** `str`
-
-Returns the avatar as SVG in XML format. The `__str__` method allows using the
-avatar directly in string contexts.
-
-```python
-avatar = Avatar(style, {"seed": "Alice"})
-
-svg = avatar.to_string()
-# or
-svg = str(avatar)
-```
-
-### `to_json()`
-
-**Return type:** `dict` with keys `svg` and `options`
-
-Returns a dict with the SVG and the resolved options.
-
-```python
-avatar = Avatar(style, {"seed": "Alice"})
-
-result = avatar.to_json()
-
-# result["svg"]     → '<svg>...</svg>'
-# result["options"] → {"seed": "Alice", ...}
-```
-
-### `to_data_uri()`
-
-**Return type:** `str`
-
-Returns the avatar as [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-
-```python
-avatar = Avatar(style, {"seed": "Alice"})
-
-data_uri = avatar.to_data_uri()
-
-# <img src="{data_uri}" alt="Avatar" />
-```
+| Method                         | Returns                                                                    |
+| ------------------------------ | -------------------------------------------------------------------------- |
+| `to_string()` or `str(avatar)` | The SVG as a `str`                                                         |
+| `to_json()`                    | A `dict` with the SVG under `svg` and the resolved options under `options` |
+| `to_data_uri()`                | The SVG as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)     |
 
 ## Core options
 
@@ -187,75 +102,26 @@ all available patterns.
 
 ## Examples
 
-### Avatar with custom background
-
-```python
-avatar = Avatar(style, {
-    "seed": "Alice",
-    "backgroundColor": ["#b6e3f4", "#c0aede", "#d1d4f9"],
-})
-```
-
-### Fixed size avatar
-
-```python
-from importlib.resources import files
-
-from dicebear import Avatar, Style
-
-style = Style.from_json(
-    files("dicebear_styles").joinpath("bottts.json").read_text("utf-8")
-)
-
-avatar = Avatar(style, {
-    "seed": "robot-42",
-    "size": 128,
-    "borderRadius": 50,  # circular avatar
-})
-```
-
-### Avatar with transformations
-
-```python
-from importlib.resources import files
-
-from dicebear import Avatar, Style
-
-style = Style.from_json(
-    files("dicebear_styles").joinpath("avataaars.json").read_text("utf-8")
-)
-
-avatar = Avatar(style, {
-    "seed": "Jane",
-    "flip": "horizontal",
-    "rotate": 10,
-    "scale": 0.9,
-    "translateY": 5,
-})
-```
-
 ### Multiple avatars on the same page
 
-When rendering multiple avatars on the same page, use `idRandomization` to
-prevent SVG ID conflicts:
+When you inline several avatars into one page, use `idRandomization` to keep
+their SVG IDs from colliding:
 
 ```python
-from dicebear import Avatar, Style
-
-style = Style(definition)
-users = ["alice", "bob", "charlie"]
-
 avatars = [
     Avatar(style, {"seed": user, "idRandomization": True}).to_string()
-    for user in users
+    for user in ["alice", "bob", "charlie"]
 ]
 ```
 
 ### Weighted variant selection
 
+A weight map makes some variants more likely than others. Here lorelei picks
+`happy01` or `happy02` mouths twice as often as `sad01`:
+
 ```python
 avatar = Avatar(style, {
     "seed": "Alice",
-    "topVariant": {"short01": 2, "short02": 2, "long01": 1},
+    "mouthVariant": {"happy01": 2, "happy02": 2, "sad01": 1},
 })
 ```

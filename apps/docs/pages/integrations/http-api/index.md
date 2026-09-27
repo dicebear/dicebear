@@ -8,64 +8,31 @@ description: >
 
 <script setup>
 import BrowserPreview from '@theme/components/ui/UiBrowserPreview.vue';
-import DocsGrid from '@theme/components/docs/DocsGrid.vue';
-
-const fileFormats = [
-  {
-    title: 'SVG',
-    description: 'Recommended. Scales indefinitely, no size limit, higher rate limit.',
-    badge: 'Recommended',
-  },
-  {
-    title: 'PNG',
-    description: 'Max. 256 × 256 px. Lower rate limit.',
-  },
-  {
-    title: 'JPG',
-    description: 'Max. 256 × 256 px. Lower rate limit.',
-  },
-  {
-    title: 'WebP',
-    description: 'Max. 256 × 256 px. Lower rate limit.',
-  },
-  {
-    title: 'AVIF',
-    description: 'Max. 256 × 256 px. Lower rate limit.',
-  },
-  {
-    title: 'JSON',
-    description: 'Returns avatar metadata as JSON instead of an image.',
-  },
-];
 </script>
 
 # HTTP API: generate SVG avatars via URL
 
-Our HTTP API is the simplest way to use DiceBear as a profile picture API or
-avatar placeholder API. No authentication is required.
+The HTTP API is the simplest way to use DiceBear as a profile picture or avatar
+placeholder API. It's free and needs no authentication.
 
 ## Usage
 
-Use the following address and replace `<styleName>` with your preferred avatar
-style. Style names are lowercase, with hyphens for multi-word styles, e.g.
-`lorelei`, `pixel-art`, `adventurer-neutral`. Every official
-[avatar style](/styles/) is supported.
+Replace `<styleName>` with the name of an [avatar style](/styles/). Style names
+are lowercase, with hyphens for multi-word styles, e.g. `lorelei`, `pixel-art`,
+`adventurer-neutral`.
 
 ```http
 https://api.dicebear.com/11.x/<styleName>/svg
 ```
-
-### A few examples
 
 <BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg" />
 <BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg" />
 
 ### Generate a consistent avatar from a user ID
 
-Use a stable identifier as the `seed` and every user gets the same avatar on
-every visit. A user ID works well, and the same seed always returns the same
-image. That makes it a good default avatar for people who haven't uploaded a
-photo yet, since the picture stays the same across pages and sessions.
+Pass a stable identifier such as a user ID as the `seed`, and every user gets
+the same avatar on every page and in every session. That makes it a good default
+for people who haven't uploaded a photo yet.
 
 ```http
 https://api.dicebear.com/11.x/lorelei/svg?seed=user-8f3a2c
@@ -73,7 +40,7 @@ https://api.dicebear.com/11.x/lorelei/svg?seed=user-8f3a2c
 
 <BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg?seed=user-8f3a2c" />
 
-If the seed contains spaces or other special characters, URL-encode it first.
+URL-encode seeds that contain spaces or other special characters.
 
 :::info
 
@@ -85,9 +52,8 @@ place.
 
 ## Listing available styles
 
-To discover which avatar styles an instance supports, send a request to the
-version root. It returns the available style names as JSON, sorted
-alphabetically:
+The version root returns the available style names as JSON, sorted
+alphabetically. It exists from `10.x` onwards.
 
 ```http
 https://api.dicebear.com/11.x
@@ -99,29 +65,20 @@ https://api.dicebear.com/11.x
 }
 ```
 
-::: info
-
-This endpoint is available from version `10.x` onwards. Earlier versions do not
-support listing styles.
-
-:::
-
 ## Style definition and options
 
-Each style also exposes two metadata endpoints. They are handy for building
-tooling on top of the API, such as avatar editors:
+Each style also has two metadata endpoints, handy for tooling such as avatar
+editors:
 
 ```http
 https://api.dicebear.com/11.x/<styleName>/definition.json
 https://api.dicebear.com/11.x/<styleName>/options.json
 ```
 
-`definition.json` returns the raw style definition, the same JSON that is
-shipped with the style's npm package.
-
-`options.json` describes every option the style accepts as query parameter,
-including field types, allowed enum values, and value ranges. An excerpt for
-[Pixel Art](/styles/pixel-art/):
+`definition.json` returns the raw style definition, the same JSON the styles
+package ships. `options.json` describes every option the style accepts as a
+query parameter, with field types, allowed enum values, and value ranges. An
+excerpt for [Pixel Art](/styles/pixel-art/):
 
 ```json
 {
@@ -142,30 +99,16 @@ including field types, allowed enum values, and value ranges. An excerpt for
 }
 ```
 
-::: info
-
-These endpoints are available from version `10.x` onwards. On self-hosted
-instances they are disabled by default. See the
+Both endpoints exist from `10.x` onwards. Self-hosted instances turn them off by
+default, see the
 [self-hosting guide](/recipes/self-host-the-http-api/#optional-style-metadata-endpoints).
-
-:::
 
 ## Options
 
-All [core options](/customize/options/) (such as `seed`, `flip`, `rotate`,
-`scale`, `borderRadius`, `backgroundColor`, and `tags`) are available as
+All [core options](/customize/options/), such as `seed`, `flip`, `rotate`,
+`scale`, `borderRadius`, `backgroundColor`, and `tags`, work as
 [query parameters](https://en.wikipedia.org/wiki/Query_string). Style-specific
-options are listed on each [avatar style page](/styles/). For example:
-
-<BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=John" />
-<BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=Jane" />
-
-:::tip
-
-If you want to pass more options, you connect them with a `&` as usual with
-query strings.
-
-:::
+options are listed on each [style page](/styles/).
 
 ::: warning
 
@@ -177,16 +120,14 @@ supported by our public HTTP API. You can enable them by
 
 ### Array options
 
-Array values are separated by a comma. For example, the URL could look like this
-if you want to provide the PRNG with several hair styles in addition to the
-seed. Note that the avatar styles provide different options. In this example, we
-use the [Pixel Art](/styles/pixel-art/) avatar style.
+Separate array values with commas. Here the seed picks from five hairstyles of
+[Pixel Art](/styles/pixel-art/):
 
 <BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=John&hairVariant=short01,short02,short03,short04,short05" />
 <BrowserPreview url="https://api.dicebear.com/11.x/pixel-art/svg?seed=Jane&hairVariant=long01,long02,long03,long04,long05" />
 
-The [`tags`](/customize/tags/) filter is an array too. Separate the tags with a
-comma and prefix a tag with `!` to exclude it:
+The [`tags`](/customize/tags/) filter is an array too. Prefix a tag with `!` to
+exclude it:
 
 ```http
 https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,!facialHair
@@ -194,74 +135,62 @@ https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,!fac
 
 ### Enum options
 
-Enum values are passed as strings. For example, the `flip` option accepts
-`none`, `horizontal`, `vertical`, or `both`:
+Enum values are passed as strings. For example, `flip` accepts `none`,
+`horizontal`, `vertical`, or `both`:
 
 <BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg?flip=horizontal" />
 <BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg?flip=none" />
 
 ### Animations
 
-Styles that carry [animations](/customize/options/) play them once you set
-`animation=true`, and `animationSpeed` sets the pace. Only the SVG format moves.
-The raster formats render the resting state, with or without the option.
+Styles that carry animations play them once you set `animation=true`, and
+`animationSpeed` sets the pace. Only the SVG format moves. The raster formats
+render the resting state.
 
 ```http
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationSpeed=2
 ```
 
-Every animation also has a switch named after it, which wins over `animation`.
-One animation alone, or everything but one:
+Every animation also has a switch, a speed, and a delay named after it, and each
+wins over the global option. `animationDelay` shifts the start by seconds. As a
+range, it gives every seed its own start, so avatars side by side don't move in
+step:
 
 ```http
 https://api.dicebear.com/11.x/planets/svg?seed=John&orbitAnimation=true
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&twinkleAnimation=false
-```
-
-The speed works the same way per animation. `orbitAnimationSpeed` wins over
-`animationSpeed` for the orbit, and a range works as everywhere else:
-
-```http
-https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimationSpeed=0.5&twinkleAnimationSpeed=2
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimationSpeed=0.5,1
-```
-
-`animationDelay` shifts the start by seconds. As a range, every seed starts at
-its own moment, so avatars rendered next to each other do not move in step:
-
-```http
 https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationDelay=0,5
-https://api.dicebear.com/11.x/planets/svg?seed=Jane&animation=true&animationDelay=0,5
 ```
 
 The `11.x` line is the first one with animations. On `10.x` the option is
-accepted and ignored.
+accepted and ignored. The [core options](/customize/options/) list all animation
+options.
 
 ## File format
 
-<DocsGrid :items="fileFormats" />
+Replace `svg` in the URL with the format you need:
 
-PNG, JPG, WebP and AVIF use the
-[Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans) font and currently
-supports the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
-`greek`, `greek-ext`, `japanese`, `korean`, `latin`, `latin-ext`,
-`simplified-chinese`, `thai` and `vietnamese`.
+| Format                       | Notes                                               |
+| ---------------------------- | --------------------------------------------------- |
+| `svg`                        | Recommended. Scales to any size, higher rate limit  |
+| `png`, `jpg`, `webp`, `avif` | Up to 256 × 256 px, lower rate limit                |
+| `json`                       | Returns avatar metadata as JSON instead of an image |
 
-<BrowserPreview url="https://api.dicebear.com/11.x/bottts/svg" />
+PNG, JPG, WebP, and AVIF render text in
+[Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans) with the subsets
+`cyrillic`, `cyrillic-ext`, `devanagari`, `greek`, `greek-ext`, `japanese`,
+`korean`, `latin`, `latin-ext`, `simplified-chinese`, `thai`, and `vietnamese`.
+
 <BrowserPreview url="https://api.dicebear.com/11.x/bottts/png" />
-<BrowserPreview url="https://api.dicebear.com/11.x/bottts/jpg" />
-<BrowserPreview url="https://api.dicebear.com/11.x/bottts/webp" />
-<BrowserPreview url="https://api.dicebear.com/11.x/bottts/avif" />
 
 ## Versioning
 
-You can set the version in the URL. Just replace the `11.x` from the previous
-examples with the one you want.
-
-Every prefix from `5.x` to `11.x` still answers.
+The version is part of the URL. Replace `11.x` with the one you want. Every
+prefix from `5.x` to `11.x` still answers, and
 [Supported versions](/understand/supported-versions/) shows how long each one
-stays that way, and which of them the libraries still cover.
+stays that way and which of them the libraries still cover.
 
 ::: warning
 
@@ -271,31 +200,24 @@ date the API shuts them down and the URLs stop working. See the
 
 :::
 
-## Self-hosted avatar API
-
-Need a private or commercial setup? You can
-[host the Avatar API yourself](/recipes/self-host-the-http-api/) for full
-control over availability, rate limits, and data privacy.
-
 ## Fair use & rate limits
 
-Our API is free to use for non-commercial purposes, but please use it
-responsibly. We reserve the right to block abusive users.
+Our API is free for non-commercial use, but please use it responsibly. We
+reserve the right to block abusive users.
 
-We currently limit requests per second to **50 for SVG** and **10 for PNG, JPG,
-WebP, and AVIF**. Exceeding the limit returns HTTP `429 Too Many Requests`. We
-reserve the right to change these limits at any time without notice.
+Requests are limited to **50 per second for SVG** and **10 per second for PNG,
+JPG, WebP, and AVIF**. Above that, the API answers `429 Too Many Requests`. We
+may change these limits at any time without notice.
 
-For commercial use or higher limits, please
-[set up your own instance](/recipes/self-host-the-http-api/). We're happy to
-answer questions: open a
-[discussion](https://github.com/orgs/dicebear/discussions) on GitHub.
+For commercial use, higher limits, or full control over availability and data
+privacy, [host the API yourself](/recipes/self-host-the-http-api/). We're happy
+to answer questions in the
+[discussions](https://github.com/orgs/dicebear/discussions) on GitHub.
 
 ## Changes and availability
 
-Please be aware that we reserve the right to update the API at any time. While
-we will do our best to maintain backwards compatibility, we cannot guarantee
-this. Even though we try to always return the same avatar, the design and
-especially the source code may change. Additionally, we cannot guarantee that
-the API will always be available. If you need consistent access to the API, we
-recommend setting up [your own instance](/recipes/self-host-the-http-api/).
+We reserve the right to update the API at any time. We try to keep it backwards
+compatible and to return the same avatar for the same URL, but we can't
+guarantee either: the design, and even more so the SVG source, may change. We
+also can't guarantee that the API is always available. If you need consistent
+access, [run your own instance](/recipes/self-host-the-http-api/).

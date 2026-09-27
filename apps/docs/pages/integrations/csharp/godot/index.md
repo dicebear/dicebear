@@ -10,14 +10,11 @@ description: >
 Godot renders SVG through `Image.LoadSvgFromString`, so an avatar becomes a
 texture without any extra dependency.
 
-Where the SVG comes from depends on which build you run. A .NET build can
-generate it in the game with the [C# library](/integrations/csharp/), and any
-build can fetch a finished avatar from the [HTTP API](/integrations/http-api/)
-with `HTTPRequest`.
-
-The C# library keeps everything local, so it works offline and sends no
-requests. The HTTP API needs no packages and is the only option in the standard
-build, which runs GDScript alone.
+A .NET build of Godot can generate the SVG in the game with the
+[C# library](/integrations/csharp/), which works offline and sends no requests.
+Any build can fetch a finished avatar from the
+[HTTP API](/integrations/http-api/) with `HTTPRequest`, and in the standard
+build, which runs GDScript alone, that is the only option.
 
 ## With the C# library
 
@@ -38,11 +35,11 @@ using DiceBear;
 
 public partial class AvatarSprite : Sprite2D
 {
+    private static readonly Style AvatarStyle = Style.Parse(Styles.Lorelei);
+
     public override void _Ready()
     {
-        var style = Style.Parse(Styles.Lorelei);
-
-        var svg = new Avatar(style, new JsonObject
+        var svg = new Avatar(AvatarStyle, new JsonObject
         {
             ["seed"] = "John",
             ["size"] = 128,
@@ -57,12 +54,10 @@ public partial class AvatarSprite : Sprite2D
 }
 ```
 
-Parse the style once and keep it in a field or an autoload. Validating and
-decomposing a definition is the expensive part, while rendering an avatar from
-an existing `Style` is cheap.
-
-For the full API and the options each style accepts, see the
-[C# library reference](/integrations/csharp/).
+Parse the style once, in a static field as above or in an autoload. Validating
+and decomposing a definition is the expensive part, while rendering an avatar
+from an existing `Style` is cheap. For the full API and the options each style
+accepts, see the [C# library reference](/integrations/csharp/).
 
 ### Sizing the texture
 

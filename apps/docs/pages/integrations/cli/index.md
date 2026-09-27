@@ -13,42 +13,36 @@ in one run, compresses definition files, and compares two versions of a style.
 
 ## Installation
 
-Make sure you have [Node.js](https://nodejs.org/en/) (version 22 or higher) and
-npm installed.
+You need [Node.js](https://nodejs.org/en/) (version 22 or higher) and npm.
 
 ```sh
 npm install dicebear --global
 ```
 
-## Upgrade
-
-For the latest features and avatar styles, make sure you update the CLI
-regularly.
-
-```sh
-npm install dicebear --global
-```
+Run the same command again to update to the latest version with the newest
+avatar styles. `dicebear --help` lists all commands.
 
 ## Create avatars
 
 ### Print an avatar
 
-Replace `<style>` with an avatar style name (lowercase, kebab-case for
+Replace `<style>` with an avatar style name (lowercase, with hyphens for
 multi-word styles, e.g. `lorelei`, `pixel-art`, `adventurer-neutral`).
+`dicebear create --help` lists every built-in style.
 
 ```sh
 dicebear create <style>
 ```
 
-Without an output path the avatar goes to stdout. So this prints one SVG for the
+Without an output path the avatar goes to stdout, so this prints one SVG of the
 [lorelei](/styles/lorelei/) style:
 
 ```sh
 dicebear create lorelei --seed "Alice"
 ```
 
-Pipe it wherever you need it. The license banner goes to stderr, so it never
-ends up in the file:
+Pipe it wherever you need it. The license banner with the style's creator and
+license goes to stderr, so it never ends up in the file:
 
 ```sh
 dicebear create lorelei --seed "Alice" > alice.svg
@@ -71,8 +65,8 @@ place.
 dicebear create lorelei --seed "Alice" -o ./alice.png
 ```
 
-The CLI does not overwrite existing files. It creates missing directories on the
-way.
+The CLI creates missing directories on the way, but it never overwrites a file.
+If the file already exists, it stops with an error.
 
 ### Create multiple avatars
 
@@ -82,24 +76,12 @@ Point `-o` at a directory and add `--count`:
 dicebear create lorelei -o ./avatars --count 100
 ```
 
-This generates `lorelei-0.svg`, `lorelei-1.svg`, ..., `lorelei-99.svg`. Any path
-without a known extension is treated as a directory. More than one avatar always
-needs a directory.
+The files are named `{style}-{index}.{format}`, with the index starting at 0, so
+this creates `lorelei-0.svg` to `lorelei-99.svg`. Any path without a known
+extension counts as a directory, and more than one avatar always needs one.
 
-:::warning
-
-The `seed` option has no effect in combination with the `count` option. If
-`count` is greater than `1`, random values are generated and used as `seed` to
-make the avatars differ from each other.
-
-:::
-
-:::tip Performance
-
-The CLI uses parallel processing based on your CPU cores, so large batches of
-avatars generate quickly.
-
-:::
+With a `--count` above `1`, every avatar gets a random seed and the `--seed`
+option has no effect.
 
 ### Output formats
 
@@ -122,77 +104,34 @@ dicebear create lorelei -o ./avatars --count 10 --format png
 
 An extension that contradicts `--format` is an error.
 
-#### Controlling the output image size
-
-`--size` controls the output dimensions (width and height in pixels) for all
-formats. The default is `512`. For rasterized formats (PNG, JPEG, WebP, AVIF)
-the value is capped at `2048`.
+`--size` sets the width and height in pixels for every format. The default is
+`512`, and raster formats are capped at `2048`:
 
 ```sh
 dicebear create lorelei --format png --size 256 > alice.png
 ```
 
-#### Adding Exif metadata
-
-When creating PNG, JPEG, WebP, or AVIF images, you can include Exif metadata:
+`--exif` adds Exif metadata to PNG, JPEG, WebP, and AVIF images:
 
 ```sh
 dicebear create lorelei -o ./avatars --format png --exif
 ```
 
-#### Saving JSON alongside images
-
-In directory mode, `--json` saves a JSON file with avatar metadata next to each
-image:
+In directory mode, `--json` saves a JSON file with the avatar metadata next to
+each image, `lorelei-0.json` next to `lorelei-0.png`. For the metadata of a
+single avatar, use `--format json` instead.
 
 ```sh
 dicebear create lorelei -o ./avatars --count 10 --format png --json
 ```
 
-This creates both `lorelei-0.png` and `lorelei-0.json` for each avatar. To print
-the metadata of a single avatar use `--format json` instead.
-
 ### Passing style options
 
-Each avatar style has its own customization options. To see all available
-options for a specific style, use `--help`:
+Each avatar style has its own options. `--help` after the style name lists all
+of them:
 
 ```sh
 dicebear create lorelei --help
-```
-
-Example output:
-
-```text
-dicebear create <style>
-
-Create avatars from a built-in style or a definition file
-
-Options:
-      --help                           Show help                       [boolean]
-      --version                        Show version number             [boolean]
-  -o, --output                         Write to this file, or into this
-                                       directory with --count. Without it the
-                                       avatar goes to stdout.           [string]
-      --count                          How many avatars to create. More than one
-                                       needs --output <dir>.
-                                                           [number] [default: 1]
-      --format                         Output format. Defaults to the --output
-                                       extension, else svg.
-         [string] [choices: "svg", "png", "jpg", "jpeg", "webp", "avif", "json"]
-      --exif                           Include Exif metadata in raster formats
-                                                      [boolean] [default: false]
-      --json                           Save a JSON file next to each image
-                                       (needs --output <dir>)
-                                                      [boolean] [default: false]
-      --seed                                                            [string]
-      --size                                                            [number]
-      --flip         [array] [choices: "none", "horizontal", "vertical", "both"]
-      --rotate                                                          [string]
-      --scale                                                           [string]
-      --borderRadius                                                    [string]
-      --backgroundColor                                                  [array]
-      ... (style-specific options)
 ```
 
 List options take a comma-separated value or repeated flags:
@@ -202,94 +141,24 @@ dicebear create lorelei --backgroundColor b6e3f4,c0aede,d1d4f9 --size 128
 dicebear create lorelei --backgroundColor b6e3f4 --backgroundColor c0aede
 ```
 
-### Output file naming
-
-In directory mode, files are named using the pattern `{style}-{index}.{format}`:
-
-- `lorelei-0.svg`
-- `lorelei-1.png`
-- `avataaars-0.webp`
-
-The index starts at 0 and increments for each avatar created.
-
-:::warning File overwrite protection
-
-The CLI will **not** overwrite existing files. If a file already exists at the
-target path, an error will be thrown. Make sure to use an empty directory or
-remove existing files before generating new avatars.
-
-:::
-
-### License banner
-
-Before generating avatars, the CLI displays a license banner with information
-about the style's creator and license. The banner goes to stderr, so it never
-mixes with an avatar printed to stdout.
-
-```text
-----------------------------------------------------------------
-Lorelei by Lisa Wischofsky
-Homepage: https://www.instagram.com/lischi_art/
-Source: https://www.figma.com/community/file/1198749693280469639
-License: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
-----------------------------------------------------------------
-```
-
-### Show help
-
-For general help and the list of commands:
-
-```sh
-dicebear --help
-```
-
-```text
-dicebear <command>
-
-Commands:
-  dicebear create <style>            Create avatars from a built-in style or a
-                                     definition file
-  dicebear optimize <definition...>  Compress definition files with svgo
-  dicebear compare <before> <after>  Compare two versions of a style, or two
-                                     directories of styles
-
-Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-```
-
-`dicebear create --help` lists every built-in style.
-
 ## Custom styles
 
-You can use any JSON [definition file](/create-styles/definition-schema/) as a
-style, including your own custom styles or styles exported from
-[DiceBear Studio](/create-styles/with-figma/).
-
-Just pass the path to the JSON file instead of a style name:
-
-```sh
-dicebear create ./my-style.json -o ./avatars
-```
-
-All available options are automatically detected from the definition. Use
-`--help` to see them:
-
-```sh
-dicebear create ./my-style.json --help
-```
-
-Generate multiple avatars in PNG format:
+Any JSON [definition file](/create-styles/definition-schema/) works as a style,
+including your own and styles exported from
+[DiceBear Studio](/create-styles/with-figma/). Pass its path instead of a style
+name. The CLI reads the available options from the definition, so `--help` shows
+them as well:
 
 ```sh
 dicebear create ./my-style.json -o ./avatars --count 20 --format png
+dicebear create ./my-style.json --help
 ```
 
 ## Compress a definition file
 
 Definition files exported from [DiceBear Studio](/create-styles/with-figma/) are
-already compressed on export. A definition you wrote or edited by hand is not,
-and its path data usually has a lot of room left. `optimize` runs the same
+compressed on export. A definition you wrote or edited by hand is not, and its
+path data usually has a lot of room left. `optimize` runs the same
 [svgo](https://github.com/svg/svgo) pass over every element tree in the file.
 Without an output path the result goes to stdout:
 
@@ -315,15 +184,15 @@ a whole source tree in place:
 dicebear optimize ./src/*.json -o ./src
 ```
 
-Use `--precision` to control how many decimals path and transform data keep. The
-default is `3`. Lower values compress harder at the cost of accuracy:
+`--precision` sets how many decimals path and transform data keep. The default
+is `3`. Lower values compress harder at the cost of accuracy:
 
 ```sh
 dicebear optimize ./my-style.json -o ./my-style.json --precision 1
 ```
 
 `--check` reports whether the files are optimized without writing anything, and
-exits with a non-zero status if one is not. This is what you want in continuous
+exits with a non-zero status if one is not, which is what you want in continuous
 integration:
 
 ```sh
@@ -336,11 +205,7 @@ contents of `<style>` elements all survive unchanged, and component `width` and
 write the file if anything moved, so an optimized definition renders the same
 avatars as before.
 
-:::info
-
 Built-in styles have no definition file of their own and cannot be optimized.
-
-:::
 
 ## Compare two versions of a style
 
@@ -371,8 +236,10 @@ For every pair the CLI runs three checks:
    other component and color pinned, so the variant's own change is the only
    thing that can differ.
 
-The renders are compared pixel by pixel. The result is a table with one row per
-style and a detail block for every style that changed:
+The renders are compared pixel by pixel, not by markup, so an optimized, a
+re-exported, and a hand-edited file can all pass as long as they render the same
+avatar. The result is a table with one row per style and a detail block for
+every style that changed:
 
 ```text
 Style      Seeds   Variants   Components   Colors       Result
@@ -391,10 +258,6 @@ lorelei
 The `Seeds` and `Variants` columns count the renders that differ, the
 `Components` and `Colors` columns count added, removed and changed entries. The
 exit code is non-zero when anything differs, so the command can guard a release.
-
-The comparison is about pixels, not markup. Two definitions may produce
-different SVG and still pass, which is the point: an optimized file, a
-re-exported file and a hand-edited file can all render the same avatar.
 
 ### Tolerance
 
@@ -439,23 +302,3 @@ Without it, the text is left out on both sides and everything else is still
 compared.
 
 :::
-
-## Troubleshooting
-
-### "File already exists" error
-
-`create` does not overwrite existing files. Either:
-
-- Use an empty output directory
-- Delete existing files before generating new avatars
-
-### Avatar style not found
-
-Style names are lowercase, with hyphens for multi-word styles (e.g. `pixel-art`,
-`adventurer-neutral`). Run `dicebear create --help` to see all available styles.
-
-### Permission denied
-
-Make sure you have write permissions to the output directory. On Unix systems,
-you may need to adjust directory permissions or use `sudo` for global
-installation.

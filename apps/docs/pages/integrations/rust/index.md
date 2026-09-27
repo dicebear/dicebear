@@ -27,9 +27,6 @@ cargo add dicebear-styles --features lorelei
 
 ## Usage
 
-We use the avatar style [lorelei](/styles/lorelei/) in our example. You can find
-more avatar styles [here](/styles/).
-
 ```rust
 use dicebear_core::{Avatar, Style};
 use serde_json::json;
@@ -44,8 +41,7 @@ let avatar = Avatar::new(&style, json!({
 let svg = avatar.to_svg();
 ```
 
-Each avatar style comes with several options. You can find them on the details
-page of each [avatar style](/styles/).
+Every style has its own options, listed on its [style page](/styles/).
 
 :::info
 
@@ -55,108 +51,25 @@ place.
 
 :::
 
-## Deterministic avatars
-
-The `seed` option is the key to generating deterministic avatars. The same seed
-always produces the same avatar:
-
-```rust
-let avatar1 = Avatar::new(&style, json!({ "seed": "user-123" }))?;
-let avatar2 = Avatar::new(&style, json!({ "seed": "user-123" }))?;
-
-assert_eq!(avatar1.to_svg(), avatar2.to_svg());
-```
-
 ## Types
 
-### `Style`
-
-A validated, immutable wrapper around a style definition. Build it once with
-`Style::from_str` (from a JSON string) or `Style::from_value` (from a
-`serde_json::Value`), then reuse it when generating multiple avatars.
-
-```rust
-use dicebear_core::{Avatar, Style};
-use serde_json::json;
-
-let style = Style::from_str(definition_json)?;
-
-let avatar1 = Avatar::new(&style, json!({ "seed": "Alice" }))?;
-let avatar2 = Avatar::new(&style, json!({ "seed": "Bob" }))?;
-```
-
-### `Avatar`
-
-The main type for generating avatars. `Avatar::new` takes a `&Style` and a
-`serde_json::Value` of options, and returns `Result<Avatar, Error>` (invalid
-options and circular color references surface as an `Error`).
-
-```rust
-use dicebear_core::{Avatar, Style};
-use serde_json::json;
-
-let avatar = Avatar::new(&style, json!({
-    // ... options
-}))?;
-```
-
-### `OptionsDescriptor`
-
-Describes all valid options for a given style. Useful for building UIs or
-validating user input.
-
-```rust
-use dicebear_core::{OptionsDescriptor, Style};
-
-let descriptor = OptionsDescriptor::new(&style).to_json();
-```
+- `Style` is a validated, immutable wrapper around a style definition. Build it
+  with `Style::from_str` from a JSON string or `Style::from_value` from a
+  `serde_json::Value`, once, and reuse it for every avatar of that style.
+- `Avatar::new` takes a `&Style` and a `serde_json::Value` of options and
+  returns `Result<Avatar, Error>`. Invalid options and circular color references
+  surface as an `Error`.
+- `OptionsDescriptor` describes all valid options of a style, for building UIs
+  or validating user input: `OptionsDescriptor::new(&style).to_json()`. See
+  [Style options](/customize/style-options/).
 
 ## Methods
 
-### `to_svg()` / `to_string()`
-
-**Return type:** `&str` / `String`
-
-Returns the avatar as SVG in XML format. `Avatar` also implements `Display`, so
-it can be used directly in string contexts (`format!`, `println!`,
-`.to_string()`).
-
-```rust
-let avatar = Avatar::new(&style, json!({ "seed": "Alice" }))?;
-
-let svg = avatar.to_svg();
-// or
-let svg = avatar.to_string();
-```
-
-### `to_json()`
-
-**Return type:** `serde_json::Value` with keys `svg` and `options`
-
-Returns a value with the SVG and the resolved options.
-
-```rust
-let avatar = Avatar::new(&style, json!({ "seed": "Alice" }))?;
-
-let result = avatar.to_json();
-
-// result["svg"]     → "<svg>...</svg>"
-// result["options"] → { "seed": "Alice", ... }
-```
-
-### `to_data_uri()`
-
-**Return type:** `String`
-
-Returns the avatar as [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-
-```rust
-let avatar = Avatar::new(&style, json!({ "seed": "Alice" }))?;
-
-let data_uri = avatar.to_data_uri();
-
-// <img src="{data_uri}" alt="Avatar" />
-```
+| Method                      | Returns                                                                                            |
+| --------------------------- | -------------------------------------------------------------------------------------------------- |
+| `to_svg()` or `to_string()` | The SVG as `&str` or `String`. `Avatar` implements `Display`, so `format!` and `println!` work too |
+| `to_json()`                 | A `serde_json::Value` with the SVG under `svg` and the resolved options under `options`            |
+| `to_data_uri()`             | The SVG as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)                             |
 
 ## Core options
 
@@ -189,55 +102,12 @@ all available patterns.
 
 ## Examples
 
-### Avatar with custom background
-
-```rust
-let avatar = Avatar::new(&style, json!({
-    "seed": "Alice",
-    "backgroundColor": ["#b6e3f4", "#c0aede", "#d1d4f9"],
-}))?;
-```
-
-### Fixed size avatar
-
-```rust
-use dicebear_core::{Avatar, Style};
-use serde_json::json;
-
-let style = Style::from_str(dicebear_styles::BOTTTS)?;
-
-let avatar = Avatar::new(&style, json!({
-    "seed": "robot-42",
-    "size": 128,
-    "borderRadius": 50, // circular avatar
-}))?;
-```
-
-### Avatar with transformations
-
-```rust
-use dicebear_core::{Avatar, Style};
-use serde_json::json;
-
-let style = Style::from_str(dicebear_styles::AVATAAARS)?;
-
-let avatar = Avatar::new(&style, json!({
-    "seed": "Jane",
-    "flip": "horizontal",
-    "rotate": 10,
-    "scale": 0.9,
-    "translateY": 5,
-}))?;
-```
-
 ### Multiple avatars on the same page
 
-When rendering multiple avatars on the same page, use `idRandomization` to
-prevent SVG ID conflicts:
+When you inline several avatars into one page, use `idRandomization` to keep
+their SVG IDs from colliding:
 
 ```rust
-let style = Style::from_str(dicebear_styles::LORELEI)?;
-
 let avatars: Vec<String> = ["alice", "bob", "charlie"]
     .iter()
     .map(|seed| {
@@ -249,9 +119,12 @@ let avatars: Vec<String> = ["alice", "bob", "charlie"]
 
 ### Weighted variant selection
 
+A weight map makes some variants more likely than others. Here lorelei picks
+`happy01` or `happy02` mouths twice as often as `sad01`:
+
 ```rust
 let avatar = Avatar::new(&style, json!({
     "seed": "Alice",
-    "topVariant": { "short01": 2, "short02": 2, "long01": 1 },
+    "mouthVariant": { "happy01": 2, "happy02": 2, "sad01": 1 },
 }))?;
 ```

@@ -7,12 +7,10 @@ description: >
 
 # Create an avatar style from scratch
 
-We highly recommend our [plugin for Figma](/create-styles/with-figma/) to create
-an avatar style.
-
-Most of DiceBear's official avatar styles were created with the plugin. But you
-can also create an avatar style by writing a JSON
-[definition file](/create-styles/definition-schema/) by hand.
+Most of DiceBear's official avatar styles were made with our
+[plugin for Figma](/create-styles/with-figma/), and we recommend it. But you can
+also write the JSON [definition file](/create-styles/definition-schema/) by
+hand.
 
 ## Minimal example
 
@@ -54,10 +52,8 @@ The PRNG picks a different background color for each seed.
 
 ## Adding components
 
-Components are the randomizable parts of your avatar. Each component has
-multiple variants that the PRNG can choose from.
-
-Let's add a face component with two variants:
+Components are the randomizable parts of your avatar, each with variants the
+PRNG picks from. Here the circle gets a `face` component with two variants:
 
 ```json
 {
@@ -259,8 +255,7 @@ your style in line with the filter examples in these docs. See
 
 ## Color palettes
 
-Colors can be referenced from element attributes. The PRNG picks a value from
-the palette for each avatar.
+Each palette is a list of colors, and the PRNG picks one of them per avatar:
 
 ```json
 {
@@ -280,9 +275,7 @@ the palette for each avatar.
 }
 ```
 
-### Color references
-
-Use color references in SVG attributes to apply dynamic colors:
+Reference a palette from any color attribute:
 
 ```json
 {
@@ -372,14 +365,15 @@ Add metadata to your definition for license attribution:
 
 This metadata appears in:
 
-- The `<metadata>` RDF block inside generated SVGs (Dublin Core terms; see the
+- The `<metadata>` RDF block inside generated SVGs (Dublin Core terms, see the
   [Core implementation spec](/create-styles/implement-dicebear-core/#metadata-block))
 - The CLI license banner
 - The documentation (if your style is added to the official collection)
 
 ## Schema validation
 
-Add the `$schema` property to enable validation in your editor:
+Add the `$schema` property, and editors such as VS Code and WebStorm
+autocomplete and validate your definition file:
 
 ```json
 {
@@ -388,21 +382,18 @@ Add the `$schema` property to enable validation in your editor:
 }
 ```
 
-Most editors (VS Code, WebStorm, etc.) will provide autocompletion and inline
-validation for your definition file.
-
 ## Testing
 
-### With the CLI
+Render a few avatars with the CLI, or load the definition in any library:
 
-```sh
+::: code-group
+
+```sh [CLI]
 dicebear create ./my-style.json -o ./output --count 10
 dicebear create ./my-style.json --seed "Alice" -o ./alice.png
 ```
 
-### With the JS Library
-
-```js
+```js [JavaScript]
 import { Style, Avatar } from '@dicebear/core';
 import definition from './my-style.json' with { type: 'json' };
 
@@ -411,9 +402,7 @@ const avatar = new Avatar(style, { seed: 'test' });
 console.log(avatar.toString());
 ```
 
-### With the PHP Library
-
-```php
+```php [PHP]
 use DiceBear\Avatar;
 use DiceBear\Style;
 
@@ -422,9 +411,7 @@ $avatar = new Avatar($style, ['seed' => 'test']);
 echo (string) $avatar;
 ```
 
-### With the Python Library
-
-```python
+```python [Python]
 from pathlib import Path
 
 from dicebear import Avatar, Style
@@ -434,9 +421,7 @@ avatar = Avatar(style, {"seed": "test"})
 print(avatar.to_string())
 ```
 
-### With the Rust Library
-
-```rust
+```rust [Rust]
 use dicebear_core::{Avatar, Style};
 use serde_json::json;
 use std::fs;
@@ -448,9 +433,7 @@ let avatar = Avatar::new(&style, json!({ "seed": "test" }))?;
 println!("{}", avatar.to_svg());
 ```
 
-### With the Go Library
-
-```go
+```go [Go]
 import (
 	"fmt"
 	"os"
@@ -465,9 +448,7 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "test"})
 fmt.Println(avatar.SVG())
 ```
 
-### With the Dart Library
-
-```dart
+```dart [Dart]
 import 'dart:io';
 
 import 'package:dicebear_core/dicebear_core.dart';
@@ -478,9 +459,7 @@ final avatar = Avatar(style, {'seed': 'test'});
 print(avatar.svg);
 ```
 
-### With the C# Library
-
-```csharp
+```csharp [C#]
 using System.Text.Json.Nodes;
 using DiceBear;
 
@@ -489,6 +468,8 @@ var style = Style.Parse(File.ReadAllText("./my-style.json"));
 var avatar = new Avatar(style, new JsonObject { ["seed"] = "test" });
 Console.WriteLine(avatar.ToSvg());
 ```
+
+:::
 
 ## Next steps
 

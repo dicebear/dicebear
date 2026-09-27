@@ -43,8 +43,7 @@ $avatar = new Avatar($style, [
 $svg = (string) $avatar;
 ```
 
-Each avatar style comes with several options. You can find them on the details
-page of each [avatar style](/styles/).
+Every style has its own options, listed on its [style page](/styles/).
 
 :::info
 
@@ -54,106 +53,23 @@ place.
 
 :::
 
-## Deterministic avatars
-
-The `seed` option is the key to generating deterministic avatars. The same seed
-will always produce the same avatar:
-
-```php
-$avatar1 = new Avatar($style, ['seed' => 'user-123']);
-$avatar2 = new Avatar($style, ['seed' => 'user-123']);
-
-(string) $avatar1 === (string) $avatar2; // true
-```
-
 ## Classes
 
-### `Avatar`
-
-The main class for generating avatars. Pass a `Style` instance and optional
-options.
-
-```php
-use DiceBear\Avatar;
-
-$avatar = new Avatar($style, [
-  // ... options
-]);
-```
-
-### `Style`
-
-An immutable wrapper around a style definition. Reuse it when generating
-multiple avatars from the same style.
-
-```php
-use DiceBear\Style;
-use DiceBear\Avatar;
-
-$style = new Style($definition);
-
-$avatar1 = new Avatar($style, ['seed' => 'Alice']);
-$avatar2 = new Avatar($style, ['seed' => 'Bob']);
-```
-
-### `OptionsDescriptor`
-
-Describes all valid options for a given style. Useful for building UIs or
-validating user input.
-
-```php
-use DiceBear\Style;
-use DiceBear\OptionsDescriptor;
-
-$descriptor = new OptionsDescriptor(new Style($definition));
-$fields = $descriptor->toJSON();
-```
+- `Style` is an immutable wrapper around a style definition. `Style::fromJson()`
+  reads a JSON string, `new Style($definition)` takes the decoded definition.
+  Build it once and reuse it for every avatar of that style.
+- `Avatar` renders one avatar from a `Style` and an optional array of options.
+- `OptionsDescriptor` describes all valid options of a style, for building UIs
+  or validating user input: `(new OptionsDescriptor($style))->toJSON()`. See
+  [Style options](/customize/style-options/).
 
 ## Methods
 
-### `__toString()` / `toString()`
-
-**Return type:** `string`
-
-Returns the avatar as SVG in XML format. The `__toString()` magic method allows
-using the avatar directly in string contexts.
-
-```php
-$avatar = new Avatar($style, ['seed' => 'Alice']);
-
-$svg = (string) $avatar;
-// or
-$svg = $avatar->toString();
-```
-
-### `toJSON()`
-
-**Return type:** `array{svg: string, options: array}`
-
-Returns an associative array with the SVG and the resolved options.
-
-```php
-$avatar = new Avatar($style, ['seed' => 'Alice']);
-
-$json = $avatar->toJSON();
-
-// $json['svg']     → '<svg>...</svg>'
-// $json['options'] → ['seed' => 'Alice', ...]
-```
-
-### `toDataUri()`
-
-**Return type:** `string`
-
-Returns the avatar as [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-
-```php
-$avatar = new Avatar($style, ['seed' => 'Alice']);
-
-$dataUri = $avatar->toDataUri();
-
-// <img src="<?= $dataUri ?>" alt="Avatar" />
-```
+| Method                             | Returns                                                                    |
+| ---------------------------------- | -------------------------------------------------------------------------- |
+| `toString()` or `(string) $avatar` | The SVG as a `string`                                                      |
+| `toJSON()`                         | `array{svg: string, options: array}` with the SVG and the resolved options |
+| `toDataUri()`                      | The SVG as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)     |
 
 ## Core options
 
@@ -186,47 +102,10 @@ all available patterns.
 
 ## Examples
 
-### Avatar with custom background
-
-```php
-$avatar = new Avatar($style, [
-  'seed' => 'Alice',
-  'backgroundColor' => ['#b6e3f4', '#c0aede', '#d1d4f9'],
-]);
-```
-
-### Fixed size avatar
-
-```php
-$basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$style = Style::fromJson(file_get_contents($basePath . '/src/bottts.json'));
-
-$avatar = new Avatar($style, [
-  'seed' => 'robot-42',
-  'size' => 128,
-  'borderRadius' => 50, // circular avatar
-]);
-```
-
-### Avatar with transformations
-
-```php
-$basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$style = Style::fromJson(file_get_contents($basePath . '/src/avataaars.json'));
-
-$avatar = new Avatar($style, [
-  'seed' => 'Jane',
-  'flip' => 'horizontal',
-  'rotate' => 10,
-  'scale' => 0.9,
-  'translateY' => 5,
-]);
-```
-
 ### Multiple avatars on the same page
 
-When rendering multiple avatars on the same page, use `idRandomization` to
-prevent SVG ID conflicts:
+When you inline several avatars into one page, use `idRandomization` to keep
+their SVG IDs from colliding:
 
 ```php
 $users = ['alice', 'bob', 'charlie'];
@@ -241,9 +120,12 @@ $avatars = array_map(function (string $user) use ($style) {
 
 ### Weighted variant selection
 
+A weight map makes some variants more likely than others. Here lorelei picks
+`happy01` or `happy02` mouths twice as often as `sad01`:
+
 ```php
 $avatar = new Avatar($style, [
   'seed' => 'Alice',
-  'topVariant' => ['short01' => 2, 'short02' => 2, 'long01' => 1],
+  'mouthVariant' => ['happy01' => 2, 'happy02' => 2, 'sad01' => 1],
 ]);
 ```

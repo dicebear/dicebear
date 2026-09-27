@@ -7,10 +7,8 @@ description: >
 
 # Nuxt avatar library: using DiceBear with Nuxt
 
-DiceBear works with Nuxt's universal rendering model.
-
-The avatar can be generated on the server during SSR, in a Nitro endpoint, or in
-a plain client component. Pick whichever matches the page's
+DiceBear works with Nuxt's universal rendering model. Generate the avatar during
+SSR, in a Nitro endpoint, or in a client component, whichever matches the page's
 [rendering mode](https://nuxt.com/docs/guide/concepts/rendering).
 
 ## With the JS library
@@ -49,12 +47,11 @@ const avatar = computed(() =>
 ::: warning Hydration & `idRandomization`
 
 `idRandomization` is backed by the host's non-seeded RNG, so the IDs produced
-during SSR will not match the client re-render, and Vue logs a hydration
-mismatch. Keep `idRandomization: false` for SSR'd avatars, or wrap the component
-in `<ClientOnly>` and accept the visual flash.
-
-If you need unique IDs across multiple avatars on the same page, render the
-entire page server-side and skip client hydration of the avatar subtree.
+during SSR won't match the client re-render, and Vue logs a hydration mismatch.
+Keep `idRandomization` off for server-rendered avatars, or wrap the component in
+`<ClientOnly>` and accept the visual flash. If several avatars on one page need
+unique IDs, render them server-side only and skip client hydration of the avatar
+subtree.
 
 :::
 
@@ -81,32 +78,6 @@ export default defineEventHandler((event) => {
 ```
 
 Consume it from any component with `<img :src="`/api/avatar/${seed}`">`.
-
-### Cache with `useAsyncData`
-
-For per-request SSR caching (so the same seed isn't re-rendered when multiple
-components ask for it), wrap generation in `useAsyncData`:
-
-```vue
-<script setup lang="ts">
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei);
-
-const props = defineProps<{ seed: string }>();
-
-const { data: avatar } = await useAsyncData(`avatar:${props.seed}`, () =>
-  Promise.resolve(
-    new Avatar(style, { seed: props.seed, size: 128 }).toDataUri(),
-  ),
-);
-</script>
-
-<template>
-  <img :src="avatar ?? undefined" alt="Avatar" width="128" height="128" />
-</template>
-```
 
 ## With the HTTP API
 

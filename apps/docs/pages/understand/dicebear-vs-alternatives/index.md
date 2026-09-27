@@ -26,8 +26,7 @@ completely different.
 <DocsComparisonTable />
 
 _This comparison is based on publicly available information and may not reflect
-the latest updates. Each tool has its own strengths, so choose what works best
-for your project._
+the latest updates._
 
 ## DiceBear vs. Boring Avatars
 
@@ -70,14 +69,7 @@ DiceBear also has an [Identicon style](/styles/identicon/) if that is the look
 you want, along with many other styles and the HTTP API. When identicons are all
 you will ever need, Jdenticon is hard to beat.
 
-## Which avatar library should you choose?
-
-- Choose DiceBear for a range of art styles, deep customization, more than one
-  language, several output formats, or self-hosting.
-- Choose Boring Avatars for its gradient styles in a React app.
-- Choose Avvvatars for a tiny two-style placeholder in React.
-- Choose Multiavatar for its illustrated multicultural character look.
-- Choose Jdenticon for geometric identicons when that is all the project needs.
+## Try DiceBear
 
 You can try any DiceBear style in the [playground](/playground/), or start with
 the [JavaScript](/integrations/javascript/), [PHP](/integrations/php/),

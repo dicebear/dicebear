@@ -8,11 +8,9 @@ description: >
 # DiceBear Studio for Figma
 
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787)
-puts DiceBear into Figma.
-
-It fills the avatar placeholders in your mockups with real avatars, inserts
-batches of new ones, and tells developers how to render the same avatar in the
-app.
+puts DiceBear into Figma. It fills the avatar placeholders in your mockups with
+real avatars, inserts batches of new ones, and tells developers how to render
+the same avatar in the app.
 
 The plugin is free and works in the Figma desktop app and in the browser. Start
 it from the Actions search in the toolbar, or from **Plugins** in the context
@@ -24,10 +22,10 @@ The rail on the left switches between three tabs. Two are for designers who use
 avatars, one is for people who make avatar styles.
 
 - **Generate** fills the selected layers with avatars or inserts a batch of new
-  ones, from the DiceBear collection or from a style of your own. This page
-  starts with it, in [Fill layers with avatars](#fill-layers-with-avatars).
+  ones, from the DiceBear collection or from a style of your own, see
+  [Fill layers with avatars](#fill-layers-with-avatars).
 - **Inspect** shows what a generated avatar carries and gives developers the
-  seed, the API URL and the code to render the same avatar. See
+  seed, the API URL and the code to render the same avatar, see
   [Hand avatars to developers](#hand-avatars-to-developers).
 - **Style** turns a Figma frame into an avatar style and back. Two guides cover
   it: [Create an avatar style with Figma](/create-styles/with-figma/) draws a
@@ -53,9 +51,9 @@ collection. Pick one, and the tab shows a preview of the avatars the selected
 layers will get.
 
 The seeds decide which face each layer gets. The default draws a random name per
-layer. Layer names use the name of each layer, so a placeholder called "Jane
-Doe" always shows the same avatar, in every mockup. From a list takes one seed
-per line, and Numbered builds seeds from a prefix and a counter.
+layer. Layer names use the name of each layer, so a placeholder called "Jane"
+always shows the same avatar, in every mockup. From a list takes one seed per
+line, and Numbered builds seeds from a prefix and a counter.
 
 ![The Generate tab with the seed strategies: Random, Layer names, From a list, Numbered](/integrations/figma/3.webp)
 
@@ -103,8 +101,8 @@ check it, so make sure you may use the style before it goes into a design.
 
 ## Hand avatars to developers
 
-Designs are mockups, the app needs the real thing. Select one or more generated
-avatars, or a frame that holds some, and open the Inspect tab.
+Select one or more generated avatars, or a frame that holds some, and open the
+Inspect tab.
 
 ![Two filled avatars selected in the chat mockup](/integrations/figma/8.webp)
 

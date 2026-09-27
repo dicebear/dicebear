@@ -3,40 +3,31 @@ title: How Do I Set a Gender?
 description: >
   DiceBear has no single gender switch, but you can shape avatars to look more
   masculine or feminine by setting each style's options, and soon by filtering
-  variants with tags. Here is how, plus where to share and reuse option sets.
+  variants with tags.
 ---
 
 # How do I set a gender?
 
-DiceBear has no single `gender` switch, but you can shape any avatar to look
-more masculine or feminine.
-
-Every feature is its own option you can set directly, so you pick the traits
-that fit the look you want, such as the hair or facial hair, and leave out the
-rest. An upcoming release adds descriptive variant tags that turn the common
-cases into a one-liner.
+DiceBear has no `gender` switch, but you can make any avatar look more masculine
+or feminine. Every feature is its own option, so you set the traits that fit the
+look you want, such as the hair or facial hair, and leave the rest to the seed.
 
 ## Find and apply the options
 
-The [Playground](/playground/) shows a preview for every option value and lets
-you combine them, with the avatar updating as you go. Every
-[avatar style page](/styles/) lists the same options as a static reference, also
-with previews, so you can look them up at any time. If you would rather not
-write any code, the [Editor](https://editor.dicebear.com) lets you browse styles
-and adjust options visually.
+The [Playground](/playground/) previews every option value and lets you combine
+them. Every [style page](/styles/) lists the same options with previews, and the
+[Editor](https://editor.dicebear.com) lets you adjust them without any code.
 
-Once you know which options you want, pass them as
+Pass the options you picked as
 [query parameters in the HTTP API](/integrations/http-api/#options) or as
 options in the [JS library](/integrations/javascript/) and the other libraries.
-The Avataaars style, for example, lets you turn facial hair off with
-`facialHairProbability=0`:
+In Avataaars, for example, `facialHairProbability=0` turns facial hair off:
 
 ```http
 https://api.dicebear.com/11.x/avataaars/svg?seed=Casey&facialHairProbability=0
 ```
 
-The options differ from style to style, so check the style page for the one you
-use.
+The options differ from style to style, so check the page of the style you use.
 
 ## Filter by tags
 
@@ -48,11 +39,10 @@ per-feature options described above.
 
 :::
 
-An upcoming release tags the character styles' variants with descriptive labels
-such as `hairLength:long` or `headwear:headscarf`. The
-[`tags`](/customize/tags/) option keeps only the variants you choose, which will
-often be the quickest way to lean on the features that read as more masculine or
-feminine. For example, keep long hair and leave out facial hair:
+An upcoming release tags the variants of the character styles with labels such
+as `hairLength:long` or `headwear:headscarf`. The [`tags`](/customize/tags/)
+option then keeps only the variants you choose, for example long hair without
+facial hair:
 
 ```js
 const avatar = new Avatar(style, {
@@ -61,42 +51,23 @@ const avatar = new Avatar(style, {
 });
 ```
 
-The same filter works as a query parameter in the HTTP API:
-
 ```http
 https://api.dicebear.com/11.x/adventurer/svg?seed=Casey&tags=hairLength:long,!facialHair
 ```
 
-Tags and the per-feature options work together, so you can combine a tag filter
-with options such as `facialHairProbability`. See
-[Filter variants with tags](/customize/tags/) for how the filter behaves and
-which tags are already available.
+Tags combine with the per-feature options, such as `facialHairProbability`.
 
-## Share and reuse option sets
-
-If you put together a set of options you like, share it under
-[Show and tell](https://github.com/orgs/dicebear/discussions/categories/show-and-tell)
-in our GitHub Discussions. Other people can then build on your work and adapt it
-to their own needs, and you can reuse combinations that others have already
-shared.
-
-## Why there is no dedicated gender option
+## Why there is no gender option
 
 Every DiceBear option names something that is drawn: a hairstyle, a beard,
 glasses, a hat. None of those features belongs to a gender. Whether long hair, a
-headscarf, or earrings reads as masculine or feminine is a matter of convention,
-and conventions differ by culture and by personal taste.
+headscarf, or earrings read as masculine or feminine is a matter of convention,
+and conventions differ by culture and by personal taste. A `male`/`female`
+switch would impose one convention on a worldwide audience, and the library
+would decide what a man or a woman looks like. That call belongs to your
+project, not to us.
 
-A `male`/`female` switch would have to settle on one such convention for
-everyone. DiceBear is used all over the world, in every kind of project, so a
-fixed mapping would be wrong for a good part of that audience, and the library
-would be the one deciding what a man or a woman looks like. That call belongs to
-your project, not to us.
-
-Facial hair is the feature that comes closest to a signal, and it still says
-little. People grow a beard or shave it for reasons of taste, culture, and
-religion, so its presence describes the drawing rather than the person.
-
-No option is tied to a gender unless the style's designer deliberately built it
-that way. The options describe features such as hair or glasses, and what you
-make of them is up to you.
+Even facial hair, the feature that comes closest to a signal, says little.
+People grow a beard or shave it for reasons of taste, culture, and religion. No
+option is tied to a gender unless a style's designer deliberately built it that
+way.

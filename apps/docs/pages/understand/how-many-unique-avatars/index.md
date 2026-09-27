@@ -11,45 +11,32 @@ import UniqueAvatarsTable from '@theme/components/guides/UniqueAvatarsTable.vue'
 
 # How many unique avatars are possible per avatar style?
 
-The number below estimates how many visibly distinct avatars the seed can
-produce for each style at its default configuration, with every other option
-left untouched.
-
-It follows the renderer's choices, with one deliberate exception for transforms:
-
-- **Variant pick per component.** Each visible component contributes one variant
-  choice. Variants with `weight: 0` are excluded because the PRNG never picks
-  them (unless every variant has `weight: 0`, in which case the PRNG falls back
-  to an unweighted pick across all of them).
-- **Probability.** A component whose `probability` is strictly between `0` and
-  `100` adds the "not rendered" branch as one extra outcome. A component with
-  `probability: 0` collapses to a single (always-absent) outcome.
-- **Per-component transforms.** `rotate`, `scale`, and `translate` ranges in the
-  definition are counted at a grain the eye can still tell apart: whole degrees
-  for `rotate`, whole percent of the component's size for `translate`, and
-  hundredths for `scale`. A range with a coarser `step` is counted at that step
-  instead. The renderer itself samples these ranges with four decimal places, so
-  the true output space is far larger. Those extra values are invisible, so we
-  leave them out.
-- **Color palettes.** A color group only counts for renderings whose chosen
-  variants reference it. A hat color on an avatar without a hat changes nothing,
-  so it adds nothing. The `background` group counts for every rendering because
-  the renderer paints it behind the avatar. Within one rendering the visible
-  groups are evaluated jointly: `notEqualTo` strips the picked hex values of the
-  referenced groups (with the renderer's "fall back to full palette when
-  filtering empties" rule), and `contrastTo` reduces to a single, deterministic
-  pick. Constraints against a hidden group are dropped, since a hidden color
-  with two or more palette entries leaves the visible group its whole palette.
-- **Seed-derived initials.** When a style renders the `initial` or `initials`
-  variable, each output letter ranges over the Unicode `\p{L}` category (about
-  140,000 distinct uppercased characters), and `initials` emits up to two
-  letters per seed.
-
-User-supplied options (custom color palettes, variant allowlists, additional
-backgrounds, `flip`, `rotate`, `scale`, `translate`, `borderRadius`, ID
-randomization, …) raise the count further beyond what is reported here.
+The table estimates how many visibly distinct avatars the seed alone can produce
+for each style, with every other option left at its default.
 
 <UniqueAvatarsTable />
+
+## How the count works
+
+The estimate follows the choices the renderer makes:
+
+- Every visible component adds one pick among its variants. Variants with weight
+  `0` don't count, because the seed never picks them unless every variant has
+  weight `0`. A component that only sometimes appears adds "not drawn" as one
+  more outcome.
+- Component rotation, translation, and scale count at a grain the eye can tell
+  apart: whole degrees, whole percent of the component's size, and hundredths of
+  scale, or the range's own `step` where that is coarser. The renderer samples
+  much finer, but those extra values are invisible.
+- A color group only counts when the avatar shows something in that color. A hat
+  color changes nothing on an avatar without a hat. The background always
+  counts. `notEqualTo` removes the colors the referenced groups picked, and a
+  `contrastTo` group adds no choice of its own.
+- In styles that draw initials from the seed, each letter can be any of about
+  140,000 Unicode letters, with up to two letters per avatar.
+
+Options you set yourself, such as your own palettes, variant lists, `flip`,
+`rotate`, or `borderRadius`, raise the count further.
 
 If a number looks wrong, please open a
 [discussion](https://github.com/orgs/dicebear/discussions) on GitHub.

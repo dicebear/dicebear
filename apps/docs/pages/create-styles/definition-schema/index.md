@@ -9,17 +9,13 @@ description: >
 # Definition schema reference
 
 Every DiceBear avatar style is a JSON file that follows the
-[DiceBear Definition Schema](https://github.com/dicebear/schema). This page
-documents the complete structure of a style definition as of schema version
-2.0.2, the version DiceBear 11 uses.
-
-## Overview
-
-A style definition describes everything needed to generate an avatar: the canvas
-size, the SVG elements to render, the components that can be randomized, the
-color palettes available, and optional animations. The definition is purely
-declarative: no code, no functions. The rendering logic lives in the DiceBear
-Core implementation.
+[DiceBear Definition Schema](https://github.com/dicebear/schema). It describes
+everything needed to generate an avatar: the canvas size, the SVG elements, the
+components that can be randomized, the color palettes, and optional animations.
+The definition is purely declarative, and the rendering logic lives in the
+DiceBear Core. This page documents schema version 2.0.2, the version DiceBear 11
+uses. For a guided example, see
+[Create an avatar style from scratch](/create-styles/from-scratch/).
 
 ## Top-level structure
 
@@ -228,8 +224,7 @@ shared `filteredString` injection filter):
 The filter also catches these tokens with whitespace before the colon or the
 parenthesis, and a remote URL with whitespace after `url(`. Whitespace here
 means space, tab, line feed, form feed, and carriage return, the characters a
-URL or CSS parser skips at these spots. The schema spells them out instead of
-using `\s`, because regex engines disagree on what `\s` covers.
+URL or CSS parser skips at these spots.
 
 This is a defense-in-depth filter, not a CSS validator: substring matches reject
 otherwise-harmless strings that happen to contain a blocked token (e.g. the
@@ -436,11 +431,9 @@ variants that the PRNG can choose from.
 | `translate`   | object | Optional. `{ x?: Range, y?: Range }` offsets as a percentage of the component's own `width` / `height`, see [Ranges](#ranges) |
 | `variants`    | object | **Required.** Named variant definitions (up to 512)                                                                           |
 
-`translate.x` and `translate.y` are expressed as percentages of the component's
-own `width` and `height`. A value of `100` shifts the component by its full
-width or height, `0` leaves it in place. The example above
-(`y: { min: -5, max: 5 }`) therefore means "shift the component vertically by up
-to 5 % of its height in either direction".
+A `translate` value of `100` shifts the component by its full width or height,
+`0` leaves it in place. The example above (`y: { min: -5, max: 5 }`) shifts the
+component vertically by up to 5 % of its height in either direction.
 
 ### Ranges
 
@@ -491,16 +484,13 @@ right earrings) and have each occurrence pick its own variant.
 }
 ```
 
-An alias is a strict reference: `extends` is its **only** allowed property. It
-must point to a base component (not another alias) defined in the same
-`components` map. The schema cannot check that reference, so the renderer
-rejects an unknown target or an alias chain when it loads the definition. Width,
-height, probability, rotate, scale, translate, and variants are inherited from
-the source. Aliases do not expose their own `${aliasName}Variant` or
-`${aliasName}Probability` user options. Both are shared with the source via
-`${sourceName}Variant` and `${sourceName}Probability`. The renderer still rolls
-the PRNG independently per alias, so each occurrence picks its own variant
-within the shared constraints. See
+`extends` is the **only** property an alias may have, and it must point to a
+base component (not another alias) in the same `components` map. The schema
+cannot check that reference, so the renderer rejects an unknown target or an
+alias chain when it loads the definition. Aliases have no user options of their
+own and share `${sourceName}Variant` and `${sourceName}Probability` with their
+source, while each alias still picks its own variant within those constraints.
+See
 [the implementation guide](/create-styles/implement-dicebear-core/#component-options)
 for details.
 
@@ -673,79 +663,6 @@ Two attributes have notable extra rules:
 - **`style`** is sanitized as a CSS string: the stricter `<style>`-element
   ruleset applies (see [The `<style>` element](#the-style-element)).
 
-## Example: minimal style definition
-
-A complete but minimal definition that renders a colored circle:
-
-```json
-{
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/definition.min.json",
-  "canvas": {
-    "width": 100,
-    "height": 100,
-    "elements": [
-      {
-        "type": "element",
-        "name": "circle",
-        "attributes": {
-          "cx": "50",
-          "cy": "50",
-          "r": "45",
-          "fill": { "type": "color", "name": "background" }
-        }
-      },
-      {
-        "type": "component",
-        "name": "face"
-      }
-    ]
-  },
-  "components": {
-    "face": {
-      "width": 100,
-      "height": 100,
-      "variants": {
-        "smile": {
-          "elements": [
-            {
-              "type": "element",
-              "name": "path",
-              "attributes": {
-                "d": "M 30 60 Q 50 80 70 60",
-                "stroke": "#000000",
-                "stroke-width": "3",
-                "fill": "none"
-              }
-            }
-          ]
-        },
-        "neutral": {
-          "elements": [
-            {
-              "type": "element",
-              "name": "line",
-              "attributes": {
-                "x1": "35",
-                "y1": "65",
-                "x2": "65",
-                "y2": "65",
-                "stroke": "#000000",
-                "stroke-width": "3"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  "colors": {
-    "background": {
-      "values": ["#f9c74f", "#90be6d", "#43aa8b", "#577590", "#f94144"]
-    }
-  }
-}
-```
-
 ## Schema package
 
 The schemas live in [`@dicebear/schema`](https://github.com/dicebear/schema) and
@@ -774,14 +691,3 @@ validation:
 https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/definition.min.json
 https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/options.min.json
 ```
-
-The vendored style definitions shipped by DiceBear live in a separate package:
-[`@dicebear/styles`](https://www.npmjs.com/package/@dicebear/styles) on npm,
-[`dicebear/styles`](https://packagist.org/packages/dicebear/styles) on
-Packagist, [`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on
-PyPI, [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
-crates.io,
-[`github.com/dicebear/styles/v11`](https://pkg.go.dev/github.com/dicebear/styles/v11)
-as a Go module, [`dicebear_styles`](https://pub.dev/packages/dicebear_styles) on
-pub.dev and [`DiceBear.Styles`](https://www.nuget.org/packages/DiceBear.Styles)
-on NuGet.

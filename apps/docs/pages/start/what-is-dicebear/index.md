@@ -9,41 +9,32 @@ description: >
 # What is DiceBear?
 
 DiceBear generates avatars. You give it a seed, it gives you an SVG image, and
-the same seed always returns the same image.
+the same seed always returns the same image. Use the username or user ID as the
+seed and every person in your app has a consistent avatar without ever uploading
+a picture.
 
-That one property makes it useful for user profiles: use the username or user ID
-as the seed and every person in your app has a consistent avatar without ever
-uploading a picture.
-
-The look comes from [avatar styles](/styles/). There are %STYLE_COUNT% of them,
-drawn by different artists, ranging from abstract shapes to illustrated
-characters and robots. That collection is what sets DiceBear apart: no other
-avatar library has one like it, and all of it is one word in your code or URL
-away. Every style has options such as background color, flip, or scale, and most
-add their own, like hair, eyes, or accessories. So an avatar is the answer to
-three questions: which style, which seed, which options. Curious what happens
-under the hood? [How avatars are made](/understand/how-avatars-are-made/) walks
-through it.
+The look comes from %STYLE_COUNT% [avatar styles](/styles/) by different
+artists, from abstract shapes to illustrated characters and robots. No other
+avatar library has a collection like it, and switching styles is one word in
+your code or URL. Options such as background color, hair, or accessories adjust
+each style. [How avatars are made](/understand/how-avatars-are-made/) shows what
+happens under the hood.
 
 ## Where it runs
 
-Anywhere, in practice. Libraries for JavaScript, PHP, Python, Rust, Go, Dart,
-and C# generate avatars directly in your code. The free HTTP API serves them by
-URL for everything else. A CLI covers batch exports, and the
-[Editor](https://editor.dicebear.com) works without any code at all. The
-[integration picker](/start/pick-your-integration/) helps you choose. Whatever
-you pick, results match: the seed `Alice` renders the same avatar in every
-library and on the API.
+Libraries for JavaScript, PHP, Python, Rust, Go, Dart, and C# generate avatars
+in your own code. The free HTTP API serves them by URL, the CLI exports files in
+batches, and the [Editor](https://editor.dicebear.com) needs no code at all. All
+of them render the same avatar for the same seed. The
+[integration picker](/start/pick-your-integration/) helps you choose.
 
 ## Privacy
 
 The libraries generate avatars entirely on your infrastructure, so no data about
-your users leaves your systems. If you want the URL-based workflow with the same
-control, the HTTP API is open source and
-[self-hostable](/recipes/self-host-the-http-api/).
+your users leaves your systems. The HTTP API is open source too, and you can
+[host it yourself](/recipes/self-host-the-http-api/).
 
 ## Free and open source
 
-The DiceBear code is MIT licensed. The avatar styles carry licenses chosen by
-their artists, and the [license overview](/licenses/) shows all of them in one
-place.
+The DiceBear code is MIT licensed. Each avatar style carries the license its
+artist chose, and the [license overview](/licenses/) lists all of them.

@@ -9,16 +9,15 @@ description: >
 # DiceBear for AI assistants
 
 Coding assistants write DiceBear from memory, and that memory mostly predates
-version 10.
-
-The block below is the fix: paste it into your project and the assistant has the
-current package for your language, the shape of the API, and the address to look
-options up at.
+version 10. Six of the seven libraries shipped during 2026, outside most
+training data, so without help an assistant will tell you there is no DiceBear
+library for your language and hand you JavaScript.
 
 ## Rules for your project
 
 Assistants read a rules file from the repository they work in, usually
-`AGENTS.md`. Everything an assistant needs is in this one block:
+`AGENTS.md`. Paste this block into it, and the assistant knows the current
+package for your language, the shape of the API, and where to look up options:
 
 ```md
 ## DiceBear
@@ -70,47 +69,20 @@ says:
 
 > Read https://www.dicebear.com/llms.txt before you write DiceBear code.
 
-## Seven libraries, identical output
-
-DiceBear is not a JavaScript library with wrappers around it. Seven native cores
-are held to byte-identical output, so the same style, seed and options produce
-the same SVG in each. Only the syntax for passing the options differs.
-
-| Library                                 | Packages                                                | Since  |
-| --------------------------------------- | ------------------------------------------------------- | ------ |
-| [JavaScript](/integrations/javascript/) | `@dicebear/core`, `@dicebear/styles`                    | 10.0.0 |
-| [PHP](/integrations/php/)               | `dicebear/core`, `dicebear/styles`                      | 10.0.0 |
-| [Python](/integrations/python/)         | `dicebear-core`, `dicebear-styles`                      | 10.1.0 |
-| [Rust](/integrations/rust/)             | `dicebear-core`, `dicebear-styles`                      | 10.2.0 |
-| [Go](/integrations/go/)                 | `github.com/dicebear/dicebear-go/v11`, `.../styles/v11` | 10.2.0 |
-| [Dart](/integrations/dart/)             | `dicebear_core`, `dicebear_styles`                      | 10.3.0 |
-| [C#](/integrations/csharp/)             | `DiceBear.Core`, `DiceBear.Styles`                      | 10.7.0 |
-
-Six of the seven shipped during 2026, which puts them outside most training
-data. That is why the block above names them explicitly: without it, an
-assistant will tell you there is no DiceBear library for your language and hand
-you JavaScript.
-
-Each [style page](/styles/) carries the loading snippet for all seven languages,
-so one page covers whichever you are working in.
-
 ## Machine-readable sources
 
-| Address                                  | Contents                                                                                               |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `https://www.dicebear.com/llms.txt`      | Index of the documentation, current package versions, and every avatar style                           |
-| `https://www.dicebear.com/llms-full.txt` | Every page in one file: guides first, then all styles with their option tables (about half a megabyte) |
-| Any page URL plus `index.md`             | That single page as Markdown                                                                           |
+| Address                                  | Contents                                                                                            |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `https://www.dicebear.com/llms.txt`      | Index of the documentation, current package versions, and every avatar style                        |
+| `https://www.dicebear.com/llms-full.txt` | Every page in one file: guides first, then all styles with their option tables (about one megabyte) |
+| Any page URL plus `index.md`             | That single page as Markdown                                                                        |
 
-The Markdown version of a page sits next to its HTML, so appending `index.md` to
-the address is enough:
+The Markdown version of a page sits next to its HTML, and each page links to it
+from the header:
 
 ```http
 https://www.dicebear.com/integrations/http-api/index.md
 ```
-
-Each page also links to its Markdown version from the header, so you do not have
-to edit the address yourself.
 
 Option names are what assistants invent most often, and the API answers that
 question directly, without a page to parse:
@@ -139,11 +111,10 @@ at its last 9.x release, so that install succeeds as well.
 The one exception is the retired `avatars.dicebear.com` host, which answers
 `410 Gone`.
 
-Nothing here is a defect you need to work around. Old versions stay available on
-purpose, and dropping unknown parameters is what keeps a URL from breaking when
-a style changes. The combination is only a problem when the code was written
-from memory rather than from the current docs, which is why the block above
-lists the pairs explicitly.
+Both behaviors are on purpose: old versions stay available, and dropping unknown
+parameters keeps a URL from breaking when a style changes. They only turn into a
+problem when code is written from memory, which is why the block lists the
+pairs.
 
 :::
 
@@ -175,6 +146,6 @@ documents the current classes.
 ## Crawling and training
 
 The [robots.txt](https://www.dicebear.com/robots.txt) allows assistants and
-their crawlers; only the site notice is excluded. The documentation is
-[MIT licensed](https://github.com/dicebear/dicebear/blob/11.x/LICENSE); the
+their crawlers and only excludes the site notice. The documentation is
+[MIT licensed](https://github.com/dicebear/dicebear/blob/11.x/LICENSE). The
 avatar styles are not, and each one carries [its own license](/licenses/).

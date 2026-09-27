@@ -7,16 +7,14 @@ description: >
 
 # Unity avatar library: using DiceBear with Unity
 
-You can bring DiceBear avatars into Unity two ways.
-
 The [HTTP API](/integrations/http-api/) returns finished PNGs that
-`UnityWebRequestTexture` loads into a texture, and the
-[C# library](/integrations/csharp/) generates the SVG inside the game.
+`UnityWebRequestTexture` loads into a texture. It needs no packages and works on
+every build target.
 
-The HTTP API needs no packages and works on every build target. The C# library
-keeps everything local, so it works offline. It also asks more of you: Unity
-ships neither a NuGet client nor a runtime SVG renderer, and the renderer you
-end up adding covers less of SVG than the styles use. Read
+The [C# library](/integrations/csharp/) generates the SVG inside the game and
+works offline, but it asks more of you: Unity ships neither a NuGet client nor a
+runtime SVG renderer, and the renderer you end up adding covers less of SVG than
+the styles use. Read
 [what the renderer leaves out](#what-the-renderer-leaves-out) before you build
 on it.
 

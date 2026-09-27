@@ -30,16 +30,14 @@ dotnet add package DiceBear.Core
 dotnet add package DiceBear.Styles
 ```
 
-The styles package embeds every style in the assembly. Like the Go module there
-is no per-style opt-in, so a project that ships it carries the whole collection.
-Where that matters, skip the package and load the one definition you need from a
-file.
+The styles package embeds every style in the assembly, with no per-style opt-in.
+Where the size matters, skip the package and load the one definition you need
+from a file.
 
 ## Usage
 
-We use the avatar style [lorelei](/styles/lorelei/) in our example. You can find
-more avatar styles [here](/styles/). Each style is exposed as a raw-JSON string
-(e.g. `Styles.Lorelei`) that you hand to `Style.Parse`.
+Each style is exposed as a raw-JSON string (e.g. `Styles.Lorelei`) that you hand
+to `Style.Parse`:
 
 ```csharp
 using System.Text.Json.Nodes;
@@ -56,11 +54,7 @@ var avatar = new Avatar(style, new JsonObject
 Console.WriteLine(avatar.ToSvg());
 ```
 
-`Style.Parse` decodes and validates the raw JSON string. If you already hold a
-decoded definition as a `JsonNode`, pass it to the `Style` constructor instead.
-
-Each avatar style comes with several options. You can find them on the details
-page of each [avatar style](/styles/).
+Every style has its own options, listed on its [style page](/styles/).
 
 :::info
 
@@ -70,107 +64,27 @@ place.
 
 :::
 
-## Deterministic avatars
-
-The `seed` option is the key to generating deterministic avatars. The same seed
-always produces the same avatar:
-
-```csharp
-var first = new Avatar(style, new JsonObject { ["seed"] = "user-123" });
-var second = new Avatar(style, new JsonObject { ["seed"] = "user-123" });
-
-// first.ToSvg() == second.ToSvg()
-```
-
 ## Types
 
-### `Style`
-
-A validated, immutable wrapper around a style definition. Build it once from the
-definition JSON, then reuse it when generating multiple avatars. Invalid
-definitions throw a `StyleValidationException`.
-
-```csharp
-var style = Style.Parse(Styles.Lorelei);
-
-var alice = new Avatar(style, new JsonObject { ["seed"] = "Alice" });
-var bob = new Avatar(style, new JsonObject { ["seed"] = "Bob" });
-```
-
-### `Avatar`
-
-The main class for generating avatars. The constructor takes a `Style` and an
-optional `JsonObject` of options. Invalid options throw an
-`OptionsValidationException`, circular color references a
-`CircularColorReferenceException`. Omitting the options is the same as passing
-an empty object.
-
-```csharp
-var avatar = new Avatar(style, new JsonObject
-{
-    // ... options
-});
-```
-
-`Avatar.FromJson(style, optionsJson)` takes the options as raw JSON text, which
-is convenient when they arrive from a request body or a config file.
-
-### `OptionsDescriptor`
-
-Describes all valid options for a given style. Useful for building UIs or
-validating user input.
-
-```csharp
-var descriptor = new OptionsDescriptor(style).ToJson();
-```
+- `Style` is a validated, immutable wrapper around a style definition.
+  `Style.Parse` decodes a raw JSON string, the constructor takes an already
+  decoded `JsonNode`. Build it once and reuse it for every avatar of that style.
+- `Avatar` renders one avatar from a `Style` and an optional `JsonObject` of
+  options. `Avatar.FromJson(style, optionsJson)` takes the options as raw JSON
+  text instead, which is convenient when they arrive from a request body or a
+  config file.
+- `OptionsDescriptor` describes all valid options of a style, for building UIs
+  or validating user input: `new OptionsDescriptor(style).ToJson()`. See
+  [Style options](/customize/style-options/).
 
 ## Methods
 
-### `ToSvg()` / `ToString()`
-
-**Return type:** `string`
-
-Returns the avatar as SVG in XML format. `ToString()` returns the same string,
-so an `Avatar` can be used directly in string interpolation.
-
-```csharp
-var avatar = new Avatar(style, new JsonObject { ["seed"] = "Alice" });
-
-var svg = avatar.ToSvg();
-// or
-svg = avatar.ToString();
-```
-
-### `ToJson()`
-
-**Return type:** `string` (a JSON object with the keys `svg` and `options`)
-
-Returns the SVG and the resolved options as JSON text.
-
-```csharp
-var avatar = new Avatar(style, new JsonObject { ["seed"] = "Alice" });
-
-var result = avatar.ToJson();
-
-// result → {"svg":"<svg>...</svg>","options":{"flip":"none",...}}
-```
-
-The resolved options are also available directly as a `JsonObject` via
-`avatar.ResolvedOptions()`.
-
-### `ToDataUri()`
-
-**Return type:** `string`
-
-Returns the avatar as [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-
-```csharp
-var avatar = new Avatar(style, new JsonObject { ["seed"] = "Alice" });
-
-var dataUri = avatar.ToDataUri();
-
-// <img src="{dataUri}" alt="Avatar" />
-```
+| Method                    | Returns                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| `ToSvg()` or `ToString()` | The SVG as a `string`, so an `Avatar` works directly in string interpolation |
+| `ToJson()`                | JSON text with the SVG under `svg` and the resolved options under `options`  |
+| `ResolvedOptions()`       | The resolved options as a `JsonObject`                                       |
+| `ToDataUri()`             | The SVG as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)       |
 
 ## Errors
 
@@ -236,48 +150,10 @@ Build the `Style` once at startup and keep it in a field or a singleton service.
 Validating and decomposing a definition is the expensive part, while rendering
 an avatar from an existing `Style` is cheap.
 
-### Avatar with custom background
-
-```csharp
-var avatar = new Avatar(style, new JsonObject
-{
-    ["seed"] = "Alice",
-    ["backgroundColor"] = new JsonArray("#b6e3f4", "#c0aede", "#d1d4f9"),
-});
-```
-
-### Fixed size avatar
-
-```csharp
-var style = Style.Parse(Styles.Bottts);
-
-var avatar = new Avatar(style, new JsonObject
-{
-    ["seed"] = "robot-42",
-    ["size"] = 128,
-    ["borderRadius"] = 50, // circular avatar
-});
-```
-
-### Avatar with transformations
-
-```csharp
-var style = Style.Parse(Styles.Avataaars);
-
-var avatar = new Avatar(style, new JsonObject
-{
-    ["seed"] = "Jane",
-    ["flip"] = "horizontal",
-    ["rotate"] = 10,
-    ["scale"] = 0.9,
-    ["translateY"] = 5,
-});
-```
-
 ### Multiple avatars on the same page
 
-When rendering multiple avatars on the same page, use `idRandomization` to
-prevent SVG ID conflicts:
+When you inline several avatars into one page, use `idRandomization` to keep
+their SVG IDs from colliding:
 
 ```csharp
 foreach (var seed in new[] { "alice", "bob", "charlie" })
@@ -294,8 +170,8 @@ foreach (var seed in new[] { "alice", "bob", "charlie" })
 
 ### Weighted variant selection
 
-A weighted object makes some variants more likely than others. The lorelei style
-selects `happy01` or `happy02` mouths twice as often as `sad01` here:
+A weight map makes some variants more likely than others. Here lorelei picks
+`happy01` or `happy02` mouths twice as often as `sad01`:
 
 ```csharp
 var avatar = new Avatar(style, new JsonObject

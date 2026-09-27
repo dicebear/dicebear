@@ -37,9 +37,6 @@ tooling complains about `require()`,
 
 ## Usage
 
-We use the avatar style [lorelei](/styles/lorelei/) in our example. You can find
-more avatar styles [here](/styles/).
-
 ```js
 import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
@@ -53,19 +50,12 @@ const avatar = new Avatar(style, {
 const svg = avatar.toString();
 ```
 
-Each avatar style comes with several options. You can find them on the details
-page of each [avatar style](/styles/).
-
-::: tip
-
-If you'd like to integrate the library into a framework, check out our guides
-for [Angular](/integrations/javascript/angular/),
+Every style has its own options, listed on its [style page](/styles/). For
+frameworks, there are guides for [Angular](/integrations/javascript/angular/),
 [React](/integrations/javascript/react/),
 [React Native](/integrations/javascript/react-native/),
-[Vue](/integrations/javascript/vue/) or
+[Vue](/integrations/javascript/vue/), and
 [Svelte](/integrations/javascript/svelte/).
-
-:::
 
 :::info
 
@@ -75,248 +65,95 @@ place.
 
 :::
 
-## Deterministic avatars
-
-The `seed` option is the key to generating deterministic avatars. The same seed
-will always produce the same avatar, which is useful for user profiles:
-
-```js
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei);
-
-// These will always produce the same avatar
-const avatar1 = new Avatar(style, { seed: 'user-123' });
-const avatar2 = new Avatar(style, { seed: 'user-123' });
-
-avatar1.toString() === avatar2.toString(); // true
-```
-
 ## Classes
 
-### `Avatar`
-
-The main class for generating avatars. Pass a `Style` instance and optional
-options.
-
-```js
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei);
-const avatar = new Avatar(style, {
-  // [!code focus:3]
-  // ... options
-});
-```
-
-### `Style`
-
-An immutable wrapper around a style definition.
-
-```js
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei); // [!code focus:4]
-
-const avatar1 = new Avatar(style, { seed: 'Alice' });
-const avatar2 = new Avatar(style, { seed: 'Bob' });
-```
-
-### `OptionsDescriptor`
-
-Describes all valid options for a given style. Useful for building UIs or
-validating user input. See [Access Style Options](/customize/style-options/) for
-details.
+- `Style` is an immutable wrapper around a style definition. Create it once and
+  reuse it for every avatar of that style.
+- `Avatar` renders one avatar from a `Style` and optional options.
+- `OptionsDescriptor` describes all valid options of a style, for building UIs
+  or validating user input. See [Style options](/customize/style-options/).
 
 ## Methods
 
-### `.toString()`
+| Method        | Returns                                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------- |
+| `toString()`  | The SVG as a `string`                                                                                   |
+| `toJSON()`    | `{ svg: string, options: StyleOptions }` with the SVG and the resolved options                          |
+| `toDataUri()` | The SVG as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme), for an `<img>` source or in CSS |
 
-**Return type:** `string`
+## Core options
 
-Returns the avatar as SVG in XML format.
-
-```js
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei);
-const avatar = new Avatar(style, {
-  // ... options
-});
-
-const svg = avatar.toString(); // [!code focus]
-```
-
-### `.toJSON()`
-
-**Return type:** `{ svg: string, options: StyleOptions }`
-
-Returns an object with the SVG and the resolved options that were used to
-generate the avatar.
+These options are the same across every DiceBear core. See
+[Core options](/customize/options/) for the full reference. Here they are in
+JavaScript:
 
 ```js
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei);
 const avatar = new Avatar(style, {
-  seed: 'John',
-  // ... other options
+  seed: 'Alice',
+  flip: 'horizontal', // 'none', 'horizontal', 'vertical', 'both'
+  rotate: 10, // -360 to 360, or [min, max] range
+  scale: 0.9, // 0 to 10 (1 = original), or [min, max] range
+  borderRadius: 50, // 0-50 (50 = circle)
+  size: 128,
+  translateX: 0, // -1000 to 1000 (percent of canvas width)
+  translateY: 0, // -1000 to 1000 (percent of canvas height)
+  idRandomization: true,
+  title: 'User Avatar',
+  fontFamily: 'Arial', // or ['Arial', 'Helvetica']
+  fontWeight: 700, // 1-1000
+  backgroundColor: ['#b6e3f4', '#c0aede'],
+  backgroundColorFill: 'solid', // 'solid', 'linear', 'radial'
 });
-
-const json = avatar.toJSON(); // [!code focus]
-
-// Example output:
-// {
-//   svg: '<svg>...</svg>',
-//   options: {
-//     seed: 'John',
-//     // ... resolved options
-//   }
-// }
 ```
 
-### `.toDataUri()`
-
-**Return type:** `string`
-
-Returns the avatar as [data uri](https://en.wikipedia.org/wiki/Data_URI_scheme).
-This is useful for embedding the avatar directly in HTML or CSS.
-
-```js
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei);
-const avatar = new Avatar(style, {
-  seed: 'John',
-  // ... other options
-});
-
-const dataUri = avatar.toDataUri(); // [!code focus]
-
-// Use in HTML
-// <img src={dataUri} alt="Avatar" />
-```
-
-## Options
-
-Every DiceBear core understands the same options. The full reference, including
-the background, per-component, and per-color options, lives on the
-[Core options](/customize/options/) page. The examples below show how to pass
-them in JavaScript.
+Dynamic component and color options also work the same way. See
+[Dynamic component options](/customize/options/#dynamic-component-options) for
+all available patterns.
 
 ## Examples
 
-### Avatar with custom background
-
-```js
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei);
-const avatar = new Avatar(style, {
-  seed: 'John',
-  backgroundColor: ['#b6e3f4', '#c0aede', '#d1d4f9'],
-  // ... other options
-});
-```
-
-### Fixed size avatar
-
-```js
-import { Style, Avatar } from '@dicebear/core';
-import bottts from '@dicebear/styles/bottts.json' with { type: 'json' };
-
-const style = new Style(bottts);
-const avatar = new Avatar(style, {
-  seed: 'robot-42',
-  size: 128,
-  borderRadius: 50, // circular avatar
-  // ... other options
-});
-```
-
-### Avatar with transformations
-
-```js
-import { Style, Avatar } from '@dicebear/core';
-import avataaars from '@dicebear/styles/avataaars.json' with { type: 'json' };
-
-const style = new Style(avataaars);
-const avatar = new Avatar(style, {
-  seed: 'Jane',
-  flip: 'horizontal',
-  rotate: 10,
-  scale: 0.9,
-  translateY: 5,
-  // ... other options
-});
-```
-
 ### Multiple avatars on the same page
 
-When inlining multiple avatars into the same document (e.g. dropping the SVG
-markup into the page rather than using `<img src={dataUri}>`), use
-`idRandomization` to suffix each SVG's internal IDs and avoid `<defs>` /
-`url(#…)` collisions:
+When you inline several SVGs into one document, rather than loading them through
+`<img>`, their internal IDs can collide. `idRandomization` adds a random suffix
+to every ID:
 
 ```js
-import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
-
-const style = new Style(lorelei);
-const users = ['alice', 'bob', 'charlie'];
-
-const avatars = users.map((user) =>
-  new Avatar(style, {
-    seed: user,
-    idRandomization: true,
-    // ... other options
-  }).toString(),
+const avatars = ['alice', 'bob', 'charlie'].map((seed) =>
+  new Avatar(style, { seed, idRandomization: true }).toString(),
 );
 ```
 
-The suffix is drawn from `Math.random()` (**not** from the DiceBear PRNG), so
-two avatars rendered with the same seed get different IDs. This also means the
-rendered SVG is no longer deterministic; only the visual output is. Skip
-`idRandomization` for snapshot tests, SSR/hydration, or anywhere you depend on
-identical markup. When you only embed avatars via `<img>` (data URI or HTTP API)
-the IDs live inside isolated documents and ID randomization is unnecessary.
+The suffix comes from `Math.random()`, not from the seed, so the markup is no
+longer deterministic, only the image is. Leave the option off for snapshot
+tests, SSR with hydration, and anywhere else that depends on identical markup.
+Avatars loaded through `<img>`, as a data URI or from the HTTP API, don't need
+it.
 
 ### Weighted variant selection
 
-You can influence the PRNG to prefer certain variants by passing a weight map.
-Variants not listed in the map are excluded; weights of `0` exclude that variant
-unless **every** mapped variant has weight `0`, in which case the PRNG falls
-back to an unweighted pick across them:
+A weight map makes some variants more likely than others. Variants missing from
+the map are left out. Here lorelei picks `happy01` or `happy02` mouths twice as
+often as `sad01`:
 
 ```js
-import { Style, Avatar } from '@dicebear/core';
-import avataaars from '@dicebear/styles/avataaars.json' with { type: 'json' };
-
-const style = new Style(avataaars);
 const avatar = new Avatar(style, {
   seed: 'John',
-  topVariant: { short01: 2, short02: 2, long01: 1 },
-  // ... other options
+  mouthVariant: { happy01: 2, happy02: 2, sad01: 1 },
 });
 ```
+
+A weight of `0` leaves a variant out as well, unless every variant in the map
+has weight `0`. The pick then falls back to all of them with equal chance.
 
 ## Accessibility
 
 By default the generated `<svg>` element is `aria-hidden="true"`, so assistive
-technology skips it. This is the right default for purely decorative avatars
-next to a username.
+technology skips it. That's right for a decorative avatar next to a username.
 
-When the avatar conveys identity on its own (e.g. it is the only thing in a
-link, or has no visible label), set the `title` option. The renderer emits
-`role="img" aria-label="…"` on the root element **and** a `<title>` child, so
-screen readers announce the value:
+When the avatar stands for a person on its own, for example as the only content
+of a link, set the `title` option. The SVG then carries `role="img"`, an
+`aria-label`, and a `<title>` element, so screen readers announce it:
 
 ```js
 const avatar = new Avatar(style, {
@@ -325,9 +162,9 @@ const avatar = new Avatar(style, {
 });
 ```
 
-If you embed the SVG inside an `<img>` (via `toDataUri()`), use the `<img>`
-element's `alt` attribute instead. The SVG's internal `title` is not read by
-assistive technology when the SVG is loaded as an image.
+If you embed the SVG through an `<img>` (via `toDataUri()`), use the `alt`
+attribute instead. Assistive technology doesn't read the SVG's `<title>` inside
+an image.
 
 ## Bundle size
 
@@ -357,7 +194,9 @@ generated yourself. When in doubt, stay on `@dicebear/core`.
 
 ## TypeScript
 
-The library is fully typed. You can import types for better IDE support:
+The library is fully typed. When you import a style definition as JSON,
+TypeScript infers its literal types and autocompletes the component and color
+option names:
 
 ```ts
 import { Avatar, Style } from '@dicebear/core';
@@ -371,9 +210,6 @@ const avatar = new Avatar(style, {
   // ... other options
 });
 ```
-
-When importing a style definition as JSON, TypeScript infers the literal types
-of the definition, providing autocomplete for component and color option names.
 
 ## Convert to other formats
 

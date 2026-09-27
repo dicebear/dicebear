@@ -9,19 +9,16 @@ description: >
 # Next.js avatar library: using DiceBear with Next.js
 
 DiceBear works in every Next.js rendering mode: server components, client
-components, and the Pages Router.
-
-Server-side generation is the default recommendation because it produces zero
-JavaScript on the client and avoids hydration pitfalls.
+components, and the Pages Router. Generate avatars on the server where you can.
+It ships no JavaScript to the client and avoids hydration pitfalls.
 
 ## App Router
 
 ### Server component (recommended)
 
-In App Router, components are server components by default. Generate the SVG on
-the server and inline it as a
-[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme), so the avatar needs
-no client-side JavaScript.
+Components in the App Router are server components by default. Generate the SVG
+there and inline it as a
+[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme):
 
 ```tsx
 // app/components/UserAvatar.tsx
@@ -74,15 +71,10 @@ export function UserAvatarClient({ seed = 'Alice' }: { seed?: string }) {
 ::: warning Hydration & `idRandomization`
 
 `idRandomization` uses the host's non-seeded RNG, so the server and the client
-will produce different IDs and React will throw a hydration mismatch warning.
-Either:
-
-- Generate the avatar in a server component (no hydration) and don't pass the
-  SVG to a client component, **or**
-- Leave `idRandomization: false` and rely on the deterministic IDs.
-
-If you need ID uniqueness across multiple avatars on the same page, render each
-avatar entirely on the server.
+produce different IDs and React warns about a hydration mismatch. Leave
+`idRandomization` off in client components. If several avatars on one page need
+unique IDs, render them in a server component and don't pass the SVG to a client
+component.
 
 :::
 
@@ -117,11 +109,9 @@ export async function GET(
 
 ## Pages Router
 
-Pages Router treats every component as client-side by default. Use `useMemo`
-exactly like in a plain React app. See the
-[React guide](/integrations/javascript/react/) for the canonical pattern.
-Server-side generation through `getServerSideProps` or `getStaticProps` returns
-the SVG as a prop, which avoids a client bundle hit.
+Generate the avatar in `getServerSideProps` or `getStaticProps` and pass it as a
+prop, so the library stays out of the client bundle. For client-side generation,
+use `useMemo` as in the [React guide](/integrations/javascript/react/).
 
 ```tsx
 // pages/profile.tsx

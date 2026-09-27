@@ -8,12 +8,20 @@ description: >
 
 # Filter avatar variants with tags
 
-Avatar styles can describe their variants with **tags**. A tag is a short label
-like `animation` or `hairLength:long` that says something about a variant.
+Avatar styles can describe their variants with tags, short labels like
+`hairLength:long` or `facialHair`. Tags never change the artwork. They let you
+narrow the pool of variants an avatar is drawn from, the same way in every style
+that carries them.
 
-Tags only describe, they never change the artwork. They let you narrow the pool
-of variants an avatar is drawn from, and they work the same way across every
-style that carries them.
+::: warning Not shipped yet
+
+No official style carries tags yet, so the filters on this page only affect
+custom styles for now. An upcoming release tags the character styles with mood,
+hair length, headwear, facial hair, eyewear, and accessory.
+[How DiceBear tags variants](/customize/tags/reference/) already defines these
+categories, so custom styles can adopt them today.
+
+:::
 
 ## Filter with the `tags` option
 
@@ -46,7 +54,7 @@ Each token narrows a component's pool of variants:
 | Token             | Effect                                                                                                                     |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `category:value`  | Keeps variants that carry this tag, plus variants with no tag in the category. Several values of one category act as "or". |
-| `category`        | Requires the category: drops variants that carry no tag in it. It binds only in components that use the category at all.   |
+| `category`        | Requires the category: drops variants that carry no tag in it.                                                             |
 | `!category:value` | Drops every variant that carries exactly this tag.                                                                         |
 | `!category`       | Drops every variant that carries any tag in the category.                                                                  |
 
@@ -73,26 +81,11 @@ nothing.
 
 :::
 
-## The tags DiceBear offers
-
-::: warning Not shipped yet
-
-The character categories are not set on any official style yet, so a filter like
-`mood:positive` or `hairLength:long` has no effect for now.
-
-:::
-
-An upcoming release adds a shared set for the character styles with mood, hair
-length, headwear, facial hair, eyewear, and accessory. The definitions already
-live in [How DiceBear tags variants](/customize/tags/reference/), so custom
-styles can adopt them today and stay compatible with the filter examples in the
-docs.
-
 ## Custom styles
 
-Tags are not limited to this list. A [custom style](/create-styles/with-figma/)
-can reuse these categories, add its own values, or define entirely different
-ones. The only rule is the grammar: a tag is `category` or `category:value`, and
-each segment is camelCase (for example `mouthExpression:smug` or
-`species:robot`). There is no fixed vocabulary a style has to follow, so pick
-the categories that describe your artwork.
+A [custom style](/create-styles/with-figma/) can reuse the
+[planned categories](/customize/tags/reference/), add its own values, or define
+entirely different ones. Reusing the planned ones keeps it compatible with the
+filter examples in these docs. The only rule is the grammar: a tag is `category`
+or `category:value`, and each segment is camelCase, for example
+`mouthExpression:smug` or `species:robot`.
