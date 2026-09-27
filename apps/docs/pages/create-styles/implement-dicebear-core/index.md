@@ -22,21 +22,25 @@ implementations for the same seed and style definition.
 ## Architecture overview
 
 ```text
-Avatar(definition, options)
+Style(definition)         Validate and parse the definition JSON once
+
+Avatar(style, options)
   │
-  ├── Style        Parse and validate the definition JSON
-  ├── Options      Resolve options using the PRNG
-  └── Renderer     Generate SVG from resolved style + options
-        │
-        ├── Prng          Deterministic random number generator
-        │   ├── Fnv1a     FNV-1a 32-bit hash
-        │   └── Mulberry32  Stateful PRNG
+  ├── Options      Read and normalize the user options
+  ├── Resolver     Turn options into concrete values
+  │     │
+  │     └── Prng          Deterministic random number generator
+  │           ├── Fnv1a       FNV-1a 32-bit hash
+  │           └── Mulberry32  Stateful PRNG
+  │
+  └── Renderer     Generate SVG from the style and the resolver
         │
         └── SVG output
 ```
 
-The core is intentionally minimal. It takes a
-[style definition](/create-styles/definition-schema/) and user options, resolves
+The core is intentionally minimal. A `Style` wraps a
+[style definition](/create-styles/definition-schema/) and can be reused for any
+number of avatars. An `Avatar` takes that style and the user options, resolves
 randomizable values through a deterministic PRNG, and renders an SVG string.
 
 ## Where to start
@@ -49,7 +53,7 @@ fixture pass before moving on. The fixtures are described in
 | ---- | ------------------------------------------------------ | -------------------------------------- | -------------------------------------------------------------------------------------------- |
 | 1    | `Fnv1a` and `Mulberry32`                               | `fnv1a.json`, `mulberry32.json`        | [PRNG contract](#prng-contract)                                                              |
 | 2    | The `Prng` methods and number formatting               | `prng.json`, `numbers.json`            | [Selection methods](#selection-methods), [Number formatting](#number-formatting)             |
-| 3    | `Style`: schema validation, aliases, animations        | `validation.json`                      | [Definition schema](/create-styles/definition-schema/), [Validation](#validation)            |
+| 3    | `Style`: schema validation, aliases, animations        | `validation.json`                      | [Definition schema](/create-styles/definition-schema/), [Loading a style](#loading-a-style)  |
 | 4    | The `Color` helpers                                    | `colors.json`                          | [Color options](#color-options)                                                              |
 | 5    | `Initials`                                             | `initials.json`                        | [Initials extraction](#initials-extraction)                                                  |
 | 6    | `Options`, `Resolver`, `Renderer`, `OptionsDescriptor` | `avatars/*.json`, `descriptors/*.json` | [Options resolution](#options-resolution), [SVG rendering pipeline](#svg-rendering-pipeline) |
@@ -308,10 +312,41 @@ Note: `shuffle` is the only method that uses a stateful PRNG instance directly
 (calling `nextFloat()` multiple times). All other methods call `getValue()`
 which creates a fresh PRNG for each key.
 
+## Loading a style
+
+`Style` checks a definition once, when it is constructed, and every avatar
+rendered from it relies on that. Three checks run:
+
+1. The definition must pass `definition.json` from the
+   [schema package](/create-styles/definition-schema/#schema-package), a JSON
+   Schema draft-07 document.
+2. Every component alias must point to a component in the same `components` map
+   that is not an alias itself. The schema cannot relate sibling keys, so this
+   check lives in the core.
+3. Every animation track must list its keyframes in strictly ascending `at`
+   order (see [Validation](#validation) under animation rendering).
+
+The user options pass `options.json` when the `Avatar` is constructed. Circular
+`contrastTo` or `notEqualTo` chains are not a load-time error. The resolver
+detects them while rendering (see [Color options](#color-options)). For all of
+these checks only the accept/reject outcome is part of the contract. Error
+messages are up to each language.
+
+Watch the regex engine behind your JSON Schema validator. An anchored pattern
+such as the one for hex colors has to match up to the very end of the input. In
+PCRE (used by PHP) and Python's `re`, `$` matches before a trailing newline as
+well, so a naive port accepts `"#00ff00\n"` or a component named `"eyes\n"`, and
+the newline ends up in the SVG. The `validation.json` fixture pins these cases.
+
+The JavaScript package also exports `@dicebear/core/lite`, which skips both
+schema validations. It is meant for definitions and options that come from your
+own code. The alias and keyframe checks still run there.
+
 ## Options resolution
 
-The `Options` class resolves raw user options into concrete values used by the
-renderer. Each resolution uses the PRNG with a specific key.
+The `Options` class reads the raw user options and normalizes them, and the
+`Resolver` turns them into the concrete values the renderer uses. Each
+resolution that involves chance uses the PRNG with a specific key.
 
 ### Core options
 
@@ -357,13 +392,13 @@ falls back to the default (**not** a range with a missing bound). A fixed range
 where `min === max` always samples that exact value.
 
 `tags` is read directly and parsed into tokens (see
-[Tag filtering](#tag-filtering)). `animation` is the one core option with a memo
-but no PRNG draw: whether an avatar moves must not depend on the seed. Both
-animation options are read only while rendering an element that carries
-`animations` (see [Animation rendering](#animation-rendering)), so the
-`resolvedOptions` snapshot of a static style never contains them, while an
-animated style records `animation: false` even when the user left the option
-unset.
+[Tag filtering](#tag-filtering)). `animation` is memoized but never drawn from
+the PRNG, because whether an avatar moves must not depend on the seed. The
+animation options are read only while rendering a node that carries `animations`
+(see [Animation rendering](#animation-rendering)). The `resolvedOptions`
+snapshot of a static style therefore never contains them. An animated style
+records `animation: false` even when the user left the option unset, as soon as
+one of its animated nodes renders.
 
 #### Switches and speeds per animation name
 
@@ -651,15 +686,31 @@ large, or fractional values. The `round` step rounds halves toward +Infinity
 equivalent (it is wrong for the largest double below `0.5`, where it yields `1`
 instead of `0`).
 
+### Seed hash
+
+Generated IDs (component bodies, the border-radius clip path, gradients) end in
+a `seedHash`: the FNV-1a hex hash, lowercased and zero-padded to 8 characters,
+of
+
+```text
+{meta.source.name or ''} + ':' + seed
+```
+
+The style's source name is part of the input because styles share component and
+variant names (`eyes`, `body`, …). Two avatars of different styles with the same
+seed would otherwise produce identical IDs and pick up each other's `<defs>`
+entries when inlined on one page. Compute the hash once per render and cache it.
+
 ### 1. Background
 
-The renderer unconditionally asks the resolver for the `background` color group:
-every style has it implicitly, even when the style definition declares no
-`background` group. If the resolved list is non-empty, emit a
-`<rect width="{w}" height="{h}" fill="{fill}"/>` as the first body element.
-`{fill}` is either a literal hex string (solid fill, or a single candidate
-color) or a `url(#…)` reference to a gradient registered in `<defs>`. See
-[Gradient rendering](#gradient-rendering).
+The renderer asks the resolver for the `background` color group before it walks
+the element tree. Every style has that group implicitly, even when the style
+definition declares no `background` group. If the resolved list is non-empty,
+emit a `<rect width="{w}" height="{h}" fill="{fill}"/>`. It becomes the first
+child of the border-radius clip group, ahead of the transformed elements (see
+[Transform order](#_3-transform-order)). `{fill}` is either a literal hex string
+(solid fill, or a single candidate color) or a `url(#…)` reference to a gradient
+registered in `<defs>`. See [Gradient rendering](#gradient-rendering).
 
 ### 2. Element tree
 
@@ -676,6 +727,14 @@ Walk the `canvas.elements` array recursively:
   the component is visible, emit a `<use>` element pointing at a `<defs>` entry
   that holds the variant body (see below).
 
+An `element` whose children all rendered to the empty string, typically because
+an optional component came up empty, renders to the empty string itself. A group
+without content draws nothing, and a masked group with an empty bounding box
+makes strict SVG parsers reject the whole document. Two exceptions keep the
+element: an `id` attribute, so references to it keep resolving, and an element
+that had no children in the definition to begin with, such as a `<circle>`.
+Pruning cascades, so a group that only held pruned groups disappears as well.
+
 An `element` or `component` node may also carry an `animations` array. When the
 `animation` option selects one of its timelines, the rendered markup (the
 element, or the `<use>` call site) is wrapped in animated `<g>` elements, see
@@ -684,10 +743,11 @@ element, or the `<use>` call site) is wrapped in animated `<g>` elements, see
 When an `element` has the name `defs`, the renderer **does not** emit a `<defs>`
 tag inline. Instead, each child is rendered and pushed into the shared `<defs>`
 block that the renderer accumulates over the whole walk (alongside generated
-gradients, clip paths, and component variant bodies). The map key is the child's
-`id` attribute when present, otherwise a synthetic `_{n}` slot, so two children
-with the same `id` collapse to one entry, last writer wins. This lets style
-definitions ship reusable fragments without breaking the
+gradients, clip paths, and component variant bodies). A child that renders to
+the empty string is skipped. The map key is the child's `id` attribute when
+present, otherwise a synthetic `_{n}` slot where `n` is the current number of
+entries, so two children with the same `id` collapse to one entry, last writer
+wins. This lets style definitions ship reusable fragments without breaking the
 single-`<defs>`-per-document invariant.
 
 #### Component rendering
@@ -703,31 +763,42 @@ A component reference is never inlined. The first time the renderer encounters a
    `<defs>` entry.
 3. At the call site, emits `<use {attributes} href="#{id}"/>` where
    `{attributes}` carries:
-   - Every attribute the style author wrote on the component reference itself
-     (rendered first, in iteration order).
+   - Every attribute the style author wrote on the component reference itself,
+     in iteration order.
    - A `transform` attribute composed of the per-component transforms (see
      [Per-component transforms](#per-component-transforms-render-time)). If the
      author also supplied a `transform`, it is **prepended** so it acts as the
      outermost (placement) transform, with the per-component values applied
-     inside it. If all per-component values are identity and the author did not
-     supply a transform, the attribute is omitted entirely.
+     inside it, and the combined value stays at the position of the authored
+     attribute. Otherwise the composed `transform` follows the authored
+     attributes. If all per-component values are identity, the authored
+     attributes are emitted unchanged, and without an authored transform the
+     attribute is omitted entirely.
 
-`seedHash` is the FNV-1a hex hash of the seed, lowercased and zero-padded to 8
-characters.
+`seedHash` is described in [Seed hash](#seed-hash). The variant body is rendered
+before the call site, so any `<defs>` entries it registers (gradients, authored
+defs, nested component bodies) come before its own `<g>` entry. A component
+whose variant resolves to nothing, because the probability check failed or the
+pool is empty, renders to the empty string.
 
 ### 3. Transform order
 
-The body (background plus rendered elements) is wrapped in nested `<g>`
-elements. The list below is **outermost → innermost**: the border-radius clip is
-always emitted, the others only when their value is non-identity.
+The rendered elements are wrapped in nested `<g>` elements. The list below is
+**outermost → innermost**: the border-radius clip is always emitted, the others
+only when their value is non-identity. The background `<rect>` sits inside the
+clip but outside the four transforms:
+
+```text
+<g clip-path="…">{background}<g translate><g rotate><g flip><g scale>{elements}</g></g></g></g></g>
+```
 
 1. **Border radius (always):** register a `<clipPath id="clip-{seedHash}">` in
    `<defs>` containing a `<rect width="{w}" height="{h}" rx="{rx}" ry="{ry}"/>`
    where `rx = (borderRadius / 100) * canvas.width` and
-   `ry = (borderRadius / 100) * canvas.height`. Wrap the body in
-   `<g clip-path="url(#clip-{seedHash})">`. **This wrap is emitted even when
-   `borderRadius` is `0`** (with `rx="0" ry="0"`) so that transformed content
-   cannot bleed past the canvas bounds.
+   `ry = (borderRadius / 100) * canvas.height`. Wrap the background and the
+   transformed elements in `<g clip-path="url(#clip-{seedHash})">`. **This wrap
+   is emitted even when `borderRadius` is `0`** (with `rx="0" ry="0"`) so that
+   transformed content cannot bleed past the canvas bounds.
 2. **Translate** (skip if both are `0`): `<g transform="translate(dx, dy)">`
    where `dx = (translateX / 100) * canvas.width` and
    `dy = (translateY / 100) * canvas.height`.
@@ -766,6 +837,10 @@ Its children, in this exact order:
 3. `<defs>`: the accumulated definitions (clip path, gradients, component
    variant bodies, and the animation `<style>` when any timeline played). Always
    present in practice because the border-radius clip is always registered.
+   Entries keep the order of their first registration: a background gradient
+   first, then everything the element walk registers, then the clip path, and
+   the animation `<style>` last. Registering an existing key again replaces its
+   content but keeps its position.
 4. `<title>`: only when the `title` option is set. Contents are escaped.
 5. The transformed body from the previous step.
 
@@ -839,8 +914,8 @@ When a gradient is needed:
    `${name}ColorAngle` is non-zero; omit the attribute entirely otherwise.
 5. Reference the gradient via `url(#{id})` in the fill attribute that asked for
    it.
-6. Gradient ID format: `{colorName}-color-{seedHash}` where `seedHash` is the
-   FNV-1a hex hash of the seed (8 chars, zero-padded, lowercased).
+6. Gradient ID format: `{colorName}-color-{seedHash}`, with the
+   [seed hash](#seed-hash) described above.
 
 ## Animation rendering
 
@@ -879,11 +954,16 @@ groups, so animations below a `mask` element pass.
 A timeline plays when the resolver's `animationPlays(name)` says so: the
 timeline's `${name}Animation` switch when the user set one, the global
 `animation` switch otherwise, and always the global switch for an unnamed
-timeline. No PRNG is involved. The global `animation` memo is touched the first
-time the renderer meets a node that carries `animations`, regardless of whether
-anything plays, so it is always part of `resolvedOptions` for an animated style.
-`animationSpeed`, `animationDelay`, and the per-name factors and offsets are
-only touched once a track is actually rendered.
+timeline. No PRNG is involved.
+
+The renderer reads a node's switches only once the node is known to render: an
+`element` after its children have rendered and it survived pruning, a
+`component` after its variant was picked and its body registered. At that point
+it touches the global `animation` memo, whether anything plays or not, and then
+asks `animationPlays` for each timeline in definition order. A node that renders
+to nothing records no switch, so `animation` lands in `resolvedOptions` as soon
+as one animated node renders. `animationSpeed`, `animationDelay`, and the
+per-name factors and offsets are only touched once a track is actually rendered.
 
 ### Wrappers
 
@@ -901,10 +981,11 @@ Then wrap the rendered markup, first collected class outermost:
 <g class="dba-{hash}-0"><g class="dba-{hash}-1">…markup…</g></g>
 ```
 
-Markup that rendered to the empty string is left alone: an `element` pruned for
-having no children takes its animations with it. For a `component` the wrappers
-go around the `<use>` call site, not around the variant body in `<defs>`, so two
-references to the same variant can animate differently.
+Markup that rendered to the empty string is left alone: an `element` pruned
+because its children rendered to nothing takes its animations with it (see
+[Element tree](#_2-element-tree)). For a `component` the wrappers go around the
+`<use>` call site, not around the variant body in `<defs>`, so two references to
+the same variant can animate differently.
 
 When the node has an `opacity` attribute and one of its active timelines has an
 `opacity` track, the attribute moves from the node to the innermost opacity
@@ -1061,8 +1142,10 @@ The `initial` and `initials` variables are derived from the seed via the
 6. **Multiple words?** Take the first grapheme of the first word and the first
    grapheme of the last word, uppercased.
 
-`initial` is `initials.charAt(0)`, the first code unit of the result, which
-matches the first letter for every input the regex produces.
+`initial` is the first code point of `initials`, or the empty string when there
+are no initials. Take the whole code point, not the first UTF-16 code unit: for
+a letter outside the Basic Multilingual Plane, `charAt(0)` would return a lone
+surrogate, which is ill-formed XML.
 
 ## Testing your implementation
 
@@ -1075,15 +1158,15 @@ gets the same coverage for free.
 
 The unit fixtures each pin one contract:
 
-| Fixture           | Pins                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fnv1a.json`      | The 32-bit hash and its 8-char hex form for ASCII input, the `seed:key` patterns produced by `Prng.getValue()`, and Unicode (`„é"`, `„日本語"`, emoji, long strings)                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `mulberry32.json` | The first 5 chained `{nextFloat, state}` pairs per seed, so state progression is checked, not only the first step                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `prng.json`       | Every `Prng` method (`getValue`, `pick`, `weightedPick`, `bool`, `float`, `integer`, `shuffle`) as `{seed, key, args, result}` cases, including order-independence checks for `pick`, `weightedPick`, and `shuffle`                                                                                                                                                                                                                                                                                                                                                                             |
-| `numbers.json`    | Number formatting: at most 5 decimal places, halves toward +Infinity, negative half-way boundaries, tiny values that collapse to `0`                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `initials.json`   | Seed-to-initials extraction with accents, quotes, email `@`-stripping, CJK, and emoji                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `colors.json`     | The `Color` helpers (`toHex`, `toRgbHex`, `parseHex`, `luminance`, `sortByContrast`, `filterNotEqualTo`). The luminance entries pin exact doubles, including values around the linearization threshold (see the warning above), and the sort cases include a stability check                                                                                                                                                                                                                                                                                                                    |
-| `validation.json` | Accept/reject outcomes for definitions and options (error _messages_ are language-specific and not part of the contract), circular `contrastTo` chains with their resolution path, tag tokens that break the grammar (uppercase segments, a third segment, a double `!`), animation blocks with unordered or duplicate keyframes or unknown tracks, `animation` given a name or a list, `${name}Animation` given a string or an uppercase name, and `animationSpeed`, `${name}AnimationSpeed`, `animationDelay`, and `${name}AnimationDelay` out of range, with too many bounds, or non-numeric |
+| Fixture           | Pins                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fnv1a.json`      | The 32-bit hash and its 8-char hex form for ASCII input, the `seed:key` patterns produced by `Prng.getValue()`, and Unicode (`„é"`, `„日本語"`, emoji, long strings)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `mulberry32.json` | The first 5 chained `{nextFloat, state}` pairs per seed, so state progression is checked, not only the first step                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `prng.json`       | Every `Prng` method (`getValue`, `pick`, `weightedPick`, `bool`, `float`, `integer`, `shuffle`) as `{seed, key, args, result}` cases, including order-independence checks for `pick`, `weightedPick`, and `shuffle`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `numbers.json`    | Number formatting: at most 5 decimal places, halves toward +Infinity, negative half-way boundaries, tiny values that collapse to `0`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `initials.json`   | Seed-to-initials extraction with accents, quotes, email `@`-stripping, CJK, and emoji                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `colors.json`     | The `Color` helpers (`toHex`, `toRgbHex`, `parseHex`, `luminance`, `sortByContrast`, `filterNotEqualTo`). The luminance entries pin exact doubles, including values around the linearization threshold (see the warning above), and the sort cases include a stability check                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `validation.json` | Accept/reject outcomes for definitions and options (error _messages_ are language-specific and not part of the contract), circular `contrastTo` chains with their resolution path, tag tokens that break the grammar (uppercase segments, a third segment, a double `!`), values and option names with a trailing newline, the injection filter behind every kind of Unicode space, animation blocks with unordered or duplicate keyframes or unknown tracks, animations below `defs`, `clipPath`, and `mask` and on a `<style>` element, `animation` given a name or a list, `${name}Animation` given a string or an uppercase name, and `animationSpeed`, `${name}AnimationSpeed`, `animationDelay`, and `${name}AnimationDelay` out of range, with too many bounds, or non-numeric |
 
 The remaining fixtures come in threes, one set per style. `styles/{name}.json`
 is a vendored copy of the definition. `avatars/{name}.json` holds
@@ -1142,15 +1225,15 @@ Only then move on to the avatar fixtures, which compose everything.
 The `resolvedOptions` field on each avatar fixture contains only the options
 that were actually touched during resolution: unset options (`title`, `size`
 when not provided, etc.) do not appear. The JavaScript reference relies on
-`JSON.stringify()` dropping `undefined` values at the serialization boundary;
-the PHP reference filters `null` values explicitly in `Options::resolved()`, and
-the Python reference does the same in `Resolver.resolved()`. All produce the
-same shape. A port that returns the full memo map verbatim will fail the
-comparison. Strip unset entries before serializing. Key order is not part of the
-contract, but a port that compares ordered output should know that the reference
-touches the memo in render order: the switches as nodes are met, then for the
-animation hash the id suffix and the named timelines in code unit order, where a
-playing name without its own factor reads the global speed.
+`JSON.stringify()` dropping `undefined` values at the serialization boundary.
+The PHP and Python references filter `null` and `None` values explicitly in
+`Resolver::resolved()` and `Resolver.resolved()`. All produce the same shape. A
+port that returns the full memo map verbatim will fail the comparison. Strip
+unset entries before serializing. Key order is not part of the contract, but a
+port that compares ordered output should know that the reference touches the
+memo in render order: the switches as nodes render, then for the animation hash
+the id suffix and the named timelines in code unit order, where a playing name
+without its own factor reads the global speed.
 
 ### Regenerating the fixtures
 

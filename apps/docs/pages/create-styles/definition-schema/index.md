@@ -2,22 +2,24 @@
 title: Definition Schema Reference
 description: >
   Complete reference for the DiceBear avatar style definition schema. Learn how
-  style definitions are structured with canvas, components, colors, and
-  metadata.
+  style definitions are structured with canvas, components, colors, animations,
+  and metadata.
 ---
 
 # Definition schema reference
 
 Every DiceBear avatar style is a JSON file that follows the
 [DiceBear Definition Schema](https://github.com/dicebear/schema). This page
-documents the complete structure of a style definition.
+documents the complete structure of a style definition as of schema version
+2.0.2, the version DiceBear 11 uses.
 
 ## Overview
 
 A style definition describes everything needed to generate an avatar: the canvas
-size, the SVG elements to render, the components that can be randomized, and the
-color palettes available. The definition is purely declarative: no code, no
-functions. The rendering logic lives in the DiceBear Core implementation.
+size, the SVG elements to render, the components that can be randomized, the
+color palettes available, and optional animations. The definition is purely
+declarative: no code, no functions. The rendering logic lives in the DiceBear
+Core implementation.
 
 ## Top-level structure
 
@@ -44,6 +46,9 @@ functions. The rendering logic lives in the DiceBear Core implementation.
 | `components` | No       | Named, randomizable SVG components (up to 512 entries)                                      |
 | `colors`     | No       | Named color palettes for dynamic coloring (up to 512 entries)                               |
 | `attributes` | No       | Global SVG attributes for the root `<svg>` element                                          |
+
+Names of components, variants, colors, and animations are camelCase: a lowercase
+letter first, then letters and digits, up to 64 characters.
 
 ## `meta`
 
@@ -90,8 +95,8 @@ determine the `viewBox` of the generated SVG.
 
 | Property   | Type   | Required | Description                                      |
 | ---------- | ------ | -------- | ------------------------------------------------ |
-| `width`    | number | **Yes**  | Canvas width in pixels (>= 1)                    |
-| `height`   | number | **Yes**  | Canvas height in pixels (>= 1)                   |
+| `width`    | number | **Yes**  | Canvas width in pixels (1 to 1,000,000)          |
+| `height`   | number | **Yes**  | Canvas height in pixels (1 to 1,000,000)         |
 | `elements` | array  | **Yes**  | Root element tree (up to 1024 top-level entries) |
 
 ## Elements
@@ -124,7 +129,8 @@ are allowed (e.g. `circle`, `path`, `g`, `rect`, `text`, `defs`, `filter`,
 
 A node may have at most 1024 children. The element with `name: "defs"` has
 special semantics (see [Reusable `<defs>` entries](#reusable-defs-entries)
-below).
+below). An element may also carry an `animations` array (see
+[Animations](#animations)).
 
 ### `text`: text content
 
@@ -180,6 +186,9 @@ A user-supplied `transform` is prepended to the per-component
 rotate/translate/scale picked by the renderer, so it acts as the outer
 (placement) transform.
 
+A component reference may carry `animations` as well. They move the placed
+instance, so two references to the same component can animate differently.
+
 ### The `<style>` element
 
 `<style>` is supported but is a special case. Its CSS body must be supplied as
@@ -199,8 +208,9 @@ holding generic elements:
 }
 ```
 
-A `<style>` element may hold at most 64 text children. The CSS body is sanitized
-more strictly than ordinary attribute values:
+A `<style>` element may hold at most 64 text children and cannot carry
+`animations`. The CSS body is sanitized more strictly than ordinary attribute
+values:
 
 - Known-dangerous `@`-rules (`@import`, `@font-face`, `@document`, `@charset`)
   are rejected. Other at-rules (`@media`, `@keyframes`, `@supports`, `@layer`,
@@ -215,6 +225,12 @@ shared `filteredString` injection filter):
 - `javascript:` and `vbscript:` URI schemes
 - Backslash escape sequences
 
+The filter also catches these tokens with whitespace before the colon or the
+parenthesis, and a remote URL with whitespace after `url(`. Whitespace here
+means space, tab, line feed, form feed, and carriage return, the characters a
+URL or CSS parser skips at these spots. The schema spells them out instead of
+using `\s`, because regex engines disagree on what `\s` covers.
+
 This is a defense-in-depth filter, not a CSS validator: substring matches reject
 otherwise-harmless strings that happen to contain a blocked token (e.g. the
 literal word `javascript:` in plain text).
@@ -228,12 +244,154 @@ clip paths, and component bodies. This keeps the rendered SVG to a single
 `<defs>` element while letting style authors ship reusable fragments (filters,
 gradients, masks, …) and reference them from elsewhere in the tree.
 
-Elements below `defs` and below `clipPath` cannot carry `animations`, and
-neither can elements no group can wrap: `stop`, `tspan`, `textPath`, `mpath` and
-the filter primitives. The schema rejects such definitions. A `<use>` clones
-only the node it references, so an animation on the def would never reach the
-instance. Animate the `<use>` element instead. Elements below `mask` may carry
-animations.
+Nothing below `defs` may carry `animations`. Animate the `<use>` element that
+references the def instead (see
+[Where animations are allowed](#where-animations-are-allowed)).
+
+## Animations
+
+An `element` or a `component` reference may carry an `animations` array with one
+to eight timelines. Each timeline moves the node through keyframes, one track
+per animated property. Renderers turn the timelines into CSS inside the SVG, but
+only when the user switches them on with the `animation` option or a per-name
+switch (see [Core options](/customize/options/)). Otherwise the output stays
+static, and so does every raster conversion.
+
+```json
+{
+  "type": "component",
+  "name": "eyes",
+  "animations": [
+    {
+      "name": "blink",
+      "duration": 4,
+      "tracks": {
+        "scaleY": {
+          "keyframes": [
+            { "at": 90, "value": 1, "easing": "easeIn" },
+            { "at": 95, "value": 0.1, "easing": "easeOut" },
+            { "at": 100, "value": 1 }
+          ]
+        }
+      }
+    },
+    {
+      "duration": 3,
+      "direction": "alternate",
+      "easing": "easeInOut",
+      "tracks": {
+        "translateY": {
+          "keyframes": [
+            { "at": 0, "value": 0 },
+            { "at": 100, "value": -2 }
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
+The first timeline is named `blink`. The eyes stay open for 90 % of each
+four-second cycle, then close and open again within the last 10 %. The second
+timeline has no name and lets the eyes drift up and back down.
+
+### Timelines
+
+| Property     | Type                   | Description                                                                                                                                           |
+| ------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`       | string                 | Optional. Groups the timeline under the per-name options, see [Animation names](#animation-names)                                                     |
+| `duration`   | number                 | **Required.** Length of one iteration in seconds, above 0 and up to 3600                                                                              |
+| `delay`      | number                 | Optional. Start delay in seconds, -3600 to 3600 (default `0`). A negative value starts the timeline mid-cycle                                         |
+| `iterations` | number or `"infinite"` | Optional. How often the timeline runs, above 0 and up to 10,000 (default `"infinite"`)                                                                |
+| `direction`  | string                 | Optional. `normal`, `reverse`, `alternate`, or `alternateReverse`, as in CSS `animation-direction` (default `normal`)                                 |
+| `fill`       | string                 | Optional. `forwards` keeps the last keyframe's value after a finite run, `none` returns to the resting state (default `none`)                         |
+| `easing`     | easing                 | Optional. Easing for every segment whose keyframe sets none (default `linear`), see [Easing](#easing)                                                 |
+| `origin`     | object                 | Optional. `{ x, y }` pivot for `rotate`, `scaleX`, and `scaleY` in percent of the node's bounding box, -1000 to 1000 (default `{ "x": 50, "y": 50 }`) |
+| `tracks`     | object                 | **Required.** One or more of the tracks below                                                                                                         |
+
+The renderer applies these defaults. The schema only checks the ranges.
+
+### Tracks
+
+| Track        | Keyframe value                                                                                                  |
+| ------------ | --------------------------------------------------------------------------------------------------------------- |
+| `translateX` | Horizontal offset from the resting position in user units. Positive values move right                           |
+| `translateY` | Vertical offset from the resting position in user units. Positive values move down                              |
+| `rotate`     | Degrees around `origin`, added to the resting transform. Positive values turn clockwise, `360` is one full turn |
+| `scaleX`     | Horizontal scale factor around `origin`. `1` is the resting size                                                |
+| `scaleY`     | Vertical scale factor around `origin`. `1` is the resting size                                                  |
+| `opacity`    | Opacity of the node                                                                                             |
+
+Tracks compose in a fixed order: translation outside rotation, rotation outside
+scale, and opacity innermost. The order of the keys in `tracks` makes no
+difference.
+
+When the node has an `opacity` attribute, an `opacity` track replaces that value
+while it plays instead of multiplying with it. A part with `opacity="0"`
+therefore stays hidden in static output and appears only through its animation.
+
+### Keyframes
+
+Each track holds 1 to 64 keyframes:
+
+| Property | Type   | Description                                                                                            |
+| -------- | ------ | ------------------------------------------------------------------------------------------------------ |
+| `at`     | number | **Required.** Position on the timeline in percent of `duration`, 0 to 100                              |
+| `value`  | number | **Required.** Value of the track at this position, -36000 to 36000                                     |
+| `easing` | easing | Optional. Shapes the segment from this keyframe to the next one. Falls back to the timeline's `easing` |
+
+List the keyframes in strictly ascending `at` order. JSON Schema cannot express
+that rule, so the renderer checks it when it loads the definition and rejects
+unordered or duplicate positions. For an instant jump, give the keyframe before
+it the `hold` easing instead of placing two keyframes at the same position.
+
+When the first keyframe of a track sits after 0 % or the last one before 100 %,
+the renderer pads the ends with a copy of the nearest keyframe. The value then
+holds outside the keyframed span. The `blink` example above relies on this to
+keep the eyes open until 90 %.
+
+### Easing
+
+An easing is a keyword or a cubic Bézier curve:
+
+- `linear`, `ease`, `easeIn`, `easeOut`, and `easeInOut` match the CSS timing
+  functions `linear`, `ease`, `ease-in`, `ease-out`, and `ease-in-out`.
+- `hold` keeps the value until the next keyframe and then jumps (CSS
+  `step-end`).
+- `{ "x1": 0.3, "y1": 0, "x2": 0.2, "y2": 1.4 }` is a CSS `cubic-bezier()`. `x1`
+  and `x2` stay within 0 to 1. `y1` and `y2` may range from -4 to 4, which
+  allows curves that overshoot.
+
+### Animation names
+
+A name ties timelines to user options. For timelines named `blink`,
+`blinkAnimation` switches them on or off, `blinkAnimationSpeed` sets their
+speed, and `blinkAnimationDelay` their start offset. Each of these wins over the
+global `animation`, `animationSpeed`, and `animationDelay` option for that name.
+Several timelines may share one name, for example one per eye, and are then
+switched together. A timeline without a name follows the global options only.
+[Core options](/customize/options/) lists the values these options take.
+
+### Where animations are allowed
+
+The renderer plays a timeline by wrapping the node in a `<g>` element. Some
+places cannot take that wrapper, so the schema rejects `animations` there:
+
+- Anywhere below `defs` or `clipPath`. A `<use>` clones only the node it
+  references, so an animation on a def never reaches the instance. A `<g>` is
+  not valid clip path content either. Animate the `<use>` element instead.
+- On elements a group cannot wrap: `stop`, `tspan`, `textPath`, `mpath`, and the
+  filter primitives (`feBlend`, `feGaussianBlur`, and the other `fe*` elements).
+- On the `<style>` element.
+
+Elements below `mask` may carry animations.
+
+### Animations in CSS
+
+A `<style>` element with `@keyframes` rules remains valid. The renderer passes
+that CSS through as written: the `animation` option does not switch it, and the
+reduced-motion media query around declarative animations does not cover it.
 
 ## `components`
 
@@ -270,8 +428,8 @@ variants that the PRNG can choose from.
 
 | Property      | Type   | Description                                                                                                                   |
 | ------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `width`       | number | **Required.** Component canvas width in pixels (>= 1)                                                                         |
-| `height`      | number | **Required.** Component canvas height in pixels (>= 1)                                                                        |
+| `width`       | number | **Required.** Component canvas width in pixels (1 to 1,000,000)                                                               |
+| `height`      | number | **Required.** Component canvas height in pixels (1 to 1,000,000)                                                              |
 | `probability` | number | Optional. Chance the component appears, 0 to 100 (default `100`)                                                              |
 | `rotate`      | object | Optional. Rotation range, see [Ranges](#ranges)                                                                               |
 | `scale`       | object | Optional. Scale range around the component's center, see [Ranges](#ranges)                                                    |
@@ -280,7 +438,7 @@ variants that the PRNG can choose from.
 
 `translate.x` and `translate.y` are expressed as percentages of the component's
 own `width` and `height`. A value of `100` shifts the component by its full
-width or height; `0` leaves it in place. The example above
+width or height, `0` leaves it in place. The example above
 (`y: { min: -5, max: 5 }`) therefore means "shift the component vertically by up
 to 5 % of its height in either direction".
 
@@ -335,27 +493,66 @@ right earrings) and have each occurrence pick its own variant.
 
 An alias is a strict reference: `extends` is its **only** allowed property. It
 must point to a base component (not another alias) defined in the same
-`components` map. Width, height, probability, rotate, scale, translate, and
-variants are inherited from the source. Aliases do not expose their own
-`${aliasName}Variant` or `${aliasName}Probability` user options. Both are shared
-with the source via `${sourceName}Variant` and `${sourceName}Probability`. The
-renderer still rolls the PRNG independently per alias, so each occurrence picks
-its own variant within the shared constraints. See
+`components` map. The schema cannot check that reference, so the renderer
+rejects an unknown target or an alias chain when it loads the definition. Width,
+height, probability, rotate, scale, translate, and variants are inherited from
+the source. Aliases do not expose their own `${aliasName}Variant` or
+`${aliasName}Probability` user options. Both are shared with the source via
+`${sourceName}Variant` and `${sourceName}Probability`. The renderer still rolls
+the PRNG independently per alias, so each occurrence picks its own variant
+within the shared constraints. See
 [the implementation guide](/create-styles/implement-dicebear-core/#component-options)
 for details.
 
 ### Variants
 
-Each variant contains an element tree and an optional weight:
+Each variant contains an element tree, an optional weight, and optional tags:
 
-| Property   | Type   | Default | Description                                                  |
-| ---------- | ------ | ------- | ------------------------------------------------------------ |
-| `elements` | array  | —       | **Required.** SVG element tree for this variant (up to 1024) |
-| `weight`   | number | `1`     | Selection weight for the PRNG (0 to 1,000,000)               |
+| Property   | Type     | Default | Description                                                                     |
+| ---------- | -------- | ------- | ------------------------------------------------------------------------------- |
+| `elements` | array    | —       | **Required.** SVG element tree for this variant (up to 1024)                    |
+| `weight`   | number   | `1`     | Selection weight for the PRNG (0 to 1,000,000)                                  |
+| `tags`     | string[] | —       | Tags the `tags` option filters by (up to 32), see [Variant tags](#variant-tags) |
 
-Higher weights make a variant more likely to be selected. A weight of `0`
-excludes the variant entirely, unless every variant has weight `0`, in which
-case the PRNG falls back to an unweighted pick across all of them.
+Higher weights make a variant more likely to be selected. A weight of `0` keeps
+the variant out of the random pick. It is drawn only when every variant left in
+the pool has weight `0`, for example after the `tags` option narrowed the pool
+to such variants. The PRNG then falls back to an unweighted pick among them. A
+user-set `${name}Variant` option brings its own weights (`1` for each named
+variant unless the option maps names to weights), so it can select a weight-`0`
+variant directly.
+
+### Variant tags
+
+Tags describe what a variant shows, so users can filter the variant pool with
+the [`tags` option](/customize/tags/):
+
+```json
+{
+  "variants": {
+    "shoulderLength": {
+      "tags": ["hairLength:long"],
+      "elements": [...]
+    },
+    "cropWithCap": {
+      "tags": ["hairLength:short", "headwear:cap"],
+      "elements": [...]
+    }
+  }
+}
+```
+
+A tag is a `category` or a `category:value` token, and each segment is
+camelCase. A variant may carry up to 32 tags, each at most once. Without the
+`tags` option the tags have no effect on the avatar.
+
+A `category:value` tag also counts for its whole category, so `!headwear` drops
+the `cropWithCap` variant above. Set a bare `category` tag only when no value
+fits the variant.
+
+The categories planned for DiceBear's own styles are listed in
+[How DiceBear tags variants](/customize/tags/reference/), and a custom style is
+free to add its own.
 
 ## `colors`
 
@@ -397,11 +594,11 @@ useful for ensuring text readability.
 
 **`notEqualTo`** filters out colors that were already selected for the
 referenced color groups. This prevents adjacent parts from having the same
-color. Comparison is done on the RGB hex (alpha stripped); if the filter would
+color. Comparison is done on the RGB hex (alpha stripped). If the filter would
 leave the candidate list empty, the renderer falls back to the unfiltered list.
 
-The schema does not detect cycles (`a` ⇄ `b` constraints). Renderers resolve
-palettes in definition order and throw at render time when a cycle is detected.
+The schema does not detect cycles (`a` ⇄ `b` constraints). Renderers throw at
+render time when they run into one.
 
 ## Color references in attributes
 
@@ -463,7 +660,7 @@ Global SVG presentation attributes applied to the root `<svg>` element.
 }
 ```
 
-Only safe SVG presentation attributes are allowed; event handlers (`onclick`, …)
+Only safe SVG presentation attributes are allowed. Event handlers (`onclick`, …)
 and namespaced attributes (`xlink:href`, …) are rejected. See the
 [schema source](https://github.com/dicebear/schema/blob/main/src/definition.json)
 for the complete whitelist.
@@ -482,7 +679,7 @@ A complete but minimal definition that renders a colored circle:
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/definition.min.json",
   "canvas": {
     "width": 100,
     "height": 100,
@@ -559,23 +756,23 @@ ship two files (both JSON Schema **draft-07**):
 
 Install via your package manager:
 
-| Ecosystem | Install                              |
-| --------- | ------------------------------------ |
-| npm       | `npm install @dicebear/schema`       |
-| Composer  | `composer require dicebear/schema`   |
-| PyPI      | `pip install dicebear-schema`        |
-| Cargo     | `cargo add dicebear-schema`          |
-| Go        | `go get github.com/dicebear/schema`  |
-| pub.dev   | `dart pub add dicebear_schema`       |
-| NuGet     | `dotnet add package DiceBear.Schema` |
+| Ecosystem | Install                                |
+| --------- | -------------------------------------- |
+| npm       | `npm install @dicebear/schema`         |
+| Composer  | `composer require dicebear/schema`     |
+| PyPI      | `pip install dicebear-schema`          |
+| Cargo     | `cargo add dicebear-schema`            |
+| Go        | `go get github.com/dicebear/schema/v2` |
+| pub.dev   | `dart pub add dicebear_schema`         |
+| NuGet     | `dotnet add package DiceBear.Schema`   |
 
 Or reference the schema directly from a CDN, handy for the `$schema` field of
 your style definition so editors like VS Code provide autocomplete and inline
 validation:
 
 ```http
-https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/definition.min.json
-https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/options.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/definition.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/options.min.json
 ```
 
 The vendored style definitions shipped by DiceBear live in a separate package:

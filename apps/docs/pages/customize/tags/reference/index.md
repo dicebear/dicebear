@@ -23,7 +23,8 @@ A few principles keep the tags consistent:
 - A tag is added only when the trait is clear. An ambiguous or purely decorative
   variant is left untagged rather than guessed. Where a category has a bare
   form, as `headwear` does, the bare tag is still set and only the value is left
-  off.
+  off. A variant with a clear value carries the value tag alone, since it
+  already counts for the whole category.
 - Most variants carry no tag or one tag. A few carry two, such as hair with a
   visible hat.
 - Variant tags only add information, they never remove a variant on their own.
@@ -83,8 +84,9 @@ when the length is actually visible.
 
 When the hair is gathered or pinned up so the length cannot be read, such as a
 bun or a top-knot, the length is left off. A ponytail or pigtails with a visible
-hanging tail still gets a length. A variant that is really headwear gets a
-`headwear` tag, and a variant showing both hair and a hat may carry both.
+hanging tail still gets a length. A variant that is really headwear gets a tag
+in the `headwear` category, and a variant showing both hair and a hat may carry
+both.
 
 The cut and the texture of the hair carry no tags. Whether hair reads as wavy or
 curly is a judgment call that would come out differently from one style to the
@@ -93,9 +95,10 @@ haircut. For a specific hairstyle, set the style's own hair variant option.
 
 ### Headwear
 
-The `headwear` category covers anything worn on the head. Every such variant
-carries at least the bare `headwear` tag, so `!headwear` removes all of them. A
-value comes on top of it when the shape is unmistakable:
+The `headwear` category covers anything worn on the head. When the shape is
+unmistakable, the variant carries one of the values below. When it is not, the
+variant carries the bare `headwear` tag instead. A value already counts for the
+whole category, so `!headwear` removes every headwear variant either way:
 
 - `hat` for a crown with a brim all the way around, such as a sun hat or a
   fedora.

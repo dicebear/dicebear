@@ -47,7 +47,7 @@ A minimal style definition with a colored circle:
 Save this as `my-style.json` and test it:
 
 ```sh
-dicebear ./my-style.json ./output --count 5
+dicebear create ./my-style.json -o ./output --count 5
 ```
 
 The PRNG picks a different background color for each seed.
@@ -238,6 +238,25 @@ full reference.
 Set `min === max` for a fixed value, or add `"step": <n>` to quantize the range
 to discrete buckets.
 
+### Variant tags
+
+Tags describe what a variant shows. Users can then narrow the pool with the
+[`tags` option](/customize/tags/), for example to leave out all headwear:
+
+```json
+{
+  "variants": {
+    "glasses": { "tags": ["eyewear:glasses"], "elements": [...] },
+    "hat": { "tags": ["headwear:hat"], "elements": [...] }
+  }
+}
+```
+
+A tag is `category` or `category:value`, both parts camelCase. Reusing the
+categories from [How DiceBear tags variants](/customize/tags/reference/) keeps
+your style in line with the filter examples in these docs. See
+[Variant tags](/create-styles/definition-schema/#variant-tags) for the rules.
+
 ## Color palettes
 
 Colors can be referenced from element attributes. The PRNG picks a value from
@@ -284,6 +303,49 @@ example above, `hair` will never be the same color as `skin`.
 referenced color group. This is useful for ensuring text is readable against a
 background.
 
+## Animations
+
+An element or a component reference can carry `animations`. This one lets the
+mouth bob up and down every two seconds:
+
+```json
+{
+  "type": "component",
+  "name": "mouth",
+  "animations": [
+    {
+      "name": "talk",
+      "duration": 2,
+      "easing": "easeInOut",
+      "tracks": {
+        "translateY": {
+          "keyframes": [
+            { "at": 0, "value": 0 },
+            { "at": 50, "value": 2 },
+            { "at": 100, "value": 0 }
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
+A timeline has a `duration` in seconds and one track per animated property:
+`translateX`, `translateY`, `rotate`, `scaleX`, `scaleY`, or `opacity`. Each
+keyframe sets a `value` at a position `at`, in percent of the duration.
+
+Animations stay off until the user turns them on with `animation: true`, or with
+`talkAnimation: true` for the timelines named `talk`. Without that the SVG is
+static. Test it with the CLI:
+
+```sh
+dicebear create ./my-style.json --seed "Alice" --animation -o ./alice.svg
+```
+
+The [animation reference](/create-styles/definition-schema/#animations) covers
+delays, easing, pivots, and where animations are allowed.
+
 ## Metadata
 
 Add metadata to your definition for license attribution:
@@ -321,7 +383,7 @@ Add the `$schema` property to enable validation in your editor:
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/definition.min.json",
   "canvas": { ... }
 }
 ```
@@ -334,8 +396,8 @@ validation for your definition file.
 ### With the CLI
 
 ```sh
-dicebear ./my-style.json ./output --count 10
-dicebear ./my-style.json ./output --seed "Alice" --format png
+dicebear create ./my-style.json -o ./output --count 10
+dicebear create ./my-style.json --seed "Alice" -o ./alice.png
 ```
 
 ### With the JS Library
