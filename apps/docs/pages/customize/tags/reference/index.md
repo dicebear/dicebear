@@ -21,9 +21,9 @@ A few principles keep the tags consistent:
   use the `!` form of the [`tags` option](/customize/tags/).
 - A tag is added only when the trait is clear. An ambiguous or purely decorative
   variant stays untagged rather than guessed. Where a category has a bare form,
-  as `headwear` does, a variant whose value is unclear still gets the bare tag.
-  A variant with a clear value carries the value tag alone, since it already
-  counts for the whole category.
+  as `headwear` and `accessory` do, a variant whose value is unclear still gets
+  the bare tag. A variant with a clear value carries the value tag alone, since
+  it already counts for the whole category.
 - Most variants carry no tag or one tag. A few carry two, such as hair with a
   visible hat.
 
@@ -93,6 +93,10 @@ unmistakable shape carries one of the values below, any other one the bare
   the shoulders.
 - `headband` for a band alone, with the hair still visible.
 
+Decorations worn in the hair, such as flowers, bows, pins, or a scrunchie, get
+the bare tag as well. If the decoration belongs to a hair variant, `!headwear`
+leaves out that hairstyle too.
+
 The values name the shape of the garment, not the person wearing it. That is why
 the two wrapped forms are told apart by the neck, and why the tag says
 `headscarf` rather than naming a particular garment: the drawing shows cloth,
@@ -115,14 +119,17 @@ facial hair variant option.
 
 ### Eyewear
 
-The `eyewear` category covers glasses.
+The `eyewear` category covers glasses and eye patches.
 
 - `glasses` for clear lenses or spectacles.
 - `sunglasses` for filled or dark lenses.
+- `eyepatch` for a patch over one eye.
 
 ### Accessory
 
-The `accessory` category covers worn extras.
+The `accessory` category covers worn extras. Ear jewelry and masks carry one of
+the values below, any other worn extra the bare `accessory` tag, such as a clown
+nose, a pacifier, or a collar. Either way, `!accessory` removes it:
 
 - `earrings` for ear jewelry.
 - `mask` for a face covering worn over the mouth or face, such as a medical
