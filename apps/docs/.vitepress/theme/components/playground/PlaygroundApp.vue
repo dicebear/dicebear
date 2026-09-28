@@ -231,6 +231,17 @@ function onDrop(event: DragEvent) {
 const exportDialog = ref<InstanceType<typeof PlaygroundButtonExport>>();
 const importDialog = ref<InstanceType<typeof PlaygroundButtonImport>>();
 const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
+const toolbar = ref<InstanceType<typeof PlaygroundToolbar>>();
+
+// The button under the simple view's options goes away with that view, so
+// the focus moves to the view menu, as it does after a pick there.
+async function showAdvanced() {
+  store.setMode('advanced', 'panel');
+
+  await nextTick();
+
+  toolbar.value?.focusView();
+}
 </script>
 
 <template>
@@ -243,6 +254,7 @@ const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
     @drop="onDrop"
   >
     <PlaygroundToolbar
+      ref="toolbar"
       @export="exportDialog?.show()"
       @import="importDialog?.show()"
     />
@@ -277,6 +289,7 @@ const howToUse = ref<InstanceType<typeof PlaygroundButtonHowToUse>>();
         :actions="!phone"
         class="pg-app-inspector"
         @how-to-use="howToUse?.show()"
+        @advanced="showAdvanced"
       />
       <PlaygroundInspector
         v-else-if="!editor && !phone"

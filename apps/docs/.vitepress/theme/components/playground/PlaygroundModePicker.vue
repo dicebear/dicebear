@@ -104,6 +104,8 @@ function onKeydown(event: KeyboardEvent, index: number) {
   event.preventDefault();
   items.value.find((item) => Number(item.dataset.index) === target)?.focus();
 }
+
+defineExpose({ focus: () => trigger.value?.focus() });
 </script>
 
 <template>

@@ -81,10 +81,14 @@ export default defineStore('playground', () => {
   const mode = useLocalStorage<PlaygroundMode>(MODE_KEY, 'simple');
 
   /**
-   * Switches the view. The menu in the toolbar does it, and so can a link,
-   * and the event says which of the two it was.
+   * Switches the view. The menu in the toolbar does it, and so can a link
+   * or the button under the options of the simple view. The event says
+   * which of the three it was.
    */
-  function setMode(next: PlaygroundMode, via: 'menu' | 'link' = 'menu') {
+  function setMode(
+    next: PlaygroundMode,
+    via: 'menu' | 'link' | 'panel' = 'menu',
+  ) {
     if (mode.value === next) return;
 
     mode.value = next;

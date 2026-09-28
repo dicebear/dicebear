@@ -2,7 +2,8 @@
 /**
  * The column of the simple view: the style's looks as tiles, a row of
  * background colors and the shape of the corners. Every other option is in
- * the advanced view, which the view menu opens. On a phone the same content
+ * the advanced view. The view menu opens it, and because the menu is easy
+ * to miss, so does a button under the options. On a phone the same content
  * sits under the picture.
  */
 import { computed, inject } from 'vue';
@@ -19,6 +20,7 @@ import {
 } from '@theme/composables/usePlaygroundShape';
 import SiteSegmented from '../site/SiteSegmented.vue';
 import PlaygroundActions from './PlaygroundActions.vue';
+import PlaygroundModeSketch from './PlaygroundModeSketch.vue';
 import PlaygroundThumb from './PlaygroundThumb.vue';
 
 withDefaults(
@@ -32,6 +34,7 @@ withDefaults(
 
 const emit = defineEmits<{
   'how-to-use': [];
+  advanced: [];
 }>();
 
 const injected = inject(playgroundEntriesKey);
@@ -239,6 +242,24 @@ const shape = usePlaygroundShape();
           fluid
         />
       </section>
+
+      <section class="pg-simple-section">
+        <div class="pg-simple-head">
+          <h2 class="pg-simple-title">More options</h2>
+          <p class="pg-help">
+            In the Advanced view you also set probabilities, weights, color
+            lists and animation.
+          </p>
+        </div>
+        <button
+          type="button"
+          class="site-btn site-btn-secondary pg-simple-more"
+          @click="emit('advanced')"
+        >
+          <PlaygroundModeSketch mode="advanced" class="pg-simple-more-sketch" />
+          Switch to Advanced
+        </button>
+      </section>
     </div>
 
     <div v-if="actions" class="pg-simple-actions">
@@ -276,6 +297,13 @@ const shape = usePlaygroundShape();
     line-height: 24px;
     font-weight: 600;
     color: var(--db-ink);
+  }
+
+  /* A title with a sentence under it. */
+  &-head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   /* Five across, so a style's dozen looks take three rows and the shape
@@ -374,6 +402,20 @@ const shape = usePlaygroundShape();
     border: 0;
     opacity: 0;
     cursor: pointer;
+  }
+
+  /* Drawn like the view field in the toolbar, with the sketch of the view
+     it leads to. It keeps its own width, which sets it apart from the
+     actions under it. */
+  &-more {
+    align-self: flex-start;
+    gap: 10px;
+    padding-left: 6px;
+
+    &-sketch {
+      width: 36px;
+      height: 24px;
+    }
   }
 
   /* Fixed under the options, as in the inspector of the advanced view. */

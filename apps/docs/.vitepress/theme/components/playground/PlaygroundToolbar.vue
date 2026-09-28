@@ -5,7 +5,7 @@
  * option files at the right edge of the picture, and the menu of views over
  * the right column. On a phone the menu moves next to the style.
  */
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useMediaQuery } from '@vueuse/core';
 import {
   Ellipsis,
@@ -62,6 +62,10 @@ const menuItems = computed<SiteMenuItem[]>(() => [
       ] satisfies SiteMenuItem[])
     : []),
 ]);
+
+const modePicker = ref<InstanceType<typeof PlaygroundModePicker> | null>(null);
+
+defineExpose({ focusView: () => modePicker.value?.focus() });
 </script>
 
 <template>
@@ -126,7 +130,7 @@ const menuItems = computed<SiteMenuItem[]>(() => [
         </div>
 
         <div class="pg-toolbar-right">
-          <PlaygroundModePicker class="pg-toolbar-view" />
+          <PlaygroundModePicker ref="modePicker" class="pg-toolbar-view" />
         </div>
       </div>
     </div>
