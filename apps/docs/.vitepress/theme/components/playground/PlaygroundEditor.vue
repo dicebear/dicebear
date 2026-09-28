@@ -4,7 +4,8 @@
  * the parts and the colors, a tab picks one of them, and every tile shows the
  * whole avatar with one choice. A tile pins that one option, everything else
  * stays with the seed. Colors are options of their own and not tied to a
- * part, since one color can paint several parts.
+ * part, since one color can paint several parts. Tabs of parts and colors
+ * the avatar does not show are greyed out.
  */
 import { computed, inject, nextTick, reactive, ref, watch } from 'vue';
 import {
@@ -98,6 +99,33 @@ const tabs = computed(() =>
   activeGroup.value === 'parts' ? parts.value : colors.value,
 );
 
+// The options the avatar takes as it stands. A part nothing draws, or a
+// color no drawn part wears, would show the same avatar on every tile, so
+// its tab is greyed out. A part its probability leaves out still counts,
+// since a tile brings it back.
+const used = computedAsync<Set<string> | null>(async () => {
+  const styleName = store.avatarStyleName;
+  const options = clonePlain({
+    ...store.avatarStyleOptionsWithoutDefaults,
+    seed: store.seed,
+  });
+
+  try {
+    const style = await loadAvatarStyle(styleName);
+
+    return new Set(Object.keys(new Avatar(style, options).toJSON().options));
+  } catch {
+    return null;
+  }
+}, null);
+
+function isUnused(tab: Tab): boolean {
+  const key =
+    tab.kind === 'component' ? `${tab.info.name}Variant` : tab.info.key;
+
+  return used.value !== null && !used.value.has(key);
+}
+
 // The tabs run in the order of the advanced list, which is the alphabet.
 // Until someone picks one, the part with the most variants is open, and the
 // color of the same name when there is one. That is the hair more often than
@@ -114,19 +142,28 @@ const richestPart = computed(() =>
   ),
 );
 
+// A greyed out tab is never the open one. When the open tab greys out, as
+// after a new seed, the default of its group takes over until it comes
+// back.
 const fallback = computed<Tab | undefined>(() => {
-  if (activeGroup.value === 'parts') return richestPart.value;
-
   const name = richestPart.value?.info.name;
+  const preferred =
+    activeGroup.value === 'parts'
+      ? richestPart.value
+      : colors.value.find((tab) => tab.info.name === name);
 
-  return colors.value.find((tab) => tab.info.name === name) ?? colors.value[0];
+  return preferred && !isUnused(preferred)
+    ? preferred
+    : tabs.value.find((tab) => !isUnused(tab));
 });
 
-const current = computed<Tab | undefined>(
-  () =>
-    tabs.value.find((tab) => tab.id === chosen.value[activeGroup.value]) ??
-    fallback.value,
-);
+const current = computed<Tab | undefined>(() => {
+  const picked = tabs.value.find(
+    (tab) => tab.id === chosen.value[activeGroup.value],
+  );
+
+  return picked && !isUnused(picked) ? picked : fallback.value;
+});
 
 function choose(tab: Tab) {
   chosen.value[activeGroup.value] = tab.id;
@@ -177,26 +214,31 @@ watch(
   { immediate: true },
 );
 
+// The arrow keys pass over greyed out tabs.
 function onTabKeydown(event: KeyboardEvent, index: number) {
-  const last = tabs.value.length - 1;
+  const open = tabs.value.flatMap((tab, i) => (isUnused(tab) ? [] : [i]));
+  const position = open.indexOf(index);
+  const last = open.length - 1;
   let target: number;
 
   switch (event.key) {
     case 'ArrowRight':
-      target = index === last ? 0 : index + 1;
+      target = open[position >= last ? 0 : position + 1];
       break;
     case 'ArrowLeft':
-      target = index === 0 ? last : index - 1;
+      target = open[position <= 0 ? last : position - 1];
       break;
     case 'Home':
-      target = 0;
+      target = open[0];
       break;
     case 'End':
-      target = last;
+      target = open[last];
       break;
     default:
       return;
   }
+
+  if (target === undefined) return;
 
   event.preventDefault();
   choose(tabs.value[target]);
@@ -445,6 +487,7 @@ function onOwnColor(event: Event) {
           class="pg-editor-tab"
           :aria-selected="tab.id === current?.id"
           :tabindex="tab.id === current?.id ? 0 : -1"
+          :disabled="isUnused(tab)"
           :data-index="index"
           :data-id="tab.id"
           @click="choose(tab)"
@@ -575,8 +618,15 @@ function onOwnColor(event: Event) {
     white-space: nowrap;
     cursor: pointer;
 
-    &:hover {
+    &:hover:not(:disabled) {
       color: var(--db-ink);
+    }
+
+    /* A part or color the avatar does not show, like the disabled
+       controls of the site. */
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     &[aria-selected='true'] {
