@@ -6,8 +6,13 @@
  * stays with the seed. Colors are options of their own and not tied to a
  * part, since one color can paint several parts.
  */
-import { computed, inject, nextTick, ref, watch } from 'vue';
-import { computedAsync, useDebounceFn } from '@vueuse/core';
+import { computed, inject, nextTick, reactive, ref, watch } from 'vue';
+import {
+  computedAsync,
+  useDebounceFn,
+  useEventListener,
+  useResizeObserver,
+} from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Avatar } from '@dicebear/core';
 import useStore from '@theme/stores/playground';
@@ -130,8 +135,26 @@ function choose(tab: Tab) {
 const tabButtons = ref<HTMLButtonElement[]>([]);
 const tabList = ref<HTMLElement | null>(null);
 
+// Where the strip runs on past an edge, that edge fades out, so a phone
+// shows there are more parts than fit.
+const cut = reactive({ start: false, end: false });
+
+function measureCut() {
+  const list = tabList.value;
+
+  if (!list) return;
+
+  cut.start = list.scrollLeft > 1;
+  cut.end = list.scrollLeft + list.clientWidth < list.scrollWidth - 1;
+}
+
+useEventListener(tabList, 'scroll', measureCut, { passive: true });
+useResizeObserver(tabList, measureCut);
+watch(tabs, () => nextTick(measureCut));
+
 // The open tab stays in view when the strip scrolls sideways, as it does on
-// a phone, where the hair would otherwise start out of sight.
+// a phone, where the hair would otherwise start out of sight. It moves to
+// the middle, so the tabs on both sides of it show.
 watch(
   () => current.value?.id,
   async (id) => {
@@ -146,8 +169,10 @@ watch(
     const end = start + tab.offsetWidth;
 
     if (start < list.scrollLeft || end > list.scrollLeft + list.clientWidth) {
-      list.scrollLeft = start - 8;
+      list.scrollLeft = start - (list.clientWidth - tab.offsetWidth) / 2;
     }
+
+    measureCut();
   },
   { immediate: true },
 );
@@ -407,6 +432,7 @@ function onOwnColor(event: Event) {
       <div
         ref="tabList"
         class="pg-editor-tabs"
+        :class="{ 'is-cut-start': cut.start, 'is-cut-end': cut.end }"
         role="tablist"
         :aria-label="activeGroup === 'parts' ? 'Parts' : 'Colors'"
       >
@@ -503,6 +529,9 @@ function onOwnColor(event: Event) {
 
   /* The tabs scroll sideways when a style has more than fit. */
   &-tabs {
+    --pg-tabs-fade-start: 0px;
+    --pg-tabs-fade-end: 0px;
+
     position: relative;
     display: flex;
     flex: 1;
@@ -510,9 +539,24 @@ function onOwnColor(event: Event) {
     min-width: 0;
     overflow-x: auto;
     scrollbar-width: none;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--pg-tabs-fade-start),
+      #000 calc(100% - var(--pg-tabs-fade-end)),
+      transparent
+    );
 
     &::-webkit-scrollbar {
       display: none;
+    }
+
+    &.is-cut-start {
+      --pg-tabs-fade-start: 32px;
+    }
+
+    &.is-cut-end {
+      --pg-tabs-fade-end: 32px;
     }
   }
 

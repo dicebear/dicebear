@@ -28,8 +28,8 @@ const emit = defineEmits<{
 
 const store = useStore();
 
-// A phone's bar has no room for the reset button, which moves into the
-// menu there.
+// A phone's bar has no room for redo and reset, which move into the menu
+// there, above the option files. Undo stays in the bar.
 const phone = useMediaQuery('(max-width: 767px)');
 
 function onReset() {
@@ -42,7 +42,7 @@ const hasChanges = computed(
   () => Object.keys(store.avatarStyleOptionsWithoutDefaults).length > 0,
 );
 
-const menuItems = computed<SiteMenuItem[]>(() => [
+const fileItems: SiteMenuItem[] = [
   {
     label: 'Export options',
     hint: 'JSON file',
@@ -50,18 +50,28 @@ const menuItems = computed<SiteMenuItem[]>(() => [
     command: () => emit('export'),
   },
   { label: 'Import options', icon: FileUp, command: () => emit('import') },
-  ...(phone.value
-    ? ([
-        { separator: true },
+];
+
+const menuItems = computed<SiteMenuItem[]>(() =>
+  phone.value
+    ? [
+        {
+          label: 'Redo',
+          icon: Redo2,
+          command: () => store.redo(),
+          disabled: !store.canRedo,
+        },
         {
           label: 'Reset everything',
           icon: RotateCcw,
           command: onReset,
           disabled: !hasChanges.value,
         },
-      ] satisfies SiteMenuItem[])
-    : []),
-]);
+        { separator: true },
+        ...fileItems,
+      ]
+    : fileItems,
+);
 
 const modePicker = ref<InstanceType<typeof PlaygroundModePicker> | null>(null);
 
@@ -90,7 +100,7 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
           </button>
           <button
             type="button"
-            class="site-btn site-btn-ghost site-btn-icon"
+            class="site-btn site-btn-ghost site-btn-icon pg-toolbar-wide"
             aria-label="Redo"
             data-tip="Redo"
             data-tip-side="bottom"
@@ -233,7 +243,7 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
   }
 
   /* One row on a phone: the style across the width, the view as a small
-     button next to it, then undo, redo and the menu. */
+     button next to it, then undo and the menu. */
   @media (max-width: 767px) {
     &-grid {
       gap: 4px;

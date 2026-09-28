@@ -86,13 +86,14 @@
 }
 
 /* Tooltip for icon buttons. The button carries aria-label for assistive
-   technology and data-tip for the visible hint. */
+   technology and data-tip for the visible hint. A button whose menu is open
+   shows none, or the tip would peek out from under the menu. */
 [data-tip] {
   position: relative;
 }
 
-[data-tip]:hover::after,
-[data-tip]:focus-visible::after {
+[data-tip]:not([aria-expanded='true']):hover::after,
+[data-tip]:not([aria-expanded='true']):focus-visible::after {
   content: attr(data-tip);
   position: absolute;
   z-index: 30;

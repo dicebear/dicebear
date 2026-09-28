@@ -272,6 +272,7 @@ async function showAdvanced() {
         :editor="editor"
         :status="!phone"
         :compact="phoneAdvanced"
+        :seed-hint="simple"
         class="pg-app-stage"
       >
         <template v-if="editor" #controls>

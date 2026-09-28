@@ -3,12 +3,12 @@
  * The column of the simple view: the style's looks as tiles, a row of
  * background colors and the shape of the corners. Every other option is in
  * the advanced view. The view menu opens it, and because the menu is easy
- * to miss, so does a button under the options. On a phone the same content
+ * to miss, so does a row after the options. On a phone the same content
  * sits under the picture.
  */
 import { computed, inject } from 'vue';
 import { storeToRefs } from 'pinia';
-import { Plus } from '@lucide/vue';
+import { ChevronRight, Plus } from '@lucide/vue';
 import useStore from '@theme/stores/playground';
 import {
   playgroundEntriesKey,
@@ -244,20 +244,26 @@ const shape = usePlaygroundShape();
       </section>
 
       <section class="pg-simple-section">
-        <div class="pg-simple-head">
-          <h2 class="pg-simple-title">More options</h2>
-          <p class="pg-help">
-            In the Advanced view you also set probabilities, weights, color
-            lists and animation.
-          </p>
-        </div>
+        <h2 class="pg-simple-title">More options</h2>
         <button
           type="button"
-          class="site-btn site-btn-secondary pg-simple-more"
+          class="pg-simple-more"
+          aria-label="Switch to Advanced"
+          aria-describedby="pg-simple-more-note"
           @click="emit('advanced')"
         >
           <PlaygroundModeSketch mode="advanced" class="pg-simple-more-sketch" />
-          Switch to Advanced
+          <span class="pg-simple-more-text">
+            <span class="pg-simple-more-name">Switch to Advanced</span>
+            <span id="pg-simple-more-note" class="pg-simple-more-note">
+              Weights, color lists and animation
+            </span>
+          </span>
+          <ChevronRight
+            :size="16"
+            aria-hidden="true"
+            class="pg-simple-more-chevron"
+          />
         </button>
       </section>
     </div>
@@ -269,6 +275,8 @@ const shape = usePlaygroundShape();
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/control' as c;
+
 .pg-simple {
   display: flex;
   flex-direction: column;
@@ -297,13 +305,6 @@ const shape = usePlaygroundShape();
     line-height: 24px;
     font-weight: 600;
     color: var(--db-ink);
-  }
-
-  /* A title with a sentence under it. */
-  &-head {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
   }
 
   /* Five across, so a style's dozen looks take three rows and the shape
@@ -345,19 +346,22 @@ const shape = usePlaygroundShape();
     }
   }
 
+  /* One row, however narrow the column: the fields give up a few pixels
+     rather than leave one of them alone on a second line. */
   &-swatches {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
   }
 
   &-swatch {
     position: relative;
     display: flex;
+    flex: 0 1 32px;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    min-width: 0;
+    aspect-ratio: 1;
     padding: 0;
     box-sizing: border-box;
     border: 1px solid var(--db-field-border);
@@ -404,17 +408,57 @@ const shape = usePlaygroundShape();
     cursor: pointer;
   }
 
-  /* Drawn like the view field in the toolbar, with the sketch of the view
-     it leads to. It keeps its own width, which sets it apart from the
-     actions under it. */
+  /* The way to the advanced view, drawn as a field of the set like the view
+     field in the toolbar: the sketch of the view it leads to, its name and
+     what it adds. That keeps it with the options and apart from the
+     actions. */
   &-more {
-    align-self: flex-start;
-    gap: 10px;
-    padding-left: 6px;
+    @include c.control;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 60px;
+    padding: 8px 12px 8px 10px;
+    border-radius: var(--db-radius-2);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--db-brand);
+      outline-offset: 2px;
+    }
 
     &-sketch {
       width: 36px;
       height: 24px;
+    }
+
+    &-text {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    &-name {
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    &-note {
+      font-size: 13px;
+      line-height: 18px;
+      color: var(--db-muted);
+    }
+
+    &-chevron {
+      flex-shrink: 0;
+      color: var(--db-muted);
     }
   }
 

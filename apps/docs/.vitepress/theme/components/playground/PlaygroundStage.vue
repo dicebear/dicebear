@@ -3,18 +3,24 @@
  * The middle of the playground: the avatar on a dotted ground, the same
  * options on other seeds below it, and the status line with the license and
  * the legal links. The avatar itself takes no clicks or hovers. A phone
- * shows the status line above its actions instead.
+ * shows the status line above its actions instead. On the first visit to
+ * the simple view, a note beside the seed says what a seed does.
  *
  * The editor view puts its own row under the avatar in place of the seed and
  * its tray between the ground and the status line. The ground then keeps to
  * its content, and the avatar grows with the height of the window.
  */
 import { computed, ref } from 'vue';
-import { computedAsync } from '@vueuse/core';
+import {
+  computedAsync,
+  useLocalStorage,
+  useResizeObserver,
+} from '@vueuse/core';
 import { Avatar } from '@dicebear/core';
 import { clonePlain, loadAvatarStyle } from '@theme/utils/avatar/style';
 import useStore from '@theme/stores/playground';
 import PlaygroundSeedField from './PlaygroundSeedField.vue';
+import PlaygroundSeedHint from './PlaygroundSeedHint.vue';
 import PlaygroundStatus from './PlaygroundStatus.vue';
 
 const props = withDefaults(
@@ -24,8 +30,10 @@ const props = withDefaults(
     status?: boolean;
     /** A smaller avatar, for a phone that shows the options under it. */
     compact?: boolean;
+    /** Explain the seed once, beside the field, where there is room. */
+    seedHint?: boolean;
   }>(),
-  { editor: false, status: true, compact: false },
+  { editor: false, status: true, compact: false, seedHint: false },
 );
 
 const store = useStore();
@@ -78,14 +86,46 @@ const otherSeeds = computed(
     OTHER_SEEDS.map((seed) => ({ seed, src: undefined })),
 );
 
+// The seed hint shows once. It goes when dismissed or as soon as the seed
+// is touched, and only where it fits beside the field without covering the
+// avatar: a laptop or larger in the simple view.
+const seedHintSeen = useLocalStorage('dicebear-playground-seed-hint', false);
+
+const ground = ref<HTMLElement | null>(null);
+const seedAnchor = ref<HTMLElement | null>(null);
+const seedHintRoom = ref(0);
+
+function measureSeedHintRoom() {
+  if (!ground.value || !seedAnchor.value) return;
+
+  seedHintRoom.value =
+    ground.value.getBoundingClientRect().right -
+    seedAnchor.value.getBoundingClientRect().right;
+}
+
+useResizeObserver(ground, measureSeedHintRoom);
+useResizeObserver(seedAnchor, measureSeedHintRoom);
+
+// 12 pixels for the arrow on the left, 12 to the edge of the ground.
+const seedHintWidth = computed(() => Math.min(260, seedHintRoom.value - 24));
+
+const seedHintShown = computed(
+  () => props.seedHint && !seedHintSeen.value && seedHintWidth.value >= 200,
+);
+
+function dismissSeedHint() {
+  seedHintSeen.value = true;
+}
+
 function pickSeed(seed: string) {
   store.seed = seed;
+  dismissSeedHint();
 }
 </script>
 
 <template>
   <div class="pg-stage" :class="{ 'is-editor': editor, 'is-compact': compact }">
-    <div class="pg-stage-ground">
+    <div ref="ground" class="pg-stage-ground">
       <div class="pg-stage-picture">
         <div
           v-if="rendered"
@@ -101,7 +141,17 @@ function pickSeed(seed: string) {
       </div>
 
       <slot name="controls">
-        <PlaygroundSeedField class="pg-stage-seed-field" />
+        <div ref="seedAnchor" class="pg-stage-seed-anchor">
+          <PlaygroundSeedField
+            @pointerdown="dismissSeedHint"
+            @input="dismissSeedHint"
+          />
+          <PlaygroundSeedHint
+            v-if="seedHintShown"
+            :style="{ width: `${seedHintWidth}px` }"
+            @dismiss="dismissSeedHint"
+          />
+        </div>
 
         <div class="pg-stage-seeds">
           <div class="pg-stage-seeds-row">
@@ -180,8 +230,10 @@ function pickSeed(seed: string) {
     color: var(--db-muted);
   }
 
-  /* The seed field is as wide as the picture and sits right under it. */
-  & &-seed-field {
+  /* The seed field is as wide as the picture and sits right under it. The
+     seed hint hangs off its right edge. */
+  &-seed-anchor {
+    position: relative;
     width: min(100%, 52vh, 480px);
   }
 
@@ -239,7 +291,7 @@ function pickSeed(seed: string) {
     }
 
     &-picture,
-    & &-seed-field {
+    &-seed-anchor {
       width: min(100%, 280px);
     }
 

@@ -100,6 +100,7 @@ const triggerOptions = { seed: exampleSeeds[0] };
         surface="tile"
       />
     </span>
+    <span class="pg-style-field-label">Style</span>
     <span class="pg-style-field-name">{{ currentName }}</span>
     <ChevronDown :size="16" aria-hidden="true" class="pg-style-field-chevron" />
   </button>
@@ -130,7 +131,8 @@ const triggerOptions = { seed: exampleSeeds[0] };
 <style scoped lang="scss">
 @use '../../styles/control' as c;
 
-/* The field in the toolbar: the picture and the name of the style. */
+/* The field in the toolbar: the picture, the word Style and the name of the
+   style, the same order as the view field on the other end of the bar. */
 .pg-style-field {
   @include c.control;
   @include c.control-size(md);
@@ -156,6 +158,24 @@ const triggerOptions = { seed: exampleSeeds[0] };
 
     :deep(.pg-thumb) {
       border-radius: var(--db-radius-1);
+    }
+  }
+
+  &-label {
+    flex-shrink: 0;
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 500;
+    color: var(--db-muted);
+
+    /* A phone's bar has no room for the word. Screen readers still get it. */
+    @media (max-width: 767px) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      white-space: nowrap;
+      clip-path: inset(50%);
     }
   }
 

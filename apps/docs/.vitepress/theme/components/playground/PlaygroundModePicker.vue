@@ -4,7 +4,8 @@
  * draws the view's layout and says who it is for: the editor for a person
  * designing their own avatar, Simple and Advanced for developers who set up
  * avatars from seeds. A menu rather than a row of segments works on touch
- * and fits the phone's bar. On a phone the button keeps only the drawing.
+ * and fits the phone's bar. On a phone the button keeps only the name of
+ * the view, which says more than the drawing at that size.
  */
 import { computed, nextTick, ref } from 'vue';
 import { useMediaQuery } from '@vueuse/core';
@@ -120,11 +121,14 @@ defineExpose({ focus: () => trigger.value?.focus() });
     :aria-expanded="open"
     @click="onTrigger"
   >
-    <PlaygroundModeSketch :mode="current.value" class="pg-mode-field-sketch" />
     <template v-if="!compact">
+      <PlaygroundModeSketch
+        :mode="current.value"
+        class="pg-mode-field-sketch"
+      />
       <span class="pg-mode-field-label">View</span>
-      <span class="pg-mode-field-name">{{ current.label }}</span>
     </template>
+    <span class="pg-mode-field-name">{{ current.label }}</span>
     <ChevronDown :size="16" aria-hidden="true" class="pg-mode-field-chevron" />
   </button>
 
@@ -209,7 +213,7 @@ defineExpose({ focus: () => trigger.value?.focus() });
 
   &.is-compact {
     gap: 6px;
-    padding: 0 8px 0 6px;
+    padding: 0 8px 0 12px;
   }
 }
 
