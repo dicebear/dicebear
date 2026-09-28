@@ -129,9 +129,7 @@ Separate array values with commas. Here the seed picks from five hairstyles of
 The [`tags`](/customize/tags/) filter is an array too. Prefix a tag with `!` to
 exclude it:
 
-```http
-https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,!facialHair
-```
+<BrowserPreview url="https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,!facialHair" />
 
 ### Enum options
 
@@ -141,28 +139,30 @@ Enum values are passed as strings. For example, `flip` accepts `none`,
 <BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg?flip=horizontal" />
 <BrowserPreview url="https://api.dicebear.com/11.x/lorelei/svg?flip=none" />
 
+### Weighted options
+
+Options marked `weighted` in `options.json` also take weights that make some
+variants rarer than others. Put the weight after each value, separated by a
+colon. Variants missing from the list are left out. Here one in five
+[critters](/styles/critters/) has a single eye:
+
+<BrowserPreview url="https://api.dicebear.com/11.x/critters/svg?seed=Jane&eyesVariant=round:4,mono:1" />
+<BrowserPreview url="https://api.dicebear.com/11.x/critters/svg?seed=Jack&eyesVariant=round:4,mono:1" />
+
 ### Animations
 
-Styles that carry animations play them once you set `animation=true`, and
-`animationSpeed` sets the pace. Only the SVG format moves. The raster formats
-render the resting state.
+Styles that carry animations play them once you set `animation=true`.
+`animationSpeed` sets the pace, and `animationDelay` shifts the start by
+seconds. A range such as `animationDelay=0,5` gives every seed its own start, so
+avatars side by side don't move in step. Only the SVG format moves. The raster
+formats render the resting state.
 
-```http
-https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true
-https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationSpeed=2
-```
+<BrowserPreview url="https://api.dicebear.com/11.x/critters/svg?seed=Jane&animation=true" />
 
 Every animation also has a switch, a speed, and a delay named after it, and each
-wins over the global option. `animationDelay` shifts the start by seconds. As a
-range, it gives every seed its own start, so avatars side by side don't move in
-step:
+wins over the global option. Here only the eyes blink:
 
-```http
-https://api.dicebear.com/11.x/planets/svg?seed=John&orbitAnimation=true
-https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&twinkleAnimation=false
-https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&orbitAnimationSpeed=0.5,1
-https://api.dicebear.com/11.x/planets/svg?seed=John&animation=true&animationDelay=0,5
-```
+<BrowserPreview url="https://api.dicebear.com/11.x/critters/svg?seed=Jane&blinkAnimation=true" />
 
 The `11.x` line is the first one with animations. On `10.x` the option is
 accepted and ignored. The [core options](/customize/options/) list all animation

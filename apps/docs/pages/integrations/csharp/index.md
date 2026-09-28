@@ -170,18 +170,19 @@ foreach (var seed in new[] { "alice", "bob", "charlie" })
 
 ### Weighted variant selection
 
-A weight map makes some variants more likely than others. Here lorelei picks
-`happy01` or `happy02` mouths twice as often as `sad01`:
+A weight map makes some variants more likely than others. Here one in five
+[critters](/styles/critters/) has a single eye:
 
 ```csharp
+var style = Style.Parse(Styles.Critters);
+
 var avatar = new Avatar(style, new JsonObject
 {
     ["seed"] = "Alice",
-    ["mouthVariant"] = new JsonObject
+    ["eyesVariant"] = new JsonObject
     {
-        ["happy01"] = 2,
-        ["happy02"] = 2,
-        ["sad01"] = 1,
+        ["round"] = 4,
+        ["mono"] = 1,
     },
 });
 ```

@@ -138,12 +138,14 @@ for _, seed := range []string{"alice", "bob", "charlie"} {
 
 ### Weighted variant selection
 
-A weight map makes some variants more likely than others. Here lorelei picks
-`happy01` or `happy02` mouths twice as often as `sad01`:
+A weight map makes some variants more likely than others. Here one in five
+[critters](/styles/critters/) has a single eye:
 
 ```go
+style, _ := dicebear.NewStyle([]byte(styles.Critters))
+
 avatar, _ := dicebear.NewAvatar(style, map[string]any{
-	"seed":         "Alice",
-	"mouthVariant": map[string]any{"happy01": 2, "happy02": 2, "sad01": 1},
+	"seed":        "Alice",
+	"eyesVariant": map[string]any{"round": 4, "mono": 1},
 })
 ```

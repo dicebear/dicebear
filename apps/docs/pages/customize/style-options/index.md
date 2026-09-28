@@ -118,7 +118,7 @@ a `type` and further properties depending on the type:
 
 - `list` means the option also accepts an array of values.
 - `weighted` means an enum option also accepts a map of weights, such as
-  `{ happy01: 2, sad01: 1 }`.
+  `{ round: 4, mono: 1 }`.
 - `contrastTo` names the color group this group is contrasted against, so a UI
   can show that the renderer picks this color for contrast rather than at
   random.

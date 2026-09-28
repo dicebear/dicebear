@@ -119,12 +119,15 @@ let avatars: Vec<String> = ["alice", "bob", "charlie"]
 
 ### Weighted variant selection
 
-A weight map makes some variants more likely than others. Here lorelei picks
-`happy01` or `happy02` mouths twice as often as `sad01`:
+A weight map makes some variants more likely than others. Here one in five
+[critters](/styles/critters/) has a single eye:
 
 ```rust
+// cargo add dicebear-styles --features critters
+let style = Style::from_str(dicebear_styles::CRITTERS)?;
+
 let avatar = Avatar::new(&style, json!({
     "seed": "Alice",
-    "mouthVariant": { "happy01": 2, "happy02": 2, "sad01": 1 },
+    "eyesVariant": { "round": 4, "mono": 1 },
 }))?;
 ```

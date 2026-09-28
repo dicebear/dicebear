@@ -133,13 +133,16 @@ it.
 ### Weighted variant selection
 
 A weight map makes some variants more likely than others. Variants missing from
-the map are left out. Here lorelei picks `happy01` or `happy02` mouths twice as
-often as `sad01`:
+the map are left out. Here one in five [critters](/styles/critters/) has a
+single eye:
 
 ```js
+import critters from '@dicebear/styles/critters.json' with { type: 'json' };
+
+const style = new Style(critters);
 const avatar = new Avatar(style, {
   seed: 'John',
-  mouthVariant: { happy01: 2, happy02: 2, sad01: 1 },
+  eyesVariant: { round: 4, mono: 1 },
 });
 ```
 

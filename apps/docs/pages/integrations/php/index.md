@@ -120,12 +120,14 @@ $avatars = array_map(function (string $user) use ($style) {
 
 ### Weighted variant selection
 
-A weight map makes some variants more likely than others. Here lorelei picks
-`happy01` or `happy02` mouths twice as often as `sad01`:
+A weight map makes some variants more likely than others. Here one in five
+[critters](/styles/critters/) has a single eye:
 
 ```php
+$style = Style::fromJson(file_get_contents($basePath . '/src/critters.json'));
+
 $avatar = new Avatar($style, [
   'seed' => 'Alice',
-  'mouthVariant' => ['happy01' => 2, 'happy02' => 2, 'sad01' => 1],
+  'eyesVariant' => ['round' => 4, 'mono' => 1],
 ]);
 ```

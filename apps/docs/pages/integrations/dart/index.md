@@ -129,12 +129,16 @@ for (final seed in ['alice', 'bob', 'charlie']) {
 
 ### Weighted variant selection
 
-A weight map makes some variants more likely than others. Here lorelei picks
-`happy01` or `happy02` mouths twice as often as `sad01`:
+A weight map makes some variants more likely than others. Here one in five
+[critters](/styles/critters/) has a single eye:
 
 ```dart
+import 'package:dicebear_styles/critters.dart';
+
+final style = Style.parse(critters);
+
 final avatar = Avatar(style, {
   'seed': 'Alice',
-  'mouthVariant': {'happy01': 2, 'happy02': 2, 'sad01': 1},
+  'eyesVariant': {'round': 4, 'mono': 1},
 });
 ```
