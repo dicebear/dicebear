@@ -10,7 +10,7 @@ description: >
 [DiceBear Studio](https://www.figma.com/community/plugin/1005765655729342787),
 our plugin for Figma, is the easiest way to create an avatar style for DiceBear.
 
-This guide covers its Style tab and assumes basic
+This guide covers its Build tab and assumes basic
 [Figma](https://www.figma.com/) knowledge. The
 [plugin overview](/integrations/figma/) covers the other tabs.
 
@@ -87,13 +87,13 @@ plugin. The quickest way is the Actions search in the toolbar.
 
 ![The Actions search in Figma with "dicebear studio" typed in](/create-styles/with-figma/7.webp)
 
-The plugin opens on the tab you used last. Switch to the Style tab in the rail
+The plugin opens on the tab you used last. Switch to the Build tab in the rail
 on the left. With your frame selected, the tab shows the settings of your style:
 the title, the license, and one entry per component group and color group.
 Everything you change here is saved on your frame, so it is there again the next
 time you open the plugin.
 
-![The Style tab of the plugin with the General settings of the frame](/create-styles/with-figma/8.webp)
+![The Build tab of the plugin with the General settings of the frame](/create-styles/with-figma/8.webp)
 
 Every component group has four tabs. Settings holds the probability with which
 the component appears at all, and the ranges for rotation, translation and scale

@@ -15,7 +15,7 @@ import StudioSame from './StudioSame.vue';
 import type { StudioFeature } from './types';
 
 interface StudioChapterData {
-  id: 'generate' | 'inspect' | 'style';
+  id: 'generate' | 'inspect' | 'build';
   title: string;
   lead: string;
   features: StudioFeature[];
@@ -53,8 +53,8 @@ const chapters: StudioChapterData[] = [
     ],
   },
   {
-    id: 'style',
-    title: 'Style',
+    id: 'build',
+    title: 'Build',
     lead: 'For the people who draw avatar styles. The tab turns a Figma frame of components and color styles into a DiceBear style, and any style back into a Figma file.',
     features: [
       {
@@ -62,7 +62,7 @@ const chapters: StudioChapterData[] = [
         text: 'Export turns a square frame of component instances, one component per variant with color styles for the palettes, into a single JSON definition for DiceBear 11.x, animations included. Import goes the other way and rebuilds a definition in an empty Figma file, with one component per variant, the palettes as color styles, a guide next to the avatar frame and a page with the credits.',
         shot: {
           name: 'style-frame',
-          alt: 'The Style tab with the Lorelei frame selected: the frame settings and the eleven components in the sidebar, the settings of the eyes component, and the Export definition button',
+          alt: 'The Build tab with the Lorelei frame selected: the frame settings and the eleven components in the sidebar, the settings of the eyes component, and the Export definition button',
         },
         links: [
           {

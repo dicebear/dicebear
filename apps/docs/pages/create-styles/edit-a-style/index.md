@@ -37,12 +37,12 @@ components with group names, the plugin refuses to import into it.
 
 ## Step 2: Import the definition
 
-Switch to the Style tab in the rail on the left, click Import definition and
+Switch to the Build tab in the rail on the left, click Import definition and
 pick your definition file. The plugin checks the file before it touches your
 document. If the definition is broken, you get a list of the problems and
 nothing is imported.
 
-![The Style tab of the plugin with the Import definition button at the top of the sidebar](/create-styles/edit-a-style/2.webp)
+![The Build tab of the plugin with the Import definition button at the top of the sidebar](/create-styles/edit-a-style/2.webp)
 
 The import takes a moment. The plugin builds a Figma component for every variant
 of every component group, and a big style has a few hundred of them.

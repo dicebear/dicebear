@@ -27,7 +27,7 @@ avatars, one is for people who make avatar styles.
 - **Inspect** shows what a generated avatar carries and gives developers the
   seed, the API URL and the code to render the same avatar, see
   [Hand avatars to developers](#hand-avatars-to-developers).
-- **Style** turns a Figma frame into an avatar style and back. Two guides cover
+- **Build** turns a Figma frame into an avatar style and back. Two guides cover
   it: [Create an avatar style with Figma](/create-styles/with-figma/) draws a
   style from your own components, and
   [Edit an avatar style with Figma](/create-styles/edit-a-style/) imports one of
@@ -94,7 +94,7 @@ available in every Figma file you open, next to the collection.
 
 ![The Library tab of the style gallery with the Upload definition button](/integrations/figma/7.webp)
 
-The definition can be one you exported with the Style tab, see
+The definition can be one you exported with the Build tab, see
 [Create an avatar style with Figma](/create-styles/with-figma/), or one you got
 from someone else. The plugin shows the license the file names, but it cannot
 check it, so make sure you may use the style before it goes into a design.

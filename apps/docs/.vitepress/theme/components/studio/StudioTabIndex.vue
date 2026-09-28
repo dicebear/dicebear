@@ -4,7 +4,7 @@
  * names them and jumps to the chapter.
  */
 import type { Component } from 'vue';
-import { ArrowDown, Code, Loader, Pencil } from '@lucide/vue';
+import { ArrowDown, Blocks, Code, Loader } from '@lucide/vue';
 
 interface StudioTab {
   id: string;
@@ -27,10 +27,10 @@ const tabs: StudioTab[] = [
     icon: Code,
   },
   {
-    id: 'style',
-    name: 'Style',
+    id: 'build',
+    name: 'Build',
     text: 'Turns a Figma frame into an avatar style, and back.',
-    icon: Pencil,
+    icon: Blocks,
   },
 ];
 </script>
