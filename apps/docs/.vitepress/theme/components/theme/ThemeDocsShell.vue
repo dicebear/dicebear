@@ -143,7 +143,7 @@ onKeyStroke('Escape', () => {
   grid-template-columns: minmax(0, 720px);
   justify-content: center;
   align-items: start;
-  --docs-shell-pad: 40px;
+  --docs-shell-pad: var(--db-page-top);
 
   /* Two rows: the page, then its footer. The navigation column spans both. */
   grid-template-rows: auto auto;

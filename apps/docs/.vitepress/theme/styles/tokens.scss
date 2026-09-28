@@ -71,6 +71,10 @@
 
   /* Layout */
   --db-header-h: 64px;
+  /* The room between the header and the first line of a page. Docs pages
+     and the page head share it, so on wide screens both start at the same
+     height. */
+  --db-page-top: 40px;
   --db-container: 84rem;
   --db-gutter: 2rem;
 

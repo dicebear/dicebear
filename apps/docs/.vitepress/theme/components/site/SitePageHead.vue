@@ -2,8 +2,8 @@
 /**
  * The head every page below the home shares: a breadcrumb, the headline,
  * facts as outlined chips and the lead. Actions stand beside the lead and
- * end with it, as on the Studio page. A style page puts its card into an
- * aside column next to the whole head instead.
+ * end with it. A style page puts its card into an aside column next to the
+ * whole head instead.
  */
 import { ChevronRight } from '@lucide/vue';
 
@@ -125,7 +125,7 @@ function isExternal(href: string): boolean {
 
 <style scoped lang="scss">
 .site-page-head {
-  padding-top: 72px;
+  padding-top: var(--db-page-top);
 
   &-crumbs {
     display: flex;
@@ -245,8 +245,6 @@ function isExternal(href: string): boolean {
   }
 
   @media (max-width: 767px) {
-    padding-top: 48px;
-
     &-crumbs {
       gap: 4px 8px;
       font-size: 15px;
