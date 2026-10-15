@@ -6,6 +6,9 @@ on:
       - '*.x'
     tags:
       - 'v*'
+permissions:
+  contents: read
+
 
 jobs:
   split:
