@@ -73,7 +73,7 @@ jobs:
       # Trusted Publishing (OIDC) — no token. Configure the publisher on PyPI:
       # project dicebear-core, repo dicebear/dicebear, workflow publish.yml.
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           packages-dir: src/python/core/dist/
 
@@ -84,7 +84,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
+        with:
+          toolchain: stable
 
       - name: Verify the crate compiles
         working-directory: src/rust/core
@@ -95,7 +97,7 @@ jobs:
       # publish.yml.
       - name: Authenticate to crates.io
         id: auth
-        uses: rust-lang/crates-io-auth-action@v1.0.4
+        uses: rust-lang/crates-io-auth-action@bbd81622f20ce9e2dd9622e3218b975523e45bbe # v1.0.4
 
       - name: Publish to crates.io
         working-directory: src/rust/core
@@ -110,7 +112,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: dart-lang/setup-dart@v1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
 
       # Automated publishing (OIDC via setup-dart, no stored token). Configure
       # on pub.dev: package dicebear_core, repository dicebear/dicebear, tag
@@ -186,7 +188,7 @@ jobs:
       - name: Authenticate to NuGet.org
         if: steps.nuget-version.outputs.exists == 'false'
         id: login
-        uses: NuGet/login@v1
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
         with:
           # The NuGet.org account that created the trusted publishing policy,
           # not the organization that owns the package. Passing the owner fails
