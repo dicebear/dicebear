@@ -8,6 +8,9 @@ on:
     branches:
       - '*.x'
   workflow_call: {}
+permissions:
+  contents: read
+
 
 jobs:
   test-js:
