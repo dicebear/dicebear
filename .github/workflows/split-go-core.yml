@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
 
       - if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        uses: danharrin/monorepo-split-github-action@v2.4.5
+        uses: danharrin/monorepo-split-github-action@14e42e2437f674b8987c1f50ca3689116aea1893 # v2.4.5
         env:
           GITHUB_TOKEN: ${{ secrets.SPLIT_TOKEN }}
         with:
@@ -29,7 +29,7 @@ jobs:
           user_email: bot@dicebear.com
 
       - if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        uses: danharrin/monorepo-split-github-action@v2.4.5
+        uses: danharrin/monorepo-split-github-action@14e42e2437f674b8987c1f50ca3689116aea1893 # v2.4.5
         env:
           GITHUB_TOKEN: ${{ secrets.SPLIT_TOKEN }}
         with:

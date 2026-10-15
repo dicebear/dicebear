@@ -86,15 +86,16 @@ jobs:
         with:
           python-version: '3.12'
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
         with:
+          toolchain: stable
           components: rustfmt
       - name: Use Go
         uses: actions/setup-go@v6
         with:
           go-version: '1.27'
       - name: Use Dart
-        uses: dart-lang/setup-dart@v1
+        uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
       - name: Use .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -158,7 +159,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Use PHP ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring
@@ -204,8 +205,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
         with:
+          toolchain: stable
           components: clippy
       - name: Run Clippy
         working-directory: src/rust/core
@@ -247,7 +249,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Use Dart ${{ matrix.sdk }}
-        uses: dart-lang/setup-dart@v1
+        uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
         with:
           sdk: ${{ matrix.sdk }}
       - name: Install dependencies
