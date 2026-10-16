@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import { fileURLToPath } from 'node:url';
 import type { Package } from 'update-notifier';
 
 /**
@@ -6,7 +7,9 @@ import type { Package } from 'update-notifier';
  * compare the running version against the latest published one.
  */
 export function getPackageJson(): Promise<Package> {
-  const packageJson = new URL('../../package.json', import.meta.url).pathname;
+  const packageJson = fileURLToPath(
+    new URL('../../package.json', import.meta.url),
+  );
 
   return fs.readJson(packageJson);
 }
