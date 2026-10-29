@@ -16,6 +16,10 @@ import {
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';
 
+// Local constant instead of `si*.path` in the template: vue-tsc 3.3.14
+// wrongly expects `.value` on imported bindings inside slot content.
+const githubIconPath = siGithub.path;
+
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
 
@@ -113,7 +117,7 @@ const scatteredAvatars = computed(() => {
           severity="contrast"
           class="app-open-source-star-btn"
         >
-          <UiIcon :path="siGithub.path" :size="20" />
+          <UiIcon :path="githubIconPath" :size="20" />
           Star on GitHub
         </Button>
         <Button

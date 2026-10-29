@@ -30,21 +30,21 @@
     "@dicebear/converter": "10.7.0",
     "@dicebear/core": "10.7.0",
     "@dicebear/styles": "^10.6.0",
-    "chalk": "^5.4.1",
-    "chalk-template": "^1.1.2",
+    "chalk": "^5.6.2",
+    "chalk-template": "^1.1.3",
     "cli-progress": "^3.12.0",
-    "fs-extra": "^11.3.3",
-    "p-queue": "^8.1.0",
-    "svgo": "^3.3.4",
+    "fs-extra": "^11.4.1",
+    "p-queue": "^8.1.1",
+    "svgo": "^3.3.5",
     "svgson": "^5.3.1",
     "update-notifier": "^7.3.1",
-    "yargs": "^18.0.0"
+    "yargs": "^18.2.0"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.13",
     "@types/cli-progress": "^3.11.6",
     "@types/fs-extra": "^11.0.4",
-    "@types/update-notifier": "^6.0.8",
+    "@types/update-notifier": "^6.0.9",
     "@types/yargs": "^17.0.35",
     "del-cli": "^7.0.0",
     "typescript": "^5.9.3"

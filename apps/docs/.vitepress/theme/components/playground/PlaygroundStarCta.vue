@@ -4,6 +4,10 @@ import Button from 'primevue/button';
 import { track } from '@theme/utils/track';
 import { UiIcon } from '../ui';
 
+// Local constant instead of `si*.path` in the template: vue-tsc 3.3.14
+// wrongly expects `.value` on imported bindings inside slot content.
+const githubIconPath = siGithub.path;
+
 // `source` tells the copy dialog apart from the download dialog in the Umami
 // stats, so the two can be compared.
 const props = defineProps<{
@@ -31,7 +35,7 @@ function onClick() {
       class="pg-star-cta-button"
       @click="onClick"
     >
-      <UiIcon :path="siGithub.path" :size="16" />
+      <UiIcon :path="githubIconPath" :size="16" />
       Star on GitHub
     </Button>
   </div>

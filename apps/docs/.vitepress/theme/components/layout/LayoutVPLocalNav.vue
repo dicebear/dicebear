@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
 import { useLayout } from 'vitepress/theme-without-fonts';
-import VPIconAlignLeft from 'vitepress/dist/client/theme-default/components/icons/VPIconAlignLeft.vue';
 
 defineProps<{
   open: boolean;
@@ -27,7 +26,10 @@ function scrollToTop() {
       aria-controls="VPSidebarNav"
       @click="$emit('open-menu')"
     >
-      <VPIconAlignLeft class="layout-vp-local-nav-menu-icon" />
+      <span
+        class="vpi-text-align-start layout-vp-local-nav-menu-icon"
+        aria-hidden="true"
+      ></span>
       <span class="layout-vp-local-nav-menu-text">
         {{ frontmatter.sidebarMenuLabel || theme.sidebarMenuLabel || 'Menu' }}
       </span>

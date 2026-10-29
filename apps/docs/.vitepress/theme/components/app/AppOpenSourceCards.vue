@@ -6,6 +6,10 @@ import Button from 'primevue/button';
 import { UiContainer, UiSection, UiCard, UiIconBox, UiIcon } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
+// Local constant instead of `si*.path` in the template: vue-tsc 3.3.14
+// wrongly expects `.value` on imported bindings inside slot content.
+const githubIconPath = siGithub.path;
+
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 </script>
@@ -35,7 +39,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
               severity="contrast"
               class="app-open-source-cards-action-btn"
             >
-              <UiIcon :path="siGithub.path" :size="20" />
+              <UiIcon :path="githubIconPath" :size="20" />
               Star on GitHub
             </Button>
             <Button

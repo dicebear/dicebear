@@ -6,6 +6,10 @@ import Button from 'primevue/button';
 import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIcon } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
+// Local constant instead of `si*.path` in the template: vue-tsc 3.3.14
+// wrongly expects `.value` on imported bindings inside slot content.
+const figmaIconPath = siFigma.path;
+
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
 
@@ -83,7 +87,7 @@ const steps = [
               severity="secondary"
               variant="outlined"
             >
-              <UiIcon :path="siFigma.path" :size="20" />
+              <UiIcon :path="figmaIconPath" :size="20" />
               Get the Plugin
               <ArrowRight :size="20" />
             </Button>
