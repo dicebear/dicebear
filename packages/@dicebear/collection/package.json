@@ -78,10 +78,10 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@tsconfig/recommended": "^1.0.13",
     "del-cli": "^7.0.0",
-    "rollup": "^4.57.1",
-    "tmp": "^0.2.5",
+    "rollup": "^4.66.0",
+    "tmp": "^0.2.7",
     "typescript": "^5.9.3",
-    "webpack": "^5.104.1"
+    "webpack": "^5.112.2"
   },
   "peerDependencies": {
     "@dicebear/core": "^9.0.0"

@@ -1,7 +1,7 @@
 {
   "name": "root",
   "private": true,
-  "packageManager": "npm@11.6.2",
+  "packageManager": "npm@11.21.1",
   "workspaces": {
     "packages": [
       "packages/dicebear",
@@ -17,8 +17,8 @@
     "prettier": "prettier --write \"{packages,apps}/**/*.{js,ts,json,md}\""
   },
   "devDependencies": {
-    "turbo": "^2.5.0",
-    "prettier": "^3.8.1"
+    "turbo": "^2.11.10",
+    "prettier": "^3.9.10"
   },
   "overrides": {
     "minimatch": ">=10.2.1",
