@@ -366,7 +366,10 @@ func (r *renderer) renderComponentElement(el *style.Element) (string, error) {
 		return "", err
 	}
 
-	return r.applyAnimations("<use"+attrs+` href="#`+id+`"/>`, el, playing), nil
+	// data-dicebear-component names the part as referenced (an alias
+	// keeps its own name), so scripts and stylesheets need not
+	// parse the def ID format.
+	return r.applyAnimations("<use"+attrs+` href="#`+id+`" data-dicebear-component="`+componentName+`"/>`, el, playing), nil
 }
 
 // buildTransforms returns the per-component transform fragments (translate,

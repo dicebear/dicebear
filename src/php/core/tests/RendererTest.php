@@ -265,7 +265,7 @@ class RendererTest extends TestCase
             'expected variant body wrapped in <g id="…"> inside <defs>',
         );
         $this->assertStringContainsString('<defs>', $svg);
-        $this->assertStringContainsString("<use href=\"#{$idMatch[1]}\"/>", $svg);
+        $this->assertStringContainsString("<use href=\"#{$idMatch[1]}\" data-dicebear-component=\"eyes\"/>", $svg);
     }
 
     public function testSkipsComponentWithProbabilityZero(): void
@@ -422,7 +422,7 @@ class RendererTest extends TestCase
         $svg = (new Avatar($style, ['seed' => 'test', 'eyesVariant' => 'open']))->toString();
 
         $this->assertSame(1, preg_match_all('/<circle r="5"\\/>/', $svg), 'variant body must appear only once');
-        $this->assertSame(2, preg_match_all('/<use href="#eyes-open-[a-f0-9]+"\\/>/', $svg), 'each component reference becomes its own <use>');
+        $this->assertSame(2, preg_match_all('/<use href="#eyes-open-[a-f0-9]+" data-dicebear-component="eyes"\\/>/', $svg), 'each component reference becomes its own <use>');
     }
 
     // color rendering
@@ -944,7 +944,7 @@ class RendererTest extends TestCase
         ]))->toString();
 
         preg_match_all('/<circle id="([a-z])"\\/>/', $svg, $circles);
-        preg_match_all('/<use href="#(eyes-[a-z]-[a-f0-9]+)"\\/>/', $svg, $uses);
+        preg_match_all('/<use href="#(eyes-[a-z]-[a-f0-9]+)" data-dicebear-component="[a-zA-Z0-9]+"\\/>/', $svg, $uses);
 
         $this->assertSame(['b'], $circles[1], 'variant body is registered once');
         $this->assertCount(2, $uses[1], 'both component slots reference the body');

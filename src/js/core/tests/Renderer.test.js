@@ -403,7 +403,7 @@ describe('Renderer', () => {
 
       assert.ok(idMatch, 'expected variant body wrapped in <g id="…"> inside <defs>');
       assert.ok(svg.includes('<defs>'));
-      assert.ok(svg.includes(`<use href="#${idMatch[1]}"/>`));
+      assert.ok(svg.includes(`<use href="#${idMatch[1]}" data-dicebear-component="eyes"/>`));
     });
 
     it('should skip component with probability 0', () => {
@@ -566,7 +566,7 @@ describe('Renderer', () => {
       }).toString();
 
       const circleMatches = svg.match(/<circle r="5"\/>/g) ?? [];
-      const useMatches = svg.match(/<use href="#eyes-open-[a-f0-9]+"\/>/g) ?? [];
+      const useMatches = svg.match(/<use href="#eyes-open-[a-f0-9]+" data-dicebear-component="eyes"\/>/g) ?? [];
 
       assert.equal(circleMatches.length, 1, 'variant body must appear only once');
       assert.equal(useMatches.length, 2, 'each component reference becomes its own <use>');
@@ -592,13 +592,23 @@ describe('Renderer', () => {
       assert.ok(differed, 'expected at least one seed where alias picks a different variant than the source');
     });
 
+    it('should tag each <use> with the referenced component name, not the source', () => {
+      const svg = new Avatar(aliasStyle, {
+        seed: 'fallthrough',
+        eyesVariant: 'b',
+      }).toString();
+      const names = [...svg.matchAll(/<use[^>]*\bdata-dicebear-component="([a-zA-Z0-9]+)"/g)].map((m) => m[1]);
+
+      assert.deepEqual(names, ['eyes', 'eyesRight']);
+    });
+
     it('should inherit eyesVariant on the alias and share the same <defs> entry', () => {
       const svg = new Avatar(aliasStyle, {
         seed: 'fallthrough',
         eyesVariant: 'b',
       }).toString();
       const circles = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
-      const uses = [...svg.matchAll(/<use[^>]*\bhref="#(eyes-[a-z]-[a-f0-9]+)"\/>/g)].map((m) => m[1]);
+      const uses = [...svg.matchAll(/<use[^>]*\bhref="#(eyes-[a-z]-[a-f0-9]+)" data-dicebear-component="[a-zA-Z0-9]+"\/>/g)].map((m) => m[1]);
 
       assert.deepEqual(circles, ['b'], 'variant body is registered once');
       assert.equal(uses.length, 2, 'both component slots reference the body');
@@ -1779,7 +1789,7 @@ describe('Renderer', () => {
       });
       const svg = new Avatar(style, { animation: true }).toString();
 
-      assert.match(svg, /<g class="dba-[0-9a-f]+-0"><use href="#shape-a-[0-9a-f]+"\/><\/g>/);
+      assert.match(svg, /<g class="dba-[0-9a-f]+-0"><use href="#shape-a-[0-9a-f]+" data-dicebear-component="shape"\/><\/g>/);
     });
 
     it('should share one animated def between two references', () => {

@@ -577,7 +577,13 @@ namespace DiceBear.Internal
                 mergedAttributes = merged;
             }
 
-            return ApplyAnimations($"<use{RenderAttributes(mergedAttributes)} href=\"#{id}\"/>", element, active);
+            // data-dicebear-component names the part as referenced (an alias
+            // keeps its own name), so scripts and stylesheets need not
+            // parse the def ID format.
+            return ApplyAnimations(
+                $"<use{RenderAttributes(mergedAttributes)} href=\"#{id}\" data-dicebear-component=\"{componentName}\"/>",
+                element,
+                active);
         }
 
         /// <summary>

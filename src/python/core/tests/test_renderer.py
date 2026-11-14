@@ -381,7 +381,7 @@ def test_registers_variant_body_in_defs_and_references_it_via_use() -> None:
     match = re.search(r'<g id="(eyes-open-[a-f0-9]+)"><circle r="5"/></g>', svg)
     assert match is not None
     assert "<defs>" in svg
-    assert f'<use href="#{match.group(1)}"/>' in svg
+    assert f'<use href="#{match.group(1)}" data-dicebear-component="eyes"/>' in svg
 
 
 def test_skips_component_with_probability_zero() -> None:
@@ -584,7 +584,8 @@ def test_deduplicates_identical_component_references() -> None:
     )
     svg = Avatar(style, {"seed": "test", "eyesVariant": "open"}).to_string()
     assert len(re.findall(r'<circle r="5"/>', svg)) == 1
-    assert len(re.findall(r'<use href="#eyes-open-[a-f0-9]+"/>', svg)) == 2
+    use_pattern = r'<use href="#eyes-open-[a-f0-9]+" data-dicebear-component="eyes"/>'
+    assert len(re.findall(use_pattern, svg)) == 2
 
 
 # ---------------------------------------------------------------------------
@@ -1125,7 +1126,11 @@ def test_alias_inherits_eyes_variant_and_shares_defs_entry() -> None:
         _alias_style(), {"seed": "fallthrough", "eyesVariant": "b"}
     ).to_string()
     circles = re.findall(r'<circle id="([a-z])"/>', svg)
-    uses = re.findall(r'<use href="#(eyes-[a-z]-[a-f0-9]+)"/>', svg)
+    uses = re.findall(
+        r'<use href="#(eyes-[a-z]-[a-f0-9]+)"'
+        r' data-dicebear-component="[a-zA-Z0-9]+"/>',
+        svg,
+    )
     assert circles == ["b"]
     assert len(uses) == 2
     assert uses[0] == uses[1]

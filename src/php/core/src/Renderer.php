@@ -473,7 +473,14 @@ class Renderer
 
         $attrs = $this->renderAttributes($mergedAttributes);
 
-        return $this->applyAnimations("<use{$attrs} href=\"#{$id}\"/>", $element, $active);
+        // `data-dicebear-component` names the part as referenced (an alias
+        // keeps its own name), so scripts and stylesheets need not
+        // parse the def ID format.
+        return $this->applyAnimations(
+            "<use{$attrs} href=\"#{$id}\" data-dicebear-component=\"{$componentName}\"/>",
+            $element,
+            $active,
+        );
     }
 
     /**
