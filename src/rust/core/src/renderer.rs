@@ -390,7 +390,14 @@ impl<'a> Renderer<'a> {
 
         let attrs = self.render_attributes(merged.as_ref())?;
 
-        Ok(self.apply_animations(format!("<use{attrs} href=\"#{id}\"/>"), element, &active))
+        // `data-dicebear-component` names the part as referenced (an alias
+        // keeps its own name), so scripts and stylesheets need not
+        // parse the def ID format.
+        Ok(self.apply_animations(
+            format!("<use{attrs} href=\"#{id}\" data-dicebear-component=\"{component_name}\"/>"),
+            element,
+            &active,
+        ))
     }
 
     /// The per-component `transform` fragments (translate, rotate, scale),

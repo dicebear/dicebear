@@ -360,6 +360,10 @@ class Renderer:
         components referenced more than once — produce a single ``<defs>`` entry
         referenced by every ``<use>``. A user-supplied ``transform`` is prepended
         to the per-component transforms.
+
+        Every ``<use>`` carries ``data-dicebear-component`` with the component's
+        name as referenced (an alias keeps its own name), so scripts and
+        stylesheets can address parts without depending on the def ID format.
         """
         component_name = element.name()
 
@@ -411,7 +415,10 @@ class Renderer:
         attrs_str = self._render_attributes(merged_attributes)
 
         return self._apply_animations(
-            f'<use{attrs_str} href="#{id_}"/>', element, active
+            f'<use{attrs_str} href="#{id_}"'
+            f' data-dicebear-component="{component_name}"/>',
+            element,
+            active,
         )
 
     def _build_transforms(self, component: Component) -> list[str]:

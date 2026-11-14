@@ -442,7 +442,14 @@ class Renderer {
 
     final attrs = _renderAttributes(mergedAttributes);
 
-    return _applyAnimations('<use$attrs href="#$id"/>', element, active);
+    // `data-dicebear-component` names the part as referenced (an alias
+    // keeps its own name), so scripts and stylesheets need not
+    // parse the def ID format.
+    return _applyAnimations(
+      '<use$attrs href="#$id" data-dicebear-component="$componentName"/>',
+      element,
+      active,
+    );
   }
 
   /// Returns the per-component SVG `transform` fragments derived from the

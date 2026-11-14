@@ -403,6 +403,12 @@ export class Renderer {
    * `<use>` tag. A user-supplied `transform` is prepended to the per-component
    * transforms so it acts as the outer (placement) transform, with the
    * style's translate/rotate/scale applied inside it.
+   *
+   * Every `<use>` carries `data-dicebear-component` with the component's name
+   * as referenced (an alias keeps its own name, e.g. `shape01`), so scripts and
+   * stylesheets can address parts like `eyes` or `mouth` without depending on
+   * the internal def ID format. Names are `camelCaseName` identifiers per the
+   * schema and need no escaping.
    */
   #renderComponentElement(element: Element): string {
     const componentName = element.name();
@@ -459,7 +465,7 @@ export class Renderer {
     const attrs = this.#renderAttributes(mergedAttributes);
 
     return this.#applyAnimations(
-      `<use${attrs} href="#${id}"/>`,
+      `<use${attrs} href="#${id}" data-dicebear-component="${componentName}"/>`,
       element,
       active,
     );

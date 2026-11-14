@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Core (all languages):** Every component `<use>` now carries a
+  `data-dicebear-component` attribute with the component's name, e.g.
+  `<use href="#eyes-…" data-dicebear-component="eyes"/>`. Aliases carry their
+  own name, such as `shape01`. Scripts and stylesheets can use it to select
+  parts like the eyes or the mouth instead of parsing the def IDs, which remain
+  internal. Avatars don't change; the markup gets one attribute longer per
+  component.
+
 ### Removed
 
 - **Core (JS, Python, Rust, Go, Dart):** The color helpers are no longer public.
