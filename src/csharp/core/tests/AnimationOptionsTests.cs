@@ -510,11 +510,11 @@ public class AnimationOptionsTests
         Assert.Equal(
             new[]
             {
-                "animation", "animationSpeed", "animationDelay",
+                "animation", "animationSpeed", "animationDelay", "animationMotionQuery",
                 "blinkAnimation", "blinkAnimationSpeed", "blinkAnimationDelay",
                 "swayAnimation", "swayAnimationSpeed", "swayAnimationDelay",
             },
-            keys.Skip(keys.IndexOf("animation")).Take(9));
+            keys.Skip(keys.IndexOf("animation")).Take(10));
         Assert.Equal("boolean", descriptor["blinkAnimation"]!["type"]!.GetValue<string>());
         Assert.Equal("range", descriptor["blinkAnimationSpeed"]!["type"]!.GetValue<string>());
         Assert.Equal("0.1", descriptor["blinkAnimationSpeed"]!["min"]!.ToJsonString());

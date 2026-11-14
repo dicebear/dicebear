@@ -887,7 +887,11 @@ impl<'a> Renderer<'a> {
             key.push('-');
         }
 
-        let css = format!("{}{}", self.keyframes_css.concat(), self.animation_css.concat());
+        let css = format!(
+            "{}{}",
+            self.keyframes_css.concat(),
+            self.animation_css.concat()
+        );
         let style = if self.resolver.animation_motion_query() {
             format!("<style>@media (prefers-reduced-motion:no-preference){{{css}}}</style>")
         } else {
