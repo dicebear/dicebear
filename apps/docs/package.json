@@ -39,7 +39,7 @@
     "@types/json-schema": "^7.0.15",
     "@types/node": "^26.4.1",
     "esbuild": "^0.28.2",
-    "sharp": "^0.35.4",
+    "sharp": "^0.35.5",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.3.11",
     "wawoff2": "^2.0.1",
