@@ -11,7 +11,6 @@ on:
 permissions:
   contents: read
 
-
 jobs:
   test-js:
     runs-on: ubuntu-latest
@@ -97,7 +96,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
         with:
           toolchain: stable
           components: rustfmt
@@ -106,7 +105,7 @@ jobs:
         with:
           go-version: '1.27'
       - name: Use Dart
-        uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+        uses: dart-lang/setup-dart@2286a0c042b44434fe26d292bbce8d34f7ec662b # v1.8.2
       - name: Use .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -222,7 +221,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
         with:
           toolchain: stable
           components: clippy
@@ -270,7 +269,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Use Dart ${{ matrix.sdk }}
-        uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+        uses: dart-lang/setup-dart@2286a0c042b44434fe26d292bbce8d34f7ec662b # v1.8.2
         with:
           sdk: ${{ matrix.sdk }}
       - name: Install dependencies

@@ -76,7 +76,7 @@ jobs:
       # Trusted Publishing (OIDC) — no token. Configure the publisher on PyPI:
       # project dicebear-core, repo dicebear/dicebear, workflow publish.yml.
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: src/python/core/dist/
 
@@ -89,7 +89,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
         with:
           toolchain: stable
 
@@ -102,7 +102,7 @@ jobs:
       # publish.yml.
       - name: Authenticate to crates.io
         id: auth
-        uses: rust-lang/crates-io-auth-action@bbd81622f20ce9e2dd9622e3218b975523e45bbe # v1.0.4
+        uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
 
       - name: Publish to crates.io
         working-directory: src/rust/core
@@ -119,7 +119,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+      - uses: dart-lang/setup-dart@2286a0c042b44434fe26d292bbce8d34f7ec662b # v1.8.2
 
       # Automated publishing (OIDC via setup-dart, no stored token). Configure
       # on pub.dev: package dicebear_core, repository dicebear/dicebear, tag
