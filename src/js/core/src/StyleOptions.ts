@@ -98,6 +98,7 @@ export interface StyleOptionsBase {
   readonly animation?: boolean;
   readonly animationSpeed?: number | readonly [number, number];
   readonly animationDelay?: number | readonly [number, number];
+  readonly animationMotionQuery?: boolean;
 }
 
 // Variant option accepts a single name, an array, or a name-to-weight record

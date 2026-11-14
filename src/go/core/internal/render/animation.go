@@ -297,8 +297,9 @@ func directionCss(direction string) string {
 
 // registerAnimationStyle registers the accumulated animation CSS as a single
 // <style> entry in the shared <defs> block, wrapped in a reduced-motion media
-// query so users who prefer reduced motion get the static avatar. A no-op
-// when no animation CSS was produced.
+// query so users who prefer reduced motion get the static avatar. With
+// animationMotionQuery off the rules stand without the query. A no-op when no
+// animation CSS was produced.
 func (r *renderer) registerAnimationStyle() {
 	if len(r.keyframesCss) == 0 {
 		return
@@ -311,9 +312,13 @@ func (r *renderer) registerAnimationStyle() {
 		key += "-"
 	}
 
-	r.defs.set(key,
-		"<style>@media (prefers-reduced-motion:no-preference){"+
-			strings.Join(r.keyframesCss, "")+strings.Join(r.animationCss, "")+"}</style>")
+	css := strings.Join(r.keyframesCss, "") + strings.Join(r.animationCss, "")
+
+	if r.resolver.animationMotionQuery() {
+		r.defs.set(key, "<style>@media (prefers-reduced-motion:no-preference){"+css+"}</style>")
+	} else {
+		r.defs.set(key, "<style>"+css+"</style>")
+	}
 }
 
 // animationHash returns the FNV-1a hex hash namespacing the animation class
@@ -356,11 +361,20 @@ func (r *renderer) animationHash() string {
 			named = ":" + strings.Join(states, ",")
 		}
 
+		// Without the media query the rules apply to every viewer. A render
+		// that keeps the query must not pick them up on the same page, so the
+		// two get different names. The default adds nothing and leaves the
+		// hash as it was.
+		motion := ""
+		if !r.resolver.animationMotionQuery() {
+			motion = ":nomotionquery"
+		}
+
 		sourceName := ""
 		if meta := r.style.Meta(); meta != nil && meta.Source.Name != nil {
 			sourceName = *meta.Source.Name
 		}
-		v := prng.Hex(sourceName + ":" + r.resolver.seed() + ":" + num.Format(r.resolver.animationSpeed()) + ":" + num.Format(r.resolver.animationDelay()) + named + random)
+		v := prng.Hex(sourceName + ":" + r.resolver.seed() + ":" + num.Format(r.resolver.animationSpeed()) + ":" + num.Format(r.resolver.animationDelay()) + named + motion + random)
 		r.cachedAnimationHash = &v
 	}
 	return *r.cachedAnimationHash

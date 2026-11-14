@@ -113,6 +113,13 @@ class Options {
   Range? animationDelayFor(String name) =>
       _toRange(_get('${name}AnimationDelay'));
 
+  /// Returns the media query switch, or `null` when unset.
+  bool? animationMotionQuery() {
+    final value = _get('animationMotionQuery');
+
+    return value is bool ? value : null;
+  }
+
   /// Returns the global `tags` filter as parsed tokens, or an empty list when
   /// unset. Each raw token (`category` / `category:value`, optionally
   /// `!`-prefixed to disallow) is decoded into a [TagFilterToken] so the

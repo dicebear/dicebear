@@ -139,6 +139,15 @@ impl<'a> Resolver<'a> {
         }
     }
 
+    /// Whether the animation CSS sits inside a `prefers-reduced-motion` media
+    /// query. On by default. Renderers that ignore media queries need it off,
+    /// and the app then decides about `animation` from the system setting.
+    pub fn animation_motion_query(&self) -> bool {
+        let value = self.options.animation_motion_query().unwrap_or(true);
+        self.record("animationMotionQuery", Value::from(value));
+        value
+    }
+
     pub fn title(&self) -> Option<String> {
         let value = self.options.title();
         self.record("title", value.clone().map_or(Value::Null, Value::from));

@@ -104,6 +104,10 @@ export class Options<D = unknown> {
     return this.#toRange(this.#data.animationDelay);
   }
 
+  animationMotionQuery(): boolean | undefined {
+    return this.#data.animationMotionQuery;
+  }
+
   /**
    * Returns the `${name}AnimationDelay` option for one animation name as a
    * range, or `undefined` when unset.

@@ -646,13 +646,24 @@ impl<'a> Renderer<'a> {
                     format!(":{}", states.join(","))
                 };
 
+                // Without the media query the rules apply to every viewer. A
+                // render that keeps the query must not pick them up on the
+                // same page, so the two get different names. The default adds
+                // nothing and leaves the hash as it was.
+                let motion = if self.resolver.animation_motion_query() {
+                    ""
+                } else {
+                    ":nomotionquery"
+                };
+
                 fnv1a::hex(&format!(
-                    "{}:{}:{}:{}{}{}",
+                    "{}:{}:{}:{}{}{}{}",
                     source_name,
                     self.resolver.seed(),
                     number::format(self.resolver.animation_speed()),
                     number::format(self.resolver.animation_delay()),
                     states,
+                    motion,
                     random
                 ))
             })
@@ -860,8 +871,9 @@ impl<'a> Renderer<'a> {
 
     /// Registers the accumulated animation CSS as a single `<style>` entry in
     /// the shared `<defs>` block, wrapped in a reduced-motion media query so
-    /// users who prefer reduced motion get the static avatar. A no-op when no
-    /// animation CSS was produced.
+    /// users who prefer reduced motion get the static avatar. With
+    /// `animationMotionQuery` off the rules stand without the query. A no-op
+    /// when no animation CSS was produced.
     fn register_animation_style(&mut self) {
         if self.keyframes_css.is_empty() {
             return;
@@ -875,14 +887,14 @@ impl<'a> Renderer<'a> {
             key.push('-');
         }
 
-        self.defs.insert(
-            key,
-            format!(
-                "<style>@media (prefers-reduced-motion:no-preference){{{}{}}}</style>",
-                self.keyframes_css.concat(),
-                self.animation_css.concat()
-            ),
-        );
+        let css = format!("{}{}", self.keyframes_css.concat(), self.animation_css.concat());
+        let style = if self.resolver.animation_motion_query() {
+            format!("<style>@media (prefers-reduced-motion:no-preference){{{css}}}</style>")
+        } else {
+            format!("<style>{css}</style>")
+        };
+
+        self.defs.insert(key, style);
     }
 }
 

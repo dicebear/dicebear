@@ -134,6 +134,16 @@ func (o *options) animationDelayFor(name string) *prng.Range {
 	return toRange(v)
 }
 
+// animationMotionQuery returns the media query switch, or nil when unset.
+func (o *options) animationMotionQuery() *bool {
+	if v, ok := o.get("animationMotionQuery"); ok {
+		if b, ok := v.(bool); ok {
+			return &b
+		}
+	}
+	return nil
+}
+
 // tags returns the global `tags` filter as parsed tokens, or an empty slice when
 // unset. Each raw token (`category` / `category:value`, optionally `!`-prefixed
 // to disallow) is decoded into a tagFilterToken so the resolver composes the

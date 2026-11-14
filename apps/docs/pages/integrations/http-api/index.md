@@ -164,6 +164,13 @@ wins over the global option. Here only the eyes blink:
 
 <BrowserPreview url="https://api.dicebear.com/11.x/critters/svg?seed=Jane&blinkAnimation=true" />
 
+Every animation sits inside a `prefers-reduced-motion` media query, so visitors
+who ask their system for less motion see the still avatar. Some SVG renderers
+ignore media queries and then drop the animation entirely, for example SVG
+libraries in native apps. `animationMotionQuery=false` leaves the query out. The
+app then has to respect the system setting itself and only ask for
+`animation=true` when motion is welcome.
+
 The `11.x` line is the first one with animations. On `10.x` the option is
 accepted and ignored. The [core options](/customize/options/) list all animation
 options.

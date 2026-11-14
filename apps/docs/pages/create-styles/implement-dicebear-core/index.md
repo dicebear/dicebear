@@ -371,6 +371,7 @@ resolution that involves chance uses the PRNG with a specific key.
 | `${name}AnimationSpeed` | `${name}AnimationSpeed` | `float` from range, default is the global factor; only for playing timelines of that name (see below) |
 | `animationDelay`        | `animationDelay`        | `float` from range, default `0`; a start offset in seconds                                            |
 | `${name}AnimationDelay` | `${name}AnimationDelay` | `float` from range, default is the global offset; only for playing timelines of that name             |
+| `animationMotionQuery`  | —                       | Boolean, default `true`, read only when animation CSS is produced (see below)                         |
 
 Options with no PRNG key are read directly from the user input. The rest sample
 from a user-supplied range/list under the given key, falling back to the listed
@@ -1005,8 +1006,9 @@ zero-padded) of
 
 ```text
 {source.name or ''} + ':' + seed + ':' + formatNumber(animationSpeed) + ':' + formatNumber(animationDelay)
-  [+ ':' + states]     // only when the style carries named timelines, see below
-  [+ ':' + suffix]     // only when idRandomization is on: the same suffix the id rewrite uses
+  [+ ':' + states]       // only when the style carries named timelines, see below
+  [+ ':nomotionquery']   // only when animationMotionQuery is false
+  [+ ':' + suffix]       // only when idRandomization is on: the same suffix the id rewrite uses
 ```
 
 `states` lists every name the style carries in UTF-16 code unit order, joined
@@ -1018,6 +1020,12 @@ the component-id hash. Compute the hash once per render and cache it. Two
 renders of the same seed with different speeds or selections placed on one page
 must not pick up each other's rules, while identical renders sharing identical
 rules is harmless.
+
+Read `animationMotionQuery` right after `states`, so it reaches
+`resolvedOptions` only when animation CSS is produced. With the query off the
+rules apply to every viewer, so a render without it must not share names with
+one that keeps it. The default adds nothing, which keeps the hash of every
+existing render.
 
 ### Keyframes body
 
@@ -1095,7 +1103,8 @@ The map key is `animation-style`. An authored `<defs>` child may already use
 that id, so append `-` to the key until it is free rather than replacing the
 def. Because the entry is registered after the whole walk, it is the last child
 of `<defs>`. The media query gives users who prefer reduced motion the static
-avatar.
+avatar. With `animationMotionQuery` set to `false` the entry drops the media
+query and is `<style><keyframes blocks><class rules></style>`.
 
 A style may still ship the older mechanism next to the declarative one: a
 component with an authored `<style>` element, gated behind a tag. The `coexist`
@@ -1104,13 +1113,15 @@ fixture pins that both render side by side in one avatar.
 ### Options descriptor
 
 When any node in the definition (canvas tree or component variants) has a
-non-empty `animations` array, the descriptor gains a switch, a speed and a delay
-field, plus one triple per distinct timeline name in UTF-16 code unit order:
+non-empty `animations` array, the descriptor gains a switch, a speed, a delay
+and a media query field, plus one triple per distinct timeline name in UTF-16
+code unit order:
 
 ```json
 "animation": { "type": "boolean" },
 "animationSpeed": { "type": "range", "min": 0.1, "max": 10 },
 "animationDelay": { "type": "range", "min": -3600, "max": 3600 },
+"animationMotionQuery": { "type": "boolean" },
 "driftAnimation": { "type": "boolean" },
 "driftAnimationSpeed": { "type": "range", "min": 0.1, "max": 10 },
 "driftAnimationDelay": { "type": "range", "min": -3600, "max": 3600 },

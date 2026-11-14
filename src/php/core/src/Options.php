@@ -155,6 +155,11 @@ class Options
         return $this->toRange($this->dynamic($name . 'AnimationDelay'));
     }
 
+    public function animationMotionQuery(): ?bool
+    {
+        return $this->data['animationMotionQuery'] ?? null;
+    }
+
     /**
      * Returns the global `tags` filter as parsed tokens, or an empty list when
      * unset. Each raw token (`category` / `category:value`, optionally

@@ -127,6 +127,11 @@ impl Options {
         to_range(self.get(&format!("{name}AnimationDelay")))
     }
 
+    /// Returns the media query switch, or `None` when unset.
+    pub fn animation_motion_query(&self) -> Option<bool> {
+        self.get("animationMotionQuery").and_then(Value::as_bool)
+    }
+
     /// Returns the global `tags` filter as parsed tokens, or an empty list when
     /// unset. Each raw token (`category` / `category:value`, optionally
     /// `!`-prefixed to disallow) is decoded into `{ category, value?, negated }`

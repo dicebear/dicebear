@@ -2512,6 +2512,27 @@
         "blinkAnimationDelay": "later"
       },
       "valid": false
+    },
+    {
+      "id": "animation-motion-query-off",
+      "options": {
+        "animationMotionQuery": false
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-motion-query-on",
+      "options": {
+        "animationMotionQuery": true
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-motion-query-string",
+      "options": {
+        "animationMotionQuery": "false"
+      },
+      "valid": false
     }
   ],
   "circularColors": [
