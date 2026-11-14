@@ -58,8 +58,7 @@ const licenseName = computed(() =>
         class="hv-link"
         >{{ meta?.creator }}</a
       >
-      <template v-else>{{ meta?.creator }}</template
-      >, licensed under
+      <template v-else>{{ meta?.creator }}</template>, licensed under
     </template>
     <a
       v-if="licenseUrl"
@@ -69,9 +68,9 @@ const licenseName = computed(() =>
       class="hv-link"
       >{{ licenseName }}</a
     >
-    <template v-else>{{ licenseName }}</template
-    >. The <a href="#details" class="hv-link">details</a> below link the source
-    and the full license text.
+    <template v-else>{{ licenseName }}</template>. The
+    <a href="#details" class="hv-link">details</a> below link the source and the
+    full license text.
   </p>
 </template>
 

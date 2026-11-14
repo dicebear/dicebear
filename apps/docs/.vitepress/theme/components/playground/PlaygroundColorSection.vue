@@ -243,8 +243,8 @@ const contrastedNames = computed(() =>
         class="pg-color-link hv-link"
         @click="goTo(contrastTo)"
       >
-        {{ capitalCase(contrastTo) }}</button
-      >. The value with the strongest contrast wins.
+        {{ capitalCase(contrastTo) }}</button>. The value with the strongest
+      contrast wins.
     </p>
     <p v-if="contrastedNames.length > 0" class="pg-help">
       <template v-for="(item, index) in contrastedNames" :key="item.name">

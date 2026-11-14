@@ -118,8 +118,7 @@ const metaList = computed(() => {
         /
         <a :href="meta.licenseUrl" target="_blank" rel="noopener noreferrer">{{
           meta.licenseName?.replace(/\.$/, '')
-        }}</a
-        >.
+        }}</a>.
         {{ ' ' }}
       </template>
       <template v-if="metaList.length === 1"> Remix of the original. </template>

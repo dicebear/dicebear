@@ -296,9 +296,9 @@ function toggle() {
           <Link2 :size="14" aria-hidden="true" />
           <span>
             Linked to
-            <a :href="contrastHref" class="hv-link">{{ contrastLabel }}</a
-            >. The renderer picks the value with the strongest contrast against
-            the selected {{ contrastLabel.toLowerCase() }} color, so additional
+            <a :href="contrastHref" class="hv-link">{{ contrastLabel }}</a>. The
+            renderer picks the value with the strongest contrast against the
+            selected {{ contrastLabel.toLowerCase() }} color, so additional
             values mainly serve as fallbacks.
           </span>
         </p>

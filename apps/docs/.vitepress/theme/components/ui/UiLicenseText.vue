@@ -58,8 +58,7 @@ const styleLink = computed(() => `/styles/${kebabCase(props.styleName)}/`);
       rel="noopener noreferrer"
       >{{ avatarStyleMeta?.creator }}</a
     >
-    <template v-else>{{ avatarStyleMeta?.creator }}</template
-    >, licensed under
+    <template v-else>{{ avatarStyleMeta?.creator }}</template>, licensed under
     <a
       v-if="licenseUrl"
       :href="licenseUrl"
