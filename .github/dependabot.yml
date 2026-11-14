@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # Keeps the commit SHAs that pin third-party actions in .github/workflows
+  # current. Dependabot updates the SHA and the version comment behind it.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns:
+          - '*'
