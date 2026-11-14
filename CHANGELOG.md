@@ -18,6 +18,16 @@ and this project adheres to
   internal. Avatars don't change; the markup gets one attribute longer per
   component.
 
+- **Core (all languages):** The `animationMotionQuery` option. The animation CSS
+  sits inside a `prefers-reduced-motion: no-preference` media query, which SVG
+  renderers without media query support skip, so an animated avatar stays still
+  in them. Flutter's SVG libraries are one case (#568). With
+  `animationMotionQuery: false` the query is left out and the app decides from
+  the system setting whether to pass `animation`. The default keeps the query,
+  and renders that leave the option unset don't change. The resolved options of
+  an animated avatar now list `animationMotionQuery`. Requires
+  `@dicebear/schema` 2.1.0.
+
 ### Removed
 
 - **Core (JS, Python, Rust, Go, Dart):** The color helpers are no longer public.

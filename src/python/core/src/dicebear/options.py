@@ -113,6 +113,9 @@ class Options:
         """
         return self._to_range(self._data.get(name + "AnimationDelay"))
 
+    def animation_motion_query(self) -> bool | None:
+        return self._data.get("animationMotionQuery")
+
     def tags(self) -> list[TagFilterToken]:
         """Return the global ``tags`` filter as parsed tokens, or an empty list
         when unset.

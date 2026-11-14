@@ -668,10 +668,15 @@ class Renderer {
     ];
     final named = states.isEmpty ? '' : ':${states.join(',')}';
 
+    // Without the media query the rules apply to every viewer. A render that
+    // keeps the query must not pick them up on the same page, so the two get
+    // different names. The default adds nothing and leaves the hash as it was.
+    final motion = _resolver.animationMotionQuery() ? '' : ':nomotionquery';
+
     return _cachedAnimationHash = fnv1aHex(
       '${_style.meta.source().name() ?? ''}:${_resolver.seed()}:'
       '${formatNumber(_resolver.animationSpeed())}:'
-      '${formatNumber(_resolver.animationDelay())}$named$random',
+      '${formatNumber(_resolver.animationDelay())}$named$motion$random',
     );
   }
 
@@ -947,8 +952,9 @@ class Renderer {
 
   /// Registers the accumulated animation CSS as a single `<style>` entry in
   /// the shared `<defs>` block, wrapped in a reduced-motion media query so
-  /// users who prefer reduced motion get the static avatar. A no-op when no
-  /// animation CSS was produced.
+  /// users who prefer reduced motion get the static avatar. With
+  /// `animationMotionQuery` off the rules stand without the query. A no-op
+  /// when no animation CSS was produced.
   void _registerAnimationStyle() {
     if (_keyframesCss.isEmpty) {
       return;
@@ -962,8 +968,11 @@ class Renderer {
       key += '-';
     }
 
-    _defs[key] = '<style>@media (prefers-reduced-motion:no-preference)'
-        '{${_keyframesCss.join()}${_animationCss.join()}}</style>';
+    final css = '${_keyframesCss.join()}${_animationCss.join()}';
+
+    _defs[key] = _resolver.animationMotionQuery()
+        ? '<style>@media (prefers-reduced-motion:no-preference){$css}</style>'
+        : '<style>$css</style>';
   }
 }
 

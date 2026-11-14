@@ -128,6 +128,16 @@ class Resolver
         return $this->memoFloat("{$name}AnimationDelay", $range, 0.0);
     }
 
+    /**
+     * Whether the animation CSS sits inside a `prefers-reduced-motion` media
+     * query. On by default. Renderers that ignore media queries need it off,
+     * and the app then decides about `animation` from the system setting.
+     */
+    public function animationMotionQuery(): bool
+    {
+        return $this->memo('animationMotionQuery', fn() => $this->options->animationMotionQuery() ?? true);
+    }
+
     public function title(): ?string
     {
         return $this->memo('title', fn() => $this->options->title());

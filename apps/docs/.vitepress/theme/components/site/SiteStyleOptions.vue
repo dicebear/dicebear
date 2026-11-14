@@ -157,7 +157,12 @@ function isColorOption(key: string, names: string[]): boolean {
   );
 }
 
-const globalAnimationKeys = ['animation', 'animationSpeed', 'animationDelay'];
+const globalAnimationKeys = [
+  'animation',
+  'animationSpeed',
+  'animationDelay',
+  'animationMotionQuery',
+];
 
 function namedAnimationKeys(name: string): string[] {
   return [`${name}Animation`, `${name}AnimationSpeed`, `${name}AnimationDelay`];

@@ -123,6 +123,15 @@ namespace DiceBear.Internal
             return MemoFloat(name + "AnimationDelay", range, 0.0);
         }
 
+        /// <summary>
+        /// Whether the animation CSS sits inside a <c>prefers-reduced-motion</c>
+        /// media query. On by default. Renderers that ignore media queries
+        /// need it off, and the app then decides about <c>animation</c> from
+        /// the system setting.
+        /// </summary>
+        internal bool AnimationMotionQuery() =>
+            Memo("animationMotionQuery", this, static self => self._options.AnimationMotionQuery() ?? true);
+
         internal string? Title() => Memo("title", this, static self => self._options.Title());
 
         internal string Flip() =>

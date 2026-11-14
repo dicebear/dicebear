@@ -605,6 +605,7 @@ void main() {
       'animation',
       'animationSpeed',
       'animationDelay',
+      'animationMotionQuery',
       'blinkAnimation',
       'blinkAnimationSpeed',
       'blinkAnimationDelay',

@@ -108,6 +108,15 @@ class Resolver {
     return _memoFloat('${name}AnimationDelay', range, 0);
   }
 
+  /// Whether the animation CSS sits inside a `prefers-reduced-motion` media
+  /// query. On by default. Renderers that ignore media queries need it off,
+  /// and the app then decides about `animation` from the system setting.
+  bool animationMotionQuery() {
+    final value = _options.animationMotionQuery() ?? true;
+
+    return _memo('animationMotionQuery', () => value);
+  }
+
   String? title() => _memo('title', () => _options.title());
 
   String flip() =>

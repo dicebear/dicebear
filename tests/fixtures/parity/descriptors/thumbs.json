@@ -261,6 +261,9 @@
     "min": -3600,
     "max": 3600
   },
+  "animationMotionQuery": {
+    "type": "boolean"
+  },
   "blinkAnimation": {
     "type": "boolean"
   },

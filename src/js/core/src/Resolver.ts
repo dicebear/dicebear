@@ -132,6 +132,18 @@ export class Resolver<D = unknown> {
     return this.#memoFloat(`${name}AnimationDelay`, range, 0);
   }
 
+  /**
+   * Whether the animation CSS sits inside a `prefers-reduced-motion` media
+   * query. On by default. Renderers that ignore media queries need it off,
+   * and the app then decides about `animation` from the system setting.
+   */
+  animationMotionQuery(): boolean {
+    return this.#memo(
+      'animationMotionQuery',
+      () => this.#options.animationMotionQuery() ?? true,
+    );
+  }
+
   title(): string | undefined {
     return this.#memo('title', () => this.#options.title());
   }

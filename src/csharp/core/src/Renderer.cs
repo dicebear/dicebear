@@ -1121,8 +1121,9 @@ namespace DiceBear.Internal
         /// Registers the accumulated animation CSS as a single
         /// <c>&lt;style&gt;</c> entry in the shared <c>&lt;defs&gt;</c> block,
         /// wrapped in a reduced-motion media query so users who prefer reduced
-        /// motion get the static avatar. A no-op when no animation CSS was
-        /// produced.
+        /// motion get the static avatar. With <c>animationMotionQuery</c> off
+        /// the rules stand without the query. A no-op when no animation CSS
+        /// was produced.
         /// </summary>
         private void RegisterAnimationStyle()
         {
@@ -1140,10 +1141,13 @@ namespace DiceBear.Internal
                 key += "-";
             }
 
+            var css = string.Concat(_keyframesCss) + string.Concat(_animationCss);
+
             _defs.Set(
                 key,
-                "<style>@media (prefers-reduced-motion:no-preference){"
-                + string.Concat(_keyframesCss) + string.Concat(_animationCss) + "}</style>");
+                _resolver.AnimationMotionQuery()
+                    ? "<style>@media (prefers-reduced-motion:no-preference){" + css + "}</style>"
+                    : "<style>" + css + "</style>");
         }
 
         /// <summary>
@@ -1185,10 +1189,16 @@ namespace DiceBear.Internal
                     .ToList();
                 var named = states.Count > 0 ? ":" + string.Join(",", states) : string.Empty;
 
+                // Without the media query the rules apply to every viewer. A
+                // render that keeps the query must not pick them up on the
+                // same page, so the two get different names. The default adds
+                // nothing and leaves the hash as it was.
+                var motion = _resolver.AnimationMotionQuery() ? string.Empty : ":nomotionquery";
+
                 _cachedAnimationHash = Fnv1a.Hex(
                     (_style.MetaBlock().Source().Name() ?? string.Empty) + ":" + _resolver.Seed()
                     + ":" + Num.Format(_resolver.AnimationSpeed())
-                    + ":" + Num.Format(_resolver.AnimationDelay()) + named + random);
+                    + ":" + Num.Format(_resolver.AnimationDelay()) + named + motion + random);
             }
 
             return _cachedAnimationHash;

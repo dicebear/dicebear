@@ -183,6 +183,7 @@ namespace DiceBear
                 descriptor["animation"] = new JsonObject { ["type"] = "boolean" };
                 descriptor["animationSpeed"] = SpeedField();
                 descriptor["animationDelay"] = DelayField();
+                descriptor["animationMotionQuery"] = new JsonObject { ["type"] = "boolean" };
 
                 foreach (var name in _style.AnimationNames())
                 {

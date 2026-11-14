@@ -107,6 +107,7 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 		result["animation"] = map[string]any{"type": "boolean"}
 		result["animationSpeed"] = map[string]any{"type": "range", "min": 0.1, "max": 10}
 		result["animationDelay"] = map[string]any{"type": "range", "min": -3600, "max": 3600}
+		result["animationMotionQuery"] = map[string]any{"type": "boolean"}
 
 		for _, name := range d.style.AnimationNames() {
 			result[name+"Animation"] = map[string]any{"type": "boolean"}

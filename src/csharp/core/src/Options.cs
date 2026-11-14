@@ -287,6 +287,8 @@ namespace DiceBear.Internal
         /// </summary>
         internal NumberRange? AnimationDelayFor(string name) => ToRange(_data[name + "AnimationDelay"]);
 
+        internal bool? AnimationMotionQuery() => JsonRead.Bool(_data, "animationMotionQuery");
+
         /// <summary>
         /// Returns the global <c>tags</c> filter as parsed tokens, or an empty
         /// list when unset.

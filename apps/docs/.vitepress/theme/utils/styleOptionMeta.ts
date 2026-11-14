@@ -27,6 +27,8 @@ export function getOptionDescription(name: string): string | undefined {
     return 'Start offset in seconds, added after the speed applies. As a range [min, max], every seed starts at its own moment, so avatars next to each other do not move in step.';
   if (name.match(/AnimationDelay$/))
     return 'Start offset in seconds for this animation alone. Wins over animationDelay for it.';
+  if (name === 'animationMotionQuery')
+    return 'Keeps the animations inside a prefers-reduced-motion media query, so visitors who ask for less motion see a still avatar. Turn it off for SVG libraries in native apps that ignore media queries, and decide about animation in the app.';
   if (name.match(/Probability$/))
     return 'Probability that this component appears in the avatar.';
   if (name.match(/Variant$/))
@@ -120,9 +122,11 @@ export function getOptionExamples(
 
 /**
  * The global animation options and their per-name counterparts:
- * `animation`, `animationSpeed`, `animationDelay`, `blinkAnimation`,
- * `blinkAnimationSpeed`, `blinkAnimationDelay`.
+ * `animation`, `animationSpeed`, `animationDelay`, `animationMotionQuery`,
+ * `blinkAnimation`, `blinkAnimationSpeed`, `blinkAnimationDelay`.
  */
 export function isAnimationOption(name: string): boolean {
-  return /^animation(Speed|Delay)?$|Animation(Speed|Delay)?$/.test(name);
+  return /^animation(Speed|Delay|MotionQuery)?$|Animation(Speed|Delay)?$/.test(
+    name,
+  );
 }
