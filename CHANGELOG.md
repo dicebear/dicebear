@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-rc.3] - 2026-11-15
+
 ### Added
 
 - **Core (all languages):** Every component `<use>` now carries a
@@ -700,7 +702,9 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.2...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.3...HEAD
+[11.0.0-rc.3]:
+  https://github.com/dicebear/dicebear/compare/v11.0.0-rc.2...v11.0.0-rc.3
 [11.0.0-rc.2]:
   https://github.com/dicebear/dicebear/compare/v11.0.0-rc.1...v11.0.0-rc.2
 [11.0.0-rc.1]:
