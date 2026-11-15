@@ -47,6 +47,13 @@ and this project adheres to
   are in the editor. The sidebar icons in the docs now come from the 11.x API,
   which is the first one that serves the two.
 
+### Fixed
+
+- **CLI:** The CLI runs on Windows. It read its own `package.json` through a URL
+  path, which is not a valid file path on Windows, so every command,
+  `dicebear --version` included, failed with `ENOENT`. Paths with spaces or
+  other characters that URLs encode work as well.
+
 ## [11.0.0-rc.2] - 2026-09-07
 
 ### Removed
