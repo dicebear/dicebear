@@ -1,0 +1,23 @@
+# Plumber overlay. Every control comes from the built-in defaults, only what
+# differs for this repository is written here. `plumber config resolve` prints
+# the full effective configuration.
+extends: plumber:default
+version: '2.0'
+
+github:
+  controls:
+    githubActionMustComeFromAuthorizedSources:
+      # The built-in list stays, plus the four community actions the workflows
+      # use. All four are pinned by commit.
+      includePlumberDefaults: true
+      trustedGithubActions:
+        - ayeressian/bunnycdn-storage-deploy
+        - danharrin/monorepo-split-github-action
+        - dtolnay/rust-toolchain
+        - shivammathur/setup-php
+
+    # dtolnay/rust-toolchain downloads rustup from sh.rustup.rs when the runner
+    # has none. That happens inside the action and cannot be pinned from here,
+    # so this check is off.
+    actionsMustNotExecuteMutableRemoteCode:
+      enabled: false

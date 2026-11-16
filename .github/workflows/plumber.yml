@@ -1,0 +1,42 @@
+name: Plumber
+
+on:
+  push:
+    branches:
+      - '*.x'
+  pull_request:
+    branches:
+      - '*.x'
+
+permissions:
+  contents: read
+
+jobs:
+  plumber:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read # actions/checkout
+      # Lets Plumber read the workflow states and one run log to see what the
+      # job token can really do. The action documents the scope.
+      actions: read
+      security-events: write # the report goes to code scanning
+      id-token: write # publishes the score, no stored token
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: getplumber/plumber@ec8cb3a7edd6a324b33e85109b627b2df6023d94 # v0.7.23
+        with:
+          # A pull request from a fork gets a read-only token and cannot upload
+          # to code scanning. The report is still attached to the run as an
+          # artifact.
+          upload-sarif: ${{ github.event.pull_request.head.repo.fork != true }}
+          # Fail under 85 points instead of on any finding, so one small
+          # finding does not block a pull request.
+          min-points: 85
+          # Publishes the score and the repository name on
+          # score.getplumber.io. Remove this line to keep them private.
+          score-push: true
