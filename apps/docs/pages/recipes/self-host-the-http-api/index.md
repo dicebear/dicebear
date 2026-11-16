@@ -69,6 +69,78 @@ http://localhost:3000/11.x/<styleName>/options.json
 
 Both responses are cached according to `CACHE_CONTROL_STYLES`.
 
+## Signed URLs
+
+By default, anyone who can reach your instance can request any avatar. Set
+`SIGNING_SECRETS` and the avatar endpoints answer an unsigned or wrongly signed
+URL with a `403`. Requests the API turns down before it gets to the signature
+keep their usual answer, such as a `404` for an unknown style or a `400` for too
+many parameters. The health check, the style listing and the metadata endpoints
+stay open.
+
+The signature is the HMAC-SHA256 of the path and query string, hex encoded and
+appended as the `sig` parameter. Encode each value before you sign, because the
+browser sends `Zoë` as `Zo%C3%AB` and the API checks the encoded form. List
+values stay separated by plain commas:
+
+```js
+import { createHmac } from 'node:crypto';
+
+// Browsers send ' in a query string as %27, encodeURIComponent leaves it.
+const encode = (value) => encodeURIComponent(value).replace(/'/g, '%27');
+
+function signedAvatarUrl(path, options, secret) {
+  const query = Object.entries(options)
+    .map(([key, value]) => {
+      const values = Array.isArray(value) ? value : [value];
+
+      return `${key}=${values.map(encode).join(',')}`;
+    })
+    .join('&');
+
+  const url = query ? `${path}?${query}` : path;
+  const sig = createHmac('sha256', secret).update(url).digest('hex');
+
+  return `${url}${query ? '&' : '?'}sig=${sig}`;
+}
+
+signedAvatarUrl(
+  '/11.x/thumbs/svg',
+  { seed: 'Zoë', backgroundColor: ['b6e3f4', 'c0aede'] },
+  '0123456789abcdef0123456789abcdef',
+);
+// /11.x/thumbs/svg?seed=Zo%C3%AB&backgroundColor=b6e3f4,c0aede&sig=e5e07a3e3f33f3eb6973e0492f767aee9d946e07d2d2631aed94130c56c04d05
+```
+
+- With the options in the query string, the API checks the URL exactly as it
+  arrives. `sig` has to be the last parameter, in lowercase hex, and everything
+  in front of it is the signed string. If a proxy in front of the API rewrites
+  the path, sign the path the API receives.
+- URLs that carry the options in the path, as in the
+  [Gravatar recipe](/recipes/gravatar-default-image/), keep `sig` and `exp` in
+  that path segment too, because Gravatar drops a query string. Sign the path
+  with its options before you encode the segment, for example
+  `/11.x/lorelei/png/seed=Zo%C3%AB&exp=1794850233`. Then append `&sig=…` and
+  encode the segment as a whole. Such a URL must not have a query string.
+- Every secret needs at least 32 characters, and the API refuses to start with a
+  shorter one. `openssl rand -hex 32` generates a random one. A short or
+  guessable secret can be found by trial and error from a single signed URL.
+- An optional `exp` parameter holds a Unix timestamp in seconds. From that
+  moment on the URL returns a `403`. Add it next to the other options before
+  signing, so the signature covers it. The `max-age` in `Cache-Control` is
+  capped at the time that remains.
+- `exp` must appear once and hold 1 to 10 digits. `Date.now()` returns
+  milliseconds, so divide by 1000. A repeated `exp` or one in another format
+  gets a `403` with `Invalid expiry.`
+- `SIGNING_SECRETS` takes several secrets separated by commas, with spaces
+  around each one trimmed, and a signature made with any of them is accepted. To
+  rotate, add the new secret, switch your application to it and remove the old
+  one once its URLs are no longer in use.
+- Removing a secret does not purge responses that a CDN or a browser has already
+  cached.
+- Sign on your server. A secret that ships to a browser or a mobile app can be
+  read by anyone.
+
 ## Environment variables
 
 | Variable                           | Default                                       | Description                                                          |
@@ -92,6 +164,7 @@ Both responses are cached according to `CACHE_CONTROL_STYLES`.
 | `QUERY_STRING_ARRAY_LIMIT_MIN`     | `20`                                          | Minimum number of values allowed per array parameter.                |
 | `EXCLUDED_OPTIONS`                 | `idRandomization,fontFamily,fontWeight,title` | Comma-separated list of option names to exclude.                     |
 | `QUERY_STRING_PARAMETER_LIMIT_MIN` | `100`                                         | Minimum number of query string parameters allowed.                   |
+| `SIGNING_SECRETS`                  |                                               | Comma-separated secrets for [signed URLs](#signed-urls).             |
 
 `{FORMAT}` stands for `PNG`, `JPEG`, `WEBP`, or `AVIF`, so `PNG_SIZE_MAX` sets
 the largest PNG and `AVIF=0` turns the AVIF endpoint off.
