@@ -38,10 +38,12 @@ def _utf16_code_units(value: str) -> list[int]:
 
     Iterating ``value`` directly would yield code points and break on non-BMP
     input (e.g. emoji), so encode to little-endian UTF-16 and read uint16 units.
+    ``surrogatepass`` keeps a lone surrogate (which JS strings can hold) as its
+    own code unit instead of raising ``UnicodeEncodeError``.
     """
     if value == "":
         return []
 
-    encoded = value.encode("utf-16-le")
+    encoded = value.encode("utf-16-le", "surrogatepass")
 
     return list(struct.unpack(f"<{len(encoded) // 2}H", encoded))

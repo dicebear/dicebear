@@ -164,7 +164,7 @@ def _utf16_sort_key(value: object) -> bytes:
     Encoding to big-endian UTF-16 makes Python's byte comparison reproduce that
     order; it differs from code-point order only for supplementary-plane chars.
     """
-    return str(value).encode("utf-16-be")
+    return str(value).encode("utf-16-be", "surrogatepass")
 
 
 def _unique_by_code_point(
