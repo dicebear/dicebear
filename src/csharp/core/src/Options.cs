@@ -30,7 +30,8 @@ namespace DiceBear.Internal
     }
 
     /// <summary>
-    /// Copies a validated document into the form the typed accessors read.
+    /// Copies the options document into the form the validator and the typed
+    /// accessors read.
     /// </summary>
     /// <remarks>
     /// The copy is what the reference gets from <c>structuredClone</c>: once
@@ -38,14 +39,14 @@ namespace DiceBear.Internal
     /// change a rendered avatar. Numbers are rebuilt from their JSON text on
     /// the way, because a hand-built C# <c>int</c> does not read back as a
     /// <c>double</c> and would drop out of the accessors. After the copy, a
-    /// hand-built <c>128</c> and a parsed <c>128</c> read the same.
+    /// hand-built <c>128</c> and a parsed <c>128</c> read the same. In the
+    /// options, every lone surrogate in a string or a property name becomes
+    /// U+FFFD, as in every port.
     ///
-    /// Serializing the document and parsing it back does both jobs in one
-    /// line, and that is what this class replaces. The round-trip encodes to
-    /// UTF-8, so an unpaired surrogate in a seed or a title comes back as
-    /// U+FFFD and the seed then drives a different PRNG stream than the
-    /// reference. It also left the nesting limit to a serializer default,
-    /// which <see cref="MaxDepth"/> states as a number of its own.
+    /// Serializing the document and parsing it back would do these jobs in
+    /// one line, and that is what this class replaces. It would leave the
+    /// nesting limit to a serializer default, which <see cref="MaxDepth"/>
+    /// states as a number of its own.
     /// </remarks>
     internal static class JsonSnapshot
     {
@@ -93,7 +94,16 @@ namespace DiceBear.Internal
         /// <see cref="ExceedsMaxDepth(JsonNode?)"/> first, since the copy
         /// follows the document's nesting.
         /// </summary>
-        internal static JsonObject Of(JsonNode? node) => Copy(node) as JsonObject ?? new JsonObject();
+        internal static JsonObject Of(JsonNode? node) => Copy(node, wellFormed: false) as JsonObject ?? new JsonObject();
+
+        /// <summary>
+        /// Returns a copy with every lone surrogate in a string or a property
+        /// name replaced by U+FFFD, the form every port reads the options in.
+        /// Numbers are taken as they stand; <see cref="Of(JsonNode?)"/>
+        /// rebuilds them once the copy is validated. Check
+        /// <see cref="ExceedsMaxDepth(JsonNode?)"/> first.
+        /// </summary>
+        internal static JsonNode? WellFormedCopy(JsonNode? node) => Copy(node, wellFormed: true);
 
         private static bool ExceedsMaxDepth(JsonNode? node, int depth)
         {
@@ -137,10 +147,12 @@ namespace DiceBear.Internal
         }
 
         /// <summary>
-        /// Copies one node, rebuilding numbers from their JSON text and taking
-        /// everything else as it stands.
+        /// Copies one node. With <paramref name="wellFormed"/> set, lone
+        /// surrogates in strings and property names are replaced; without it,
+        /// numbers are rebuilt from their JSON text. Everything else is taken
+        /// as it stands.
         /// </summary>
-        private static JsonNode? Copy(JsonNode? node)
+        private static JsonNode? Copy(JsonNode? node, bool wellFormed)
         {
             if (node is JsonObject obj)
             {
@@ -148,7 +160,7 @@ namespace DiceBear.Internal
 
                 foreach (var entry in obj)
                 {
-                    result[entry.Key] = Copy(entry.Value);
+                    result[wellFormed ? Text.WellFormed(entry.Key) : entry.Key] = Copy(entry.Value, wellFormed);
                 }
 
                 return result;
@@ -160,10 +172,19 @@ namespace DiceBear.Internal
 
                 foreach (var item in array)
                 {
-                    items.Add(Copy(item));
+                    items.Add(Copy(item, wellFormed));
                 }
 
                 return items;
+            }
+
+            if (wellFormed)
+            {
+                // Numbers stay as they are: the validator turns down a NaN
+                // before Number() would have to rebuild it.
+                return node is JsonValue text && text.TryGetValue<string>(out var str)
+                    ? JsonValue.Create(Text.WellFormed(str))
+                    : node?.DeepClone();
             }
 
             if (node is JsonValue value && value.GetValueKind() == JsonValueKind.Number)
@@ -209,34 +230,53 @@ namespace DiceBear.Internal
 
         internal Options(JsonNode? data)
         {
-            var input = data ?? new JsonObject();
-
-            if (JsonSnapshot.ExceedsMaxDepth(input))
-            {
-                throw new OptionsValidationException(new[]
-                {
-                    new ValidationErrorDetail(message: JsonSnapshot.DepthMessage),
-                });
-            }
+            JsonNode copy;
 
             try
             {
-                OptionsValidator.Validate(input);
+                var input = data ?? new JsonObject();
+
+                if (JsonSnapshot.ExceedsMaxDepth(input))
+                {
+                    throw new OptionsValidationException(new[]
+                    {
+                        new ValidationErrorDetail(message: JsonSnapshot.DepthMessage),
+                    });
+                }
+
+                // Copy first: the copy has every lone surrogate replaced by
+                // U+FFFD, and the validator checks what the avatar will read.
+                copy = JsonSnapshot.WellFormedCopy(input)!;
             }
-            catch (JsonException exception)
+            catch (InvalidOperationException exception)
             {
-                // The validator reads the options through a serializer, which
-                // turns some documents down on its own: one nested past its
-                // limit, or a string that came in as JSON text carrying an
-                // unpaired surrogate. Either way it leaves here as this port's
-                // own error.
+                // A document parsed from JSON text with a lone surrogate escape
+                // such as "\ud83d" throws as soon as that string or property
+                // name is read. Decoding JSON is up to the caller, as with the
+                // usual decoders in PHP and Rust, so it leaves here as this
+                // port's own error.
                 throw new OptionsValidationException(new[]
                 {
                     new ValidationErrorDetail(message: exception.Message),
                 });
             }
 
-            _data = JsonSnapshot.Of(input);
+            try
+            {
+                OptionsValidator.Validate(copy);
+            }
+            catch (JsonException exception)
+            {
+                // The validator reads the options through a serializer, which
+                // turns some documents down on its own, such as one nested
+                // past its limit. It leaves here as this port's own error.
+                throw new OptionsValidationException(new[]
+                {
+                    new ValidationErrorDetail(message: exception.Message),
+                });
+            }
+
+            _data = JsonSnapshot.Of(copy);
         }
 
         internal string? Seed() => JsonRead.Str(_data, "seed");

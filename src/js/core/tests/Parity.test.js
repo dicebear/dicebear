@@ -111,6 +111,23 @@ describe('Parity / Prng', () => {
   });
 });
 
+describe('Parity / Ill-formed text', () => {
+  // Lone surrogates in the options become U+FFFD before anything reads them.
+  // Inputs are UTF-16 code-unit arrays; the `utf8` cases are for the ports
+  // whose strings are bytes. See generate.mjs.
+  const fixture = loadFixture('ill-formed-text.json');
+  const style = new Style(loadFixture('styles/initials.json'));
+
+  for (const [i, c] of fixture.utf16.entries()) {
+    it(`utf16 #${i} renders like ${JSON.stringify(c.wellFormed)}`, () => {
+      const input = String.fromCharCode(...c.input);
+      const avatar = new Avatar(style, { seed: input, title: input });
+
+      assert.equal(avatar.toString(), c.svg);
+    });
+  }
+});
+
 describe('Parity / Numbers', () => {
   // The renderer formats every numeric attribute via Number.format (rounded to
   // 5 decimals); this pins that contract so the PHP/Python ports stay identical.

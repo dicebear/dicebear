@@ -1,4 +1,5 @@
 import type { Range } from './StyleDefinition.js';
+import { Text } from './Utils/Text.js';
 import type {
   StyleOptions,
   StyleOptionsFlipValue,
@@ -22,7 +23,9 @@ export class Options<D = unknown> {
   #tags?: readonly TagFilterToken[];
 
   constructor(data: StyleOptions<D> = {} as StyleOptions<D>) {
-    this.#data = structuredClone(data);
+    // Lone surrogates become U+FFFD before anything reads the options, so the
+    // seed hashes and the text renders the same in every port.
+    this.#data = Text.wellFormedDeep(structuredClone(data));
   }
 
   seed(): string | undefined {

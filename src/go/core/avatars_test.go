@@ -2,6 +2,7 @@ package dicebear
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -135,4 +136,50 @@ func firstDiff(a, b string) int {
 		}
 	}
 	return n
+}
+
+// Ill-formed UTF-8 in the options becomes U+FFFD before anything reads it, one
+// per maximal subpart, so the avatar matches the one for the well-formed text.
+// Inputs are hex strings; the utf16 cases are for the ports whose strings are
+// UTF-16 code units. See tests/fixtures/parity/generate.mjs.
+func TestIllFormedTextParity(t *testing.T) {
+	styleJSON, err := os.ReadFile(fixturePath(t, filepath.Join("styles", "initials.json")))
+	if err != nil {
+		t.Fatalf("read style: %v", err)
+	}
+
+	style, err := NewStyle(styleJSON)
+	if err != nil {
+		t.Fatalf("parse style: %v", err)
+	}
+
+	var fixture struct {
+		UTF8 []struct {
+			Input      string `json:"input"`
+			WellFormed string `json:"wellFormed"`
+			SVG        string `json:"svg"`
+		} `json:"utf8"`
+	}
+	readFixture(t, "ill-formed-text.json", &fixture)
+
+	if len(fixture.UTF8) == 0 {
+		t.Fatal("no utf8 cases")
+	}
+
+	for _, c := range fixture.UTF8 {
+		raw, err := hex.DecodeString(c.Input)
+		if err != nil {
+			t.Fatalf("decode %s: %v", c.Input, err)
+		}
+
+		input := string(raw)
+		avatar, err := NewAvatar(style, map[string]any{"seed": input, "title": input})
+		if err != nil {
+			t.Fatalf("%s: %v", c.Input, err)
+		}
+
+		if got := avatar.String(); got != c.SVG {
+			t.Errorf("%s (%q): SVG differs at byte %d", c.Input, c.WellFormed, firstDiff(got, c.SVG))
+		}
+	}
 }

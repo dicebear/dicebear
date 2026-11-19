@@ -8,12 +8,19 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Core (all languages):** Ill-formed text in the options becomes U+FFFD before
+  the options are validated or read: a lone surrogate (for example half of an
+  emoji, which JS, Python, C# and Dart strings can hold), or an ill-formed UTF-8
+  sequence in Go and PHP, one U+FFFD per maximal subpart. Such a seed now
+  renders the same avatar in every port; before, the ports disagreed with each
+  other. Avatars for such seeds and titles change, all others stay the same.
+
 ### Fixed
 
-- **Core (Python):** A seed or option value with a lone surrogate (for example
-  half of an emoji, which JS strings can hold) raised `UnicodeEncodeError` while
-  hashing or sorting. It is now hashed as one UTF-16 code unit, like the JS
-  reference.
+- **Core (Python):** A seed or option value with a lone surrogate raised
+  `UnicodeEncodeError` while hashing or sorting.
 
 ## [11.0.0-rc.3] - 2026-11-15
 

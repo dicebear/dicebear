@@ -460,35 +460,32 @@ public class ApiTests
     }
 
     /// <summary>
-    /// The reference reads strings as UTF-16 code units, so an unpaired
-    /// surrogate in a seed is a seed like any other and picks its own avatar.
-    /// Anything that encodes the options to UTF-8 on the way in replaces the
-    /// surrogate with U+FFFD, which is a different seed and a different
-    /// avatar. The options here are built by hand for the same reason:
+    /// Every port replaces an unpaired surrogate in the options with U+FFFD
+    /// before it reads them, so the seed picks the same avatar as the seed
+    /// with U+FFFD in its place. The options are built by hand:
     /// <see cref="JsonSerializer"/> would encode the surrogate away before the
     /// port ever saw it.
     /// </summary>
     [Fact]
-    public void KeepsAnUnpairedSurrogateInTheSeed()
+    public void ReplacesAnUnpairedSurrogateInTheSeed()
     {
         var style = Style.Parse(MinimalStyle);
 
         var lone = new Avatar(style, new JsonObject { ["seed"] = "a\uD800b" }).ToSvg();
         var replaced = new Avatar(style, new JsonObject { ["seed"] = "a�b" }).ToSvg();
 
-        Assert.NotEqual(replaced, lone);
+        Assert.Equal(replaced, lone);
     }
 
     [Fact]
-    public void KeepsAnUnpairedSurrogateInTheTitle()
+    public void ReplacesAnUnpairedSurrogateInTheTitle()
     {
         var svg = new Avatar(
             Style.Parse(MinimalStyle),
             new JsonObject { ["seed"] = "x", ["title"] = "broken \uD800 title" }).ToSvg();
 
-        // The reference renders the code unit the caller passed in.
-        Assert.Contains("<title>broken \uD800 title</title>", svg, StringComparison.Ordinal);
-        Assert.DoesNotContain("�", svg, StringComparison.Ordinal);
+        Assert.Contains("<title>broken � title</title>", svg, StringComparison.Ordinal);
+        Assert.DoesNotContain("\uD800", svg, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -511,10 +508,11 @@ public class ApiTests
     }
 
     /// <summary>
-    /// The reference reads a lone surrogate written as an escape in JSON text
-    /// and renders it. The .NET reader refuses to hand that string over at
-    /// all, so the port cannot take the text either. What it must not do is
-    /// let the reader's own exception out in place of its own.
+    /// The .NET reader refuses to hand over a string with a lone surrogate
+    /// escape at all, so the port cannot take such text. Decoding JSON is up
+    /// to the caller, as with the usual decoders in PHP and Rust. What the
+    /// port must not do is let the reader's own exception out in place of its
+    /// own.
     /// </summary>
     [Fact]
     public void RejectsJsonTextCarryingAnUnpairedSurrogate()
@@ -851,12 +849,15 @@ public class ApiTests
     }
 
     [Fact]
-    public void EscapesAnUnpairedSurrogateInTheJsonEnvelope()
+    public void WritesTheReplacedSurrogateToTheJsonEnvelope()
     {
         var options = new JsonObject { ["seed"] = "x", ["title"] = "broken \ud800 title" };
         var avatar = new Avatar(Style.Parse(MinimalStyle), options);
 
-        Assert.Contains("\"title\":\"broken \\ud800 title\"", avatar.ToJson(), StringComparison.Ordinal);
+        Assert.DoesNotContain("\\ud800", avatar.ToJson(), StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(
+            "broken � title",
+            JsonNode.Parse(avatar.ToJson())!["options"]!["title"]!.GetValue<string>());
     }
 
     [Fact]
@@ -864,8 +865,20 @@ public class ApiTests
     {
         // encodeURIComponent throws URIError on this in the reference. Every
         // port refuses it rather than substituting a replacement character.
-        var options = new JsonObject { ["seed"] = "x", ["title"] = "broken \ud800 title" };
-        var avatar = new Avatar(Style.Parse(MinimalStyle), options);
+        // The options cannot carry one into the markup any more, a style
+        // definition still can.
+        var definition = JsonNode.Parse(MinimalStyle)!.AsObject();
+
+        definition["meta"] = new JsonObject
+        {
+            ["license"] = new JsonObject
+            {
+                ["name"] = "CC \uD800 BY",
+                ["url"] = "https://example.com",
+            },
+        };
+
+        var avatar = new Avatar(new Style(definition), Options(("seed", "x")));
 
         Assert.Throws<ArgumentException>(() => avatar.ToDataUri());
     }

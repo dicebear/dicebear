@@ -264,6 +264,15 @@ circular color-reference chains, the `OptionsDescriptor` field map, and full
 covers seed, size, transforms, gradients, `title` escaping, and
 component-variant overrides.
 
+`ill-formed-text.json` pins that every port replaces ill-formed text in the
+options with U+FFFD before reading them (see
+[Ill-formed text](https://www.dicebear.com/create-styles/implement-dicebear-core/#ill-formed-text)
+in the spec). Its `utf16` cases hold lone surrogates as arrays of UTF-16 code
+units, because not every JSON library reads a lone surrogate in a JSON string;
+JS, Python, C# and Dart run them. Its `utf8` cases hold ill-formed byte
+sequences as hex strings; Go and PHP run them. Rust strings are always
+well-formed, so Rust has nothing to run.
+
 Float determinism is part of the parity contract: `pow` is not correctly rounded
 (JS engines, libm, and Go all differ in the last bit), so the sRGB linearization
 ships as a precomputed 256-entry table in every port, and languages that fuse

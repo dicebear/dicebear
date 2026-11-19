@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DiceBear;
 
+use DiceBear\Utils\Text;
 use DiceBear\Validator\OptionsValidator;
 
 /**
@@ -34,6 +35,11 @@ class Options
      */
     public function __construct(array $data = [])
     {
+        // Ill-formed UTF-8 becomes U+FFFD before anything reads the options,
+        // so the seed hashes and the text renders the same in every port.
+        /** @var array<string, mixed> $data */
+        $data = Text::wellFormedDeep($data);
+
         OptionsValidator::validate($data);
 
         $this->data = $data;

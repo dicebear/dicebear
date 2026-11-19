@@ -348,6 +348,37 @@ The `Options` class reads the raw user options and normalizes them, and the
 `Resolver` turns them into the concrete values the renderer uses. Each
 resolution that involves chance uses the PRNG with a specific key.
 
+### Ill-formed text
+
+Before the options are validated or read, every string in them is made
+well-formed: object keys, values and array items at any depth. Ill-formed text
+has no meaning another port could reproduce, so each piece of it becomes U+FFFD
+(the replacement character). Which kind a port can receive depends on how its
+strings are stored:
+
+- **UTF-16 strings** (JavaScript, Python, C#, Dart): every lone surrogate, that
+  is a high surrogate not followed by a low one or a low surrogate not preceded
+  by a high one, becomes U+FFFD. This is `String.prototype.toWellFormed()`. In
+  Python, a high and a low surrogate code point next to each other form the
+  character the pair stands for.
+- **Byte strings** (Go, PHP): every maximal subpart of an ill-formed UTF-8
+  sequence becomes one U+FFFD, the substitution the Unicode Standard recommends
+  (chapter 3, "U+FFFD Substitution of Maximal Subparts") and the WHATWG
+  `TextDecoder` applies. A maximal subpart is a lead byte followed by the
+  continuation bytes that still fit it (Unicode table 3-7); a byte that cannot
+  start a sequence is one subpart on its own. For example, `E2 82 41` becomes
+  `U+FFFD A`, and the encoded surrogate `ED A0 BD` becomes three U+FFFD.
+- **Always well-formed strings** (Rust): nothing to do.
+
+A seed cut in the middle of an emoji therefore renders the same avatar in every
+port, and no ill-formed text reaches the hash, the PRNG or the SVG.
+`tests/fixtures/parity/ill-formed-text.json` holds the cases for both kinds.
+
+The rule covers the options the core receives. How a JSON decoder treats a lone
+surrogate escape such as `"\ud83d"` before that is up to the caller: the usual
+decoders in PHP, Rust and C# turn the document down, Go's turns the escape into
+U+FFFD. Style definitions are not user input and are taken as they are.
+
 ### Core options
 
 | Option                  | PRNG key                | Resolution                                                                                            |

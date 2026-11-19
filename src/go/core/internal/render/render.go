@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 
 	"github.com/dicebear/dicebear-go/v11/internal/style"
+	"github.com/dicebear/dicebear-go/v11/internal/text"
 	"github.com/dicebear/dicebear-go/v11/internal/validate"
 )
 
@@ -24,13 +25,17 @@ type Result struct {
 // options or a circular color reference.
 //
 // Options are normalized through a JSON round-trip, so passing a Go int such as
-// map[string]any{"size": 128} behaves the same as the JSON 128.
+// map[string]any{"size": 128} behaves the same as the JSON 128. Before that,
+// every ill-formed UTF-8 sequence in a string becomes U+FFFD, the same text
+// every other port reads.
 func Generate(s *style.Style, opts map[string]any) (*Result, error) {
 	if opts == nil {
 		opts = map[string]any{}
 	}
 
-	optionsJSON, err := json.Marshal(opts)
+	// json.Marshal would replace ill-formed bytes too, but one U+FFFD per
+	// byte; text.WellFormedValue replaces them the way every port does.
+	optionsJSON, err := json.Marshal(text.WellFormedValue(opts))
 	if err != nil {
 		return nil, err
 	}

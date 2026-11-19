@@ -6,6 +6,7 @@ import copy
 from dataclasses import dataclass
 from typing import Any, cast
 
+from .utils.text import Text
 from .validator import OptionsValidator
 
 Numeric = int | float
@@ -42,7 +43,9 @@ class Options:
     """
 
     def __init__(self, data: dict[str, Any] | None = None) -> None:
-        data = data if data is not None else {}
+        # Lone surrogates become U+FFFD before anything reads the options, so
+        # the seed hashes and the text renders the same in every port.
+        data = Text.well_formed_deep(data if data is not None else {})
         OptionsValidator.validate(data)
 
         # Deep-copy so later caller mutations cannot leak into resolution,

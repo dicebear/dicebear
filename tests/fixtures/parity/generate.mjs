@@ -1911,6 +1911,85 @@ for (const [styleName, cases] of Object.entries(avatarFixtures)) {
 }
 
 // ---------------------------------------------------------------------------
+// Ill-formed text fixtures
+// ---------------------------------------------------------------------------
+//
+// Every port replaces ill-formed text in the options with U+FFFD before it
+// reads them, so the seed hashes and the text renders the same everywhere.
+// Which kind of ill-formed text a port can receive depends on its strings:
+//
+// - utf16: lone surrogates, run by the ports whose strings are UTF-16 code
+//   units (JS, Python, C#, Dart). Each one becomes U+FFFD, as with
+//   String.prototype.toWellFormed().
+// - utf8: ill-formed byte sequences, run by the ports whose strings are bytes
+//   (Go, PHP). Each maximal subpart becomes one U+FFFD, the substitution the
+//   Unicode Standard recommends and TextDecoder applies.
+//
+// Rust strings are always well-formed, so Rust has nothing to run here.
+//
+// The input goes in as both seed and title: the seed reaches the hash, the
+// PRNG and the initials, the title is written to the SVG as it is. `svg` is
+// the avatar for the well-formed text, which the ill-formed input must match.
+// Inputs are code-unit arrays and hex strings, because not every JSON library
+// reads a lone surrogate, and none reads raw ill-formed bytes.
+
+console.log('Generating ill-formed-text.json…');
+
+const HIGH = String.fromCharCode(0xd83d);
+const LOW = String.fromCharCode(0xde00);
+
+function codeUnits(value) {
+  return Array.from({ length: value.length }, (_, i) => value.charCodeAt(i));
+}
+
+function illFormedCase(input, wellFormed) {
+  const svg = new Avatar(new Style(styles.initials), {
+    seed: wellFormed,
+    title: wellFormed,
+  }).toString();
+
+  return { input, wellFormed, svg };
+}
+
+const utf16Inputs = [
+  'Jo' + HIGH, // an emoji cut in half
+  LOW + 'Ann',
+  'x' + HIGH + 'y',
+  LOW + HIGH, // a reversed pair is two lone surrogates
+  HIGH + EMOJI, // a lone surrogate right before a valid pair
+  'Zoë' + String.fromCharCode(0xdfff),
+  'Ab' + EMOJI, // well-formed, must stay as it is
+];
+
+const utf8Inputs = [
+  '4a6ff09f98', // "Jo" and an emoji cut after three of four bytes
+  '78eda0bd79', // a surrogate encoded as UTF-8
+  'e282416e6e', // a cut three-byte sequence before "Ann"
+  'c0af426f', // an overlong "/"
+  '457661f4908080', // a code point above U+10FFFF
+  '804c69', // a lone continuation byte
+  '4d61ff', // a byte that never occurs in UTF-8
+  'e228a1', // a lead byte, then a byte that cannot continue it
+  'f0808080', // an overlong four-byte sequence
+  '4162f09f9880', // well-formed, must stay as it is
+];
+
+writeJson('ill-formed-text.json', {
+  utf16: utf16Inputs.map((input) =>
+    illFormedCase(codeUnits(input), input.toWellFormed()),
+  ),
+  utf8: utf8Inputs.map((hex) =>
+    illFormedCase(
+      hex,
+      // ignoreBOM keeps a leading U+FEFF; the ports do not strip it either.
+      new TextDecoder('utf-8', { fatal: false, ignoreBOM: true }).decode(
+        Buffer.from(hex, 'hex'),
+      ),
+    ),
+  ),
+});
+
+// ---------------------------------------------------------------------------
 // OptionsDescriptor fixtures
 // ---------------------------------------------------------------------------
 //

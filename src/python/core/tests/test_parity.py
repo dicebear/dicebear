@@ -13,6 +13,7 @@ To regenerate the fixtures: ``npm run fixtures:parity`` (from repo root).
 from __future__ import annotations
 
 import json
+import struct
 from pathlib import Path
 from typing import Any
 
@@ -110,6 +111,36 @@ def test_prng_integer(c: dict[str, Any]) -> None:
 @pytest.mark.parametrize("c", **_prng_params("shuffle"))
 def test_prng_shuffle(c: dict[str, Any]) -> None:
     assert Prng(c["seed"]).shuffle(c["key"], c["items"]) == c["result"]
+
+
+# ---------------------------------------------------------------------------
+# Ill-formed text
+# ---------------------------------------------------------------------------
+
+# Lone surrogates in the options become U+FFFD before anything reads them.
+# Inputs are UTF-16 code-unit arrays; the ``utf8`` cases are for the ports whose
+# strings are bytes. See generate.mjs.
+_ILL_FORMED = _load("ill-formed-text.json")["utf16"]
+_INITIALS_STYLE = Style(_load("styles/initials.json"))
+
+
+def _from_code_units(units: list[int]) -> str:
+    """Build the str a JS string with these code units corresponds to.
+
+    Decoding (not ``chr`` per unit) joins a valid pair into one code point;
+    ``surrogatepass`` keeps a lone surrogate as it is.
+    """
+    return struct.pack(f"<{len(units)}H", *units).decode("utf-16-le", "surrogatepass")
+
+
+@pytest.mark.parametrize(
+    "c", _ILL_FORMED, ids=[f"#{i}" for i in range(len(_ILL_FORMED))]
+)
+def test_ill_formed_text(c: dict[str, Any]) -> None:
+    text = _from_code_units(c["input"])
+    avatar = Avatar(_INITIALS_STYLE, {"seed": text, "title": text})
+
+    assert str(avatar) == c["svg"]
 
 
 # ---------------------------------------------------------------------------

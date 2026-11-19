@@ -4,6 +4,7 @@ library;
 import 'error/options_validation_error.dart';
 import 'range.dart';
 import 'utils/deep_copy.dart';
+import 'utils/text.dart';
 import 'validator/options_validator.dart';
 
 /// The two values of the per-color `${name}ColorOrder` option.
@@ -204,13 +205,16 @@ class Options {
   /// absent (Dart map lookup already yields `null` for missing keys).
   Object? _get(String key) => _data[key];
 
-  /// Validates the user input, then deep-copies it so the stored data cannot
-  /// alias the caller's map. Validation runs on the original input, like the
-  /// JS port (validate, then `structuredClone`).
+  /// Replaces lone surrogates with U+FFFD, validates the result, then
+  /// deep-copies it so the stored data cannot alias the caller's map. Every
+  /// port validates what the avatar will read, so the seed hashes and the
+  /// text renders the same everywhere.
   static Map<String, Object?> _validateAndCopy(Map<String, Object?> data) {
-    validateOptions(data);
+    final wellFormedData = wellFormedJsonValue(data);
 
-    return deepCopyJsonMap(data);
+    validateOptions(wellFormedData);
+
+    return deepCopyJsonValue(wellFormedData) as Map<String, Object?>;
   }
 
   /// Decodes a single raw `tags` token into a [TagFilterToken]. A leading `!`

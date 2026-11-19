@@ -84,6 +84,27 @@ public class AvatarParityTests
     }
 
     /// <summary>
+    /// Lone surrogates in the options become U+FFFD before anything reads
+    /// them, so the avatar matches the one for the well-formed text. Inputs
+    /// are UTF-16 code-unit arrays, because System.Text.Json refuses a lone
+    /// surrogate in a JSON string; the <c>utf8</c> cases are for the ports
+    /// whose strings are bytes.
+    /// </summary>
+    [Fact]
+    public void RendersIllFormedTextLikeTheReference()
+    {
+        var style = Style.Parse(Fixtures.LoadText("styles", "initials.json"));
+
+        foreach (var testCase in Fixtures.Load("ill-formed-text.json")["utf16"]!.AsArray())
+        {
+            var input = new string(testCase!["input"]!.AsArray().Select(unit => (char)unit!.GetValue<int>()).ToArray());
+            var avatar = new Avatar(style, new JsonObject { ["seed"] = input, ["title"] = input });
+
+            Assert.Equal(testCase["svg"]!.GetValue<string>(), avatar.ToSvg());
+        }
+    }
+
+    /// <summary>
     /// Returns the index of the first character where the two strings differ,
     /// or the length of the shorter one when it is a prefix of the other.
     /// </summary>
