@@ -8,6 +8,13 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **Core (Python):** A seed or option value with a lone surrogate (for example
+  half of an emoji, which JS strings can hold) raised `UnicodeEncodeError` while
+  hashing or sorting. It is now hashed as one UTF-16 code unit, like the JS
+  reference.
+
 ## [11.0.0-rc.3] - 2026-11-15
 
 ### Added

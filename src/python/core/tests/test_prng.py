@@ -32,6 +32,19 @@ def test_fnv1a_hex_pads_to_8_characters() -> None:
     assert len(Fnv1a.hex("test")) == 8
 
 
+def test_fnv1a_hashes_a_lone_surrogate_like_js() -> None:
+    # JS strings can hold a lone surrogate (e.g. from a cut emoji); charCodeAt
+    # hashes it as one code unit. Value from the JS reference.
+    assert Fnv1a.hash("x\ud83dy") == 1505793045
+
+
+def test_prng_accepts_a_lone_surrogate_in_seed_and_items() -> None:
+    prng = Prng("x\ud83d")
+    assert 0 <= prng.get_value("key") < 1
+    assert sorted(prng.shuffle("key", ["\ud83d", "a"])) == ["a", "\ud83d"]
+    assert prng.pick("key", ["\ud83d"]) == "\ud83d"
+
+
 # ---------------------------------------------------------------------------
 # mulberry32
 # ---------------------------------------------------------------------------
