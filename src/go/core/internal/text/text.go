@@ -107,25 +107,56 @@ var (
 // slices as []any, which encoding/json writes the same way. Values that carry
 // their own JSON encoding (json.Marshaler, encoding.TextMarshaler,
 // json.Number, []byte) and anything else are passed through as they are.
+//
+// Well-formed input encodes to the same JSON as before the walk. A value
+// json.Marshal could take the address of (a slice item, or what a pointer
+// points to) is handed on as a pointer to the original when its encoding may
+// depend on that: a struct, or a type whose pointer carries the marshaler.
 func WellFormedValue(v any) any {
 	if v == nil {
 		return nil
 	}
 
-	return wellFormedValue(reflect.ValueOf(v), 0)
+	w := walker{path: map[visit]struct{}{}}
+
+	return w.value(reflect.ValueOf(v))
 }
 
-// maxDepth stops the walk on a pointer cycle. The value is then passed on as
-// it is, and json.Marshal reports the cycle the way it did before.
-const maxDepth = 1000
+// visit identifies a map, pointer or slice the walk is currently inside.
+type visit struct {
+	typ reflect.Type
+	ptr uintptr
+	len int
+}
 
-func wellFormedValue(v reflect.Value, depth int) any {
-	if !v.IsValid() {
-		return nil
+// walker remembers the references on the path from the root to the current
+// value. Meeting one of them again is a cycle: the value is then passed on as
+// it is, and json.Marshal reports the cycle the way it did before. A depth
+// limit alone would not do, because a value that refers to itself twice
+// doubles the work on every level.
+type walker struct {
+	path map[visit]struct{}
+}
+
+// enter records v on the path and reports false when it is already there.
+func (w *walker) enter(v reflect.Value) (visit, bool) {
+	key := visit{typ: v.Type(), ptr: v.Pointer()}
+	if v.Kind() == reflect.Slice {
+		key.len = v.Len()
 	}
 
-	if depth > maxDepth {
-		return v.Interface()
+	if _, seen := w.path[key]; seen {
+		return key, false
+	}
+
+	w.path[key] = struct{}{}
+
+	return key, true
+}
+
+func (w *walker) value(v reflect.Value) any {
+	if !v.IsValid() {
+		return nil
 	}
 
 	t := v.Type()
@@ -133,39 +164,90 @@ func wellFormedValue(v reflect.Value, depth int) any {
 		return v.Interface()
 	}
 
+	// encoding/json calls a marshaler declared on the pointer only for a
+	// value it can take the address of. Copying such a value into an
+	// interface would lose that, so the pointer goes on instead.
+	if v.CanAddr() {
+		if p := reflect.PointerTo(t); p.Implements(marshalerType) || p.Implements(textType) {
+			return v.Addr().Interface()
+		}
+	}
+
 	switch v.Kind() {
 	case reflect.String:
 		return WellFormed(v.String())
 
-	case reflect.Interface, reflect.Pointer:
+	case reflect.Interface:
 		if v.IsNil() {
 			return v.Interface()
 		}
-		return wellFormedValue(v.Elem(), depth+1)
+		return w.value(v.Elem())
+
+	case reflect.Pointer:
+		if v.IsNil() {
+			return v.Interface()
+		}
+
+		key, fresh := w.enter(v)
+		if !fresh {
+			return v.Interface()
+		}
+		defer delete(w.path, key)
+
+		return w.value(v.Elem())
 
 	case reflect.Map:
 		if v.IsNil() || t.Key().Kind() != reflect.String {
 			return v.Interface()
 		}
 
+		key, fresh := w.enter(v)
+		if !fresh {
+			return v.Interface()
+		}
+		defer delete(w.path, key)
+
 		out := make(map[string]any, v.Len())
 		iter := v.MapRange()
 		for iter.Next() {
-			out[WellFormed(iter.Key().String())] = wellFormedValue(iter.Value(), depth+1)
+			out[WellFormed(iter.Key().String())] = w.value(iter.Value())
 		}
 		return out
 
-	case reflect.Slice, reflect.Array:
-		if v.Kind() == reflect.Slice && (v.IsNil() || t.Elem().Kind() == reflect.Uint8) {
+	case reflect.Slice:
+		if v.IsNil() || t.Elem().Kind() == reflect.Uint8 {
 			return v.Interface()
 		}
 
-		out := make([]any, v.Len())
-		for i := range out {
-			out[i] = wellFormedValue(v.Index(i), depth+1)
+		if v.Len() > 0 {
+			key, fresh := w.enter(v)
+			if !fresh {
+				return v.Interface()
+			}
+			defer delete(w.path, key)
 		}
-		return out
+
+		return w.items(v)
+
+	case reflect.Array:
+		return w.items(v)
+
+	case reflect.Struct:
+		// Its fields are not walked, but they may hold a marshaler declared
+		// on the pointer, which only an addressable struct reaches.
+		if v.CanAddr() {
+			return v.Addr().Interface()
+		}
 	}
 
 	return v.Interface()
+}
+
+func (w *walker) items(v reflect.Value) []any {
+	out := make([]any, v.Len())
+	for i := range out {
+		out[i] = w.value(v.Index(i))
+	}
+
+	return out
 }

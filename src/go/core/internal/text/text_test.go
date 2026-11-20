@@ -96,3 +96,91 @@ func TestWellFormedValueLeavesTheInputUntouched(t *testing.T) {
 		t.Errorf("input changed: %q", list[0])
 	}
 }
+
+type pointerMarshals struct{ V string }
+
+func (*pointerMarshals) MarshalJSON() ([]byte, error) { return []byte(`"kept"`), nil }
+
+type pointerText string
+
+func (*pointerText) MarshalText() ([]byte, error) { return []byte("kept"), nil }
+
+type holder struct {
+	Inner pointerMarshals
+	Name  string
+}
+
+// encoding/json calls a marshaler declared on the pointer only for a value it
+// can take the address of. The walk must not change which values those are.
+func TestWellFormedValueEncodesWellFormedInputAsBefore(t *testing.T) {
+	array := [2]pointerMarshals{{"a"}, {"b"}}
+	value := pointerMarshals{"v"}
+
+	inputs := map[string]any{
+		"slice":           []pointerMarshals{{"x"}},
+		"pointerToSlice":  &[]pointerMarshals{{"x"}},
+		"pointerToArray":  &array,
+		"array":           array,
+		"textSlice":       []pointerText{"x"},
+		"structSlice":     []holder{{Name: "n"}},
+		"pointerToStruct": &holder{Name: "n"},
+		"nestedSlices":    [][]pointerMarshals{{{"x"}}},
+		"sliceOfArrays":   [][1]pointerMarshals{{{"x"}}},
+		"value":           value,
+		"mapValue":        map[string]pointerMarshals{"k": {"x"}},
+		"interfaceItems":  []any{value, pointerText("x"), holder{Name: "n"}},
+		"plain":           map[string]any{"a": []string{"x"}, "b": []float64{1.5}, "c": []*string{nil}},
+	}
+
+	for name, input := range inputs {
+		want, err := json.Marshal(input)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		got, err := json.Marshal(WellFormedValue(input))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if string(got) != string(want) {
+			t.Errorf("%s: got %s, want %s", name, got, want)
+		}
+	}
+}
+
+// A value that refers to itself more than once must not multiply the walk;
+// json.Marshal still reports the cycle.
+func TestWellFormedValueStopsAtACycle(t *testing.T) {
+	m := map[string]any{"seed": "a\xff"}
+	m["a"] = m
+	m["b"] = m
+
+	list := make([]any, 2)
+	list[0] = list
+	list[1] = list
+
+	for name, input := range map[string]any{"map": m, "slice": list} {
+		got := WellFormedValue(input)
+
+		if _, err := json.Marshal(got); err == nil {
+			t.Errorf("%s: json.Marshal reported no cycle", name)
+		}
+	}
+
+	if got := WellFormedValue(m).(map[string]any)["seed"]; got != "a�" {
+		t.Errorf("seed = %q", got)
+	}
+}
+
+// The same map or slice in two places is not a cycle and is walked both times.
+func TestWellFormedValueWalksASharedValueTwice(t *testing.T) {
+	shared := []string{"a\xff"}
+
+	got := WellFormedValue(map[string]any{"x": shared, "y": shared})
+	want := map[string]any{"x": []any{"a�"}, "y": []any{"a�"}}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("WellFormedValue = %#v", got)
+	}
+}

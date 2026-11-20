@@ -59,4 +59,36 @@ class TextTest extends TestCase
             Text::wellFormedDeep(["k\xFF" => [$bad, ['x' => $bad]], 'n' => 1, 'b' => true, 0 => null]),
         );
     }
+
+    /**
+     * An array that refers to itself more than once must not multiply the
+     * walk; json_encode() still reports the recursion.
+     */
+    public function testWellFormedDeepStopsAtAReferenceCycle(): void
+    {
+        $data = ['seed' => "a\xFF"];
+        $data['a'] = &$data;
+        $data['b'] = &$data;
+
+        $result = Text::wellFormedDeep($data);
+
+        $this->assertSame("a\u{FFFD}", $result['seed']);
+        $this->assertSame("a\u{FFFD}", $result['a']['seed']);
+        $this->assertFalse(@json_encode($result));
+    }
+
+    /**
+     * The same reference in two places is not a cycle and is walked both
+     * times.
+     */
+    public function testWellFormedDeepWalksASharedReferenceTwice(): void
+    {
+        $shared = ["a\xFF"];
+        $data = ['x' => &$shared, 'y' => &$shared, 'z' => ['deep' => &$shared]];
+
+        $this->assertSame(
+            ['x' => ["a\u{FFFD}"], 'y' => ["a\u{FFFD}"], 'z' => ['deep' => ["a\u{FFFD}"]]],
+            Text::wellFormedDeep($data),
+        );
+    }
 }
