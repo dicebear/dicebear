@@ -24,7 +24,7 @@ _MAX_ERRORS = 10
 # matches the C# port.
 MAX_DEPTH = 64
 
-_MAX_DEPTH_MESSAGE = f"nesting is deeper than the {MAX_DEPTH} levels this port reads"
+MAX_DEPTH_MESSAGE = f"nesting is deeper than the {MAX_DEPTH} levels this port reads"
 
 _validators: dict[str, Draft7Validator] = {}
 
@@ -239,7 +239,7 @@ class StyleValidator:
     @staticmethod
     def validate(data: Any) -> None:
         if exceeds_max_depth(data):
-            raise StyleValidationError([{"message": _MAX_DEPTH_MESSAGE}])
+            raise StyleValidationError([{"message": MAX_DEPTH_MESSAGE}])
 
         details = _details("definition.json", data)
 
@@ -253,7 +253,7 @@ class OptionsValidator:
     @staticmethod
     def validate(data: Any) -> None:
         if exceeds_max_depth(data):
-            raise OptionsValidationError([{"message": _MAX_DEPTH_MESSAGE}])
+            raise OptionsValidationError([{"message": MAX_DEPTH_MESSAGE}])
 
         details = _details("options.json", data)
 
