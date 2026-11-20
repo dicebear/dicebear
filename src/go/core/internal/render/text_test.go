@@ -24,7 +24,7 @@ func TestWellFormedTextLeavesTheCallersMapAsItIs(t *testing.T) {
 	}
 }
 
-// Nothing to replace means nothing to copy.
+// wellFormedText returns the caller's own map when there is nothing to replace.
 func TestWellFormedTextHandsBackWellFormedOptions(t *testing.T) {
 	input := map[string]any{"seed": "Zoë", "title": "\U0001F600"}
 	got := wellFormedText(input)
@@ -34,8 +34,8 @@ func TestWellFormedTextHandsBackWellFormedOptions(t *testing.T) {
 	}
 }
 
-// Only a plain string is text. Anything else is left to json.Marshal and the
-// validator, and a nil map is an empty one.
+// Only a value of type string is replaced. Anything else is left to
+// json.Marshal and the validator, and a nil map comes back as an empty one.
 func TestWellFormedTextLeavesOtherValuesAlone(t *testing.T) {
 	input := map[string]any{"seed": 5, "title": []string{"a\xff"}}
 

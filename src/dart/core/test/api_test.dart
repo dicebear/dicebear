@@ -426,9 +426,9 @@ void main() {
 
   test('toDataUri rejects unpaired surrogates like the JS reference', () {
     // JS encodeURIComponent throws URIError for a lone surrogate;
-    // Uri.encodeComponent would silently substitute U+FFFD instead. The
-    // options cannot carry one into the markup any more, a style definition
-    // still can.
+    // Uri.encodeComponent would silently substitute U+FFFD instead. The seed
+    // and the title cannot carry one into the markup, so the style definition
+    // does here.
     final avatar = Avatar(
       Style({
         ..._minimalStyle,

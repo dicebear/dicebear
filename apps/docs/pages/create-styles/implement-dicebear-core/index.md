@@ -379,20 +379,20 @@ strings are stored:
 
 A seed cut in the middle of an emoji therefore renders the same avatar in every
 port, and no ill-formed text from these two options reaches the hash, the PRNG
-or the SVG. `tests/fixtures/parity/ill-formed-text.json` holds the cases for
+or the SVG. `tests/fixtures/parity/ill-formed-text.json` holds test cases for
 both kinds.
 
-Nothing else is replaced. The options schema holds every other string option to
-ASCII, so ill-formed text there is invalid options, and a port reports it the
-way it reports any other invalid option. Style definitions are not user input
-and are taken as they are.
+The core replaces nothing else. The options schema holds every other string
+option to ASCII, so ill-formed text there is invalid options, and a port reports
+it the way it reports any other invalid option. Style definitions are not user
+input, and the core takes them as they are.
 
 How a JSON decoder treats a lone surrogate escape such as `"\ud83d"` is up to
-the caller: the usual decoders in JavaScript, Python and Dart hand over the lone
-surrogate, which the core then replaces; Go's turns the escape into U+FFFD
-itself; those in PHP and Rust turn the document down. In C# the usual decoder
-accepts the document and throws only when the string is read, which happens
-inside the core, so the core reports invalid options.
+the caller. The usual decoders in JavaScript, Python and Dart hand over the lone
+surrogate, which the core then replaces. Go's decoder turns the escape into
+U+FFFD itself, and those in PHP and Rust turn the document down. In C# the usual
+decoder accepts the document and throws only when the core reads the string, so
+the core reports invalid options.
 
 ### Core options
 

@@ -59,11 +59,11 @@ func Generate(s *style.Style, opts map[string]any) (*Result, error) {
 var freeText = [...]string{"seed", "title"}
 
 // wellFormedText returns opts with ill-formed UTF-8 in the freeText options
-// replaced. The caller's map is left as it is: a copy is made, and only when
-// there is something to replace. A nil map comes back as an empty one.
+// replaced. It does not change the caller's map: it copies the map, and only
+// when there is something to replace. A nil map comes back as an empty one.
 //
-// Only a plain string is replaced. Any other value under these keys is left
-// to json.Marshal and the validator.
+// It replaces only a value of type string. Any other value under these keys
+// is left to json.Marshal and the validator.
 func wellFormedText(opts map[string]any) map[string]any {
 	if opts == nil {
 		return map[string]any{}

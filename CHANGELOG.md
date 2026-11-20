@@ -11,11 +11,12 @@ and this project adheres to
 ### Changed
 
 - **Core (all languages):** Ill-formed text in `seed` and `title` becomes U+FFFD
-  before the core hashes or renders it: a lone surrogate (for example half of an
-  emoji, which JS, Python, C# and Dart strings can hold), or an ill-formed UTF-8
-  sequence in Go and PHP, one U+FFFD per maximal subpart. Such a seed now
-  renders the same avatar in every port; before, the ports disagreed with each
-  other. Avatars for such seeds and titles change, all others stay the same.
+  before the core hashes or renders it. In JS, Python, C# and Dart that is a
+  lone surrogate, for example half of an emoji. In Go and PHP it is an
+  ill-formed UTF-8 sequence, with one U+FFFD per maximal subpart. Such a seed
+  now renders the same avatar in every port, where the ports used to disagree
+  with each other. Avatars for such seeds and titles change. All others stay the
+  same.
 
 ### Fixed
 

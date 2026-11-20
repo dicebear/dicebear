@@ -15,8 +15,8 @@ namespace DiceBear\Utils;
  * Standard recommends (chapter 3, "U+FFFD Substitution of Maximal Subparts")
  * and the WHATWG Encoding Standard's TextDecoder applies.
  *
- * mbstring is not used for the replacement: its substitute character is
- * global state shared with the caller.
+ * The replacement does not use mbstring, whose substitute character is global
+ * state shared with the caller.
  *
  * @internal
  */

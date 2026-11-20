@@ -8,8 +8,9 @@
 // Standard recommends (chapter 3, "U+FFFD Substitution of Maximal Subparts")
 // and the WHATWG Encoding Standard's TextDecoder applies.
 //
-// Go's own conversions are not used: a range loop and json.Marshal replace
-// every byte of a cut sequence, strings.ToValidUTF8 a whole run of them.
+// The package does not use Go's own conversions: a range loop and json.Marshal
+// replace every byte of a cut sequence, strings.ToValidUTF8 a whole run of
+// them.
 package text
 
 import (

@@ -23,9 +23,9 @@ public class TextTests
         Assert.Same(value, Text.WellFormed(value));
 
     /// <remarks>
-    /// Plain facts rather than <c>[InlineData]</c>: xUnit stores theory data
-    /// as UTF-8 and would turn the lone surrogates into U+FFFD before the test
-    /// sees them.
+    /// These cases are plain facts because xUnit stores the data of an
+    /// <c>[InlineData]</c> theory as UTF-8 and would turn the lone surrogates
+    /// into U+FFFD before the test sees them.
     /// </remarks>
     [Fact]
     public void ReplacesLoneSurrogates()

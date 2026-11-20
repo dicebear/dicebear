@@ -1916,8 +1916,8 @@ for (const [styleName, cases] of Object.entries(avatarFixtures)) {
 //
 // Every port replaces ill-formed text in the seed and the title with U+FFFD
 // before it uses them, so the seed hashes and the text renders the same
-// everywhere.
-// Which kind of ill-formed text a port can receive depends on its strings:
+// everywhere. Which kind of ill-formed text a port can receive depends on its
+// strings:
 //
 // - utf16: lone surrogates, run by the ports whose strings are UTF-16 code
 //   units (JS, Python, C#, Dart). Each one becomes U+FFFD, as with

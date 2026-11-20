@@ -268,9 +268,9 @@ component-variant overrides.
 and `title` with U+FFFD before using them (see
 [Ill-formed text](https://www.dicebear.com/create-styles/implement-dicebear-core/#ill-formed-text)
 in the spec). Its `utf16` cases hold lone surrogates as arrays of UTF-16 code
-units, because not every JSON library reads a lone surrogate in a JSON string;
+units, because not every JSON library reads a lone surrogate in a JSON string.
 JS, Python, C# and Dart run them. Its `utf8` cases hold ill-formed byte
-sequences as hex strings; Go and PHP run them. Rust strings are always
+sequences as hex strings, and Go and PHP run them. Rust strings are always
 well-formed, so Rust has nothing to run.
 
 Float determinism is part of the parity contract: `pow` is not correctly rounded

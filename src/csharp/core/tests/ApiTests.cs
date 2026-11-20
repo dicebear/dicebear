@@ -510,9 +510,8 @@ public class ApiTests
     /// <summary>
     /// The .NET reader refuses to hand over a string with a lone surrogate
     /// escape at all, so the port cannot take such text. Decoding JSON is up
-    /// to the caller, as with the usual decoders in PHP and Rust. What the
-    /// port must not do is let the reader's own exception out in place of its
-    /// own.
+    /// to the caller, as with the usual decoders in PHP and Rust. The port
+    /// must not let the reader's own exception out in place of its own.
     /// </summary>
     [Fact]
     public void RejectsJsonTextCarryingAnUnpairedSurrogate()
@@ -865,8 +864,8 @@ public class ApiTests
     {
         // encodeURIComponent throws URIError on this in the reference. Every
         // port refuses it rather than substituting a replacement character.
-        // The seed and the title cannot carry one into the markup any more, a
-        // style definition still can.
+        // The seed and the title cannot carry one into the markup, so the
+        // style definition does here.
         var definition = JsonNode.Parse(MinimalStyle)!.AsObject();
 
         definition["meta"] = new JsonObject

@@ -240,7 +240,8 @@ export class Options<D = unknown> {
   }
 
   /**
-   * Without the validator the value may be anything; only a string is text.
+   * Without the validator the value can be of any type. Only a string is
+   * replaced.
    */
   #wellFormed<T>(value: T): T {
     return typeof value === 'string' ? (Text.wellFormed(value) as T) : value;
