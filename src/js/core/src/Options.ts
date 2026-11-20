@@ -1,4 +1,5 @@
 import type { Range } from './StyleDefinition.js';
+import { Text } from './Utils/Text.js';
 import type {
   StyleOptions,
   StyleOptionsFlipValue,
@@ -25,8 +26,13 @@ export class Options<D = unknown> {
     this.#data = structuredClone(data);
   }
 
+  /**
+   * The seed, with every lone surrogate replaced by U+FFFD: ill-formed text
+   * has no meaning another port could reproduce, so the hash and the initials
+   * read the same text everywhere.
+   */
   seed(): string | undefined {
-    return this.#data.seed;
+    return this.#wellFormed(this.#data.seed);
   }
 
   size(): number | undefined {
@@ -37,8 +43,12 @@ export class Options<D = unknown> {
     return this.#data.idRandomization;
   }
 
+  /**
+   * The title, with every lone surrogate replaced by U+FFFD, so no ill-formed
+   * text reaches the SVG.
+   */
   title(): string | undefined {
-    return this.#data.title;
+    return this.#wellFormed(this.#data.title);
   }
 
   flip(): readonly StyleOptionsFlipValue[] {
@@ -227,6 +237,14 @@ export class Options<D = unknown> {
     }
 
     return [value as T];
+  }
+
+  /**
+   * Without the validator the value can be of any type. Only a string is
+   * replaced.
+   */
+  #wellFormed<T>(value: T): T {
+    return typeof value === 'string' ? (Text.wellFormed(value) as T) : value;
   }
 
   /**

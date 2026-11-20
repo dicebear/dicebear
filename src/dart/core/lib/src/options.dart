@@ -4,6 +4,7 @@ library;
 import 'error/options_validation_error.dart';
 import 'range.dart';
 import 'utils/deep_copy.dart';
+import 'utils/text.dart';
 import 'validator/options_validator.dart';
 
 /// The two values of the per-color `${name}ColorOrder` option.
@@ -45,10 +46,13 @@ class Options {
   Options(Map<String, Object?>? data)
       : _data = _validateAndCopy(data ?? const <String, Object?>{});
 
+  /// The seed, with every lone surrogate replaced by U+FFFD: ill-formed text
+  /// has no meaning another port could reproduce, so the hash and the
+  /// initials read the same text everywhere.
   String? seed() {
     final value = _get('seed');
 
-    return value is String ? value : null;
+    return value is String ? wellFormed(value) : null;
   }
 
   double? size() {
@@ -63,10 +67,12 @@ class Options {
     return value is bool ? value : null;
   }
 
+  /// The title, with every lone surrogate replaced by U+FFFD, so no
+  /// ill-formed text reaches the SVG.
   String? title() {
     final value = _get('title');
 
-    return value is String ? value : null;
+    return value is String ? wellFormed(value) : null;
   }
 
   List<String> flip() => _asStringArray(_get('flip'));

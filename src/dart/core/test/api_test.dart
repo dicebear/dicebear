@@ -7,6 +7,7 @@ library;
 import 'dart:convert';
 
 import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_core/src/utils/text.dart';
 import 'package:test/test.dart';
 
 Map<String, Object?> _decode(String json) =>
@@ -425,12 +426,55 @@ void main() {
 
   test('toDataUri rejects unpaired surrogates like the JS reference', () {
     // JS encodeURIComponent throws URIError for a lone surrogate;
-    // Uri.encodeComponent would silently substitute U+FFFD instead.
+    // Uri.encodeComponent would silently substitute U+FFFD instead. The seed
+    // and the title cannot carry one into the markup, so the style definition
+    // does here.
     final avatar = Avatar(
-      Style(_minimalStyle),
-      {'seed': 'x', 'title': 'broken \u{D800} title'},
+      Style({
+        ..._minimalStyle,
+        'meta': {
+          'license': {
+            'name': 'CC \u{D800} BY',
+            'url': 'https://example.com',
+          },
+        },
+      }),
+      {'seed': 'x'},
     );
 
     expect(avatar.toDataUri, throwsArgumentError);
+  });
+
+  test('seed and title replace unpaired surrogates with U+FFFD', () {
+    final style = Style(_minimalStyle);
+    final avatar = Avatar(style, {'seed': 'a\u{D800}b', 'title': '\u{DE00}x'});
+
+    expect(
+      avatar.toString(),
+      Avatar(style, {'seed': 'a\u{FFFD}b', 'title': '\u{FFFD}x'}).toString(),
+    );
+    expect(avatar.toString(), isNot(contains('\u{DE00}')));
+  });
+
+  test('wellFormed replaces lone surrogates and keeps valid pairs', () {
+    const high = '\u{D83D}';
+    const low = '\u{DE00}';
+    const emoji = '$high$low';
+    final cases = {
+      '': '',
+      'Zoë': 'Zoë',
+      emoji: emoji,
+      high: '\u{FFFD}',
+      low: '\u{FFFD}',
+      'Jo$high': 'Jo\u{FFFD}',
+      '${low}Ann': '\u{FFFD}Ann',
+      '$low$high': '\u{FFFD}\u{FFFD}',
+      '$high$emoji': '\u{FFFD}$emoji',
+      '$emoji$low': '$emoji\u{FFFD}',
+    };
+
+    cases.forEach((input, expected) {
+      expect(wellFormed(input), expected, reason: '${input.codeUnits}');
+    });
   });
 }

@@ -21,6 +21,9 @@ type Avatar struct {
 //
 // Options are normalized through a JSON round-trip, so passing
 // map[string]any{"size": 128} (a Go int) behaves the same as the JSON 128.
+//
+// Ill-formed UTF-8 in a seed or title passed as a string becomes U+FFFD, the
+// same text every other port reads.
 func NewAvatar(style *Style, options map[string]any) (*Avatar, error) {
 	result, err := render.Generate(style, options)
 	if err != nil {

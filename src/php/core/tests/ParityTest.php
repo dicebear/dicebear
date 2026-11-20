@@ -255,6 +255,35 @@ class ParityTest extends TestCase
     }
 
     // -----------------------------------------------------------------------
+    // Ill-formed text
+    // -----------------------------------------------------------------------
+
+    // Ill-formed UTF-8 in the seed and the title becomes U+FFFD, one per
+    // maximal subpart, so the avatar matches the one for the well-formed
+    // text. Inputs are hex strings; the utf16 cases are for the
+    // ports whose strings are UTF-16 code units. See generate.mjs.
+    public static function illFormedTextProvider(): array
+    {
+        $cases = [];
+        foreach (self::loadFixture('ill-formed-text.json')['utf8'] as $entry) {
+            $cases[$entry['input']] = [$entry];
+        }
+        return $cases;
+    }
+
+    #[DataProvider('illFormedTextProvider')]
+    public function testIllFormedText(array $entry): void
+    {
+        $input = hex2bin($entry['input']);
+        $avatar = new Avatar(new Style(self::loadFixture('styles/initials.json')), [
+            'seed' => $input,
+            'title' => $input,
+        ]);
+
+        $this->assertSame($entry['svg'], (string) $avatar);
+    }
+
+    // -----------------------------------------------------------------------
     // Color
     // -----------------------------------------------------------------------
 

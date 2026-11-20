@@ -62,8 +62,9 @@ class Avatar {
   /// Returns the SVG encoded as a `data:image/svg+xml` URI.
   /// [Uri.encodeComponent] matches the JS `encodeURIComponent` contract for
   /// all well-formed input: every UTF-8 byte is percent-encoded except
-  /// `A–Z a–z 0–9` and `-_.!~*'()`. An unpaired surrogate (only producible
-  /// by ill-formed `seed`/`title` strings) is rejected here, mirroring the
+  /// `A–Z a–z 0–9` and `-_.!~*'()`. An unpaired surrogate (only a style
+  /// definition can bring one in, since the options replace any in `seed`
+  /// and `title` with U+FFFD) is rejected here, mirroring the
   /// `URIError` the JS reference throws — Dart would otherwise silently
   /// substitute U+FFFD and diverge.
   String toDataUri() {

@@ -348,6 +348,52 @@ The `Options` class reads the raw user options and normalizes them, and the
 `Resolver` turns them into the concrete values the renderer uses. Each
 resolution that involves chance uses the PRNG with a specific key.
 
+### Ill-formed text
+
+The cores render the same avatar for the same options as long as every string in
+them is well-formed. Ill-formed text, such as an emoji cut in half, has no
+meaning another port could reproduce: a UTF-16 string holds it as a lone
+surrogate, a byte string as bytes that are not UTF-8, and a Rust string cannot
+hold it at all.
+
+Two options carry text of the user's choosing, `seed` and `title`. In these,
+each piece of ill-formed text becomes U+FFFD (the replacement character) before
+the core hashes or renders it. Which kind a port can receive depends on how its
+strings are stored:
+
+- **UTF-16 strings** (JavaScript, Python, C#, Dart): every lone surrogate, that
+  is a high surrogate not followed by a low one or a low surrogate not preceded
+  by a high one, becomes U+FFFD. This is `String.prototype.toWellFormed()`. In
+  Python, a high and a low surrogate code point next to each other form the
+  character the pair stands for.
+- **Byte strings** (Go, PHP): every maximal subpart of an ill-formed UTF-8
+  sequence becomes one U+FFFD, the substitution the Unicode Standard recommends
+  (chapter 3, "U+FFFD Substitution of Maximal Subparts") and the WHATWG
+  `TextDecoder` applies. A maximal subpart is a lead byte followed by the
+  continuation bytes that still fit it (Unicode table 3-7); a byte that cannot
+  start a sequence is one subpart on its own. For example, `E2 82 41` becomes
+  `U+FFFD A`, and the encoded surrogate `ED A0 BD` becomes three U+FFFD. These
+  ports replace before they encode the options as JSON, because their encoders
+  either replace byte by byte or fail.
+- **Always well-formed strings** (Rust): nothing to do.
+
+A seed cut in the middle of an emoji therefore renders the same avatar in every
+port, and no ill-formed text from these two options reaches the hash, the PRNG
+or the SVG. `tests/fixtures/parity/ill-formed-text.json` holds test cases for
+both kinds.
+
+The core replaces nothing else. The options schema holds every other string
+option to ASCII, so ill-formed text there is invalid options, and a port reports
+it the way it reports any other invalid option. Style definitions are not user
+input, and the core takes them as they are.
+
+How a JSON decoder treats a lone surrogate escape such as `"\ud83d"` is up to
+the caller. The usual decoders in JavaScript, Python and Dart hand over the lone
+surrogate, which the core then replaces. Go's decoder turns the escape into
+U+FFFD itself, and those in PHP and Rust turn the document down. In C# the usual
+decoder accepts the document and throws only when the core reads the string, so
+the core reports invalid options.
+
 ### Core options
 
 | Option                  | PRNG key                | Resolution                                                                                            |

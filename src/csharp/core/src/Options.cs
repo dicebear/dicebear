@@ -40,12 +40,12 @@ namespace DiceBear.Internal
     /// <c>double</c> and would drop out of the accessors. After the copy, a
     /// hand-built <c>128</c> and a parsed <c>128</c> read the same.
     ///
-    /// Serializing the document and parsing it back does both jobs in one
-    /// line, and that is what this class replaces. The round-trip encodes to
-    /// UTF-8, so an unpaired surrogate in a seed or a title comes back as
-    /// U+FFFD and the seed then drives a different PRNG stream than the
-    /// reference. It also left the nesting limit to a serializer default,
-    /// which <see cref="MaxDepth"/> states as a number of its own.
+    /// Serializing the document and parsing it back would do both jobs in
+    /// one line. It would also leave the nesting limit to a serializer
+    /// default, which <see cref="MaxDepth"/> states as a number of its own,
+    /// and turn an unpaired surrogate into U+FFFD in every string. The
+    /// accessors do that for the seed and the title, the two options that
+    /// carry free text.
     /// </remarks>
     internal static class JsonSnapshot
     {
@@ -239,13 +239,25 @@ namespace DiceBear.Internal
             _data = JsonSnapshot.Of(input);
         }
 
-        internal string? Seed() => JsonRead.Str(_data, "seed");
+        /// <summary>
+        /// The seed, with every unpaired surrogate replaced by U+FFFD:
+        /// ill-formed text has no meaning another port could reproduce, so the
+        /// hash and the initials read the same text everywhere.
+        /// </summary>
+        internal string? Seed() => WellFormed(JsonRead.Str(_data, "seed"));
 
         internal double? Size() => JsonRead.Num(_data, "size");
 
         internal bool? IdRandomization() => JsonRead.Bool(_data, "idRandomization");
 
-        internal string? Title() => JsonRead.Str(_data, "title");
+        /// <summary>
+        /// The title, with every unpaired surrogate replaced by U+FFFD, so no
+        /// ill-formed text reaches the SVG.
+        /// </summary>
+        internal string? Title() => WellFormed(JsonRead.Str(_data, "title"));
+
+        private static string? WellFormed(string? value) =>
+            value is null ? null : Text.WellFormed(value);
 
         internal IReadOnlyList<string> Flip() => StringList(_data["flip"]);
 

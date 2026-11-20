@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 
 	"github.com/dicebear/dicebear-go/v11/internal/style"
+	"github.com/dicebear/dicebear-go/v11/internal/text"
 	"github.com/dicebear/dicebear-go/v11/internal/validate"
 )
 
@@ -25,12 +26,12 @@ type Result struct {
 //
 // Options are normalized through a JSON round-trip, so passing a Go int such as
 // map[string]any{"size": 128} behaves the same as the JSON 128.
+//
+// Ill-formed UTF-8 in the seed and the title becomes U+FFFD first, the same
+// text every other port reads. json.Marshal would replace it too, but one
+// U+FFFD per byte; text.WellFormed replaces the way every port does.
 func Generate(s *style.Style, opts map[string]any) (*Result, error) {
-	if opts == nil {
-		opts = map[string]any{}
-	}
-
-	optionsJSON, err := json.Marshal(opts)
+	optionsJSON, err := json.Marshal(wellFormedText(opts))
 	if err != nil {
 		return nil, err
 	}
@@ -51,4 +52,48 @@ func Generate(s *style.Style, opts map[string]any) (*Result, error) {
 	}
 
 	return &Result{SVG: svg, Options: res.resolved(), Order: res.resolvedOrder()}, nil
+}
+
+// freeText names the options that carry text of the caller's choosing. Every
+// other string option is held to ASCII by the options schema.
+var freeText = [...]string{"seed", "title"}
+
+// wellFormedText returns opts with ill-formed UTF-8 in the freeText options
+// replaced. It does not change the caller's map: it copies the map, and only
+// when there is something to replace. A nil map comes back as an empty one.
+//
+// It replaces only a value of type string. Any other value under these keys
+// is left to json.Marshal and the validator.
+func wellFormedText(opts map[string]any) map[string]any {
+	if opts == nil {
+		return map[string]any{}
+	}
+
+	out := opts
+	copied := false
+
+	for _, key := range freeText {
+		value, ok := opts[key].(string)
+		if !ok {
+			continue
+		}
+
+		replaced := text.WellFormed(value)
+		if replaced == value {
+			continue
+		}
+
+		if !copied {
+			out = make(map[string]any, len(opts))
+			for k, v := range opts {
+				out[k] = v
+			}
+
+			copied = true
+		}
+
+		out[key] = replaced
+	}
+
+	return out
 }

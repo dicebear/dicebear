@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DiceBear;
 
+use DiceBear\Utils\Text;
 use DiceBear\Validator\OptionsValidator;
 
 /**
@@ -26,6 +27,9 @@ class Options
     /** @var array<string, mixed> */
     private array $data;
 
+    /** The options that carry text of the caller's choosing. */
+    private const FREE_TEXT = ['seed', 'title'];
+
     /** @var list<array{category: string, value?: string, negated: bool}>|null */
     private ?array $tags = null;
 
@@ -34,6 +38,17 @@ class Options
      */
     public function __construct(array $data = [])
     {
+        // Ill-formed UTF-8 in the seed and the title becomes U+FFFD, the same
+        // text every other port reads. These two options carry text of the
+        // caller's choosing; the schema holds every other string to ASCII.
+        // The replacement runs before the validator, which encodes the
+        // options as JSON and cannot do that with ill-formed UTF-8 in them.
+        foreach (self::FREE_TEXT as $key) {
+            if (is_string($data[$key] ?? null)) {
+                $data[$key] = Text::wellFormed($data[$key]);
+            }
+        }
+
         OptionsValidator::validate($data);
 
         $this->data = $data;

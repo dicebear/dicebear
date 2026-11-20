@@ -8,12 +8,20 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Core (all languages):** Ill-formed text in `seed` and `title` becomes U+FFFD
+  before the core hashes or renders it. In JS, Python, C# and Dart that is a
+  lone surrogate, for example half of an emoji. In Go and PHP it is an
+  ill-formed UTF-8 sequence, with one U+FFFD per maximal subpart. Such a seed
+  now renders the same avatar in every port, where the ports used to disagree
+  with each other. Avatars for such seeds and titles change. All others stay the
+  same.
+
 ### Fixed
 
-- **Core (Python):** A seed or option value with a lone surrogate (for example
-  half of an emoji, which JS strings can hold) raised `UnicodeEncodeError` while
-  hashing or sorting. It is now hashed as one UTF-16 code unit, like the JS
-  reference.
+- **Core (Python):** A seed or option value with a lone surrogate raised
+  `UnicodeEncodeError` while hashing or sorting.
 
 ## [11.0.0-rc.3] - 2026-11-15
 
