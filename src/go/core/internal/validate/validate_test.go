@@ -2,6 +2,7 @@ package validate
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 )
 
@@ -99,6 +100,40 @@ func TestReferencesOpeningOnANonSeparatorAreRejected(t *testing.T) {
 
 		if err := Definition(definitionWithFill(t, value)); err == nil {
 			t.Errorf("fill %q with U+%04X was accepted, want rejected", value, sep)
+		}
+	}
+}
+
+func nestJSON(levels int, leaf string) string {
+	return strings.Repeat("[", levels) + leaf + strings.Repeat("]", levels)
+}
+
+// The value itself is level 1: an object holding 63 arrays reaches level 64.
+func TestExceedsMaxDepthCountsTheValueAsTheFirstLevel(t *testing.T) {
+	if exceedsMaxDepth([]byte(`{"seed":` + nestJSON(MaxDepth-1, `"x"`) + `}`)) {
+		t.Error("64 levels exceed the limit")
+	}
+
+	if !exceedsMaxDepth([]byte(`{"seed":` + nestJSON(MaxDepth, `"x"`) + `}`)) {
+		t.Error("65 levels do not exceed the limit")
+	}
+}
+
+// Brackets inside strings, escaped quotes included, are text, not nesting.
+func TestExceedsMaxDepthIgnoresBracketsInStrings(t *testing.T) {
+	text := `"` + strings.Repeat(`[{\"`, 100) + `"`
+
+	if exceedsMaxDepth([]byte(`{"seed":` + text + `}`)) {
+		t.Error("brackets in a string counted as nesting")
+	}
+}
+
+func TestDeepNestingIsInvalid(t *testing.T) {
+	for _, check := range []func([]byte) error{Options, Definition} {
+		err := check([]byte(`{"seed":` + nestJSON(5000, `"x"`) + `}`))
+
+		if err == nil || !strings.Contains(err.Error(), "nesting is deeper") {
+			t.Errorf("got %v, want the nesting error", err)
 		}
 	}
 }

@@ -990,6 +990,17 @@ function attributeStyle(attributes) {
 const fillStyle = (fill) => attributeStyle({ fill });
 const hrefStyle = (href) => attributeStyle({ href });
 
+// A canvas holding `groups` nested groups around `leaf`, for the depth limit.
+function nestedGroupsStyle(groups, leaf) {
+  let element = leaf;
+
+  for (let i = 0; i < groups; i++) {
+    element = { type: 'element', name: 'g', children: [element] };
+  }
+
+  return { canvas: { width: 100, height: 100, elements: [element] } };
+}
+
 // A canvas holding one animated group, for the animation validation cases.
 function animatedStyle(animations) {
   return {
@@ -1353,6 +1364,22 @@ const styleValidationCases = [
         ],
       },
     },
+  },
+  // Every port turns down a value nested deeper than 64 levels, counting the
+  // definition itself as the first. Each group adds two levels (the element
+  // and its children array), so 30 groups put the innermost element on level
+  // 64. Its empty attributes object would be level 65.
+  {
+    id: 'nesting-at-the-depth-limit',
+    definition: nestedGroupsStyle(30, { type: 'element', name: 'rect' }),
+  },
+  {
+    id: 'nesting-past-the-depth-limit',
+    definition: nestedGroupsStyle(30, {
+      type: 'element',
+      name: 'rect',
+      attributes: {},
+    }),
   },
 ];
 

@@ -2056,6 +2056,399 @@
         }
       },
       "valid": false
+    },
+    {
+      "id": "nesting-at-the-depth-limit",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "children": [
+                {
+                  "type": "element",
+                  "name": "g",
+                  "children": [
+                    {
+                      "type": "element",
+                      "name": "g",
+                      "children": [
+                        {
+                          "type": "element",
+                          "name": "g",
+                          "children": [
+                            {
+                              "type": "element",
+                              "name": "g",
+                              "children": [
+                                {
+                                  "type": "element",
+                                  "name": "g",
+                                  "children": [
+                                    {
+                                      "type": "element",
+                                      "name": "g",
+                                      "children": [
+                                        {
+                                          "type": "element",
+                                          "name": "g",
+                                          "children": [
+                                            {
+                                              "type": "element",
+                                              "name": "g",
+                                              "children": [
+                                                {
+                                                  "type": "element",
+                                                  "name": "g",
+                                                  "children": [
+                                                    {
+                                                      "type": "element",
+                                                      "name": "g",
+                                                      "children": [
+                                                        {
+                                                          "type": "element",
+                                                          "name": "g",
+                                                          "children": [
+                                                            {
+                                                              "type": "element",
+                                                              "name": "g",
+                                                              "children": [
+                                                                {
+                                                                  "type": "element",
+                                                                  "name": "g",
+                                                                  "children": [
+                                                                    {
+                                                                      "type": "element",
+                                                                      "name": "g",
+                                                                      "children": [
+                                                                        {
+                                                                          "type": "element",
+                                                                          "name": "g",
+                                                                          "children": [
+                                                                            {
+                                                                              "type": "element",
+                                                                              "name": "g",
+                                                                              "children": [
+                                                                                {
+                                                                                  "type": "element",
+                                                                                  "name": "g",
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "type": "element",
+                                                                                      "name": "g",
+                                                                                      "children": [
+                                                                                        {
+                                                                                          "type": "element",
+                                                                                          "name": "g",
+                                                                                          "children": [
+                                                                                            {
+                                                                                              "type": "element",
+                                                                                              "name": "g",
+                                                                                              "children": [
+                                                                                                {
+                                                                                                  "type": "element",
+                                                                                                  "name": "g",
+                                                                                                  "children": [
+                                                                                                    {
+                                                                                                      "type": "element",
+                                                                                                      "name": "g",
+                                                                                                      "children": [
+                                                                                                        {
+                                                                                                          "type": "element",
+                                                                                                          "name": "g",
+                                                                                                          "children": [
+                                                                                                            {
+                                                                                                              "type": "element",
+                                                                                                              "name": "g",
+                                                                                                              "children": [
+                                                                                                                {
+                                                                                                                  "type": "element",
+                                                                                                                  "name": "g",
+                                                                                                                  "children": [
+                                                                                                                    {
+                                                                                                                      "type": "element",
+                                                                                                                      "name": "g",
+                                                                                                                      "children": [
+                                                                                                                        {
+                                                                                                                          "type": "element",
+                                                                                                                          "name": "g",
+                                                                                                                          "children": [
+                                                                                                                            {
+                                                                                                                              "type": "element",
+                                                                                                                              "name": "g",
+                                                                                                                              "children": [
+                                                                                                                                {
+                                                                                                                                  "type": "element",
+                                                                                                                                  "name": "g",
+                                                                                                                                  "children": [
+                                                                                                                                    {
+                                                                                                                                      "type": "element",
+                                                                                                                                      "name": "rect"
+                                                                                                                                    }
+                                                                                                                                  ]
+                                                                                                                                }
+                                                                                                                              ]
+                                                                                                                            }
+                                                                                                                          ]
+                                                                                                                        }
+                                                                                                                      ]
+                                                                                                                    }
+                                                                                                                  ]
+                                                                                                                }
+                                                                                                              ]
+                                                                                                            }
+                                                                                                          ]
+                                                                                                        }
+                                                                                                      ]
+                                                                                                    }
+                                                                                                  ]
+                                                                                                }
+                                                                                              ]
+                                                                                            }
+                                                                                          ]
+                                                                                        }
+                                                                                      ]
+                                                                                    }
+                                                                                  ]
+                                                                                }
+                                                                              ]
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "nesting-past-the-depth-limit",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "g",
+              "children": [
+                {
+                  "type": "element",
+                  "name": "g",
+                  "children": [
+                    {
+                      "type": "element",
+                      "name": "g",
+                      "children": [
+                        {
+                          "type": "element",
+                          "name": "g",
+                          "children": [
+                            {
+                              "type": "element",
+                              "name": "g",
+                              "children": [
+                                {
+                                  "type": "element",
+                                  "name": "g",
+                                  "children": [
+                                    {
+                                      "type": "element",
+                                      "name": "g",
+                                      "children": [
+                                        {
+                                          "type": "element",
+                                          "name": "g",
+                                          "children": [
+                                            {
+                                              "type": "element",
+                                              "name": "g",
+                                              "children": [
+                                                {
+                                                  "type": "element",
+                                                  "name": "g",
+                                                  "children": [
+                                                    {
+                                                      "type": "element",
+                                                      "name": "g",
+                                                      "children": [
+                                                        {
+                                                          "type": "element",
+                                                          "name": "g",
+                                                          "children": [
+                                                            {
+                                                              "type": "element",
+                                                              "name": "g",
+                                                              "children": [
+                                                                {
+                                                                  "type": "element",
+                                                                  "name": "g",
+                                                                  "children": [
+                                                                    {
+                                                                      "type": "element",
+                                                                      "name": "g",
+                                                                      "children": [
+                                                                        {
+                                                                          "type": "element",
+                                                                          "name": "g",
+                                                                          "children": [
+                                                                            {
+                                                                              "type": "element",
+                                                                              "name": "g",
+                                                                              "children": [
+                                                                                {
+                                                                                  "type": "element",
+                                                                                  "name": "g",
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "type": "element",
+                                                                                      "name": "g",
+                                                                                      "children": [
+                                                                                        {
+                                                                                          "type": "element",
+                                                                                          "name": "g",
+                                                                                          "children": [
+                                                                                            {
+                                                                                              "type": "element",
+                                                                                              "name": "g",
+                                                                                              "children": [
+                                                                                                {
+                                                                                                  "type": "element",
+                                                                                                  "name": "g",
+                                                                                                  "children": [
+                                                                                                    {
+                                                                                                      "type": "element",
+                                                                                                      "name": "g",
+                                                                                                      "children": [
+                                                                                                        {
+                                                                                                          "type": "element",
+                                                                                                          "name": "g",
+                                                                                                          "children": [
+                                                                                                            {
+                                                                                                              "type": "element",
+                                                                                                              "name": "g",
+                                                                                                              "children": [
+                                                                                                                {
+                                                                                                                  "type": "element",
+                                                                                                                  "name": "g",
+                                                                                                                  "children": [
+                                                                                                                    {
+                                                                                                                      "type": "element",
+                                                                                                                      "name": "g",
+                                                                                                                      "children": [
+                                                                                                                        {
+                                                                                                                          "type": "element",
+                                                                                                                          "name": "g",
+                                                                                                                          "children": [
+                                                                                                                            {
+                                                                                                                              "type": "element",
+                                                                                                                              "name": "g",
+                                                                                                                              "children": [
+                                                                                                                                {
+                                                                                                                                  "type": "element",
+                                                                                                                                  "name": "g",
+                                                                                                                                  "children": [
+                                                                                                                                    {
+                                                                                                                                      "type": "element",
+                                                                                                                                      "name": "rect",
+                                                                                                                                      "attributes": {}
+                                                                                                                                    }
+                                                                                                                                  ]
+                                                                                                                                }
+                                                                                                                              ]
+                                                                                                                            }
+                                                                                                                          ]
+                                                                                                                        }
+                                                                                                                      ]
+                                                                                                                    }
+                                                                                                                  ]
+                                                                                                                }
+                                                                                                              ]
+                                                                                                            }
+                                                                                                          ]
+                                                                                                        }
+                                                                                                      ]
+                                                                                                    }
+                                                                                                  ]
+                                                                                                }
+                                                                                              ]
+                                                                                            }
+                                                                                          ]
+                                                                                        }
+                                                                                      ]
+                                                                                    }
+                                                                                  ]
+                                                                                }
+                                                                              ]
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "valid": false
     }
   ],
   "options": [

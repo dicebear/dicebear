@@ -16,10 +16,19 @@ type ValidationError struct {
 	Subject string
 	// Details holds one entry per failed constraint.
 	Details []string
+	// Err is the error that made the input invalid when it came from
+	// elsewhere, such as encoding/json or a MarshalJSON method of the
+	// caller's. It is nil for a failed schema constraint.
+	Err error
 }
 
 func (e *ValidationError) Error() string {
 	return fmt.Sprintf("invalid %s: %s", e.Subject, strings.Join(e.Details, "; "))
+}
+
+// Unwrap returns Err, so errors.Is and errors.As reach the cause.
+func (e *ValidationError) Unwrap() error {
+	return e.Err
 }
 
 // CircularColorReferenceError is returned when a color in the style definition

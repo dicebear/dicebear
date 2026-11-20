@@ -17,6 +17,66 @@ import '../error/validation_error.dart';
 const String schemaBaseUrl =
     'https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/';
 
+/// How many levels of maps and lists a style definition or the options may
+/// nest, counting the value itself as the first. The deepest style definition
+/// uses less than a quarter of that and valid options two levels; the limit
+/// matches the C# port.
+const int maxJsonDepth = 64;
+
+/// What a validator reports when [exceedsMaxJsonDepth] holds.
+const String maxJsonDepthMessage =
+    'nesting is deeper than the $maxJsonDepth levels this port reads';
+
+/// Returns whether [value] nests maps and lists deeper than [maxJsonDepth]
+/// levels. A value that contains itself does.
+///
+/// Both validators ask first. The schema validator follows the nesting with
+/// recursion, writes the offending value into its error message, and on a few
+/// thousand levels or a value that contains itself ends in a
+/// [StackOverflowError] instead of an error the caller is expected to catch.
+bool exceedsMaxJsonDepth(Object? value) =>
+    _exceedsMaxJsonDepth(value, 1, Map<Object, int>.identity());
+
+/// [checked] holds the deepest level each map and list was searched from. One
+/// met again no deeper than that needs no second search, so a part shared
+/// many times is searched once, not once per reference. One met again deeper
+/// is searched again, which is how a value that contains itself runs into the
+/// limit.
+bool _exceedsMaxJsonDepth(Object? value, int depth, Map<Object, int> checked) {
+  if (value is! Map && value is! List) {
+    return false;
+  }
+
+  if (depth > maxJsonDepth) {
+    return true;
+  }
+
+  if ((checked[value!] ?? 0) >= depth) {
+    return false;
+  }
+
+  checked[value] = depth;
+
+  if (value is Map) {
+    for (final entry in value.entries) {
+      if (_exceedsMaxJsonDepth(entry.key, depth + 1, checked) ||
+          _exceedsMaxJsonDepth(entry.value, depth + 1, checked)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  for (final item in value as List) {
+    if (_exceedsMaxJsonDepth(item, depth + 1, checked)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 /// Compiles a draft-07 schema from its raw JSON [raw], registered under
 /// [schemaBaseUrl] + [name].
 json_schema.JsonSchema compileSchema(String name, String raw) {

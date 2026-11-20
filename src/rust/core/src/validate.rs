@@ -35,7 +35,40 @@ pub(crate) fn options(instance: &Value) -> Result<(), Error> {
     check(&OPTIONS, instance)
 }
 
+/// How many levels of objects and arrays a style definition or the options may
+/// nest, counting the value itself as the first. The deepest style definition
+/// uses less than a quarter of that and valid options two levels; the limit
+/// matches the C#, Dart and Python ports.
+const MAX_DEPTH: usize = 64;
+
+/// Returns whether `value`, found on level `depth`, nests deeper than
+/// [`MAX_DEPTH`]. The search stops at the first level past the limit, so it
+/// never recurses deeper than that itself.
+fn exceeds_depth(value: &Value, depth: usize) -> bool {
+    match value {
+        Value::Array(items) => {
+            depth > MAX_DEPTH || items.iter().any(|item| exceeds_depth(item, depth + 1))
+        }
+        Value::Object(map) => {
+            depth > MAX_DEPTH || map.values().any(|item| exceeds_depth(item, depth + 1))
+        }
+        _ => false,
+    }
+}
+
+/// Validates `instance` against `validator`.
+///
+/// A value nested deeper than [`MAX_DEPTH`] levels is turned down first. The
+/// schema validator follows the nesting with recursion, and on a thread with
+/// the default 2 MiB stack a few thousand levels overflow it, which aborts the
+/// process instead of returning an error.
 fn check(validator: &Validator, instance: &Value) -> Result<(), Error> {
+    if exceeds_depth(instance, 1) {
+        return Err(Error::Validation(format!(
+            "nesting is deeper than the {MAX_DEPTH} levels this port reads"
+        )));
+    }
+
     if validator.is_valid(instance) {
         return Ok(());
     }

@@ -10,6 +10,7 @@ import 'package:dicebear_schema/dicebear_schema.dart' as dicebear_schema;
 import 'package:json_schema/json_schema.dart' as json_schema;
 
 import '../error/options_validation_error.dart';
+import '../error/validation_error.dart';
 import 'validator.dart';
 
 // A top-level `final` variable is initialized lazily on first read, so the
@@ -22,6 +23,12 @@ final json_schema.JsonSchema _optionsSchema = compileSchema(
 /// Throws an [OptionsValidationError] when [data] violates the options
 /// schema.
 void validateOptions(Object? data) {
+  if (exceedsMaxJsonDepth(data)) {
+    throw OptionsValidationError(const [
+      ValidationErrorDetail(message: maxJsonDepthMessage),
+    ]);
+  }
+
   final details = collectErrors(_optionsSchema, data);
 
   if (details.isNotEmpty) {

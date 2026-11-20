@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
 from dicebear.errors import OptionsValidationError, ValidationError
 from dicebear.options import Options
+from dicebear.validator import MAX_DEPTH, exceeds_max_depth
 
 # ---------------------------------------------------------------------------
 # constructor
@@ -218,3 +221,63 @@ def test_color_order_rejects_unknown_value() -> None:
 def test_color_order_rejects_list_value() -> None:
     with pytest.raises(OptionsValidationError):
         Options({"skinColorOrder": ["fixed"]})
+
+
+# ---------------------------------------------------------------------------
+# nesting depth
+# ---------------------------------------------------------------------------
+
+
+def _nest(levels: int, leaf: Any) -> Any:
+    value = leaf
+
+    for _ in range(levels):
+        value = [value]
+
+    return value
+
+
+def test_depth_counts_the_options_as_the_first_level() -> None:
+    # The options dict is level 1, so 63 lists reach level 64.
+    assert not exceeds_max_depth({"seed": _nest(MAX_DEPTH - 1, "x")})
+    assert exceeds_max_depth({"seed": _nest(MAX_DEPTH, "x")})
+
+
+@pytest.mark.parametrize("levels", [MAX_DEPTH, 5000])
+@pytest.mark.parametrize("key", ["seed", "backgroundColor", "zzz"])
+def test_deep_nesting_is_invalid_options(key: str, levels: int) -> None:
+    with pytest.raises(OptionsValidationError):
+        Options({key: _nest(levels, "x")})
+
+
+def test_options_that_contain_themselves_are_invalid_options() -> None:
+    value: dict[str, Any] = {"seed": "x"}
+    value["a"] = value
+
+    items: list[Any] = []
+    items += [items, items]
+
+    with pytest.raises(OptionsValidationError):
+        Options(value)
+
+    with pytest.raises(OptionsValidationError):
+        Options({"backgroundColor": items})
+
+
+def test_a_part_shared_many_times_is_searched_once() -> None:
+    shared: Any = ["x"]
+
+    # 2**50 paths if every reference were searched on its own.
+    for _ in range(50):
+        shared = [shared, shared]
+
+    assert not exceeds_max_depth({"zzz": shared})
+
+
+def test_a_shared_part_too_deep_on_one_path_is_found() -> None:
+    # Met two levels down it ends on level 63, four levels down on level 65.
+    shared = _nest(MAX_DEPTH - 2, "x")
+
+    assert not exceeds_max_depth({"a": shared})
+    assert exceeds_max_depth({"a": shared, "b": [[shared]]})
+    assert exceeds_max_depth({"b": [[shared]], "a": shared})

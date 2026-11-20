@@ -10,6 +10,7 @@ import 'package:dicebear_schema/dicebear_schema.dart' as dicebear_schema;
 import 'package:json_schema/json_schema.dart' as json_schema;
 
 import '../error/style_validation_error.dart';
+import '../error/validation_error.dart';
 import 'validator.dart';
 
 // A top-level `final` variable is initialized lazily on first read, so the
@@ -22,6 +23,12 @@ final json_schema.JsonSchema _definitionSchema = compileSchema(
 /// Throws a [StyleValidationError] when [data] violates the style definition
 /// schema.
 void validateStyle(Object? data) {
+  if (exceedsMaxJsonDepth(data)) {
+    throw StyleValidationError(const [
+      ValidationErrorDetail(message: maxJsonDepthMessage),
+    ]);
+  }
+
   final details = collectErrors(_definitionSchema, data);
 
   if (details.isNotEmpty) {

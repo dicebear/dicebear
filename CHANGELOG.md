@@ -20,6 +20,18 @@ and this project adheres to
 
 ### Fixed
 
+- **Core (all languages):** Options and style definitions nested deeper than 64
+  levels are now turned down as invalid in every port, as C# already did.
+  Before, each port drew its own line, and several crashed instead: Dart with a
+  `StackOverflowError`, also on values that contain themselves, Rust on a thread
+  with the default 2 MiB stack, which aborts the process, and Python 3.10 and
+  3.11 while the validator wrote a deeply nested value into its error message.
+- **Core (PHP):** A style definition that `json_encode()` cannot encode, such as
+  one with ill-formed UTF-8, threw a `TypeError`. It now throws a
+  `StyleValidationError`.
+- **Core (Go):** Options that `encoding/json` cannot encode, such as options
+  that contain themselves, returned the `encoding/json` error. They now return a
+  `ValidationError` for the options, with the original error as its cause.
 - **Core (Python):** A seed or option value with a lone surrogate raised
   `UnicodeEncodeError` while hashing or sorting.
 

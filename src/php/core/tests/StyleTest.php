@@ -117,6 +117,40 @@ class StyleTest extends TestCase
         Style::fromJson('{}');
     }
 
+    public function testThrowsStyleValidationErrorForADeeplyNestedDefinition(): void
+    {
+        $value = 'x';
+
+        for ($i = 0; $i < 5000; $i++) {
+            $value = [$value];
+        }
+
+        $definition = self::minimal();
+        $definition['canvas']['width'] = $value;
+
+        $this->expectException(StyleValidationError::class);
+        new Style($definition);
+    }
+
+    public function testThrowsStyleValidationErrorForADefinitionThatContainsItself(): void
+    {
+        $definition = self::minimal();
+        $definition['canvas']['self'] = &$definition['canvas'];
+
+        $this->expectException(StyleValidationError::class);
+        $this->expectExceptionMessage('nesting is deeper than the 64 levels');
+        new Style($definition);
+    }
+
+    public function testThrowsStyleValidationErrorForIllFormedUtf8(): void
+    {
+        $definition = self::minimal();
+        $definition['meta'] = ['license' => ['name' => "CC \xFF BY", 'url' => 'https://example.com']];
+
+        $this->expectException(StyleValidationError::class);
+        new Style($definition);
+    }
+
     public function testThrowsStyleValidationErrorForInvalidData(): void
     {
         $this->expectException(StyleValidationError::class);

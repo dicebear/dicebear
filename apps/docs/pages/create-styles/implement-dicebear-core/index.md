@@ -996,6 +996,14 @@ wrappers the renderer adds would be lost in both places: a `<use>` clones only
 the node it references, and a `<g>` is no valid clipPath content. Masks accept
 groups, so animations below a `mask` element pass.
 
+Before it runs the schema, every port turns down a style definition or options
+nested deeper than 64 levels as invalid. Objects and arrays count as levels, and
+the value itself is the first. The limit keeps schema validators from running
+out of stack, and with one limit in every port a definition renders in all of
+them or in none. No real input comes close: valid options nest two levels and
+the deepest style definition 15. The `nesting-at-the-depth-limit` and
+`nesting-past-the-depth-limit` cases in `validation.json` pin the boundary.
+
 ### Selecting timelines
 
 A timeline plays when the resolver's `animationPlays(name)` says so: the
