@@ -376,8 +376,17 @@ port, and no ill-formed text reaches the hash, the PRNG or the SVG.
 
 The rule covers the options the core receives. How a JSON decoder treats a lone
 surrogate escape such as `"\ud83d"` before that is up to the caller: the usual
-decoders in PHP, Rust and C# turn the document down, Go's turns the escape into
-U+FFFD. Style definitions are not user input and are taken as they are.
+decoders in JavaScript, Python and Dart hand over the lone surrogate, which the
+core then replaces; Go's turns the escape into U+FFFD itself; those in PHP and
+Rust turn the document down. C# is the one port where the core does that: its
+usual decoder accepts the document and throws only when the string is read,
+which happens inside the core, so the core reports invalid options. Style
+definitions are not user input and are taken as they are.
+
+A port may stop the replacement at a nesting depth no valid options reach, and
+at a value that contains itself (the JavaScript, Python, Dart and C# ports stop
+at 64 levels). It must not fail there with anything but its error for invalid
+options.
 
 ### Core options
 

@@ -7,6 +7,10 @@ from typing import Any
 
 _SURROGATE = re.compile("[\ud800-\udfff]")
 
+# How many levels of dicts, lists and tuples ``well_formed_deep`` walks. No valid
+# options nest anywhere near this deep.
+MAX_DEPTH = 64
+
 
 class Text:
     """Replace lone surrogates with U+FFFD.
@@ -54,23 +58,45 @@ class Text:
     def well_formed_deep(value: Any) -> Any:
         """Apply :meth:`well_formed` to every string in a JSON-like value.
 
-        Covers dict keys, dict values and list or tuple items at any depth.
-        Returns a new value and leaves the input untouched; anything else is
-        passed through.
-        """
-        if isinstance(value, str):
-            return Text.well_formed(value)
+        Covers dict keys, dict values and list or tuple items. Returns a new
+        value and leaves the input untouched; anything else is passed through.
 
+        So is a dict, list or tuple nested deeper than ``MAX_DEPTH`` levels, or
+        one that contains itself. The walk must not be what fails on such
+        input: the validator turns it down with its own error.
+        """
+        return _deep(value, set(), 0)
+
+
+def _deep(value: Any, path: set[int], depth: int) -> Any:
+    """Walk ``value`` for :meth:`Text.well_formed_deep`.
+
+    ``path`` holds the ids of the containers between the root and ``value``. A
+    depth limit alone would not stop a cycle in time: a value that contains
+    itself twice doubles the work on every level.
+    """
+    if isinstance(value, str):
+        return Text.well_formed(value)
+
+    if not isinstance(value, (dict, list, tuple)):
+        return value
+
+    marker = id(value)
+
+    if depth >= MAX_DEPTH or marker in path:
+        return value
+
+    path.add(marker)
+
+    try:
         if isinstance(value, dict):
             return {
-                Text.well_formed_deep(k): Text.well_formed_deep(v)
+                _deep(k, path, depth + 1): _deep(v, path, depth + 1)
                 for k, v in value.items()
             }
 
-        if isinstance(value, list):
-            return [Text.well_formed_deep(item) for item in value]
+        items = [_deep(item, path, depth + 1) for item in value]
 
-        if isinstance(value, tuple):
-            return tuple(Text.well_formed_deep(item) for item in value)
-
-        return value
+        return items if isinstance(value, list) else tuple(items)
+    finally:
+        path.discard(marker)

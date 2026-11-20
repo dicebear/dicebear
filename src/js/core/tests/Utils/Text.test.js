@@ -72,9 +72,65 @@ describe('Text', () => {
       assert.deepEqual(Object.keys(result), ['__proto__']);
       assert.equal({}.polluted, undefined);
     });
+
+    it('should pass through what nests deeper than MAX_DEPTH levels', () => {
+      const nest = (levels, leaf) =>
+        Array.from({ length: levels }).reduce((inner) => [inner], leaf);
+
+      // The string sits in the innermost array, one level below the root.
+      const reached = { seed: nest(Text.MAX_DEPTH - 1, HIGH) };
+      const tooDeep = { seed: nest(Text.MAX_DEPTH, HIGH) };
+
+      assert.equal(
+        JSON.stringify(Text.wellFormedDeep(reached)).includes('\\ud83d'),
+        false,
+      );
+      assert.equal(
+        JSON.stringify(Text.wellFormedDeep(tooDeep)).includes('\\ud83d'),
+        true,
+      );
+    });
+
+    it('should not overflow the stack on deep nesting', () => {
+      const deep = JSON.parse(
+        '{"seed":' + '['.repeat(5000) + ']'.repeat(5000) + '}',
+      );
+
+      assert.doesNotThrow(() => Text.wellFormedDeep(deep));
+    });
+
+    it('should stop at a value that contains itself', () => {
+      const input = { seed: HIGH, list: [LOW] };
+      input.a = input;
+      input.b = input;
+      input.list.push(input.list, input.list);
+
+      const result = Text.wellFormedDeep(input);
+
+      assert.equal(result.seed, '\ufffd');
+      assert.equal(result.list[0], '\ufffd');
+      assert.equal(result.a, input);
+      assert.equal(result.list[1], input.list);
+    });
+
+    it('should walk a value that appears twice both times', () => {
+      const shared = [HIGH];
+
+      assert.deepEqual(Text.wellFormedDeep({ x: shared, y: shared }), {
+        x: ['\ufffd'],
+        y: ['\ufffd'],
+      });
+    });
   });
 
   describe('Options', () => {
+    it('should keep a cyclic option the way structuredClone does', () => {
+      const input = { seed: 'Jo' + HIGH, extra: {} };
+      input.extra.self = input.extra;
+
+      assert.equal(new Options(input).seed(), 'Jo\ufffd');
+    });
+
     it('should read the options with lone surrogates replaced', () => {
       const options = new Options({ seed: 'Jo' + HIGH, title: LOW });
 

@@ -4,9 +4,13 @@ from __future__ import annotations
 
 import itertools
 import json
+from typing import Any
 
+import pytest
+
+from dicebear.errors import OptionsValidationError
 from dicebear.options import Options
-from dicebear.utils.text import Text
+from dicebear.utils.text import MAX_DEPTH, Text
 
 HIGH = "\ud83d"
 LOW = "\ude00"
@@ -64,6 +68,68 @@ def test_well_formed_deep_leaves_the_input_untouched() -> None:
     Text.well_formed_deep(value)
 
     assert value == {"seed": HIGH, "list": [LOW]}
+
+
+def _nest(levels: int, leaf: Any) -> Any:
+    value = leaf
+
+    for _ in range(levels):
+        value = [value]
+
+    return value
+
+
+def _holds_a_surrogate(value: Any) -> bool:
+    while isinstance(value, (dict, list)):
+        value = next(iter(value.values())) if isinstance(value, dict) else value[0]
+
+    return value == HIGH
+
+
+def test_well_formed_deep_passes_through_what_nests_deeper_than_max_depth() -> None:
+    # The string sits in the innermost list, one level below the root.
+    reached = Text.well_formed_deep({"seed": _nest(MAX_DEPTH - 1, HIGH)})
+    too_deep = Text.well_formed_deep({"seed": _nest(MAX_DEPTH, HIGH)})
+
+    assert not _holds_a_surrogate(reached)
+    assert _holds_a_surrogate(too_deep)
+
+
+def test_well_formed_deep_stops_at_a_value_that_contains_itself() -> None:
+    value: dict[str, Any] = {"seed": HIGH, "list": [LOW]}
+    value["a"] = value
+    value["b"] = value
+    value["list"] += [value["list"], value["list"]]
+
+    result = Text.well_formed_deep(value)
+
+    assert result["seed"] == "\ufffd"
+    assert result["list"][0] == "\ufffd"
+    assert result["a"] is value
+    assert result["list"][1] is value["list"]
+
+
+def test_well_formed_deep_walks_a_value_that_appears_twice_both_times() -> None:
+    shared = [HIGH]
+
+    assert Text.well_formed_deep({"x": shared, "y": shared}) == {
+        "x": ["\ufffd"],
+        "y": ["\ufffd"],
+    }
+
+
+def test_options_turn_down_deep_nesting_as_invalid_options() -> None:
+    with pytest.raises(OptionsValidationError):
+        Options({"seed": _nest(5000, "x")})
+
+
+def test_options_turn_down_a_value_that_contains_itself_as_invalid_options() -> None:
+    value: dict[str, Any] = {"seed": "x"}
+    value["a"] = value
+    value["b"] = value
+
+    with pytest.raises(OptionsValidationError):
+        Options(value)
 
 
 def test_options_read_the_replaced_text() -> None:

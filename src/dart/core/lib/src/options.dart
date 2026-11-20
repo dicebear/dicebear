@@ -2,6 +2,7 @@
 library;
 
 import 'error/options_validation_error.dart';
+import 'error/validation_error.dart';
 import 'range.dart';
 import 'utils/deep_copy.dart';
 import 'utils/text.dart';
@@ -209,7 +210,17 @@ class Options {
   /// deep-copies it so the stored data cannot alias the caller's map. Every
   /// port validates what the avatar will read, so the seed hashes and the
   /// text renders the same everywhere.
+  ///
+  /// Options nested too deep to walk, which includes options that contain
+  /// themselves, are turned down first: the walk and the schema validator
+  /// would both run out of stack on them.
   static Map<String, Object?> _validateAndCopy(Map<String, Object?> data) {
+    if (exceedsMaxJsonDepth(data)) {
+      throw OptionsValidationError(const [
+        ValidationErrorDetail(message: maxJsonDepthMessage),
+      ]);
+    }
+
     final wellFormedData = wellFormedJsonValue(data);
 
     validateOptions(wellFormedData);

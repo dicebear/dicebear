@@ -250,11 +250,13 @@ namespace DiceBear.Internal
             }
             catch (InvalidOperationException exception)
             {
-                // A document parsed from JSON text with a lone surrogate escape
-                // such as "\ud83d" throws as soon as that string or property
-                // name is read. Decoding JSON is up to the caller, as with the
-                // usual decoders in PHP and Rust, so it leaves here as this
-                // port's own error.
+                // System.Text.Json accepts JSON text with a lone surrogate
+                // escape such as "\ud83d" and throws only when that string or
+                // property name is read, which is here. The port does not
+                // decode JSON itself, so it cannot replace the escape the way
+                // it replaces a lone surrogate in a string. The document is
+                // turned down instead, as the usual decoders in PHP and Rust
+                // do, and leaves here as this port's own error.
                 throw new OptionsValidationException(new[]
                 {
                     new ValidationErrorDetail(message: exception.Message),

@@ -36,6 +36,28 @@ describe('Avatar', () => {
 
       assert.ok(avatar instanceof Avatar);
     });
+
+    it('should turn down deeply nested options as invalid options', () => {
+      const options = JSON.parse(
+        '{"seed":' + '['.repeat(5000) + ']'.repeat(5000) + '}',
+      );
+
+      assert.throws(
+        () => new Avatar(minimalStyle, options),
+        (error) => error.name === 'OptionsValidationError',
+      );
+    });
+
+    it('should turn down options that contain themselves as invalid options', () => {
+      const options = { seed: 'test' };
+      options.a = options;
+      options.b = options;
+
+      assert.throws(
+        () => new Avatar(minimalStyle, options),
+        (error) => error.name === 'OptionsValidationError',
+      );
+    });
   });
 
   describe('toString()', () => {
