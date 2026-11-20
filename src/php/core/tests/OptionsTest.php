@@ -41,6 +41,12 @@ class OptionsTest extends TestCase
         new Options(['size' => -1]);
     }
 
+    public function testThrowsOptionsValidationErrorForIllFormedUtf8OutsideSeedAndTitle(): void
+    {
+        $this->expectException(OptionsValidationError::class);
+        new Options(['seed' => 'x', 'backgroundColor' => ["\xFF"]]);
+    }
+
     public function testErrorIncludesDetails(): void
     {
         try {
