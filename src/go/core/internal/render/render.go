@@ -33,7 +33,7 @@ type Result struct {
 // U+FFFD per byte; text.WellFormed replaces the way every port does.
 //
 // Options the round-trip cannot carry, such as a value that contains itself or
-// one nested deeper than encoding/json reads, are invalid options.
+// one whose MarshalJSON method fails, are invalid options.
 func Generate(s *style.Style, opts map[string]any) (*Result, error) {
 	optionsJSON, err := json.Marshal(wellFormedText(opts))
 	if err != nil {

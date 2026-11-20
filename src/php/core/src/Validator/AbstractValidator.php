@@ -18,6 +18,15 @@ use Opis\JsonSchema\Validator;
  */
 abstract class AbstractValidator
 {
+    /**
+     * How many levels of arrays and objects a style definition or the options
+     * may nest, counting the value itself as the first. Every port turns down
+     * a deeper value as invalid, so a definition renders in all of them or in
+     * none. Valid options nest two levels and the deepest style definition
+     * uses less than a quarter of the limit.
+     */
+    public const MAX_DEPTH = 64;
+
     private static ?Validator $validator = null;
     /** @var array<class-string, object> */
     private static array $schemas = [];
@@ -46,6 +55,12 @@ abstract class AbstractValidator
      */
     public static function validate(mixed $data): void
     {
+        if (self::exceedsMaxDepth($data, 1)) {
+            static::throwError([
+                ['message' => sprintf('nesting is deeper than the %d levels this port reads', self::MAX_DEPTH)],
+            ]);
+        }
+
         $result = self::validator()->validate(static::toObject($data), static::schema());
 
         if (!$result->isValid()) {
@@ -60,6 +75,31 @@ abstract class AbstractValidator
 
             static::throwError($details);
         }
+    }
+
+    /**
+     * Returns whether `$value`, found on level `$depth`, nests arrays and
+     * objects deeper than {@see MAX_DEPTH}. The search stops at the first
+     * level past the limit, which also ends an array that contains itself
+     * through a reference.
+     */
+    private static function exceedsMaxDepth(mixed $value, int $depth): bool
+    {
+        if (!is_array($value) && !is_object($value)) {
+            return false;
+        }
+
+        if ($depth > self::MAX_DEPTH) {
+            return true;
+        }
+
+        foreach ($value as $item) {
+            if (self::exceedsMaxDepth($item, $depth + 1)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static function validator(): Validator

@@ -132,6 +132,16 @@ class StyleTest extends TestCase
         new Style($definition);
     }
 
+    public function testThrowsStyleValidationErrorForADefinitionThatContainsItself(): void
+    {
+        $definition = self::minimal();
+        $definition['canvas']['self'] = &$definition['canvas'];
+
+        $this->expectException(StyleValidationError::class);
+        $this->expectExceptionMessage('nesting is deeper than the 64 levels');
+        new Style($definition);
+    }
+
     public function testThrowsStyleValidationErrorForIllFormedUtf8(): void
     {
         $definition = self::minimal();

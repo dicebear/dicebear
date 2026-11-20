@@ -3,6 +3,9 @@ import { Avatar as AvatarBase } from './Avatar.js';
 import { StyleValidator } from './Validator/StyleValidator.js';
 import { OptionsValidator } from './Validator/OptionsValidator.js';
 import type { StyleOptions } from './StyleOptions.js';
+import { StyleValidationError } from './Error/StyleValidationError.js';
+import { OptionsValidationError } from './Error/OptionsValidationError.js';
+import { Depth } from './Utils/Depth.js';
 
 /**
  * A style whose definition is checked against the definition schema before
@@ -11,6 +14,10 @@ import type { StyleOptions } from './StyleOptions.js';
  */
 export class Style<D = unknown> extends StyleBase<D> {
   constructor(data: D) {
+    if (Depth.exceeds(data)) {
+      throw new StyleValidationError([{ message: Depth.MESSAGE }]);
+    }
+
     StyleValidator.validate(data);
     super(data);
   }
@@ -23,6 +30,10 @@ export class Style<D = unknown> extends StyleBase<D> {
  */
 export class Avatar<D = unknown> extends AvatarBase<D> {
   constructor(style: StyleBase<D>, optionsInput?: StyleOptions<D>) {
+    if (Depth.exceeds(optionsInput)) {
+      throw new OptionsValidationError([{ message: Depth.MESSAGE }]);
+    }
+
     OptionsValidator.validate(optionsInput ?? {});
     super(style, optionsInput);
   }

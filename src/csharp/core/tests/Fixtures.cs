@@ -19,7 +19,9 @@ internal static class Fixtures
     {
         var path = Path.Combine(new[] { Root }.Concat(segments).ToArray());
 
-        return JsonNode.Parse(File.ReadAllText(path))
+        // The validation fixtures wrap definitions that reach the port's own
+        // depth limit in three more levels, past the reader's default of 64.
+        return JsonNode.Parse(File.ReadAllText(path), documentOptions: new JsonDocumentOptions { MaxDepth = 128 })
             ?? throw new InvalidOperationException($"Fixture is empty: {path}");
     }
 

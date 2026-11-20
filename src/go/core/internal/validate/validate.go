@@ -5,6 +5,7 @@ package validate
 
 import (
 	"bytes"
+	"fmt"
 	"sync"
 
 	"github.com/dicebear/schema/v2"
@@ -56,7 +57,21 @@ func Options(instanceJSON []byte) error {
 	return check(optionsValidator(), instanceJSON, "options")
 }
 
+// MaxDepth is how many levels of objects and arrays a style definition or the
+// options may nest, counting the value itself as the first. Every port turns
+// down a deeper value as invalid, so a definition renders in all of them or in
+// none. Valid options nest two levels and the deepest style definition uses
+// less than a quarter of the limit.
+const MaxDepth = 64
+
 func check(sch *jsonschema.Schema, instanceJSON []byte, subject string) error {
+	if exceedsMaxDepth(instanceJSON) {
+		return &errs.ValidationError{
+			Subject: subject,
+			Details: []string{fmt.Sprintf("nesting is deeper than the %d levels this port reads", MaxDepth)},
+		}
+	}
+
 	inst, err := jsonschema.UnmarshalJSON(bytes.NewReader(instanceJSON))
 	if err != nil {
 		return &errs.ValidationError{Subject: subject, Details: []string{err.Error()}}
@@ -67,4 +82,39 @@ func check(sch *jsonschema.Schema, instanceJSON []byte, subject string) error {
 	}
 
 	return nil
+}
+
+// exceedsMaxDepth reports whether the JSON text nests objects and arrays
+// deeper than MaxDepth levels. It counts brackets outside strings, which is
+// the nesting the decoder would build. Text that is not valid JSON is left to
+// the decoder to report.
+func exceedsMaxDepth(instanceJSON []byte) bool {
+	depth := 0
+	inString := false
+	escaped := false
+
+	for _, b := range instanceJSON {
+		switch {
+		case escaped:
+			escaped = false
+		case inString:
+			switch b {
+			case '\\':
+				escaped = true
+			case '"':
+				inString = false
+			}
+		case b == '"':
+			inString = true
+		case b == '[' || b == '{':
+			depth++
+			if depth > MaxDepth {
+				return true
+			}
+		case b == ']' || b == '}':
+			depth--
+		}
+	}
+
+	return false
 }
