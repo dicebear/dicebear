@@ -84,62 +84,6 @@ class Text
     }
 
     /**
-     * Applies {@see wellFormed()} to every string in a JSON-like value: array
-     * keys, array values and nested arrays at any depth. Anything that is not
-     * a string or an array is passed through.
-     *
-     * An array that contains itself through a reference is passed through
-     * where it repeats, and `json_encode()` reports the recursion the way it
-     * did before.
-     */
-    public static function wellFormedDeep(mixed $value): mixed
-    {
-        return self::deep($value, []);
-    }
-
-    /**
-     * @param array<string, true> $path The references the walk is inside of,
-     *                                  by {@see \ReflectionReference::getId()}.
-     */
-    private static function deep(mixed $value, array $path): mixed
-    {
-        if (is_string($value)) {
-            return self::wellFormed($value);
-        }
-
-        if (!is_array($value)) {
-            return $value;
-        }
-
-        $result = [];
-
-        foreach ($value as $key => $item) {
-            $inner = $path;
-
-            // Only a reference can make an array contain itself, and meeting
-            // one a second time on the way down is that cycle. A depth limit
-            // alone would not do: an array that refers to itself twice doubles
-            // the work on every level.
-            if (is_array($item)) {
-                $id = \ReflectionReference::fromArrayElement($value, $key)?->getId();
-
-                if ($id !== null) {
-                    if (isset($path[$id])) {
-                        $result[is_string($key) ? self::wellFormed($key) : $key] = $item;
-                        continue;
-                    }
-
-                    $inner[$id] = true;
-                }
-            }
-
-            $result[is_string($key) ? self::wellFormed($key) : $key] = self::deep($item, $inner);
-        }
-
-        return $result;
-    }
-
-    /**
      * Returns how many continuation bytes follow `$lead` in a well-formed
      * sequence and the range the first one must fall in (Unicode Standard,
      * table 3-7). The count is 0 when `$lead` cannot start a sequence.

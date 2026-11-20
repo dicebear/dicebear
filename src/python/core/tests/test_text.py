@@ -4,13 +4,9 @@ from __future__ import annotations
 
 import itertools
 import json
-from typing import Any
 
-import pytest
-
-from dicebear.errors import OptionsValidationError
 from dicebear.options import Options
-from dicebear.utils.text import MAX_DEPTH, Text
+from dicebear.utils.text import Text
 
 HIGH = "\ud83d"
 LOW = "\ude00"
@@ -52,94 +48,30 @@ def test_matches_utf16_decoding_with_replacement() -> None:
         assert Text.well_formed(value) == expected, repr(value)
 
 
-def test_well_formed_deep_covers_keys_values_and_items() -> None:
-    value = {"k" + HIGH: ["a" + LOW, {"x": HIGH}], "n": 1, "b": True}
-
-    assert Text.well_formed_deep(value) == {
-        "k�": ["a�", {"x": "�"}],
-        "n": 1,
-        "b": True,
-    }
-
-
-def test_well_formed_deep_leaves_the_input_untouched() -> None:
-    value = {"seed": HIGH, "list": [LOW]}
-
-    Text.well_formed_deep(value)
-
-    assert value == {"seed": HIGH, "list": [LOW]}
-
-
-def _nest(levels: int, leaf: Any) -> Any:
-    value = leaf
-
-    for _ in range(levels):
-        value = [value]
-
-    return value
-
-
-def _holds_a_surrogate(value: Any) -> bool:
-    while isinstance(value, (dict, list)):
-        value = next(iter(value.values())) if isinstance(value, dict) else value[0]
-
-    return value == HIGH
-
-
-def test_well_formed_deep_passes_through_what_nests_deeper_than_max_depth() -> None:
-    # The string sits in the innermost list, one level below the root.
-    reached = Text.well_formed_deep({"seed": _nest(MAX_DEPTH - 1, HIGH)})
-    too_deep = Text.well_formed_deep({"seed": _nest(MAX_DEPTH, HIGH)})
-
-    assert not _holds_a_surrogate(reached)
-    assert _holds_a_surrogate(too_deep)
-
-
-def test_well_formed_deep_stops_at_a_value_that_contains_itself() -> None:
-    value: dict[str, Any] = {"seed": HIGH, "list": [LOW]}
-    value["a"] = value
-    value["b"] = value
-    value["list"] += [value["list"], value["list"]]
-
-    result = Text.well_formed_deep(value)
-
-    assert result["seed"] == "\ufffd"
-    assert result["list"][0] == "\ufffd"
-    assert result["a"] is value
-    assert result["list"][1] is value["list"]
-
-
-def test_well_formed_deep_walks_a_value_that_appears_twice_both_times() -> None:
-    shared = [HIGH]
-
-    assert Text.well_formed_deep({"x": shared, "y": shared}) == {
-        "x": ["\ufffd"],
-        "y": ["\ufffd"],
-    }
-
-
-def test_exceeds_max_depth_counts_the_options_as_the_first_level() -> None:
-    assert not Text.exceeds_max_depth({"seed": _nest(MAX_DEPTH - 1, "x")})
-    assert Text.exceeds_max_depth({"seed": _nest(MAX_DEPTH, "x")})
-
-
-@pytest.mark.parametrize("levels", [MAX_DEPTH, 300, 5000])
-def test_options_turn_down_deep_nesting_as_invalid_options(levels: int) -> None:
-    with pytest.raises(OptionsValidationError):
-        Options({"seed": _nest(levels, "x")})
-
-
-def test_options_turn_down_a_value_that_contains_itself_as_invalid_options() -> None:
-    value: dict[str, Any] = {"seed": "x"}
-    value["a"] = value
-    value["b"] = value
-
-    with pytest.raises(OptionsValidationError):
-        Options(value)
-
-
-def test_options_read_the_replaced_text() -> None:
+def test_options_read_the_seed_and_the_title_with_lone_surrogates_replaced() -> None:
     options = Options(json.loads('{"seed": "Jo\\ud83d", "title": "\\ude00"}'))
 
-    assert options.seed() == "Jo�"
-    assert options.title() == "�"
+    assert options.seed() == "Jo\ufffd"
+    assert options.title() == "\ufffd"
+
+
+def test_options_leave_a_well_formed_seed_and_title_as_they_are() -> None:
+    options = Options({"seed": "Jo\U0001f600", "title": "Zoë"})
+
+    assert options.seed() == "Jo\U0001f600"
+    assert options.title() == "Zoë"
+
+
+def test_options_read_an_absent_seed_and_title_as_absent() -> None:
+    options = Options({})
+
+    assert options.seed() is None
+    assert options.title() is None
+
+
+def test_options_do_not_change_what_they_were_given() -> None:
+    value = {"seed": HIGH}
+
+    Options(value).seed()
+
+    assert value == {"seed": HIGH}

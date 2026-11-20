@@ -84,8 +84,8 @@ public class AvatarParityTests
     }
 
     /// <summary>
-    /// Lone surrogates in the options become U+FFFD before anything reads
-    /// them, so the avatar matches the one for the well-formed text. Inputs
+    /// Lone surrogates in the seed and the title become U+FFFD when they are
+    /// read, so the avatar matches the one for the well-formed text. Inputs
     /// are UTF-16 code-unit arrays, because System.Text.Json refuses a lone
     /// surrogate in a JSON string; the <c>utf8</c> cases are for the ports
     /// whose strings are bytes.

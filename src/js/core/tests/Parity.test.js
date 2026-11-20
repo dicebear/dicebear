@@ -112,7 +112,7 @@ describe('Parity / Prng', () => {
 });
 
 describe('Parity / Ill-formed text', () => {
-  // Lone surrogates in the options become U+FFFD before anything reads them.
+  // Lone surrogates in the seed and the title become U+FFFD when they are read.
   // Inputs are UTF-16 code-unit arrays; the `utf8` cases are for the ports
   // whose strings are bytes. See generate.mjs.
   const fixture = loadFixture('ill-formed-text.json');

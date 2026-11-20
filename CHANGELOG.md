@@ -10,8 +10,8 @@ and this project adheres to
 
 ### Changed
 
-- **Core (all languages):** Ill-formed text in the options becomes U+FFFD before
-  the options are validated or read: a lone surrogate (for example half of an
+- **Core (all languages):** Ill-formed text in `seed` and `title` becomes U+FFFD
+  before the core hashes or renders it: a lone surrogate (for example half of an
   emoji, which JS, Python, C# and Dart strings can hold), or an ill-formed UTF-8
   sequence in Go and PHP, one U+FFFD per maximal subpart. Such a seed now
   renders the same avatar in every port; before, the ports disagreed with each
@@ -19,10 +19,6 @@ and this project adheres to
 
 ### Fixed
 
-- **Core (Dart, Python):** Deeply nested options ended in a `StackOverflowError`
-  in Dart, as did options that contain themselves, and in a `RecursionError` on
-  Python 3.10 and 3.11. Options nested deeper than 64 levels are now turned down
-  with an `OptionsValidationError`.
 - **Core (Python):** A seed or option value with a lone surrogate raised
   `UnicodeEncodeError` while hashing or sorting.
 

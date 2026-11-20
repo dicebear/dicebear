@@ -264,8 +264,8 @@ circular color-reference chains, the `OptionsDescriptor` field map, and full
 covers seed, size, transforms, gradients, `title` escaping, and
 component-variant overrides.
 
-`ill-formed-text.json` pins that every port replaces ill-formed text in the
-options with U+FFFD before reading them (see
+`ill-formed-text.json` pins that every port replaces ill-formed text in `seed`
+and `title` with U+FFFD before using them (see
 [Ill-formed text](https://www.dicebear.com/create-styles/implement-dicebear-core/#ill-formed-text)
 in the spec). Its `utf16` cases hold lone surrogates as arrays of UTF-16 code
 units, because not every JSON library reads a lone surrogate in a JSON string;

@@ -10,8 +10,8 @@ import 'package:test/test.dart';
 
 import 'fixtures.dart';
 
-// Lone surrogates in the options become U+FFFD before anything reads them, so
-// the avatar matches the one for the well-formed text. Inputs are UTF-16
+// Lone surrogates in the seed and the title become U+FFFD when they are read,
+// so the avatar matches the one for the well-formed text. Inputs are UTF-16
 // code-unit arrays; the `utf8` cases are for the ports whose strings are
 // bytes. See tests/fixtures/parity/generate.mjs.
 void main() {

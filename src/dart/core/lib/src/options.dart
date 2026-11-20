@@ -2,7 +2,6 @@
 library;
 
 import 'error/options_validation_error.dart';
-import 'error/validation_error.dart';
 import 'range.dart';
 import 'utils/deep_copy.dart';
 import 'utils/text.dart';
@@ -47,10 +46,13 @@ class Options {
   Options(Map<String, Object?>? data)
       : _data = _validateAndCopy(data ?? const <String, Object?>{});
 
+  /// The seed, with every lone surrogate replaced by U+FFFD: ill-formed text
+  /// has no meaning another port could reproduce, so the hash and the
+  /// initials read the same text everywhere.
   String? seed() {
     final value = _get('seed');
 
-    return value is String ? value : null;
+    return value is String ? wellFormed(value) : null;
   }
 
   double? size() {
@@ -65,10 +67,12 @@ class Options {
     return value is bool ? value : null;
   }
 
+  /// The title, with every lone surrogate replaced by U+FFFD, so no
+  /// ill-formed text reaches the SVG.
   String? title() {
     final value = _get('title');
 
-    return value is String ? value : null;
+    return value is String ? wellFormed(value) : null;
   }
 
   List<String> flip() => _asStringArray(_get('flip'));
@@ -206,26 +210,13 @@ class Options {
   /// absent (Dart map lookup already yields `null` for missing keys).
   Object? _get(String key) => _data[key];
 
-  /// Replaces lone surrogates with U+FFFD, validates the result, then
-  /// deep-copies it so the stored data cannot alias the caller's map. Every
-  /// port validates what the avatar will read, so the seed hashes and the
-  /// text renders the same everywhere.
-  ///
-  /// Options nested too deep to walk, which includes options that contain
-  /// themselves, are turned down first: the walk and the schema validator
-  /// would both run out of stack on them.
+  /// Validates the user input, then deep-copies it so the stored data cannot
+  /// alias the caller's map. Validation runs on the original input, like the
+  /// JS port (validate, then `structuredClone`).
   static Map<String, Object?> _validateAndCopy(Map<String, Object?> data) {
-    if (exceedsMaxJsonDepth(data)) {
-      throw OptionsValidationError(const [
-        ValidationErrorDetail(message: maxJsonDepthMessage),
-      ]);
-    }
+    validateOptions(data);
 
-    final wellFormedData = wellFormedJsonValue(data);
-
-    validateOptions(wellFormedData);
-
-    return deepCopyJsonValue(wellFormedData) as Map<String, Object?>;
+    return deepCopyJsonMap(data);
   }
 
   /// Decodes a single raw `tags` token into a [TagFilterToken]. A leading `!`

@@ -6,8 +6,7 @@ import copy
 from dataclasses import dataclass
 from typing import Any, cast
 
-from .errors import OptionsValidationError
-from .utils.text import MAX_DEPTH_MESSAGE, Text
+from .utils.text import Text
 from .validator import OptionsValidator
 
 Numeric = int | float
@@ -15,6 +14,10 @@ Range = dict[str, Numeric]
 
 COLOR_ORDER_RANDOM = "random"
 COLOR_ORDER_FIXED = "fixed"
+
+
+def _well_formed(value: str | None) -> str | None:
+    return Text.well_formed(value) if isinstance(value, str) else value
 
 
 @dataclass(frozen=True)
@@ -45,16 +48,6 @@ class Options:
 
     def __init__(self, data: dict[str, Any] | None = None) -> None:
         data = data if data is not None else {}
-
-        # Options nested too deep, which includes options that contain
-        # themselves, are turned down before the validator sees them: it would
-        # run out of stack on some of them instead of reporting them.
-        if Text.exceeds_max_depth(data):
-            raise OptionsValidationError([{"message": MAX_DEPTH_MESSAGE}])
-
-        # Lone surrogates become U+FFFD before anything reads the options, so
-        # the seed hashes and the text renders the same in every port.
-        data = Text.well_formed_deep(data)
         OptionsValidator.validate(data)
 
         # Deep-copy so later caller mutations cannot leak into resolution,
@@ -63,7 +56,12 @@ class Options:
         self._tags: list[TagFilterToken] | None = None
 
     def seed(self) -> str | None:
-        return cast("str | None", self._data.get("seed"))
+        """Return the seed, with every lone surrogate replaced by U+FFFD.
+
+        Ill-formed text has no meaning another port could reproduce, so the
+        hash and the initials read the same text everywhere.
+        """
+        return _well_formed(cast("str | None", self._data.get("seed")))
 
     def size(self) -> int | None:
         return cast("int | None", self._data.get("size"))
@@ -72,7 +70,11 @@ class Options:
         return cast("bool | None", self._data.get("idRandomization"))
 
     def title(self) -> str | None:
-        return cast("str | None", self._data.get("title"))
+        """Return the title, with every lone surrogate replaced by U+FFFD.
+
+        No ill-formed text reaches the SVG that way.
+        """
+        return _well_formed(cast("str | None", self._data.get("title")))
 
     def flip(self) -> list[str]:
         return self._as_array(self._data.get("flip"))

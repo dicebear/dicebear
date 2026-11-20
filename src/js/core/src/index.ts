@@ -3,7 +3,6 @@ import { Avatar as AvatarBase } from './Avatar.js';
 import { StyleValidator } from './Validator/StyleValidator.js';
 import { OptionsValidator } from './Validator/OptionsValidator.js';
 import type { StyleOptions } from './StyleOptions.js';
-import { Text } from './Utils/Text.js';
 
 /**
  * A style whose definition is checked against the definition schema before
@@ -24,12 +23,8 @@ export class Style<D = unknown> extends StyleBase<D> {
  */
 export class Avatar<D = unknown> extends AvatarBase<D> {
   constructor(style: StyleBase<D>, optionsInput?: StyleOptions<D>) {
-    // Validate what the avatar will read: the options with every lone
-    // surrogate already replaced by U+FFFD.
-    const options = Text.wellFormedDeep(optionsInput ?? {}) as StyleOptions<D>;
-
-    OptionsValidator.validate(options);
-    super(style, options);
+    OptionsValidator.validate(optionsInput ?? {});
+    super(style, optionsInput);
   }
 }
 

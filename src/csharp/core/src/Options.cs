@@ -30,8 +30,7 @@ namespace DiceBear.Internal
     }
 
     /// <summary>
-    /// Copies the options document into the form the validator and the typed
-    /// accessors read.
+    /// Copies a validated document into the form the typed accessors read.
     /// </summary>
     /// <remarks>
     /// The copy is what the reference gets from <c>structuredClone</c>: once
@@ -39,14 +38,14 @@ namespace DiceBear.Internal
     /// change a rendered avatar. Numbers are rebuilt from their JSON text on
     /// the way, because a hand-built C# <c>int</c> does not read back as a
     /// <c>double</c> and would drop out of the accessors. After the copy, a
-    /// hand-built <c>128</c> and a parsed <c>128</c> read the same. In the
-    /// options, every lone surrogate in a string or a property name becomes
-    /// U+FFFD, as in every port.
+    /// hand-built <c>128</c> and a parsed <c>128</c> read the same.
     ///
-    /// Serializing the document and parsing it back would do these jobs in
-    /// one line, and that is what this class replaces. It would leave the
+    /// Serializing the document and parsing it back does both jobs in one
+    /// line, and that is what this class replaces. The round-trip left the
     /// nesting limit to a serializer default, which <see cref="MaxDepth"/>
-    /// states as a number of its own.
+    /// states as a number of its own. It also encodes to UTF-8, which turns
+    /// an unpaired surrogate into U+FFFD in every string; the accessors do
+    /// that for the seed and the title, the two options that carry free text.
     /// </remarks>
     internal static class JsonSnapshot
     {
@@ -94,16 +93,7 @@ namespace DiceBear.Internal
         /// <see cref="ExceedsMaxDepth(JsonNode?)"/> first, since the copy
         /// follows the document's nesting.
         /// </summary>
-        internal static JsonObject Of(JsonNode? node) => Copy(node, wellFormed: false) as JsonObject ?? new JsonObject();
-
-        /// <summary>
-        /// Returns a copy with every lone surrogate in a string or a property
-        /// name replaced by U+FFFD, the form every port reads the options in.
-        /// Numbers are taken as they stand; <see cref="Of(JsonNode?)"/>
-        /// rebuilds them once the copy is validated. Check
-        /// <see cref="ExceedsMaxDepth(JsonNode?)"/> first.
-        /// </summary>
-        internal static JsonNode? WellFormedCopy(JsonNode? node) => Copy(node, wellFormed: true);
+        internal static JsonObject Of(JsonNode? node) => Copy(node) as JsonObject ?? new JsonObject();
 
         private static bool ExceedsMaxDepth(JsonNode? node, int depth)
         {
@@ -147,12 +137,10 @@ namespace DiceBear.Internal
         }
 
         /// <summary>
-        /// Copies one node. With <paramref name="wellFormed"/> set, lone
-        /// surrogates in strings and property names are replaced; without it,
-        /// numbers are rebuilt from their JSON text. Everything else is taken
-        /// as it stands.
+        /// Copies one node, rebuilding numbers from their JSON text and taking
+        /// everything else as it stands.
         /// </summary>
-        private static JsonNode? Copy(JsonNode? node, bool wellFormed)
+        private static JsonNode? Copy(JsonNode? node)
         {
             if (node is JsonObject obj)
             {
@@ -160,7 +148,7 @@ namespace DiceBear.Internal
 
                 foreach (var entry in obj)
                 {
-                    result[wellFormed ? Text.WellFormed(entry.Key) : entry.Key] = Copy(entry.Value, wellFormed);
+                    result[entry.Key] = Copy(entry.Value);
                 }
 
                 return result;
@@ -172,19 +160,10 @@ namespace DiceBear.Internal
 
                 foreach (var item in array)
                 {
-                    items.Add(Copy(item, wellFormed));
+                    items.Add(Copy(item));
                 }
 
                 return items;
-            }
-
-            if (wellFormed)
-            {
-                // Numbers stay as they are: the validator turns down a NaN
-                // before Number() would have to rebuild it.
-                return node is JsonValue text && text.TryGetValue<string>(out var str)
-                    ? JsonValue.Create(Text.WellFormed(str))
-                    : node?.DeepClone();
             }
 
             if (node is JsonValue value && value.GetValueKind() == JsonValueKind.Number)
@@ -230,64 +209,55 @@ namespace DiceBear.Internal
 
         internal Options(JsonNode? data)
         {
-            JsonNode copy;
+            var input = data ?? new JsonObject();
 
-            try
+            if (JsonSnapshot.ExceedsMaxDepth(input))
             {
-                var input = data ?? new JsonObject();
-
-                if (JsonSnapshot.ExceedsMaxDepth(input))
-                {
-                    throw new OptionsValidationException(new[]
-                    {
-                        new ValidationErrorDetail(message: JsonSnapshot.DepthMessage),
-                    });
-                }
-
-                // Copy first: the copy has every lone surrogate replaced by
-                // U+FFFD, and the validator checks what the avatar will read.
-                copy = JsonSnapshot.WellFormedCopy(input)!;
-            }
-            catch (InvalidOperationException exception)
-            {
-                // System.Text.Json accepts JSON text with a lone surrogate
-                // escape such as "\ud83d" and throws only when that string or
-                // property name is read, which is here. The port does not
-                // decode JSON itself, so it cannot replace the escape the way
-                // it replaces a lone surrogate in a string. The document is
-                // turned down instead, as the usual decoders in PHP and Rust
-                // do, and leaves here as this port's own error.
                 throw new OptionsValidationException(new[]
                 {
-                    new ValidationErrorDetail(message: exception.Message),
+                    new ValidationErrorDetail(message: JsonSnapshot.DepthMessage),
                 });
             }
 
             try
             {
-                OptionsValidator.Validate(copy);
+                OptionsValidator.Validate(input);
             }
             catch (JsonException exception)
             {
                 // The validator reads the options through a serializer, which
-                // turns some documents down on its own, such as one nested
-                // past its limit. It leaves here as this port's own error.
+                // turns some documents down on its own: one nested past its
+                // limit, or a string that came in as JSON text carrying an
+                // unpaired surrogate. Either way it leaves here as this port's
+                // own error.
                 throw new OptionsValidationException(new[]
                 {
                     new ValidationErrorDetail(message: exception.Message),
                 });
             }
 
-            _data = JsonSnapshot.Of(copy);
+            _data = JsonSnapshot.Of(input);
         }
 
-        internal string? Seed() => JsonRead.Str(_data, "seed");
+        /// <summary>
+        /// The seed, with every unpaired surrogate replaced by U+FFFD:
+        /// ill-formed text has no meaning another port could reproduce, so the
+        /// hash and the initials read the same text everywhere.
+        /// </summary>
+        internal string? Seed() => WellFormed(JsonRead.Str(_data, "seed"));
 
         internal double? Size() => JsonRead.Num(_data, "size");
 
         internal bool? IdRandomization() => JsonRead.Bool(_data, "idRandomization");
 
-        internal string? Title() => JsonRead.Str(_data, "title");
+        /// <summary>
+        /// The title, with every unpaired surrogate replaced by U+FFFD, so no
+        /// ill-formed text reaches the SVG.
+        /// </summary>
+        internal string? Title() => WellFormed(JsonRead.Str(_data, "title"));
+
+        private static string? WellFormed(string? value) =>
+            value is null ? null : Text.WellFormed(value);
 
         internal IReadOnlyList<string> Flip() => StringList(_data["flip"]);
 

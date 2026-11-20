@@ -1914,8 +1914,9 @@ for (const [styleName, cases] of Object.entries(avatarFixtures)) {
 // Ill-formed text fixtures
 // ---------------------------------------------------------------------------
 //
-// Every port replaces ill-formed text in the options with U+FFFD before it
-// reads them, so the seed hashes and the text renders the same everywhere.
+// Every port replaces ill-formed text in the seed and the title with U+FFFD
+// before it uses them, so the seed hashes and the text renders the same
+// everywhere.
 // Which kind of ill-formed text a port can receive depends on its strings:
 //
 // - utf16: lone surrogates, run by the ports whose strings are UTF-16 code

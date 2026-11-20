@@ -27,6 +27,9 @@ class Options
     /** @var array<string, mixed> */
     private array $data;
 
+    /** The options that carry text of the caller's choosing. */
+    private const FREE_TEXT = ['seed', 'title'];
+
     /** @var list<array{category: string, value?: string, negated: bool}>|null */
     private ?array $tags = null;
 
@@ -35,10 +38,16 @@ class Options
      */
     public function __construct(array $data = [])
     {
-        // Ill-formed UTF-8 becomes U+FFFD before anything reads the options,
-        // so the seed hashes and the text renders the same in every port.
-        /** @var array<string, mixed> $data */
-        $data = Text::wellFormedDeep($data);
+        // Ill-formed UTF-8 in the seed and the title becomes U+FFFD, the same
+        // text every other port reads. They are the options that carry text
+        // of the caller's choosing; the schema holds every other string to
+        // ASCII. It happens before the validator, which encodes the options
+        // as JSON and cannot do that with ill-formed UTF-8 in them.
+        foreach (self::FREE_TEXT as $key) {
+            if (is_string($data[$key] ?? null)) {
+                $data[$key] = Text::wellFormed($data[$key]);
+            }
+        }
 
         OptionsValidator::validate($data);
 

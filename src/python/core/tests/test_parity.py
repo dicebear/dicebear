@@ -117,7 +117,7 @@ def test_prng_shuffle(c: dict[str, Any]) -> None:
 # Ill-formed text
 # ---------------------------------------------------------------------------
 
-# Lone surrogates in the options become U+FFFD before anything reads them.
+# Lone surrogates in the seed and the title become U+FFFD when they are read.
 # Inputs are UTF-16 code-unit arrays; the ``utf8`` cases are for the ports whose
 # strings are bytes. See generate.mjs.
 _ILL_FORMED = _load("ill-formed-text.json")["utf16"]

@@ -460,9 +460,9 @@ public class ApiTests
     }
 
     /// <summary>
-    /// Every port replaces an unpaired surrogate in the options with U+FFFD
-    /// before it reads them, so the seed picks the same avatar as the seed
-    /// with U+FFFD in its place. The options are built by hand:
+    /// Every port replaces an unpaired surrogate in the seed and the title
+    /// with U+FFFD when it reads them, so the seed picks the same avatar as
+    /// the seed with U+FFFD in its place. The options are built by hand:
     /// <see cref="JsonSerializer"/> would encode the surrogate away before the
     /// port ever saw it.
     /// </summary>
@@ -865,8 +865,8 @@ public class ApiTests
     {
         // encodeURIComponent throws URIError on this in the reference. Every
         // port refuses it rather than substituting a replacement character.
-        // The options cannot carry one into the markup any more, a style
-        // definition still can.
+        // The seed and the title cannot carry one into the markup any more, a
+        // style definition still can.
         var definition = JsonNode.Parse(MinimalStyle)!.AsObject();
 
         definition["meta"] = new JsonObject

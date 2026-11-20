@@ -445,7 +445,7 @@ void main() {
     expect(avatar.toDataUri, throwsArgumentError);
   });
 
-  test('options replace unpaired surrogates with U+FFFD', () {
+  test('seed and title replace unpaired surrogates with U+FFFD', () {
     final style = Style(_minimalStyle);
     final avatar = Avatar(style, {'seed': 'a\u{D800}b', 'title': '\u{DE00}x'});
 
@@ -454,55 +454,6 @@ void main() {
       Avatar(style, {'seed': 'a\u{FFFD}b', 'title': '\u{FFFD}x'}).toString(),
     );
     expect(avatar.toString(), isNot(contains('\u{DE00}')));
-  });
-
-  test('options nested too deep are turned down as invalid options', () {
-    Object? nest(int levels, Object? leaf) {
-      var value = leaf;
-
-      for (var i = 0; i < levels; i++) {
-        value = <Object?>[value];
-      }
-
-      return value;
-    }
-
-    final style = Style(_minimalStyle);
-
-    // The options map is level 1, so 63 lists reach level 64.
-    expect(exceedsMaxJsonDepth({'seed': nest(maxJsonDepth - 1, 'x')}), isFalse);
-    expect(exceedsMaxJsonDepth({'seed': nest(maxJsonDepth, 'x')}), isTrue);
-
-    for (final levels in [maxJsonDepth, 5000, 200000]) {
-      expect(
-        () => Avatar(style, {'seed': nest(levels, 'x')}),
-        throwsA(isA<OptionsValidationError>()),
-        reason: '$levels levels',
-      );
-    }
-  });
-
-  test('options that contain themselves are turned down as invalid options',
-      () {
-    final options = <String, Object?>{'seed': 'x'};
-    options['a'] = options;
-    options['b'] = options;
-
-    final list = <Object?>[];
-    list
-      ..add(list)
-      ..add(list);
-
-    final style = Style(_minimalStyle);
-
-    expect(
-      () => Avatar(style, options),
-      throwsA(isA<OptionsValidationError>()),
-    );
-    expect(
-      () => Avatar(style, {'fontFamily': list}),
-      throwsA(isA<OptionsValidationError>()),
-    );
   });
 
   test('wellFormed replaces lone surrogates and keeps valid pairs', () {

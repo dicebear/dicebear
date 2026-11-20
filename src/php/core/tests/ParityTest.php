@@ -258,9 +258,9 @@ class ParityTest extends TestCase
     // Ill-formed text
     // -----------------------------------------------------------------------
 
-    // Ill-formed UTF-8 in the options becomes U+FFFD before anything reads it,
-    // one per maximal subpart, so the avatar matches the one for the
-    // well-formed text. Inputs are hex strings; the utf16 cases are for the
+    // Ill-formed UTF-8 in the seed and the title becomes U+FFFD, one per
+    // maximal subpart, so the avatar matches the one for the well-formed
+    // text. Inputs are hex strings; the utf16 cases are for the
     // ports whose strings are UTF-16 code units. See generate.mjs.
     public static function illFormedTextProvider(): array
     {

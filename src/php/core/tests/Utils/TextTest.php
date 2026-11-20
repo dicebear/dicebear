@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DiceBear\Tests\Utils;
 
+use DiceBear\Options;
 use DiceBear\Utils\Text;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -50,45 +51,27 @@ class TextTest extends TestCase
         $this->assertSame($expected, Text::wellFormed(hex2bin($hex)));
     }
 
-    public function testWellFormedDeepCoversKeysValuesAndNestedArrays(): void
+    public function testOptionsReadTheSeedAndTheTitleWithIllFormedTextReplaced(): void
     {
-        $bad = "a\xFFb";
+        $options = new Options(['seed' => "Jo\xF0\x9F\x98", 'title' => "a\xFFb"]);
 
-        $this->assertSame(
-            ["k\u{FFFD}" => ["a\u{FFFD}b", ['x' => "a\u{FFFD}b"]], 'n' => 1, 'b' => true, 0 => null],
-            Text::wellFormedDeep(["k\xFF" => [$bad, ['x' => $bad]], 'n' => 1, 'b' => true, 0 => null]),
-        );
+        $this->assertSame("Jo\u{FFFD}", $options->seed());
+        $this->assertSame("a\u{FFFD}b", $options->title());
     }
 
-    /**
-     * An array that refers to itself more than once must not multiply the
-     * walk; json_encode() still reports the recursion.
-     */
-    public function testWellFormedDeepStopsAtAReferenceCycle(): void
+    public function testOptionsLeaveAWellFormedSeedAndTitleAsTheyAre(): void
     {
-        $data = ['seed' => "a\xFF"];
-        $data['a'] = &$data;
-        $data['b'] = &$data;
+        $options = new Options(['seed' => "Jo\u{1F600}", 'title' => 'Zoë']);
 
-        $result = Text::wellFormedDeep($data);
-
-        $this->assertSame("a\u{FFFD}", $result['seed']);
-        $this->assertSame("a\u{FFFD}", $result['a']['seed']);
-        $this->assertFalse(@json_encode($result));
+        $this->assertSame("Jo\u{1F600}", $options->seed());
+        $this->assertSame('Zoë', $options->title());
     }
 
-    /**
-     * The same reference in two places is not a cycle and is walked both
-     * times.
-     */
-    public function testWellFormedDeepWalksASharedReferenceTwice(): void
+    public function testOptionsReadAnAbsentSeedAndTitleAsAbsent(): void
     {
-        $shared = ["a\xFF"];
-        $data = ['x' => &$shared, 'y' => &$shared, 'z' => ['deep' => &$shared]];
+        $options = new Options([]);
 
-        $this->assertSame(
-            ['x' => ["a\u{FFFD}"], 'y' => ["a\u{FFFD}"], 'z' => ['deep' => ["a\u{FFFD}"]]],
-            Text::wellFormedDeep($data),
-        );
+        $this->assertNull($options->seed());
+        $this->assertNull($options->title());
     }
 }

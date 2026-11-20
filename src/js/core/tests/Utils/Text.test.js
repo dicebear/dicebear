@@ -45,97 +45,34 @@ describe('Text', () => {
     });
   });
 
-  describe('wellFormedDeep', () => {
-    it('should replace in keys, values and array items at any depth', () => {
-      const input = { ['k' + HIGH]: ['a' + LOW, { x: HIGH }], n: 1, b: true };
-
-      assert.deepEqual(Text.wellFormedDeep(input), {
-        'k�': ['a�', { x: '�' }],
-        n: 1,
-        b: true,
-      });
-    });
-
-    it('should not change the input', () => {
-      const input = { seed: HIGH, list: [LOW] };
-
-      Text.wellFormedDeep(input);
-
-      assert.deepEqual(input, { seed: HIGH, list: [LOW] });
-    });
-
-    it('should keep a "__proto__" key as a plain key', () => {
-      const input = JSON.parse('{"__proto__": {"polluted": true}}');
-      const result = Text.wellFormedDeep(input);
-
-      assert.equal(Object.getPrototypeOf(result), Object.prototype);
-      assert.deepEqual(Object.keys(result), ['__proto__']);
-      assert.equal({}.polluted, undefined);
-    });
-
-    it('should pass through what nests deeper than MAX_DEPTH levels', () => {
-      const nest = (levels, leaf) =>
-        Array.from({ length: levels }).reduce((inner) => [inner], leaf);
-
-      // The string sits in the innermost array, one level below the root.
-      const reached = { seed: nest(Text.MAX_DEPTH - 1, HIGH) };
-      const tooDeep = { seed: nest(Text.MAX_DEPTH, HIGH) };
-
-      assert.equal(
-        JSON.stringify(Text.wellFormedDeep(reached)).includes('\\ud83d'),
-        false,
-      );
-      assert.equal(
-        JSON.stringify(Text.wellFormedDeep(tooDeep)).includes('\\ud83d'),
-        true,
-      );
-    });
-
-    it('should not overflow the stack on deep nesting', () => {
-      const deep = JSON.parse(
-        '{"seed":' + '['.repeat(5000) + ']'.repeat(5000) + '}',
-      );
-
-      assert.doesNotThrow(() => Text.wellFormedDeep(deep));
-    });
-
-    it('should stop at a value that contains itself', () => {
-      const input = { seed: HIGH, list: [LOW] };
-      input.a = input;
-      input.b = input;
-      input.list.push(input.list, input.list);
-
-      const result = Text.wellFormedDeep(input);
-
-      assert.equal(result.seed, '\ufffd');
-      assert.equal(result.list[0], '\ufffd');
-      assert.equal(result.a, input);
-      assert.equal(result.list[1], input.list);
-    });
-
-    it('should walk a value that appears twice both times', () => {
-      const shared = [HIGH];
-
-      assert.deepEqual(Text.wellFormedDeep({ x: shared, y: shared }), {
-        x: ['\ufffd'],
-        y: ['\ufffd'],
-      });
-    });
-  });
-
   describe('Options', () => {
-    it('should keep a cyclic option the way structuredClone does', () => {
-      const input = { seed: 'Jo' + HIGH, extra: {} };
-      input.extra.self = input.extra;
-
-      assert.equal(new Options(input).seed(), 'Jo\ufffd');
-    });
-
-    it('should read the options with lone surrogates replaced', () => {
+    it('should read the seed and the title with lone surrogates replaced', () => {
       const options = new Options({ seed: 'Jo' + HIGH, title: LOW });
 
-      assert.equal(options.seed(), 'Jo�');
-      assert.equal(options.title(), '�');
+      assert.equal(options.seed(), 'Jo\ufffd');
+      assert.equal(options.title(), '\ufffd');
+    });
+
+    it('should leave a well-formed seed and title as they are', () => {
+      const options = new Options({ seed: 'Jo' + EMOJI, title: 'Zoë' });
+
+      assert.equal(options.seed(), 'Jo' + EMOJI);
+      assert.equal(options.title(), 'Zoë');
+    });
+
+    it('should read an absent seed and title as absent', () => {
+      const options = new Options({});
+
+      assert.equal(options.seed(), undefined);
+      assert.equal(options.title(), undefined);
+    });
+
+    it('should not change the options it was given', () => {
+      const input = { seed: HIGH };
+
+      new Options(input).seed();
+
+      assert.equal(input.seed, HIGH);
     });
   });
 });
