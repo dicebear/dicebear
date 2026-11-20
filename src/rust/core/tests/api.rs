@@ -241,3 +241,26 @@ fn options_nested_too_deep_are_invalid_options() {
         .join()
         .unwrap();
 }
+
+#[test]
+fn style_definitions_nested_too_deep_are_invalid() {
+    // Run on a thread with the default 2 MiB stack, as above.
+    std::thread::Builder::new()
+        .stack_size(2 * 1024 * 1024)
+        .spawn(|| {
+            for key in ["width", "elements"] {
+                let mut definition = json!({ "canvas": { "width": 100, "height": 100, "elements": [] } });
+                definition["canvas"][key] = nest(5000);
+
+                let result = Style::from_value(definition);
+
+                assert!(
+                    matches!(&result, Err(Error::Validation(message)) if message.contains("nesting")),
+                    "{key}"
+                );
+            }
+        })
+        .unwrap()
+        .join()
+        .unwrap();
+}

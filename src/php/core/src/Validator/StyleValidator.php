@@ -23,10 +23,22 @@ class StyleValidator extends AbstractValidator
 
     /**
      * @inheritDoc
+     *
+     * A definition that `json_encode()` cannot encode, such as one nested
+     * deeper than it reads, one that contains itself or one with ill-formed
+     * UTF-8, is an invalid definition and throws the error for it.
      */
     protected static function toObject(mixed $data): mixed
     {
-        return is_array($data) ? json_decode(json_encode($data)) : $data;
+        if (!is_array($data)) {
+            return $data;
+        }
+
+        try {
+            return json_decode(json_encode($data, JSON_THROW_ON_ERROR));
+        } catch (\JsonException $exception) {
+            static::throwError([['message' => $exception->getMessage()]]);
+        }
     }
 
     /**

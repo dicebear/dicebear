@@ -509,3 +509,34 @@ def test_accepts_animations_inside_a_mask() -> None:
     )
 
     assert style.has_animations() is True
+
+
+# ---------------------------------------------------------------------------
+# nesting depth
+# ---------------------------------------------------------------------------
+
+
+def _nest(levels: int, leaf: Any) -> Any:
+    value = leaf
+
+    for _ in range(levels):
+        value = [value]
+
+    return value
+
+
+@pytest.mark.parametrize("key", ["width", "elements"])
+def test_a_deeply_nested_definition_is_invalid(key: str) -> None:
+    definition = _minimal()
+    definition["canvas"][key] = _nest(5000, "x")
+
+    with pytest.raises(StyleValidationError, match="nesting"):
+        Style(definition)
+
+
+def test_a_definition_that_contains_itself_is_invalid() -> None:
+    definition = _minimal()
+    definition["canvas"]["self"] = definition["canvas"]
+
+    with pytest.raises(StyleValidationError):
+        Style(definition)

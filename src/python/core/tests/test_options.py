@@ -7,7 +7,8 @@ from typing import Any
 import pytest
 
 from dicebear.errors import OptionsValidationError, ValidationError
-from dicebear.options import MAX_DEPTH, Options, _exceeds_max_depth
+from dicebear.options import Options
+from dicebear.validator import MAX_DEPTH, exceeds_max_depth
 
 # ---------------------------------------------------------------------------
 # constructor
@@ -236,14 +237,10 @@ def _nest(levels: int, leaf: Any) -> Any:
     return value
 
 
-def _exceeds(value: Any) -> bool:
-    return _exceeds_max_depth(value, 1, {})
-
-
 def test_depth_counts_the_options_as_the_first_level() -> None:
     # The options dict is level 1, so 63 lists reach level 64.
-    assert not _exceeds({"seed": _nest(MAX_DEPTH - 1, "x")})
-    assert _exceeds({"seed": _nest(MAX_DEPTH, "x")})
+    assert not exceeds_max_depth({"seed": _nest(MAX_DEPTH - 1, "x")})
+    assert exceeds_max_depth({"seed": _nest(MAX_DEPTH, "x")})
 
 
 @pytest.mark.parametrize("levels", [MAX_DEPTH, 5000])
@@ -274,13 +271,13 @@ def test_a_part_shared_many_times_is_searched_once() -> None:
     for _ in range(50):
         shared = [shared, shared]
 
-    assert not _exceeds({"zzz": shared})
+    assert not exceeds_max_depth({"zzz": shared})
 
 
 def test_a_shared_part_too_deep_on_one_path_is_found() -> None:
     # Met two levels down it ends on level 63, four levels down on level 65.
     shared = _nest(MAX_DEPTH - 2, "x")
 
-    assert not _exceeds({"a": shared})
-    assert _exceeds({"a": shared, "b": [[shared]]})
-    assert _exceeds({"b": [[shared]], "a": shared})
+    assert not exceeds_max_depth({"a": shared})
+    assert exceeds_max_depth({"a": shared, "b": [[shared]]})
+    assert exceeds_max_depth({"b": [[shared]], "a": shared})

@@ -20,12 +20,15 @@ and this project adheres to
 
 ### Fixed
 
-- **Core (Dart, Python, Rust):** Options nested deeper than 64 levels are now
-  turned down as invalid options, and in Dart so are options that contain
-  themselves. Before, the schema validator ran out of stack on them: in Dart, in
-  Rust on a thread with the default 2 MiB stack, which aborts the process, and
-  on Python 3.10 and 3.11 while it wrote a deeply nested value into its error
-  message.
+- **Core (Dart, Python, Rust):** Options and style definitions nested deeper
+  than 64 levels are now turned down as invalid, and in Dart so are values that
+  contain themselves. Before, the schema validator ran out of stack on them: in
+  Dart, in Rust on a thread with the default 2 MiB stack, which aborts the
+  process, and on Python 3.10 and 3.11 while it wrote a deeply nested value into
+  its error message.
+- **Core (PHP):** A style definition that `json_encode()` cannot encode, such as
+  one with ill-formed UTF-8, one nested deeper than 512 levels or one that
+  contains itself, threw a `TypeError`. It now throws a `StyleValidationError`.
 - **Core (Go):** Options that contain themselves, or nest deeper than
   `encoding/json` reads, returned the `encoding/json` error. They now return a
   `ValidationError` for the options.

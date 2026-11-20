@@ -7,8 +7,8 @@ library;
 import 'dart:convert';
 
 import 'package:dicebear_core/dicebear_core.dart';
-import 'package:dicebear_core/src/options.dart'
-    show exceedsMaxOptionsDepth, maxOptionsDepth;
+import 'package:dicebear_core/src/validator/validator.dart'
+    show exceedsMaxJsonDepth, maxJsonDepth;
 import 'package:dicebear_core/src/utils/text.dart';
 import 'package:test/test.dart';
 
@@ -458,7 +458,7 @@ void main() {
     expect(avatar.toString(), isNot(contains('\u{DE00}')));
   });
 
-  group('options nesting depth', () {
+  group('nesting depth', () {
     Object? nest(int levels, Object? leaf) {
       var value = leaf;
 
@@ -472,11 +472,11 @@ void main() {
     test('counts the options as the first level', () {
       // The options map is level 1, so 63 lists reach level 64.
       expect(
-        exceedsMaxOptionsDepth({'seed': nest(maxOptionsDepth - 1, 'x')}),
+        exceedsMaxJsonDepth({'seed': nest(maxJsonDepth - 1, 'x')}),
         isFalse,
       );
       expect(
-        exceedsMaxOptionsDepth({'seed': nest(maxOptionsDepth, 'x')}),
+        exceedsMaxJsonDepth({'seed': nest(maxJsonDepth, 'x')}),
         isTrue,
       );
     });
@@ -485,7 +485,7 @@ void main() {
       final style = Style(_minimalStyle);
 
       for (final key in ['seed', 'backgroundColor', 'zzz']) {
-        for (final levels in [maxOptionsDepth, 5000, 200000]) {
+        for (final levels in [maxJsonDepth, 5000, 200000]) {
           expect(
             () => Avatar(style, {key: nest(levels, 'x')}),
             throwsA(isA<OptionsValidationError>()),
@@ -516,6 +516,31 @@ void main() {
       );
     });
 
+    test('a deeply nested style definition is invalid', () {
+      for (final key in ['width', 'elements']) {
+        final definition = _decode(
+          '{"canvas":{"width":100,"height":100,"elements":[]}}',
+        );
+        (definition['canvas'] as Map<String, Object?>)[key] = nest(5000, 'x');
+
+        expect(
+          () => Style(definition),
+          throwsA(isA<StyleValidationError>()),
+          reason: key,
+        );
+      }
+    });
+
+    test('a style definition that contains itself is invalid', () {
+      final definition = _decode(
+        '{"canvas":{"width":100,"height":100,"elements":[]}}',
+      );
+      final canvas = definition['canvas'] as Map<String, Object?>;
+      canvas['self'] = canvas;
+
+      expect(() => Style(definition), throwsA(isA<StyleValidationError>()));
+    });
+
     test('a part shared many times is searched once', () {
       Object? shared = <Object?>['x'];
 
@@ -524,16 +549,16 @@ void main() {
         shared = <Object?>[shared, shared];
       }
 
-      expect(exceedsMaxOptionsDepth({'zzz': shared}), isFalse);
+      expect(exceedsMaxJsonDepth({'zzz': shared}), isFalse);
     });
 
     test('a shared part too deep on one path is found', () {
       // Met two levels down it ends on level 63, four levels down on level 65.
-      final part = nest(maxOptionsDepth - 2, 'x');
+      final part = nest(maxJsonDepth - 2, 'x');
 
-      expect(exceedsMaxOptionsDepth({'a': part}), isFalse);
+      expect(exceedsMaxJsonDepth({'a': part}), isFalse);
       expect(
-        exceedsMaxOptionsDepth({
+        exceedsMaxJsonDepth({
           'a': part,
           'b': [
             [part],
@@ -542,7 +567,7 @@ void main() {
         isTrue,
       );
       expect(
-        exceedsMaxOptionsDepth({
+        exceedsMaxJsonDepth({
           'b': [
             [part],
           ],
