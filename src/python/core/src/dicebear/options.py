@@ -6,11 +6,18 @@ import copy
 from dataclasses import dataclass
 from typing import Any, cast
 
+from .errors import OptionsValidationError
 from .utils.text import Text
 from .validator import OptionsValidator
 
 Numeric = int | float
 Range = dict[str, Numeric]
+
+# How many levels of dicts and lists the options may nest. Valid options nest
+# two levels at most; the limit matches the C# port.
+MAX_DEPTH = 64
+
+MAX_DEPTH_MESSAGE = f"nesting is deeper than the {MAX_DEPTH} levels this port reads"
 
 COLOR_ORDER_RANDOM = "random"
 COLOR_ORDER_FIXED = "fixed"
@@ -18,6 +25,38 @@ COLOR_ORDER_FIXED = "fixed"
 
 def _well_formed(value: str | None) -> str | None:
     return Text.well_formed(value) if isinstance(value, str) else value
+
+
+def _exceeds_max_depth(value: Any, depth: int, checked: dict[int, int]) -> bool:
+    """Return whether ``value`` nests dicts and lists deeper than ``MAX_DEPTH``.
+
+    A value that contains itself does. ``checked`` holds the deepest level each
+    container was searched from. One met again no deeper than that needs no
+    second search, so a part shared many times is searched once, not once per
+    reference. One met again deeper is searched again, which is how a value
+    that contains itself runs into the limit.
+    """
+    if not isinstance(value, (dict, list, tuple)):
+        return False
+
+    if depth > MAX_DEPTH:
+        return True
+
+    marker = id(value)
+
+    if checked.get(marker, 0) >= depth:
+        return False
+
+    checked[marker] = depth
+
+    if isinstance(value, dict):
+        return any(
+            _exceeds_max_depth(k, depth + 1, checked)
+            or _exceeds_max_depth(v, depth + 1, checked)
+            for k, v in value.items()
+        )
+
+    return any(_exceeds_max_depth(item, depth + 1, checked) for item in value)
 
 
 @dataclass(frozen=True)
@@ -48,6 +87,13 @@ class Options:
 
     def __init__(self, data: dict[str, Any] | None = None) -> None:
         data = data if data is not None else {}
+
+        # On Python 3.10 and 3.11 the schema validator runs out of stack while
+        # it writes a deeply nested value into its error message, so such
+        # options are turned down before it sees them.
+        if _exceeds_max_depth(data, 1, {}):
+            raise OptionsValidationError([{"message": MAX_DEPTH_MESSAGE}])
+
         OptionsValidator.validate(data)
 
         # Deep-copy so later caller mutations cannot leak into resolution,

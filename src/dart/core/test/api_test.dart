@@ -7,6 +7,8 @@ library;
 import 'dart:convert';
 
 import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_core/src/options.dart'
+    show exceedsMaxOptionsDepth, maxOptionsDepth;
 import 'package:dicebear_core/src/utils/text.dart';
 import 'package:test/test.dart';
 
@@ -454,6 +456,101 @@ void main() {
       Avatar(style, {'seed': 'a\u{FFFD}b', 'title': '\u{FFFD}x'}).toString(),
     );
     expect(avatar.toString(), isNot(contains('\u{DE00}')));
+  });
+
+  group('options nesting depth', () {
+    Object? nest(int levels, Object? leaf) {
+      var value = leaf;
+
+      for (var i = 0; i < levels; i++) {
+        value = <Object?>[value];
+      }
+
+      return value;
+    }
+
+    test('counts the options as the first level', () {
+      // The options map is level 1, so 63 lists reach level 64.
+      expect(
+        exceedsMaxOptionsDepth({'seed': nest(maxOptionsDepth - 1, 'x')}),
+        isFalse,
+      );
+      expect(
+        exceedsMaxOptionsDepth({'seed': nest(maxOptionsDepth, 'x')}),
+        isTrue,
+      );
+    });
+
+    test('deep nesting is invalid options', () {
+      final style = Style(_minimalStyle);
+
+      for (final key in ['seed', 'backgroundColor', 'zzz']) {
+        for (final levels in [maxOptionsDepth, 5000, 200000]) {
+          expect(
+            () => Avatar(style, {key: nest(levels, 'x')}),
+            throwsA(isA<OptionsValidationError>()),
+            reason: '$key, $levels levels',
+          );
+        }
+      }
+    });
+
+    test('options that contain themselves are invalid options', () {
+      final options = <String, Object?>{'seed': 'x'};
+      options['a'] = options;
+
+      final list = <Object?>[];
+      list
+        ..add(list)
+        ..add(list);
+
+      final style = Style(_minimalStyle);
+
+      expect(
+        () => Avatar(style, options),
+        throwsA(isA<OptionsValidationError>()),
+      );
+      expect(
+        () => Avatar(style, {'backgroundColor': list}),
+        throwsA(isA<OptionsValidationError>()),
+      );
+    });
+
+    test('a part shared many times is searched once', () {
+      Object? shared = <Object?>['x'];
+
+      // 2^50 paths if every reference were searched on its own.
+      for (var i = 0; i < 50; i++) {
+        shared = <Object?>[shared, shared];
+      }
+
+      expect(exceedsMaxOptionsDepth({'zzz': shared}), isFalse);
+    });
+
+    test('a shared part too deep on one path is found', () {
+      // Met two levels down it ends on level 63, four levels down on level 65.
+      final part = nest(maxOptionsDepth - 2, 'x');
+
+      expect(exceedsMaxOptionsDepth({'a': part}), isFalse);
+      expect(
+        exceedsMaxOptionsDepth({
+          'a': part,
+          'b': [
+            [part],
+          ],
+        }),
+        isTrue,
+      );
+      expect(
+        exceedsMaxOptionsDepth({
+          'b': [
+            [part],
+          ],
+          'a': part,
+        }),
+        isTrue,
+      );
+    });
   });
 
   test('wellFormed replaces lone surrogates and keeps valid pairs', () {

@@ -20,6 +20,15 @@ and this project adheres to
 
 ### Fixed
 
+- **Core (Dart, Python, Rust):** Options nested deeper than 64 levels are now
+  turned down as invalid options, and in Dart so are options that contain
+  themselves. Before, the schema validator ran out of stack on them: in Dart, in
+  Rust on a thread with the default 2 MiB stack, which aborts the process, and
+  on Python 3.10 and 3.11 while it wrote a deeply nested value into its error
+  message.
+- **Core (Go):** Options that contain themselves, or nest deeper than
+  `encoding/json` reads, returned the `encoding/json` error. They now return a
+  `ValidationError` for the options.
 - **Core (Python):** A seed or option value with a lone surrogate raised
   `UnicodeEncodeError` while hashing or sorting.
 

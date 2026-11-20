@@ -2,10 +2,68 @@
 library;
 
 import 'error/options_validation_error.dart';
+import 'error/validation_error.dart';
 import 'range.dart';
 import 'utils/deep_copy.dart';
 import 'utils/text.dart';
 import 'validator/options_validator.dart';
+
+/// How many levels of maps and lists the options may nest. Valid options nest
+/// two levels at most; the limit matches the C# port.
+const int maxOptionsDepth = 64;
+
+const String _maxOptionsDepthMessage =
+    'nesting is deeper than the $maxOptionsDepth levels this port reads';
+
+/// Returns whether [value] nests maps and lists deeper than [maxOptionsDepth]
+/// levels, counting [value] itself as the first. A value that contains itself
+/// does.
+bool exceedsMaxOptionsDepth(Object? value) =>
+    _exceedsMaxOptionsDepth(value, 1, Map<Object, int>.identity());
+
+/// [checked] holds the deepest level each map and list was searched from. One
+/// met again no deeper than that needs no second search, so a part shared
+/// many times is searched once, not once per reference. One met again deeper
+/// is searched again, which is how a value that contains itself runs into the
+/// limit.
+bool _exceedsMaxOptionsDepth(
+  Object? value,
+  int depth,
+  Map<Object, int> checked,
+) {
+  if (value is! Map && value is! List) {
+    return false;
+  }
+
+  if (depth > maxOptionsDepth) {
+    return true;
+  }
+
+  if ((checked[value!] ?? 0) >= depth) {
+    return false;
+  }
+
+  checked[value] = depth;
+
+  if (value is Map) {
+    for (final entry in value.entries) {
+      if (_exceedsMaxOptionsDepth(entry.key, depth + 1, checked) ||
+          _exceedsMaxOptionsDepth(entry.value, depth + 1, checked)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  for (final item in value as List) {
+    if (_exceedsMaxOptionsDepth(item, depth + 1, checked)) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 /// The two values of the per-color `${name}ColorOrder` option.
 const colorOrderRandom = 'random';
@@ -213,7 +271,18 @@ class Options {
   /// Validates the user input, then deep-copies it so the stored data cannot
   /// alias the caller's map. Validation runs on the original input, like the
   /// JS port (validate, then `structuredClone`).
+  ///
+  /// Options nested deeper than [maxOptionsDepth] levels, which includes
+  /// options that contain themselves, are turned down first: the schema
+  /// validator follows the nesting with recursion and would end in a
+  /// [StackOverflowError] instead of an error the caller is expected to catch.
   static Map<String, Object?> _validateAndCopy(Map<String, Object?> data) {
+    if (exceedsMaxOptionsDepth(data)) {
+      throw OptionsValidationError(const [
+        ValidationErrorDetail(message: _maxOptionsDepthMessage),
+      ]);
+    }
+
     validateOptions(data);
 
     return deepCopyJsonMap(data);
