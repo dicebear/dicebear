@@ -1971,6 +1971,8 @@ const utf8Inputs = [
   '4d61ff', // a byte that never occurs in UTF-8
   'e228a1', // a lead byte, then a byte that cannot continue it
   'f0808080', // an overlong four-byte sequence
+  '5a6fc3', // "Zo" and a two-byte character cut after its lead byte
+  '41e282e2826e', // two cut sequences in a row are two U+FFFD, not one
   '4162f09f9880', // well-formed, must stay as it is
 ];
 
