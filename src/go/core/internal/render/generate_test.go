@@ -1,6 +1,7 @@
 package render
 
 import (
+	"encoding/json"
 	"errors"
 	"testing"
 
@@ -52,5 +53,36 @@ func TestGenerateReportsOptionsTheRoundTripCannotCarryAsInvalid(t *testing.T) {
 		if !errors.As(err, &invalid) || invalid.Subject != "options" {
 			t.Errorf("%s: got %T (%v), want invalid options", name, err, err)
 		}
+	}
+}
+
+var errSentinel = errors.New("sentinel")
+
+type failingOption struct{}
+
+func (failingOption) MarshalJSON() ([]byte, error) { return nil, errSentinel }
+
+// The encoding/json error stays reachable under the ValidationError, and so
+// does an error from a MarshalJSON method of the caller's.
+func TestGenerateKeepsTheRoundTripErrorAsTheCause(t *testing.T) {
+	list := []any{nil}
+	list[0] = list
+
+	_, err := Generate(minimalStyle(t), map[string]any{"backgroundColor": list})
+
+	var unsupported *json.UnsupportedValueError
+	if !errors.As(err, &unsupported) {
+		t.Errorf("errors.As(%T, *json.UnsupportedValueError) = false", err)
+	}
+
+	_, err = Generate(minimalStyle(t), map[string]any{"backgroundColor": failingOption{}})
+
+	if !errors.Is(err, errSentinel) {
+		t.Errorf("errors.Is(%v, errSentinel) = false", err)
+	}
+
+	var invalid *errs.ValidationError
+	if !errors.As(err, &invalid) {
+		t.Errorf("errors.As(%T, *errs.ValidationError) = false", err)
 	}
 }

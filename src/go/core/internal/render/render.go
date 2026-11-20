@@ -59,9 +59,10 @@ func Generate(s *style.Style, opts map[string]any) (*Result, error) {
 }
 
 // invalidOptions reports err from the JSON round-trip as invalid options, the
-// error a caller checks for.
+// error a caller checks for. err stays reachable through errors.Is and
+// errors.As.
 func invalidOptions(err error) error {
-	return &errs.ValidationError{Subject: "options", Details: []string{err.Error()}}
+	return &errs.ValidationError{Subject: "options", Details: []string{err.Error()}, Err: err}
 }
 
 // freeText names the options that carry text of the caller's choosing. Every

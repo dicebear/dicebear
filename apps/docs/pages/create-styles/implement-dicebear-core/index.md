@@ -996,6 +996,13 @@ wrappers the renderer adds would be lost in both places: a `<use>` clones only
 the node it references, and a `<g>` is no valid clipPath content. Masks accept
 groups, so animations below a `mask` element pass.
 
+A port may turn down a style definition or options nested deeper than 64 levels
+(objects and arrays, counting the value itself as the first) as invalid before
+it runs the schema, and must do so if its schema validator would otherwise crash
+on such input. The C#, Dart, Python and Rust ports apply this limit. No real
+input comes close: valid options nest two levels and the deepest style
+definition 15.
+
 ### Selecting timelines
 
 A timeline plays when the resolver's `animationPlays(name)` says so: the
