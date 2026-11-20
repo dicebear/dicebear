@@ -6,7 +6,8 @@ import copy
 from dataclasses import dataclass
 from typing import Any, cast
 
-from .utils.text import Text
+from .errors import OptionsValidationError
+from .utils.text import MAX_DEPTH_MESSAGE, Text
 from .validator import OptionsValidator
 
 Numeric = int | float
@@ -43,9 +44,17 @@ class Options:
     """
 
     def __init__(self, data: dict[str, Any] | None = None) -> None:
+        data = data if data is not None else {}
+
+        # Options nested too deep, which includes options that contain
+        # themselves, are turned down before the validator sees them: it would
+        # run out of stack on some of them instead of reporting them.
+        if Text.exceeds_max_depth(data):
+            raise OptionsValidationError([{"message": MAX_DEPTH_MESSAGE}])
+
         # Lone surrogates become U+FFFD before anything reads the options, so
         # the seed hashes and the text renders the same in every port.
-        data = Text.well_formed_deep(data if data is not None else {})
+        data = Text.well_formed_deep(data)
         OptionsValidator.validate(data)
 
         # Deep-copy so later caller mutations cannot leak into resolution,

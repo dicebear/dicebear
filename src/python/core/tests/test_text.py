@@ -118,9 +118,15 @@ def test_well_formed_deep_walks_a_value_that_appears_twice_both_times() -> None:
     }
 
 
-def test_options_turn_down_deep_nesting_as_invalid_options() -> None:
+def test_exceeds_max_depth_counts_the_options_as_the_first_level() -> None:
+    assert not Text.exceeds_max_depth({"seed": _nest(MAX_DEPTH - 1, "x")})
+    assert Text.exceeds_max_depth({"seed": _nest(MAX_DEPTH, "x")})
+
+
+@pytest.mark.parametrize("levels", [MAX_DEPTH, 300, 5000])
+def test_options_turn_down_deep_nesting_as_invalid_options(levels: int) -> None:
     with pytest.raises(OptionsValidationError):
-        Options({"seed": _nest(5000, "x")})
+        Options({"seed": _nest(levels, "x")})
 
 
 def test_options_turn_down_a_value_that_contains_itself_as_invalid_options() -> None:

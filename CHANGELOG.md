@@ -19,9 +19,10 @@ and this project adheres to
 
 ### Fixed
 
-- **Core (Dart):** Options nested deeper than 64 levels, or options that contain
-  themselves, ended in a `StackOverflowError`. They are now turned down with an
-  `OptionsValidationError`.
+- **Core (Dart, Python):** Deeply nested options ended in a `StackOverflowError`
+  in Dart, as did options that contain themselves, and in a `RecursionError` on
+  Python 3.10 and 3.11. Options nested deeper than 64 levels are now turned down
+  with an `OptionsValidationError`.
 - **Core (Python):** A seed or option value with a lone surrogate raised
   `UnicodeEncodeError` while hashing or sorting.
 
