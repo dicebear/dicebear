@@ -32,6 +32,10 @@ and this project adheres to
 - **Core (Go):** Options that `encoding/json` cannot encode, such as options
   that contain themselves, returned the `encoding/json` error. They now return a
   `ValidationError` for the options, with the original error as its cause.
+- **Core (Python):** `Style.from_json` raised a `RecursionError` for JSON text
+  nested deeper than the JSON decoder reads, a few hundred to a few thousand
+  levels depending on the Python version. It now raises a `StyleValidationError`
+  like any definition past the depth limit.
 - **Core (Python):** A seed or option value with a lone surrogate raised
   `UnicodeEncodeError` while hashing or sorting.
 

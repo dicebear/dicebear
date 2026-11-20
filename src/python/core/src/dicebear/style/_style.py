@@ -8,7 +8,7 @@ from collections.abc import Callable
 from typing import Any, cast
 
 from ..errors import ErrorDetail, StyleValidationError
-from ..validator import StyleValidator
+from ..validator import MAX_DEPTH_MESSAGE, StyleValidator
 from .canvas import Canvas
 from .color import Color
 from .component import Component
@@ -48,7 +48,15 @@ class Style:
         decoded value is not a valid style definition. Pass an already-decoded
         ``dict`` to the constructor instead.
         """
-        return cls(json.loads(raw))
+        try:
+            definition = json.loads(raw)
+        except RecursionError:
+            # The decoder runs out of stack on text nested a few hundred to a
+            # few thousand levels deep, depending on the Python version. That
+            # is far past the depth limit, so the definition is invalid.
+            raise StyleValidationError([{"message": MAX_DEPTH_MESSAGE}]) from None
+
+        return cls(definition)
 
     def id(self) -> str | None:
         """Return the definition's ``$id``, or ``None`` when not set."""

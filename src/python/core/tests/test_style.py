@@ -540,3 +540,12 @@ def test_a_definition_that_contains_itself_is_invalid() -> None:
 
     with pytest.raises(StyleValidationError):
         Style(definition)
+
+
+@pytest.mark.parametrize("levels", [100, 5000, 100000])
+def test_from_json_turns_down_deeply_nested_text_as_invalid(levels: int) -> None:
+    nested = "[" * levels + "]" * levels
+    text = '{"canvas":{"width":100,"height":100,"elements":' + nested + "}}"
+
+    with pytest.raises(StyleValidationError, match="nesting"):
+        Style.from_json(text)
