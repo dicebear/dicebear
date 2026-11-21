@@ -121,12 +121,11 @@ signedAvatarUrl(
   that path segment too, because Gravatar drops a query string. Sign the path
   with its options before you encode the segment, for example
   `/11.x/lorelei/png/seed=Zo%C3%AB&exp=1794850233`. Then append `&sig=…` and
-  encode the segment as a whole. Such a URL must not have a query string. The
-  API answers one with a `403` and
-  `Query string not allowed next to path options.`, even when the signature is
-  correct.
-- A `#` in a value has to arrive as `%23`, which `encodeURIComponent` takes care
-  of. A URL with a raw `#` gets a `403`.
+  encode the segment as a whole. Such a URL must not have a query string. With
+  one, even a correctly signed URL gets a `403` with
+  `Query string not allowed next to path options.`
+- A `#` in a value has to arrive as `%23`. `encodeURIComponent` does that for
+  you. A URL with a raw `#` gets a `403`.
 - Every secret needs at least 32 characters, and the API refuses to start with a
   shorter one. `openssl rand -hex 32` generates a random one. A short or
   guessable secret can be found by trial and error from a single signed URL.
@@ -138,11 +137,11 @@ signedAvatarUrl(
   milliseconds, so divide by 1000. A repeated `exp` or one in another format
   gets a `403` with `Invalid expiry.`
 - `SIGNING_SECRETS` takes several secrets separated by commas, with spaces
-  around each one trimmed, and a signature made with any of them is accepted. A
-  secret therefore cannot contain a comma. Without the variable, or with an
-  empty one, the API runs without signed URLs. To rotate, add the new secret,
-  switch your application to it and remove the old one once its URLs are no
-  longer in use.
+  around each one trimmed, so a secret cannot contain a comma. Without the
+  variable, or with an empty one, the API runs without signed URLs.
+- The API accepts a signature made with any of the secrets. To rotate, add the
+  new secret, switch your application to it and remove the old one once its URLs
+  are no longer in use.
 - Removing a secret does not purge responses that a CDN or a browser has already
   cached.
 - Sign on your server. A secret that ships to a browser or a mobile app can be
