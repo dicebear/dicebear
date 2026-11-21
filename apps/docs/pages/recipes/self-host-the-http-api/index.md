@@ -83,7 +83,9 @@ appended as the `sig` parameter. Encode each value before you sign, because the
 browser sends `Zoë` as `Zo%C3%AB` and the API checks the encoded form. List
 values stay separated by plain commas:
 
-```js
+::: code-group
+
+```js [JavaScript]
 import { createHmac } from 'node:crypto';
 
 // Browsers send ' in a query string as %27, encodeURIComponent leaves it.
@@ -112,6 +114,219 @@ signedAvatarUrl(
 // /11.x/thumbs/svg?seed=Zo%C3%AB&backgroundColor=b6e3f4,c0aede&sig=e5e07a3e3f33f3eb6973e0492f767aee9d946e07d2d2631aed94130c56c04d05
 ```
 
+<!-- prettier-ignore -->
+```php [PHP]
+function signedAvatarUrl(string $path, array $options, string $secret): string
+{
+    $query = [];
+
+    foreach ($options as $key => $value) {
+        $query[] = $key . '=' . implode(',', array_map('rawurlencode', (array) $value));
+    }
+
+    $url = $query ? $path . '?' . implode('&', $query) : $path;
+    $sig = hash_hmac('sha256', $url, $secret);
+
+    return $url . ($query ? '&' : '?') . 'sig=' . $sig;
+}
+
+signedAvatarUrl(
+    '/11.x/thumbs/svg',
+    ['seed' => 'Zoë', 'backgroundColor' => ['b6e3f4', 'c0aede']],
+    '0123456789abcdef0123456789abcdef'
+);
+// /11.x/thumbs/svg?seed=Zo%C3%AB&backgroundColor=b6e3f4,c0aede&sig=e5e07a3e3f33f3eb6973e0492f767aee9d946e07d2d2631aed94130c56c04d05
+```
+
+<!-- prettier-ignore -->
+```python [Python]
+import hashlib
+import hmac
+from urllib.parse import quote
+
+
+def signed_avatar_url(path: str, options: dict, secret: str) -> str:
+    parts = []
+
+    for key, value in options.items():
+        values = value if isinstance(value, list) else [value]
+        parts.append(f"{key}={','.join(quote(str(v), safe='') for v in values)}")
+
+    query = "&".join(parts)
+    url = f"{path}?{query}" if query else path
+    sig = hmac.new(secret.encode(), url.encode(), hashlib.sha256).hexdigest()
+
+    return f"{url}{'&' if query else '?'}sig={sig}"
+
+
+signed_avatar_url(
+    "/11.x/thumbs/svg",
+    {"seed": "Zoë", "backgroundColor": ["b6e3f4", "c0aede"]},
+    "0123456789abcdef0123456789abcdef",
+)
+# /11.x/thumbs/svg?seed=Zo%C3%AB&backgroundColor=b6e3f4,c0aede&sig=e5e07a3e3f33f3eb6973e0492f767aee9d946e07d2d2631aed94130c56c04d05
+```
+
+<!-- prettier-ignore -->
+```rust [Rust]
+// Cargo.toml: hex = "0.4", hmac = "0.12", sha2 = "0.10", urlencoding = "2"
+use hmac::{Hmac, Mac};
+use sha2::Sha256;
+
+fn signed_avatar_url(path: &str, options: &[(&str, &[&str])], secret: &str) -> String {
+    let query = options
+        .iter()
+        .map(|(key, values)| {
+            let values: Vec<_> = values.iter().map(|value| urlencoding::encode(value)).collect();
+
+            format!("{key}={}", values.join(","))
+        })
+        .collect::<Vec<_>>()
+        .join("&");
+
+    let url = if query.is_empty() {
+        path.to_string()
+    } else {
+        format!("{path}?{query}")
+    };
+
+    let mut mac = Hmac::<Sha256>::new_from_slice(secret.as_bytes()).unwrap();
+    mac.update(url.as_bytes());
+    let sig = hex::encode(mac.finalize().into_bytes());
+
+    format!("{url}{}sig={sig}", if query.is_empty() { '?' } else { '&' })
+}
+
+signed_avatar_url(
+    "/11.x/thumbs/svg",
+    &[("seed", &["Zoë"]), ("backgroundColor", &["b6e3f4", "c0aede"])],
+    "0123456789abcdef0123456789abcdef",
+);
+// /11.x/thumbs/svg?seed=Zo%C3%AB&backgroundColor=b6e3f4,c0aede&sig=e5e07a3e3f33f3eb6973e0492f767aee9d946e07d2d2631aed94130c56c04d05
+```
+
+<!-- prettier-ignore -->
+```go [Go]
+import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"net/url"
+	"strings"
+)
+
+type Option struct {
+	Key    string
+	Values []string
+}
+
+func signedAvatarURL(path string, options []Option, secret string) string {
+	parts := make([]string, len(options))
+
+	for i, option := range options {
+		values := make([]string, len(option.Values))
+
+		for j, value := range option.Values {
+			// QueryEscape writes a space as "+", the API expects "%20".
+			values[j] = strings.ReplaceAll(url.QueryEscape(value), "+", "%20")
+		}
+
+		parts[i] = option.Key + "=" + strings.Join(values, ",")
+	}
+
+	signed, separator := path, "?"
+
+	if len(parts) > 0 {
+		signed, separator = path+"?"+strings.Join(parts, "&"), "&"
+	}
+
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write([]byte(signed))
+
+	return signed + separator + "sig=" + hex.EncodeToString(mac.Sum(nil))
+}
+
+signedAvatarURL(
+	"/11.x/thumbs/svg",
+	[]Option{
+		{"seed", []string{"Zoë"}},
+		{"backgroundColor", []string{"b6e3f4", "c0aede"}},
+	},
+	"0123456789abcdef0123456789abcdef",
+)
+// /11.x/thumbs/svg?seed=Zo%C3%AB&backgroundColor=b6e3f4,c0aede&sig=e5e07a3e3f33f3eb6973e0492f767aee9d946e07d2d2631aed94130c56c04d05
+```
+
+<!-- prettier-ignore -->
+```dart [Dart]
+// pubspec.yaml: crypto: ^3.0.0
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+
+// Browsers send ' in a query string as %27, Uri.encodeComponent leaves it.
+String encode(String value) =>
+    Uri.encodeComponent(value).replaceAll("'", '%27');
+
+String signedAvatarUrl(
+  String path,
+  Map<String, List<String>> options,
+  String secret,
+) {
+  final query = options.entries
+      .map((option) => '${option.key}=${option.value.map(encode).join(',')}')
+      .join('&');
+
+  final url = query.isEmpty ? path : '$path?$query';
+  final sig = Hmac(sha256, utf8.encode(secret)).convert(utf8.encode(url));
+
+  return '$url${query.isEmpty ? '?' : '&'}sig=$sig';
+}
+
+signedAvatarUrl(
+  '/11.x/thumbs/svg',
+  {
+    'seed': ['Zoë'],
+    'backgroundColor': ['b6e3f4', 'c0aede'],
+  },
+  '0123456789abcdef0123456789abcdef',
+);
+// /11.x/thumbs/svg?seed=Zo%C3%AB&backgroundColor=b6e3f4,c0aede&sig=e5e07a3e3f33f3eb6973e0492f767aee9d946e07d2d2631aed94130c56c04d05
+```
+
+<!-- prettier-ignore -->
+```csharp [C#]
+using System.Security.Cryptography;
+using System.Text;
+
+static string SignedAvatarUrl(
+    string path,
+    IEnumerable<KeyValuePair<string, string[]>> options,
+    string secret)
+{
+    var query = string.Join("&", options.Select(option =>
+        $"{option.Key}={string.Join(",", option.Value.Select(Uri.EscapeDataString))}"));
+
+    var url = query.Length > 0 ? $"{path}?{query}" : path;
+    var hash = HMACSHA256.HashData(Encoding.UTF8.GetBytes(secret), Encoding.UTF8.GetBytes(url));
+    var sig = Convert.ToHexString(hash).ToLowerInvariant();
+
+    return $"{url}{(query.Length > 0 ? "&" : "?")}sig={sig}";
+}
+
+SignedAvatarUrl(
+    "/11.x/thumbs/svg",
+    new Dictionary<string, string[]>
+    {
+        ["seed"] = ["Zoë"],
+        ["backgroundColor"] = ["b6e3f4", "c0aede"],
+    },
+    "0123456789abcdef0123456789abcdef");
+// /11.x/thumbs/svg?seed=Zo%C3%AB&backgroundColor=b6e3f4,c0aede&sig=e5e07a3e3f33f3eb6973e0492f767aee9d946e07d2d2631aed94130c56c04d05
+```
+
+:::
+
 - With the options in the query string, the API checks the URL exactly as it
   arrives. `sig` has to be the last parameter, in lowercase hex, and everything
   in front of it is the signed string. If a proxy in front of the API rewrites
@@ -124,8 +339,8 @@ signedAvatarUrl(
   encode the segment as a whole. Such a URL must not have a query string. With
   one, even a correctly signed URL gets a `403` with
   `Query string not allowed next to path options.`
-- A `#` in a value has to arrive as `%23`. `encodeURIComponent` does that for
-  you. A URL with a raw `#` gets a `403`.
+- A `#` in a value has to arrive as `%23`. The examples above encode it. A URL
+  with a raw `#` gets a `403`.
 - Every secret needs at least 32 characters, and the API refuses to start with a
   shorter one. `openssl rand -hex 32` generates a random one. A short or
   guessable secret can be found by trial and error from a single signed URL.
