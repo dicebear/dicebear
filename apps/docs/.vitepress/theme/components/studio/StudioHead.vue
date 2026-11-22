@@ -1,13 +1,13 @@
 <script setup lang="ts">
 /**
  * The head of the Studio page: breadcrumb, title, the lead with the two
- * actions next to it, the style gallery of the plugin and the tab index.
+ * actions next to it, and the style gallery of the plugin standing in a
+ * lilac block.
  */
 import { withBase } from 'vitepress';
 import SitePageHead from '../site/SitePageHead.vue';
 import StudioActions from './StudioActions.vue';
 import StudioShot from './StudioShot.vue';
-import StudioTabIndex from './StudioTabIndex.vue';
 import type { StudioShotImage } from './types';
 
 const head = {
@@ -33,22 +33,22 @@ const gallery: StudioShotImage[] = [
     </template>
   </SitePageHead>
 
-  <div class="site-container site-rise" style="animation-delay: 320ms">
-    <div class="studio-head-block">
-      <StudioShot :images="gallery" :width="880" eager="light" />
-    </div>
-    <div class="studio-head-block">
-      <StudioTabIndex />
-    </div>
+  <div class="site-box is-block is-lilac studio-head-shot">
+    <StudioShot :images="gallery" eager="light" tilted />
   </div>
 </template>
 
 <style scoped lang="scss">
-.studio-head-block {
-  margin-top: 72px;
+/* The screenshot stands on the bottom edge of the block. */
+.studio-head-shot {
+  margin-top: clamp(40px, 4.4vw, 64px);
+  padding-top: clamp(32px, 5vw, 72px);
+  padding-bottom: 0;
+  overflow: hidden;
 
-  @media (max-width: 767px) {
-    margin-top: 48px;
+  > .studio-shot {
+    max-width: 1040px;
+    margin: 0 auto;
   }
 }
 </style>
