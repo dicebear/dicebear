@@ -327,6 +327,7 @@ defineExpose({ focus });
 
 <style scoped lang="scss">
 @use '../../styles/control' as c;
+@use '../../styles/mixins' as m;
 
 .pg-picker {
   display: flex;
@@ -413,7 +414,7 @@ defineExpose({ focus });
     cursor: pointer;
 
     &.is-active {
-      background: var(--db-soft);
+      @include m.option-hover;
     }
 
     &[aria-selected='true'] {

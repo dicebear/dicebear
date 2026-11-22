@@ -173,6 +173,7 @@ defineExpose({ focus: () => trigger.value?.focus() });
 
 <style scoped lang="scss">
 @use '../../styles/control' as c;
+@use '../../styles/mixins' as m;
 
 /* A field of the control set, like the style field on the other end of the
    bar: the drawing of the view, the word View and its name. */
@@ -242,7 +243,7 @@ defineExpose({ focus: () => trigger.value?.focus() });
   cursor: pointer;
 
   &:hover {
-    background: var(--db-soft);
+    @include m.option-hover;
   }
 
   &:focus-visible {

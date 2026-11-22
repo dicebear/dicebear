@@ -199,6 +199,7 @@ defineExpose({ toggle, show, hide });
 
 <style scoped lang="scss">
 @use '../../styles/tone';
+@use '../../styles/mixins' as m;
 
 .site-menu {
   position: relative;
@@ -258,8 +259,7 @@ defineExpose({ toggle, show, hide });
       color 0.12s;
 
     &:hover {
-      background-color: var(--db-soft);
-      color: var(--db-ink);
+      @include m.option-hover;
     }
 
     &[aria-checked='true'] {
@@ -275,7 +275,7 @@ defineExpose({ toggle, show, hide });
 
     &:focus-visible {
       outline-offset: -2px;
-      background-color: var(--db-soft);
+      @include m.option-hover;
     }
   }
 

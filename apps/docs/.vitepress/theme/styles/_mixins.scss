@@ -85,6 +85,14 @@ $icon-chevron-right: url('lucide-static/icons/chevron-right.svg');
   }
 }
 
+/* The ground of the item under the pointer or the keyboard in a menu or a
+   list of options. 10% of the text color, like a tonal button, so it shows
+   on the white panel in light and the charcoal panel in dark alike. */
+@mixin option-hover {
+  background-color: color-mix(in srgb, var(--db-ink) 10%, transparent);
+  color: var(--db-ink);
+}
+
 @mixin button-ghost {
   color: var(--db-ink-2);
 
