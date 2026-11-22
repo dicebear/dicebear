@@ -309,6 +309,7 @@ function seed(name: string): string {
     font-weight: 700;
   }
 
+  &-step:hover &-step-name,
   &-row:hover &-name {
     text-decoration: underline;
     text-decoration-thickness: 2px;

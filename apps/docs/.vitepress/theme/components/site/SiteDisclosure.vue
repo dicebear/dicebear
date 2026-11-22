@@ -89,6 +89,13 @@ function onToggle(event: Event) {
       outline-offset: 2px;
       border-radius: var(--db-radius-1);
     }
+
+    /* The title underlines on hover, like the title of a row that links. */
+    &:hover .site-disclosure-title {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
   }
 
   &-title {

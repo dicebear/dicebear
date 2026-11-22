@@ -279,7 +279,12 @@ $icon-chevron-right: url('lucide-static/icons/chevron-right.svg');
     color: var(--db-ink);
     list-style: none;
     cursor: pointer;
+    transition: background-color 0.12s;
     @include focus-ring(-2px);
+
+    &:hover {
+      background: color-mix(in srgb, var(--db-ink) 5%, transparent);
+    }
 
     &::-webkit-details-marker {
       display: none;

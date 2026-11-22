@@ -166,10 +166,12 @@ function toggleLicense(value: string, on: boolean) {
     color: var(--db-muted);
   }
 
+  /* The second text color rather than the muted one: it keeps 4.5:1 on the
+     ground a row takes on hover too. */
   &-count {
     margin-left: auto;
     font-variant-numeric: tabular-nums;
-    color: var(--db-muted);
+    color: var(--db-ink-2);
 
     .is-active & {
       color: inherit;

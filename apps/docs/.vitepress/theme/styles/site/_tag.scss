@@ -60,9 +60,22 @@
     font-size: 12px;
   }
 
+  /* A tag that links underlines on hover like every link of the site; an
+     outlined one also takes a ground. */
   &:is(a, button) {
     cursor: pointer;
+    transition: background-color 0.12s;
     @include m.focus-ring(2px);
+
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+    }
+  }
+
+  &-outline:is(a, button):hover {
+    background: color-mix(in srgb, var(--db-ink) 6%, transparent);
   }
 }
 

@@ -372,6 +372,12 @@ function formatSize(bytes: number): string {
     border-top: 2px solid var(--db-rule);
     cursor: pointer;
 
+    &:hover .site-title {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
+
     &-copy {
       display: flex;
       flex: 1 1 240px;
@@ -442,6 +448,19 @@ function formatSize(bytes: number): string {
     align-items: center;
     padding: 8px 0;
     cursor: pointer;
+    transition: background-color 0.12s;
+
+    /* A ground across the row, reaching a little past the list, like the
+       rows of the styles list. */
+    &:hover {
+      background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--db-ink) 5%, transparent) 12%,
+        color-mix(in srgb, var(--db-ink) 5%, transparent) 88%,
+        transparent
+      );
+    }
 
     &-title {
       overflow: hidden;
