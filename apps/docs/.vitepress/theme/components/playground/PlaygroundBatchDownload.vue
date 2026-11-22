@@ -46,11 +46,20 @@ const seedsInput = ref('');
 const randomCount = ref(24);
 const randomSeeds = ref<string[]>([]);
 
+// Ten hex digits each. `getRandomValues` rather than `randomUUID`, which
+// browsers only offer on https and localhost and older Safari not at all.
 function generateRandomSeeds(n: number): string[] {
+  const bytes = crypto.getRandomValues(new Uint8Array(n * 5));
   const out: string[] = [];
+
   for (let i = 0; i < n; i++) {
-    out.push(crypto.randomUUID().replaceAll('-', '').slice(0, 10));
+    out.push(
+      Array.from(bytes.subarray(i * 5, (i + 1) * 5), (byte) =>
+        byte.toString(16).padStart(2, '0'),
+      ).join(''),
+    );
   }
+
   return out;
 }
 
