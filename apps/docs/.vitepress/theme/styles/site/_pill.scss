@@ -13,8 +13,10 @@
  * - `site-pill-row`: a row of a side navigation or list filter, full width
  *   in the text face; on, yellow.
  *
- * `site-pill-sm` is the 36px size for dense panels, `site-pill-lg` the
- * larger text of the main navigation.
+ * `site-pill-sm` is the 36px size for dense panels, `site-pill-xs` the 28px
+ * one for tools in a label row (reset, all, none), as high as the row's
+ * text, so a tool that appears does not move anything. `site-pill-lg` is
+ * the larger text of the main navigation.
  *
  * `site-seg` is the track of a segmented control: pills on a tint.
  */
@@ -111,6 +113,13 @@
     padding: 0 14px;
     border-radius: 18px;
     font-size: 14px;
+  }
+
+  &-xs {
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 14px;
+    font-size: 13px;
   }
 
   &:disabled {

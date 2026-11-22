@@ -19,6 +19,7 @@ import PlaygroundAnimationSection from './PlaygroundAnimationSection.vue';
 import PlaygroundAnimationNameSection from './PlaygroundAnimationNameSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
+import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 import PlaygroundFontSection from './PlaygroundFontSection.vue';
 import PlaygroundOutputSection from './PlaygroundOutputSection.vue';
 import PlaygroundPresetSection from './PlaygroundPresetSection.vue';
@@ -125,14 +126,7 @@ function reset() {
             <ChevronLeft :size="20" aria-hidden="true" />
           </button>
           <h2 class="pg-inspector-title">{{ title }}</h2>
-          <button
-            v-if="changed"
-            type="button"
-            class="pg-field-reset"
-            @click="reset"
-          >
-            Reset
-          </button>
+          <PlaygroundFieldReset v-if="changed" @click="reset" />
         </div>
 
         <PlaygroundComponentSection
@@ -237,10 +231,12 @@ function reset() {
     container: pg-options / inline-size;
   }
 
+  /* As high as the back button, so the reset can come and go. */
   &-head {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-height: 36px;
     margin-bottom: 22px;
   }
 

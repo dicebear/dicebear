@@ -16,7 +16,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 26px;
+  /* As high as the tools (reset, all, none), so one appearing moves
+     nothing. */
+  min-height: 28px;
   font-family: var(--db-font-display);
   font-size: 18px;
   line-height: 26px;
@@ -53,8 +55,7 @@
   white-space: nowrap;
 }
 
-/* The reset of a field: a small chip, like the other tools of a label
-   row. */
+/* The reset of a field: the 28px chip of the label row's tools. */
 .pg-field-reset {
   flex-shrink: 0;
 }
@@ -65,6 +66,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  min-height: 32px;
 
   > label {
     flex: 1;
@@ -117,6 +119,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-height: 28px;
   margin-bottom: 12px;
 
   .pg-field-reset {

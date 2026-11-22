@@ -159,14 +159,14 @@ function setRowWeight(variant: string, value: number | null) {
             />
             <button
               type="button"
-              class="site-pill site-pill-outline site-pill-sm"
+              class="site-pill site-pill-outline site-pill-xs"
               @click="selectAll"
             >
               All
             </button>
             <button
               type="button"
-              class="site-pill site-pill-outline site-pill-sm"
+              class="site-pill site-pill-outline site-pill-xs"
               @click="selectNone"
             >
               None
