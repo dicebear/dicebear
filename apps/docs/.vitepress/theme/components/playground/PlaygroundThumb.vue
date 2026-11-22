@@ -56,6 +56,8 @@ const src = computedAsync(async () => {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .pg-thumb {
   display: block;
   flex-shrink: 0;
@@ -64,8 +66,10 @@ const src = computedAsync(async () => {
   border-radius: 10px;
   overflow: hidden;
 
+  @include m.avatar-ground(transparent);
+
   &-tile {
-    background: var(--db-tile);
+    background-color: var(--db-tile);
   }
 
   &-checker {
@@ -89,12 +93,6 @@ const src = computedAsync(async () => {
     background-position:
       0 0,
       10px 10px;
-  }
-
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
   }
 }
 </style>

@@ -247,12 +247,13 @@ const triggerOptions = { seed: exampleSeeds[0] };
     padding: 0 12px 0 4px;
     border-radius: 22px;
 
+    /* Round in the round pill, with the same room on every side. */
     &-thumb {
       width: 36px;
       height: 36px;
 
       :deep(.pg-thumb) {
-        border-radius: 12px;
+        border-radius: 50%;
       }
     }
 

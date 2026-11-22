@@ -1,20 +1,16 @@
+@use '../mixins' as m;
+
 /**
  * Avatars. `site-tile` is the avatar itself: the warm ground and rounded
  * corners. `site-sticker` puts it on a white card with a shadow, the way it
  * would come off a sheet; `is-tilt-*` turns it a little.
  */
 .site-tile {
-  position: relative;
   flex-shrink: 0;
   overflow: hidden;
-  background: var(--db-tile);
   border-radius: 24%;
 
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
+  @include m.avatar-ground;
 }
 
 /* The white edge is a margin of the tile, which a percentage measures

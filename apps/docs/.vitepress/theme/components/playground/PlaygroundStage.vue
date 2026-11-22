@@ -188,6 +188,8 @@ function pickSeed(seed: string) {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .pg-stage {
   display: flex;
   flex-direction: column;
@@ -281,10 +283,8 @@ function pickSeed(seed: string) {
     box-sizing: border-box;
     width: 44px;
     height: 44px;
-    padding: 0;
     border: 0;
     border-radius: 14px;
-    background: var(--db-tile);
     /* The beige tile needs an edge on the light paper only; on the dark
        ground it stands out by itself. */
     box-shadow: inset 0 0 0 1px var(--db-line);
@@ -293,6 +293,8 @@ function pickSeed(seed: string) {
     transition:
       transform 0.25s var(--ease-spring),
       box-shadow 0.12s;
+
+    @include m.avatar-ground;
 
     &:hover {
       box-shadow:
@@ -303,12 +305,6 @@ function pickSeed(seed: string) {
 
     :root.dark &:not(:hover) {
       box-shadow: none;
-    }
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
     }
 
     &:focus-visible {

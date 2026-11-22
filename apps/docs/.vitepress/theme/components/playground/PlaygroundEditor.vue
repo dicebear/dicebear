@@ -466,6 +466,8 @@ function onOwnColor(event: Event) {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .pg-editor {
   display: flex;
   flex: 1;
@@ -502,21 +504,14 @@ function onOwnColor(event: Event) {
   }
 
   &-tile {
-    position: relative;
     display: block;
     aspect-ratio: 1 / 1;
-    padding: 0;
     border: 0;
     border-radius: var(--db-radius-3);
-    background: var(--db-tile);
     overflow: hidden;
     cursor: pointer;
 
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
+    @include m.avatar-ground;
 
     &:hover {
       outline: 2px solid var(--db-ink-2);

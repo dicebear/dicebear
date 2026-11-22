@@ -118,6 +118,7 @@ const sources = computedAsync<Record<string, string>>(async () => {
 
 <style lang="scss" scoped>
 @use '../../styles/control' as c;
+@use '../../styles/mixins' as m;
 
 .docs-seed-demo {
   display: flex;
@@ -220,14 +221,9 @@ const sources = computedAsync<Record<string, string>>(async () => {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 10px;
-  background: var(--db-tile);
   overflow: hidden;
 
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
+  @include m.avatar-ground;
 }
 
 .docs-seed-demo-url {
