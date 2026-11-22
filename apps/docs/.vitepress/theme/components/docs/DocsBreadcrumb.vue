@@ -159,16 +159,21 @@ const crumbs = computed<Crumb[]>(() => {
 <style lang="scss" scoped>
 .docs-breadcrumb {
   min-width: 0;
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 15px;
+  line-height: 24px;
   color: var(--db-muted);
+
+  [aria-current='page'] {
+    font-weight: 600;
+    color: var(--db-ink);
+  }
 }
 
 .docs-breadcrumb-list {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 2px 8px;
+  gap: 0 10px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -176,22 +181,23 @@ const crumbs = computed<Crumb[]>(() => {
   li {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    min-height: 44px;
   }
 }
 
 .docs-breadcrumb-sep {
   flex: none;
-  color: var(--db-chevron);
 }
 
 .docs-breadcrumb-link {
   color: inherit;
   text-decoration: none;
 
+  transition: color 0.12s;
+
   &:hover {
-    color: var(--db-brand-text);
-    text-decoration: underline;
+    color: var(--db-ink);
   }
 }
 </style>

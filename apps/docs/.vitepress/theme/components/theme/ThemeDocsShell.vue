@@ -63,7 +63,7 @@ onKeyStroke('Escape', () => {
     <button
       v-if="hasSidebar"
       type="button"
-      class="docs-local-nav-button"
+      class="site-btn site-btn-ghost site-btn-sm"
       :aria-expanded="drawerOpen"
       @click="drawerOpen = true"
     >
@@ -74,7 +74,7 @@ onKeyStroke('Escape', () => {
     <button
       v-if="hasAside && items.length"
       type="button"
-      class="docs-local-nav-button"
+      class="site-btn site-btn-ghost site-btn-sm"
       :aria-expanded="outlineOpen"
       @click="outlineOpen = !outlineOpen"
     >
@@ -102,7 +102,7 @@ onKeyStroke('Escape', () => {
       <div class="docs-sidebar-inner">
         <button
           type="button"
-          class="docs-sidebar-close"
+          class="site-btn site-btn-ghost site-btn-icon docs-sidebar-close"
           aria-label="Close menu"
           @click="drawerOpen = false"
         >
@@ -140,20 +140,20 @@ onKeyStroke('Escape', () => {
 <style lang="scss" scoped>
 .docs-shell {
   display: grid;
-  grid-template-columns: minmax(0, 720px);
+  grid-template-columns: minmax(0, 760px);
   justify-content: center;
   align-items: start;
-  --docs-shell-pad: var(--db-page-top);
+  --docs-shell-pad: 32px;
 
   /* Two rows: the page, then its footer. The navigation column spans both. */
   grid-template-rows: auto auto;
-  gap: 48px;
+  gap: 40px clamp(32px, 4vw, 64px);
   max-width: var(--db-container);
   margin: 0 auto;
-  padding: var(--docs-shell-pad) var(--db-gutter) 0;
+  padding: var(--docs-shell-pad) var(--db-wrap) 0;
 
   &.has-aside {
-    grid-template-columns: minmax(0, 720px) 200px;
+    grid-template-columns: minmax(0, 760px) 240px;
   }
 
   /* Without the outline, the article fills the room up to the navigation. */
@@ -162,7 +162,7 @@ onKeyStroke('Escape', () => {
   }
 
   &.has-sidebar.has-aside {
-    grid-template-columns: 260px minmax(0, 720px) 200px;
+    grid-template-columns: 260px minmax(0, 760px) 240px;
     justify-content: space-between;
   }
 }
@@ -187,15 +187,12 @@ onKeyStroke('Escape', () => {
   margin-top: 120px;
 }
 
-/* The hairline sets the navigation apart from the article. The column spans
-   the footer row as well, so the navigation runs down the whole page instead
-   of stopping above it. */
+/* The column spans the footer row as well, so the navigation runs down the
+   whole page instead of stopping above it. */
 .docs-sidebar {
   grid-column: 1;
   grid-row: 1 / -1;
   align-self: stretch;
-  padding-right: 28px;
-  border-right: 1px solid var(--db-line);
 }
 
 .docs-shell.has-sidebar {
@@ -224,7 +221,7 @@ onKeyStroke('Escape', () => {
   margin-top: calc(-1 * var(--docs-shell-pad));
   max-height: calc(100vh - var(--db-header-h));
   max-height: calc(100dvh - var(--db-header-h));
-  padding: 44px 0 40px;
+  padding: 32px 4px 40px;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -289,20 +286,10 @@ onKeyStroke('Escape', () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 48px;
-    padding: 0 var(--db-gutter);
+    height: 52px;
+    padding: 0 calc(var(--db-wrap) - 14px);
     border-bottom: 1px solid var(--db-line);
     background: var(--db-paper);
-  }
-
-  .docs-local-nav-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 48px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--db-ink-2);
   }
 
   .docs-local-nav-outline {
@@ -312,9 +299,8 @@ onKeyStroke('Escape', () => {
     left: var(--db-gutter);
     max-height: 60vh;
     padding: 16px;
-    border: 1px solid var(--db-line);
-    border-radius: var(--db-radius-3);
-    background: var(--db-paper);
+    border-radius: var(--db-radius-card);
+    background: var(--db-panel);
     box-shadow: var(--db-shadow-pop);
     overflow-y: auto;
   }
@@ -366,13 +352,7 @@ onKeyStroke('Escape', () => {
     position: absolute;
     top: 12px;
     right: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--db-radius-2);
-    color: var(--db-ink);
+    display: inline-flex;
   }
 
   .docs-sidebar-backdrop {
@@ -380,7 +360,7 @@ onKeyStroke('Escape', () => {
     inset: 0;
     z-index: 69;
     display: block;
-    background: rgba(11, 22, 32, 0.45);
+    background: rgba(21, 33, 59, 0.4);
   }
 }
 </style>

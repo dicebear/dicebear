@@ -82,14 +82,13 @@ function licenseName(name?: string) {
             :key="column.title"
             class="theme-footer-column"
           >
-            <h3>{{ column.title }}</h3>
+            <h3 class="site-control">{{ column.title }}</h3>
             <ul>
               <li v-for="link in column.links" :key="link.label">
                 <a
                   :href="href(link)"
                   :target="link.external ? '_blank' : undefined"
                   :rel="link.external ? 'noopener noreferrer' : undefined"
-                  class="hv-fade"
                 >
                   {{ link.label }}
                   <ArrowUpRight
@@ -112,7 +111,7 @@ function licenseName(name?: string) {
           <h3>Styles by other artists</h3>
           <span>
             All avatars are remixes of the original works.
-            <a :href="withBase('/licenses/')" class="hv-link">All licenses</a>
+            <a :href="withBase('/licenses/')" class="site-link">All licenses</a>
           </span>
         </div>
         <ul>
@@ -122,7 +121,7 @@ function licenseName(name?: string) {
               :href="safeHttpUrl(style.source)"
               target="_blank"
               rel="noopener"
-              class="hv-link"
+              class="theme-footer-link"
               >{{ style.title }}</a
             >
             <template v-else>{{ style.title }}</template>
@@ -132,7 +131,7 @@ function licenseName(name?: string) {
               :href="safeHttpUrl(style.license?.url)"
               target="_blank"
               rel="noopener"
-              class="hv-link"
+              class="theme-footer-link"
               >{{ licenseName(style.license?.name) }}</a
             >
             <template v-else>{{ licenseName(style.license?.name) }}</template>
@@ -148,14 +147,16 @@ function licenseName(name?: string) {
             :href="olderDocs.href"
             target="_blank"
             rel="noopener noreferrer"
-            class="hv-link"
+            class="theme-footer-link"
             >{{ olderDocs.label }}
             <ArrowUpRight :size="12" aria-hidden="true" />
           </a>
         </span>
         <span>
           Code under the
-          <a :href="withBase('/licenses/')" class="hv-link">MIT license</a>
+          <a :href="withBase('/licenses/')" class="theme-footer-link"
+            >MIT license</a
+          >
         </span>
       </div>
     </div>
@@ -163,17 +164,13 @@ function licenseName(name?: string) {
 </template>
 
 <style lang="scss" scoped>
-.theme-footer {
-  border-top: 1px solid var(--db-line);
-}
-
 .theme-footer-inner {
   display: flex;
   flex-direction: column;
-  gap: 80px;
+  gap: clamp(40px, 4vw, 56px);
   max-width: var(--db-container);
   margin: 0 auto;
-  padding: 80px var(--db-gutter) 40px;
+  padding: clamp(48px, 5.5vw, 80px) var(--db-wrap) 40px;
 }
 
 /* Inside the docs shell the grid already holds the column and its gutter. */
@@ -183,17 +180,24 @@ function licenseName(name?: string) {
 }
 
 .theme-footer-top {
-  display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
-  gap: 96px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px clamp(40px, 6vw, 96px);
 }
 
 .theme-footer-brand {
   display: flex;
+  flex: 1 1 260px;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  max-width: 300px;
+  max-width: 320px;
+
+  > a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
 
   img {
     width: 137px;
@@ -208,40 +212,34 @@ function licenseName(name?: string) {
 }
 
 .theme-footer-sponsor {
-  margin-top: 24px;
+  margin-top: 16px;
 }
 
 .theme-footer-columns {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex: 999 1 560px;
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
   gap: 32px;
+  min-width: 0;
 }
 
 .theme-footer-column {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
   h3 {
-    font-size: 16px;
-    line-height: 26px;
-    font-weight: 600;
-    color: var(--db-ink);
-  }
-
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    margin-bottom: 6px;
   }
 
   a {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-size: 16px;
+    padding: 9px 0;
     line-height: 26px;
     color: var(--db-ink-2);
+    transition: color 0.12s;
+
+    &:hover {
+      color: var(--db-ink);
+    }
 
     svg {
       color: var(--db-muted);
@@ -255,7 +253,7 @@ function licenseName(name?: string) {
   gap: 14px;
 
   ul {
-    columns: 4;
+    columns: 4 220px;
     column-gap: 32px;
   }
 
@@ -266,17 +264,14 @@ function licenseName(name?: string) {
     line-height: 16px;
     color: var(--db-muted);
   }
-
-  li a {
-    color: var(--db-ink-2);
-  }
 }
 
 .theme-footer-credits-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 24px;
+  gap: 8px 24px;
 
   h3 {
     font-size: 13px;
@@ -290,18 +285,23 @@ function licenseName(name?: string) {
     line-height: 18px;
     color: var(--db-muted);
   }
+}
 
-  a {
-    font-weight: 500;
-    color: var(--db-brand-text);
+.theme-footer-link {
+  color: var(--db-ink-2);
+  transition: color 0.12s;
+
+  &:hover {
+    color: var(--db-ink);
   }
 }
 
 .theme-footer-bottom {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px 16px;
   font-size: 13px;
   line-height: 18px;
   color: var(--db-muted);
@@ -310,47 +310,10 @@ function licenseName(name?: string) {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    color: var(--db-ink-2);
   }
 }
 
 .theme-footer-dot {
   margin: 0 6px;
-  color: var(--db-chevron);
-}
-
-@media (max-width: 1023px) {
-  .theme-footer-top {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 56px;
-  }
-
-  .theme-footer-credits ul {
-    columns: 2;
-  }
-}
-
-@media (max-width: 767px) {
-  .theme-footer-inner {
-    gap: 56px;
-    padding-top: 48px;
-    padding-bottom: 32px;
-  }
-
-  .theme-footer-columns {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 40px 24px;
-  }
-
-  .theme-footer-credits ul {
-    columns: 1;
-  }
-
-  .theme-footer-credits-head,
-  .theme-footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
 }
 </style>

@@ -74,9 +74,12 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    padding: 0 16px;
+    height: auto;
+    min-height: 44px;
+    padding: 10px 16px;
     font-family: var(--db-font);
     font-size: 15px;
+    line-height: 24px;
     font-weight: 500;
     color: var(--db-ink-2);
     text-align: left;

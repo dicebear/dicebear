@@ -3,6 +3,8 @@
  * scrolls sideways when narrow. `is-centered` centers every cell but the
  * first; a `is-pick` cell is the highlighted column.
  */
+@use '../mixins' as m;
+
 .site-table-card {
   overflow-x: auto;
   padding: clamp(8px, 1.6vw, 24px) clamp(16px, 2.4vw, 32px);
@@ -12,33 +14,10 @@
 }
 
 .site-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 16px;
-  line-height: 26px;
-  text-align: left;
-
-  th {
-    padding: 12px 24px 12px 0;
-    border-bottom: 2px solid var(--db-ink);
-    font-family: var(--db-font-display);
-    font-size: 17px;
-    line-height: 26px;
-    font-weight: 700;
-    color: var(--db-ink);
-    vertical-align: bottom;
-  }
+  @include m.table;
 
   td {
-    padding: 14px 24px 14px 0;
-    border-bottom: 1px solid var(--db-line);
-    color: var(--db-ink-2);
     vertical-align: middle;
-  }
-
-  th:last-child,
-  td:last-child {
-    padding-right: 0;
   }
 
   tbody th {

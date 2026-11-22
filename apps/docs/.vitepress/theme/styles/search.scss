@@ -4,8 +4,8 @@
  */
 
 .VPLocalSearchBox {
-  --vp-backdrop-bg-color: rgba(11, 22, 32, 0.45);
-  --vp-c-brand-1: var(--db-brand-text);
+  --vp-backdrop-bg-color: rgba(21, 33, 59, 0.4);
+  --vp-c-brand-1: var(--db-ink);
   --vp-c-divider: var(--db-line);
   --vp-c-bg: var(--db-paper);
   --vp-c-text-1: var(--db-ink);
@@ -16,16 +16,29 @@
   --vp-local-search-highlight-text: var(--db-tint-text);
   --vp-local-search-result-bg: var(--db-paper);
   --vp-local-search-result-border: var(--db-line);
-  --vp-local-search-result-selected-bg: var(--db-soft);
-  --vp-local-search-result-selected-border: var(--db-brand);
+  --vp-local-search-result-selected-bg: var(--db-select);
+  --vp-local-search-result-selected-border: var(--db-select);
   --vp-nav-height: var(--db-header-h);
 
   color: var(--db-ink);
 
   .shell {
-    border: 1px solid var(--db-line);
-    border-radius: var(--db-radius-4);
+    border-radius: var(--db-radius-card);
     box-shadow: var(--db-shadow-pop);
+  }
+
+  .search-bar {
+    border-radius: 24px;
+    border-color: var(--db-field-border);
+  }
+
+  .result {
+    border-radius: var(--db-radius-5);
+  }
+
+  .titles,
+  .title-main {
+    font-family: var(--db-font-display);
   }
 }
 

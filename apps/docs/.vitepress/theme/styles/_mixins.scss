@@ -220,3 +220,49 @@ $icon-chevron-down: url('lucide-static/icons/chevron-down.svg');
   line-height: 1;
   color: var(--db-ink);
 }
+
+/* Table: the head on a 2px ink rule, rows on hairlines. */
+@mixin table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  line-height: 26px;
+  text-align: left;
+
+  th {
+    padding: 12px 24px 12px 0;
+    border-bottom: 2px solid var(--db-ink);
+    font-family: var(--db-font-display);
+    font-size: 17px;
+    line-height: 26px;
+    font-weight: 700;
+    color: var(--db-ink);
+    vertical-align: bottom;
+  }
+
+  td {
+    padding: 14px 24px 14px 0;
+    border-bottom: 1px solid var(--db-line);
+    color: var(--db-ink-2);
+    vertical-align: top;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 0;
+  }
+}
+
+/* A key on the keyboard. */
+@mixin kbd {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid var(--db-line);
+  border-radius: 10px;
+  font-family: var(--db-font);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--db-muted);
+}

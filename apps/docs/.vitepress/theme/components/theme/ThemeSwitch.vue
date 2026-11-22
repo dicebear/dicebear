@@ -23,7 +23,7 @@ function toggle() {
   <button
     type="button"
     role="switch"
-    class="theme-switch hv-border"
+    class="theme-switch"
     :aria-checked="mounted ? isDark : false"
     aria-label="Dark theme"
     @click="toggle"
@@ -31,13 +31,13 @@ function toggle() {
     <span class="theme-switch-knob">
       <Sun
         class="theme-switch-sun"
-        :size="12"
+        :size="16"
         :stroke-width="2.5"
         aria-hidden="true"
       />
       <Moon
         class="theme-switch-moon"
-        :size="11"
+        :size="15"
         :stroke-width="2.5"
         aria-hidden="true"
       />
@@ -46,29 +46,35 @@ function toggle() {
 </template>
 
 <style lang="scss" scoped>
+/* The large switch of the set (SiteSwitch md), with the sun or the moon on
+   its knob. */
 .theme-switch {
   position: relative;
   flex-shrink: 0;
-  width: 40px;
-  height: 22px;
-  border: 1px solid var(--db-switch-border);
-  border-radius: 11px;
-  background: var(--db-switch-bg);
+  width: 72px;
+  height: 44px;
+  border: 1px solid var(--db-field-border);
+  border-radius: 22px;
+  background: var(--db-soft);
+  transition: border-color 0.12s;
+
+  &:hover {
+    border-color: var(--db-ink-2);
+  }
 }
 
 .theme-switch-knob {
   position: absolute;
-  top: 1px;
-  left: 1px;
+  top: 5px;
+  left: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: var(--db-knob);
-  box-shadow: 0 1px 2px rgba(11, 22, 32, 0.25);
-  color: var(--db-muted);
+  background: var(--db-ink);
+  color: var(--db-paper);
   transition: transform var(--duration-fast) var(--ease-smooth);
 }
 
@@ -77,8 +83,7 @@ function toggle() {
 }
 
 .dark .theme-switch-knob {
-  transform: translateX(18px);
-  color: var(--db-btn-fg);
+  transform: translateX(28px);
 }
 
 .dark .theme-switch-sun {

@@ -68,16 +68,7 @@
 
 /* A keyboard key. */
 .site-kbd {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 8px;
-  border: 1px solid var(--db-line);
-  border-radius: 10px;
-  font-family: var(--db-font);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1;
-  color: var(--db-muted);
+  @include m.kbd;
 }
 
 .site-code {

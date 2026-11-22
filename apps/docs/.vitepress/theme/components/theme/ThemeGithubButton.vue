@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** The star button: the one filled control in the header. */
+/** The star button: the one filled button of the header. */
 import { computed } from 'vue';
 import { useData } from 'vitepress';
 import { siGithub } from 'simple-icons';
@@ -20,7 +20,7 @@ const stars = computed(
     href="https://github.com/dicebear/dicebear"
     target="_blank"
     rel="noopener noreferrer"
-    class="theme-github hv-primary"
+    class="site-btn site-btn-primary theme-github"
     :class="{ 'theme-github-compact': compact }"
     :aria-label="
       stars
@@ -36,29 +36,17 @@ const stars = computed(
 
 <style lang="scss" scoped>
 .theme-github {
-  display: flex;
   flex-shrink: 0;
-  align-items: center;
-  gap: 8px;
-  height: 36px;
-  padding: 0 14px;
-  border-radius: var(--db-radius-2);
-  background: var(--db-btn-bg);
-  color: var(--db-btn-fg);
-  font-size: 14px;
-  line-height: 1;
-  font-weight: 600;
-  white-space: nowrap;
 }
 
 .theme-github-count {
   padding-left: 8px;
-  border-left: 1px solid color-mix(in srgb, var(--db-btn-fg) 28%, transparent);
+  border-left: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   font-variant-numeric: tabular-nums;
 }
 
 .theme-github-compact {
-  padding: 0 12px;
+  padding: 0 14px;
 
   .theme-github-count {
     padding-left: 0;

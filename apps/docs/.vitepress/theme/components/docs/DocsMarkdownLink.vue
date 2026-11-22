@@ -57,15 +57,15 @@ const markdownUrl = computed(() => withBase(`${route.value}index.md`));
   flex: none;
   align-items: center;
   gap: 8px;
+  min-height: 44px;
   color: var(--db-muted);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 15px;
+  line-height: 24px;
   text-decoration: none;
+  transition: color 0.12s;
 
   &:hover {
-    color: var(--db-brand-text);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    color: var(--db-ink);
   }
 }
 

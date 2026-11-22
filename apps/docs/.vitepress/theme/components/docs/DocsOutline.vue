@@ -13,7 +13,6 @@ defineEmits<{ navigate: [] }>();
       <li v-for="item in items" :key="item.id">
         <a
           :href="`#${item.id}`"
-          class="hv-fade"
           :class="{ 'is-active': item.id === active }"
           :aria-current="item.id === active ? 'location' : undefined"
           @click="$emit('navigate')"
@@ -28,12 +27,13 @@ defineEmits<{ navigate: [] }>();
 .docs-outline {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .docs-outline-title {
-  font-size: 14px;
-  line-height: 20px;
+  margin-bottom: 8px;
+  font-family: var(--db-font-display);
+  font-size: 17px;
+  line-height: 26px;
   font-weight: 700;
   color: var(--db-ink);
 }
@@ -41,22 +41,30 @@ defineEmits<{ navigate: [] }>();
 ul {
   display: flex;
   flex-direction: column;
-  border-left: 1px solid var(--db-line);
 }
 
+/* A rail on the left; the section in view marks it in ink. */
 a {
-  display: block;
-  margin-left: -1px;
-  padding: 4px 0 4px 14px;
-  border-left: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-left: 3px solid var(--db-line);
   font-size: 15px;
-  line-height: 24px;
-  color: var(--db-muted);
+  line-height: 22px;
+  color: var(--db-ink-2);
+  transition:
+    color 0.12s,
+    border-color 0.12s;
+
+  &:hover {
+    color: var(--db-ink);
+  }
 
   &.is-active {
-    border-left-color: var(--db-brand);
+    border-left-color: var(--db-ink);
     font-weight: 600;
-    color: var(--db-brand-text);
+    color: var(--db-ink);
   }
 }
 </style>

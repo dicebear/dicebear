@@ -26,8 +26,8 @@ import DocsMarkdownLink from './DocsMarkdownLink.vue';
   gap: 16px;
   // The row sits outside `.vp-doc`, so nothing else spaces it from the page
   // title below it.
-  margin-bottom: 30px;
-  min-height: 26px;
+  margin-bottom: 12px;
+  min-height: 44px;
 
   // Pushing one child right, rather than spacing both apart, keeps the link
   // on the right edge on the pages where the trail renders nothing.
