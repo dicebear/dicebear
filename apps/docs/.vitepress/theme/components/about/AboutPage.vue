@@ -1,7 +1,8 @@
 <script setup lang="ts">
 /**
- * The About page answers what someone asks while deciding: how DiceBear
- * compares, what they can rely on, who is behind it and how to help.
+ * The Why DiceBear page answers what someone asks while deciding: what it
+ * is, how it compares, what they can rely on, how to help, and where to
+ * start.
  */
 import AboutHead from './AboutHead.vue';
 import AboutCompare from './AboutCompare.vue';
@@ -11,9 +12,11 @@ import AboutClosing from './AboutClosing.vue';
 </script>
 
 <template>
-  <AboutHead />
-  <AboutCompare />
-  <AboutOpenSource />
-  <AboutSupport />
-  <AboutClosing />
+  <div class="about-page">
+    <AboutHead />
+    <AboutCompare />
+    <AboutOpenSource />
+    <AboutSupport />
+    <AboutClosing />
+  </div>
 </template>

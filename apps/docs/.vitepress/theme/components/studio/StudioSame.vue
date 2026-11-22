@@ -30,7 +30,7 @@ const note =
 
 <template>
   <div class="studio-same">
-    <div class="studio-same-grid">
+    <div class="site-grid studio-same-grid">
       <div
         v-for="card in cards"
         :key="card.caption"
@@ -55,8 +55,6 @@ const note =
 <style scoped lang="scss">
 .studio-same {
   &-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
     gap: 16px;
   }
 

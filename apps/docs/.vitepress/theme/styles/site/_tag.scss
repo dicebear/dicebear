@@ -66,6 +66,26 @@
   }
 }
 
+/* A yes or a no in a table: a round mark, 32px. `is-yes` fills it in the
+   button colors of its ground. */
+.site-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--db-ink) 10%, transparent);
+  color: var(--db-muted);
+  vertical-align: middle;
+
+  &.is-yes {
+    background: var(--db-btn-bg);
+    color: var(--db-btn-fg);
+  }
+}
+
 /* A keyboard key. */
 .site-kbd {
   @include m.kbd;

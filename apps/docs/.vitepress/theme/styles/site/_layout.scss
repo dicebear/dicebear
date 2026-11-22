@@ -53,6 +53,19 @@
   }
 }
 
+/* Tiles or cards in even columns, as many as fit. `--site-grid-min` is the
+   narrowest a column may get. */
+.site-grid {
+  --site-grid-min: 280px;
+
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(var(--site-grid-min), 100%), 1fr)
+  );
+  gap: var(--db-edge);
+}
+
 /* A row of buttons or links. */
 .site-actions {
   display: flex;

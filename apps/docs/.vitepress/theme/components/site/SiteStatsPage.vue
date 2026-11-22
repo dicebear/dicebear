@@ -155,7 +155,7 @@ const chartLabel = computed(() => {
         </div>
       </div>
 
-      <div class="site-stats-page-tiles">
+      <div class="site-grid">
         <div class="site-box is-tile is-sun">
           <SiteStat
             :value="month?.requests.value ?? '\xa0'"
@@ -302,12 +302,6 @@ const chartLabel = computed(() => {
     > :deep(.site-sticker) {
       position: absolute;
     }
-  }
-
-  &-tiles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-    gap: var(--db-edge);
   }
 
   &-downloads {

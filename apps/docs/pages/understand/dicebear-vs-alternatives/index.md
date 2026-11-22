@@ -7,7 +7,7 @@ aside: false
 ---
 
 <script setup>
-import DocsComparisonTable from '@theme/components/docs/DocsComparisonTable.vue';
+import SiteComparisonTable from '@theme/components/site/SiteComparisonTable.vue';
 </script>
 
 # Avatar library comparison
@@ -23,7 +23,7 @@ recolor the avatar, swap individual features, control the background, and weight
 how likely each variant is, so two avatars from the same style can look
 completely different.
 
-<DocsComparisonTable />
+<SiteComparisonTable />
 
 _This comparison is based on publicly available information and may not reflect
 the latest updates._

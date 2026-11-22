@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Who is behind DiceBear and what someone can rely on. The last row counts
+ * Who is behind DiceBear and what someone can rely on, on a mint block. The last row counts
  * the websites of the latest complete week, which arrives with the
  * statistics after the page has mounted.
  */
@@ -8,7 +8,7 @@ import { computed } from 'vue';
 import { siGithub } from 'simple-icons';
 import UiIcon from '@theme/components/ui/UiIcon.vue';
 import { useApiStatsRaw } from '@theme/composables/useApiStats';
-import AboutSection from './AboutSection.vue';
+import SiteSection from '../site/SiteSection.vue';
 import AboutRows, { type AboutRow } from './AboutRows.vue';
 
 const WEBSITES_STEP = 10_000;
@@ -70,27 +70,32 @@ const rows = computed<AboutRow[]>(() => [
 </script>
 
 <template>
-  <AboutSection
-    :title="['No paid tier', 'No company behind it']"
-    lead="DiceBear is MIT licensed and built in the open. Bug reports, pull requests and new styles are welcome."
+  <SiteSection
+    tone="mint"
+    layout="stack"
+    title="No paid tier. No company behind it."
+    hint="DiceBear is MIT licensed and built in the open. Bug reports, pull requests and new styles are welcome."
   >
-    <template #actions>
-      <a
-        class="site-btn site-btn-lg site-btn-primary"
-        href="https://github.com/dicebear/dicebear"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <UiIcon :path="siGithub.path" :size="20" aria-hidden="true" />
-        DiceBear on GitHub
-      </a>
-      <a
-        class="site-btn site-btn-lg site-btn-secondary"
-        href="/contribute/library/"
-      >
-        How to contribute
-      </a>
+    <template #title>No paid tier<br />No company behind it</template>
+    <template #aside>
+      <div class="site-actions">
+        <a
+          class="site-btn site-btn-lg site-btn-primary"
+          href="https://github.com/dicebear/dicebear"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <UiIcon :path="siGithub.path" :size="20" aria-hidden="true" />
+          DiceBear on GitHub
+        </a>
+        <a
+          class="site-btn site-btn-lg site-btn-secondary"
+          href="/contribute/library/"
+        >
+          How to contribute
+        </a>
+      </div>
     </template>
     <AboutRows :rows="rows" />
-  </AboutSection>
+  </SiteSection>
 </template>

@@ -37,6 +37,8 @@ const props = withDefaults(
 
 defineSlots<{
   default?: () => unknown;
+  /** Replaces the title, for one with a line break. */
+  title?: () => unknown;
   /** Replaces the hint, for text with links. */
   hint?: () => unknown;
   /** Below the hint: links or actions that belong to the title. */
@@ -64,7 +66,9 @@ const titleClass = computed(() =>
         class="site-section-head"
         :class="{ 'site-pair': layout === 'stack' && ($slots.hint || hint) }"
       >
-        <h2 :class="titleClass">{{ title }}</h2>
+        <h2 :class="titleClass">
+          <slot name="title">{{ title }}</slot>
+        </h2>
         <div
           v-if="$slots.hint || hint || $slots.aside"
           class="site-section-hint"
