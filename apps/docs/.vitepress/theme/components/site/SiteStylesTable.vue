@@ -175,7 +175,7 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
 <template>
   <div class="site-styles-table">
     <div class="site-container site-styles-layout">
-      <aside class="site-styles-side" aria-label="Filters">
+      <aside class="site-box is-soft site-styles-side" aria-label="Filters">
         <SiteSearch
           v-model="searchQuery"
           placeholder="Name or artist"
@@ -294,14 +294,13 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
 
 .site-styles-layout {
   display: grid;
-  grid-template-columns: 248px minmax(0, 1fr);
-  gap: 64px;
+  grid-template-columns: 312px minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 64px);
   align-items: start;
-  margin-top: 72px;
+  margin-top: clamp(40px, 5vw, 72px);
 
   @media (max-width: 1099px) {
-    grid-template-columns: 220px minmax(0, 1fr);
-    gap: 40px;
+    grid-template-columns: 260px minmax(0, 1fr);
   }
 
   @media (max-width: 767px) {
@@ -313,8 +312,10 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
 .site-styles-side {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
   min-width: 0;
+  padding: 16px 16px 20px;
+  border-radius: var(--db-radius-card);
 
   // Sticks only where the whole sidebar fits under the header, so its foot
   // never ends up out of reach.
@@ -339,6 +340,15 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
     display: flex;
     gap: 8px;
     margin-bottom: 16px;
+
+    > :first-child {
+      flex: 1;
+      min-width: 0;
+    }
+
+    > .site-btn {
+      flex-shrink: 0;
+    }
   }
 
   &-count {
@@ -346,8 +356,8 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
     padding: 0 5px;
     box-sizing: border-box;
     border-radius: 9px;
-    background: var(--db-brand);
-    color: var(--db-paper);
+    background: var(--db-btn-bg);
+    color: var(--db-btn-fg);
     font-size: 12px;
     line-height: 18px;
     text-align: center;

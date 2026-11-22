@@ -47,7 +47,7 @@ function toggleLicense(value: string, on: boolean) {
       <label
         v-for="option in categoryOptions"
         :key="option.value"
-        class="site-styles-filters-option is-radio"
+        class="site-pill site-pill-row site-styles-filters-radio"
         :class="{
           'is-active': category === option.value,
           'is-empty': option.count === 0,
@@ -109,7 +109,7 @@ function toggleLicense(value: string, on: boolean) {
 .site-styles-filters {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
 
   &-group {
     min-width: 0;
@@ -118,56 +118,56 @@ function toggleLicense(value: string, on: boolean) {
     border: 0;
   }
 
+  /* Group titles: the control label of the set. */
   &-label {
     display: block;
     padding: 0 0 8px;
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--db-muted);
+    font-family: var(--db-font-display);
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
+    color: var(--db-ink);
   }
 
-  &-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 36px;
-    padding: 0 10px;
-    border-radius: var(--db-radius-2);
-    font-size: 15px;
-    color: var(--db-ink);
+  /* A category is a row pill: yellow while chosen. */
+  &-radio {
     cursor: pointer;
+
+    &:has(:focus-visible) {
+      outline: 2px solid var(--db-focus);
+      outline-offset: 2px;
+    }
 
     & + & {
       margin-top: 2px;
     }
+  }
 
-    &:not(.is-active):hover {
-      background: var(--db-soft);
-    }
+  /* A license or the motion filter: a checkbox row. */
+  &-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 22px;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--db-ink-2);
+    cursor: pointer;
+    transition: background-color 0.12s;
 
-    &.is-radio:has(:focus-visible) {
-      outline: 2px solid var(--db-brand);
-      outline-offset: -2px;
+    &:hover {
+      background: color-mix(in srgb, var(--db-ink) 6%, transparent);
     }
+  }
 
-    &.is-active {
-      background: var(--db-tint);
-      color: var(--db-tint-text);
-      font-weight: 600;
-    }
-
-    &.is-empty {
-      color: var(--db-muted);
-    }
+  .is-empty {
+    color: var(--db-muted);
   }
 
   &-count {
     margin-left: auto;
-    font-size: 14px;
-    font-weight: 400;
     font-variant-numeric: tabular-nums;
     color: var(--db-muted);
 
@@ -179,16 +179,13 @@ function toggleLicense(value: string, on: boolean) {
   &-sort {
     display: flex;
     flex-direction: column;
-
-    .site-styles-filters-label {
-      padding-bottom: 8px;
-    }
   }
 
   &-hint {
     margin: 8px 0 0;
+    padding: 0 4px;
     font-size: 13px;
-    line-height: 18px;
+    line-height: 20px;
     color: var(--db-muted);
   }
 }
