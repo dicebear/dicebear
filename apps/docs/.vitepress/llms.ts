@@ -284,6 +284,8 @@ function renderMarkdown(body: string): string {
           // Any other Vue component. Paired ones lose their tags but keep the
           // text they wrap, which is the part worth reading.
           .replace(/<\/?[A-Z][A-Za-z0-9]*\b[^>]*>/g, '')
+          // The slots of such a component, which wrap Markdown the same way.
+          .replace(/<\/?template\b[^>]*>/g, '')
           // Site-internal links are relative in the source and would dangle in
           // a file that gets copied into a chat window.
           .replace(
