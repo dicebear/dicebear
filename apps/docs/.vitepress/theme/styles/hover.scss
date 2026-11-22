@@ -100,13 +100,14 @@
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  padding: 6px 10px;
-  border-radius: var(--db-radius-2);
-  background: var(--db-ink);
-  color: var(--db-paper);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 16px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: var(--db-btn-bg);
+  color: var(--db-btn-fg);
+  font-family: var(--db-font-display);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
   white-space: nowrap;
   pointer-events: none;
 }

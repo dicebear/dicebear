@@ -1,0 +1,96 @@
+/**
+ * Button: one pill in three sizes (sm 36, md 44, lg 56) and four looks.
+ *
+ * - `site-btn-primary`: filled in the button color of the ground.
+ * - `site-btn-secondary`: white inside with a 2px ring.
+ * - `site-btn-ghost`: text only, a tint on hover.
+ * - `site-btn-accent`: yellow, for the one action that rolls or starts.
+ *
+ * `site-btn-icon` makes it square, `site-btn-fluid` lets it share a row.
+ * A `site-btn-group` joins two into a split button. Plain anchors and
+ * buttons carry these classes; the ground decides the colors.
+ */
+@use '../mixins' as m;
+
+.site-btn {
+  @include m.button-base;
+
+  &.is-loading {
+    cursor: progress;
+    opacity: 0.7;
+  }
+
+  &-primary {
+    @include m.button-solid;
+  }
+
+  &-secondary {
+    @include m.button-outline;
+  }
+
+  &-ghost {
+    @include m.button-ghost;
+  }
+
+  &-accent {
+    background: var(--db-sun);
+    color: var(--db-on);
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--db-sun) 86%, #ffffff);
+    }
+  }
+
+  /* A toggle that is on takes the filled look. */
+  &[aria-pressed='true'] {
+    background: var(--db-btn-bg);
+    box-shadow: none;
+    color: var(--db-btn-fg);
+  }
+
+  &-sm {
+    @include m.button-size(sm);
+  }
+
+  &-lg {
+    @include m.button-size(lg);
+  }
+
+  &-icon {
+    width: 44px;
+    padding: 0;
+
+    &.site-btn-sm {
+      width: 36px;
+    }
+
+    &.site-btn-lg {
+      width: 56px;
+    }
+  }
+
+  &-fluid {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+/* Two buttons as one: the action and its menu. */
+.site-btn-group {
+  display: inline-flex;
+
+  > .site-btn:first-child:not(:last-child) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  > .site-btn:last-child:not(:first-child) {
+    margin-inline-start: 2px;
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+
+  > .site-btn-secondary:last-child:not(:first-child) {
+    margin-inline-start: -2px;
+  }
+}

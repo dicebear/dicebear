@@ -72,7 +72,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
 <template>
   <span
     role="radiogroup"
-    class="site-segmented"
+    class="site-seg site-segmented"
     :class="[`is-${size}`, { 'is-fluid': fluid }]"
     :aria-label="ariaLabel"
     :aria-disabled="disabled || undefined"
@@ -83,7 +83,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
       ref="buttons"
       type="button"
       role="radio"
-      class="site-segmented-item hv-seg"
+      class="site-pill site-pill-tab site-segmented-item"
       :class="{ 'is-icon': option.icon }"
       :aria-checked="index === chosen"
       :aria-label="option.icon ? option.label : undefined"
@@ -106,65 +106,16 @@ function onKeydown(event: KeyboardEvent, index: number) {
 </template>
 
 <style scoped lang="scss">
+/* The track and the segments are the shared `site-seg` and `site-pill-tab`;
+   this adds the square icon segment and the small size. */
 .site-segmented {
-  display: inline-grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 4px;
-  max-width: 100%;
-  padding: 3px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-field-border);
-  border-radius: var(--db-radius-2);
-  background: var(--db-soft);
-
-  &.is-fluid {
-    display: grid;
-    width: 100%;
-  }
-
-  &.is-sm {
-    border-radius: var(--db-radius-1);
-  }
-
   &-item {
-    min-width: 0;
-    height: 32px;
-    padding: 0 12px;
-    box-sizing: border-box;
-    border: 0;
-    border-radius: var(--db-radius-1);
-    background: transparent;
-    font: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-    color: var(--db-muted);
-    white-space: nowrap;
-    cursor: pointer;
-
     &[aria-checked='true'] {
-      background: var(--db-paper);
-      color: var(--db-ink);
       cursor: default;
     }
 
-    &:focus-visible {
-      outline-offset: 1px;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    /* The label clips a long text rather than the segment, whose tooltip
-       has to reach past its edge. */
     &.is-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px;
+      width: 40px;
       padding: 0;
     }
   }
@@ -175,12 +126,21 @@ function onKeydown(event: KeyboardEvent, index: number) {
     text-overflow: ellipsis;
   }
 
+  &.is-sm {
+    padding: 3px;
+    border-radius: 20px;
+  }
+
   &.is-sm &-item {
-    height: 24px;
-    padding: 0 10px;
-    border-radius: 4px;
-    font-size: 13px;
-    line-height: 18px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 16px;
+    font-size: 14px;
+
+    &.is-icon {
+      width: 32px;
+      padding: 0;
+    }
   }
 }
 </style>

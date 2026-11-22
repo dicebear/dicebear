@@ -187,6 +187,8 @@ defineExpose({ toggle, show, hide });
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/tone';
+
 .site-menu {
   position: relative;
   display: inline-flex;
@@ -207,7 +209,9 @@ defineExpose({ toggle, show, hide });
     margin: 0;
     padding: 6px;
     border: 1px solid var(--db-line);
-    border-radius: var(--db-radius-3);
+    /* It opens inside the box of its trigger, so it resets to neutral. */
+    @include tone.tone('panel');
+    border-radius: var(--db-radius-5);
     background: var(--db-panel);
     color: var(--db-ink);
     box-shadow: var(--db-shadow-pop);
@@ -224,9 +228,9 @@ defineExpose({ toggle, show, hide });
     align-items: center;
     gap: 10px;
     height: 40px;
-    padding: 0 12px;
+    padding: 0 14px;
     border: 0;
-    border-radius: var(--db-radius-1);
+    border-radius: 20px;
     background: transparent;
     color: var(--db-ink);
     font-size: 15px;

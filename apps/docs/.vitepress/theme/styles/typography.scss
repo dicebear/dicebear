@@ -7,6 +7,8 @@
  * link or an accordion row), control (the label of a field or group).
  * Text: lead, body, text, small, mono.
  */
+@use './mixins' as m;
+
 %site-heading {
   margin: 0;
   font-family: var(--db-font-display);
@@ -109,11 +111,7 @@
   }
 
   a {
-    font-weight: 600;
-    color: var(--db-ink);
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 4px;
+    @include m.link-inline;
   }
 }
 

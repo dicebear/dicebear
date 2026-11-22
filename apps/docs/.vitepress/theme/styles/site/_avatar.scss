@@ -1,0 +1,92 @@
+/**
+ * Avatars. `site-tile` is the avatar itself: the warm ground and rounded
+ * corners. `site-sticker` puts it on a white card with a shadow, the way it
+ * would come off a sheet; `is-tilt-*` turns it a little.
+ */
+.site-tile {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--db-tile);
+  border-radius: 24%;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.site-sticker {
+  display: block;
+  flex-shrink: 0;
+  padding: 6%;
+  box-sizing: border-box;
+  border-radius: 28%;
+  background: #ffffff;
+  box-shadow: var(--db-shadow);
+
+  > .site-tile {
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  &.is-tilt-l {
+    transform: rotate(-3deg);
+  }
+
+  &.is-tilt-r {
+    transform: rotate(3deg);
+  }
+}
+
+/* A fan of stickers that overlap, as in a page head. */
+.site-fan {
+  --site-fan-tile: clamp(88px, 9vw, 132px);
+  display: flex;
+  padding: 0 24px 12px 0;
+
+  > .site-sticker {
+    width: var(--site-fan-tile);
+    padding: calc(var(--site-fan-tile) * 0.06);
+  }
+
+  > .site-sticker + .site-sticker {
+    margin-left: calc(var(--site-fan-tile) * -0.14);
+  }
+
+  > .site-sticker:nth-child(3n + 1) {
+    transform: rotate(-8deg) translateY(10%);
+  }
+
+  > .site-sticker:nth-child(3n + 2) {
+    transform: rotate(4deg) translateY(-8%);
+  }
+
+  > .site-sticker:nth-child(3n) {
+    transform: rotate(11deg) translateY(12%);
+  }
+}
+
+/* A stack of small stickers, as in a closing block. */
+.site-stack {
+  --site-stack-tile: clamp(40px, 6.2vw, 80px);
+  display: flex;
+  justify-content: center;
+
+  > .site-sticker {
+    width: var(--site-stack-tile);
+  }
+
+  > .site-sticker + .site-sticker {
+    margin-left: clamp(-16px, -1.2vw, -8px);
+  }
+
+  > .site-sticker:nth-child(odd) {
+    transform: rotate(-3deg);
+  }
+
+  > .site-sticker:nth-child(even) {
+    transform: rotate(3deg) translateY(6px);
+  }
+}

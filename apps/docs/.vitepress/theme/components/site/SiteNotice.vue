@@ -60,32 +60,37 @@ const icon = computed(() => icons[props.tone]);
 </template>
 
 <style scoped lang="scss">
-.site-notice {
-  --site-notice-color: var(--db-brand-text);
+@use '../../styles/tone';
+@use '../../styles/mixins' as m;
 
+/* A small box in the tone that fits the message, like the callouts of the
+   docs. */
+.site-notice {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 18px 20px;
-  border: 1px solid var(--db-line);
-  border-radius: 14px;
-  background: var(--db-paper);
+  padding: 20px 24px;
+  border-radius: var(--db-radius-6);
+
+  &-info {
+    @include tone.tone('sky');
+  }
 
   &-warn {
-    --site-notice-color: var(--db-warn);
+    @include tone.tone('sun');
   }
 
   &-error {
-    --site-notice-color: var(--db-danger);
+    @include tone.tone('coral');
   }
 
   &-success {
-    --site-notice-color: var(--db-ok);
+    @include tone.tone('mint');
   }
 
   &-titled {
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
   }
 
   &-title {
@@ -93,17 +98,18 @@ const icon = computed(() => icons[props.tone]);
     align-items: center;
     gap: 8px;
     margin: 0;
-    font-size: 15px;
-    line-height: 24px;
-    font-weight: 600;
-    color: var(--site-notice-color);
+    font-family: var(--db-font-display);
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
+    color: var(--db-accent);
   }
 
   // Centered on the first line of the text.
   &-icon {
     flex-shrink: 0;
     margin-top: 4px;
-    color: var(--site-notice-color);
+    color: var(--db-accent);
   }
 
   &-body {
@@ -121,11 +127,16 @@ const icon = computed(() => icons[props.tone]);
     :deep(strong) {
       color: var(--db-ink);
     }
+
+    :deep(a) {
+      @include m.link-inline;
+    }
   }
 
   &-compact {
     gap: 10px;
-    padding: 12px 14px;
+    padding: 12px 16px;
+    border-radius: var(--db-radius-4);
   }
 
   &-compact &-icon {

@@ -226,7 +226,7 @@ defineExpose({ focus });
       <div class="pg-picker-chips" role="group" aria-label="Category">
         <button
           type="button"
-          class="site-chip"
+          class="site-pill site-pill-outline site-pill-sm"
           :aria-pressed="selectedCategories.length === 0"
           @click="toggleCategory(undefined)"
         >
@@ -236,7 +236,7 @@ defineExpose({ focus });
           v-for="category in categories"
           :key="category"
           type="button"
-          class="site-chip"
+          class="site-pill site-pill-outline site-pill-sm"
           :aria-pressed="selectedCategories[0] === category"
           @click="toggleCategory(category)"
         >
@@ -381,7 +381,7 @@ defineExpose({ focus });
     font-weight: 400;
     color: var(--db-muted);
 
-    .site-chip[aria-pressed='true'] & {
+    .site-pill[aria-pressed='true'] & {
       color: inherit;
       opacity: 0.8;
     }

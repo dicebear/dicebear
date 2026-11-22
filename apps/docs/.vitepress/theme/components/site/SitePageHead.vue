@@ -24,8 +24,8 @@ withDefaults(
     chips?: SiteChip[];
     /** Width of the aside column in pixels. */
     asideWidth?: number;
-    /** Whether the aside sits at the top of the head or at its middle. */
-    asideAlign?: 'start' | 'center';
+    /** Whether the aside sits at the top, the middle or the end of the head. */
+    asideAlign?: 'start' | 'center' | 'end';
     /** The lead in the large marketing size, or in the body size of a style page. */
     leadSize?: 'lead' | 'body';
   }>(),
@@ -46,10 +46,8 @@ function isExternal(href: string): boolean {
       aria-label="Breadcrumb"
     >
       <template v-for="(crumb, index) in crumbs" :key="index">
-        <ChevronRight v-if="index > 0" :size="12" aria-hidden="true" />
-        <a v-if="crumb.link" :href="crumb.link" class="hv-link">{{
-          crumb.text
-        }}</a>
+        <ChevronRight v-if="index > 0" :size="14" aria-hidden="true" />
+        <a v-if="crumb.link" :href="crumb.link">{{ crumb.text }}</a>
         <span v-else aria-current="page">{{ crumb.text }}</span>
       </template>
     </nav>
@@ -72,13 +70,15 @@ function isExternal(href: string): boolean {
           <template v-for="chip in chips" :key="chip.text">
             <a
               v-if="chip.href"
-              class="site-chip hv-outline"
+              class="site-tag site-tag-outline"
               :href="chip.href"
               :target="isExternal(chip.href) ? '_blank' : undefined"
               :rel="isExternal(chip.href) ? 'noopener noreferrer' : undefined"
               >{{ chip.text }}</a
             >
-            <span v-else class="site-chip">{{ chip.text }}</span>
+            <span v-else class="site-tag site-tag-outline">{{
+              chip.text
+            }}</span>
           </template>
         </div>
         <div
@@ -124,6 +124,8 @@ function isExternal(href: string): boolean {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .site-page-head {
   padding-top: var(--db-page-top);
 
@@ -131,27 +133,38 @@ function isExternal(href: string): boolean {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 4px 10px;
+    gap: 0 10px;
     font-size: 16px;
     line-height: 26px;
-    color: var(--db-ink-2);
+    color: var(--db-muted);
 
     a {
-      color: var(--db-muted);
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      transition: color 0.12s;
+
+      &:hover {
+        color: var(--db-ink);
+      }
+    }
+
+    [aria-current='page'] {
+      font-weight: 600;
+      color: var(--db-ink);
     }
 
     svg {
       flex-shrink: 0;
-      color: var(--db-chevron);
     }
   }
 
   &-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 80px;
+    gap: 48px;
     align-items: start;
-    padding-top: 28px;
+    padding-top: 8px;
 
     &.has-aside {
       grid-template-columns: minmax(0, 1fr) var(--site-page-head-aside, 400px);
@@ -168,7 +181,7 @@ function isExternal(href: string): boolean {
   &-main {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 28px;
     min-width: 0;
   }
 
@@ -194,7 +207,7 @@ function isExternal(href: string): boolean {
 
   &-lead {
     &.site-lead {
-      max-width: 720px;
+      max-width: 680px;
     }
 
     /* Markdown pages hand the lead over as paragraphs. */
@@ -207,13 +220,7 @@ function isExternal(href: string): boolean {
     }
 
     :deep(a) {
-      color: var(--db-brand-text);
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-        text-underline-offset: 3px;
-      }
+      @include m.link-inline;
     }
   }
 
@@ -249,10 +256,6 @@ function isExternal(href: string): boolean {
       gap: 4px 8px;
       font-size: 15px;
       line-height: 24px;
-    }
-
-    &-grid {
-      padding-top: 20px;
     }
 
     &-main {

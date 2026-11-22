@@ -45,7 +45,7 @@ defineExpose({
   min-height: 48px;
   margin: 0;
   padding: 8px 16px;
-  border-radius: var(--db-radius-2);
+  border-radius: var(--db-radius-5);
   font: inherit;
   font-size: 15px;
   line-height: 24px;

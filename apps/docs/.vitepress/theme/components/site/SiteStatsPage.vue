@@ -96,7 +96,7 @@ const numbers = computed(() =>
             v-for="tab in tabs"
             :key="tab.key"
             type="button"
-            class="site-chip site-chip-lg hv-outline"
+            class="site-pill site-pill-outline"
             :aria-pressed="activeTab === tab.key"
             @click="activeTab = tab.key"
           >

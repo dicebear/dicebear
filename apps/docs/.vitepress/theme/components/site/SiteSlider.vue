@@ -187,15 +187,15 @@ function onPointerDown(event: PointerEvent) {
 </template>
 
 <style scoped lang="scss">
-$thumb: 18px;
+$thumb: 20px;
 
 @mixin thumb {
   width: $thumb;
   height: $thumb;
   box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
+  border: 2px solid var(--db-btn-bg);
   border-radius: 50%;
-  background: var(--db-knob);
+  background: var(--db-panel);
   cursor: pointer;
   pointer-events: auto;
   transition:
@@ -204,13 +204,11 @@ $thumb: 18px;
 }
 
 @mixin thumb-hover {
-  border-color: var(--db-hover-border);
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--db-brand) 16%, transparent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--db-btn-bg) 14%, transparent);
 }
 
 @mixin thumb-focus {
-  border-color: var(--db-brand);
-  outline: 2px solid var(--db-brand);
+  outline: 2px solid var(--db-focus);
   outline-offset: 2px;
 }
 
@@ -228,16 +226,16 @@ $thumb: 18px;
   &::after {
     content: '';
     position: absolute;
-    top: 8px;
-    height: 4px;
-    border-radius: 2px;
+    top: 7px;
+    height: 6px;
+    border-radius: 3px;
     pointer-events: none;
   }
 
   &::before {
     left: 0;
     right: 0;
-    background: var(--db-switch-bg);
+    background: color-mix(in srgb, var(--db-ink) 14%, transparent);
   }
 
   &::after {
@@ -245,7 +243,7 @@ $thumb: 18px;
     right: calc(
       (1 - var(--site-slider-hi)) * (100% - #{$thumb}) + #{$thumb} / 2
     );
-    background: var(--db-brand);
+    background: var(--db-btn-bg);
   }
 
   &.is-range::after {

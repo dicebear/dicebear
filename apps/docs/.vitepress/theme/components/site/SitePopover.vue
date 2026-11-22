@@ -62,6 +62,8 @@ defineExpose({ toggle, show, hide });
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/tone';
+
 .site-popover {
   position: fixed;
   inset: auto;
@@ -71,7 +73,9 @@ defineExpose({ toggle, show, hide });
   margin: 0;
   padding: 16px;
   border: 1px solid var(--db-line);
-  border-radius: var(--db-radius-3);
+  /* It opens inside the box of its trigger, so it resets to neutral. */
+  @include tone.tone('panel');
+  border-radius: var(--db-radius-5);
   background: var(--db-panel);
   color: var(--db-ink);
   box-shadow: var(--db-shadow-pop);

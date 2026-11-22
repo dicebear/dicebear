@@ -56,13 +56,13 @@ const rows = buildComparisonRows({
               </span>
               <span
                 v-else-if="row.values[service.key] === 'free'"
-                class="site-chip site-chip-ok"
+                class="site-tag site-tag-sm site-tag-ok"
               >
                 Free
               </span>
               <span
                 v-else-if="row.values[service.key] === 'paid'"
-                class="site-chip site-chip-muted"
+                class="site-tag site-tag-sm"
               >
                 Paid
               </span>

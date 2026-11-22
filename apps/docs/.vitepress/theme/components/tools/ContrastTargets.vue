@@ -79,8 +79,8 @@ function emitUpdate(id: 'a' | 'b', value: string) {
           <span
             v-for="level in target.levels"
             :key="level.name"
-            class="site-chip"
-            :class="level.passed ? 'site-chip-ok' : 'site-chip-muted'"
+            class="site-tag site-tag-sm"
+            :class="{ 'site-tag-ok': level.passed }"
           >
             {{ level.name }}
             <span class="sr-only">{{

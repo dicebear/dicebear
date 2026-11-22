@@ -187,6 +187,8 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/tone';
+
 .site-dialog {
   // The same gap above and below, which centers the box and keeps a tall one
   // off the edges of the window.
@@ -203,7 +205,9 @@ onBeforeUnmount(() => {
   margin: auto;
   padding: 0;
   border: 1px solid var(--db-line);
-  border-radius: var(--db-radius-5);
+  /* It opens inside the box of its trigger, so it resets to neutral. */
+  @include tone.tone('panel');
+  border-radius: var(--db-radius-card);
   background: var(--db-panel);
   color: var(--db-ink);
   box-shadow: var(--db-shadow-pop);
@@ -217,7 +221,7 @@ onBeforeUnmount(() => {
   }
 
   &::backdrop {
-    background: rgba(6, 12, 18, 0.4);
+    background: rgba(21, 33, 59, 0.4);
   }
 
   &[open]::backdrop {
@@ -239,10 +243,10 @@ onBeforeUnmount(() => {
     min-width: 0;
     margin: 0;
     padding: 12px 0;
-    font-size: 20px;
-    line-height: 28px;
+    font-family: var(--db-font-display);
+    font-size: 24px;
+    line-height: 30px;
     font-weight: 700;
-    letter-spacing: -0.01em;
     color: var(--db-ink);
   }
 
@@ -251,11 +255,11 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 0;
-    border-radius: var(--db-radius-2);
+    border-radius: 22px;
     background: transparent;
     color: var(--db-muted);
 
@@ -284,7 +288,7 @@ onBeforeUnmount(() => {
     max-height: 88dvh;
     margin: 0;
     border-bottom: 0;
-    border-radius: var(--db-radius-6) var(--db-radius-6) 0 0;
+    border-radius: var(--db-radius-card) var(--db-radius-card) 0 0;
 
     &[open] {
       animation: site-sheet-in var(--duration-fast) var(--ease-smooth);
@@ -339,7 +343,7 @@ onBeforeUnmount(() => {
 }
 
 .dark .site-dialog::backdrop {
-  background: rgba(6, 12, 18, 0.6);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 @keyframes site-dialog-in {

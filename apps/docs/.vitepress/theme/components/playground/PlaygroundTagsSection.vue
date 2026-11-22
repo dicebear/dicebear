@@ -112,7 +112,7 @@ function chipTitle(label: string, state: RowState): string {
         v-for="chip in chips"
         :key="chip.token"
         type="button"
-        class="site-chip pg-tags-chip"
+        class="site-pill site-pill-outline site-pill-sm pg-tags-chip"
         :data-state="chip.state"
         :disabled="chipsDisabled"
         :title="chipTitle(chip.label, chip.state)"
@@ -158,31 +158,19 @@ function chipTitle(label: string, state: RowState): string {
   margin-top: 10px;
 }
 
-/* Neutral is the plain chip, allowed the tint, disallowed struck through. */
+/* Neutral is the plain chip, allowed yellow, disallowed struck through. */
 .pg-tags-chip {
-  cursor: pointer;
-
   &[data-state='allow'] {
-    border-color: var(--db-brand);
-    background: var(--db-tint);
-    color: var(--db-tint-text);
+    background: var(--db-select);
+    box-shadow: none;
+    color: var(--db-select-text);
   }
 
   &[data-state='disallow'] {
-    border-color: var(--db-danger);
     background: var(--db-danger-soft);
+    box-shadow: inset 0 0 0 1px var(--db-danger);
     color: var(--db-danger);
     text-decoration: line-through;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: default;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--db-brand);
-    outline-offset: 2px;
   }
 }
 

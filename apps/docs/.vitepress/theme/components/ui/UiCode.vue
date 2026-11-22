@@ -1,8 +1,9 @@
 <script setup lang="ts">
 /**
- * A code block in the look of the docs code blocks. The header row shows one
- * tab per language when `tabs` is set and the language label otherwise. The
- * copy button sits at its right end.
+ * A code card. The header row shows one tab per language when `tabs` is set
+ * and the language label otherwise; the copy button sits at its right end.
+ * The card keeps its own neutral ground, so it reads the same in every
+ * block.
  */
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { escapeHtml } from '@theme/utils/escape';
@@ -82,8 +83,8 @@ watch(current, async () => {
           :key="tab.id"
           type="button"
           role="tab"
+          class="site-pill site-pill-tab"
           :aria-selected="tab.id === activeId"
-          :class="{ 'is-active': tab.id === activeId }"
           @click="active = tab.id"
         >
           {{ tab.label }}
@@ -101,45 +102,43 @@ watch(current, async () => {
 </template>
 
 <style lang="scss" scoped>
+@use '../../styles/tone';
+
 .ui-code {
+  @include tone.tone('code');
+
   position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  border: 1px solid var(--db-line);
-  border-radius: 14px;
-  background: var(--db-code-bg);
+  border-radius: var(--db-radius-code);
+  box-shadow: 0 0 0 1px var(--db-c-line);
   overflow: hidden;
 
   &-bar {
     flex-shrink: 0;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: space-between;
     gap: 12px;
-    height: 40px;
-    padding: 0 6px 0 16px;
-    background: var(--db-code-bar);
-    border-bottom: 1px solid var(--db-code-line);
+    padding: 12px 12px 0 clamp(20px, 2.6vw, 32px);
   }
 
   &.has-tabs &-bar {
-    height: 44px;
-    padding-left: 8px;
+    padding-left: 12px;
   }
 
   &-lang {
-    align-self: center;
     font-family: var(--db-font-mono);
     font-size: 12px;
-    line-height: 16px;
+    line-height: 20px;
     color: var(--db-muted);
   }
 
   &-tabs {
     display: flex;
-    align-items: stretch;
+    gap: 4px;
     min-width: 0;
     overflow-x: auto;
     overflow-y: hidden;
@@ -149,35 +148,8 @@ watch(current, async () => {
       display: none;
     }
 
-    button {
-      display: inline-flex;
-      align-items: center;
-      padding: 0 12px;
-      border: 0;
-      border-bottom: 2px solid transparent;
-      background: none;
-      font: inherit;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--db-muted);
-      white-space: nowrap;
-      cursor: pointer;
-      transition: color 0.12s;
-
-      &:hover {
-        color: var(--db-ink);
-      }
-
-      &.is-active {
-        border-bottom-color: var(--db-brand);
-        font-weight: 600;
-        color: var(--db-ink);
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--db-brand);
-        outline-offset: -2px;
-      }
+    .site-pill {
+      flex-shrink: 0;
     }
   }
 
@@ -185,12 +157,12 @@ watch(current, async () => {
     flex: 1;
     min-height: 0;
     margin: 0;
-    padding: 16px 0 18px;
+    padding: 16px 0 24px;
     overflow: auto;
     font-family: var(--db-font-mono);
     font-size: 14px;
     line-height: 24px;
-    color: var(--db-code-ink);
+    color: var(--db-ink);
     white-space: pre;
 
     @media (max-width: 767px) {
@@ -201,14 +173,12 @@ watch(current, async () => {
       display: block;
       width: fit-content;
       min-width: 100%;
-      padding: 0 20px;
+      padding: 0 clamp(20px, 2.6vw, 32px);
       font: inherit;
     }
   }
 
   &-copy {
-    align-self: center;
-
     /* The tooltip opens to the left, above it the frame would clip it. */
     &:hover::after,
     &:focus-visible::after {
@@ -227,7 +197,7 @@ watch(current, async () => {
 .ui-code-text .hljs-literal,
 .ui-code-text .hljs-name,
 .ui-code-text .hljs-attr {
-  color: var(--db-brand-text);
+  color: var(--db-code-key);
 }
 .ui-code-text .hljs-string {
   color: var(--db-code-string);

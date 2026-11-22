@@ -4,9 +4,9 @@
  * the roles as usual, so they need no variant per ground.
  *
  * `tone(name)` is used by `.site-box.is-*` and by the few other grounds that
- * take a block color (the Studio tabs, the docs callouts). `tone(paper)`
- * resets to neutral; dialogs, menus, tooltips and code cards use it, so they
- * look the same wherever they open.
+ * take a block color (the Studio tabs, the docs callouts). `tone(paper)`,
+ * `tone(panel)` and `tone(code)` reset to neutral; dialogs, menus and code
+ * cards use them, so they look the same wherever they open.
  */
 
 /* Tokens computed from the roles. A custom property resolves where it is
@@ -95,27 +95,27 @@
 }
 
 @mixin tone($name) {
-  @if $name == paper {
+  @if $name == 'paper' {
     @include neutral-roles;
-  } @else if $name == soft {
+  } @else if $name == 'soft' {
     @include neutral-roles;
     --db-paper: var(--db-c-soft);
     --db-soft: var(--db-c-paper);
-  } @else if $name == panel {
+  } @else if $name == 'panel' {
     @include neutral-roles;
     --db-paper: var(--db-c-panel);
-  } @else if $name == card {
+  } @else if $name == 'code' {
     @include neutral-roles;
     --db-paper: var(--db-card);
-  } @else if $name == sun {
+  } @else if $name == 'sun' {
     @include bright-roles(var(--db-sun));
-  } @else if $name == coral {
+  } @else if $name == 'coral' {
     @include bright-roles(var(--db-coral));
-  } @else if $name == sky {
+  } @else if $name == 'sky' {
     @include deep-roles(var(--db-sky), var(--db-sky-acc));
-  } @else if $name == lilac {
+  } @else if $name == 'lilac' {
     @include deep-roles(var(--db-lilac), var(--db-lilac-acc));
-  } @else if $name == mint {
+  } @else if $name == 'mint' {
     @include deep-roles(var(--db-mint), var(--db-mint-acc));
   } @else {
     @error 'Unknown tone #{$name}';
@@ -126,4 +126,5 @@
   color: var(--db-ink);
 }
 
-$tones: paper, soft, panel, card, sun, coral, sky, lilac, mint;
+$tones:
+  'paper', 'soft', 'panel', 'code', 'sun', 'coral', 'sky', 'lilac', 'mint';

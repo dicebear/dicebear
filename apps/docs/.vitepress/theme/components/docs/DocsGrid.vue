@@ -50,7 +50,7 @@ const hasLinks = computed(() => props.items.some((item) => item.link));
         <span class="docs-grid-title" :class="{ 'is-mono': row.mono }">{{
           row.title
         }}</span>
-        <span v-if="row.badge" class="site-chip site-chip-brand">{{
+        <span v-if="row.badge" class="site-tag site-tag-sm site-tag-sun">{{
           row.badge
         }}</span>
       </span>

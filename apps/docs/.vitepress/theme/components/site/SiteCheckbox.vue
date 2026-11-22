@@ -79,9 +79,9 @@ function onChange(event: Event) {
     cursor: not-allowed;
   }
 
-  // Centres the 18px box on the first text line.
+  // Centres the 20px box on the first text line.
   .site-checkbox-input {
-    margin-top: 3px;
+    margin-top: 2px;
   }
 
   &-label {
@@ -92,12 +92,12 @@ function onChange(event: Event) {
 .site-checkbox-input {
   position: relative;
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   margin: 0;
   box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
-  border-radius: 5px;
+  border: 1px solid var(--db-field-border);
+  border-radius: 6px;
   background: var(--db-panel);
   cursor: pointer;
   appearance: none;
@@ -109,27 +109,27 @@ function onChange(event: Event) {
   &::after {
     content: '';
     position: absolute;
-    top: 2px;
-    left: 5.5px;
+    top: 3px;
+    left: 6.5px;
     width: 5px;
-    height: 9px;
+    height: 10px;
     box-sizing: border-box;
-    border: solid var(--db-paper);
+    border: solid var(--db-btn-fg);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
     opacity: 0;
   }
 
   &:hover:not(:disabled) {
-    border-color: var(--db-hover-border);
+    border-color: var(--db-ink-2);
   }
 
   &:checked,
   &:indeterminate,
   &:checked:hover,
   &:indeterminate:hover {
-    border-color: var(--db-brand);
-    background: var(--db-brand);
+    border-color: var(--db-btn-bg);
+    background: var(--db-btn-bg);
 
     &::after {
       opacity: 1;
@@ -137,8 +137,8 @@ function onChange(event: Event) {
   }
 
   &:indeterminate::after {
-    top: 7px;
-    left: 3px;
+    top: 8px;
+    left: 4px;
     width: 10px;
     height: 2px;
     border-width: 0 0 2px;

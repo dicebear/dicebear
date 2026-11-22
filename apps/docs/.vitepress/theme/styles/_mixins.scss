@@ -1,0 +1,222 @@
+/**
+ * The looks of the shared elements as mixins. The classes in `site/` are
+ * built from them, and so is markup that cannot carry a class, such as the
+ * Markdown output in `prose.scss`. This file emits no CSS of its own, so a
+ * component may `@use` it.
+ */
+
+$icon-arrow: url('lucide-static/icons/arrow-right.svg');
+$icon-chevron-down: url('lucide-static/icons/chevron-down.svg');
+
+/* An icon drawn in the current color from a Lucide file. */
+@mixin icon($image, $size: 18px) {
+  display: inline-block;
+  flex-shrink: 0;
+  width: $size;
+  height: $size;
+  background-color: currentColor;
+  -webkit-mask: $image center / contain no-repeat;
+  mask: $image center / contain no-repeat;
+}
+
+@mixin focus-ring($offset: 3px) {
+  &:focus-visible {
+    outline: 2px solid var(--db-focus);
+    outline-offset: $offset;
+  }
+}
+
+/* Button: a pill in the display face. */
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 22px;
+  background: none;
+  font-family: var(--db-font-display);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--db-ink);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.12s,
+    box-shadow 0.12s,
+    color 0.12s;
+
+  @include focus-ring;
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+@mixin button-solid {
+  background: var(--db-btn-bg);
+  color: var(--db-btn-fg);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--db-btn-bg) 84%, var(--db-paper));
+    color: var(--db-btn-fg);
+  }
+}
+
+/* White inside, a 2px ring in the button color. */
+@mixin button-outline {
+  background: var(--db-panel);
+  box-shadow: inset 0 0 0 2px var(--db-btn-bg);
+  color: var(--db-btn-bg);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--db-btn-bg) 8%, var(--db-panel));
+  }
+}
+
+@mixin button-ghost {
+  color: var(--db-ink-2);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--db-ink) 8%, transparent);
+    color: var(--db-ink);
+  }
+}
+
+@mixin button-size($size) {
+  @if $size == sm {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 18px;
+    font-size: 14px;
+  } @else if $size == lg {
+    gap: 10px;
+    height: 56px;
+    padding: 0 28px;
+    border-radius: 28px;
+    font-size: 19px;
+  }
+}
+
+/* Pill: chips, tabs, navigation and option rows. 44px high. */
+@mixin pill-base {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 22px;
+  background: transparent;
+  font-family: var(--db-font-display);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--db-ink);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.12s,
+    box-shadow 0.12s,
+    color 0.12s;
+
+  @include focus-ring(2px);
+}
+
+/* The states that count as "this one is on". */
+@mixin on {
+  &[aria-pressed='true'],
+  &[aria-selected='true'],
+  &[aria-current='page'],
+  &[aria-current='true'],
+  &[aria-checked='true'],
+  &.is-active {
+    @content;
+  }
+}
+
+@mixin off {
+  &:not([aria-pressed='true']):not([aria-selected='true']):not(
+      [aria-current='page']
+    ):not([aria-current='true']):not([aria-checked='true']):not(.is-active) {
+    @content;
+  }
+}
+
+@mixin link-inline {
+  font-weight: 600;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: text-decoration-color 0.12s;
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+@mixin link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-family: var(--db-font-display);
+  font-size: 19px;
+  line-height: 26px;
+  font-weight: 700;
+  color: var(--db-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+
+  &::after {
+    content: '';
+    @include icon($icon-arrow, 18px);
+    transition: transform 0.25s var(--ease-spring);
+  }
+
+  &:hover::after {
+    transform: translateX(4px);
+  }
+}
+
+/* Tag: a static mark, 32px high. */
+@mixin tag-base {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--db-ink) 10%, transparent);
+  font-family: var(--db-font-display);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--db-ink);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+/* Inline code: a soft pill around monospace. */
+@mixin code-inline {
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: var(--db-soft);
+  font-family: var(--db-font-mono);
+  font-size: 0.875em;
+  line-height: 1;
+  color: var(--db-ink);
+}

@@ -1,0 +1,68 @@
+/**
+ * Layout. Content is 1280px wide at most, with `--db-wrap` on each side.
+ */
+
+/* The column of the page: header, page heads and unboxed sections. */
+.site-container {
+  width: 100%;
+  max-width: var(--db-container);
+  margin: 0 auto;
+  padding: 0 var(--db-wrap);
+  box-sizing: border-box;
+}
+
+/* An aside next to the main column. The aside keeps its width until the
+   two no longer fit, then the main column drops below it. */
+.site-split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 32px clamp(32px, 5vw, 80px);
+
+  > :first-child {
+    flex: 1 1 300px;
+    max-width: 340px;
+    min-width: 0;
+  }
+
+  > :last-child {
+    flex: 999 1 520px;
+    min-width: 0;
+  }
+
+  &.is-wide > :first-child {
+    flex-basis: 380px;
+    max-width: 440px;
+  }
+
+  &.is-center {
+    align-items: center;
+  }
+}
+
+/* Two even columns that stack when narrow: a block head with its title on
+   the left and the lead on the right, or two pieces of content. */
+.site-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: 24px clamp(40px, 5vw, 88px);
+  align-items: end;
+
+  &.is-top {
+    align-items: start;
+  }
+}
+
+/* A row of buttons or links. */
+.site-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+}
