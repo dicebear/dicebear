@@ -1,8 +1,9 @@
 <script setup lang="ts">
 /**
- * How DiceBear gets into a project: the code for one avatar in every
- * language, and on the left what a page full of users looks like with that
- * line in place. Fixed style and seeds; the hero does not reach in here.
+ * How DiceBear gets into a project: the headline across the block, under it
+ * the code for one avatar in every language, and on the left what a page
+ * full of users looks like with that line in place. Fixed style and seeds;
+ * the hero does not reach in here.
  */
 import { computed, ref } from 'vue';
 import { useData, withBase } from 'vitepress';
@@ -31,9 +32,12 @@ const current = computed(
 
 <template>
   <section class="site-box is-block is-sun home-integrate">
+    <h2 class="site-headline home-integrate-title">
+      One line, and everybody has a face
+    </h2>
+
     <div class="site-pair is-top home-integrate-grid">
       <div>
-        <h2 class="site-headline">One line, and everybody has a face</h2>
         <p class="site-lead home-integrate-lead">
           Put the URL into an image tag. Or draw avatars in your own code, with
           a library for seven languages and a CLI for batches. Each of them
@@ -96,13 +100,16 @@ const current = computed(
 
 <style scoped lang="scss">
 .home-integrate {
+  &-title {
+    margin-bottom: clamp(32px, 3.4vw, 48px);
+  }
+
   &-grid {
-    row-gap: 48px;
+    row-gap: 40px;
   }
 
   &-lead {
     max-width: 520px;
-    margin-top: 28px;
   }
 
   &-code {
