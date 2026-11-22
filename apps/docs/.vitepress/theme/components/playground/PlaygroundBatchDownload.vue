@@ -413,8 +413,9 @@ watch([seeds, format], () => (successState.value = false));
   }
 
   // Two classes, so the width outranks the default of the field.
+  /* Room for three digits beside the word and the two buttons. */
   & &-count {
-    width: 150px;
+    width: 196px;
   }
 
   &-cap {
