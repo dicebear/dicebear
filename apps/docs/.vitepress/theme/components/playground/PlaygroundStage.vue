@@ -292,7 +292,7 @@ function pickSeed(seed: string) {
   &.is-editor &-ground {
     flex: none;
     gap: 14px;
-    padding: 20px 12px 16px;
+    padding: 20px 0 16px;
   }
 
   &.is-editor &-picture {

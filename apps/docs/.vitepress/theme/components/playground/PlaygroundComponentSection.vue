@@ -159,14 +159,14 @@ function setRowWeight(variant: string, value: number | null) {
             />
             <button
               type="button"
-              class="site-btn site-btn-ghost site-btn-sm"
+              class="site-pill site-pill-outline site-pill-sm"
               @click="selectAll"
             >
               All
             </button>
             <button
               type="button"
-              class="site-btn site-btn-ghost site-btn-sm"
+              class="site-pill site-pill-outline site-pill-sm"
               @click="selectNone"
             >
               None
@@ -179,7 +179,6 @@ function setRowWeight(variant: string, value: number | null) {
             :key="variant"
             type="button"
             class="pg-comp-tile"
-            :class="{ 'hv-thumb': variantWeights[variant] === undefined }"
             :aria-pressed="variantWeights[variant] !== undefined"
             :title="variant"
             @click="toggleVariant(variant)"
@@ -250,7 +249,7 @@ function setRowWeight(variant: string, value: number | null) {
 }
 
 .pg-comp-tools {
-  gap: 4px;
+  gap: 6px;
 
   .pg-field-reset {
     margin-right: 6px;
@@ -302,14 +301,17 @@ function setRowWeight(variant: string, value: number | null) {
     opacity: 0.7;
   }
 
+  /* A chosen tile is the plain tile; a full set reads calm, and the faded
+     dashed ones stand out as the ones left out. */
   &[aria-pressed='true'] {
-    border-color: var(--db-focus);
+    border-color: transparent;
   }
 
-  /* Hovering a chosen tile shows the dashed line of the unchosen ones, in
-     the same weight: a click will take it out. */
+  /* Hovering a chosen tile shows the dashed line of the unchosen ones: a
+     click will take it out. */
   &[aria-pressed='true']:hover,
   &[aria-pressed='true']:focus-visible {
+    border-color: var(--db-ink-2);
     border-style: dashed;
   }
 }

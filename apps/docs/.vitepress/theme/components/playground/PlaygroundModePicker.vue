@@ -121,14 +121,11 @@ defineExpose({ focus: () => trigger.value?.focus() });
     :aria-expanded="open"
     @click="onTrigger"
   >
+    <PlaygroundModeSketch :mode="current.value" class="pg-mode-field-sketch" />
     <template v-if="!compact">
-      <PlaygroundModeSketch
-        :mode="current.value"
-        class="pg-mode-field-sketch"
-      />
       <span class="pg-mode-field-label">View</span>
+      <span class="pg-mode-field-name">{{ current.label }}</span>
     </template>
-    <span class="pg-mode-field-name">{{ current.label }}</span>
     <ChevronDown :size="16" aria-hidden="true" class="pg-mode-field-chevron" />
   </button>
 
@@ -180,16 +177,9 @@ defineExpose({ focus: () => trigger.value?.focus() });
 /* A field of the control set, like the style field on the other end of the
    bar: the drawing of the view, the word View and its name. */
 .pg-mode-field {
-  @include c.control;
-  @include c.control-size(md);
+  @include c.control-picker;
 
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 10px 0 6px;
-  font-weight: 600;
-  color: var(--db-ink);
-  cursor: pointer;
 
   &-sketch {
     width: 36px;
@@ -197,7 +187,6 @@ defineExpose({ focus: () => trigger.value?.focus() });
   }
 
   &-label {
-    font-weight: 500;
     color: var(--db-muted);
   }
 
@@ -209,15 +198,17 @@ defineExpose({ focus: () => trigger.value?.focus() });
     flex-shrink: 0;
     margin-left: auto;
     color: var(--db-muted);
+    transition: transform 0.15s;
   }
 
   &[aria-expanded='true'] &-chevron {
     transform: rotate(180deg);
   }
 
+  /* On a phone the drawing of the view stands for its name. */
   &.is-compact {
     gap: 6px;
-    padding: 0 8px 0 12px;
+    padding: 0 12px 0 10px;
   }
 }
 
@@ -241,9 +232,9 @@ defineExpose({ focus: () => trigger.value?.focus() });
   align-items: flex-start;
   gap: 12px;
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 0;
-  border-radius: var(--db-radius-2);
+  border-radius: 18px;
   background: transparent;
   font: inherit;
   color: var(--db-ink);
@@ -251,10 +242,6 @@ defineExpose({ focus: () => trigger.value?.focus() });
   cursor: pointer;
 
   &:hover {
-    background: var(--db-soft);
-  }
-
-  &[aria-checked='true'] {
     background: var(--db-soft);
   }
 
@@ -277,21 +264,22 @@ defineExpose({ focus: () => trigger.value?.focus() });
   }
 
   &-name {
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 600;
+    font-family: var(--db-font-display);
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 700;
   }
 
   &-description {
-    font-size: 13px;
-    line-height: 18px;
+    font-size: 14px;
+    line-height: 20px;
     color: var(--db-ink-2);
   }
 
   &-check {
     flex-shrink: 0;
-    margin-top: 2px;
-    color: var(--db-focus);
+    margin-top: 3px;
+    color: var(--db-ink);
   }
 }
 </style>

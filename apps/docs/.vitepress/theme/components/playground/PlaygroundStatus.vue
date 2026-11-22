@@ -62,7 +62,7 @@ const legal = legalLinks.filter((link) => link.label !== 'Licenses');
   gap: 4px 16px;
   box-sizing: border-box;
   min-height: 16px;
-  padding: 8px 20px 10px;
+  padding: 8px 0 10px;
   border-top: 1px solid var(--db-line);
   font-size: 12px;
   line-height: 16px;

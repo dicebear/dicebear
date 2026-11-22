@@ -232,7 +232,7 @@ function reset() {
   &-body {
     flex: 1;
     min-height: 0;
-    padding: 20px 12px 24px;
+    padding: 24px 0 24px 24px;
     overflow-y: auto;
     container: pg-options / inline-size;
   }
@@ -241,16 +241,18 @@ function reset() {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 22px;
   }
 
+  /* The title of the open entry, the card title of the site. */
   &-title {
     flex: 1;
     min-width: 0;
     margin: 0;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 600;
+    font-family: var(--db-font-display);
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 700;
     color: var(--db-ink);
   }
 
@@ -263,7 +265,7 @@ function reset() {
   &-stack {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
   }
 
   /* Rows behind hairlines, closed by one at the end. */
@@ -274,7 +276,7 @@ function reset() {
   /* Fixed under the options, whatever is open above. */
   &-actions {
     flex-shrink: 0;
-    padding: 16px 12px 20px;
+    padding: 16px 0 20px 24px;
     border-top: 1px solid var(--db-line);
     background: var(--db-paper);
   }

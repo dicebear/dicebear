@@ -7,7 +7,7 @@
  * input.
  */
 import { computed, nextTick, ref, useAttrs, watch } from 'vue';
-import { ChevronDown, ChevronUp } from '@lucide/vue';
+import { Minus, Plus } from '@lucide/vue';
 
 defineOptions({ inheritAttrs: false });
 
@@ -35,8 +35,8 @@ const emit = defineEmits<{
 }>();
 
 const buttons = [
-  { direction: 1, label: 'Increase', icon: ChevronUp },
-  { direction: -1, label: 'Decrease', icon: ChevronDown },
+  { direction: -1, label: 'Decrease', icon: Minus },
+  { direction: 1, label: 'Increase', icon: Plus },
 ] as const;
 
 const attrs = useAttrs();
@@ -209,7 +209,7 @@ defineExpose({
         @mousedown.prevent
         @click="stepBy(button.direction)"
       >
-        <component :is="button.icon" :size="12" aria-hidden="true" />
+        <component :is="button.icon" :size="14" aria-hidden="true" />
       </button>
     </span>
   </span>
@@ -241,7 +241,11 @@ defineExpose({
   }
 
   &.has-buttons {
-    padding-right: 0;
+    padding-right: 6px;
+  }
+
+  &.is-sm.has-buttons {
+    padding-right: 6px;
   }
 
   &:has(.site-number-input:focus-visible) {
@@ -294,37 +298,39 @@ defineExpose({
     color: var(--db-muted);
   }
 
+  /* Minus and plus as two round buttons inside the pill, at its right
+     end. They keep the 6px of the pill's own curve around them. */
   &-buttons {
     display: flex;
-    flex-direction: column;
     flex-shrink: 0;
-    align-self: stretch;
-    width: 28px;
+    gap: 2px;
     margin-left: 4px;
-    border-left: 1px solid var(--db-line);
   }
 
   &-button {
     display: flex;
-    flex: 1;
     align-items: center;
     justify-content: center;
+    width: 32px;
+    height: 32px;
     padding: 0;
     border: 0;
+    border-radius: 50%;
     background: transparent;
-    color: var(--db-muted);
+    color: var(--db-ink-2);
     cursor: pointer;
     transition:
       background-color 0.12s,
       color 0.12s;
 
-    & + & {
-      border-top: 1px solid var(--db-line);
-    }
-
     &:hover:not(:disabled) {
       background: var(--db-soft);
       color: var(--db-ink);
+    }
+
+    .is-sm & {
+      width: 24px;
+      height: 24px;
     }
 
     &:disabled {

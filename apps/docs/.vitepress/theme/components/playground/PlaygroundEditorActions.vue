@@ -27,7 +27,7 @@ const emit = defineEmits<{
       aria-haspopup="dialog"
       @click="emit('how-to-use')"
     >
-      <Code :size="16" aria-hidden="true" />
+      <Code :size="18" aria-hidden="true" />
       How to use
     </button>
     <div class="pg-editor-actions-download">

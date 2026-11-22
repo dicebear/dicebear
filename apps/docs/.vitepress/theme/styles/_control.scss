@@ -1,8 +1,9 @@
 /**
  * The one shape every field takes: a pill on the panel ground with the
  * field edge. Hover darkens the edge, focus draws the focus color around it,
- * invalid turns it red, disabled halves the strength. Three sizes, shared
- * with the buttons: sm 36, md 44, lg 48.
+ * invalid turns it red, disabled halves the strength. Three sizes, the same
+ * as the buttons, the pills and the segmented controls: sm 36, md 44,
+ * lg 56, so any of them can stand in one row.
  */
 @mixin control {
   box-sizing: border-box;
@@ -37,10 +38,10 @@
     border-radius: 18px;
     font-size: 14px;
   } @else if $size == lg {
-    height: 48px;
-    padding: 0 18px;
-    border-radius: 24px;
-    font-size: 15px;
+    height: 56px;
+    padding: 0 22px;
+    border-radius: 28px;
+    font-size: 17px;
   } @else {
     height: 44px;
     padding: 0 16px;
@@ -52,6 +53,33 @@
 @mixin control-disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* A field that opens a list, such as the style or the view of the
+   Playground: a picture inset as far from the edge as from top and bottom,
+   a muted word, the chosen value and a chevron at the field's own padding.
+   Sizes as `control-size`. */
+@mixin control-picker($size: md) {
+  @include control;
+  @include control-size($size);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding-left: 8px;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--db-focus);
+    outline-offset: 2px;
+  }
+
+  &[aria-expanded='true'] {
+    border-color: var(--db-focus);
+  }
 }
 
 /* The chosen value of a picker field, such as the style or the view of the

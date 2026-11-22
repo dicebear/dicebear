@@ -401,7 +401,6 @@ function onOwnColor(event: Event) {
         v-if="groups.length > 1"
         v-model="group"
         :options="groups"
-        size="sm"
         aria-label="Edit"
         class="pg-editor-group"
       />
@@ -477,8 +476,7 @@ function onOwnColor(event: Event) {
     flex-shrink: 0;
     align-items: stretch;
     gap: 12px;
-    height: 52px;
-    padding-left: 12px;
+    padding: 10px 0;
     border-bottom: 1px solid var(--db-line);
   }
 
@@ -498,7 +496,7 @@ function onOwnColor(event: Event) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
     gap: 8px;
-    padding: 12px;
+    padding: 20px 0;
   }
 
   &-tile {
@@ -588,21 +586,31 @@ function onOwnColor(event: Event) {
 
   &-empty {
     margin: 0;
-    padding: 24px 12px;
+    padding: 24px 0;
     font-size: 15px;
     line-height: 24px;
     color: var(--db-muted);
   }
 
-  /* The phone's edge, as everywhere else on the page. */
-  @media (max-width: 767px) {
+  /* Without the page's edge the tray keeps 16px of its own, as everywhere
+     else on a small screen. */
+  @media (max-width: 959px) {
     &-head {
-      padding-left: 16px;
+      padding: 10px 16px;
     }
 
     &-tiles {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
       padding: 12px 16px;
+    }
+
+    &-empty {
+      padding: 24px 16px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    &-tiles {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 }

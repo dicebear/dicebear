@@ -134,21 +134,7 @@ const triggerOptions = { seed: exampleSeeds[0] };
 /* The field in the toolbar: the picture, the word Style and the name of the
    style, the same order as the view field on the other end of the bar. */
 .pg-style-field {
-  @include c.control;
-  @include c.control-size(md);
-
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  padding: 0 10px 0 5px;
-  font: inherit;
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid var(--db-focus);
-    outline-offset: 2px;
-  }
+  @include c.control-picker;
 
   &-thumb {
     flex-shrink: 0;
@@ -157,7 +143,7 @@ const triggerOptions = { seed: exampleSeeds[0] };
     height: 28px;
 
     :deep(.pg-thumb) {
-      border-radius: var(--db-radius-1);
+      border-radius: 50%;
     }
   }
 
@@ -194,12 +180,8 @@ const triggerOptions = { seed: exampleSeeds[0] };
     transition: transform 0.15s;
   }
 
-  &[aria-expanded='true'] {
-    border-color: var(--db-focus);
-
-    .pg-style-field-chevron {
-      transform: rotate(180deg);
-    }
+  &[aria-expanded='true'] &-chevron {
+    transform: rotate(180deg);
   }
 }
 

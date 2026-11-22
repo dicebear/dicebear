@@ -75,15 +75,16 @@ function randomize() {
       v-model="shape"
       :options="PLAYGROUND_SHAPES"
       aria-label="Shape"
+      size="lg"
       class="pg-editor-bar-shape"
     />
 
     <button
       type="button"
-      class="site-btn site-btn-accent pg-editor-bar-random"
+      class="site-btn site-btn-accent site-btn-lg pg-editor-bar-random"
       @click="randomize"
     >
-      <Shuffle :size="16" aria-hidden="true" />
+      <Shuffle :size="18" aria-hidden="true" />
       Randomize
     </button>
 
@@ -97,7 +98,11 @@ function randomize() {
 </template>
 
 <style scoped lang="scss">
-/* Three parts on one line, Randomize in the middle of the picture. */
+@use '../../styles/mixins' as m;
+
+/* Three parts on one line, Randomize in the middle of the picture. Every
+   control of the bar is 56 high, the size of the page's actions; a phone
+   takes 44 for all of them. */
 .pg-editor-bar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -129,6 +134,20 @@ function randomize() {
   /* A phone has the shape on the left and Randomize on the right. */
   @media (max-width: 767px) {
     justify-content: space-between;
+
+    &-random {
+      @include m.button-size(md);
+    }
+
+    &-shape:deep(.site-segmented-item) {
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+    }
+
+    &-shape {
+      border-radius: 22px;
+    }
   }
 }
 </style>

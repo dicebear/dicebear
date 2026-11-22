@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight, Code as CodeIcon } from '@lucide/vue';
+import { Code as CodeIcon } from '@lucide/vue';
 import { computed, watch } from 'vue';
 import { UiCode, type UiCodeTab } from '../ui';
 import SiteDialog from '../site/SiteDialog.vue';
@@ -402,39 +402,24 @@ defineExpose({ show: () => (open.value = true) });
 
   <SiteDialog v-model:open="open" header="How to use" max-width="860px">
     <div class="pg-how-to-use">
-      <div class="pg-how-to-use-tabs" role="tablist" aria-label="Language">
-        <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          type="button"
-          role="tab"
-          class="pg-how-to-use-tab"
-          :aria-selected="tab.id === current.id"
-          @click="onTab(tab.id)"
-        >
-          {{ tab.label }}
-        </button>
-      </div>
-
       <UiCode
-        :key="current.id"
+        :model-value="current.id"
+        :tabs="tabs"
         class="pg-how-to-use-code"
-        :lang="current.lang"
-        :code="current.code"
-      />
-
-      <div class="pg-how-to-use-foot">
-        <code v-if="current.install" class="pg-how-to-use-install">{{
-          current.install
-        }}</code>
-        <span v-else-if="current.note" class="pg-how-to-use-note">{{
-          current.note
-        }}</span>
-        <a :href="current.docs" class="pg-how-to-use-docs hv-link">
-          {{ current.label }} documentation
-          <ArrowRight :size="16" aria-hidden="true" />
-        </a>
-      </div>
+        @update:model-value="onTab"
+      >
+        <template #foot>
+          <code v-if="current.install" class="pg-how-to-use-install">{{
+            current.install
+          }}</code>
+          <span v-else-if="current.note" class="pg-how-to-use-note">{{
+            current.note
+          }}</span>
+          <a :href="current.docs" class="site-link-arrow pg-how-to-use-docs">
+            {{ current.label }} docs
+          </a>
+        </template>
+      </UiCode>
 
       <SiteNotice
         v-if="current.id === 'http-api' && hasExcludedOptions"
@@ -503,51 +488,10 @@ defineExpose({ show: () => (open.value = true) });
     }
   }
 
-  /* The languages, underlined where chosen. */
-  &-tabs {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    border-bottom: 1px solid var(--db-line);
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
-  &-tab {
-    flex-shrink: 0;
-    padding: 0 2px 10px;
-    border: 0;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    background: transparent;
-    font: inherit;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 500;
-    color: var(--db-muted);
-    white-space: nowrap;
-    cursor: pointer;
-
-    &[aria-selected='true'] {
-      border-bottom-color: var(--db-ink);
-      font-weight: 600;
-      color: var(--db-ink);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--db-focus);
-      outline-offset: 2px;
-    }
-  }
-
-  &-foot {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px 20px;
+  /* The foot of the code card: what to install or a note, and the way to
+     the docs at its end. */
+  &-docs {
+    margin-left: auto;
   }
 
   &-install {
@@ -555,7 +499,7 @@ defineExpose({ show: () => (open.value = true) });
     font-family: var(--db-font-mono);
     font-size: 13px;
     line-height: 20px;
-    color: var(--db-muted);
+    color: var(--db-ink-2);
     white-space: pre-line;
   }
 
@@ -563,20 +507,7 @@ defineExpose({ show: () => (open.value = true) });
     min-width: 0;
     font-size: 14px;
     line-height: 20px;
-    color: var(--db-muted);
-  }
-
-  &-docs {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: auto;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 500;
-    color: var(--db-ink);
-    text-decoration: none;
-    white-space: nowrap;
+    color: var(--db-ink-2);
   }
 }
 </style>

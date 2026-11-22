@@ -365,10 +365,9 @@ async function showAdvanced() {
     max-width: var(--db-container);
     min-height: 0;
     margin: 0 auto;
-    /* The controls, the headings and the tint of a chosen row stand on the
-       header's edge. The columns reach 12px past it for the room the
-       controls keep to the picture's lines. */
-    padding: 0 calc(var(--db-wrap) - 12px);
+    /* The columns end on the content edge of the header, like every line
+       in them; the panels keep their room on the side of the picture. */
+    padding: 0 var(--db-wrap);
   }
 
   /* Each sidebar has one line, towards the picture. The outer edge is the
@@ -379,6 +378,11 @@ async function showAdvanced() {
 
   &-inspector {
     border-left: 1px solid var(--db-line);
+  }
+
+  /* Beside the list the status line keeps the panels' room to the line. */
+  &-entries + &-stage :deep(.pg-status) {
+    padding-left: 24px;
   }
 
   /* The simple view leaves the list out and gives its room to the picture. */

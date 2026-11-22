@@ -55,10 +55,10 @@ function addFromPicker() {
   <button
     v-if="row"
     type="button"
-    class="pg-color-picker-row hv-link"
+    class="site-pill site-pill-outline site-pill-sm pg-color-picker-row"
     @click="toggle"
   >
-    <Plus :size="16" aria-hidden="true" />
+    <Plus :size="14" aria-hidden="true" />
     Add a color
   </button>
   <button
@@ -126,19 +126,7 @@ function addFromPicker() {
 
 <style scoped lang="scss">
 .pg-color-picker-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-  color: var(--db-ink);
-  cursor: pointer;
+  align-self: flex-start;
 }
 
 .pg-color-picker-trigger {

@@ -57,7 +57,7 @@ function pick(entry: PlaygroundEntry) {
         v-for="entry in entries.generalEntries.value"
         :key="entry.id"
         type="button"
-        class="pg-entries-row hv-fill"
+        class="pg-entries-row"
         :aria-pressed="pressed({ kind: 'general', id: entry.id })"
         @click="pick({ kind: 'general', id: entry.id })"
       >
@@ -89,7 +89,7 @@ function pick(entry: PlaygroundEntry) {
       >
         <button
           type="button"
-          class="pg-entries-row hv-fill"
+          class="pg-entries-row"
           :aria-pressed="pressed({ kind: 'component', name: comp.name })"
           @click="pick({ kind: 'component', name: comp.name })"
         >
@@ -107,7 +107,7 @@ function pick(entry: PlaygroundEntry) {
         <button
           v-if="comp.hasProbability"
           type="button"
-          class="pg-entries-eye hv-ghost"
+          class="pg-entries-eye"
           :aria-pressed="entries.isHidden(comp)"
           :aria-label="
             entries.isHidden(comp) ? 'Show on every seed' : 'Hide on every seed'
@@ -130,7 +130,7 @@ function pick(entry: PlaygroundEntry) {
         v-for="color in entries.colors.value"
         :key="color.key"
         type="button"
-        class="pg-entries-row hv-fill"
+        class="pg-entries-row"
         :aria-pressed="pressed({ kind: 'color', name: color.name })"
         @click="pick({ kind: 'color', name: color.name })"
       >
@@ -153,9 +153,10 @@ function pick(entry: PlaygroundEntry) {
   flex-direction: column;
   gap: 18px;
   box-sizing: border-box;
-  /* The headings and the tint of a chosen row stand on the content edge,
-     the row's text 10px inside it. */
-  padding: 16px 12px;
+  /* The tint of a chosen row stands on the content edge, the headings in
+     line with the row's text 12px inside it. The room on the right keeps
+     the rows off the line towards the picture. */
+  padding: 24px 24px 24px 0;
   overflow-y: auto;
 
   &-group {
@@ -167,13 +168,13 @@ function pick(entry: PlaygroundEntry) {
 
   &-heading {
     margin: 0;
-    padding: 0 0 8px;
+    padding: 0 12px 8px;
     font-size: 13px;
     line-height: 18px;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--db-ink-2);
+    color: var(--db-muted);
   }
 
   &-item {
@@ -196,14 +197,19 @@ function pick(entry: PlaygroundEntry) {
     gap: 10px;
     min-width: 0;
     height: 44px;
-    padding: 0 10px;
+    padding: 0 12px;
     border: 0;
-    border-radius: var(--db-radius-2);
+    border-radius: 22px;
     background: transparent;
     font: inherit;
     color: var(--db-ink);
     text-align: left;
     cursor: pointer;
+    transition: background-color 0.12s;
+
+    &:hover:not([aria-pressed='true']) {
+      background: color-mix(in srgb, var(--db-ink) 6%, transparent);
+    }
 
     &[aria-pressed='true'] {
       background: var(--db-select);
@@ -223,7 +229,7 @@ function pick(entry: PlaygroundEntry) {
   /* The eye is the last thing in its row, laid over the row's right end so
      the count keeps its place under the rows without one. */
   &-item &-row {
-    padding-right: 40px;
+    padding-right: 48px;
   }
 
   &-name {
@@ -244,9 +250,9 @@ function pick(entry: PlaygroundEntry) {
   &-count {
     flex-shrink: 0;
     font-family: var(--db-font-mono);
-    font-size: 12px;
-    line-height: 16px;
-    color: var(--db-muted);
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--db-ink-2);
   }
 
   &-dot {
@@ -264,15 +270,25 @@ function pick(entry: PlaygroundEntry) {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     padding: 0;
     border: 0;
-    border-radius: var(--db-radius-1);
+    border-radius: 50%;
     background: transparent;
     color: var(--db-ink-2);
     transform: translateY(-50%);
     cursor: pointer;
+    transition: background-color 0.12s;
+
+    &:hover {
+      background: color-mix(in srgb, var(--db-ink) 8%, transparent);
+    }
+
+    /* On the yellow of the chosen row it takes the row's dark text. */
+    .pg-entries-row[aria-pressed='true'] ~ & {
+      color: var(--db-select-text);
+    }
 
     &[aria-pressed='true'] {
       color: var(--db-muted);

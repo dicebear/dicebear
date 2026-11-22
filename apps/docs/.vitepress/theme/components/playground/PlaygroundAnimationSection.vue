@@ -68,7 +68,7 @@ function resetAll() {
 
 <template>
   <div class="pg-animation">
-    <div class="pg-animation-switch">
+    <div class="pg-switch-row">
       <label :for="switchId">Play animations</label>
       <PlaygroundFieldReset v-if="anythingSet" @click="resetAll()" />
       <SiteSwitch :id="switchId" v-model="animation" />
@@ -109,21 +109,6 @@ function resetAll() {
 .pg-animation {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.pg-animation-switch {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  label {
-    flex: 1;
-    font-size: 15px;
-    line-height: 24px;
-    font-weight: 600;
-    color: var(--db-ink);
-    cursor: pointer;
-  }
+  gap: 22px;
 }
 </style>

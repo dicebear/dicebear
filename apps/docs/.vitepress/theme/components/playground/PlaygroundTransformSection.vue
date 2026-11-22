@@ -138,8 +138,7 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
   }
 
   .pg-transform-flip :deep(.site-segmented-item) {
-    padding: 0 8px;
-    font-size: 13px;
+    padding: 0 10px;
   }
 }
 </style>

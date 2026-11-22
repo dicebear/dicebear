@@ -5,7 +5,7 @@ defineEmits<{ click: [] }>();
 <template>
   <button
     type="button"
-    class="pg-field-reset hv-link"
+    class="site-pill site-pill-outline site-pill-sm pg-field-reset"
     aria-label="Reset to default"
     @click="$emit('click')"
   >

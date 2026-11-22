@@ -15,7 +15,7 @@ const props = withDefaults(
       icon?: Component;
     }[];
     ariaLabel?: string;
-    size?: 'sm' | 'md';
+    size?: 'sm' | 'md' | 'lg';
     fluid?: boolean;
     disabled?: boolean;
   }>(),
@@ -97,7 +97,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
       <component
         :is="option.icon"
         v-if="option.icon"
-        :size="16"
+        :size="size === 'lg' ? 20 : 16"
         aria-hidden="true"
       />
       <span v-else class="site-segmented-label">{{ option.label }}</span>
@@ -107,7 +107,9 @@ function onKeydown(event: KeyboardEvent, index: number) {
 
 <style scoped lang="scss">
 /* The track and the segments are the shared `site-seg` and `site-pill-tab`;
-   this adds the square icon segment and the small size. */
+   this adds the square icon segment and the small and large sizes. The
+   track is as high as a field or a button of the same size: sm 36, md 44,
+   lg 56. */
 .site-segmented {
   &-item {
     &[aria-checked='true'] {
@@ -115,7 +117,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
     }
 
     &.is-icon {
-      width: 40px;
+      width: 36px;
       padding: 0;
     }
   }
@@ -127,18 +129,33 @@ function onKeydown(event: KeyboardEvent, index: number) {
   }
 
   &.is-sm {
-    padding: 3px;
-    border-radius: 20px;
+    border-radius: 18px;
   }
 
   &.is-sm &-item {
-    height: 32px;
+    height: 28px;
     padding: 0 12px;
-    border-radius: 16px;
+    border-radius: 14px;
     font-size: 14px;
 
     &.is-icon {
-      width: 32px;
+      width: 28px;
+      padding: 0;
+    }
+  }
+
+  &.is-lg {
+    border-radius: 28px;
+  }
+
+  &.is-lg &-item {
+    height: 48px;
+    padding: 0 22px;
+    border-radius: 24px;
+    font-size: 17px;
+
+    &.is-icon {
+      width: 48px;
       padding: 0;
     }
   }
