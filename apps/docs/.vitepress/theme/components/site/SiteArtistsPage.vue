@@ -183,7 +183,7 @@ const FAN = [
           its artist chose.
         </p>
       </div>
-      <div class="site-rows is-strong is-between site-artists-rows">
+      <div class="site-rows is-between site-artists-rows">
         <div
           v-for="artist in artists"
           :key="artist.name"
@@ -354,22 +354,23 @@ const FAN = [
     }
   }
 
-  &-rows {
-    border-top: 2px solid var(--db-rule);
-  }
-
-  /* An artist: the name and the link on the left, the styles on the right. */
+  /* An artist: the name and the link on the left, the styles on the right.
+     The one line of the list runs between the artists. */
   &-artist {
     display: flex;
     flex-wrap: wrap;
     gap: 16px clamp(32px, 5vw, 80px);
 
-    .is-strong > & {
-      padding: 28px 0 40px;
+    .site-rows > & {
+      padding: 32px 0;
     }
 
     .is-between > &:first-child {
-      padding-top: 28px;
+      padding-top: 0;
+    }
+
+    .is-between > &:last-child {
+      padding-bottom: 0;
     }
 
     &-head {
@@ -387,20 +388,28 @@ const FAN = [
     margin-top: 16px;
   }
 
+  /* The styles part by space alone. The negative margin keeps the avatars
+     and arrows on the column's edge while a row's hover ground reaches past
+     them. */
   &-styles {
     flex: 999 1 520px;
+    gap: 2px;
     min-width: 0;
+    margin: -8px -12px;
+    border-bottom: 0;
   }
 
   &-style {
     gap: 8px 28px;
 
     .site-rows > & {
-      padding: 12px 0;
+      padding: 8px 12px;
+      border-top: 0;
+      border-radius: 22px;
     }
 
-    &:first-child {
-      border-top: 0;
+    &:hover {
+      background: color-mix(in srgb, var(--db-ink) 7%, transparent);
     }
 
     &-name {
@@ -422,6 +431,37 @@ const FAN = [
       text-decoration: underline;
       text-decoration-thickness: 2px;
       text-underline-offset: 4px;
+    }
+
+    /* On a phone the name and the license stack beside the avatar, with
+       the arrow at the end of the row. */
+    @media (max-width: 767px) {
+      .site-rows > & {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 2px 14px;
+      }
+
+      > :first-child,
+      > svg {
+        grid-row: 1 / span 2;
+      }
+
+      > svg {
+        grid-column: 3;
+      }
+
+      &-name {
+        grid-column: 2;
+        align-self: end;
+      }
+
+      &-license {
+        grid-column: 2;
+        align-self: start;
+        color: var(--db-muted);
+      }
     }
   }
 
