@@ -144,7 +144,7 @@ const optionsHint = computed(() =>
       v-if="hasPopularity"
       id="popularity"
       title="Popularity"
-      hint="Counted from the requests to the hosted API, per website and week."
+      hint="Counted from the requests to the hosted API, per website and month."
     >
       <SiteStylePopularity :style-name="slug" />
     </SiteSection>

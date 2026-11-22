@@ -1,19 +1,19 @@
 /**
  * The usage numbers of the home page, read from the public stats endpoint
- * after mount: the monthly API requests of the last year, the package
- * downloads of the latest complete month and the websites of the latest
- * complete week. Everything is empty until the numbers have arrived.
+ * after mount: the monthly API requests of the last year, and the package
+ * downloads and websites of the latest complete month. Everything is empty
+ * until the numbers have arrived.
  */
 import { computed } from 'vue';
 import {
   aggregateMonthly,
-  averageWeeklyWebsites,
+  completeMonths,
+  daysInMonth,
   formatMonthKey,
   useApiStatsRaw,
 } from '@theme/composables/useApiStats';
 
 const MAX_MONTHS = 12;
-const WEBSITES_STEP = 10_000;
 const SECONDS_PER_DAY = 86_400;
 
 /** 1.5 billion, 2.29 million: numbers at display size read as words. */
@@ -47,7 +47,6 @@ export function compactNumber(value: number): string {
 export function useUsageStats() {
   const stats = useApiStatsRaw();
 
-  /** Complete months only. A month cut off at either end would read as a dip. */
   const months = computed(() => {
     const requests = stats.value?.requests;
 
@@ -55,10 +54,7 @@ export function useUsageStats() {
       return [];
     }
 
-    const firstDay = Object.keys(requests).sort()[0] ?? '';
-    const all = aggregateMonthly(requests).slice(0, -1);
-
-    return (firstDay.endsWith('-01') ? all : all.slice(1))
+    return completeMonths(requests)
       .slice(-MAX_MONTHS)
       .map((month) => ({
         ...month,
@@ -89,23 +85,11 @@ export function useUsageStats() {
     );
   });
 
-  /** Websites that asked the hosted API in the latest complete week. */
-  const websites = computed(() => {
-    const referers = stats.value?.weekly?.referers;
-    const week = referers ? Object.keys(referers).sort().at(-1) : undefined;
-    const count = week && referers ? referers[week] : 0;
-
-    return count >= WEBSITES_STEP
-      ? Math.floor(count / WEBSITES_STEP) * WEBSITES_STEP
-      : 0;
-  });
-
-  /** Websites a week in the month the requests end with, on average. */
+  /** Websites that asked the hosted API in the month the requests end with. */
   const monthlyWebsites = computed(() => {
     const key = last.value?.key;
-    const referers = stats.value?.weekly?.referers;
 
-    return key && referers ? averageWeeklyWebsites(referers, key) : null;
+    return key ? (stats.value?.monthly?.referers[key] ?? null) : null;
   });
 
   /** Requests a second over the month the requests end with. */
@@ -114,10 +98,9 @@ export function useUsageStats() {
       return null;
     }
 
-    const [year, month] = last.value.key.split('-').map(Number);
-    const days = new Date(Date.UTC(year, month, 0)).getUTCDate();
-
-    return Math.round(last.value.total / (days * SECONDS_PER_DAY));
+    return Math.round(
+      last.value.total / (daysInMonth(last.value.key) * SECONDS_PER_DAY),
+    );
   });
 
   /** Growth in percent from the first month shown to the last. */
@@ -134,7 +117,6 @@ export function useUsageStats() {
     first,
     last,
     downloads,
-    websites,
     monthlyWebsites,
     perSecond,
     growth,

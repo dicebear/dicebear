@@ -53,7 +53,7 @@ const figures = computed(() => {
     list.push({
       tone: 'is-sky',
       value: tileNumber(monthlyWebsites.value),
-      label: 'websites a week',
+      label: `websites in ${last.value?.name}`,
     });
   }
 
@@ -77,7 +77,7 @@ const figures = computed(() => {
     list.push({
       tone: 'is-sun',
       value: tileNumber(downloads.value),
-      label: 'package downloads a month',
+      label: `package downloads in ${last.value?.name}`,
     });
   }
 
@@ -306,6 +306,11 @@ const label = computed(() =>
     display: flex;
     align-items: flex-end;
     min-height: clamp(120px, 13vw, 190px);
+
+    /* While one figure is missing, the last tile closes the row. */
+    &:nth-child(4):last-child {
+      grid-column: span 2;
+    }
 
     @media (max-width: 639px) {
       align-items: flex-start;

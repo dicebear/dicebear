@@ -1,15 +1,12 @@
 <script setup lang="ts">
 /**
  * How much the style is used on the hosted API: rank, websites and trend as
- * facts, and the last twelve weeks as a line. Renders nothing until the
+ * facts, and the last twelve complete months as a line. Renders nothing until the
  * stats have loaded, and nothing at all for a style without traffic.
  */
 import { computed } from 'vue';
 import { kebabCase } from 'change-case';
-import {
-  SPARK_WEEKS,
-  useStyleRankings,
-} from '@theme/composables/useStyleRankings';
+import { useStyleRankings } from '@theme/composables/useStyleRankings';
 import { formatGrowth, growthDirection } from '@theme/utils/statsTrends';
 import {
   seriesAreaPath,
@@ -21,7 +18,13 @@ const props = defineProps<{
   styleName: string;
 }>();
 
-const { rankings, rankingByName, currentWeekLabel } = useStyleRankings();
+const {
+  rankings,
+  rankingByName,
+  currentMonthLabel,
+  previousMonthLabel,
+  sparkMonths,
+} = useStyleRankings();
 
 const row = computed(
   () => rankingByName.value?.[kebabCase(props.styleName)] ?? null,
@@ -61,37 +64,35 @@ const chart = computed(() => {
       <div class="site-fact">
         <b>Rank</b>
         <span>
-          #{{ row.rank }} of the {{ totalRanked }} styles requested in the week
-          of {{ currentWeekLabel }}
+          #{{ row.rank }} of the {{ totalRanked }} styles requested in
+          {{ currentMonthLabel }}
         </span>
       </div>
       <div class="site-fact">
         <b>Websites</b>
         <span>
           {{ row.websites.toLocaleString('en') }} requested this style that
-          week, {{ row.share.toFixed(1) }}% of all
+          month, {{ row.share.toFixed(1) }}% of all
         </span>
       </div>
-      <div class="site-fact">
+      <div v-if="previousMonthLabel" class="site-fact">
         <b>Trend</b>
         <span>
           <span class="site-style-popularity-trend" :class="`is-${direction}`">
             {{ row.isNew ? 'New' : formatGrowth(row.growth) }}
           </span>
-          against the four weeks before
+          against {{ previousMonthLabel }}
         </span>
       </div>
     </div>
     <div v-if="chart" class="site-style-popularity-chart">
-      <span class="site-label"
-        >Websites per week, last {{ SPARK_WEEKS }} weeks</span
-      >
+      <span class="site-label">Websites per month</span>
       <svg
         class="site-style-popularity-svg"
         :viewBox="`0 0 ${WIDTH} ${HEIGHT}`"
         preserveAspectRatio="none"
         role="img"
-        :aria-label="`Websites per week over the last ${SPARK_WEEKS} weeks`"
+        :aria-label="`Websites per month from ${sparkMonths[0]} to ${sparkMonths.at(-1)}`"
       >
         <path :d="chart.area" class="site-style-popularity-area" />
         <path :d="chart.line" class="site-style-popularity-line" />
@@ -103,8 +104,8 @@ const chart = computed(() => {
         />
       </svg>
       <div class="site-style-popularity-axis">
-        <span class="site-small">{{ SPARK_WEEKS }} weeks ago</span>
-        <span class="site-small">Week of {{ currentWeekLabel }}</span>
+        <span class="site-small">{{ sparkMonths[0] }}</span>
+        <span class="site-small">{{ sparkMonths.at(-1) }}</span>
       </div>
       <a href="/stats/" class="site-link-arrow site-style-popularity-link">
         Style rankings and trends

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * The statistics page: the head, the figures as color tiles (the request
- * rate first, then the latest complete month), the weeks as bars with one
+ * rate first, then the latest complete month), the months as bars with one
  * chip per source, the style rankings with a podium, and the shares of API
  * versions and output formats. Everything arrives after mount; the tiles
  * keep their room until then.
@@ -9,6 +9,7 @@
 import { computed, ref } from 'vue';
 import { formatNumber } from '@theme/utils/format';
 import { spellNumber, useStatsCharts } from '@theme/composables/useStatsCharts';
+import { useStyleRankings } from '@theme/composables/useStyleRankings';
 import SiteAvatar from './SiteAvatar.vue';
 import SitePageHead from './SitePageHead.vue';
 import SiteSection from './SiteSection.vue';
@@ -18,15 +19,24 @@ import SiteStatsShares from './SiteStatsShares.vue';
 
 const {
   rankings,
-  currentWeekLabel,
+  currentMonthLabel,
   requests,
   downloads,
   requestsPerSecond,
   month,
   versions,
   formats,
-  websites,
 } = useStatsCharts();
+
+const { monthly, previousMonthLabel } = useStyleRankings();
+
+/** The websites of the month the rankings stand for. */
+const rankedWebsites = computed(() => {
+  const referers = monthly.value?.referers;
+  const key = referers ? Object.keys(referers).sort().at(-1) : undefined;
+
+  return key && referers ? referers[key] : null;
+});
 
 const perSecond = computed(() =>
   requestsPerSecond.value ? Math.round(requestsPerSecond.value) : null,
@@ -51,9 +61,9 @@ const CLOUD = [
   { style: 'shapes', x: 84, y: 74, w: 10.8, turn: 8 },
 ];
 
-/* Week by week */
+/* Month by month */
 
-const WEEKS = 26;
+const MONTHS = 12;
 const LABELS = 6;
 
 const source = ref('api');
@@ -70,20 +80,20 @@ const series = computed(() =>
       null),
 );
 
-const weeks = computed(() => {
+const bars = computed(() => {
   const s = series.value;
 
   if (!s) return [];
 
-  const labels = s.labels.slice(-WEEKS);
-  const values = s.values.slice(-WEEKS);
+  const labels = s.labels.slice(-MONTHS);
+  const values = s.values.slice(-MONTHS);
   const top = Math.max(...values, 1);
 
   return values.map((value, index) => ({
     label: labels[index],
     value,
     height: `${Math.max(2, (value / top) * 100).toFixed(1)}%`,
-    // Older weeks fade, the latest stands in full color.
+    // Older months fade, the latest stands in full color.
     opacity: (0.35 + (0.65 * index) / Math.max(1, values.length - 1)).toFixed(
       2,
     ),
@@ -91,9 +101,9 @@ const weeks = computed(() => {
 });
 
 const axis = computed(() => {
-  const list = weeks.value;
+  const list = bars.value;
 
-  if (list.length === 0) return [];
+  if (list.length <= LABELS) return list.map((bar) => bar.label);
 
   const step = (list.length - 1) / (LABELS - 1);
 
@@ -104,15 +114,15 @@ const axis = computed(() => {
 });
 
 const chartLabel = computed(() => {
-  const list = weeks.value;
+  const list = bars.value;
   const name = sources.value.find((s) => s.key === source.value)?.label;
 
-  if (list.length === 0) return `Weekly totals for ${name}`;
+  if (list.length === 0) return `Monthly totals for ${name}`;
 
   const first = list[0];
   const last = list[list.length - 1];
 
-  return `Weekly totals for ${name} over the last ${list.length} complete weeks, from ${formatNumber(first.value)} in the week of ${first.label} to ${formatNumber(last.value)} in the week of ${last.label}`;
+  return `Monthly totals for ${name} over the last ${list.length} complete months, from ${formatNumber(first.value)} in ${first.label} to ${formatNumber(last.value)} in ${last.label}`;
 });
 </script>
 
@@ -123,7 +133,7 @@ const chartLabel = computed(() => {
       title="In numbers"
     >
       Every avatar the hosted API serves is counted, and the package registries
-      report their downloads. The page updates once a week.
+      report their downloads. All figures cover complete calendar months.
     </SitePageHead>
 
     <section class="site-stats-page-figures" aria-label="The figures">
@@ -133,9 +143,9 @@ const chartLabel = computed(() => {
           :value="perSecond?.toLocaleString('en-US') ?? '\xa0'"
           label="avatars a second"
           :note="
-            perDay
-              ? `On average over the last seven days. That is ${perDay} a day.`
-              : 'On average over the last seven days.'
+            month && perDay
+              ? `On average in ${month.label}. That is ${perDay} a day.`
+              : undefined
           "
         />
         <div class="site-stats-page-cloud" aria-hidden="true">
@@ -164,11 +174,14 @@ const chartLabel = computed(() => {
             :note="month?.label"
           />
         </div>
-        <div class="site-box is-tile is-lilac">
+        <div
+          v-if="!month || month.websites !== null"
+          class="site-box is-tile is-lilac"
+        >
           <SiteStat
             :value="month?.websites?.toLocaleString('en-US') ?? '\xa0'"
-            label="websites a week"
-            :note="month ? `${month.label}, on average` : undefined"
+            label="websites"
+            :note="month?.label"
           />
         </div>
         <div class="site-box is-tile is-mint">
@@ -207,9 +220,9 @@ const chartLabel = computed(() => {
     <SiteSection
       tone="lilac"
       layout="stack"
-      title="Week by week"
-      hint="Weekly totals for the hosted HTTP API and the package registries. A week shows up once it is complete."
-      class="site-stats-page-weeks"
+      title="Month by month"
+      hint="Monthly totals for the hosted HTTP API and the package registries. A month shows up once it is complete."
+      class="site-stats-page-months"
     >
       <div class="site-stats-page-sources" role="group" aria-label="Source">
         <button
@@ -226,10 +239,10 @@ const chartLabel = computed(() => {
       <div class="site-stats-page-chart">
         <div class="site-stats-page-bars" role="img" :aria-label="chartLabel">
           <span
-            v-for="week in weeks"
-            :key="week.label"
-            :title="`${week.label}: ${formatNumber(week.value)}`"
-            :style="{ height: week.height, opacity: week.opacity }"
+            v-for="bar in bars"
+            :key="bar.label"
+            :title="`${bar.label}: ${formatNumber(bar.value)}`"
+            :style="{ height: bar.height, opacity: bar.opacity }"
           ></span>
         </div>
         <div class="site-stats-page-axis" aria-hidden="true">
@@ -239,13 +252,15 @@ const chartLabel = computed(() => {
     </SiteSection>
 
     <SiteStatsRankings
-      v-if="rankings && currentWeekLabel"
+      v-if="rankings && currentMonthLabel"
       :rows="rankings"
-      :week-label="currentWeekLabel"
-      :websites="websites"
+      :month-label="currentMonthLabel"
+      :previous-month="previousMonthLabel"
+      :websites="rankedWebsites"
     />
 
     <SiteSection
+      v-if="versions.length || formats.length"
       tone="soft"
       layout="stack"
       title="Versions and formats"
@@ -254,12 +269,12 @@ const chartLabel = computed(() => {
       <div class="site-pair is-top">
         <SiteStatsShares
           title="API versions"
-          :lead="`Share of the websites active in the week of ${currentWeekLabel ?? ''}.`"
+          :lead="`Share of the websites active in ${currentMonthLabel ?? ''}.`"
           :items="versions"
         />
         <SiteStatsShares
           title="Output formats"
-          lead="Share of the websites active in the same week."
+          lead="Share of the websites active in the same month."
           :items="formats"
         />
       </div>
@@ -322,7 +337,7 @@ const chartLabel = computed(() => {
     gap: 12px;
   }
 
-  &-weeks {
+  &-months {
     margin-top: var(--db-edge);
   }
 
@@ -332,7 +347,7 @@ const chartLabel = computed(() => {
     gap: 8px;
   }
 
-  /* Bars with round tops, the older weeks fainter. */
+  /* Bars with round tops, the older months fainter. */
   &-bars {
     display: flex;
     align-items: flex-end;

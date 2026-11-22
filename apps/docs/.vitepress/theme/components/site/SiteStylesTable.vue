@@ -58,9 +58,9 @@ const sortOptions: { label: string; value: SortMode }[] = [
 const sortHints: Record<SortMode, string | undefined> = {
   name: undefined,
   popular:
-    'Ranked by the number of websites that requested the style in the last complete week.',
+    'Ranked by the number of websites that requested the style in the last complete month.',
   trending:
-    'The past four weeks against the four before. New styles come first.',
+    'The last complete month against the one before. New styles come first.',
 };
 
 // One category at a time, so the sidebar lists them as radios. The composable

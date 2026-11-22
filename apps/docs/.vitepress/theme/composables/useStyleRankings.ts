@@ -1,20 +1,20 @@
 import { computed } from 'vue';
-import { apiStatsData, useApiStatsRaw } from './useApiStats';
+import { apiStatsData, formatMonthKey, useApiStatsRaw } from './useApiStats';
 import {
-  buildWeeklySeries,
+  buildMonthlySeries,
   computeTrend,
-  formatWeekRange,
+  previousMonthKey,
   type StyleRankingRow,
 } from '../utils/statsTrends';
 import { findUncategorizedStyles } from '../config/styleCategories';
 
-export const SPARK_WEEKS = 12;
+export const SPARK_MONTHS = 12;
 
 /**
- * The style ranking derived from the stats API's weekly unique-referer
+ * The style ranking derived from the stats API's monthly unique-referer
  * counts, shared by the statistics page, the style pages, and the styles
  * overview so all three show the same numbers. Everything is null until the
- * client fetch has delivered a payload that carries the weekly aggregates.
+ * client fetch has delivered a payload that carries the monthly aggregates.
  *
  * The computeds live at module scope, like the caches in useApiStats: they
  * depend only on the shared fetch state, so every consumer shares one
@@ -23,8 +23,8 @@ export const SPARK_WEEKS = 12;
 
 const stats = apiStatsData;
 
-const weekly = computed(() => {
-  const data = stats.value?.weekly;
+const monthly = computed(() => {
+  const data = stats.value?.monthly;
 
   if (!data || Object.keys(data.styles).length === 0) {
     return null;
@@ -33,42 +33,66 @@ const weekly = computed(() => {
   return data;
 });
 
-const styleWeekly = computed(() =>
-  weekly.value ? buildWeeklySeries(weekly.value.styles) : null,
+const styleMonthly = computed(() =>
+  monthly.value ? buildMonthlySeries(monthly.value.styles) : null,
 );
 
-const currentWeekLabel = computed(() => {
-  const weeks = styleWeekly.value?.weeks;
+const currentMonth = computed(() => styleMonthly.value?.months.at(-1) ?? null);
 
-  if (!weeks || weeks.length === 0) {
+/** "October 2026": the month every ranking figure belongs to. */
+const currentMonthLabel = computed(() =>
+  currentMonth.value
+    ? formatMonthKey(currentMonth.value, { month: 'long', year: 'numeric' })
+    : null,
+);
+
+/** The month the trend compares with, when it has complete data. */
+const previousMonth = computed(() => {
+  const months = styleMonthly.value?.months;
+
+  if (!months || months.length < 2 || !currentMonth.value) {
     return null;
   }
 
-  return formatWeekRange(weeks[weeks.length - 1]);
+  const key = months[months.length - 2];
+
+  return key === previousMonthKey(currentMonth.value) ? key : null;
 });
 
-const rankings = computed<StyleRankingRow[] | null>(() => {
-  const sw = styleWeekly.value;
+const previousMonthLabel = computed(() =>
+  previousMonth.value
+    ? formatMonthKey(previousMonth.value, { month: 'long' })
+    : null,
+);
 
-  if (!sw || sw.weeks.length === 0 || !weekly.value) {
+/** The months the line on a style's page runs over, as short labels. */
+const sparkMonths = computed(() =>
+  (styleMonthly.value?.months ?? [])
+    .slice(-SPARK_MONTHS)
+    .map((key) => formatMonthKey(key, { month: 'short', year: 'numeric' })),
+);
+
+const rankings = computed<StyleRankingRow[] | null>(() => {
+  const series = styleMonthly.value;
+
+  if (!series || !currentMonth.value || !monthly.value) {
     return null;
   }
 
-  const lastWeek = sw.weeks[sw.weeks.length - 1];
-  const total = weekly.value.referers[lastWeek] ?? 0;
+  const total = monthly.value.referers[currentMonth.value] ?? 0;
 
   // The stats count whatever the API serves, which under old version paths
   // includes styles that are gone from the current catalog. The docs show
   // the catalog, so names without a docs page stay out of the ranking.
-  const names = Object.keys(sw.byName);
+  const names = Object.keys(series.byName);
   const unknown = new Set(findUncategorizedStyles(names));
 
   const rows = names
     .filter((name) => !unknown.has(name))
     .map((name) => {
-      const values = sw.byName[name];
+      const values = series.byName[name];
       const websites = values[values.length - 1];
-      const trend = computeTrend(values);
+      const trend = computeTrend(values, previousMonth.value !== null);
 
       return {
         rank: 0,
@@ -77,8 +101,7 @@ const rankings = computed<StyleRankingRow[] | null>(() => {
         share: total > 0 ? (websites / total) * 100 : 0,
         growth: trend.growth,
         isNew: trend.isNew,
-        recentAvg: trend.recentAvg,
-        spark: values.slice(-SPARK_WEEKS),
+        spark: values.slice(-SPARK_MONTHS),
       };
     });
 
@@ -105,8 +128,11 @@ export function useStyleRankings() {
 
   return {
     stats,
-    weekly,
-    currentWeekLabel,
+    monthly,
+    currentMonth,
+    currentMonthLabel,
+    previousMonthLabel,
+    sparkMonths,
     rankings,
     rankingByName,
   };

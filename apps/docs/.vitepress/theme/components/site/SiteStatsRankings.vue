@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * Every style ranked by the websites that requested it in the latest
- * complete week. The first three stand on a podium, the next ten in a list
+ * complete month. The first three stand on a podium, the next ten in a list
  * with a bar for their share and a tag for their trend; the rest on
  * request, and a search across all of them.
  */
@@ -16,7 +16,9 @@ import SiteSearch from './SiteSearch.vue';
 
 const props = defineProps<{
   rows: StyleRankingRow[];
-  weekLabel: string;
+  monthLabel: string;
+  /** The month the trend compares with, when it has complete data. */
+  previousMonth: string | null;
   websites: number | null;
 }>();
 
@@ -78,9 +80,11 @@ function seed(name: string): string {
     <div class="site-pair">
       <h2 class="site-headline">Style rankings</h2>
       <p class="site-lead">
-        Every style, ranked by the number of websites that requested it in the
-        week of {{ weekLabel }}. The trend compares the past four weeks with the
-        four before.
+        Every style, ranked by the number of websites that requested it in
+        {{ monthLabel }}.
+        <template v-if="previousMonth"
+          >The trend compares it with {{ previousMonth }}.</template
+        >
       </p>
     </div>
 

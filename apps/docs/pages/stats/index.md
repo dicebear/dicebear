@@ -3,7 +3,7 @@ layout: page
 title: Statistics | DiceBear Avatar API Usage & Trends
 titleTemplate: false
 description: >
-  Live statistics for the DiceBear Avatar API: weekly requests, bandwidth,
+  Live statistics for the DiceBear Avatar API: monthly requests, bandwidth,
   package downloads, style rankings with trends, version distribution, and
   output formats.
 aside: false

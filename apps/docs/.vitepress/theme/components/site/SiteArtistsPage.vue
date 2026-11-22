@@ -22,7 +22,7 @@ import SitePageHead from './SitePageHead.vue';
 import SiteSection from './SiteSection.vue';
 
 const { theme } = useData<ThemeOptions>();
-const { rankings, currentWeekLabel } = useStyleRankings();
+const { rankings, currentMonthLabel } = useStyleRankings();
 
 const artists = computed(() => guestArtists(theme.value.avatarStyles));
 const guestStyles = computed(() => artists.value.flatMap((a) => a.styles));
@@ -33,7 +33,7 @@ const ICONS: Partial<Record<ArtistLinkKind, { path: string }>> = {
   dribbble: siDribbble,
 };
 
-/** The three guest styles the most websites requested last week. */
+/** The three guest styles the most websites requested in the last month. */
 const featured = computed(() => {
   if (!rankings.value) {
     return [];
@@ -132,9 +132,9 @@ const FAN = [
       class="site-artists-featured"
     >
       <template #hint>
-        <template v-if="currentWeekLabel">
-          The three styles by guest artists that the most websites used in the
-          week of {{ currentWeekLabel }}.
+        <template v-if="currentMonthLabel">
+          The three styles by guest artists that the most websites used in
+          {{ currentMonthLabel }}.
         </template>
         <template v-else>
           The styles by guest artists that the most websites use.
@@ -160,7 +160,7 @@ const FAN = [
             <span class="site-heading">{{ item.artist }}</span>
             <span class="site-body">{{ item.style.title }}</span>
             <span class="site-artists-card-figure">{{ item.websites }}</span>
-            <span class="site-text">websites in one week</span>
+            <span class="site-text">websites in {{ currentMonthLabel }}</span>
           </a>
         </template>
         <template v-else>

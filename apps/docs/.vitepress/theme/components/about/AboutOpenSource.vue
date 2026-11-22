@@ -1,13 +1,13 @@
 <script setup lang="ts">
 /**
  * Who is behind DiceBear and what someone can rely on, on a mint block. The last row counts
- * the websites of the latest complete week, which arrives with the
+ * the websites of the latest complete month, which arrives with the
  * statistics after the page has mounted.
  */
 import { computed } from 'vue';
 import { siGithub } from 'simple-icons';
 import UiIcon from '@theme/components/ui/UiIcon.vue';
-import { useApiStatsRaw } from '@theme/composables/useApiStats';
+import { formatMonthKey, useApiStatsRaw } from '@theme/composables/useApiStats';
 import SiteSection from '../site/SiteSection.vue';
 import AboutRows, { type AboutRow } from './AboutRows.vue';
 
@@ -16,22 +16,18 @@ const WEBSITES_STEP = 10_000;
 const stats = useApiStatsRaw();
 
 const realUse = computed(() => {
-  const referers = stats.value?.weekly?.referers;
-  const week = referers ? Object.keys(referers).sort().at(-1) : undefined;
-  const count = week && referers ? referers[week] : 0;
+  const referers = stats.value?.monthly?.referers;
+  const month = referers ? Object.keys(referers).sort().at(-1) : undefined;
+  const count = month && referers ? referers[month] : 0;
 
-  if (!week || count < WEBSITES_STEP) {
-    return 'Websites request avatars from the hosted API every week.';
+  if (!month || count < WEBSITES_STEP) {
+    return 'Websites request avatars from the hosted API every month.';
   }
 
   const floor = Math.floor(count / WEBSITES_STEP) * WEBSITES_STEP;
-  const day = new Date(`${week}T00:00:00Z`).toLocaleDateString('en', {
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'UTC',
-  });
+  const label = formatMonthKey(month, { month: 'long', year: 'numeric' });
 
-  return `More than ${floor.toLocaleString('en')} websites requested avatars in the week of ${day}.`;
+  return `More than ${floor.toLocaleString('en')} websites requested avatars in ${label}.`;
 });
 
 const rows = computed<AboutRow[]>(() => [
