@@ -3,10 +3,13 @@
  * A code card. The header row shows one tab per language when `tabs` is set
  * and the language label otherwise; the copy button sits at its right end.
  * The card keeps its own neutral ground, so it reads the same in every
- * block.
+ * block. Text between the marks of `utils/codeMarks` is highlighted and left
+ * out of the copy. The `label` slot replaces the language label, the `foot`
+ * slot takes a link under the code.
  */
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { escapeHtml } from '@theme/utils/escape';
+import { marksToHtml, stripMarks } from '@theme/utils/codeMarks';
 import { loadHljs, type Hljs } from '@theme/utils/hljs';
 import UiCopyButton from './UiCopyButton.vue';
 
@@ -42,7 +45,8 @@ const current = computed<{ lang?: string; code: string }>(() => {
 });
 
 const preRef = ref<HTMLPreElement>();
-const codeHtml = ref(escapeHtml(current.value.code));
+const codeHtml = ref(marksToHtml(escapeHtml(current.value.code)));
+const plain = computed(() => stripMarks(current.value.code));
 
 function scrollPreToBottom() {
   if (props.scrollToBottom && preRef.value) {
@@ -52,11 +56,11 @@ function scrollPreToBottom() {
 
 function updateCodeHtml(instance?: Hljs) {
   const { lang, code } = current.value;
-  if (lang && instance?.getLanguage(lang)) {
-    codeHtml.value = instance.highlight(code, { language: lang }).value;
-  } else {
-    codeHtml.value = escapeHtml(code);
-  }
+  codeHtml.value = marksToHtml(
+    lang && instance?.getLanguage(lang)
+      ? instance.highlight(code, { language: lang }).value
+      : escapeHtml(code),
+  );
 }
 
 onMounted(async () => {
@@ -90,14 +94,15 @@ watch(current, async () => {
           {{ tab.label }}
         </button>
       </div>
-      <span v-else class="ui-code-lang">{{ current.lang }}</span>
-      <UiCopyButton
-        class="ui-code-copy"
-        :text="current.code"
-        :duration="3000"
-      />
+      <span v-else class="ui-code-lang">
+        <slot name="label">{{ current.lang }}</slot>
+      </span>
+      <UiCopyButton class="ui-code-copy" :text="plain" :duration="3000" />
     </div>
     <pre ref="preRef" class="ui-code-text"><code v-html="codeHtml" /></pre>
+    <div v-if="$slots.foot" class="ui-code-foot">
+      <slot name="foot" />
+    </div>
   </div>
 </template>
 
@@ -178,6 +183,14 @@ watch(current, async () => {
     }
   }
 
+  &-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    padding: 0 clamp(20px, 2.6vw, 32px) 16px;
+  }
+
   &-copy {
     /* The tooltip opens to the left, above it the frame would clip it. */
     &:hover::after,
@@ -205,5 +218,13 @@ watch(current, async () => {
 .ui-code-text .hljs-comment {
   color: var(--db-muted);
   font-style: italic;
+}
+/* The reader's own input, such as the seed of the demo. */
+.ui-code-text .code-mark {
+  padding: 2px 0;
+  border-radius: 3px;
+  background: var(--db-sun);
+  font-weight: 600;
+  color: var(--db-on);
 }
 </style>

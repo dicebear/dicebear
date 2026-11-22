@@ -1,6 +1,7 @@
 /**
  * Lists with dividers. `site-rows` holds `site-row`s with a hairline
- * between them; `is-strong` makes the lines the 2px rule of a block.
+ * between them; `is-strong` makes the lines the 2px rule of a block,
+ * `is-between` leaves out the lines at both ends.
  * `site-facts` is the same list as term and text.
  */
 .site-rows {
@@ -11,6 +12,10 @@
   &.is-strong {
     border-bottom: 2px solid var(--db-rule);
   }
+
+  &.is-between {
+    border-bottom: 0;
+  }
 }
 
 .site-row {
@@ -20,6 +25,16 @@
   .is-strong > & {
     padding: 22px 0;
     border-top: 2px solid var(--db-rule);
+  }
+
+  /* Lines only between the rows, none above the first or below the last. */
+  .is-between > &:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .is-between > &:last-child {
+    padding-bottom: 0;
   }
 }
 
