@@ -5,8 +5,6 @@
 import {
   computed,
   inject,
-  onBeforeUnmount,
-  onMounted,
   provide,
   ref,
   type ComputedRef,
@@ -59,8 +57,6 @@ export interface HomeDemo {
   style: ComputedRef<HomeDemoStyle>;
   /** The options of the chosen style, the way they go into an avatar. */
   options: ComputedRef<Record<string, unknown>>;
-  /** True once someone typed or rolled. */
-  touched: Ref<boolean>;
   roll: () => void;
   setSeed: (value: string) => void;
 }
@@ -86,7 +82,6 @@ export function provideHomeDemo(config: {
 
   const seed = ref(config.seed ?? DEMO_NAMES[0]);
   const styleName = ref(config.style);
-  const touched = ref(false);
 
   const style = computed(
     () =>
@@ -105,12 +100,10 @@ export function provideHomeDemo(config: {
     const others = DEMO_NAMES.filter((name) => name !== seed.value);
 
     seed.value = others[Math.floor(Math.random() * others.length)];
-    touched.value = true;
   }
 
   function setSeed(value: string) {
     seed.value = value;
-    touched.value = true;
   }
 
   const demo: HomeDemo = {
@@ -119,7 +112,6 @@ export function provideHomeDemo(config: {
     styles,
     style,
     options,
-    touched,
     roll,
     setSeed,
   };
@@ -137,82 +129,4 @@ export function useHomeDemo(): HomeDemo {
   }
 
   return demo;
-}
-
-/**
- * Types a few names into the seed by itself until someone takes over, so the
- * field shows what it is for. Waits while `active` is false, for example
- * while the hero is out of view.
- */
-export function useSeedTyping(
-  demo: HomeDemo,
-  names: string[],
-  active: Ref<boolean> = ref(true),
-) {
-  const TYPE_MS = 200;
-  const ERASE_MS = 80;
-  const HOLD_MS = 2200;
-
-  const typing = ref(false);
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  let index = 0;
-
-  function step(erasing: boolean) {
-    if (demo.touched.value) {
-      typing.value = false;
-
-      return;
-    }
-
-    if (!active.value) {
-      timer = setTimeout(() => step(erasing), HOLD_MS);
-
-      return;
-    }
-
-    if (erasing) {
-      if (demo.seed.value.length > 0) {
-        demo.seed.value = demo.seed.value.slice(0, -1);
-        timer = setTimeout(() => step(true), ERASE_MS);
-
-        return;
-      }
-
-      index = (index + 1) % names.length;
-    }
-
-    const name = names[index];
-
-    if (demo.seed.value.length < name.length) {
-      demo.seed.value = name.slice(0, demo.seed.value.length + 1);
-      timer = setTimeout(() => step(false), TYPE_MS);
-
-      return;
-    }
-
-    timer = setTimeout(() => step(true), HOLD_MS);
-  }
-
-  function stop() {
-    clearTimeout(timer);
-    typing.value = false;
-
-    // A half-erased name would otherwise stay in the field.
-    if (!demo.touched.value && demo.seed.value !== names[index]) {
-      demo.seed.value = names[index];
-    }
-  }
-
-  onMounted(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
-
-    typing.value = true;
-    timer = setTimeout(() => step(true), HOLD_MS);
-  });
-
-  onBeforeUnmount(() => clearTimeout(timer));
-
-  return { typing, stop };
 }

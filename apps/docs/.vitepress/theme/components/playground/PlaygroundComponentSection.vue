@@ -287,31 +287,36 @@ function setRowWeight(variant: string, value: number | null) {
   background: var(--db-paper);
   font: inherit;
   cursor: pointer;
-  transition:
-    opacity var(--duration-fast) ease,
-    border-color 0.12s;
+  transition: border-color 0.12s;
 
+  /* Left out: a dashed line in the field color and a faded picture. */
   &[aria-pressed='false'] {
+    border-color: var(--db-field-border);
     border-style: dashed;
-    opacity: 0.35;
+
+    .pg-comp-tile-picture {
+      opacity: 0.4;
+    }
   }
 
   &[aria-pressed='false']:hover,
   &[aria-pressed='false']:focus-visible {
-    opacity: 0.7;
+    border-color: var(--db-ink-2);
+
+    .pg-comp-tile-picture {
+      opacity: 0.75;
+    }
   }
 
-  /* A chosen tile is the plain tile; a full set reads calm, and the faded
-     dashed ones stand out as the ones left out. */
+  /* Chosen: a solid line in the text color, so each chosen tile stands
+     out by itself (3:1 and more), not only through the faded ones. */
   &[aria-pressed='true'] {
-    border-color: transparent;
+    border-color: var(--db-ink);
   }
 
-  /* Hovering a chosen tile shows the dashed line of the unchosen ones: a
-     click will take it out. */
+  /* Hovering a chosen tile turns its line dashed: a click takes it out. */
   &[aria-pressed='true']:hover,
   &[aria-pressed='true']:focus-visible {
-    border-color: var(--db-ink-2);
     border-style: dashed;
   }
 }
@@ -340,6 +345,7 @@ function setRowWeight(variant: string, value: number | null) {
   box-sizing: border-box;
   padding: 12%;
   border-radius: calc(var(--db-radius-3) - 2px);
+  transition: opacity var(--duration-fast) ease;
 }
 
 .pg-comp-weights {

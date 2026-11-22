@@ -1,25 +1,20 @@
 <script setup lang="ts">
 /**
  * The hero. Five stickers show the seed in five styles, the one in the
- * middle large and upright. The field holds the seed and types a few names
- * by itself until someone takes over; the yellow button rolls a new one.
+ * middle large and upright. The field holds the seed and stays still until
+ * someone types; the yellow button rolls a new one.
  * The hero fills the window below the header.
  */
 import { onMounted, ref } from 'vue';
 import { useData, withBase } from 'vitepress';
 import { ArrowRight } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
-import {
-  DEMO_NAMES,
-  useHomeDemo,
-  useSeedTyping,
-} from '@theme/composables/useHomeDemo';
+import { useHomeDemo } from '@theme/composables/useHomeDemo';
 import { LINKS } from '@theme/config/home';
 import SiteAvatar from '../site/SiteAvatar.vue';
 
 const { theme } = useData<ThemeOptions>();
 const demo = useHomeDemo();
-const { stop } = useSeedTyping(demo, DEMO_NAMES.slice(0, 6));
 
 const mounted = ref(false);
 
@@ -73,7 +68,6 @@ function onInput(event: Event) {
         autocomplete="off"
         spellcheck="false"
         maxlength="40"
-        @focus="stop"
         @input="onInput"
       />
       <button
