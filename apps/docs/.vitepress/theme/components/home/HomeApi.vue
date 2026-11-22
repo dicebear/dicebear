@@ -77,7 +77,7 @@ const figures = computed(() => {
     list.push({
       tone: 'is-sun',
       value: tileNumber(downloads.value),
-      label: `package downloads in ${last.value?.name}`,
+      label: `downloads in ${last.value?.name}`,
     });
   }
 
