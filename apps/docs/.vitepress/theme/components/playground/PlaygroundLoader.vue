@@ -71,6 +71,7 @@ const entryRows = [24, 44, 44, 44, 24, 44, 44, 44, 44, 44, 24, 44, 44];
   &-toolbar {
     flex-shrink: 0;
     height: 88px;
+    border-top: 1px solid var(--db-line);
     border-bottom: 1px solid var(--db-line);
 
     &-inner {

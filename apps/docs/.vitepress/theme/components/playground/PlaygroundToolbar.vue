@@ -155,6 +155,9 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
 .pg-toolbar {
   box-sizing: border-box;
   height: 88px;
+  /* A line above as well: the bar starts the playground, apart from the
+     site's header. */
+  border-top: 1px solid var(--db-line);
   border-bottom: 1px solid var(--db-line);
 
   &-inner {
