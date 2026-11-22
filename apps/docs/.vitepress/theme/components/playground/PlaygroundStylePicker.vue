@@ -417,8 +417,8 @@ defineExpose({ focus });
     }
 
     &[aria-selected='true'] {
-      background: var(--db-tint);
-      color: var(--db-tint-text);
+      background: var(--db-select);
+      color: var(--db-select-text);
 
       .pg-picker-name {
         font-weight: 600;
@@ -460,7 +460,7 @@ defineExpose({ focus });
   &-check {
     flex-shrink: 0;
     margin-right: 2px;
-    color: var(--db-brand);
+    color: var(--db-focus);
   }
 
   &-empty {

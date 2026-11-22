@@ -99,17 +99,17 @@ function choose(preset: StylePreset) {
   cursor: pointer;
 
   &[aria-pressed='true'] {
-    background: var(--db-tint);
-    color: var(--db-tint-text);
+    background: var(--db-select);
+    color: var(--db-select-text);
     cursor: default;
 
     .pg-presets-summary {
-      color: var(--db-tint-text);
+      color: var(--db-select-text);
     }
   }
 
   &:focus-visible {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: -2px;
   }
 }

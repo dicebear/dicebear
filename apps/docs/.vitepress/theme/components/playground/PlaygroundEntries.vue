@@ -206,16 +206,16 @@ function pick(entry: PlaygroundEntry) {
     cursor: pointer;
 
     &[aria-pressed='true'] {
-      background: var(--db-tint);
-      color: var(--db-tint-text);
+      background: var(--db-select);
+      color: var(--db-select-text);
 
       .pg-entries-count {
-        color: var(--db-tint-text);
+        color: var(--db-select-text);
       }
     }
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: -2px;
     }
   }
@@ -254,7 +254,7 @@ function pick(entry: PlaygroundEntry) {
     width: 6px;
     height: 6px;
     border-radius: 3px;
-    background: var(--db-brand);
+    background: var(--db-focus);
   }
 
   &-eye {
@@ -275,11 +275,11 @@ function pick(entry: PlaygroundEntry) {
     cursor: pointer;
 
     &[aria-pressed='true'] {
-      color: var(--db-chevron);
+      color: var(--db-muted);
     }
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
   }

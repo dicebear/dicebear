@@ -9,24 +9,6 @@
  * cards use them, so they look the same wherever they open.
  */
 
-/* Tokens computed from the roles. A custom property resolves where it is
-   declared, so every place that re-points a role declares these again. */
-@mixin derived {
-  --db-brand: var(--db-focus);
-  --db-brand-text: var(--db-ink);
-  --db-tint: var(--db-select);
-  --db-tint-text: var(--db-select-text);
-  --db-chevron: var(--db-muted);
-  --db-hover-border: var(--db-ink-2);
-  --db-btn-border: var(--db-field-border);
-  --db-switch-bg: var(--db-soft);
-  --db-switch-border: var(--db-field-border);
-  --db-code-bg: var(--db-soft);
-  --db-code-bar: var(--db-soft);
-  --db-code-line: var(--db-line);
-  --db-code-ink: var(--db-ink);
-}
-
 @mixin neutral-roles {
   --db-paper: var(--db-c-paper);
   --db-panel: var(--db-c-panel);
@@ -121,7 +103,6 @@
     @error 'Unknown tone #{$name}';
   }
 
-  @include derived;
   background-color: var(--db-paper);
   color: var(--db-ink);
 }

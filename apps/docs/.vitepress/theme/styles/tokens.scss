@@ -1,5 +1,5 @@
 /**
- * The one token set of the site. Three layers:
+ * The one token set of the site. Two layers:
  *
  * 1. The palette (`--db-c-*` and the block colors). Fixed values, never
  *    reassigned, so anything can reach back to them.
@@ -7,8 +7,6 @@
  *    these. A colored box re-points them for what is inside it (see
  *    `_tone.scss`), so a heading, a link or a button needs no "on yellow"
  *    variant of its own.
- * 3. Older names that now point at a role. They keep components working
- *    until those are moved to the role names.
  *
  * Warm paper and a navy ink in light. In dark a neutral near-black with a
  * trace of warmth, so the cream text has no blue cast. Yellow and coral have
@@ -16,7 +14,6 @@
  * themes and carry dark text. Blue, violet and green go deep in dark, and
  * their bright tint becomes the accent.
  */
-@use './tone';
 
 :root {
   /* Palette: neutrals */
@@ -136,13 +133,7 @@
   --duration-slow: 0.6s;
   --duration-reveal: 0.8s;
 
-  /* Older names. Each points at the role that took its place. */
-  @include tone.derived;
-  --db-btn-hover: #24335a;
-  --db-knob: var(--db-c-panel);
-  --db-logo-mono: #000000;
   --db-container: calc(var(--db-content) + 2 * var(--db-wrap));
-  --db-gutter: var(--db-wrap);
 }
 
 .dark {
@@ -186,5 +177,4 @@
     0 24px 48px -24px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
 
   --db-btn-hover: #ffffff;
-  --db-logo-mono: #ffffff;
 }

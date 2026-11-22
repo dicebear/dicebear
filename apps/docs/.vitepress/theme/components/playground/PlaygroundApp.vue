@@ -368,7 +368,7 @@ async function showAdvanced() {
     /* The controls, the headings and the tint of a chosen row stand on the
        header's edge. The columns reach 12px past it for the room the
        controls keep to the picture's lines. */
-    padding: 0 calc(var(--db-gutter) - 12px);
+    padding: 0 calc(var(--db-wrap) - 12px);
   }
 
   /* Each sidebar has one line, towards the picture. The outer edge is the
@@ -499,10 +499,10 @@ async function showAdvanced() {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  border: 2px dashed var(--db-brand);
+  border: 2px dashed var(--db-focus);
   border-radius: var(--db-radius-3);
-  background: color-mix(in srgb, var(--db-tint) 94%, transparent);
-  color: var(--db-tint-text);
+  background: color-mix(in srgb, var(--db-select) 94%, transparent);
+  color: var(--db-select-text);
   pointer-events: none;
 
   &-icon {
@@ -513,7 +513,7 @@ async function showAdvanced() {
     height: 64px;
     border-radius: 16px;
     background: var(--db-paper);
-    color: var(--db-brand);
+    color: var(--db-focus);
   }
 
   &-title {

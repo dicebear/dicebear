@@ -238,7 +238,7 @@ defineExpose({ show: () => (open.value = true) });
   justify-content: center;
   gap: 8px;
   height: 56px;
-  border: 1px dashed var(--db-btn-border);
+  border: 1px dashed var(--db-field-border);
   border-radius: var(--db-radius-3);
   font-size: 14px;
   line-height: 20px;
@@ -246,13 +246,13 @@ defineExpose({ show: () => (open.value = true) });
   cursor: pointer;
 
   &.is-dragging {
-    border-color: var(--db-brand);
-    background: var(--db-tint);
+    border-color: var(--db-focus);
+    background: var(--db-select);
   }
 
   /* The input stays focusable, so the label shows its focus ring. */
   &:focus-within {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: 2px;
   }
 

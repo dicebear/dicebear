@@ -194,15 +194,15 @@ const sources = computedAsync<Record<string, string>>(async () => {
   }
 
   &:focus-visible {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: 3px;
   }
 
   &[aria-pressed='true'] {
-    box-shadow: 0 0 0 2px var(--db-brand);
+    box-shadow: 0 0 0 2px var(--db-focus);
 
     code {
-      color: var(--db-brand-text);
+      color: var(--db-ink);
     }
   }
 
@@ -253,7 +253,7 @@ const sources = computedAsync<Record<string, string>>(async () => {
 
   b {
     font-weight: 600;
-    color: var(--db-brand-text);
+    color: var(--db-ink);
   }
 }
 </style>

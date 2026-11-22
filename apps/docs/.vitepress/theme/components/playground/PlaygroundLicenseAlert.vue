@@ -30,7 +30,7 @@ import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
   /* The license text of the built-in styles brings its own link colors. */
   :deep(p a) {
     font-weight: 500;
-    color: var(--db-brand-text);
+    color: var(--db-ink);
     text-decoration: none;
 
     &:hover {

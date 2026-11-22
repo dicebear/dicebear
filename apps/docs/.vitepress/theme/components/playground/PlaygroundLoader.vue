@@ -61,10 +61,10 @@ const entryRows = [24, 44, 44, 44, 24, 44, 44, 44, 44, 44, 24, 44, 44];
     width: 100%;
     max-width: var(--db-container);
     margin: 0 auto;
-    padding: 0 var(--db-gutter);
+    padding: 0 var(--db-wrap);
 
     @media (min-width: 960px) {
-      padding: 0 calc(var(--db-gutter) - 12px);
+      padding: 0 calc(var(--db-wrap) - 12px);
     }
   }
 

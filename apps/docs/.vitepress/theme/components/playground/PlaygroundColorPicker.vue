@@ -137,7 +137,7 @@ function addFromPicker() {
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
-  color: var(--db-brand-text);
+  color: var(--db-ink);
   cursor: pointer;
 }
 
@@ -149,7 +149,7 @@ function addFromPicker() {
   height: 32px;
   padding: 0;
   box-sizing: border-box;
-  border: 1px dashed var(--db-btn-border);
+  border: 1px dashed var(--db-field-border);
   border-radius: var(--db-radius-1);
   background: transparent;
   color: var(--db-muted);

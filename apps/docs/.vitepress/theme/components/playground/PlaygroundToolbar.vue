@@ -161,7 +161,7 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     max-width: var(--db-container);
     height: 100%;
     margin: 0 auto;
-    padding: 0 var(--db-gutter);
+    padding: 0 var(--db-wrap);
   }
 
   /* The same three columns as the body below: the style over the list, the
@@ -209,7 +209,7 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
 
   @media (min-width: 960px) {
     &-inner {
-      padding: 0 calc(var(--db-gutter) - 12px);
+      padding: 0 calc(var(--db-wrap) - 12px);
     }
 
     /* The buttons end as far before the column's line as its content

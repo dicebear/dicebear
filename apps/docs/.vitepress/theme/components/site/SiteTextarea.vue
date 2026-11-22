@@ -62,7 +62,7 @@ defineExpose({
   }
 
   &:focus {
-    border-color: var(--db-brand);
+    border-color: var(--db-focus);
     outline: none;
   }
 

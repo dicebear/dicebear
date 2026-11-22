@@ -55,7 +55,7 @@ defineProps<{
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
-  color: var(--db-brand-text);
+  color: var(--db-ink);
   text-decoration: none;
   cursor: pointer;
 

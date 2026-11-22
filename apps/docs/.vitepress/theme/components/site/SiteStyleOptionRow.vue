@@ -510,7 +510,7 @@ function toggle() {
     }
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 4px;
     }
 

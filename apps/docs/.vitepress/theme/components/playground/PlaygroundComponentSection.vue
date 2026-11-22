@@ -303,7 +303,7 @@ function setRowWeight(variant: string, value: number | null) {
   }
 
   &[aria-pressed='true'] {
-    border-color: var(--db-brand);
+    border-color: var(--db-focus);
   }
 
   /* Hovering a chosen tile shows the dashed line of the unchosen ones, in
@@ -395,7 +395,7 @@ function setRowWeight(variant: string, value: number | null) {
     display: block;
     height: 100%;
     border-radius: 2px;
-    background: var(--db-brand);
+    background: var(--db-focus);
     transition: width var(--duration-fast) ease;
   }
 }

@@ -148,13 +148,13 @@ const chart = computed(() => {
   }
 
   &-area {
-    fill: var(--db-brand);
+    fill: var(--db-focus);
     fill-opacity: 0.08;
   }
 
   &-line {
     fill: none;
-    stroke: var(--db-brand);
+    stroke: var(--db-focus);
     stroke-width: 2;
     stroke-linejoin: round;
     stroke-linecap: round;
@@ -162,7 +162,7 @@ const chart = computed(() => {
   }
 
   &-dot {
-    fill: var(--db-brand);
+    fill: var(--db-focus);
     stroke: var(--db-paper);
     stroke-width: 2;
   }

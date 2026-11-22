@@ -487,7 +487,7 @@ defineExpose({ show: () => (open.value = true) });
 
   :deep(.site-notice a) {
     font-weight: 500;
-    color: var(--db-brand-text);
+    color: var(--db-ink);
   }
 
   &-hint {
@@ -538,7 +538,7 @@ defineExpose({ show: () => (open.value = true) });
     }
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
   }
@@ -574,7 +574,7 @@ defineExpose({ show: () => (open.value = true) });
     font-size: 14px;
     line-height: 20px;
     font-weight: 500;
-    color: var(--db-brand-text);
+    color: var(--db-ink);
     text-decoration: none;
     white-space: nowrap;
   }

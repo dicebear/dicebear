@@ -274,10 +274,9 @@ function seed(name: string): string {
   /* Rank, avatar, name, bar, share and trend in one row. */
   &-row {
     display: grid;
-    grid-template-columns: 28px 52px minmax(96px, 1.1fr) minmax(
-        0,
-        3fr
-      ) auto auto;
+    grid-template-columns:
+      28px 52px minmax(96px, 1.1fr) minmax(0, 3fr)
+      auto auto;
     gap: 8px clamp(10px, 1.6vw, 24px);
     align-items: center;
     min-height: 68px;

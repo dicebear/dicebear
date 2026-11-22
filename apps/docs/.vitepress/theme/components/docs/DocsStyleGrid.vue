@@ -67,9 +67,8 @@ const resolvedAllStylesLabel = computed(
     </a>
   </div>
 
-  <a :href="allStylesLink" class="docs-style-grid-all hv-link">
+  <a :href="allStylesLink" class="site-link-arrow">
     {{ resolvedAllStylesLabel }}
-    <ArrowRight :size="16" />
   </a>
 </template>
 
@@ -116,22 +115,6 @@ const resolvedAllStylesLabel = computed(
   &-chev {
     display: flex;
     color: var(--db-muted);
-  }
-
-  &-all {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
-    line-height: 24px;
-    font-weight: 500;
-    color: var(--db-brand-text);
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
   }
 
   @media (max-width: 767px) {

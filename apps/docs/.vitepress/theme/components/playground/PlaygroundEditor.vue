@@ -519,18 +519,18 @@ function onOwnColor(event: Event) {
     }
 
     &:hover {
-      outline: 2px solid var(--db-hover-border);
+      outline: 2px solid var(--db-ink-2);
       outline-offset: 2px;
     }
 
     &.is-active {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
 
     &:focus-visible,
     &:has(:focus-visible) {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
   }

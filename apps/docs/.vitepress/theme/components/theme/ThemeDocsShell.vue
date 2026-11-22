@@ -295,8 +295,8 @@ onKeyStroke('Escape', () => {
   .docs-local-nav-outline {
     position: absolute;
     top: 100%;
-    right: var(--db-gutter);
-    left: var(--db-gutter);
+    right: var(--db-wrap);
+    left: var(--db-wrap);
     max-height: 60vh;
     padding: 16px;
     border-radius: var(--db-radius-card);

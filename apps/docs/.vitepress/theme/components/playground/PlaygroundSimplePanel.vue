@@ -330,18 +330,18 @@ const shape = usePlaygroundShape();
     }
 
     &:hover {
-      outline: 2px solid var(--db-hover-border);
+      outline: 2px solid var(--db-ink-2);
       outline-offset: 2px;
     }
 
     &[aria-pressed='true'] {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
       cursor: default;
     }
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
   }
@@ -370,18 +370,18 @@ const shape = usePlaygroundShape();
     cursor: pointer;
 
     &:hover {
-      border-color: var(--db-hover-border);
+      border-color: var(--db-ink-2);
     }
 
     &[aria-pressed='true'],
     &.is-active {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
 
     &:focus-visible,
     &:has(:focus-visible) {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
 
@@ -427,7 +427,7 @@ const shape = usePlaygroundShape();
     cursor: pointer;
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
 

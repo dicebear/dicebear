@@ -435,10 +435,9 @@ function formatSize(bytes: number): string {
   /* Checkbox, avatar, name, bar, gzipped and minified size in one row. */
   &-row {
     display: grid;
-    grid-template-columns: 20px 40px minmax(120px, 1fr) minmax(
-        0,
-        1.4fr
-      ) 80px 80px;
+    grid-template-columns:
+      20px 40px minmax(120px, 1fr) minmax(0, 1.4fr)
+      80px 80px;
     gap: 16px;
     align-items: center;
     padding: 8px 0;

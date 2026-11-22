@@ -197,7 +197,7 @@ const canSubmit = computed(
     }
 
     &:focus-within {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
   }

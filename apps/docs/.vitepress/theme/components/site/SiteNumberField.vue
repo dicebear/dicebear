@@ -245,7 +245,7 @@ defineExpose({
   }
 
   &:has(.site-number-input:focus-visible) {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: 0;
   }
 
@@ -323,7 +323,7 @@ defineExpose({
     }
 
     &:hover:not(:disabled) {
-      background: var(--db-switch-bg);
+      background: var(--db-soft);
       color: var(--db-ink);
     }
 

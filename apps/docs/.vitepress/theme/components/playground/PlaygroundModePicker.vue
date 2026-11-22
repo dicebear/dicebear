@@ -259,7 +259,7 @@ defineExpose({ focus: () => trigger.value?.focus() });
   }
 
   &:focus-visible {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: -2px;
   }
 
@@ -291,7 +291,7 @@ defineExpose({ focus: () => trigger.value?.focus() });
   &-check {
     flex-shrink: 0;
     margin-top: 2px;
-    color: var(--db-brand);
+    color: var(--db-focus);
   }
 }
 </style>

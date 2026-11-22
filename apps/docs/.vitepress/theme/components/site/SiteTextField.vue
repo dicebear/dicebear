@@ -90,7 +90,7 @@ defineExpose({
   }
 
   &:has(.site-field-input:focus-visible) {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: 0;
   }
 
@@ -163,7 +163,7 @@ defineExpose({
         color 0.12s;
 
       &:hover {
-        background: var(--db-switch-bg);
+        background: var(--db-soft);
         color: var(--db-ink);
       }
 

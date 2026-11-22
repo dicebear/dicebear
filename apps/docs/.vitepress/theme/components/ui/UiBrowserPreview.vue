@@ -76,7 +76,7 @@ const parts = computed(() => {
   text-decoration: none;
 
   &:hover {
-    border-color: var(--db-hover-border);
+    border-color: var(--db-ink-2);
   }
 
   /* Rows that follow each other in a page read as one group. */
@@ -116,7 +116,7 @@ const parts = computed(() => {
   }
 
   &-key {
-    color: var(--db-brand-text);
+    color: var(--db-ink);
   }
 
   &-arrow {

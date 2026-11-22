@@ -146,7 +146,7 @@ const triggerOptions = { seed: exampleSeeds[0] };
   cursor: pointer;
 
   &:focus-visible {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: 2px;
   }
 
