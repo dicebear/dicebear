@@ -150,22 +150,28 @@ const items = computed<SiteMenuItem[]>(() => [
 </script>
 
 <template>
-  <span class="pg-download" :class="{ 'is-primary': primary }">
-    <button type="button" class="pg-download-main" @click="downloadMain">
-      <Download :size="16" aria-hidden="true" />
+  <span class="site-btn-group is-fluid">
+    <button
+      type="button"
+      class="site-btn site-btn-lg"
+      :class="primary ? 'site-btn-primary' : 'site-btn-secondary'"
+      @click="downloadMain"
+    >
+      <Download :size="18" aria-hidden="true" />
       {{ mainLabel }}
     </button>
     <SiteMenu :items="items" label="More ways to save" align="right">
       <template #trigger="{ open: menuOpen, toggle }">
         <button
           type="button"
-          class="pg-download-more"
+          class="site-btn site-btn-lg site-btn-icon"
+          :class="primary ? 'site-btn-primary' : 'site-btn-secondary'"
           aria-label="More ways to save"
           aria-haspopup="menu"
           :aria-expanded="menuOpen"
           @click="toggle"
         >
-          <ChevronDown :size="16" aria-hidden="true" />
+          <ChevronDown :size="18" aria-hidden="true" />
         </button>
       </template>
     </SiteMenu>
@@ -186,82 +192,3 @@ const items = computed<SiteMenuItem[]>(() => [
     <PlaygroundBatchDownload v-if="batchOpen" />
   </SiteDialog>
 </template>
-
-<style scoped lang="scss">
-/* A secondary button of the set, split in two: the soft ground with the
-   quiet line, a line between the parts. */
-.pg-download {
-  display: flex;
-  width: 100%;
-  height: 40px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-field-border);
-  border-radius: var(--db-radius-2);
-  background: var(--db-soft);
-  color: var(--db-ink);
-  overflow: hidden;
-  transition: border-color 0.12s;
-
-  &:hover {
-    border-color: var(--db-btn-border);
-  }
-
-  &-main,
-  &-more {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    transition: background-color 0.12s;
-
-    &:hover {
-      background: var(--db-switch-bg);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--db-brand);
-      outline-offset: -3px;
-    }
-  }
-
-  &-main {
-    flex: 1;
-    gap: 8px;
-    min-width: 0;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  &-more {
-    flex-shrink: 0;
-    width: 40px;
-    border-left: 1px solid var(--db-field-border);
-  }
-
-  /* The ink of the primary button, with a faint line between the parts. */
-  &.is-primary {
-    border-color: var(--db-btn-bg);
-    background: var(--db-btn-bg);
-    color: var(--db-btn-fg);
-
-    &:hover {
-      border-color: var(--db-btn-bg);
-    }
-  }
-
-  &.is-primary &-main:hover,
-  &.is-primary &-more:hover {
-    background: var(--db-btn-hover);
-  }
-
-  &.is-primary &-more {
-    border-left-color: color-mix(in srgb, var(--db-btn-fg) 25%, transparent);
-  }
-}
-</style>

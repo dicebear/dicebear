@@ -43,29 +43,39 @@ const onFocus = (event: FocusEvent) => {
     />
     <button
       type="button"
-      class="site-btn site-btn-ghost site-btn-icon site-btn-sm"
+      class="site-btn site-btn-accent site-btn-icon pg-seed-roll"
       aria-label="Random seed"
       data-tip="Random seed"
       @click="randomizeSeed"
     >
-      <Shuffle :size="16" aria-hidden="true" />
+      <Shuffle :size="20" aria-hidden="true" />
     </button>
   </label>
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/control' as c;
-
+/* The seed field of the Playground: a large pill ringed in ink, the word
+   Seed in small capitals, the value in the display face and a yellow die
+   that rolls a new one. */
 .pg-seed {
-  @include c.control;
-  @include c.control-size(md);
-
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding-right: 3px;
+  height: 64px;
+  padding: 0 8px 0 22px;
+  border-radius: 32px;
+  background: var(--db-panel);
+  box-shadow: 0 0 0 2px var(--db-ink);
   cursor: text;
+
+  &:focus-within {
+    box-shadow: 0 0 0 3px var(--db-focus);
+  }
+
+  .site-label {
+    font-size: 12px;
+  }
 
   &-input {
     flex: 1;
@@ -74,14 +84,22 @@ const onFocus = (event: FocusEvent) => {
     padding: 0;
     border: 0;
     background: transparent;
-    font: inherit;
-    font-size: inherit;
+    font-family: var(--db-font-display);
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 700;
     color: var(--db-ink);
     outline: none;
 
     &::placeholder {
       color: var(--db-muted);
     }
+  }
+
+  &-roll {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
   }
 }
 </style>

@@ -159,7 +159,7 @@ function pickSeed(seed: string) {
               v-for="other in otherSeeds"
               :key="other.seed"
               type="button"
-              class="pg-stage-seed hv-thumb"
+              class="pg-stage-seed"
               :aria-label="`Use the seed ${other.seed}`"
               :title="other.seed"
               @click="pickSeed(other.seed)"
@@ -195,8 +195,12 @@ function pickSeed(seed: string) {
     min-height: 0;
     padding: 24px;
     background-color: var(--db-paper);
-    background-image: radial-gradient(var(--db-line) 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--db-ink) 16%, transparent) 1px,
+      transparent 1.5px
+    );
+    background-size: 22px 22px;
+    background-position: 11px 11px;
     overflow: hidden;
   }
 
@@ -251,14 +255,25 @@ function pickSeed(seed: string) {
 
   &-seed {
     box-sizing: border-box;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     padding: 0;
-    border: 1px solid var(--db-line);
-    border-radius: var(--db-radius-3);
-    background: var(--db-panel);
+    border: 0;
+    border-radius: 14px;
+    background: var(--db-tile);
+    box-shadow: inset 0 0 0 1px var(--db-line);
     overflow: hidden;
     cursor: pointer;
+    transition:
+      transform 0.25s var(--ease-spring),
+      box-shadow 0.12s;
+
+    &:hover {
+      box-shadow:
+        0 0 0 2px var(--db-paper),
+        0 0 0 4px var(--db-field-border);
+      transform: translateY(-2px);
+    }
 
     img {
       display: block;
@@ -267,7 +282,7 @@ function pickSeed(seed: string) {
     }
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
   }

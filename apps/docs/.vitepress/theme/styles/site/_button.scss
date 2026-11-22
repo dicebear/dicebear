@@ -75,22 +75,39 @@
   }
 }
 
-/* Two buttons as one: the action and its menu. */
+/* Two buttons as one: the action and its menu. A part may be the trigger
+   of a SiteMenu, so the rules reach into the wrappers. Filled parts keep a
+   2px gap; outlined ones share their ring. */
 .site-btn-group {
   display: inline-flex;
 
-  > .site-btn:first-child:not(:last-child) {
+  > :not(:last-child),
+  > :not(:last-child) .site-btn {
     border-start-end-radius: 0;
     border-end-end-radius: 0;
   }
 
-  > .site-btn:last-child:not(:first-child) {
-    margin-inline-start: 2px;
+  > :not(:first-child),
+  > :not(:first-child) .site-btn {
     border-start-start-radius: 0;
     border-end-start-radius: 0;
   }
 
-  > .site-btn-secondary:last-child:not(:first-child) {
+  > :not(:first-child) {
+    margin-inline-start: 2px;
+  }
+
+  &:has(.site-btn-secondary) > :not(:first-child) {
     margin-inline-start: -2px;
+  }
+
+  &.is-fluid {
+    display: flex;
+    width: 100%;
+
+    > :first-child {
+      flex: 1;
+      min-width: 0;
+    }
   }
 }

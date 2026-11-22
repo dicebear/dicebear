@@ -201,6 +201,10 @@ defineExpose({ focus: () => trigger.value?.focus() });
     color: var(--db-muted);
   }
 
+  &-name {
+    @include c.control-value;
+  }
+
   &-chevron {
     flex-shrink: 0;
     margin-left: auto;

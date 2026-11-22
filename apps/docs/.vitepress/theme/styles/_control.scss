@@ -53,3 +53,13 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* The chosen value of a picker field, such as the style or the view of the
+   Playground: bold in the display face, next to a muted word. */
+@mixin control-value {
+  font-family: var(--db-font-display);
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 700;
+  color: var(--db-ink);
+}

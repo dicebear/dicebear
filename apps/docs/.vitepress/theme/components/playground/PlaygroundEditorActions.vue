@@ -23,7 +23,7 @@ const emit = defineEmits<{
   <div class="pg-editor-actions" :class="{ 'is-fluid': fluid }">
     <button
       type="button"
-      class="site-btn site-btn-secondary pg-editor-actions-code"
+      class="site-btn site-btn-secondary site-btn-lg pg-editor-actions-code"
       aria-haspopup="dialog"
       @click="emit('how-to-use')"
     >
@@ -37,12 +37,27 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .pg-editor-actions {
   display: flex;
   gap: 8px;
 
+  /* Large on a wide window, as the actions of the page; a phone shares the
+     row between the two and takes the medium size. */
+  @media (max-width: 767px) {
+    :deep(.site-btn:not(.site-btn-icon)) {
+      @include m.button-size(md);
+    }
+
+    :deep(.site-btn-icon) {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
   &-download {
-    width: 196px;
+    display: flex;
   }
 
   &.is-fluid &-code {

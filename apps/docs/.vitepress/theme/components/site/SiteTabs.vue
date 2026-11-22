@@ -4,7 +4,8 @@
  * last pill that opens a menu (SiteMenu). The pill takes the name of a tab
  * chosen from the menu and fills like any chosen tab. Nothing scrolls
  * sideways, so every tab can be reached with a mouse wheel, a touchpad, a
- * keyboard or a finger alike.
+ * keyboard or a finger alike. The arrow keys move between the tabs in the
+ * row and pass over disabled ones; the menu holds the rest.
  */
 import {
   computed,
@@ -20,6 +21,7 @@ import SiteMenu, { type SiteMenuItem } from './SiteMenu.vue';
 export interface SiteTab {
   id: string;
   label: string;
+  disabled?: boolean;
 }
 
 const props = withDefaults(
@@ -51,11 +53,41 @@ const menu = computed<SiteMenuItem[]>(() =>
   hidden.value.map((tab) => ({
     label: tab.label,
     checked: tab.id === model.value,
+    disabled: tab.disabled,
     command: () => {
       model.value = tab.id;
     },
   })),
 );
+
+const buttons = ref<HTMLButtonElement[]>([]);
+
+/** The one tab in the row that Tab reaches: the chosen one, or the first. */
+const tabStop = computed(() => {
+  const chosen = shown.value.findIndex((tab) => tab.id === model.value);
+
+  return chosen >= 0 ? chosen : shown.value.findIndex((tab) => !tab.disabled);
+});
+
+function onKeydown(event: KeyboardEvent, index: number) {
+  const open = shown.value.flatMap((tab, i) => (tab.disabled ? [] : [i]));
+  const position = open.indexOf(index);
+  const last = open.length - 1;
+  const target = {
+    ArrowRight: open[position >= last ? 0 : position + 1],
+    ArrowLeft: open[position <= 0 ? last : position - 1],
+    Home: open[0],
+    End: open[last],
+  }[event.key];
+
+  if (target === undefined) return;
+
+  event.preventDefault();
+  model.value = shown.value[target].id;
+  buttons.value
+    .find((button) => Number(button.dataset.index) === target)
+    ?.focus();
+}
 
 function fit() {
   const box = root.value;
@@ -116,13 +148,18 @@ watch(
   <div ref="root" class="site-tabs">
     <div class="site-tabs-list" role="tablist" :aria-label="ariaLabel">
       <button
-        v-for="tab in shown"
+        v-for="(tab, index) in shown"
         :key="tab.id"
+        ref="buttons"
         type="button"
         role="tab"
         class="site-pill site-pill-tab"
         :aria-selected="tab.id === model"
+        :tabindex="index === tabStop ? 0 : -1"
+        :disabled="tab.disabled"
+        :data-index="index"
         @click="model = tab.id"
+        @keydown="onKeydown($event, index)"
       >
         {{ tab.label }}
       </button>
@@ -199,15 +236,22 @@ watch(
   }
 }
 
-/* Every tab once, at its bold width, to know what fits. */
+/* Every tab once, at its bold width, to know what fits. The row itself
+   has no size, so it never widens the page; the pills keep theirs. */
 .site-tabs-measure {
   position: absolute;
   top: 0;
   left: 0;
   display: flex;
-  gap: 4px;
+  width: 0;
+  height: 0;
+  overflow: hidden;
   visibility: hidden;
   pointer-events: none;
   white-space: nowrap;
+
+  > * {
+    flex-shrink: 0;
+  }
 }
 </style>

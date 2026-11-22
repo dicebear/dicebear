@@ -91,7 +91,13 @@ $icon-chevron-down: url('lucide-static/icons/chevron-down.svg');
 }
 
 @mixin button-size($size) {
-  @if $size == sm {
+  @if $size == md {
+    gap: 8px;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 22px;
+    font-size: 16px;
+  } @else if $size == sm {
     height: 36px;
     padding: 0 14px;
     border-radius: 18px;

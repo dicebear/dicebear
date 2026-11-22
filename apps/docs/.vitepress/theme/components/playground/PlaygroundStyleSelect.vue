@@ -180,9 +180,8 @@ const triggerOptions = { seed: exampleSeeds[0] };
   }
 
   &-name {
-    font-size: 15px;
-    line-height: 20px;
-    font-weight: 600;
+    @include c.control-value;
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -196,7 +195,7 @@ const triggerOptions = { seed: exampleSeeds[0] };
   }
 
   &[aria-expanded='true'] {
-    border-color: var(--db-brand);
+    border-color: var(--db-focus);
 
     .pg-style-field-chevron {
       transform: rotate(180deg);

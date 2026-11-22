@@ -80,7 +80,7 @@ function randomize() {
 
     <button
       type="button"
-      class="site-btn site-btn-secondary pg-editor-bar-random"
+      class="site-btn site-btn-accent pg-editor-bar-random"
       @click="randomize"
     >
       <Shuffle :size="16" aria-hidden="true" />
