@@ -38,7 +38,9 @@
   --db-accent: var(--db-on);
   --db-line: color-mix(in srgb, var(--db-on) 22%, transparent);
   --db-rule: color-mix(in srgb, var(--db-on) 22%, transparent);
-  --db-field-border: color-mix(in srgb, var(--db-on) 50%, transparent);
+  /* 60% keeps the edge of a field or chip at 3:1 on coral, the lighter of
+     the two bright grounds in contrast terms. */
+  --db-field-border: color-mix(in srgb, var(--db-on) 60%, transparent);
   --db-btn-bg: var(--db-on);
   --db-btn-fg: #ffffff;
   --db-focus: var(--db-on);
@@ -61,7 +63,9 @@
   --db-rule: color-mix(in srgb, #{$acc} 24%, transparent);
   --db-field-border: color-mix(in srgb, #{$acc} 55%, transparent);
   --db-btn-bg: #{$acc};
-  --db-btn-fg: #{$bg};
+  /* White on the dark button in light, as on yellow; in dark the button is
+     the light tint and takes the deep ground as its text. */
+  --db-btn-fg: #ffffff;
   --db-focus: #{$acc};
   --db-select: #{$acc};
   --db-select-text: #{$bg};
@@ -69,6 +73,7 @@
   :root.dark & {
     --db-panel: color-mix(in srgb, #{$bg} 62%, #000000);
     --db-soft: color-mix(in srgb, #{$bg} 80%, #000000);
+    --db-btn-fg: #{$bg};
   }
 }
 
