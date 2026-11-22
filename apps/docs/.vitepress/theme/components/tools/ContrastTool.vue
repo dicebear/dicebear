@@ -57,7 +57,7 @@ function updateHsv(next: Hsv) {
           aria-label="Initials avatar with the picked text color"
           >IR</span
         >
-        <p class="contrast-tool-hint">
+        <p class="site-text">
           Initials uses the same rule: its text color is whichever of black and
           white contrasts more with the background.
         </p>
@@ -80,82 +80,43 @@ function updateHsv(next: Hsv) {
 <style lang="scss" scoped>
 .contrast-tool {
   display: grid;
-  grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
-  gap: 80px;
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+  gap: 40px clamp(32px, 5vw, 80px);
   align-items: start;
-  padding-top: 64px;
-  padding-bottom: 168px;
+  padding-top: clamp(40px, 5vw, 72px);
+  padding-bottom: clamp(56px, 6.4vw, 96px);
 
   &-side {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 28px;
     min-width: 0;
   }
 
   &-preview {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 32px;
+    gap: 16px 24px;
+
+    .site-text {
+      flex: 1 1 220px;
+    }
   }
 
+  /* An Initials avatar in miniature, in the face of the site. */
   &-swatch {
     display: flex;
-    flex-shrink: 0;
+    flex: 0 0 clamp(96px, 10vw, 136px);
     align-items: center;
     justify-content: center;
-    width: 200px;
-    height: 200px;
-    border-radius: 52px;
-    font-size: 96px;
+    aspect-ratio: 1;
+    border-radius: 24%;
+    font-family: var(--db-font-display);
+    font-size: clamp(34px, 3.8vw, 52px);
     line-height: 1;
-    font-weight: 500;
+    font-weight: 800;
     user-select: none;
-  }
-
-  &-hint {
-    margin: 0;
-    font-size: 16px;
-    line-height: 26px;
-    color: var(--db-muted);
-  }
-
-  @media (max-width: 1279px) {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 48px;
-
-    &-swatch {
-      width: 144px;
-      height: 144px;
-      border-radius: 36px;
-      font-size: 68px;
-    }
-  }
-
-  @media (max-width: 959px) {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 48px;
-  }
-
-  @media (max-width: 767px) {
-    padding-top: 48px;
-    padding-bottom: 96px;
-
-    &-preview {
-      gap: 20px;
-    }
-
-    &-swatch {
-      width: 96px;
-      height: 96px;
-      border-radius: 24px;
-      font-size: 44px;
-    }
-
-    &-hint {
-      font-size: 14px;
-      line-height: 20px;
-    }
   }
 }
 </style>

@@ -80,7 +80,7 @@ function addFromPicker() {
             v-model="nativePickerColor"
             type="color"
             aria-label="Color"
-            class="pg-picker-native hv-border"
+            class="site-swatch"
           />
           <span class="pg-picker-preview">
             <span :style="{ background: `#${pickedHex}` }"></span>
@@ -168,32 +168,6 @@ function addFromPicker() {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.pg-picker-native {
-  flex-shrink: 0;
-  width: 56px;
-  height: 40px;
-  padding: 3px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
-  border-radius: 10px;
-  background: var(--db-paper);
-  cursor: pointer;
-
-  &::-webkit-color-swatch-wrapper {
-    padding: 0;
-  }
-
-  &::-webkit-color-swatch {
-    border: none;
-    border-radius: var(--db-radius-1);
-  }
-
-  &::-moz-color-swatch {
-    border: none;
-    border-radius: var(--db-radius-1);
-  }
 }
 
 /* The checker shows through a color with reduced opacity. */

@@ -203,7 +203,7 @@ const isoContrastPath = computed<string | null>(() => {
     </div>
 
     <div class="contrast-canvas-hue">
-      <span class="contrast-canvas-hue-label">Hue</span>
+      <span class="site-control">Hue</span>
       <SiteSlider
         :model-value="Math.round(hsv.h)"
         :min="0"
@@ -215,7 +215,7 @@ const isoContrastPath = computed<string | null>(() => {
       <span class="contrast-canvas-hue-hex">{{ hex }}</span>
     </div>
 
-    <p class="contrast-canvas-hint">
+    <p class="site-text">
       The dashed line marks where the pick switches from one contrast color to
       the other.
     </p>
@@ -234,13 +234,13 @@ const isoContrastPath = computed<string | null>(() => {
     width: 100%;
     aspect-ratio: 1;
     overflow: hidden;
-    border-radius: var(--db-radius-6);
+    border-radius: var(--db-radius-card);
     cursor: crosshair;
     touch-action: none;
     user-select: none;
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 3px;
     }
   }
@@ -271,14 +271,12 @@ const isoContrastPath = computed<string | null>(() => {
 
   &-cursor {
     position: absolute;
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     box-sizing: border-box;
-    border: 3px solid #fff;
+    border: 4px solid #fff;
     border-radius: 50%;
-    box-shadow:
-      0 0 0 1px rgba(0, 0, 0, 0.35),
-      inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
     transform: translate(-50%, -50%);
     pointer-events: none;
   }
@@ -288,21 +286,13 @@ const isoContrastPath = computed<string | null>(() => {
     align-items: center;
     gap: 20px;
 
-    &-label {
-      flex-shrink: 0;
-      width: 40px;
-      font-size: 16px;
-      line-height: 26px;
-      font-weight: 600;
-      color: var(--db-ink-2);
-    }
-
     &-hex {
       flex-shrink: 0;
       width: 80px;
       font-family: var(--db-font-mono);
-      font-size: 15px;
+      font-size: 16px;
       line-height: 24px;
+      font-weight: 600;
       text-align: right;
       color: var(--db-ink);
       font-variant-numeric: tabular-nums;
@@ -335,29 +325,13 @@ const isoContrastPath = computed<string | null>(() => {
     }
   }
 
-  &-hint {
-    margin: 0;
-    font-size: 16px;
-    line-height: 26px;
-    color: var(--db-muted);
-  }
-
   @media (max-width: 959px) {
     max-width: 560px;
   }
 
   @media (max-width: 767px) {
-    &-surface {
-      border-radius: var(--db-radius-5);
-    }
-
     &-hue {
       gap: 12px;
-    }
-
-    &-hint {
-      font-size: 14px;
-      line-height: 20px;
     }
   }
 }

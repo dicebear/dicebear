@@ -196,7 +196,7 @@ function updateActiveChannel(key: string, value: number | null) {
       <input
         type="color"
         :value="hex"
-        class="contrast-sliders-hex-swatch hv-border"
+        class="site-swatch"
         aria-label="Open native color picker"
         @input="onNativePick"
       />
@@ -226,7 +226,9 @@ function updateActiveChannel(key: string, value: number | null) {
         :key="`${activeSpace}-${channel.key}`"
         class="contrast-sliders-row"
       >
-        <span class="contrast-sliders-row-label">{{ channel.label }}</span>
+        <span class="site-control contrast-sliders-row-label">{{
+          channel.label
+        }}</span>
         <SiteSlider
           :model-value="activeValues[channel.key]"
           :min="channel.min"
@@ -261,30 +263,6 @@ function updateActiveChannel(key: string, value: number | null) {
     align-items: center;
     flex-wrap: wrap;
     gap: 12px;
-
-    &-swatch {
-      flex-shrink: 0;
-      width: 40px;
-      height: 40px;
-      padding: 0;
-      overflow: hidden;
-      border: 1px solid var(--db-btn-border);
-      border-radius: var(--db-radius-2);
-      background: transparent;
-      cursor: pointer;
-
-      &::-webkit-color-swatch-wrapper {
-        padding: 0;
-      }
-
-      &::-webkit-color-swatch {
-        border: none;
-      }
-
-      &::-moz-color-swatch {
-        border: none;
-      }
-    }
   }
 
   // Doubled selector, so the width wins over the field's own.
@@ -316,10 +294,7 @@ function updateActiveChannel(key: string, value: number | null) {
     align-items: center;
 
     &-label {
-      font-size: 15px;
-      line-height: 24px;
-      font-weight: 600;
-      color: var(--db-ink-2);
+      font-size: 16px;
     }
   }
 }

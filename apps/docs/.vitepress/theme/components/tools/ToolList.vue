@@ -1,7 +1,8 @@
 <script setup lang="ts">
 /**
- * The list on the tools overview: one hairline row per tool with a picture,
- * the name, a sentence and where the link leads.
+ * The list on the tools overview: one row per tool on strong rules, with a
+ * picture, the name, a sentence and a button that says where the link
+ * leads. The whole row is the link.
  */
 import { ArrowRight, ArrowUpRight, Frame } from '@lucide/vue';
 import SiteAvatar from '@theme/components/site/SiteAvatar.vue';
@@ -89,148 +90,146 @@ const boundary = miniBoundary();
 
 /** Relative widths of the three bars in the bundle picture. */
 const bars = [100, 58, 24];
+
+/** A tool on this site is the next step, one elsewhere a side trip. */
+function buttonClass(tool: Tool): string {
+  return tool.host ? 'site-btn-secondary' : 'site-btn-primary';
+}
 </script>
 
 <template>
   <section class="site-container tool-list">
-    <a
-      v-for="tool in tools"
-      :key="tool.slug"
-      :href="tool.href"
-      :target="tool.host ? '_blank' : undefined"
-      :rel="tool.host ? 'noopener' : undefined"
-      class="tool-list-row hv-row"
-    >
-      <span v-if="tool.visual.kind === 'avatar'" class="tool-list-visual">
-        <SiteAvatar
-          :style-name="tool.visual.styleName"
-          :options="{ seed: tool.visual.seed }"
-          :size="120"
-          :radius="0"
-          :alt="tool.visual.alt"
-        />
+    <div class="site-rows is-strong">
+      <a
+        v-for="(tool, index) in tools"
+        :key="tool.slug"
+        :href="tool.href"
+        :target="tool.host ? '_blank' : undefined"
+        :rel="tool.host ? 'noopener' : undefined"
+        class="site-row tool-list-row"
+      >
+        <span v-if="tool.visual.kind === 'avatar'" class="tool-list-visual">
+          <SiteAvatar
+            sticker
+            :class="index % 2 ? 'is-tilt-r' : 'is-tilt-l'"
+            :style-name="tool.visual.styleName"
+            :options="{ seed: tool.visual.seed }"
+            :alt="tool.visual.alt"
+          />
+          <span
+            v-if="tool.visual.framed"
+            class="tool-list-frame"
+            aria-hidden="true"
+          />
+        </span>
         <span
-          v-if="tool.visual.framed"
-          class="tool-list-frame"
+          v-else-if="tool.visual.kind === 'plugin'"
+          class="site-box is-lilac tool-list-visual tool-list-plugin"
           aria-hidden="true"
-        />
-      </span>
-      <span
-        v-else-if="tool.visual.kind === 'plugin'"
-        class="tool-list-visual tool-list-plugin"
-        aria-hidden="true"
-      >
-        <Frame :size="48" :stroke-width="1.5" />
-      </span>
-      <span
-        v-else-if="tool.visual.kind === 'contrast'"
-        class="tool-list-visual tool-list-contrast"
-        aria-hidden="true"
-      >
-        <svg
-          :width="MINI"
-          :height="MINI"
-          :viewBox="`0 0 ${MINI} ${MINI}`"
-          fill="none"
         >
-          <polyline
-            :points="boundary"
-            stroke="#fff"
-            stroke-width="2"
-            stroke-dasharray="5 4"
-            stroke-linejoin="round"
-          />
-          <circle
-            :cx="miniCursor.x"
-            :cy="miniCursor.y"
-            r="7"
-            stroke="#fff"
-            stroke-width="2.5"
-          />
-        </svg>
-      </span>
-      <span v-else class="tool-list-visual tool-list-bundle" aria-hidden="true">
+          <Frame :size="48" :stroke-width="1.75" />
+        </span>
         <span
-          v-for="(width, index) in bars"
-          :key="width"
-          :class="{ 'is-first': index === 0 }"
-          :style="{ width: `${width}%` }"
-        />
-      </span>
+          v-else-if="tool.visual.kind === 'contrast'"
+          class="tool-list-visual tool-list-contrast"
+          aria-hidden="true"
+        >
+          <svg
+            :width="MINI"
+            :height="MINI"
+            :viewBox="`0 0 ${MINI} ${MINI}`"
+            fill="none"
+          >
+            <polyline
+              :points="boundary"
+              stroke="#fff"
+              stroke-width="2"
+              stroke-dasharray="5 4"
+              stroke-linejoin="round"
+            />
+            <circle
+              :cx="miniCursor.x"
+              :cy="miniCursor.y"
+              r="7"
+              stroke="#fff"
+              stroke-width="2.5"
+            />
+          </svg>
+        </span>
+        <span
+          v-else
+          class="site-box is-soft tool-list-visual tool-list-bundle"
+          aria-hidden="true"
+        >
+          <span
+            v-for="(width, bar) in bars"
+            :key="width"
+            :class="{ 'is-first': bar === 0 }"
+            :style="{ width: `${width}%` }"
+          />
+        </span>
 
-      <span class="tool-list-copy">
-        <span class="site-h3 tool-list-name">{{ tool.name }}</span>
-        <span class="site-body tool-list-text" v-html="tool.text" />
-      </span>
+        <span class="tool-list-copy">
+          <span class="site-heading">{{ tool.name }}</span>
+          <span class="site-body tool-list-text" v-html="tool.text" />
+        </span>
 
-      <span class="site-control tool-list-action">
-        <template v-if="tool.host">
-          {{ tool.host }}
-          <ArrowUpRight :size="18" aria-hidden="true" />
-          <span class="sr-only">Opens in a new tab</span>
-        </template>
-        <template v-else>
-          Open
-          <ArrowRight :size="18" aria-hidden="true" />
-        </template>
-      </span>
-    </a>
+        <span class="site-btn" :class="buttonClass(tool)">
+          <template v-if="tool.host">
+            {{ tool.host }}
+            <ArrowUpRight :size="18" aria-hidden="true" />
+            <span class="sr-only">Opens in a new tab</span>
+          </template>
+          <template v-else>
+            Open
+            <ArrowRight :size="18" aria-hidden="true" />
+          </template>
+        </span>
+      </a>
+    </div>
   </section>
 </template>
 
 <style lang="scss" scoped>
+@use '../../styles/mixins' as m;
+
 .tool-list {
-  padding-top: 64px;
-  padding-bottom: 168px;
+  padding-top: clamp(40px, 5vw, 72px);
+  padding-bottom: clamp(56px, 6.4vw, 96px);
 
   &-row {
-    display: grid;
-    grid-template-columns: 120px minmax(0, 1fr) 200px;
-    gap: 48px;
-    align-items: center;
-    padding: 32px 0;
-    border-top: 1px solid var(--db-line);
-    color: var(--db-ink);
-    text-decoration: none;
+    gap: 20px clamp(24px, 3vw, 48px);
+    padding: clamp(20px, 2.4vw, 32px) 0;
 
-    &:last-child {
-      border-bottom: 1px solid var(--db-line);
+    .is-strong > & {
+      padding: clamp(20px, 2.4vw, 32px) 0;
     }
   }
 
+  /* The picture of a tool, a square of 88 to 128px. */
   &-visual {
     position: relative;
-    display: block;
-    flex-shrink: 0;
-    width: 120px;
-    height: 120px;
-    overflow: hidden;
-    border-radius: 32px;
-  }
+    display: flex;
+    flex: 0 0 clamp(88px, 10vw, 128px);
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    border-radius: 24%;
 
-  // The avatar fills the picture at every size of it.
-  &-visual :deep(.site-avatar) {
-    width: 100% !important;
-    height: 100% !important;
+    > :deep(.site-sticker) {
+      width: 100%;
+    }
   }
 
   &-frame {
     position: absolute;
-    inset: 20px;
-    border: 2px dashed var(--db-brand);
-    border-radius: 16px;
-  }
-
-  // The tile stays light in dark mode, so the icon keeps its dark ink.
-  &-plugin {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--db-tile);
-    color: #0b1620;
+    inset: 22%;
+    border: 2px dashed var(--db-ink);
+    border-radius: 12px;
   }
 
   &-contrast {
+    overflow: hidden;
     background:
       linear-gradient(to top, #000, rgba(0, 0, 0, 0)),
       linear-gradient(to right, #fff, hsl(210, 100%, 50%));
@@ -243,121 +242,48 @@ const bars = [100, 58, 24];
     }
   }
 
+  &-plugin {
+    color: var(--db-accent);
+  }
+
   &-bundle {
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    padding: 0 20%;
-    box-sizing: border-box;
-    background: var(--db-tile);
+    align-items: flex-start;
+    gap: clamp(6px, 0.8vw, 10px);
+    padding: 0 clamp(18px, 2vw, 26px);
 
     span {
       display: block;
-      height: 12px;
-      border-radius: 6px;
-      background: #8fa3b3;
+      height: clamp(8px, 1vw, 12px);
+      border-radius: 999px;
+      background: var(--db-muted);
 
       &.is-first {
-        background: #0284c7;
+        background: var(--db-ink);
       }
     }
   }
 
   &-copy {
     display: flex;
+    flex: 999 1 320px;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     min-width: 0;
   }
 
-  &-name {
-    color: inherit;
-  }
-
   &-text {
-    max-width: 680px;
+    max-width: 640px;
 
     :deep(code) {
-      font-family: var(--db-font-mono);
-      font-size: 0.9em;
-      color: var(--db-ink);
+      @include m.code-inline;
     }
   }
 
-  &-action {
-    justify-self: end;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--db-brand-text);
-
-    svg {
-      flex-shrink: 0;
-    }
-  }
-
-  @media (max-width: 959px) {
-    &-row {
-      grid-template-columns: 120px minmax(0, 1fr);
-      gap: 16px 32px;
-    }
-
-    &-visual {
-      grid-row: span 2;
-      align-self: start;
-    }
-
-    &-action {
-      grid-column: 2;
-      justify-self: start;
-    }
-  }
-
-  @media (max-width: 767px) {
-    padding-top: 48px;
-    padding-bottom: 96px;
-
-    &-row {
-      grid-template-columns: 72px minmax(0, 1fr);
-      gap: 12px 20px;
-      padding: 24px 0;
-    }
-
-    // The pictures are drawn at 120px and scale down as a whole.
-    &-visual {
-      width: 72px;
-      height: 72px;
-      border-radius: 20px;
-    }
-
-    &-frame {
-      inset: 12px;
-      border-radius: 10px;
-    }
-
-    &-plugin svg {
-      width: 30px;
-      height: 30px;
-    }
-
-    &-bundle {
-      gap: 6px;
-
-      span {
-        height: 8px;
-        border-radius: 4px;
-      }
-    }
-
-    &-name {
-      font-size: 20px;
-      line-height: 28px;
-    }
-
-    &-action {
-      font-size: 16px;
-    }
+  &-row:hover .site-heading {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 6px;
   }
 }
 </style>
