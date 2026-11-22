@@ -50,27 +50,28 @@ function toggle() {
 </template>
 
 <style lang="scss" scoped>
-/* The large switch of the set (SiteSwitch md), with the sun or the moon on
-   its knob. */
+/* The size of the large switch (SiteSwitch md), with the sun or the moon on
+   its knob. In the header it is an action like its neighbours, so its track
+   is a tint without a line, as the search and the tonal buttons. */
 .theme-switch {
   position: relative;
   flex-shrink: 0;
   width: 72px;
   height: 44px;
-  border: 1px solid var(--db-field-border);
+  border: 0;
   border-radius: 22px;
-  background: var(--db-soft);
-  transition: border-color 0.12s;
+  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+  transition: background-color 0.12s;
 
   &:hover {
-    border-color: var(--db-ink-2);
+    background: color-mix(in srgb, var(--db-ink) 12%, transparent);
   }
 }
 
 .theme-switch-knob {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: 6px;
+  left: 6px;
   display: flex;
   align-items: center;
   justify-content: center;

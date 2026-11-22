@@ -153,6 +153,7 @@ onKeyStroke('Escape', () => {
 
 <style lang="scss" scoped>
 @use '../../styles/control' as c;
+@use '../../styles/mixins' as m;
 
 .theme-header {
   position: sticky;
@@ -192,18 +193,34 @@ onKeyStroke('Escape', () => {
   }
 }
 
-/* The search opens the search dialog; it looks like the field it leads to. */
+/* The search opens the search dialog, so it is an action of the header like
+   the others: a tinted pill without a line, with the muted word of a field
+   and the shortcut. */
 .theme-header-search {
-  @include c.control;
   @include c.control-size(md);
+  @include m.focus-ring(2px);
 
   display: flex;
   align-items: center;
   gap: 8px;
   width: clamp(140px, 16vw, 220px);
   padding: 0 8px 0 14px;
-  color: var(--db-muted);
+  border: 0;
+  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+  color: var(--db-ink-2);
   cursor: pointer;
+  transition: background-color 0.12s;
+
+  &:hover {
+    background: color-mix(in srgb, var(--db-ink) 12%, transparent);
+  }
+
+  /* The shortcut sits on the paper, as a small key on the tint. */
+  .site-kbd {
+    border-color: transparent;
+    background: var(--db-paper);
+    color: var(--db-ink-2);
+  }
 }
 
 .theme-header-search-label {
