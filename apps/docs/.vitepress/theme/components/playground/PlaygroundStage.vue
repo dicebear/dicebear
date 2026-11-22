@@ -293,16 +293,18 @@ function pickSeed(seed: string) {
     }
   }
 
-  /* A window 760px high shows the avatar at 200px and two rows of the
-     tray under it. Every pixel more goes to the avatar, up to 320px. */
+  /* The canvas of the editor leaves room around the avatar: above it and
+     between it and the controls, growing with the window. A window 760px
+     high shows the avatar at 200px, one 900px high at 320px with a row and
+     a half of the tray under it, which scrolls. */
   &.is-editor &-ground {
     flex: none;
-    gap: 14px;
-    padding: 20px 0 16px;
+    gap: clamp(16px, 4dvh, 48px);
+    padding: clamp(24px, 6dvh, 80px) 0 20px;
   }
 
   &.is-editor &-picture {
-    width: clamp(160px, calc(100dvh - 560px), 320px);
+    width: clamp(180px, calc(100dvh - 560px), 320px);
   }
 
   @media (max-width: 959px) {
