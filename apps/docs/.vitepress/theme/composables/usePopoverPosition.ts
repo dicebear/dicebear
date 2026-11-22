@@ -55,6 +55,9 @@ export function usePopoverPosition(options: PopoverPositionOptions) {
       return;
     }
 
+    // Measure the panel at its own height, not at a limit set last time.
+    el.style.maxHeight = '';
+
     const width = el.offsetWidth;
     const height = el.offsetHeight;
     const align = options.align?.() ?? 'left';
@@ -67,22 +70,45 @@ export function usePopoverPosition(options: PopoverPositionOptions) {
           : rect.left;
     left = Math.max(GAP, Math.min(left, viewportWidth - width - GAP));
 
+    // Below the anchor where it fits, else above it. A panel that fits on
+    // neither side takes the roomier one and scrolls inside that room, so
+    // it never runs off the screen, as a long menu low on a phone would.
+    const roomBelow = viewportHeight - rect.bottom - 2 * GAP;
+    const roomAbove = rect.top - 2 * GAP;
     let top = rect.bottom + GAP;
-    const above = rect.top - GAP - height;
+    let maxHeight: number | undefined;
 
-    if (top + height > viewportHeight - GAP && above >= GAP) {
-      top = above;
+    if (height > roomBelow) {
+      if (height <= roomAbove) {
+        top = rect.top - GAP - height;
+      } else if (roomAbove > roomBelow) {
+        maxHeight = roomAbove;
+        top = GAP;
+      } else {
+        maxHeight = roomBelow;
+      }
     }
 
     style.value = {
       top: `${Math.round(top)}px`,
       left: `${Math.round(left)}px`,
+      ...(maxHeight === undefined
+        ? {}
+        : { maxHeight: `${Math.floor(maxHeight)}px` }),
     };
   }
 
   function schedulePlace() {
     cancelAnimationFrame(frame);
     frame = requestAnimationFrame(place);
+  }
+
+  // Scrolling the panel's own list moves nothing, and placing it again
+  // would reset that scroll.
+  function onScroll(event: Event) {
+    if (panel.value?.contains(event.target as Node)) return;
+
+    schedulePlace();
   }
 
   function onDocumentPointerDown(event: PointerEvent) {
@@ -117,7 +143,7 @@ export function usePopoverPosition(options: PopoverPositionOptions) {
 
   function listen() {
     window.addEventListener('resize', schedulePlace);
-    window.addEventListener('scroll', schedulePlace, {
+    window.addEventListener('scroll', onScroll, {
       capture: true,
       passive: true,
     });
@@ -128,7 +154,7 @@ export function usePopoverPosition(options: PopoverPositionOptions) {
   function unlisten() {
     cancelAnimationFrame(frame);
     window.removeEventListener('resize', schedulePlace);
-    window.removeEventListener('scroll', schedulePlace, true);
+    window.removeEventListener('scroll', onScroll, true);
     document.removeEventListener('pointerdown', onDocumentPointerDown, true);
     document.removeEventListener('keydown', onDocumentKeyDown, true);
   }
