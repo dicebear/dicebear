@@ -9,6 +9,7 @@ import { ArrowUpRight } from '@lucide/vue';
 import type { AvatarStyleMeta, ThemeOptions } from '@theme/types';
 import { footerColumns, olderDocs } from '@theme/config/footer-links';
 import { safeHttpUrl } from '@theme/utils/url';
+import { isGuestStyle } from '@theme/utils/artists';
 import ThemeSponsor from './ThemeSponsor.vue';
 
 const { theme } = useData<ThemeOptions>();
@@ -21,7 +22,7 @@ const credits = computed(() => {
   for (const style of Object.values(theme.value.avatarStyles)) {
     const meta = style.meta;
 
-    if (meta.creator === 'Florian Körner' || meta.creator === 'DiceBear') {
+    if (!isGuestStyle(meta)) {
       continue;
     }
 
