@@ -25,10 +25,6 @@
   --db-focus: var(--db-c-ink);
   --db-select: var(--db-sun);
   --db-select-text: var(--db-on);
-
-  :root.dark & {
-    --db-focus: var(--db-sun);
-  }
 }
 
 /* Yellow and coral: bright in both themes, dark text, white cards. */

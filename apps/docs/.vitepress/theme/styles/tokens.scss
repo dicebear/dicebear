@@ -65,6 +65,9 @@
   --db-rule: color-mix(in srgb, var(--db-c-ink) 16%, transparent);
   --db-btn-bg: var(--db-c-ink);
   --db-btn-fg: var(--db-c-paper);
+  /* The focus ring is the text color in both themes, ink in light and
+     cream in dark. Yellow stays with the accents and the current choice,
+     where it means something. */
   --db-focus: var(--db-c-ink);
   /* A selected row or option: the yellow with its dark text. */
   --db-select: var(--db-sun);
@@ -156,8 +159,6 @@
   --db-on: #161513;
   --db-on-2: #3b3833;
   --db-card: #161513;
-
-  --db-focus: var(--db-sun);
 
   --db-ok: #4ade80;
   --db-ok-soft: #17331f;

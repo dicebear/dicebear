@@ -1,6 +1,9 @@
 /**
  * The one shape every field takes: a pill on the panel ground with the
- * field edge. Hover darkens the edge, focus draws the focus color around it,
+ * field edge. Hover darkens the edge, keyboard focus draws the focus color
+ * around it (a text field shows it while typing too, as browsers set
+ * :focus-visible there on a click; a field that opens a list does not
+ * flash it on a click),
  * invalid turns it red, disabled halves the strength. Three sizes, the same
  * as the buttons, the pills and the segmented controls: sm 36, md 44,
  * lg 56, so any of them can stand in one row.
@@ -15,11 +18,12 @@
     border-color 0.12s,
     box-shadow 0.12s;
 
-  &:hover:not(:focus-within):not(.is-invalid) {
+  &:hover:not(:has(:focus-visible)):not(:focus-visible):not(.is-invalid) {
     border-color: var(--db-ink-2);
   }
 
-  &:focus-within {
+  &:focus-visible,
+  &:has(:focus-visible) {
     border-color: var(--db-focus);
     box-shadow: 0 0 0 1px var(--db-focus);
   }
