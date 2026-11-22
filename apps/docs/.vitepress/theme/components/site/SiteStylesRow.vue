@@ -200,8 +200,9 @@ defineProps<{
     }
   }
 
-  // The arrow sits centered in a 32px circle that fills on hover. The
-  // negative margin keeps the arrow itself on the list's edge.
+  // The arrow sits centered in a 32px circle that fills on hover. The circle
+  // ends on the list's edge, so the hover surface leaves the same 12px
+  // beside it as beside the avatars on the left.
   &-go {
     display: flex;
     align-items: center;
@@ -209,7 +210,6 @@ defineProps<{
     flex-shrink: 0;
     width: 32px;
     height: 32px;
-    margin-right: -7px;
     border-radius: 50%;
     color: var(--db-ink-2);
     transition:
@@ -279,7 +279,6 @@ defineProps<{
     &-go {
       width: 28px;
       height: 28px;
-      margin-right: -6px;
 
       .is-wide {
         display: none;
