@@ -1,45 +1,32 @@
 <script setup lang="ts">
 /**
- * Section three: how DiceBear gets into a project. The code card draws the
- * avatar of the hero, with the seed marked, and the crowd on the left is
- * what a page full of users looks like with that line in place.
+ * How DiceBear gets into a project: the code for one avatar in every
+ * language, and on the left what a page full of users looks like with that
+ * line in place. Fixed style and seeds; the hero does not reach in here.
  */
 import { computed, ref } from 'vue';
 import { useData, withBase } from 'vitepress';
 import { ArrowRight } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
-import { useHomeDemo } from '@theme/composables/useHomeDemo';
 import { demoSnippets } from '@theme/utils/homeSnippets';
 import { FRAMEWORK_GUIDES, LINKS } from '@theme/config/home';
 import SiteAvatar from '../site/SiteAvatar.vue';
 import UiCode from '../ui/UiCode.vue';
 
 const { theme } = useData<ThemeOptions>();
-const demo = useHomeDemo();
+const STYLE = 'pixel-art';
+const SEED = 'Felix';
+const CROWD = ['Felix', 'Mia', 'Noah', 'Aiko', 'Lena', 'Omar'];
 
 const active = ref('http-api');
 
 const tabs = computed(() =>
-  demoSnippets(
-    demo.styleName.value,
-    demo.options.value,
-    theme.value.majorVersion,
-    true,
-  ),
+  demoSnippets(STYLE, { seed: SEED }, theme.value.majorVersion),
 );
 
 const current = computed(
   () => tabs.value.find((tab) => tab.id === active.value) ?? tabs.value[0],
 );
-
-const OTHERS = ['Mia', 'Noah', 'Aiko', 'Lena', 'Omar', 'Ines'];
-
-/** The seed of the hero first, then five names that differ from it. */
-const crowd = computed(() => {
-  const first = demo.seed.value || 'Felix';
-
-  return [first, ...OTHERS.filter((name) => name !== first).slice(0, 5)];
-});
 </script>
 
 <template>
@@ -52,11 +39,10 @@ const crowd = computed(() => {
           a library for seven languages and a CLI for batches. Each of them
           returns the same avatar for the same seed.
         </p>
-        <ul class="home-crowd" aria-label="Six avatars in the chosen style">
-          <li v-for="name in crowd" :key="name">
+        <ul class="home-crowd" aria-label="Six Pixel Art avatars">
+          <li v-for="name in CROWD" :key="name">
             <SiteAvatar
-              mode="library"
-              :style-name="demo.styleName.value"
+              :style-name="STYLE"
               :options="{ seed: name }"
               :alt="name"
             />

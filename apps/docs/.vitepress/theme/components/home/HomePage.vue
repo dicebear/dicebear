@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
  * The home page, top to bottom: the hero with the seed field, then five
- * numbered sections: the styles, the HTTP API, how to drop it in, a style
- * of your own and the open source project. The hero sets the seed and the
- * style that the code sample and the crowd further down use.
+ * sections: the styles, the HTTP API, how to drop it in, a style
+ * of your own and the open source project. Only the hero reacts to the
+ * seed field.
  */
 import { provideHomeDemo } from '@theme/composables/useHomeDemo';
 import HomeHero from './HomeHero.vue';
@@ -15,7 +15,7 @@ import HomeOpenSource from './HomeOpenSource.vue';
 
 // Five of the most used CC0 styles whose definitions are small, since the
 // page loads each of them to draw the seed as it is typed: about 14 kB
-// gzipped for all five. The middle one is the style of the code sample.
+// gzipped for all five.
 provideHomeDemo({
   style: 'pixel-art',
   styles: ['shapes', 'thumbs', 'pixel-art', 'critters', 'glass'],

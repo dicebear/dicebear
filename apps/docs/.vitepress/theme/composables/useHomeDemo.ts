@@ -1,8 +1,6 @@
 /**
- * The state of the home page demo: one seed shared by every section of the
- * page, and the styles the hero shows it in. The seed field of the hero
- * changes it, and the code sample and the crowd further down follow. The
- * style in the middle of the hero is the one the code uses.
+ * The state of the home page hero: one seed and the styles the fan shows it
+ * in. The seed field changes it, or the die rolls a new one.
  */
 import {
   computed,
