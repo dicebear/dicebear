@@ -9,6 +9,8 @@ export type SiteMenuItem =
       icon?: Component;
       command: () => void;
       disabled?: boolean;
+      /** Makes the item one of a choice: a check marks the chosen one. */
+      checked?: boolean;
       separator?: false;
     }
   | { separator: true };
@@ -16,12 +18,14 @@ export type SiteMenuItem =
 
 <script setup lang="ts">
 /**
- * A dropdown menu under its trigger. The trigger slot receives `toggle` and
- * `open` for the button's click handler and `aria-expanded`. A trigger that
- * lives elsewhere calls the exposed `toggle(event)` instead, and the menu
- * opens under that event's `currentTarget`.
+ * A dropdown menu under its trigger: a card with one row per item, the row
+ * under the pointer soft. The trigger slot receives `toggle` and `open` for
+ * the button's click handler and `aria-expanded`. A trigger that lives
+ * elsewhere calls the exposed `toggle(event)` instead, and the menu opens
+ * under that event's `currentTarget`. Items with `checked` form a choice.
  */
 import { nextTick, ref } from 'vue';
+import { Check } from '@lucide/vue';
 import {
   usePopoverPosition,
   type PopoverAlign,
@@ -68,7 +72,7 @@ const { ready, native, open, style, show, hide, toggle, onToggle } =
 function enabledItems(): HTMLElement[] {
   return Array.from(
     panel.value?.querySelectorAll<HTMLElement>(
-      '[role="menuitem"]:not(:disabled)',
+      ':is([role="menuitem"], [role="menuitemradio"]):not(:disabled)',
     ) ?? [],
   );
 }
@@ -165,9 +169,10 @@ defineExpose({ toggle, show, hide });
         <button
           v-else
           type="button"
-          role="menuitem"
+          :role="item.checked === undefined ? 'menuitem' : 'menuitemradio'"
+          :aria-checked="item.checked"
           tabindex="-1"
-          class="site-menu-item hv-ghost"
+          class="site-menu-item"
           :disabled="item.disabled"
           @click="pick(item)"
         >
@@ -180,6 +185,12 @@ defineExpose({ toggle, show, hide });
           />
           <span class="site-menu-label">{{ item.label }}</span>
           <span v-if="item.hint" class="site-menu-hint">{{ item.hint }}</span>
+          <Check
+            v-if="item.checked"
+            :size="16"
+            :stroke-width="2.6"
+            aria-hidden="true"
+          />
         </button>
       </template>
     </div>
@@ -203,18 +214,20 @@ defineExpose({ toggle, show, hide });
     position: fixed;
     inset: auto;
     box-sizing: border-box;
-    min-width: 240px;
+    min-width: 200px;
     max-width: calc(100vw - 16px);
     max-height: calc(100vh - 16px);
     margin: 0;
     padding: 6px;
-    border: 1px solid var(--db-line);
+    border: 0;
     /* It opens inside the box of its trigger, so it resets to neutral. */
     @include tone.tone('panel');
-    border-radius: var(--db-radius-5);
+    border-radius: var(--db-radius-6);
     background: var(--db-panel);
     color: var(--db-ink);
-    box-shadow: var(--db-shadow-pop);
+    box-shadow:
+      0 0 0 1px var(--db-line),
+      var(--db-shadow-pop);
     overflow-y: auto;
   }
 
@@ -232,12 +245,27 @@ defineExpose({ toggle, show, hide });
     border: 0;
     border-radius: 20px;
     background: transparent;
-    color: var(--db-ink);
-    font-size: 15px;
+    font-family: var(--db-font-display);
+    font-size: 16px;
     line-height: 24px;
     font-weight: 600;
+    color: var(--db-ink-2);
     text-align: left;
     white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.12s,
+      color 0.12s;
+
+    &:hover {
+      background-color: var(--db-soft);
+      color: var(--db-ink);
+    }
+
+    &[aria-checked='true'] {
+      font-weight: 700;
+      color: var(--db-ink);
+    }
 
     &:disabled {
       color: var(--db-muted);

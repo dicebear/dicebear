@@ -13,12 +13,12 @@ import HomeIntegrate from './HomeIntegrate.vue';
 import HomeOwnStyle from './HomeOwnStyle.vue';
 import HomeOpenSource from './HomeOpenSource.vue';
 
-// Five of the most used styles whose definitions are small, since the page
-// loads each of them to draw the seed as it is typed: about 25 kB gzipped
-// for all five. The middle one is the style of the code sample.
+// Five of the most used CC0 styles whose definitions are small, since the
+// page loads each of them to draw the seed as it is typed: about 14 kB
+// gzipped for all five. The middle one is the style of the code sample.
 provideHomeDemo({
-  style: 'personas',
-  styles: ['thumbs', 'pixel-art', 'personas', 'micah', 'miniavs'],
+  style: 'pixel-art',
+  styles: ['shapes', 'thumbs', 'pixel-art', 'critters', 'glass'],
 });
 </script>
 

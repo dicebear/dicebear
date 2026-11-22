@@ -63,9 +63,6 @@ function onInput(event: Event) {
       </li>
     </ul>
 
-    <p class="site-control home-hero-style" aria-live="polite">
-      {{ demo.style.value.title }}
-    </p>
     <div class="home-seed site-rise" style="animation-delay: 240ms">
       <label for="home-seed" class="sr-only">Seed</label>
       <input
@@ -120,10 +117,6 @@ function onInput(event: Event) {
   &-lead {
     max-width: 760px;
     margin-top: clamp(20px, 2vw, 28px);
-  }
-
-  &-style {
-    color: var(--db-muted);
   }
 
   &-actions {

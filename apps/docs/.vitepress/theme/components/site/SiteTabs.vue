@@ -1,9 +1,10 @@
 <script setup lang="ts">
 /**
  * A row of tab pills. As many as fit stand in the row; the rest go into a
- * last pill with a native dropdown, which shows the chosen tab when that is
- * one of them. Nothing scrolls sideways, so every tab can be reached with a
- * mouse wheel, a touchpad, a keyboard or a finger alike.
+ * last pill that opens a menu (SiteMenu). The pill takes the name of a tab
+ * chosen from the menu and fills like any chosen tab. Nothing scrolls
+ * sideways, so every tab can be reached with a mouse wheel, a touchpad, a
+ * keyboard or a finger alike.
  */
 import {
   computed,
@@ -14,6 +15,7 @@ import {
   watch,
 } from 'vue';
 import { ChevronDown } from '@lucide/vue';
+import SiteMenu, { type SiteMenuItem } from './SiteMenu.vue';
 
 export interface SiteTab {
   id: string;
@@ -43,6 +45,16 @@ const shown = computed(() => props.tabs.slice(0, visible.value));
 const hidden = computed(() => props.tabs.slice(visible.value));
 const hiddenActive = computed(() =>
   hidden.value.find((tab) => tab.id === model.value),
+);
+
+const menu = computed<SiteMenuItem[]>(() =>
+  hidden.value.map((tab) => ({
+    label: tab.label,
+    checked: tab.id === model.value,
+    command: () => {
+      model.value = tab.id;
+    },
+  })),
 );
 
 function fit() {
@@ -98,10 +110,6 @@ watch(
   () => props.tabs.map((tab) => tab.label).join('|'),
   () => void nextTick(fit),
 );
-
-function onPick(event: Event) {
-  model.value = (event.target as HTMLSelectElement).value;
-}
 </script>
 
 <template>
@@ -118,25 +126,31 @@ function onPick(event: Event) {
       >
         {{ tab.label }}
       </button>
-      <span
+      <SiteMenu
         v-if="hidden.length"
-        class="site-pill site-pill-tab site-tabs-more"
-        :class="{ 'is-active': hiddenActive }"
+        :items="menu"
+        :label="moreLabel"
+        align="right"
+        class="site-tabs-more"
       >
-        {{ hiddenActive?.label ?? moreLabel }}
-        <ChevronDown :size="16" aria-hidden="true" />
-        <select
-          class="site-tabs-select"
-          :value="hiddenActive ? model : ''"
-          :aria-label="moreLabel"
-          @change="onPick"
-        >
-          <option value="" disabled>{{ moreLabel }}</option>
-          <option v-for="tab in hidden" :key="tab.id" :value="tab.id">
-            {{ tab.label }}
-          </option>
-        </select>
-      </span>
+        <template #trigger="{ open, toggle }">
+          <button
+            type="button"
+            class="site-pill site-pill-tab"
+            :class="{ 'is-active': hiddenActive, 'is-open': open }"
+            :aria-expanded="open"
+            aria-haspopup="menu"
+            @click="toggle"
+          >
+            {{ hiddenActive?.label ?? moreLabel }}
+            <ChevronDown
+              :size="16"
+              aria-hidden="true"
+              class="site-tabs-chevron"
+            />
+          </button>
+        </template>
+      </SiteMenu>
     </div>
     <div ref="measure" class="site-tabs-measure" aria-hidden="true">
       <span
@@ -167,23 +181,22 @@ function onPick(event: Event) {
   }
 }
 
-/* The native dropdown lies over the pill, invisible, so the pill looks like
-   the others and the browser's own picker opens. */
+/* The last pill: soft while its menu is open, its chevron turned. */
 .site-tabs-more {
-  position: relative;
+  flex-shrink: 0;
 
-  &:focus-within {
-    outline: 2px solid var(--db-focus);
-    outline-offset: 2px;
+  .is-open:not(.is-active) {
+    background: var(--db-soft);
+    color: var(--db-ink);
   }
 }
 
-.site-tabs-select {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  opacity: 0;
-  cursor: pointer;
+.site-tabs-chevron {
+  transition: transform 0.2s var(--ease-smooth);
+
+  .is-open & {
+    transform: rotate(180deg);
+  }
 }
 
 /* Every tab once, at its bold width, to know what fits. */
