@@ -176,7 +176,7 @@ const FAN = [
     </SiteSection>
 
     <section class="site-container site-artists-list">
-      <div class="site-pair is-top site-artists-list-head">
+      <div class="site-artists-list-head">
         <h2 class="site-h2">Artists</h2>
         <p class="site-body">
           Each style keeps the name of the work it is based on and the license
@@ -349,7 +349,8 @@ const FAN = [
       padding-bottom: clamp(32px, 3.4vw, 48px);
 
       .site-body {
-        max-width: 520px;
+        max-width: 640px;
+        margin-top: 16px;
       }
     }
   }
