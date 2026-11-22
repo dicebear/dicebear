@@ -52,5 +52,16 @@ const stars = computed(
     padding-left: 0;
     border-left: 0;
   }
+
+  /* The narrowest phones have no room for the count beside the logo, the
+     search and the menu. It stays in the button's name. */
+  @media (max-width: 339px) {
+    width: 44px;
+    padding: 0;
+
+    .theme-github-count {
+      display: none;
+    }
+  }
 }
 </style>
