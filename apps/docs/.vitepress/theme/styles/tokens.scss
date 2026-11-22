@@ -8,11 +8,12 @@
  *    `_tone.scss`), so a heading, a link or a button needs no "on yellow"
  *    variant of its own.
  *
- * Warm paper and a navy ink in light. In dark a neutral near-black with a
- * trace of warmth, so the cream text has no blue cast. Yellow and coral have
- * no dark shade that is not brown, so their blocks stay bright in both
- * themes and carry dark text. Blue, violet and green go deep in dark, and
- * their bright tint becomes the accent.
+ * Warm paper and a navy ink in light. In dark a charcoal with a trace of
+ * warmth, so the cream text has no blue cast. Its grounds step up in clear
+ * stages (paper, panel, soft) and its lines are strong enough to hold a
+ * layout together. The block colors stay light in both themes and carry
+ * dark text: yellow and coral as they are, blue, violet and green as
+ * quieter pastels in dark.
  */
 
 :root {
@@ -140,25 +141,25 @@
 }
 
 .dark {
-  --db-c-paper: #131312;
-  --db-c-panel: #1d1d1b;
-  --db-c-soft: #232321;
-  --db-c-line: #30302d;
-  --db-c-field: #75726a;
-  --db-c-ink: #f7f2e8;
-  --db-c-ink-2: #c9c5bb;
-  --db-c-muted: #9c988e;
+  --db-c-paper: #1c1b19;
+  --db-c-panel: #272623;
+  --db-c-soft: #302e2b;
+  --db-c-line: #45423d;
+  --db-c-field: #8f8a80;
+  --db-c-ink: #f4efe6;
+  --db-c-ink-2: #d2ccc1;
+  --db-c-muted: #aaa498;
 
-  --db-sky: #0d3a6e;
-  --db-sky-acc: #9ed8ff;
-  --db-lilac: #32237a;
-  --db-lilac-acc: #cfc2ff;
-  --db-mint: #0c4a37;
-  --db-mint-acc: #9eeac6;
-  --db-deep-2: #d3d6dc;
+  --db-sky: #8cc4e6;
+  --db-sky-acc: #10202c;
+  --db-lilac: #b4a8e6;
+  --db-lilac-acc: #1c1838;
+  --db-mint: #86c9a8;
+  --db-mint-acc: #13241c;
+  --db-deep-2: #33312c;
   --db-on: #161513;
   --db-on-2: #3b3833;
-  --db-card: #161513;
+  --db-card: #232220;
 
   --db-ok: #4ade80;
   --db-ok-soft: #17331f;
@@ -172,10 +173,11 @@
   --db-code-key: #7dd3fc;
   --db-code-string: #fdba74;
 
-  --db-shadow: 0 22px 36px -22px rgba(0, 0, 0, 0.55);
+  /* A hairline in the line color, so a white sticker keeps its edge on the
+     dark ground. */
+  --db-shadow:
+    0 0 0 1px var(--db-c-line), 0 22px 36px -22px rgba(0, 0, 0, 0.55);
   --db-shadow-stage: 0 30px 48px -28px rgba(0, 0, 0, 0.7);
   --db-shadow-pop:
     0 24px 48px -24px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
-
-  --db-btn-hover: #ffffff;
 }

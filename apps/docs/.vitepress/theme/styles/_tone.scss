@@ -48,14 +48,14 @@
   --db-select-text: #ffffff;
 }
 
-/* Sky, lilac and mint: light in light, deep in dark. The tint carries the
-   headings; cards inside are white in light and a darker shade of the
-   ground in dark. */
+/* Sky, lilac and mint: a light ground with a dark tint for the headings and
+   the button, in both themes. The text is the dark `--db-on`, so it stays
+   dark on the pastels of the dark theme too. */
 @mixin deep-roles($bg, $acc) {
   --db-paper: #{$bg};
   --db-panel: #ffffff;
   --db-soft: color-mix(in srgb, #ffffff 42%, transparent);
-  --db-ink: var(--db-c-ink);
+  --db-ink: var(--db-on);
   --db-ink-2: var(--db-deep-2);
   --db-muted: var(--db-deep-2);
   --db-accent: #{$acc};
@@ -63,19 +63,10 @@
   --db-rule: color-mix(in srgb, #{$acc} 24%, transparent);
   --db-field-border: color-mix(in srgb, #{$acc} 55%, transparent);
   --db-btn-bg: #{$acc};
-  /* White on the dark button in light, as on yellow; in dark the button is
-     cream with near-black text, like everywhere else in dark mode. */
   --db-btn-fg: #ffffff;
   --db-focus: #{$acc};
   --db-select: #{$acc};
   --db-select-text: #{$bg};
-
-  :root.dark & {
-    --db-panel: color-mix(in srgb, #{$bg} 62%, #000000);
-    --db-soft: color-mix(in srgb, #{$bg} 80%, #000000);
-    --db-btn-bg: var(--db-c-ink);
-    --db-btn-fg: var(--db-on);
-  }
 }
 
 @mixin tone($name) {
