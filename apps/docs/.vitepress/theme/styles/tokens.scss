@@ -46,6 +46,9 @@
   --db-on-2: #2c3857;
   /* The ground of a code card. */
   --db-card: #ffffff;
+  /* The logo's mark: charcoal on light grounds, cream on dark ones, as in
+     logo.svg and logo-dark.svg. */
+  --db-mark: #1c1b19;
   /* The ground behind an avatar, light in both themes, or styles drawn in
      black line work vanish. */
   --db-tile: #f4ecdc;
@@ -160,6 +163,7 @@
   --db-on: #161513;
   --db-on-2: #3b3833;
   --db-card: #232220;
+  --db-mark: var(--db-c-ink);
 
   --db-ok: #4ade80;
   --db-ok-soft: #17331f;

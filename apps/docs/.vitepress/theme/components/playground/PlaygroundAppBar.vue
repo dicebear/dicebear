@@ -101,7 +101,22 @@ const links = computed(() => [
 <template>
   <div class="pg-appbar">
     <a :href="withBase('/')" class="pg-appbar-home" aria-label="DiceBear home">
-      <img :src="withBase('/favicon.svg')" alt="" width="36" height="36" />
+      <!-- The mark of the wordmark, in one color: the tile in the mark's
+           color, the bear cut out of it. With a single color nothing can
+           shine through its rounded corners. -->
+      <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M2 0C0.895637 0.000243231 0 0.895581 0 2V30C0 31.1044 0.895637 31.9998 2 32H19.1187C20.127 32 20.7699 30.9239 20.2804 30.0423C18.9648 27.6728 17.7083 25.5811 16.917 24.6768C14.6623 22.1 4.08154 24.5028 3.74685 16.0962C3.72487 15.5442 4.09608 15.0614 4.62019 14.8867L9.7823 13.1657C10.0841 13.0651 10.3394 12.86 10.5116 12.5925C10.9993 11.8346 12.0883 10.2358 13.084 9.42676C14.026 8.66138 15.5502 7.68769 18.3327 7.241C18.8892 7.15167 19.3312 6.73699 19.6023 6.24285C20.2531 5.05655 21.5433 4.33664 22.9033 4.53223C24.6799 4.78792 25.9026 6.50922 25.6338 8.37695C25.614 8.51463 25.659 8.65455 25.7626 8.74726C26.9469 9.806 28.199 11.2718 29.4383 12.9274C30.2334 13.9896 32 13.4517 32 12.1248V2C32 0.895431 31.1046 0 30 0H2Z"
+        />
+        <circle
+          cx="1.66667"
+          cy="1.66667"
+          r="1.66667"
+          transform="matrix(-1 0 0 1 17.8335 11.167)"
+          fill="currentColor"
+        />
+      </svg>
     </a>
 
     <PlaygroundStyleSelect class="pg-appbar-style" />
@@ -242,9 +257,10 @@ const links = computed(() => [
   &-home {
     display: flex;
     flex-shrink: 0;
-    border-radius: 10px;
+    border-radius: 4px;
+    color: var(--db-mark);
 
-    img {
+    svg {
       display: block;
     }
 
