@@ -166,7 +166,7 @@ watch(
       <SiteMenu
         v-if="hidden.length"
         :items="menu"
-        :label="moreLabel"
+        :label="ariaLabel ?? moreLabel"
         align="right"
         class="site-tabs-more"
       >

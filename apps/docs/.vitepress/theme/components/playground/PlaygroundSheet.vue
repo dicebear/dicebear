@@ -6,10 +6,15 @@
  * to the top of the playground for more room; the head then shows a small
  * avatar, so a change stays in sight. Its content scrolls inside it.
  *
+ * Scrolling moves the sheet first, as in the editor of old: a swipe up, on
+ * the sheet or on the picture, or a turn of the wheel down, raises it, and
+ * only then does its content scroll; at the top of its content a swipe or
+ * a turn the other way lowers it again.
+ *
  * The parent measures where the picture ends (`top`) and how high the
  * actions are (`bottom`), both in pixels from the playground's edges.
  */
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 const props = defineProps<{
   top: number;
@@ -53,12 +58,8 @@ function onPointerMove(event: PointerEvent) {
 
 // A pull of a fifth of the way or more takes the sheet to the other end; a
 // shorter one lets it fall back.
-function onPointerUp() {
-  window.removeEventListener('pointermove', onPointerMove);
-  window.removeEventListener('pointerup', onPointerUp);
-  window.removeEventListener('pointercancel', onPointerUp);
-
-  if (!moved || dragTop.value === null) return;
+function settle() {
+  if (dragTop.value === null) return;
 
   const travel = props.top - RAISED;
   const raisedBy = props.top - dragTop.value;
@@ -69,7 +70,143 @@ function onPointerUp() {
   dragTop.value = null;
 }
 
-onBeforeUnmount(onPointerUp);
+function onPointerUp() {
+  window.removeEventListener('pointermove', onPointerMove);
+  window.removeEventListener('pointerup', onPointerUp);
+  window.removeEventListener('pointercancel', onPointerUp);
+
+  if (moved) settle();
+}
+
+const root = ref<HTMLElement | null>(null);
+let surface: HTMLElement | null = null;
+
+/** The element that scrolls under a point inside the sheet, if any. */
+function scrollerOf(target: EventTarget | null): HTMLElement | null {
+  let el = target instanceof HTMLElement ? target : null;
+
+  while (el && el !== root.value) {
+    const overflow = getComputedStyle(el).overflowY;
+
+    if (
+      (overflow === 'auto' || overflow === 'scroll') &&
+      el.scrollHeight > el.clientHeight
+    ) {
+      return el;
+    }
+
+    el = el.parentElement;
+  }
+
+  return null;
+}
+
+function inSheet(target: EventTarget | null) {
+  return !!root.value && target instanceof Node && root.value.contains(target);
+}
+
+/** The content under the point is scrolled to its top, or does not scroll. */
+function atTop(target: EventTarget | null) {
+  const scroller = scrollerOf(target);
+
+  return !scroller || scroller.scrollTop <= 0;
+}
+
+/** A vertical move in this direction belongs to the sheet, not the content. */
+function sheetTakes(up: boolean, target: EventTarget | null) {
+  return expanded.value ? !up && inSheet(target) && atTop(target) : up;
+}
+
+let touch: {
+  x: number;
+  y: number;
+  top: number;
+  target: EventTarget | null;
+  mode: 'open' | 'sheet' | 'content';
+} | null = null;
+
+function onTouchStart(event: TouchEvent) {
+  const target = event.target;
+
+  // The grip has its own pull; two fingers zoom.
+  if (
+    event.touches.length !== 1 ||
+    (target instanceof Element && target.closest('.pg-sheet-grip'))
+  ) {
+    touch = null;
+
+    return;
+  }
+
+  touch = {
+    x: event.touches[0].clientX,
+    y: event.touches[0].clientY,
+    top: expanded.value ? RAISED : props.top,
+    target,
+    mode: 'open',
+  };
+}
+
+function onTouchMove(event: TouchEvent) {
+  if (!touch) return;
+
+  const point = event.touches[0];
+  const dx = point.clientX - touch.x;
+  const dy = point.clientY - touch.y;
+
+  if (touch.mode === 'open') {
+    if (Math.abs(dy) < 6 || Math.abs(dy) < Math.abs(dx)) return;
+
+    touch.mode = sheetTakes(dy < 0, touch.target) ? 'sheet' : 'content';
+    touch.y = point.clientY;
+  }
+
+  if (touch.mode !== 'sheet') return;
+
+  event.preventDefault();
+  dragTop.value = Math.min(
+    props.top,
+    Math.max(RAISED, touch.top + point.clientY - touch.y),
+  );
+}
+
+function onTouchEnd() {
+  if (touch?.mode === 'sheet') settle();
+
+  touch = null;
+}
+
+// The wheel of a mouse or a trackpad: one turn raises or lowers the sheet.
+function onWheel(event: WheelEvent) {
+  if (
+    dragTop.value !== null ||
+    Math.abs(event.deltaY) <= Math.abs(event.deltaX)
+  )
+    return;
+
+  if (!sheetTakes(event.deltaY > 0, event.target)) return;
+
+  event.preventDefault();
+  expanded.value = !expanded.value;
+}
+
+onMounted(() => {
+  surface = (root.value?.offsetParent as HTMLElement | null) ?? null;
+  surface?.addEventListener('touchstart', onTouchStart, { passive: true });
+  surface?.addEventListener('touchmove', onTouchMove, { passive: false });
+  surface?.addEventListener('touchend', onTouchEnd);
+  surface?.addEventListener('touchcancel', onTouchEnd);
+  surface?.addEventListener('wheel', onWheel, { passive: false });
+});
+
+onBeforeUnmount(() => {
+  onPointerUp();
+  surface?.removeEventListener('touchstart', onTouchStart);
+  surface?.removeEventListener('touchmove', onTouchMove);
+  surface?.removeEventListener('touchend', onTouchEnd);
+  surface?.removeEventListener('touchcancel', onTouchEnd);
+  surface?.removeEventListener('wheel', onWheel);
+});
 
 // A tap, or Enter and Space, toggles the sheet. The click that ends a pull
 // is not a tap.
@@ -93,6 +230,7 @@ defineExpose({ expanded });
 
 <template>
   <section
+    ref="root"
     class="pg-sheet"
     :class="{ 'is-expanded': expanded, 'is-dragging': dragTop !== null }"
     :style="style"

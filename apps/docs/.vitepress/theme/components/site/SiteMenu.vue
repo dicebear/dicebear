@@ -23,8 +23,12 @@ export type SiteMenuItem =
  * the button's click handler and `aria-expanded`. A trigger that lives
  * elsewhere calls the exposed `toggle(event)` instead, and the menu opens
  * under that event's `currentTarget`. Items with `checked` form a choice.
+ * On a phone the same items open as a sheet from the bottom, with rows for
+ * the thumb, as the other menus there do.
  */
-import { nextTick, ref } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
+import { useMediaQuery } from '@vueuse/core';
+import SiteDialog from './SiteDialog.vue';
 import { Check } from '@lucide/vue';
 import {
   usePopoverPosition,
@@ -118,22 +122,62 @@ function onKeyDown(event: KeyboardEvent) {
 }
 
 async function onTriggerArrow(event: KeyboardEvent) {
-  if (open.value) return;
+  if (isOpen.value) return;
 
   event.preventDefault();
+
+  if (phone.value) {
+    sheetOpen.value = true;
+
+    return;
+  }
+
   await show();
   await nextTick();
   focusItem(event.key === 'ArrowUp' ? 'last' : 'first');
 }
 
+const phone = useMediaQuery('(max-width: 767px)');
+const sheetOpen = ref(false);
+
+watch(sheetOpen, (value) => (value ? emit('show') : emit('hide')));
+
+/** Open, as a popover or, on a phone, as a sheet. */
+const isOpen = computed(() => (phone.value ? sheetOpen.value : open.value));
+
+function toggleMenu(event?: Event) {
+  if (phone.value) {
+    sheetOpen.value = !sheetOpen.value;
+
+    return;
+  }
+
+  toggle(event);
+}
+
+function showMenu(event?: Event) {
+  if (phone.value) {
+    sheetOpen.value = true;
+
+    return;
+  }
+
+  return show(event);
+}
+
+function hideMenu() {
+  sheetOpen.value = false;
+  hide();
+}
+
 function pick(item: SiteMenuItem) {
   if (item.separator || item.disabled) return;
 
-  hide();
+  hideMenu();
   item.command();
 }
 
-defineExpose({ toggle, show, hide });
+defineExpose({ toggle: toggleMenu, show: showMenu, hide: hideMenu });
 </script>
 
 <template>
@@ -144,7 +188,7 @@ defineExpose({ toggle, show, hide });
       @keydown.down="onTriggerArrow"
       @keydown.up="onTriggerArrow"
     >
-      <slot name="trigger" :open="open" :toggle="toggle" />
+      <slot name="trigger" :open="isOpen" :toggle="toggleMenu" />
     </span>
 
     <div
@@ -194,6 +238,48 @@ defineExpose({ toggle, show, hide });
         </button>
       </template>
     </div>
+
+    <SiteDialog
+      v-if="phone"
+      v-model:open="sheetOpen"
+      sheet
+      :header="label ?? 'Menu'"
+    >
+      <div class="site-menu-sheet" role="menu" :aria-label="label">
+        <template v-for="(item, index) in items" :key="index">
+          <div
+            v-if="item.separator"
+            class="site-menu-separator"
+            role="separator"
+          />
+          <button
+            v-else
+            type="button"
+            :role="item.checked === undefined ? 'menuitem' : 'menuitemradio'"
+            :aria-checked="item.checked"
+            class="site-menu-item"
+            :disabled="item.disabled"
+            @click="pick(item)"
+          >
+            <component
+              :is="item.icon"
+              v-if="item.icon"
+              :size="18"
+              aria-hidden="true"
+              class="site-menu-icon"
+            />
+            <span class="site-menu-label">{{ item.label }}</span>
+            <span v-if="item.hint" class="site-menu-hint">{{ item.hint }}</span>
+            <Check
+              v-if="item.checked"
+              :size="18"
+              :stroke-width="2.6"
+              aria-hidden="true"
+            />
+          </button>
+        </template>
+      </div>
+    </SiteDialog>
   </span>
 </template>
 
@@ -301,6 +387,20 @@ defineExpose({ toggle, show, hide });
     height: 1px;
     margin: 6px 4px;
     background: var(--db-line);
+  }
+
+  /* The sheet of a phone: the same rows, 48px for the thumb. */
+  &-sheet {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 8px 8px;
+
+    .site-menu-item {
+      height: 48px;
+      border-radius: 24px;
+      font-size: 17px;
+    }
   }
 }
 </style>

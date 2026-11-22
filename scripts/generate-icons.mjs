@@ -4,8 +4,9 @@
 // `node scripts/generate-icons.mjs`.
 //
 // The mark is the bear of the logo, drawn as negative space: the tile is the
-// bear's color, the shape around it and the eye are the ink. A beige bear on
-// a navy tile reads at 16px in light and dark tab bars alike.
+// bear's color, the shape around it and the eye are the ground. A beige bear
+// on the charcoal of the dark theme reads at 16px in light and dark tab bars
+// alike, and sits as well in the dark playground as in the light one.
 //
 // Icons a browser shows as they are (favicons, the README icon) get rounded
 // corners like the stickers on the site. Icons a system masks itself (the
@@ -20,8 +21,9 @@ import { Resvg } from '@resvg/resvg-js';
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const publicDir = join(rootDir, 'apps', 'docs', 'pages', 'public');
 
-/** The ink and the beige of the site (`--db-c-ink`, `--db-tile`). */
-const INK = '#15213b';
+// The charcoal of the dark theme (`--db-c-paper` in dark) and the beige of
+// the avatar tiles (`--db-tile`).
+const INK = '#1c1b19';
 const BEIGE = '#f4ecdc';
 
 /** Corner radius of the rounded icons, as a share of the side. */
