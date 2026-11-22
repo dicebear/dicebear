@@ -101,6 +101,11 @@ function scrollerOf(target: EventTarget | null): HTMLElement | null {
   return null;
 }
 
+/** A dialog or a popover open over the playground keeps its own gestures. */
+function inOverlay(target: EventTarget | null) {
+  return target instanceof Element && !!target.closest('dialog, [popover]');
+}
+
 function inSheet(target: EventTarget | null) {
   return !!root.value && target instanceof Node && root.value.contains(target);
 }
@@ -128,9 +133,11 @@ let touch: {
 function onTouchStart(event: TouchEvent) {
   const target = event.target;
 
-  // The grip has its own pull; two fingers zoom.
+  // The grip has its own pull, two fingers zoom, and a dialog or a menu
+  // over the playground scrolls its own list.
   if (
     event.touches.length !== 1 ||
+    inOverlay(target) ||
     (target instanceof Element && target.closest('.pg-sheet-grip'))
   ) {
     touch = null;
@@ -180,6 +187,7 @@ function onTouchEnd() {
 function onWheel(event: WheelEvent) {
   if (
     dragTop.value !== null ||
+    inOverlay(event.target) ||
     Math.abs(event.deltaY) <= Math.abs(event.deltaX)
   )
     return;
