@@ -455,6 +455,8 @@ function onOwnColor(event: Event) {
           </button>
         </template>
       </div>
+      <!-- What scrolls in after the tiles, such as a phone's status line. -->
+      <slot name="end" />
     </div>
 
     <p v-else class="pg-editor-empty">

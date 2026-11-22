@@ -21,6 +21,7 @@ import {
 } from '@lucide/vue';
 import useStore, { type PlaygroundMode } from '@theme/stores/playground';
 import { track, styleLabel } from '@theme/utils/track';
+import { legalLinks } from '@theme/config/footer-links';
 import SiteDialog from '../site/SiteDialog.vue';
 import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
 import PlaygroundModeSketch from './PlaygroundModeSketch.vue';
@@ -210,6 +211,17 @@ const links = computed(() => [
         </a>
 
         <PlaygroundLicenseText class="pg-appbar-license" />
+        <p v-if="legalLinks.length" class="pg-appbar-legal">
+          <template v-for="(link, index) in legalLinks" :key="link.href">
+            <span v-if="index > 0" aria-hidden="true"> · </span>
+            <a
+              :href="link.href"
+              :target="link.external ? '_blank' : undefined"
+              :rel="link.external ? 'noopener noreferrer' : undefined"
+              >{{ link.label }}</a
+            >
+          </template>
+        </p>
       </div>
     </SiteDialog>
   </div>
@@ -354,6 +366,20 @@ const links = computed(() => [
     font-size: 13px;
     line-height: 19px;
     color: var(--db-ink-2);
+  }
+
+  &-legal {
+    margin: 8px 0 0;
+    padding: 0 12px;
+    font-size: 13px;
+    line-height: 19px;
+    color: var(--db-ink-2);
+
+    a {
+      color: var(--db-ink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
   }
 
   /* A view: its drawing, its name and what it is for. */

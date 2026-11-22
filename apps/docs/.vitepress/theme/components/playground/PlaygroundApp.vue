@@ -411,7 +411,14 @@ async function showAdvanced() {
           />
           <PlaygroundStatus class="pg-app-sheet-status" />
         </div>
-        <PlaygroundEditor v-else class="pg-app-sheet-editor" />
+        <PlaygroundEditor v-else class="pg-app-sheet-editor">
+          <template #end>
+            <PlaygroundStatus
+              :combinations="false"
+              class="pg-app-sheet-status is-editor"
+            />
+          </template>
+        </PlaygroundEditor>
       </PlaygroundSheet>
     </div>
 
@@ -608,6 +615,11 @@ async function showAdvanced() {
       margin-top: auto;
       padding: 16px 20px 24px;
       border-top: 1px solid var(--db-line);
+    }
+
+    /* Under the tiles of the editor, inside their own padding. */
+    &-sheet-status.is-editor {
+      margin-top: 4px;
     }
 
     &-history {
