@@ -1,14 +1,19 @@
 <script setup lang="ts">
 /**
- * The style field in the toolbar. It opens the list of styles right under
- * it, aligned to its left edge, on a phone as a sheet from the bottom.
+ * The style as the title of the playground: its picture, its name as large
+ * as a heading and, under it, who drew it and its license. A press opens the
+ * list of styles right under it, aligned to its left edge, on a phone as a
+ * sheet from the bottom.
  */
 import { computed, ref } from 'vue';
 import { capitalCase } from 'change-case';
 import { storeToRefs } from 'pinia';
+import { useData } from 'vitepress';
 import { useMediaQuery } from '@vueuse/core';
 import { ChevronDown } from '@lucide/vue';
 import { exampleSeeds } from '@theme/config/styleCategories';
+import type { ThemeOptions } from '@theme/types';
+import { formatLicenseName } from '@theme/utils/format';
 import useStore from '@theme/stores/playground';
 import { usePlaygroundStyles } from '@theme/composables/usePlaygroundStyles';
 import SiteDialog from '../site/SiteDialog.vue';
@@ -18,6 +23,7 @@ import PlaygroundThumb from './PlaygroundThumb.vue';
 
 defineOptions({ inheritAttrs: false });
 
+const { theme } = useData<ThemeOptions>();
 const store = useStore();
 const { avatarStyleName } = storeToRefs(store);
 const { chooseStyle, openUpload } = usePlaygroundStyles();
@@ -80,6 +86,16 @@ const currentName = computed(() =>
     : capitalCase(avatarStyleName.value),
 );
 
+// Who drew the style and under which license, the line under its name.
+const credit = computed(() => {
+  if (store.isCustomStyle) return 'Your own style';
+
+  const meta = theme.value.avatarStyles[avatarStyleName.value]?.meta;
+  const license = formatLicenseName(meta?.license?.name);
+
+  return [meta?.creator, license].filter(Boolean).join(' · ');
+});
+
 const triggerOptions = { seed: exampleSeeds[0] };
 </script>
 
@@ -100,9 +116,19 @@ const triggerOptions = { seed: exampleSeeds[0] };
         surface="tile"
       />
     </span>
-    <span class="pg-style-field-label">Style</span>
-    <span class="pg-style-field-name">{{ currentName }}</span>
-    <ChevronDown :size="16" aria-hidden="true" class="pg-style-field-chevron" />
+    <span class="pg-style-field-text">
+      <span class="sr-only">Style:</span>
+      <span class="pg-style-field-title">
+        <span class="pg-style-field-name">{{ currentName }}</span>
+        <ChevronDown
+          :size="24"
+          :stroke-width="2.4"
+          aria-hidden="true"
+          class="pg-style-field-chevron"
+        />
+      </span>
+      <span v-if="credit" class="pg-style-field-credit">{{ credit }}</span>
+    </span>
   </button>
 
   <SitePopover
@@ -129,45 +155,67 @@ const triggerOptions = { seed: exampleSeeds[0] };
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/control' as c;
-
-/* The field in the toolbar: the picture, the word Style and the name of the
-   style, the same order as the view field on the other end of the bar. */
+/* The title of the playground: the picture, the name of the style as large
+   as a heading with the chevron after it, and the credit under it. It is a
+   button to choose with, so it takes the tint on hover like a picker, but
+   rests without a ground, as a title does. */
 .pg-style-field {
-  @include c.control-picker;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 6px 18px 6px 6px;
+  border: 0;
+  border-radius: 24px;
+  background: transparent;
+  font: inherit;
+  color: var(--db-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.12s;
+
+  &:hover,
+  &[aria-expanded='true'] {
+    background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--db-focus);
+    outline-offset: 2px;
+  }
 
   &-thumb {
     flex-shrink: 0;
     display: block;
-    width: 28px;
-    height: 28px;
+    width: 52px;
+    height: 52px;
 
     :deep(.pg-thumb) {
-      border-radius: 50%;
+      border-radius: 16px;
     }
   }
 
-  &-label {
-    flex-shrink: 0;
-    font-size: 15px;
-    line-height: 20px;
-    font-weight: 500;
-    color: var(--db-muted);
+  &-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
 
-    /* A phone's bar has no room for the word. Screen readers still get it. */
-    @media (max-width: 767px) {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      white-space: nowrap;
-      clip-path: inset(50%);
-    }
+  &-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
   }
 
   &-name {
-    @include c.control-value;
-
+    font-family: var(--db-font-display);
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -175,13 +223,44 @@ const triggerOptions = { seed: exampleSeeds[0] };
 
   &-chevron {
     flex-shrink: 0;
-    margin-left: auto;
-    color: var(--db-muted);
     transition: transform 0.15s;
   }
 
   &[aria-expanded='true'] &-chevron {
     transform: rotate(180deg);
+  }
+
+  &-credit {
+    font-size: 14px;
+    line-height: 18px;
+    color: var(--db-ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Smaller on a phone, where the bar is one row with the view and the
+     history; the credit stays on the style's own page. */
+  @media (max-width: 767px) {
+    gap: 10px;
+    padding: 4px 12px 4px 4px;
+
+    &-thumb {
+      width: 40px;
+      height: 40px;
+
+      :deep(.pg-thumb) {
+        border-radius: 12px;
+      }
+    }
+
+    &-name {
+      font-size: 22px;
+    }
+
+    &-credit {
+      display: none;
+    }
   }
 }
 

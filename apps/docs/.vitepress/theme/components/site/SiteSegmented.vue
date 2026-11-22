@@ -3,7 +3,9 @@
  * A segmented control for two to six options, built as a radio group. One
  * segment is always chosen. Tab reaches the chosen segment, and the arrow
  * keys move the choice. An option with an icon shows only the icon, its
- * label becomes the name and the tooltip.
+ * label becomes the name and the tooltip. A `tip` adds a tooltip below the
+ * segment, and the `option` slot draws a segment's content in place of the
+ * label or icon.
  */
 import { computed, ref, type Component } from 'vue';
 
@@ -13,6 +15,7 @@ const props = withDefaults(
       value: T;
       label: string;
       icon?: Component;
+      tip?: string;
     }[];
     ariaLabel?: string;
     size?: 'sm' | 'md' | 'lg';
@@ -87,20 +90,23 @@ function onKeydown(event: KeyboardEvent, index: number) {
       :class="{ 'is-icon': option.icon }"
       :aria-checked="index === chosen"
       :aria-label="option.icon ? option.label : undefined"
-      :data-tip="option.icon ? option.label : undefined"
+      :data-tip="option.tip ?? (option.icon ? option.label : undefined)"
+      :data-tip-side="option.tip ? 'bottom' : undefined"
       :tabindex="index === tabStop ? 0 : -1"
       :disabled="disabled"
       :data-index="index"
       @click="pick(index)"
       @keydown="onKeydown($event, index)"
     >
-      <component
-        :is="option.icon"
-        v-if="option.icon"
-        :size="size === 'lg' ? 20 : 16"
-        aria-hidden="true"
-      />
-      <span v-else class="site-segmented-label">{{ option.label }}</span>
+      <slot name="option" :option="option" :chosen="index === chosen">
+        <component
+          :is="option.icon"
+          v-if="option.icon"
+          :size="size === 'lg' ? 20 : 16"
+          aria-hidden="true"
+        />
+        <span v-else class="site-segmented-label">{{ option.label }}</span>
+      </slot>
     </button>
   </span>
 </template>

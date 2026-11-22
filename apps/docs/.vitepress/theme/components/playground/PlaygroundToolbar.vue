@@ -149,10 +149,12 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
 
 <style scoped lang="scss">
 /* The toolbar keeps to the container like the header above it, and its
-   line runs across the page like the header's. */
+   line runs across the page like the header's. It is the title bar of the
+   playground: the style as its heading on the left, the history in the
+   middle, the three views on the right. */
 .pg-toolbar {
   box-sizing: border-box;
-  height: 56px;
+  height: 88px;
   border-bottom: 1px solid var(--db-line);
 
   &-inner {
@@ -164,18 +166,13 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     padding: 0 var(--db-wrap);
   }
 
-  /* The same three columns as the body below: the style over the list, the
-     history over the picture, the switch over the column on the right. That
-     column keeps its place in both views, so nothing in the bar moves when
-     the list comes and goes. */
   &-grid {
     display: grid;
-    grid-template-columns: 260px minmax(0, 1fr) 360px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    gap: 12px;
+    gap: 24px;
     box-sizing: border-box;
     height: 100%;
-    padding: 0 12px;
   }
 
   &-left,
@@ -187,11 +184,6 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     min-width: 0;
   }
 
-  &-middle,
-  &-right {
-    justify-content: flex-end;
-  }
-
   &-divider {
     width: 1px;
     height: 22px;
@@ -199,70 +191,36 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     background: var(--db-line);
   }
 
-  /* As wide as the text of the list below, which starts on the same edge.
-     The field is one of several roots of its component, so the class
-     arrives without this file's scope. */
-  &-left :deep(.pg-toolbar-style) {
-    width: calc(100% - 24px);
-    min-width: 0;
-  }
-
-  @media (min-width: 960px) {
-    &-inner {
-      padding: 0 calc(var(--db-wrap) - 12px);
-    }
-
-    /* The buttons end as far before the column's line as its content
-       starts after it. */
-    &-middle {
-      margin-right: -12px;
-    }
-
-    /* As wide as the content of the column below. */
-    &-right :deep(.pg-toolbar-view) {
-      width: calc(100% - 24px);
-    }
+  /* The style title starts on the edge of the text below it. */
+  &-left {
+    margin-left: -6px;
   }
 
   @media (max-width: 1279px) {
     &-grid {
-      grid-template-columns: 224px minmax(0, 1fr) 324px;
+      grid-template-columns: minmax(180px, 1fr) auto auto;
+      gap: 12px;
     }
   }
 
-  @media (max-width: 959px) {
-    &-grid {
-      grid-template-columns: minmax(0, 1fr) auto auto;
-      padding: 0;
-    }
-
-    &-left :deep(.pg-toolbar-style) {
-      width: 100%;
-      max-width: 260px;
-    }
-  }
-
-  /* One row on a phone: the style across the width, the view as a small
-     button next to it, then undo and the menu. */
+  /* Two rows on a phone: the style and the history, then the views across
+     the width. */
   @media (max-width: 767px) {
+    height: auto;
+
     &-grid {
-      gap: 4px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px 4px;
+      padding: 10px 0 12px;
     }
 
     &-right {
-      order: 1;
-    }
-
-    &-middle {
-      order: 2;
+      grid-column: 1 / -1;
+      order: 3;
     }
 
     &-wide {
       display: none;
-    }
-
-    &-left :deep(.pg-toolbar-style) {
-      max-width: none;
     }
   }
 }

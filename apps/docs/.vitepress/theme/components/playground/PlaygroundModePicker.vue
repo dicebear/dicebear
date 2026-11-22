@@ -1,286 +1,107 @@
 <script setup lang="ts">
 /**
- * The view of the playground, as a button that opens a menu. Each entry
- * draws the view's layout and says who it is for: the editor for a person
- * designing their own avatar, Simple and Advanced for developers who set up
- * avatars from seeds. A menu rather than a row of segments works on touch
- * and fits the phone's bar. On a phone the button keeps only the name of
- * the view, which says more than the drawing at that size.
+ * The view of the playground as a segmented control in the toolbar: Simple
+ * and Advanced for developers who set up avatars from seeds, the editor for
+ * a person designing their own avatar. All three stay in sight, so nobody
+ * has to open a menu to learn that there are three. Each segment shows the
+ * drawing of its layout and its name. Between phone and desktop, where the
+ * bar is short of room, only the drawing, with the name for screen readers
+ * and as the tooltip. On a phone the control has a row of its own.
  */
-import { computed, nextTick, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useMediaQuery } from '@vueuse/core';
-import { Check, ChevronDown } from '@lucide/vue';
 import useStore, { type PlaygroundMode } from '@theme/stores/playground';
-import SitePopover from '../site/SitePopover.vue';
+import SiteSegmented from '../site/SiteSegmented.vue';
 import PlaygroundModeSketch from './PlaygroundModeSketch.vue';
 
-defineOptions({ inheritAttrs: false });
-
 const store = useStore();
-const compact = useMediaQuery('(max-width: 767px)');
+const wide = useMediaQuery('(min-width: 1280px)');
+const phone = useMediaQuery('(max-width: 767px)');
+const compact = computed(() => !wide.value && !phone.value);
 
-const MODES: { value: PlaygroundMode; label: string; description: string }[] = [
-  {
-    value: 'editor',
-    label: 'Editor',
-    description:
-      'Design your own avatar. Pick each part and color from the tiles, then download it.',
-  },
-  {
-    value: 'simple',
-    label: 'Simple',
-    description:
-      'Set up avatars for your app. Each seed, such as a user name, always gets the same avatar. Start from a finished look.',
-  },
-  {
-    value: 'advanced',
-    label: 'Advanced',
-    description:
-      'The same seed-based avatars with every option of the style: probabilities, weights, color lists and animation.',
-  },
+const MODES: { value: PlaygroundMode; label: string; tip: string }[] = [
+  { value: 'simple', label: 'Simple', tip: 'Avatars from seeds' },
+  { value: 'advanced', label: 'Advanced', tip: 'Every option of the style' },
+  { value: 'editor', label: 'Editor', tip: 'Design your own avatar' },
 ];
 
-const current = computed(
-  () => MODES.find((mode) => mode.value === store.mode) ?? MODES[1],
+const options = computed(() =>
+  MODES.map((mode) => ({
+    value: mode.value,
+    label: mode.label,
+    tip: compact.value ? mode.label : mode.tip,
+  })),
 );
 
-const trigger = ref<HTMLButtonElement | null>(null);
-const popover = ref<InstanceType<typeof SitePopover> | null>(null);
-const items = ref<HTMLButtonElement[]>([]);
-const open = ref(false);
+const mode = computed({
+  get: () => store.mode,
+  set: (next: PlaygroundMode) => store.setMode(next, 'menu'),
+});
 
-function onTrigger(event: MouseEvent) {
-  popover.value?.toggle(event);
-}
+const root = ref<HTMLElement | null>(null);
 
-// The chosen view takes the focus, so the arrow keys start from it.
-async function onShow() {
-  open.value = true;
-
-  await nextTick();
-
-  items.value
-    .find((item) => item.dataset.mode === current.value.value)
-    ?.focus();
-}
-
-// A focus left in the menu goes back to the button.
-function onHide() {
-  open.value = false;
-
-  requestAnimationFrame(() => {
-    const focused = document.activeElement;
-
-    if (!focused || focused === document.body) trigger.value?.focus();
-  });
-}
-
-function pick(mode: PlaygroundMode) {
-  store.setMode(mode, 'menu');
-  popover.value?.hide();
-  trigger.value?.focus();
-}
-
-function onKeydown(event: KeyboardEvent, index: number) {
-  const last = MODES.length - 1;
-  let target: number;
-
-  switch (event.key) {
-    case 'ArrowDown':
-      target = index === last ? 0 : index + 1;
-      break;
-    case 'ArrowUp':
-      target = index === 0 ? last : index - 1;
-      break;
-    case 'Home':
-      target = 0;
-      break;
-    case 'End':
-      target = last;
-      break;
-    default:
-      return;
-  }
-
-  event.preventDefault();
-  items.value.find((item) => Number(item.dataset.index) === target)?.focus();
-}
-
-defineExpose({ focus: () => trigger.value?.focus() });
+defineExpose({
+  focus: () =>
+    root.value?.querySelector<HTMLElement>('[aria-checked="true"]')?.focus(),
+});
 </script>
 
 <template>
-  <button
-    ref="trigger"
-    type="button"
-    class="pg-mode-field"
-    :class="{ 'is-compact': compact }"
-    v-bind="$attrs"
-    :aria-label="compact ? `View: ${current.label}` : undefined"
-    aria-haspopup="menu"
-    :aria-expanded="open"
-    @click="onTrigger"
-  >
-    <PlaygroundModeSketch :mode="current.value" class="pg-mode-field-sketch" />
-    <template v-if="!compact">
-      <span class="pg-mode-field-label">View</span>
-      <span class="pg-mode-field-name">{{ current.label }}</span>
-    </template>
-    <ChevronDown :size="16" aria-hidden="true" class="pg-mode-field-chevron" />
-  </button>
-
-  <SitePopover
-    ref="popover"
-    align="right"
-    bare
-    label="View"
-    @show="onShow"
-    @hide="onHide"
-  >
-    <div class="pg-mode-menu" role="menu" aria-label="View">
-      <button
-        v-for="(mode, index) in MODES"
-        :key="mode.value"
-        ref="items"
-        type="button"
-        role="menuitemradio"
-        class="pg-mode-item"
-        :aria-checked="mode.value === current.value"
-        :data-mode="mode.value"
-        :data-index="index"
-        @click="pick(mode.value)"
-        @keydown="onKeydown($event, index)"
-      >
+  <div ref="root" class="pg-mode">
+    <SiteSegmented
+      v-model="mode"
+      :options="options"
+      aria-label="View"
+      :size="wide ? 'lg' : 'md'"
+      :fluid="phone"
+    >
+      <template #option="{ option, chosen }">
         <PlaygroundModeSketch
-          :mode="mode.value"
-          :active="mode.value === current.value"
-          class="pg-mode-item-sketch"
+          :mode="option.value"
+          :active="chosen"
+          class="pg-mode-sketch"
         />
-        <span class="pg-mode-item-text">
-          <span class="pg-mode-item-name">{{ mode.label }}</span>
-          <span class="pg-mode-item-description">{{ mode.description }}</span>
-        </span>
-        <Check
-          v-if="mode.value === current.value"
-          :size="16"
-          aria-hidden="true"
-          class="pg-mode-item-check"
-        />
-      </button>
-    </div>
-  </SitePopover>
+        <span :class="compact ? 'sr-only' : 'pg-mode-name'">{{
+          option.label
+        }}</span>
+      </template>
+    </SiteSegmented>
+  </div>
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/control' as c;
-@use '../../styles/mixins' as m;
-
-/* A field of the control set, like the style field on the other end of the
-   bar: the drawing of the view, the word View and its name. */
-.pg-mode-field {
-  @include c.control-picker;
-
+.pg-mode {
   display: flex;
+
+  :deep(.site-segmented-item) {
+    gap: 10px;
+  }
 
   &-sketch {
-    width: 36px;
-    height: 24px;
+    width: 33px;
+    height: 22px;
   }
 
-  &-label {
-    color: var(--db-muted);
+  /* The drawings alone, between phone and desktop. */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    :deep(.site-segmented-item) {
+      padding: 0 12px;
+    }
   }
 
-  &-name {
-    @include c.control-value;
-  }
-
-  &-chevron {
-    flex-shrink: 0;
-    margin-left: auto;
-    color: var(--db-muted);
-    transition: transform 0.15s;
-  }
-
-  &[aria-expanded='true'] &-chevron {
-    transform: rotate(180deg);
-  }
-
-  /* On a phone the drawing of the view stands for its name. */
-  &.is-compact {
-    gap: 6px;
-    padding: 0 12px 0 10px;
-  }
-}
-
-/* As wide as the column under the button, and across the screen on a
-   phone, with the same room on both sides. */
-.pg-mode-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  box-sizing: border-box;
-  width: 336px;
-  padding: 6px;
-
+  /* On a phone the control spans its row. */
   @media (max-width: 767px) {
-    width: calc(100vw - 16px);
-  }
-}
+    width: 100%;
 
-.pg-mode-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  width: 100%;
-  padding: 12px;
-  border: 0;
-  border-radius: 18px;
-  background: transparent;
-  font: inherit;
-  color: var(--db-ink);
-  text-align: left;
-  cursor: pointer;
+    :deep(.site-segmented-item) {
+      gap: 8px;
+      padding: 0 8px;
+    }
 
-  &:hover {
-    @include m.option-hover;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--db-focus);
-    outline-offset: -2px;
-  }
-
-  &-sketch {
-    width: 72px;
-    height: 48px;
-  }
-
-  &-text {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  &-name {
-    font-family: var(--db-font-display);
-    font-size: 16px;
-    line-height: 22px;
-    font-weight: 700;
-  }
-
-  &-description {
-    font-size: 14px;
-    line-height: 20px;
-    color: var(--db-ink-2);
-  }
-
-  &-check {
-    flex-shrink: 0;
-    margin-top: 3px;
-    color: var(--db-ink);
+    &-sketch {
+      width: 30px;
+      height: 20px;
+    }
   }
 }
 </style>
