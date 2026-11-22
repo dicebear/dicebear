@@ -228,6 +228,16 @@ watch(activeChild, (child) => {
   &:hover {
     background: color-mix(in srgb, var(--db-ink) 8%, transparent);
   }
+
+  /* Beside the current page the row is yellow, so the arrow takes the text
+     color of the selection, dark in both themes. */
+  [aria-current='page'] ~ & {
+    color: var(--db-select-text);
+
+    &:hover {
+      background: color-mix(in srgb, var(--db-select-text) 10%, transparent);
+    }
+  }
 }
 
 .is-depth-0 > .docs-sidebar-panel > .docs-sidebar-children {

@@ -94,8 +94,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .studio-tabs {
-  --studio-tabs-r: var(--db-radius-block);
-
   &-list {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -105,14 +103,18 @@ onMounted(() => {
     margin: clamp(40px, 5vw, 72px) auto 0;
   }
 
-  /* A tab: a small block of its color. The chosen one grows down into the
-     panel, which is painted after it and hides the seam. */
+  /* A tab: a small block of its color. The chosen one reaches down to the
+     panel with a square foot, and two inward curves join it to the panel
+     like the tab of a folder. */
   &-tab {
+    --studio-tabs-join: 12px;
+
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 6px 12px;
-    margin-bottom: 12px;
+    margin-bottom: var(--studio-tabs-join);
     padding: 20px clamp(14px, 2.4vw, 28px);
     border-radius: clamp(18px, 2.4vw, 28px);
     font-family: var(--db-font-display);
@@ -122,14 +124,48 @@ onMounted(() => {
     color: var(--db-accent);
     text-align: left;
     cursor: pointer;
-    transition:
-      margin 0.2s var(--ease-smooth),
-      padding 0.2s var(--ease-smooth);
 
     &[aria-selected='true'] {
-      margin-bottom: calc(-1 * var(--studio-tabs-r));
-      padding-bottom: calc(20px + var(--studio-tabs-r));
+      /* One pixel into the panel, so no seam shows between the two. */
+      margin-bottom: -1px;
+      padding-bottom: calc(20px + var(--studio-tabs-join) + 1px);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
       cursor: default;
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 1px;
+        width: var(--studio-tabs-join);
+        height: var(--studio-tabs-join);
+        pointer-events: none;
+      }
+
+      &::before {
+        right: 100%;
+        background: radial-gradient(
+          circle at 0 0,
+          transparent calc(var(--studio-tabs-join) - 0.5px),
+          var(--db-paper) var(--studio-tabs-join)
+        );
+      }
+
+      &::after {
+        left: 100%;
+        background: radial-gradient(
+          circle at 100% 0,
+          transparent calc(var(--studio-tabs-join) - 0.5px),
+          var(--db-paper) var(--studio-tabs-join)
+        );
+      }
+
+      /* The outer tabs sit on a square corner of the panel. */
+      &:first-child::before,
+      &:last-child::after {
+        display: none;
+      }
     }
 
     &:focus-visible {
@@ -139,8 +175,6 @@ onMounted(() => {
 
   /* The corner under the first or last tab is square. */
   &-panel {
-    margin-top: 0;
-
     /* VitePress focuses the target of a hash link; a panel is no control,
        so it shows no ring for that. */
     &:focus {
@@ -154,6 +188,13 @@ onMounted(() => {
     &.is-at-2 {
       border-top-right-radius: 0;
     }
+  }
+
+  /* The panels follow each other in the markup, hidden but for one, so the
+     space the site puts between two blocks would open a gap under the tabs.
+     Stated with the full selector to outrank that rule. */
+  & &-panel.site-box.is-block {
+    margin-top: 0;
   }
 
   &-lead {
