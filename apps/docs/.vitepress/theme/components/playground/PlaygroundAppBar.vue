@@ -1,0 +1,414 @@
+<script setup lang="ts">
+/**
+ * The bar of the playground on a phone, in place of the site header and the
+ * toolbar: the bear leads home, the style opens its list, the drawing of the
+ * view opens the three views with what each is for, and the menu holds what
+ * is used less often (how to use, reset, option files), the pages of the
+ * site and the license. Undo, redo and the download stand on the stage.
+ */
+import { computed, ref } from 'vue';
+import { useData, withBase } from 'vitepress';
+import type { DefaultTheme } from 'vitepress';
+import {
+  Check,
+  ChevronDown,
+  ChevronRight,
+  Code,
+  Ellipsis,
+  FileDown,
+  FileUp,
+  RotateCcw,
+} from '@lucide/vue';
+import useStore, { type PlaygroundMode } from '@theme/stores/playground';
+import { track, styleLabel } from '@theme/utils/track';
+import SiteDialog from '../site/SiteDialog.vue';
+import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
+import PlaygroundModeSketch from './PlaygroundModeSketch.vue';
+import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
+
+const emit = defineEmits<{
+  export: [];
+  import: [];
+  'how-to-use': [];
+}>();
+
+const { theme } = useData();
+const store = useStore();
+
+const MODES: { value: PlaygroundMode; label: string; description: string }[] = [
+  {
+    value: 'simple',
+    label: 'Simple',
+    description:
+      'Avatars from seeds: each user name always gets the same avatar. Start from a finished look.',
+  },
+  {
+    value: 'advanced',
+    label: 'Advanced',
+    description:
+      'The same seed-based avatars with every option of the style: probabilities, weights, colors and animation.',
+  },
+  {
+    value: 'editor',
+    label: 'Editor',
+    description:
+      'Design your own avatar. Pick each part and color, then download it.',
+  },
+];
+
+const current = computed(
+  () => MODES.find((mode) => mode.value === store.mode) ?? MODES[0],
+);
+
+const viewsOpen = ref(false);
+const menuOpen = ref(false);
+
+function pickMode(mode: PlaygroundMode) {
+  store.setMode(mode, 'menu');
+  viewsOpen.value = false;
+}
+
+const hasChanges = computed(
+  () => Object.keys(store.avatarStyleOptionsWithoutDefaults).length > 0,
+);
+
+// Each entry closes the menu first, so a dialog it opens is not stacked on
+// the sheet.
+function run(action: () => void) {
+  menuOpen.value = false;
+  action();
+}
+
+function reset() {
+  track('Playground: Reset', { style: styleLabel(store.avatarStyleName) });
+  store.resetOptions();
+}
+
+type NavLink = DefaultTheme.NavItemWithLink;
+
+const links = computed(() => [
+  { text: 'Home', href: withBase('/') },
+  ...((theme.value.nav ?? []) as NavLink[])
+    .filter((item) => item.link !== '/playground/')
+    .map((item) => ({
+      text: item.text,
+      href: withBase(typeof item.link === 'string' ? item.link : '/'),
+    })),
+]);
+</script>
+
+<template>
+  <div class="pg-appbar">
+    <a :href="withBase('/')" class="pg-appbar-home" aria-label="DiceBear home">
+      <img :src="withBase('/favicon.svg')" alt="" width="36" height="36" />
+    </a>
+
+    <PlaygroundStyleSelect class="pg-appbar-style" />
+
+    <button
+      type="button"
+      class="pg-appbar-view"
+      :aria-label="`View: ${current.label}`"
+      aria-haspopup="dialog"
+      :aria-expanded="viewsOpen"
+      @click="viewsOpen = true"
+    >
+      <PlaygroundModeSketch :mode="current.value" class="pg-appbar-sketch" />
+      <ChevronDown :size="16" :stroke-width="2.4" aria-hidden="true" />
+    </button>
+
+    <button
+      type="button"
+      class="site-btn site-btn-ghost site-btn-icon"
+      aria-label="Menu"
+      aria-haspopup="dialog"
+      :aria-expanded="menuOpen"
+      @click="menuOpen = true"
+    >
+      <Ellipsis :size="20" aria-hidden="true" />
+    </button>
+
+    <SiteDialog v-model:open="viewsOpen" sheet header="View">
+      <div class="pg-appbar-list">
+        <button
+          v-for="mode in MODES"
+          :key="mode.value"
+          type="button"
+          class="pg-appbar-mode"
+          :aria-current="mode.value === current.value ? 'true' : undefined"
+          @click="pickMode(mode.value)"
+        >
+          <PlaygroundModeSketch
+            :mode="mode.value"
+            :active="mode.value === current.value"
+            class="pg-appbar-mode-sketch"
+          />
+          <span class="pg-appbar-mode-text">
+            <span class="pg-appbar-mode-name">{{ mode.label }}</span>
+            <span class="pg-appbar-mode-description">{{
+              mode.description
+            }}</span>
+          </span>
+          <Check
+            v-if="mode.value === current.value"
+            :size="18"
+            aria-hidden="true"
+            class="pg-appbar-mode-check"
+          />
+        </button>
+      </div>
+    </SiteDialog>
+
+    <SiteDialog v-model:open="menuOpen" sheet header="Menu">
+      <div class="pg-appbar-list">
+        <p class="pg-appbar-group">Playground</p>
+        <button
+          type="button"
+          class="pg-appbar-item"
+          @click="run(() => emit('how-to-use'))"
+        >
+          <Code :size="20" aria-hidden="true" />
+          <span>How to use</span>
+          <span class="pg-appbar-hint">code for this avatar</span>
+        </button>
+        <button
+          type="button"
+          class="pg-appbar-item"
+          :disabled="!hasChanges"
+          @click="run(reset)"
+        >
+          <RotateCcw :size="20" aria-hidden="true" />
+          <span>Reset everything</span>
+        </button>
+        <button
+          type="button"
+          class="pg-appbar-item"
+          @click="run(() => emit('export'))"
+        >
+          <FileDown :size="20" aria-hidden="true" />
+          <span>Export options</span>
+          <span class="pg-appbar-hint">JSON file</span>
+        </button>
+        <button
+          type="button"
+          class="pg-appbar-item"
+          @click="run(() => emit('import'))"
+        >
+          <FileUp :size="20" aria-hidden="true" />
+          <span>Import options</span>
+        </button>
+
+        <p class="pg-appbar-group">DiceBear</p>
+        <a
+          v-for="link in links"
+          :key="link.href"
+          :href="link.href"
+          class="pg-appbar-item"
+        >
+          <ChevronRight :size="20" aria-hidden="true" />
+          <span>{{ link.text }}</span>
+        </a>
+
+        <PlaygroundLicenseText class="pg-appbar-license" />
+      </div>
+    </SiteDialog>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.pg-appbar {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 60px;
+  padding: 0 8px 0 14px;
+  border-bottom: 1px solid var(--db-line);
+  background: var(--db-paper);
+
+  &-home {
+    display: flex;
+    flex-shrink: 0;
+    border-radius: 10px;
+
+    img {
+      display: block;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--db-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  /* The style takes what the bar has left. The field is one of several
+     roots of its component, so the class arrives without this scope. */
+  :deep(.pg-appbar-style) {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-left: 4px;
+    margin-right: auto;
+  }
+
+  &-view {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 6px;
+    height: 44px;
+    padding: 0 10px 0 12px;
+    border: 0;
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+    color: var(--db-ink);
+    cursor: pointer;
+
+    &:hover {
+      background: color-mix(in srgb, var(--db-ink) 12%, transparent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--db-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  &-sketch {
+    width: 30px;
+    height: 20px;
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 8px 8px;
+  }
+
+  &-group {
+    margin: 12px 0 4px;
+    padding: 0 12px;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--db-ink-2);
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  /* One row of the menu: icon, label and a quiet hint, 48px for the thumb. */
+  &-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 48px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 24px;
+    background: transparent;
+    font-family: var(--db-font-display);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--db-ink);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+
+    > svg {
+      flex-shrink: 0;
+      color: var(--db-ink-2);
+    }
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--db-ink) 10%, transparent);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--db-focus);
+      outline-offset: -2px;
+    }
+  }
+
+  &-hint {
+    margin-left: auto;
+    font-family: var(--db-font);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--db-ink-2);
+  }
+
+  &-license {
+    margin: 14px 0 0;
+    padding: 14px 12px 0;
+    border-top: 1px solid var(--db-line);
+    font-size: 13px;
+    line-height: 19px;
+    color: var(--db-ink-2);
+  }
+
+  /* A view: its drawing, its name and what it is for. */
+  &-mode {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px;
+    border: 0;
+    border-radius: 18px;
+    background: transparent;
+    color: var(--db-ink);
+    text-align: left;
+    cursor: pointer;
+
+    &:hover,
+    &[aria-current='true'] {
+      background: color-mix(in srgb, var(--db-ink) 10%, transparent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--db-focus);
+      outline-offset: -2px;
+    }
+  }
+
+  &-mode-sketch {
+    flex-shrink: 0;
+    width: 54px;
+    height: 36px;
+  }
+
+  &-mode-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &-mode-name {
+    font-family: var(--db-font-display);
+    font-size: 17px;
+    line-height: 22px;
+    font-weight: 700;
+  }
+
+  &-mode-description {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--db-ink-2);
+  }
+
+  &-mode-check {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+</style>

@@ -2,11 +2,10 @@
 /**
  * The bar across the top of the playground: the style on the left, above
  * the list whose entries depend on it, undo, redo, reset and a menu for
- * option files at the right edge of the picture, and the menu of views over
- * the right column. On a phone the menu moves next to the style.
+ * option files at the right edge of the picture, and the views over the
+ * right column. A phone has a bar of its own (PlaygroundAppBar).
  */
 import { computed, ref } from 'vue';
-import { useMediaQuery } from '@vueuse/core';
 import {
   Ellipsis,
   FileDown,
@@ -28,10 +27,6 @@ const emit = defineEmits<{
 
 const store = useStore();
 
-// A phone's bar has no room for redo and reset, which move into the menu
-// there, above the option files. Undo stays in the bar.
-const phone = useMediaQuery('(max-width: 767px)');
-
 function onReset() {
   track('Playground: Reset', { style: styleLabel(store.avatarStyleName) });
   store.resetOptions();
@@ -51,27 +46,6 @@ const fileItems: SiteMenuItem[] = [
   },
   { label: 'Import options', icon: FileUp, command: () => emit('import') },
 ];
-
-const menuItems = computed<SiteMenuItem[]>(() =>
-  phone.value
-    ? [
-        {
-          label: 'Redo',
-          icon: Redo2,
-          command: () => store.redo(),
-          disabled: !store.canRedo,
-        },
-        {
-          label: 'Reset everything',
-          icon: RotateCcw,
-          command: onReset,
-          disabled: !hasChanges.value,
-        },
-        { separator: true },
-        ...fileItems,
-      ]
-    : fileItems,
-);
 
 const modePicker = ref<InstanceType<typeof PlaygroundModePicker> | null>(null);
 
@@ -100,7 +74,7 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
           </button>
           <button
             type="button"
-            class="site-btn site-btn-ghost site-btn-icon pg-toolbar-wide"
+            class="site-btn site-btn-ghost site-btn-icon"
             aria-label="Redo"
             data-tip="Redo"
             data-tip-side="bottom"
@@ -109,10 +83,10 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
           >
             <Redo2 :size="18" aria-hidden="true" />
           </button>
-          <span class="pg-toolbar-divider pg-toolbar-wide" aria-hidden="true" />
+          <span class="pg-toolbar-divider" aria-hidden="true" />
           <button
             type="button"
-            class="site-btn site-btn-ghost site-btn-icon pg-toolbar-wide"
+            class="site-btn site-btn-ghost site-btn-icon"
             aria-label="Reset everything"
             data-tip="Reset everything"
             data-tip-side="bottom"
@@ -121,7 +95,7 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
           >
             <RotateCcw :size="18" aria-hidden="true" />
           </button>
-          <SiteMenu :items="menuItems" label="More">
+          <SiteMenu :items="fileItems" label="More">
             <template #trigger="{ open, toggle }">
               <button
                 type="button"
@@ -202,27 +176,6 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     &-grid {
       grid-template-columns: minmax(180px, 1fr) auto auto;
       gap: 12px;
-    }
-  }
-
-  /* Two rows on a phone: the style and the history, then the views across
-     the width. */
-  @media (max-width: 767px) {
-    height: auto;
-
-    &-grid {
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 8px 4px;
-      padding: 10px 0 12px;
-    }
-
-    &-right {
-      grid-column: 1 / -1;
-      order: 3;
-    }
-
-    &-wide {
-      display: none;
     }
   }
 }

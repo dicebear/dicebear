@@ -239,15 +239,17 @@ const triggerOptions = { seed: exampleSeeds[0] };
     text-overflow: ellipsis;
   }
 
-  /* Smaller on a phone, where the bar is one row with the view and the
-     history; the credit stays on the style's own page. */
+  /* Smaller in a phone's app bar, a pill as high as its neighbours; the
+     credit stays on the style's own page. */
   @media (max-width: 767px) {
-    gap: 10px;
-    padding: 4px 12px 4px 4px;
+    gap: 8px;
+    height: 44px;
+    padding: 0 12px 0 4px;
+    border-radius: 22px;
 
     &-thumb {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
 
       :deep(.pg-thumb) {
         border-radius: 12px;
@@ -255,7 +257,12 @@ const triggerOptions = { seed: exampleSeeds[0] };
     }
 
     &-name {
-      font-size: 22px;
+      font-size: 18px;
+    }
+
+    &-chevron {
+      width: 16px;
+      height: 16px;
     }
 
     &-credit {

@@ -4,9 +4,9 @@
  * and Advanced for developers who set up avatars from seeds, the editor for
  * a person designing their own avatar. All three stay in sight, so nobody
  * has to open a menu to learn that there are three. Each segment shows the
- * drawing of its layout and its name. Between phone and desktop, where the
- * bar is short of room, only the drawing, with the name for screen readers
- * and as the tooltip. On a phone the control has a row of its own.
+ * drawing of its layout and its name; under 1280px, where the bar is short
+ * of room, only the drawing, with the name for screen readers and as the
+ * tooltip. A phone picks the view in its own bar (PlaygroundAppBar).
  */
 import { computed, ref } from 'vue';
 import { useMediaQuery } from '@vueuse/core';
@@ -16,8 +16,7 @@ import PlaygroundModeSketch from './PlaygroundModeSketch.vue';
 
 const store = useStore();
 const wide = useMediaQuery('(min-width: 1280px)');
-const phone = useMediaQuery('(max-width: 767px)');
-const compact = computed(() => !wide.value && !phone.value);
+const compact = computed(() => !wide.value);
 
 const MODES: { value: PlaygroundMode; label: string; tip: string }[] = [
   { value: 'simple', label: 'Simple', tip: 'Avatars from seeds' },
@@ -53,7 +52,6 @@ defineExpose({
       :options="options"
       aria-label="View"
       :size="wide ? 'lg' : 'md'"
-      :fluid="phone"
     >
       <template #option="{ option, chosen }">
         <PlaygroundModeSketch
@@ -82,25 +80,10 @@ defineExpose({
     height: 22px;
   }
 
-  /* The drawings alone, between phone and desktop. */
-  @media (min-width: 768px) and (max-width: 1279px) {
+  /* The drawings alone, where the bar is short of room. */
+  @media (max-width: 1279px) {
     :deep(.site-segmented-item) {
       padding: 0 12px;
-    }
-  }
-
-  /* On a phone the control spans its row. */
-  @media (max-width: 767px) {
-    width: 100%;
-
-    :deep(.site-segmented-item) {
-      gap: 8px;
-      padding: 0 8px;
-    }
-
-    &-sketch {
-      width: 30px;
-      height: 20px;
     }
   }
 }

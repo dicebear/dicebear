@@ -124,8 +124,18 @@ function pickSeed(seed: string) {
 </script>
 
 <template>
-  <div class="pg-stage" :class="{ 'is-editor': editor, 'is-compact': compact }">
+  <div
+    class="pg-stage"
+    :class="{
+      'is-editor': editor,
+      'is-compact': compact,
+      'has-corner': !!$slots.corner,
+    }"
+  >
     <div ref="ground" class="pg-stage-ground">
+      <div v-if="$slots.corner" class="pg-stage-corner">
+        <slot name="corner" />
+      </div>
       <div class="pg-stage-picture">
         <div
           v-if="rendered"
@@ -202,6 +212,20 @@ function pickSeed(seed: string) {
     background-size: 22px 22px;
     background-position: 11px 11px;
     overflow: hidden;
+  }
+
+  /* Tools in the top corners of the ground, on a phone: what the bar of a
+     wider window holds. */
+  &-corner {
+    position: absolute;
+    z-index: 2;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
   }
 
   /* The avatar stands on the ground as it is, without a panel around it.
@@ -326,16 +350,22 @@ function pickSeed(seed: string) {
   /* A phone leaves the height to the tray or the options under a smaller
      avatar. */
   @media (max-width: 767px) {
-    &.is-editor &-picture {
-      width: 180px;
-    }
-
     &.is-compact &-ground {
-      gap: 12px;
+      gap: 14px;
     }
 
     &.is-compact &-picture {
-      width: 150px;
+      width: 200px;
+    }
+
+    &.is-editor &-picture {
+      width: 200px;
+    }
+
+    /* Undo, redo and the download stand in the top corners of the ground,
+       so the ground leaves room above the avatar for them. */
+    &.has-corner &-ground {
+      padding-top: 64px;
     }
   }
 }

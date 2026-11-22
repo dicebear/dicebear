@@ -15,7 +15,7 @@ import type { ThemeOptions } from '@theme/types';
 import ThemeGithubButton from './ThemeGithubButton.vue';
 import ThemeSwitch from './ThemeSwitch.vue';
 
-const { theme, page } = useData<ThemeOptions>();
+const { theme, page, frontmatter } = useData<ThemeOptions>();
 const route = useRoute();
 const { show } = useSearch();
 
@@ -58,7 +58,7 @@ onKeyStroke('Escape', () => {
 </script>
 
 <template>
-  <header class="theme-header">
+  <header class="theme-header" :class="{ 'is-app': frontmatter.appBar }">
     <div class="theme-header-inner">
       <div class="theme-header-left">
         <a
@@ -161,6 +161,14 @@ onKeyStroke('Escape', () => {
   z-index: 50;
   height: var(--db-header-h);
   background: var(--db-paper);
+
+  /* A page with a bar of its own, the playground, shows it in place of
+     the header on a phone; its menu leads back to the site. */
+  &.is-app {
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
 }
 
 .theme-header-inner {

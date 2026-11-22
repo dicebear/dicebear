@@ -4,16 +4,17 @@
  * the middle. The simple view puts a column of looks next to it, the
  * advanced view the entries on the left and the inspector on the right. The
  * editor view has no columns and puts a tray of parts and colors under the
- * picture. A phone stacks everything in one column with the ways out in a
- * bar at the bottom; in the advanced and editor views the options, or the
- * tray, lie in a sheet over the playground that rises for more room.
+ * picture. A phone has three layers in every view: a bar of its own in
+ * place of the site header and the toolbar, the stage with undo, redo and
+ * the download in its corners, and a sheet with the looks, the options or
+ * the tray, which rises for more room.
  * The dialogs that concern the whole setup live here, so the menu in the
  * toolbar and the buttons under the columns open the same ones. A style
  * definition dropped anywhere on the playground becomes a style of one's
  * own.
  */
 import { computed, nextTick, provide, ref, watch } from 'vue';
-import { Upload } from '@lucide/vue';
+import { Redo2, Undo2, Upload } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
 import { useMediaQuery, useResizeObserver } from '@vueuse/core';
 import { kebabCase } from 'change-case';
@@ -33,14 +34,14 @@ import {
   navigateToColorKey,
 } from '@theme/components/styles/styleOptionsKeys';
 import PlaygroundToolbar from './PlaygroundToolbar.vue';
+import PlaygroundAppBar from './PlaygroundAppBar.vue';
+import PlaygroundButtonDownload from './PlaygroundButtonDownload.vue';
 import PlaygroundEntries from './PlaygroundEntries.vue';
 import PlaygroundStage from './PlaygroundStage.vue';
 import PlaygroundInspector from './PlaygroundInspector.vue';
 import PlaygroundSimplePanel from './PlaygroundSimplePanel.vue';
 import PlaygroundEditor from './PlaygroundEditor.vue';
 import PlaygroundEditorBar from './PlaygroundEditorBar.vue';
-import PlaygroundEditorActions from './PlaygroundEditorActions.vue';
-import PlaygroundActions from './PlaygroundActions.vue';
 import PlaygroundSheet from './PlaygroundSheet.vue';
 import PlaygroundThumb from './PlaygroundThumb.vue';
 import PlaygroundStatus from './PlaygroundStatus.vue';
@@ -80,36 +81,34 @@ const phoneAdvanced = computed(
   () => phone.value && !simple.value && !editor.value,
 );
 
-// The sheet of the advanced and editor views on a phone lies between the
-// bottom of the picture and the top of the actions. Both are measured, as
-// the picture and the actions change their height with the view, the style
-// and the window. The picture keeps at most three fifths of the height, so
-// the sheet always has room on a short phone.
-const sheet = computed(() => phone.value && !simple.value);
+// On a phone the sheet lies from the bottom of the picture to the bottom of
+// the window. The picture is measured, as it changes its height with the
+// view, the style and the window; it keeps at most three fifths of the
+// height, so the sheet always has room on a short phone.
 const app = ref<HTMLElement | null>(null);
 const stage = ref<InstanceType<typeof PlaygroundStage> | null>(null);
-const foot = ref<HTMLElement | null>(null);
 const sheetTop = ref(0);
-const sheetBottom = ref(0);
 
 function measureSheet() {
   const box = app.value?.getBoundingClientRect();
   const stageBox = (stage.value?.$el as HTMLElement | undefined)
     ?.querySelector('.pg-stage-ground')
     ?.getBoundingClientRect();
-  const footBox = foot.value?.getBoundingClientRect();
 
-  if (!box || !stageBox || !footBox) return;
+  if (!box || !stageBox) return;
 
   sheetTop.value = Math.round(
     Math.min(stageBox.bottom - box.top, box.height * 0.6),
   );
-  sheetBottom.value = Math.round(box.bottom - footBox.top);
 }
 
+const stageElement = computed(
+  () => (stage.value?.$el as HTMLElement | undefined) ?? null,
+);
+
 useResizeObserver(app, measureSheet);
-useResizeObserver(foot, measureSheet);
-watch([sheet, view, avatarStyleName], () => nextTick(measureSheet));
+useResizeObserver(stageElement, measureSheet);
+watch([phone, view, avatarStyleName], () => nextTick(measureSheet));
 const detailOpen = ref(false);
 const phonePanel = ref<HTMLElement | null>(null);
 let listScroll = 0;
@@ -283,8 +282,8 @@ async function showAdvanced() {
     class="pg-app"
     :class="{
       'is-editor': editor,
-      'is-fixed': editor || phoneAdvanced,
-      'has-sheet': sheet,
+      'is-fixed': editor || phone,
+      'has-sheet': phone,
     }"
     @dragenter="onDragEnter"
     @dragover="onDragOver"
@@ -292,9 +291,16 @@ async function showAdvanced() {
     @drop="onDrop"
   >
     <PlaygroundToolbar
+      v-if="!phone"
       ref="toolbar"
       @export="exportDialog?.show()"
       @import="importDialog?.show()"
+    />
+    <PlaygroundAppBar
+      v-else
+      @export="exportDialog?.show()"
+      @import="importDialog?.show()"
+      @how-to-use="howToUse?.show()"
     />
 
     <div
@@ -310,10 +316,33 @@ async function showAdvanced() {
         :seed="seed"
         :editor="editor"
         :status="!phone"
-        :compact="phoneAdvanced"
+        :compact="phone"
         :seed-hint="simple"
         class="pg-app-stage"
       >
+        <template v-if="phone" #corner>
+          <span class="pg-app-history">
+            <button
+              type="button"
+              class="site-btn site-btn-ghost site-btn-icon"
+              aria-label="Undo"
+              :disabled="!store.canUndo"
+              @click="store.undo()"
+            >
+              <Undo2 :size="18" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              class="site-btn site-btn-ghost site-btn-icon"
+              aria-label="Redo"
+              :disabled="!store.canRedo"
+              @click="store.redo()"
+            >
+              <Redo2 :size="18" aria-hidden="true" />
+            </button>
+          </span>
+          <PlaygroundButtonDownload :seed="seed" primary compact />
+        </template>
         <template v-if="editor" #controls>
           <PlaygroundEditorBar
             :seed="seed"
@@ -321,12 +350,11 @@ async function showAdvanced() {
             @how-to-use="howToUse?.show()"
           />
         </template>
-        <PlaygroundEditor v-if="editor && !sheet" />
+        <PlaygroundEditor v-if="editor && !phone" />
       </PlaygroundStage>
       <PlaygroundSimplePanel
-        v-if="simple"
+        v-if="simple && !phone"
         :seed="seed"
-        :actions="!phone"
         class="pg-app-inspector"
         @how-to-use="howToUse?.show()"
         @advanced="showAdvanced"
@@ -338,10 +366,10 @@ async function showAdvanced() {
         @how-to-use="howToUse?.show()"
       />
       <PlaygroundSheet
-        v-if="sheet"
+        v-if="phone"
         :top="sheetTop"
-        :bottom="sheetBottom"
-        :label="editor ? 'Parts and colors' : 'Options'"
+        :bottom="0"
+        :label="editor ? 'Parts and colors' : simple ? 'Looks' : 'Options'"
       >
         <template #head="{ expanded }">
           <div v-if="expanded" class="pg-app-sheet-head">
@@ -372,26 +400,19 @@ async function showAdvanced() {
             class="pg-app-panel-list"
             @pick="openDetail"
           />
+          <PlaygroundStatus class="pg-app-sheet-status" />
+        </div>
+        <div v-else-if="simple" class="pg-app-panel">
+          <PlaygroundSimplePanel
+            :seed="seed"
+            :actions="false"
+            @how-to-use="howToUse?.show()"
+            @advanced="showAdvanced"
+          />
+          <PlaygroundStatus class="pg-app-sheet-status" />
         </div>
         <PlaygroundEditor v-else class="pg-app-sheet-editor" />
       </PlaygroundSheet>
-      <div v-if="phone" ref="foot" class="pg-app-foot">
-        <PlaygroundStatus :combinations="!editor" />
-        <div class="pg-app-actions">
-          <PlaygroundEditorActions
-            v-if="editor"
-            :seed="seed"
-            fluid
-            @how-to-use="howToUse?.show()"
-          />
-          <PlaygroundActions
-            v-else
-            :seed="seed"
-            :row="sheet"
-            @how-to-use="howToUse?.show()"
-          />
-        </div>
-      </div>
     </div>
 
     <PlaygroundButtonExport ref="exportDialog" :seed="seed" :trigger="false" />
@@ -495,24 +516,9 @@ async function showAdvanced() {
       border-left: 0;
     }
 
-    /* The phone's own foot, stuck to the bottom in every view: the status
-       line with the license, and the actions under it. */
-    &-foot {
-      order: 4;
-      position: sticky;
-      bottom: 0;
-      margin-top: auto;
-      background: var(--db-paper);
-    }
-
-    &-actions {
-      padding: 12px 16px 16px;
-      border-top: 1px solid var(--db-line);
-    }
-
-    /* The editor, and the advanced view on a phone, keep to the window like
-       on a desktop, so only their tiles or options scroll and the avatar
-       stays in view while picking. */
+    /* The editor, and every view on a phone, keep to the window like on a
+       desktop, so only their tiles or options scroll and the avatar stays
+       in view while picking. */
     &.is-fixed {
       height: calc(100dvh - var(--db-header-h));
       min-height: 0;
@@ -584,6 +590,29 @@ async function showAdvanced() {
     &-sheet-editor {
       flex: 1;
       min-height: 0;
+    }
+
+    /* In the sheet the simple panel grows with its content; the sheet
+       scrolls, not the panel. */
+    &-panel > :deep(.pg-simple) {
+      flex: none;
+    }
+
+    &-panel :deep(.pg-simple-body) {
+      overflow: visible;
+      padding: 8px 16px 24px;
+    }
+
+    /* The license and the number of combinations end the sheet's list. */
+    &-sheet-status {
+      margin-top: auto;
+      padding: 16px 20px 24px;
+      border-top: 1px solid var(--db-line);
+    }
+
+    &-history {
+      display: flex;
+      gap: 2px;
     }
 
     /* The panel scrolls, not the list in it, so it can keep the list's

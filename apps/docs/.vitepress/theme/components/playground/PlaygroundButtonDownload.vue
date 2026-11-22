@@ -24,6 +24,8 @@ const props = defineProps<{
   seed: string;
   /** The filled look of the main action, where saving comes first. */
   primary?: boolean;
+  /** The 44px size with only the format as its label, for a phone's stage. */
+  compact?: boolean;
 }>();
 
 const { store, open, options, showDialog } = usePlaygroundDialog(
@@ -150,22 +152,29 @@ const items = computed<SiteMenuItem[]>(() => [
 </script>
 
 <template>
-  <span class="site-btn-group is-fluid">
+  <span class="site-btn-group" :class="{ 'is-fluid': !compact }">
     <button
       type="button"
-      class="site-btn site-btn-lg"
-      :class="primary ? 'site-btn-primary' : 'site-btn-secondary'"
+      class="site-btn"
+      :class="[
+        primary ? 'site-btn-primary' : 'site-btn-secondary',
+        { 'site-btn-lg': !compact },
+      ]"
+      :aria-label="compact ? mainLabel : undefined"
       @click="downloadMain"
     >
       <Download :size="18" aria-hidden="true" />
-      {{ mainLabel }}
+      {{ compact ? mainLabel.replace('Download ', '') : mainLabel }}
     </button>
     <SiteMenu :items="items" label="More ways to save" align="right">
       <template #trigger="{ open: menuOpen, toggle }">
         <button
           type="button"
-          class="site-btn site-btn-lg site-btn-icon"
-          :class="primary ? 'site-btn-primary' : 'site-btn-secondary'"
+          class="site-btn site-btn-icon"
+          :class="[
+            primary ? 'site-btn-primary' : 'site-btn-secondary',
+            { 'site-btn-lg': !compact },
+          ]"
           aria-label="More ways to save"
           aria-haspopup="menu"
           :aria-expanded="menuOpen"
