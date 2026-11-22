@@ -19,11 +19,13 @@
 
 /* The white edge is a margin of the tile, which a percentage measures
    against the sticker itself; a padding would measure against the row the
-   sticker stands in. `--site-sticker-edge` sets it. */
+   sticker stands in. `--site-sticker-edge` sets it. `flow-root` keeps the
+   top and bottom margins inside the sticker; as a plain block they would
+   collapse through it and leave the edge only at the sides. */
 .site-sticker {
   --site-sticker-edge: 6%;
 
-  display: block;
+  display: flow-root;
   flex-shrink: 0;
   box-sizing: border-box;
   border-radius: 28%;
