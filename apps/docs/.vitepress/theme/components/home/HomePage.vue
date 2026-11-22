@@ -13,23 +13,12 @@ import HomeIntegrate from './HomeIntegrate.vue';
 import HomeOwnStyle from './HomeOwnStyle.vue';
 import HomeOpenSource from './HomeOpenSource.vue';
 
-// The most used styles first, so the fan opens on what most people pick.
+// Five of the most used styles whose definitions are small, since the page
+// loads each of them to draw the seed as it is typed: about 25 kB gzipped
+// for all five. The middle one is the style of the code sample.
 provideHomeDemo({
-  style: 'avataaars',
-  styles: [
-    'avataaars',
-    'notionists',
-    'big-ears',
-    'adventurer',
-    'lorelei',
-    'bottts',
-    'personas',
-    'micah',
-    'thumbs',
-    'pixel-art',
-    'croodles',
-    'shapes',
-  ],
+  style: 'personas',
+  styles: ['thumbs', 'pixel-art', 'personas', 'micah', 'miniavs'],
 });
 </script>
 

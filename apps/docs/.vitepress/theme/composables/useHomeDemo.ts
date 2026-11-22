@@ -1,7 +1,8 @@
 /**
- * The state of the home page demo: one seed and one style, shared by every
- * section of the page. The hero changes them, and the code sample and the
- * crowd of avatars further down follow.
+ * The state of the home page demo: one seed shared by every section of the
+ * page, and the styles the hero shows it in. The seed field of the hero
+ * changes it, and the code sample and the crowd further down follow. The
+ * style in the middle of the hero is the one the code uses.
  */
 import {
   computed,
@@ -55,16 +56,15 @@ export interface HomeDemoStyle {
 export interface HomeDemo {
   seed: Ref<string>;
   styleName: Ref<string>;
-  /** The styles the hero fan turns through. */
+  /** The styles of the hero fan, the chosen one among them. */
   styles: ComputedRef<HomeDemoStyle[]>;
   style: ComputedRef<HomeDemoStyle>;
   /** The options of the chosen style, the way they go into an avatar. */
   options: ComputedRef<Record<string, unknown>>;
-  /** True once someone typed, rolled or picked. */
+  /** True once someone typed or rolled. */
   touched: Ref<boolean>;
   roll: () => void;
   setSeed: (value: string) => void;
-  pick: (styleName: string) => void;
 }
 
 const HOME_DEMO_KEY: InjectionKey<HomeDemo> = Symbol('home-demo');
@@ -115,11 +115,6 @@ export function provideHomeDemo(config: {
     touched.value = true;
   }
 
-  function pick(name: string) {
-    styleName.value = name;
-    touched.value = true;
-  }
-
   const demo: HomeDemo = {
     seed,
     styleName,
@@ -129,7 +124,6 @@ export function provideHomeDemo(config: {
     touched,
     roll,
     setSeed,
-    pick,
   };
 
   provide(HOME_DEMO_KEY, demo);

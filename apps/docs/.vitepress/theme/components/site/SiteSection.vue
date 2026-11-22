@@ -8,11 +8,9 @@
  * - `stack`: the title and the lead side by side across the top, the
  *   content below.
  *
- * `die` and `eyebrow` put the numbered label above the title. The id is the
- * anchor a sub-navigation points at.
+ * The id is the anchor a sub-navigation points at.
  */
 import { computed } from 'vue';
-import SiteEyebrow from './SiteEyebrow.vue';
 
 export type SiteTone =
   'soft' | 'panel' | 'sun' | 'coral' | 'sky' | 'lilac' | 'mint';
@@ -27,8 +25,6 @@ const props = withDefaults(
     layout?: 'split' | 'stack';
     /** Title size; defaults to the large one when stacked. */
     size?: 'xl' | 'l';
-    die?: number;
-    eyebrow?: string;
   }>(),
   {
     id: undefined,
@@ -36,8 +32,6 @@ const props = withDefaults(
     tone: undefined,
     layout: 'split',
     size: undefined,
-    die: undefined,
-    eyebrow: undefined,
   },
 );
 
@@ -65,10 +59,6 @@ const titleClass = computed(() =>
       tone ? ['site-box', 'is-block', `is-${tone}`] : 'site-container',
     ]"
   >
-    <SiteEyebrow v-if="die && eyebrow" :face="die" class="site-section-eyebrow">
-      {{ eyebrow }}
-    </SiteEyebrow>
-
     <div :class="layout === 'split' ? 'site-split' : 'site-section-stack'">
       <div
         class="site-section-head"
@@ -102,10 +92,6 @@ const titleClass = computed(() =>
   &.site-container {
     padding-top: clamp(56px, 6.4vw, 96px);
     padding-bottom: clamp(56px, 6.4vw, 96px);
-  }
-
-  &-eyebrow {
-    margin-bottom: 24px;
   }
 
   &-head:not(.site-pair) {

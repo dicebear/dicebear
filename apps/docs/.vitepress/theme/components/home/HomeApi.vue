@@ -13,7 +13,6 @@ import {
   useUsageStats,
 } from '@theme/composables/useUsageStats';
 import { LINKS } from '@theme/config/home';
-import SiteEyebrow from '../site/SiteEyebrow.vue';
 
 const { months, first, last } = useUsageStats();
 
@@ -40,7 +39,6 @@ const label = computed(() =>
 
 <template>
   <section class="site-box is-block is-soft home-api">
-    <SiteEyebrow :face="2">The HTTP API</SiteEyebrow>
     <div class="site-pair home-api-grid">
       <div>
         <h2 class="site-headline">
@@ -89,7 +87,6 @@ const label = computed(() =>
 <style scoped lang="scss">
 .home-api {
   &-grid {
-    margin-top: 24px;
     row-gap: 48px;
   }
 

@@ -353,7 +353,9 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       gap: 4px;
       padding: 12px 60px 0 12px;
       overflow-x: auto;
-      scrollbar-width: none;
+      /* Visible, so the tabs past the edge can be reached without a
+         touchpad. */
+      scrollbar-width: thin;
 
       input {
         position: fixed;

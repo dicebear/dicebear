@@ -12,7 +12,6 @@ import { useHomeDemo } from '@theme/composables/useHomeDemo';
 import { demoSnippets } from '@theme/utils/homeSnippets';
 import { FRAMEWORK_GUIDES, LINKS } from '@theme/config/home';
 import SiteAvatar from '../site/SiteAvatar.vue';
-import SiteEyebrow from '../site/SiteEyebrow.vue';
 import UiCode from '../ui/UiCode.vue';
 
 const { theme } = useData<ThemeOptions>();
@@ -45,7 +44,6 @@ const crowd = computed(() => {
 
 <template>
   <section class="site-box is-block is-sun home-integrate">
-    <SiteEyebrow :face="3">Drop it in</SiteEyebrow>
     <div class="site-pair is-top home-integrate-grid">
       <div>
         <h2 class="site-headline">One line, and everybody has a face</h2>
@@ -113,7 +111,6 @@ const crowd = computed(() => {
 <style scoped lang="scss">
 .home-integrate {
   &-grid {
-    margin-top: 24px;
     row-gap: 48px;
   }
 

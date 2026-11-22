@@ -3,8 +3,8 @@
  * Headings take the accent of the ground they sit on, text its ink.
  *
  * Headings: home hero, page title, section, section in a split, item,
- * card. Labels: eyebrow (with a die), title (a bold line such as an arrow
- * link or an accordion row), control (the label of a field or group).
+ * card. Labels: title (a bold line such as an arrow link or an accordion
+ * row), control (the label of a field or group).
  * Text: lead, body, text, small, mono.
  */
 @use './mixins' as m;
@@ -64,19 +64,6 @@
   line-height: 30px;
   font-weight: 700;
   text-wrap: wrap;
-}
-
-/* The label above a section, led by a die (see SiteEyebrow). */
-.site-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 0;
-  font-family: var(--db-font-display);
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 700;
-  color: var(--db-accent);
 }
 
 /* A bold line: arrow links, accordion rows, list titles. */

@@ -9,12 +9,15 @@ import { Moon, Sun } from '@lucide/vue';
 
 const { isDark } = useData();
 const mounted = ref(false);
+/** Only a switch by hand moves the knob, not the first paint. */
+const moved = ref(false);
 
 onMounted(() => {
   mounted.value = true;
 });
 
 function toggle() {
+  moved.value = true;
   isDark.value = !isDark.value;
 }
 </script>
@@ -24,6 +27,7 @@ function toggle() {
     type="button"
     role="switch"
     class="theme-switch"
+    :class="{ 'is-moved': moved }"
     :aria-checked="mounted ? isDark : false"
     aria-label="Dark theme"
     @click="toggle"
@@ -92,5 +96,51 @@ function toggle() {
 
 .dark .theme-switch-moon {
   display: block;
+}
+
+/* VitePress turns transitions off for the moment the theme changes, so the
+   knob slides and the icon turns in with animations instead. */
+.is-moved .theme-switch-knob {
+  animation: theme-switch-off 0.35s var(--ease-spring);
+}
+
+.dark .is-moved .theme-switch-knob {
+  animation-name: theme-switch-on;
+}
+
+.is-moved :is(.theme-switch-sun, .theme-switch-moon) {
+  animation: theme-switch-icon 0.45s var(--ease-spring);
+}
+
+@keyframes theme-switch-on {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(28px);
+  }
+}
+
+@keyframes theme-switch-off {
+  from {
+    transform: translateX(28px);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes theme-switch-icon {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 </style>

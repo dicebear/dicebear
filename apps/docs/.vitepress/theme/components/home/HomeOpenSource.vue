@@ -11,7 +11,6 @@ import type { ThemeOptions } from '@theme/types';
 import { normalizeLicense } from '@theme/config/styleCategories';
 import { FIRST_COMMIT, LINKS } from '@theme/config/home';
 import UiIcon from '../ui/UiIcon.vue';
-import SiteEyebrow from '../site/SiteEyebrow.vue';
 
 const { theme } = useData<ThemeOptions>();
 
@@ -31,10 +30,7 @@ const cc0 = computed(
   <section class="site-box is-block is-mint home-project">
     <div class="site-pair is-top home-project-grid">
       <div>
-        <SiteEyebrow :face="5">The project</SiteEyebrow>
-        <h2 class="site-headline home-project-title">
-          Open source since {{ FIRST_COMMIT.year }}
-        </h2>
+        <h2 class="site-headline">Open source since {{ FIRST_COMMIT.year }}</h2>
         <p class="site-lead home-project-lead">
           The first commit dates from {{ FIRST_COMMIT.month }}
           {{ FIRST_COMMIT.year }}. Version {{ theme.majorVersion }} is the
@@ -91,10 +87,6 @@ const cc0 = computed(
 .home-project {
   &-grid {
     row-gap: 56px;
-  }
-
-  &-title {
-    margin-top: 24px;
   }
 
   &-lead {

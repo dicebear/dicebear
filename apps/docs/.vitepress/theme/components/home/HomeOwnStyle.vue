@@ -16,7 +16,6 @@ import {
 } from '@theme/config/home';
 import SiteAvatar from '../site/SiteAvatar.vue';
 import SiteDisclosure from '../site/SiteDisclosure.vue';
-import SiteEyebrow from '../site/SiteEyebrow.vue';
 import UiCode from '../ui/UiCode.vue';
 
 type Way = 'figma' | 'hand' | 'use';
@@ -46,8 +45,7 @@ const GALLERY_ALT =
 
 <template>
   <section class="site-box is-block is-soft home-own">
-    <SiteEyebrow :face="4">Custom styles</SiteEyebrow>
-    <h2 class="site-headline home-own-title">A style of your own</h2>
+    <h2 class="site-headline">A style of your own</h2>
     <p class="site-lead home-own-lead">
       Draw it in Figma or write it by hand. Either way you end up with one file
       that works wherever DiceBear runs.
@@ -178,10 +176,6 @@ const GALLERY_ALT =
 
 <style scoped lang="scss">
 .home-own {
-  &-title {
-    margin-top: 24px;
-  }
-
   &-lead {
     max-width: 640px;
     margin-top: 28px;

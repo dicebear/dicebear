@@ -1,0 +1,200 @@
+<script setup lang="ts">
+/**
+ * A row of tab pills. As many as fit stand in the row; the rest go into a
+ * last pill with a native dropdown, which shows the chosen tab when that is
+ * one of them. Nothing scrolls sideways, so every tab can be reached with a
+ * mouse wheel, a touchpad, a keyboard or a finger alike.
+ */
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue';
+import { ChevronDown } from '@lucide/vue';
+
+export interface SiteTab {
+  id: string;
+  label: string;
+}
+
+const props = withDefaults(
+  defineProps<{
+    tabs: SiteTab[];
+    ariaLabel?: string;
+    moreLabel?: string;
+  }>(),
+  { ariaLabel: undefined, moreLabel: 'More' },
+);
+
+const model = defineModel<string>({ required: true });
+
+const root = ref<HTMLElement>();
+const measure = ref<HTMLElement>();
+const visible = ref(props.tabs.length);
+
+const GAP = 4;
+/** Room for the chevron of the last pill. */
+const CHEVRON = 26;
+
+const shown = computed(() => props.tabs.slice(0, visible.value));
+const hidden = computed(() => props.tabs.slice(visible.value));
+const hiddenActive = computed(() =>
+  hidden.value.find((tab) => tab.id === model.value),
+);
+
+function fit() {
+  const box = root.value;
+  const pills = measure.value
+    ? Array.from(measure.value.children as HTMLCollectionOf<HTMLElement>)
+    : [];
+
+  if (!box || pills.length !== props.tabs.length) {
+    return;
+  }
+
+  const widths = pills.map((pill) => pill.offsetWidth);
+  const available = box.clientWidth;
+  const total = widths.reduce((sum, width) => sum + width + GAP, -GAP);
+
+  if (total <= available) {
+    visible.value = props.tabs.length;
+
+    return;
+  }
+
+  // The last pill may show the longest hidden label, so it gets that room.
+  const more = Math.max(...widths) + CHEVRON;
+  let used = more;
+  let count = 0;
+
+  while (count < widths.length && used + widths[count] + GAP <= available) {
+    used += widths[count] + GAP;
+    count += 1;
+  }
+
+  visible.value = count;
+}
+
+let observer: ResizeObserver | undefined;
+
+onMounted(() => {
+  observer = new ResizeObserver(() => fit());
+
+  if (root.value) {
+    observer.observe(root.value);
+  }
+
+  // The display face may arrive after the first layout.
+  void document.fonts?.ready.then(() => fit());
+  fit();
+});
+
+onBeforeUnmount(() => observer?.disconnect());
+
+watch(
+  () => props.tabs.map((tab) => tab.label).join('|'),
+  () => void nextTick(fit),
+);
+
+function onPick(event: Event) {
+  model.value = (event.target as HTMLSelectElement).value;
+}
+</script>
+
+<template>
+  <div ref="root" class="site-tabs">
+    <div class="site-tabs-list" role="tablist" :aria-label="ariaLabel">
+      <button
+        v-for="tab in shown"
+        :key="tab.id"
+        type="button"
+        role="tab"
+        class="site-pill site-pill-tab"
+        :aria-selected="tab.id === model"
+        @click="model = tab.id"
+      >
+        {{ tab.label }}
+      </button>
+      <span
+        v-if="hidden.length"
+        class="site-pill site-pill-tab site-tabs-more"
+        :class="{ 'is-active': hiddenActive }"
+      >
+        {{ hiddenActive?.label ?? moreLabel }}
+        <ChevronDown :size="16" aria-hidden="true" />
+        <select
+          class="site-tabs-select"
+          :value="hiddenActive ? model : ''"
+          :aria-label="moreLabel"
+          @change="onPick"
+        >
+          <option value="" disabled>{{ moreLabel }}</option>
+          <option v-for="tab in hidden" :key="tab.id" :value="tab.id">
+            {{ tab.label }}
+          </option>
+        </select>
+      </span>
+    </div>
+    <div ref="measure" class="site-tabs-measure" aria-hidden="true">
+      <span
+        v-for="tab in tabs"
+        :key="tab.id"
+        class="site-pill site-pill-tab"
+        aria-selected="true"
+        >{{ tab.label }}</span
+      >
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.site-tabs {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.site-tabs-list {
+  display: flex;
+  gap: 4px;
+  overflow: hidden;
+
+  > .site-pill {
+    flex-shrink: 0;
+  }
+}
+
+/* The native dropdown lies over the pill, invisible, so the pill looks like
+   the others and the browser's own picker opens. */
+.site-tabs-more {
+  position: relative;
+
+  &:focus-within {
+    outline: 2px solid var(--db-focus);
+    outline-offset: 2px;
+  }
+}
+
+.site-tabs-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Every tab once, at its bold width, to know what fits. */
+.site-tabs-measure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 4px;
+  visibility: hidden;
+  pointer-events: none;
+  white-space: nowrap;
+}
+</style>

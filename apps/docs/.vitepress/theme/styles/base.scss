@@ -173,9 +173,11 @@
   }
 }
 
+/* The selection takes the select color of its ground: yellow on paper,
+   ink on yellow, the tint on a deep block. */
 ::selection {
-  background: color-mix(in srgb, var(--db-sun) 70%, transparent);
-  color: var(--db-on);
+  background: color-mix(in srgb, var(--db-select) 75%, transparent);
+  color: var(--db-select-text);
 }
 
 .sr-only {

@@ -12,6 +12,7 @@ import { escapeHtml } from '@theme/utils/escape';
 import { marksToHtml, stripMarks } from '@theme/utils/codeMarks';
 import { loadHljs, type Hljs } from '@theme/utils/hljs';
 import UiCopyButton from './UiCopyButton.vue';
+import SiteTabs from '../site/SiteTabs.vue';
 
 export interface UiCodeTab {
   id: string;
@@ -81,19 +82,13 @@ watch(current, async () => {
 <template>
   <div class="ui-code" :class="{ 'has-tabs': tabs?.length }">
     <div class="ui-code-bar">
-      <div v-if="tabs?.length" class="ui-code-tabs" role="tablist">
-        <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          type="button"
-          role="tab"
-          class="site-pill site-pill-tab"
-          :aria-selected="tab.id === activeId"
-          @click="active = tab.id"
-        >
-          {{ tab.label }}
-        </button>
-      </div>
+      <SiteTabs
+        v-if="tabs?.length"
+        :model-value="activeId ?? ''"
+        :tabs="tabs"
+        aria-label="Language"
+        @update:model-value="active = $event"
+      />
       <span v-else class="ui-code-lang">
         <slot name="label">{{ current.lang }}</slot>
       </span>
@@ -139,23 +134,6 @@ watch(current, async () => {
     font-size: 12px;
     line-height: 20px;
     color: var(--db-muted);
-  }
-
-  &-tabs {
-    display: flex;
-    gap: 4px;
-    min-width: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    .site-pill {
-      flex-shrink: 0;
-    }
   }
 
   &-text {

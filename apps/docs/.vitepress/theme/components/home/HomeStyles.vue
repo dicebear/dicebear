@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * Section one: the styles, as a lilac band across the whole page with two
- * belts of stickers, the most used styles first. Every sticker leads to its
- * style page.
+ * The styles, as a lilac band across the whole page with two belts of
+ * stickers, the most used styles first. The belts are centered and run off
+ * both edges at any width. Every sticker leads to its style page.
  */
 import { computed } from 'vue';
 import { useData, withBase } from 'vitepress';
@@ -12,10 +12,11 @@ import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 import { styleDisplayName } from '@theme/utils/styleMeta';
 import { LINKS } from '@theme/config/home';
 import SiteAvatar from '../site/SiteAvatar.vue';
-import SiteEyebrow from '../site/SiteEyebrow.vue';
 
 const { theme } = useData<ThemeOptions>();
 
+// The most used styles, split into two belts. Each holds enough stickers to
+// run off both edges of a wide screen.
 const BELTS = [
   [
     'avataaars',
@@ -30,20 +31,28 @@ const BELTS = [
     'thumbs',
     'big-smile',
     'shapes',
+    'identicon',
+    'open-peeps',
+    'miniavs',
+    'croodles',
   ],
   [
-    'croodles',
     'big-ears',
-    'dylan',
-    'miniavs',
-    'identicon',
-    'blobs',
-    'waves',
-    'voxel-art',
-    'clay',
-    'critters',
-    'open-peeps',
     'fun-emoji',
+    'glass',
+    'bottts-neutral',
+    'dylan',
+    'big-ears-neutral',
+    'adventurer-neutral',
+    'croodles-neutral',
+    'icons',
+    'notionists-neutral',
+    'avataaars-neutral',
+    'waves',
+    'rings',
+    'blobs',
+    'cats',
+    'critters',
   ],
 ];
 
@@ -63,7 +72,6 @@ const belts = computed(() =>
 <template>
   <section class="site-box is-lilac home-styles">
     <div class="site-container home-styles-head">
-      <SiteEyebrow :face="1">The styles</SiteEyebrow>
       <h2 class="site-headline">{{ theme.styleCount }} styles in the box</h2>
       <p class="site-lead home-styles-lead">
         People, animals, robots, scenes and abstract marks, by independent
@@ -131,25 +139,27 @@ const belts = computed(() =>
   }
 }
 
-/* A belt of stickers that runs off both edges, turned left and right in
-   turn. */
+/* A belt of stickers, centered so it runs off both edges, turned left and
+   right in turn. The second one sits half a sticker over. */
 .home-belt {
   --belt: clamp(104px, 12vw, 176px);
+  --belt-gap: clamp(16px, 2vw, 32px);
 
   display: flex;
-  gap: clamp(16px, 2vw, 32px);
+  justify-content: center;
+  gap: var(--belt-gap);
   padding: 20px 0 16px;
 
   &:first-of-type {
     margin-top: clamp(24px, 2.8vw, 40px);
   }
 
-  > li {
-    flex: 0 0 var(--belt);
+  & + & {
+    transform: translateX(calc((var(--belt) + var(--belt-gap)) / 2));
   }
 
-  > li:first-child {
-    margin-left: calc(var(--belt) * -0.45);
+  > li {
+    flex: 0 0 var(--belt);
   }
 
   > li:nth-child(odd) {
@@ -158,10 +168,6 @@ const belts = computed(() =>
 
   > li:nth-child(even) {
     transform: rotate(2deg) translateY(6px);
-  }
-
-  &:nth-of-type(2) > li:first-child {
-    margin-left: calc(var(--belt) * -0.1);
   }
 
   &-link {

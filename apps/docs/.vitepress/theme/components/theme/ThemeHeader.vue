@@ -262,6 +262,18 @@ onKeyStroke('Escape', () => {
   color: var(--db-ink);
 }
 
+/* Between the menu and the full width the search folds into its icon, so it
+   never runs into the navigation. */
+@media (max-width: 1199px) {
+  .theme-header-search {
+    display: none;
+  }
+
+  .theme-header-search-icon {
+    display: inline-flex;
+  }
+}
+
 @media (max-width: 1023px) {
   .theme-header-left {
     gap: 8px;

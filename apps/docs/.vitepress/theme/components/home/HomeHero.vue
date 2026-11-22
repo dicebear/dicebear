@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
  * The hero. Five stickers show the seed in five styles, the one in the
- * middle is the chosen style; a click on another turns the fan to it. The
- * field holds the seed and types a few names by itself until someone takes
- * over; the yellow button rolls a new one.
+ * middle large and upright. The field holds the seed and types a few names
+ * by itself until someone takes over; the yellow button rolls a new one.
+ * The hero fills the window below the header.
  */
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useData, withBase } from 'vitepress';
 import { ArrowRight } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
@@ -20,30 +20,6 @@ import SiteAvatar from '../site/SiteAvatar.vue';
 const { theme } = useData<ThemeOptions>();
 const demo = useHomeDemo();
 const { stop } = useSeedTyping(demo, DEMO_NAMES.slice(0, 6));
-
-const OFFSETS = [-2, -1, 0, 1, 2];
-
-const index = computed(() =>
-  Math.max(
-    0,
-    demo.styles.value.findIndex((style) => style.name === demo.styleName.value),
-  ),
-);
-
-/** The chosen style in the middle, its neighbors in the list around it. */
-const fan = computed(() => {
-  const list = demo.styles.value;
-
-  return OFFSETS.map((offset) => {
-    const style = list[(index.value + offset + list.length) % list.length];
-
-    return {
-      ...style,
-      offset,
-      options: offset === 0 ? demo.options.value : { seed: demo.seed.value },
-    };
-  });
-});
 
 const mounted = ref(false);
 
@@ -65,36 +41,27 @@ function onInput(event: Event) {
       libraries for seven languages.
     </p>
 
-    <TransitionGroup
-      tag="ul"
-      name="home-fan"
-      class="home-fan site-rise"
-      style="animation-delay: 160ms"
-    >
+    <ul class="home-fan site-rise" style="animation-delay: 160ms">
       <li
-        v-for="item in fan"
+        v-for="(item, index) in demo.styles.value"
         :key="item.name"
         class="home-fan-item"
-        :class="`is-at-${item.offset + 2}`"
+        :class="`is-at-${index}`"
       >
-        <button
-          type="button"
-          class="home-fan-button"
-          :aria-pressed="item.offset === 0"
-          :aria-label="item.title"
-          @click="demo.pick(item.name)"
-        >
-          <SiteAvatar
-            sticker
-            mode="library"
-            :style-name="item.name"
-            :options="item.options"
-            :lazy="false"
-            :alt="`${item.title} avatar for the seed ${demo.seed.value}`"
-          />
-        </button>
+        <SiteAvatar
+          sticker
+          mode="library"
+          :style-name="item.name"
+          :options="
+            item.name === demo.styleName.value
+              ? demo.options.value
+              : { seed: demo.seed.value }
+          "
+          :lazy="false"
+          :alt="`${item.title} avatar for the seed ${demo.seed.value}`"
+        />
       </li>
-    </TransitionGroup>
+    </ul>
 
     <p class="site-control home-hero-style" aria-live="polite">
       {{ demo.style.value.title }}
@@ -144,8 +111,10 @@ function onInput(event: Event) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: clamp(32px, 3.4vw, 48px);
-  padding-bottom: clamp(64px, 6.6vw, 96px);
+  justify-content: center;
+  min-height: calc(100svh - var(--db-header-h));
+  padding-top: clamp(24px, 3vh, 48px);
+  padding-bottom: clamp(40px, 6vh, 96px);
   text-align: center;
 
   &-lead {
@@ -163,10 +132,12 @@ function onInput(event: Event) {
   }
 }
 
-/* The fan: five stickers, the middle one large and upright, the outer ones
-   smaller, lower and turned away. */
+/* The fan: five stickers that overlap, the middle one large and upright,
+   the outer ones smaller, lower and turned away. */
 .home-fan {
-  --fan: clamp(56px, 12.4vw, 176px);
+  /* Wide and tall windows get large stickers; on a laptop the field and the
+     buttons still fit above the fold. */
+  --fan: clamp(64px, min(13vw, 14.5svh), 188px);
 
   display: flex;
   align-items: center;
@@ -177,8 +148,7 @@ function onInput(event: Event) {
   &-item {
     position: relative;
     width: var(--fan);
-    margin: 0 calc(var(--fan) * -0.04 + clamp(0px, 1vw, 16px));
-    transition: transform 0.5s var(--ease-spring);
+    margin: 0 calc(var(--fan) * -0.1);
 
     &.is-at-0 {
       z-index: 1;
@@ -205,42 +175,6 @@ function onInput(event: Event) {
       transform: translate(-2%, 34%) scale(0.68) rotate(13deg);
     }
   }
-
-  &-button {
-    display: block;
-    width: 100%;
-    padding: 0;
-    border-radius: 28%;
-    transition: transform 0.25s var(--ease-spring);
-
-    &:hover {
-      transform: translateY(-4%);
-    }
-
-    &[aria-pressed='true'] {
-      cursor: default;
-    }
-
-    &[aria-pressed='true']:hover {
-      transform: none;
-    }
-  }
-}
-
-.home-fan-enter-from,
-.home-fan-leave-to {
-  opacity: 0;
-}
-
-.home-fan-leave-active {
-  position: absolute;
-}
-
-.home-fan-enter-active,
-.home-fan-leave-active {
-  transition:
-    opacity 0.3s,
-    transform 0.5s var(--ease-spring);
 }
 
 /* The seed field: the large field of the page, ringed in ink. */
@@ -276,13 +210,6 @@ function onInput(event: Event) {
     line-height: 40px;
     font-weight: 700;
     color: var(--db-ink);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-fan-item,
-  .home-fan-button {
-    transition: none;
   }
 }
 </style>
