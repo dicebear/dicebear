@@ -24,6 +24,11 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+    /* No zoom on a double tap, which Safari does on a quick second tap on
+       Randomize, Undo or any other button. Pinch zoom stays. The value
+       holds for every element on the page, as touch-action is the
+       intersection of an element's and its ancestors'. */
+    touch-action: manipulation;
     color-scheme: light;
 
     &.dark {
