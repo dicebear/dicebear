@@ -51,7 +51,7 @@ const model = defineModel<T>({ required: true });
   }
 
   &-input {
-    @include c.control;
+    @include c.control-tint;
     @include c.control-size(md);
 
     padding-right: 42px;

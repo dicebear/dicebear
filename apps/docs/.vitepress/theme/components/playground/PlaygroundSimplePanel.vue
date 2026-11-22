@@ -415,7 +415,7 @@ const shape = usePlaygroundShape();
      what it adds. That keeps it with the options and apart from the
      actions. */
   &-more {
-    @include c.control;
+    @include c.control-tint;
 
     display: flex;
     align-items: center;

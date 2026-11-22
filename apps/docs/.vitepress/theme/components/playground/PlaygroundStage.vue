@@ -261,6 +261,8 @@ function pickSeed(seed: string) {
     border: 0;
     border-radius: 14px;
     background: var(--db-tile);
+    /* The beige tile needs an edge on the light paper only; on the dark
+       ground it stands out by itself. */
     box-shadow: inset 0 0 0 1px var(--db-line);
     overflow: hidden;
     cursor: pointer;
@@ -273,6 +275,10 @@ function pickSeed(seed: string) {
         0 0 0 2px var(--db-paper),
         0 0 0 4px var(--db-field-border);
       transform: translateY(-2px);
+    }
+
+    :root.dark &:not(:hover) {
+      box-shadow: none;
     }
 
     img {

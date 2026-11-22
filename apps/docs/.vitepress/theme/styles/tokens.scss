@@ -173,10 +173,7 @@
   --db-code-key: #7dd3fc;
   --db-code-string: #fdba74;
 
-  /* A hairline in the line color, so a white sticker keeps its edge on the
-     dark ground. */
-  --db-shadow:
-    0 0 0 1px var(--db-c-line), 0 22px 36px -22px rgba(0, 0, 0, 0.55);
+  --db-shadow: 0 22px 36px -22px rgba(0, 0, 0, 0.55);
   --db-shadow-stage: 0 30px 48px -28px rgba(0, 0, 0, 0.7);
   --db-shadow-pop:
     0 24px 48px -24px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);

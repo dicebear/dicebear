@@ -13,7 +13,7 @@
  * `site-pill-sm` is the 36px size for dense panels, `site-pill-lg` the
  * larger text of the main navigation.
  *
- * `site-seg` is the track of a segmented control: pills inside a ring.
+ * `site-seg` is the track of a segmented control: pills on a tint.
  */
 @use '../mixins' as m;
 
@@ -116,25 +116,24 @@
   }
 }
 
-/* Segmented control: tabs in a ring, 40px each. */
+/* Segmented control: tabs on a tint without a line, like a select. */
 .site-seg {
   display: inline-grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
   gap: 2px;
   max-width: 100%;
-  padding: 3px;
+  padding: 4px;
   box-sizing: border-box;
-  border: 1px solid var(--db-field-border);
   border-radius: 22px;
-  background: var(--db-panel);
+  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
 
   &.is-fluid {
     display: grid;
     width: 100%;
   }
 
-  /* 1 + 3 + 36 + 3 + 1: the track is 44 high, like a field or a button. */
+  /* 4 + 36 + 4: the track is 44 high, like a field or a button. */
   > .site-pill {
     justify-content: center;
     height: 36px;

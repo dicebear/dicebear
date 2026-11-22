@@ -1,8 +1,9 @@
 <script setup lang="ts">
 /**
  * An on/off switch drawn on a checkbox with role="switch". A wrapping label
- * toggles it, and screen readers announce it as a switch. Off it is a soft
- * track with a white knob, on it fills in the button color of its ground.
+ * toggles it, and screen readers announce it as a switch. Off it is a tinted
+ * track with a knob in the second text color, on it fills in the button
+ * color of its ground.
  */
 withDefaults(defineProps<{ size?: 'sm' | 'md' }>(), { size: 'sm' });
 
@@ -31,14 +32,14 @@ const model = defineModel<boolean>({ required: true });
   height: var(--track-h);
   margin: 0;
   box-sizing: border-box;
-  border: 1px solid var(--db-field-border);
+  border: 0;
   border-radius: calc(var(--track-h) / 2);
-  background: var(--db-soft);
+  /* A tint without a line, like a select or a segmented control. Off, the
+     knob is the second text color, so it shows on any ground. */
+  background: color-mix(in srgb, var(--db-ink) 12%, transparent);
   cursor: pointer;
   appearance: none;
-  transition:
-    background-color var(--duration-fast),
-    border-color var(--duration-fast);
+  transition: background-color var(--duration-fast);
 
   &.is-md {
     --track-w: 72px;
@@ -50,29 +51,27 @@ const model = defineModel<boolean>({ required: true });
     content: '';
     position: absolute;
     top: 50%;
-    left: calc((var(--track-h) - var(--knob)) / 2 - 1px);
+    left: calc((var(--track-h) - var(--knob)) / 2);
     width: var(--knob);
     height: var(--knob);
     border-radius: 50%;
-    background: var(--db-panel);
-    box-shadow: 0 0 0 1px var(--db-field-border);
+    background: var(--db-ink-2);
     transform: translateY(-50%);
     transition:
       transform var(--duration-fast) var(--ease-smooth),
       background-color var(--duration-fast);
   }
 
-  &:hover {
-    border-color: var(--db-ink-2);
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--db-ink) 18%, transparent);
   }
 
-  &:checked {
-    border-color: var(--db-btn-bg);
+  &:checked,
+  &:checked:hover {
     background: var(--db-btn-bg);
 
     &::before {
-      background: var(--db-paper);
-      box-shadow: none;
+      background: var(--db-btn-fg);
       transform: translate(calc(var(--track-w) - var(--track-h)), -50%);
     }
   }

@@ -63,8 +63,34 @@
    Playground: a picture inset as far from the edge as from top and bottom,
    a muted word, the chosen value and a chevron at the field's own padding.
    Sizes as `control-size`. */
+/* A control you click to choose, not to type in: a select, a picker, the
+   track of a segmented control or a switch. Like the tonal buttons it is a
+   tint of the text color without a line; lines stay with the fields you
+   type in, so a line always means "type here". The tint mixes with any
+   ground, so it fits paper, the colored blocks and dark mode. */
+@mixin control-tint {
+  /* The muted color falls under 4.5:1 on the hover tint, so the muted
+     words inside (the "Style" of a picker) take the second text color. */
+  --db-muted: var(--db-ink-2);
+
+  box-sizing: border-box;
+  border: 0;
+  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+  color: var(--db-ink);
+  transition: background-color 0.12s;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--db-ink) 12%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--db-focus);
+    outline-offset: 2px;
+  }
+}
+
 @mixin control-picker($size: md) {
-  @include control;
+  @include control-tint;
   @include control-size($size);
 
   display: inline-flex;
@@ -76,13 +102,8 @@
   font-size: 15px;
   cursor: pointer;
 
-  &:focus-visible {
-    outline: 2px solid var(--db-focus);
-    outline-offset: 2px;
-  }
-
   &[aria-expanded='true'] {
-    border-color: var(--db-focus);
+    background: color-mix(in srgb, var(--db-ink) 12%, transparent);
   }
 }
 
