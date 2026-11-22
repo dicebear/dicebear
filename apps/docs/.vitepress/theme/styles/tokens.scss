@@ -107,14 +107,14 @@
   --db-radius-code: clamp(24px, 2.6vw, 36px);
   --db-radius-pill: 999px;
 
-  /* Layout. Content is 1280px wide at most, with `--db-wrap` on each side.
+  /* Layout. Content is 1440px wide at most, with `--db-wrap` on each side.
      `--db-edge` is the gap between two blocks, `--db-block` the inner room
      of a block, top and bottom. */
   --db-wrap: clamp(20px, 5.5vw, 80px);
   --db-edge: clamp(16px, 2.8vw, 40px);
   --db-block: clamp(48px, 5.6vw, 80px);
   --db-block-x: clamp(24px, 4.5vw, 64px);
-  --db-content: 1280px;
+  --db-content: 1440px;
   --db-header-h: 72px;
   /* The room between the header and the first line of a page. */
   --db-page-top: 40px;
