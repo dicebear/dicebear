@@ -1,17 +1,18 @@
 <script setup lang="ts">
 /**
  * Every style ranked by the websites that requested it in the latest
- * complete week. Ten rows to start with, the rest on request, a search
- * across all of them.
+ * complete week. The first three stand on a podium, the next ten in a list
+ * with a bar for their share and a tag for their trend; the rest on
+ * request, and a search across all of them.
  */
 import { computed, ref } from 'vue';
 import { capitalCase, kebabCase } from 'change-case';
 import { ArrowDown, ArrowUp } from '@lucide/vue';
 import type { StyleRankingRow } from '@theme/utils/statsTrends';
 import { formatGrowth, growthDirection } from '@theme/utils/statsTrends';
+import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 import SiteAvatar from './SiteAvatar.vue';
 import SiteSearch from './SiteSearch.vue';
-import SiteStatsSparkline from './SiteStatsSparkline.vue';
 
 const props = defineProps<{
   rows: StyleRankingRow[];
@@ -24,347 +25,344 @@ const SHOWN = 10;
 const query = ref('');
 const expanded = ref(false);
 
-type SortKey = 'rank' | 'name' | 'websites' | 'share' | 'trend';
+/** Second, first, third: the order of a podium. */
+const podium = computed(() => {
+  const [first, second, third] = props.rows;
 
-const sortKey = ref<SortKey>('rank');
-const descending = ref(true);
-
-/** Every column but the sparkline sorts. The rank keeps its number from the API. */
-const columns: { key: SortKey; label: string; right?: boolean }[] = [
-  { key: 'rank', label: '#' },
-  { key: 'name', label: 'Style' },
-  { key: 'websites', label: 'Websites', right: true },
-  { key: 'share', label: 'Share', right: true },
-  { key: 'trend', label: 'Trend', right: true },
-];
-
-function sortBy(key: SortKey) {
-  if (sortKey.value === key) {
-    descending.value = !descending.value;
-    return;
-  }
-  sortKey.value = key;
-  // Names read best A to Z, numbers largest first.
-  descending.value = key !== 'name';
-}
-
-/** New styles have no growth figure yet and sort above every gain. */
-function trendValue(row: StyleRankingRow): number {
-  return row.isNew
-    ? Number.POSITIVE_INFINITY
-    : (row.growth ?? Number.NEGATIVE_INFINITY);
-}
-
-function compare(a: StyleRankingRow, b: StyleRankingRow): number {
-  switch (sortKey.value) {
-    case 'name':
-      return capitalCase(a.name).localeCompare(capitalCase(b.name));
-    case 'websites':
-      return a.websites - b.websites;
-    case 'share':
-      return a.share - b.share;
-    case 'trend':
-      return trendValue(a) - trendValue(b);
-    default:
-      return b.rank - a.rank;
-  }
-}
-
-const filtered = computed(() => {
-  const q = query.value.trim().toLowerCase();
-  const rows = q
-    ? props.rows.filter((row) =>
-        capitalCase(row.name).toLowerCase().includes(q),
-      )
-    : [...props.rows];
-  rows.sort((a, b) => (descending.value ? compare(b, a) : compare(a, b)));
-  return rows;
+  return [
+    { row: second, tone: 'lilac', place: 2 },
+    { row: first, tone: 'sun', place: 1 },
+    { row: third, tone: 'mint', place: 3 },
+  ].filter((step) => step.row);
 });
+
+const searching = computed(() => query.value.trim() !== '');
+
+const list = computed(() => {
+  const q = query.value.trim().toLowerCase();
+
+  if (q) {
+    return props.rows.filter((row) =>
+      capitalCase(row.name).toLowerCase().includes(q),
+    );
+  }
+
+  const rest = props.rows.slice(3);
+
+  return expanded.value ? rest : rest.slice(0, SHOWN);
+});
+
+/** The bars measure against the largest share in the list. */
+const top = computed(() => Math.max(...list.value.map((row) => row.share), 1));
 
 /** A new style counts as a gain, like the arrow beside it says. */
 function direction(row: StyleRankingRow): 'up' | 'down' | 'flat' {
   return row.isNew ? 'up' : growthDirection(row.growth);
 }
 
-const shown = computed(() =>
-  expanded.value || query.value.trim()
-    ? filtered.value
-    : filtered.value.slice(0, SHOWN),
-);
+function trend(row: StyleRankingRow): string {
+  return row.isNew ? 'New' : formatGrowth(row.growth);
+}
+
+function share(value: number): string {
+  return `${value.toFixed(1)}%`;
+}
+
+function seed(name: string): string {
+  return getStyleCardSeeds(kebabCase(name))[0] ?? 'Felix';
+}
 </script>
 
 <template>
   <section class="site-container site-stats-rankings">
-    <div class="site-stats-rankings-head">
-      <div class="site-stats-rankings-intro">
-        <h2 class="site-headline">Style rankings</h2>
-        <p class="site-lead">
-          Every style, ranked by the number of websites that requested it in the
-          week of {{ weekLabel }}. The trend compares the past four weeks with
-          the four before.
-        </p>
-      </div>
+    <div class="site-pair">
+      <h2 class="site-headline">Style rankings</h2>
+      <p class="site-lead">
+        Every style, ranked by the number of websites that requested it in the
+        week of {{ weekLabel }}. The trend compares the past four weeks with the
+        four before.
+      </p>
+    </div>
+
+    <ol v-if="!searching" class="site-stats-rankings-podium">
+      <li
+        v-for="step in podium"
+        :key="step.row.name"
+        :class="`is-${step.place}`"
+      >
+        <SiteAvatar
+          sticker
+          :style-name="kebabCase(step.row.name)"
+          :options="{ seed: seed(step.row.name) }"
+          :alt="`${capitalCase(step.row.name)} avatar`"
+        />
+        <a
+          :href="`/styles/${kebabCase(step.row.name)}/`"
+          class="site-box site-stats-rankings-step"
+          :class="`is-${step.tone}`"
+        >
+          <span class="site-stats-rankings-step-share">{{
+            share(step.row.share)
+          }}</span>
+          <span class="site-stats-rankings-step-name"
+            >{{ step.place }}. {{ capitalCase(step.row.name) }}</span
+          >
+          <span class="site-stats-rankings-step-sites"
+            >{{ step.row.websites.toLocaleString('en-US') }} websites</span
+          >
+        </a>
+      </li>
+    </ol>
+
+    <div class="site-table-card site-stats-rankings-list">
+      <a
+        v-for="row in list"
+        :key="row.name"
+        :href="`/styles/${kebabCase(row.name)}/`"
+        class="site-stats-rankings-row"
+      >
+        <span class="site-stats-rankings-rank">{{ row.rank }}</span>
+        <SiteAvatar
+          :style-name="kebabCase(row.name)"
+          :options="{ seed: seed(row.name) }"
+          :size="52"
+          :alt="`${capitalCase(row.name)} avatar`"
+        />
+        <span class="site-stats-rankings-name">{{
+          capitalCase(row.name)
+        }}</span>
+        <span class="site-stats-rankings-track" aria-hidden="true">
+          <span :style="{ width: `${(row.share / top) * 100}%` }"></span>
+        </span>
+        <span class="site-stats-rankings-share">{{ share(row.share) }}</span>
+        <span
+          class="site-tag site-stats-rankings-trend"
+          :class="`is-${direction(row)}`"
+        >
+          <ArrowUp
+            v-if="direction(row) === 'up'"
+            :size="14"
+            aria-hidden="true"
+          />
+          <ArrowDown
+            v-else-if="direction(row) === 'down'"
+            :size="14"
+            aria-hidden="true"
+          />
+          {{ trend(row) }}
+        </span>
+      </a>
+      <p v-if="list.length === 0" class="site-text site-stats-rankings-empty">
+        No style matches “{{ query.trim() }}”.
+      </p>
+    </div>
+
+    <div class="site-stats-rankings-foot">
+      <button
+        v-if="!searching && rows.length > SHOWN + 3"
+        type="button"
+        class="site-btn site-btn-primary site-btn-lg"
+        @click="expanded = !expanded"
+      >
+        {{ expanded ? 'Show fewer' : `Show all ${rows.length} styles` }}
+      </button>
       <SiteSearch
         v-model="query"
         placeholder="Search styles"
         label="Search styles"
+        size="lg"
         class="site-stats-rankings-search"
       />
-    </div>
-    <div class="site-stats-rankings-table">
-      <div class="site-stats-rankings-columns site-label">
-        <template v-for="column in columns" :key="column.key">
-          <span v-if="column.key === 'name'"></span>
-          <button
-            type="button"
-            class="site-stats-rankings-sort hv-seg"
-            :class="{ 'is-right': column.right }"
-            :aria-pressed="sortKey === column.key"
-            :aria-sort="
-              sortKey === column.key
-                ? descending
-                  ? 'descending'
-                  : 'ascending'
-                : undefined
-            "
-            @click="sortBy(column.key)"
-          >
-            {{ column.label }}
-            <ArrowDown
-              v-if="sortKey === column.key"
-              :size="12"
-              :class="{ 'is-up': !descending }"
-              aria-hidden="true"
-            />
-          </button>
-        </template>
-        <span class="is-right">12 weeks</span>
-      </div>
-      <div
-        class="site-stats-rankings-rows"
-        :class="{ 'is-scrolling': shown.length > SHOWN }"
-      >
-        <a
-          v-for="row in shown"
-          :key="row.name"
-          :href="`/styles/${kebabCase(row.name)}/`"
-          class="site-stats-rankings-row hv-row"
-        >
-          <span class="site-stats-rankings-rank">{{ row.rank }}</span>
-          <SiteAvatar
-            :style-name="row.name"
-            :options="{ seed: 'Felix' }"
-            :size="40"
-            :radius="10"
-            :alt="`${capitalCase(row.name)} avatar`"
-          />
-          <span class="site-stats-rankings-name">{{
-            capitalCase(row.name)
-          }}</span>
-          <span class="is-right site-stats-rankings-figure">{{
-            row.websites.toLocaleString('en-US')
-          }}</span>
-          <span
-            class="is-right site-stats-rankings-figure site-stats-rankings-share"
-            >{{ row.share.toFixed(1) }}%</span
-          >
-          <span
-            class="site-stats-rankings-figure site-stats-rankings-trend"
-            :class="`is-${direction(row)}`"
-          >
-            <ArrowUp
-              v-if="direction(row) === 'up'"
-              :size="12"
-              aria-hidden="true"
-            />
-            <ArrowDown
-              v-else-if="direction(row) === 'down'"
-              :size="12"
-              aria-hidden="true"
-            />
-            {{ row.isNew ? 'New' : formatGrowth(row.growth) }}
-          </span>
-          <span class="site-stats-rankings-spark">
-            <SiteStatsSparkline :values="row.spark" :width="120" :height="28" />
-          </span>
-        </a>
-        <p
-          v-if="shown.length === 0"
-          class="site-text site-stats-rankings-empty"
-        >
-          No style matches.
-        </p>
-      </div>
-    </div>
-    <div class="site-stats-rankings-foot">
-      <button
-        v-if="!query.trim() && filtered.length > SHOWN"
-        type="button"
-        class="site-btn site-btn-secondary"
-        @click="expanded = !expanded"
-      >
-        {{ expanded ? 'Show the top 10' : `Show all ${rows.length} styles` }}
-      </button>
-      <span class="site-text site-stats-rankings-total">
-        <template v-if="websites"
-          >{{ websites.toLocaleString('en-US') }} websites in the week of
-          {{ weekLabel }}</template
-        >
-      </span>
     </div>
   </section>
 </template>
 
 <style scoped lang="scss">
 .site-stats-rankings {
-  padding-top: 168px;
+  padding-top: clamp(56px, 6.4vw, 96px);
+  padding-bottom: clamp(56px, 6.4vw, 96px);
 
-  &-head {
+  /* Three steps of a podium, the first in the middle and highest. */
+  &-podium {
     display: flex;
-    flex-wrap: wrap;
     align-items: flex-end;
-    justify-content: space-between;
-    gap: 32px 48px;
+    gap: clamp(8px, 1.6vw, 24px);
+    max-width: 980px;
+    margin: clamp(40px, 5vw, 72px) auto 0;
+
+    > li {
+      display: flex;
+      flex: 1 1 0;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+
+      > :first-child {
+        position: relative;
+        z-index: 1;
+        margin-bottom: -6%;
+      }
+    }
+
+    .is-1 > :first-child {
+      width: 58%;
+      transform: rotate(-3deg);
+    }
+
+    .is-2 > :first-child {
+      width: 46%;
+      transform: rotate(4deg);
+    }
+
+    .is-3 > :first-child {
+      width: 40%;
+      transform: rotate(-5deg);
+    }
   }
 
-  &-intro {
+  &-step {
     display: flex;
     flex-direction: column;
-    gap: 32px;
-    min-width: 0;
+    align-items: center;
+    width: 100%;
+    padding: clamp(28px, 3.4vw, 48px) 12px 20px;
+    border-radius: clamp(20px, 2.6vw, 36px) clamp(20px, 2.6vw, 36px) 0 0;
+    color: var(--db-accent);
+    text-align: center;
 
-    .site-lead {
-      max-width: 700px;
+    .is-1 & {
+      height: clamp(220px, 27vw, 360px);
+    }
+
+    .is-2 & {
+      height: clamp(170px, 20vw, 260px);
+    }
+
+    .is-3 & {
+      height: clamp(150px, 16vw, 210px);
+    }
+
+    &-share {
+      font-family: var(--db-font-display);
+      font-size: clamp(34px, 4.6vw, 68px);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    &-name {
+      margin-top: 8px;
+      font-family: var(--db-font-display);
+      font-size: clamp(17px, 1.9vw, 26px);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    &-sites {
+      margin-top: 4px;
+      font-size: clamp(13px, 1.1vw, 15px);
+      line-height: 1.4;
+      color: var(--db-ink-2);
     }
   }
 
-  &-search {
-    flex-shrink: 0;
+  &-list {
+    display: flex;
+    flex-direction: column;
   }
 
-  /* Below the width the columns need, the table scrolls sideways inside its
-     own box and the page keeps its width. */
-  &-table {
-    margin-top: 48px;
-    overflow-x: auto;
-  }
-
-  &-columns,
+  /* Rank, avatar, name, bar, share and trend in one row. */
   &-row {
     display: grid;
-    grid-template-columns: 48px 40px minmax(0, 1fr) 140px 100px 100px 140px;
-    gap: 16px;
+    grid-template-columns: 28px 52px minmax(96px, 1.1fr) minmax(
+        0,
+        3fr
+      ) auto auto;
+    gap: 8px clamp(10px, 1.6vw, 24px);
     align-items: center;
-    min-width: 760px;
-  }
+    min-height: 68px;
+    color: var(--db-ink);
 
-  &-columns {
-    height: 44px;
-  }
+    @media (max-width: 767px) {
+      grid-template-columns: 28px 44px minmax(0, 1fr) auto;
 
-  &-rows {
-    min-width: 760px;
-    border-top: 1px solid var(--db-line);
-    border-bottom: 1px solid var(--db-line);
+      --site-avatar-size: 44px;
 
-    /* The full list scrolls inside the height of the first ten rows. */
-    @media (min-width: 768px) {
-      &.is-scrolling {
-        max-height: 640px;
-        overflow-y: auto;
+      > :nth-child(4),
+      > :nth-child(6) {
+        display: none;
       }
     }
-  }
-
-  &-row {
-    height: 64px;
-    border-bottom: 1px solid var(--db-line);
-
-    &:last-child {
-      border-bottom: 0;
-    }
-  }
-
-  .is-right {
-    text-align: right;
-  }
-
-  &-sort {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 0;
-    border: 0;
-    background: none;
-    font: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
-    color: inherit;
-    cursor: pointer;
-
-    &.is-right {
-      justify-content: flex-end;
-    }
-
-    &[aria-pressed='true'] {
-      color: var(--db-ink);
-    }
-
-    svg {
-      transition: transform var(--duration-fast);
-
-      &.is-up {
-        transform: rotate(180deg);
-      }
-    }
-  }
-
-  &-rank,
-  &-figure {
-    font-family: var(--db-font-mono);
-    font-size: 14px;
-    line-height: 20px;
-    font-variant-numeric: tabular-nums;
   }
 
   &-rank {
+    font-family: var(--db-font-display);
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 800;
     color: var(--db-muted);
   }
 
   &-name {
-    font-size: 16px;
-    line-height: 26px;
-    font-weight: 600;
+    font-family: var(--db-font-display);
+    font-size: clamp(18px, 1.8vw, 24px);
+    line-height: 1.2;
+    font-weight: 700;
   }
 
-  &-figure {
-    color: var(--db-ink);
+  &-row:hover &-name {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
   }
 
-  &-share {
-    color: var(--db-ink-2);
-  }
+  &-track {
+    display: block;
+    height: 20px;
+    border-radius: 10px;
+    background: var(--db-soft);
 
-  &-trend {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 4px;
-
-    &.is-down,
-    &.is-flat {
-      color: var(--db-muted);
+    > span {
+      display: block;
+      height: 100%;
+      border-radius: 10px;
+      background: var(--db-ink);
     }
   }
 
-  &-spark {
-    display: flex;
-    justify-content: flex-end;
+  &-share {
+    min-width: 56px;
+    font-family: var(--db-font-display);
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 700;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Up in mint, down in coral, both in their light shade in every theme. */
+  &-trend {
+    justify-content: center;
+    min-width: 68px;
+    font-variant-numeric: tabular-nums;
+
+    &.is-up {
+      background: var(--db-mint-light);
+      color: var(--db-on);
+    }
+
+    &.is-down {
+      background: var(--db-coral);
+      color: var(--db-on);
+    }
+
+    &.is-flat {
+      background: var(--db-soft);
+    }
   }
 
   &-empty {
-    padding: 24px 0;
-    color: var(--db-muted);
+    padding: 20px 0;
   }
 
   &-foot {
@@ -372,21 +370,12 @@ const shown = computed(() =>
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    margin-top: 20px;
+    gap: 12px 24px;
+    margin-top: 24px;
   }
 
-  &-total {
-    margin-left: auto;
-    color: var(--db-muted);
-  }
-
-  @media (max-width: 767px) {
-    padding-top: 96px;
-
-    & &-search {
-      width: 100%;
-    }
+  &-search {
+    width: min(320px, 100%);
   }
 }
 </style>

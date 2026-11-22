@@ -380,9 +380,6 @@ export default defineConfig<ThemeOptions>({
         },
       },
     ],
-    ssr: {
-      noExternal: ['vue-chartjs'],
-    },
     resolve: {
       alias: {
         '@playground': path.resolve(

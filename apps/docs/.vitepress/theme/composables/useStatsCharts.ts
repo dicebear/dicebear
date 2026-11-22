@@ -1,11 +1,16 @@
 /**
  * The series the statistics page draws, derived from the stats API: weekly
  * request totals, one weekly download series per registry, the latest
- * complete month's headline numbers, the request rate for the map, and the
- * share of API versions and output formats in the most recent complete week.
+ * complete month's headline numbers, the request rate of the last week, and
+ * the share of API versions and output formats in the most recent complete
+ * week.
  */
 import { computed } from 'vue';
-import { aggregateMonthly, lastCompleteMonth } from './useApiStats';
+import {
+  aggregateMonthly,
+  formatMonthKey,
+  lastCompleteMonth,
+} from './useApiStats';
 import { useStyleRankings } from './useStyleRankings';
 import { formatWeekRange, shiftDays, weekStartKey } from '../utils/statsTrends';
 
@@ -69,24 +74,41 @@ function aggregateWeekly(data: Record<string, number>): StatsSeries {
 }
 
 /** Headline numbers read as words at display size: 1.35 billion, 4.76 TB. */
-function spellNumber(value: number): string {
-  if (value >= 1e9) {
-    return `${(value / 1e9).toFixed(2)} billion`;
-  }
-  if (value >= 1e6) {
-    return `${(value / 1e6).toFixed(2)} million`;
-  }
-  return value.toLocaleString('en-US');
+/** A figure split into its number and its unit, which show at two sizes. */
+export interface StatsFigure {
+  value: string;
+  unit: string;
 }
 
-function spellBytes(bytes: number): string {
+export function spellNumber(value: number): StatsFigure {
+  if (value >= 1e9) {
+    return { value: (value / 1e9).toFixed(2), unit: 'billion' };
+  }
+  if (value >= 1e6) {
+    return { value: (value / 1e6).toFixed(2), unit: 'million' };
+  }
+  return { value: Math.round(value).toLocaleString('en-US'), unit: '' };
+}
+
+/** 2.26M, 22.1k: the short form for the small registry figures. */
+function shortNumber(value: number): string {
+  if (value >= 1e6) {
+    return `${(value / 1e6).toFixed(2)}M`;
+  }
+  if (value >= 1e3) {
+    return `${(value / 1e3).toFixed(1)}k`;
+  }
+  return String(value);
+}
+
+function spellBytes(bytes: number): StatsFigure {
   if (bytes >= 1e12) {
-    return `${(bytes / 1e12).toFixed(2)} TB`;
+    return { value: (bytes / 1e12).toFixed(2), unit: 'TB' };
   }
   if (bytes >= 1e9) {
-    return `${(bytes / 1e9).toFixed(1)} GB`;
+    return { value: (bytes / 1e9).toFixed(1), unit: 'GB' };
   }
-  return `${(bytes / 1e6).toFixed(0)} MB`;
+  return { value: (bytes / 1e6).toFixed(0), unit: 'MB' };
 }
 
 export function useStatsCharts() {
@@ -161,18 +183,34 @@ export function useStatsCharts() {
       return null;
     }
     // Every registry counts, summed over the month the requests come from.
-    const downloads = Object.values(stats.value.downloads).reduce(
-      (sum, daily) =>
-        sum +
-        (aggregateMonthly(daily ?? {}).find((m) => m.key === total.key)
-          ?.total ?? 0),
-      0,
+    const registries = DOWNLOAD_SOURCES.map((source) => ({
+      label: source.label,
+      total:
+        aggregateMonthly(stats.value?.downloads[source.key] ?? {}).find(
+          (m) => m.key === total.key,
+        )?.total ?? 0,
+    })).filter((registry) => registry.total > 0);
+    const downloads = registries.reduce((sum, r) => sum + r.total, 0);
+    // The weeks that start in the month, averaged: there is no distinct
+    // count of websites for a whole month.
+    const referers = weekly.value?.referers ?? {};
+    const weeks = Object.entries(referers).filter(([week]) =>
+      week.startsWith(total.key),
     );
+    const websites = weeks.length
+      ? Math.round(weeks.reduce((sum, [, n]) => sum + n, 0) / weeks.length)
+      : null;
     return {
-      label: total.label,
+      key: total.key,
+      label: formatMonthKey(total.key, { month: 'long', year: 'numeric' }),
       requests: spellNumber(total.total),
       traffic: traffic ? spellBytes(traffic.total) : null,
       downloads: downloads > 0 ? spellNumber(downloads) : null,
+      registries: registries.map((r) => ({
+        label: r.label,
+        value: shortNumber(r.total),
+      })),
+      websites,
     };
   });
 
