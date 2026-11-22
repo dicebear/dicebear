@@ -193,26 +193,31 @@ export default defineConfig<ThemeOptions>({
   transformHead: (ctx) => {
     const result: HeadConfig[] = [];
 
-    // The theme renders text with the self-hosted variable Inter (see
-    // theme/index.ts); VitePress's built-in Inter is disabled via
-    // theme-without-fonts. Preload the latin subset so the first paint
-    // doesn't wait a full round trip after the CSS arrives. Font preloads
-    // always need `crossorigin`, even for same-origin requests.
-    const interFont = ctx.assets.find((asset) =>
-      /inter-latin-wght-normal\.[\w-]+\.woff2$/.test(asset),
-    );
+    // The theme renders text with the self-hosted variable Inter and its
+    // headings with Gabarito (see theme/index.ts); VitePress's built-in Inter
+    // is disabled via theme-without-fonts. Preload the latin subsets so the
+    // first paint doesn't wait a full round trip after the CSS arrives. Font
+    // preloads always need `crossorigin`, even for same-origin requests.
+    const fonts = [
+      /inter-latin-wght-normal\.[\w-]+\.woff2$/,
+      /gabarito-latin-wght-normal\.[\w-]+\.woff2$/,
+    ];
 
-    if (interFont) {
-      result.push([
-        'link',
-        {
-          rel: 'preload',
-          href: interFont,
-          as: 'font',
-          type: 'font/woff2',
-          crossorigin: '',
-        },
-      ]);
+    for (const pattern of fonts) {
+      const font = ctx.assets.find((asset) => pattern.test(asset));
+
+      if (font) {
+        result.push([
+          'link',
+          {
+            rel: 'preload',
+            href: font,
+            as: 'font',
+            type: 'font/woff2',
+            crossorigin: '',
+          },
+        ]);
+      }
     }
 
     if (ctx.pageData.relativePath) {

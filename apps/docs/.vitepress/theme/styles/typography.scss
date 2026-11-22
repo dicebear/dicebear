@@ -1,88 +1,102 @@
 /**
- * The type scale. Inter carries the whole site, so only size, leading and
- * tracking change between steps. Headings: 152 hero, 96 page title,
- * 80 section, 48 group, 32 heading, 24 item. Text: one line height per size.
+ * The type scale. Headings and labels are set in Gabarito, text in Inter.
+ * Headings take the accent of the ground they sit on, text its ink.
+ *
+ * Headings: home hero, page title, section, section in a split, item,
+ * card. Labels: eyebrow (with a die), title (a bold line such as an arrow
+ * link or an accordion row), control (the label of a field or group).
+ * Text: lead, body, text, small, mono.
  */
 %site-heading {
   margin: 0;
-  font-weight: 700;
-  color: var(--db-ink);
+  font-family: var(--db-font-display);
+  font-weight: 800;
+  color: var(--db-accent);
   text-wrap: balance;
 }
 
-/* Homepage hero only. */
+/* Home page hero only. */
 .site-hero {
   @extend %site-heading;
-  font-size: clamp(56px, 10.56vw, 152px);
-  line-height: 0.947;
-  letter-spacing: -0.055em;
+  font-size: clamp(44px, 7.6vw, 108px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
 }
 
 /* Page title. */
 .site-display {
   @extend %site-heading;
-  font-size: clamp(48px, 6.67vw, 96px);
-  line-height: 0.958;
-  letter-spacing: -0.05em;
-
-  @media (max-width: 767px) {
-    line-height: 1.04;
-    letter-spacing: -0.045em;
-  }
+  font-size: clamp(52px, 7.6vw, 112px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
 }
 
-/* Section heading of the marketing pages. */
+/* Section title, the big one of a block. */
 .site-headline {
   @extend %site-heading;
-  font-size: clamp(32px, 5.56vw, 80px);
-  line-height: 0.975;
-  letter-spacing: -0.045em;
-
-  @media (max-width: 767px) {
-    line-height: 1.0625;
-    letter-spacing: -0.035em;
-  }
+  font-size: clamp(40px, 6.2vw, 92px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
 }
 
-/* Group heading, and the title of docs and tool pages. */
+/* Section title next to content, in a split or on a secondary page. */
 .site-h2 {
   @extend %site-heading;
-  font-size: clamp(32px, 3.34vw, 48px);
-  line-height: 1.083;
-  letter-spacing: -0.04em;
-
-  @media (max-width: 767px) {
-    line-height: 1.125;
-  }
+  font-size: clamp(40px, 4.8vw, 68px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
 }
 
-/* Docs section heading, tab index. */
+/* Item or row title. */
 .site-heading {
   @extend %site-heading;
-  font-size: 32px;
-  line-height: 38px;
-  letter-spacing: -0.02em;
-
-  @media (max-width: 767px) {
-    font-size: 24px;
-    line-height: 30px;
-    letter-spacing: -0.01em;
-  }
+  font-size: clamp(26px, 2.8vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
 }
 
-/* Item heading. */
+/* Card title. */
 .site-h3 {
   @extend %site-heading;
   font-size: 24px;
-  line-height: 32px;
-  letter-spacing: -0.01em;
+  line-height: 30px;
+  font-weight: 700;
   text-wrap: wrap;
+}
+
+/* The label above a section, led by a die (see SiteEyebrow). */
+.site-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  font-family: var(--db-font-display);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--db-accent);
+}
+
+/* A bold line: arrow links, accordion rows, list titles. */
+.site-title {
+  font-family: var(--db-font-display);
+  font-size: 19px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+/* The label of a field or a group of controls. */
+.site-control {
+  font-family: var(--db-font-display);
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 700;
 }
 
 .site-lead {
   margin: 0;
-  font-size: 24px;
-  line-height: 36px;
+  font-size: clamp(18px, 1.5vw, 22px);
+  line-height: 1.55;
   color: var(--db-ink-2);
   text-wrap: pretty;
 
@@ -95,49 +109,38 @@
   }
 
   a {
-    color: var(--db-brand-text);
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-  }
-
-  @media (max-width: 767px) {
-    font-size: 18px;
-    line-height: 30px;
+    font-weight: 600;
+    color: var(--db-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
   }
 }
 
 .site-body {
   margin: 0;
-  font-size: 20px;
-  line-height: 32px;
+  font-size: 17px;
+  line-height: 28px;
   color: var(--db-ink-2);
   text-wrap: pretty;
-
-  @media (max-width: 767px) {
-    font-size: 16px;
-    line-height: 26px;
-  }
 }
 
 .site-text {
   margin: 0;
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 15px;
+  line-height: 24px;
   color: var(--db-ink-2);
   text-wrap: pretty;
 }
 
 .site-small {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
   color: var(--db-muted);
 }
 
+/* A caption in capitals: table heads, the labels of figures. */
 .site-label {
   font-size: 13px;
   line-height: 18px;
@@ -150,13 +153,6 @@
 .site-mono {
   font-family: var(--db-font-mono);
   font-size: 13px;
-  line-height: 18px;
+  line-height: 20px;
   color: var(--db-muted);
-}
-
-/* Button and control text. */
-.site-control {
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 600;
 }

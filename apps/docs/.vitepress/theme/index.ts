@@ -1,4 +1,5 @@
 import '@fontsource-variable/inter';
+import '@fontsource-variable/gabarito';
 import { App, onMounted, watchEffect } from 'vue';
 import Layout from './Layout.vue';
 import { createPinia } from 'pinia';

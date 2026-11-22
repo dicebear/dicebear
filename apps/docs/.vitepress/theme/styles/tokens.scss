@@ -1,87 +1,128 @@
 /**
- * The one token set of the site. Everything new reads these names. The
- * palette is a cool blue-grey, brand blue is #0284C7.
+ * The one token set of the site. Three layers:
+ *
+ * 1. The palette (`--db-c-*` and the block colors). Fixed values, never
+ *    reassigned, so anything can reach back to them.
+ * 2. Roles (`--db-ink`, `--db-paper`, `--db-accent`, …). Components read
+ *    these. A colored box re-points them for what is inside it (see
+ *    `_tone.scss`), so a heading, a link or a button needs no "on yellow"
+ *    variant of its own.
+ * 3. Older names that now point at a role. They keep components working
+ *    until those are moved to the role names.
+ *
+ * Warm paper and a navy ink in light. In dark a neutral near-black with a
+ * trace of warmth, so the cream text has no blue cast. Yellow and coral have
+ * no dark shade that is not brown, so their blocks stay bright in both
+ * themes and carry dark text. Blue, violet and green go deep in dark, and
+ * their bright tint becomes the accent.
  */
+@use './tone';
+
 :root {
-  /* Surfaces */
-  --db-paper: #ffffff;
-  --db-panel: #ffffff;
-  --db-soft: #f1f4f6;
-  --db-tile: #eef2f5;
-  --db-line: #e4e9ed;
+  /* Palette: neutrals */
+  --db-c-paper: #fff9ef;
+  --db-c-panel: #ffffff;
+  --db-c-soft: #f7efe0;
+  --db-c-line: #eadfca;
+  /* The edge of a field or a chip: 3:1 on paper, so the control shows. */
+  --db-c-field: #8f856b;
+  --db-c-ink: #15213b;
+  --db-c-ink-2: #3b4662;
+  --db-c-muted: #5e6880;
 
-  /* Text */
-  --db-ink: #0b1620;
-  --db-ink-2: #3e4c58;
-  --db-muted: #5f6d79;
-  /* Separators are text, so they clear AA as well: 4.5:1 on paper. */
-  --db-chevron: #6b7885;
-  --db-on-ink: #a9bac5;
+  /* Palette: block colors. Each deep block has an accent for its headings
+     and a second text color. */
+  --db-sun: #ffd23f;
+  --db-coral: #ff8a6b;
+  --db-sky: #a8deff;
+  --db-sky-acc: #15213b;
+  --db-lilac: #cdbffd;
+  --db-lilac-acc: #15213b;
+  --db-mint: #9fe5c1;
+  --db-mint-acc: #15213b;
+  --db-deep-2: #2c3857;
+  /* Text on yellow and coral. It stays dark in both themes. */
+  --db-on: #15213b;
+  --db-on-2: #2c3857;
+  /* The ground of a code card. */
+  --db-card: #ffffff;
+  /* The ground behind an avatar, light in both themes, or styles drawn in
+     black line work vanish. */
+  --db-tile: #f4ecdc;
 
-  /* Brand */
-  --db-brand: #0284c7;
-  --db-brand-text: #0369a1;
-  --db-tint: #e0f2fe;
-  --db-tint-text: #0369a1;
-
-  /* Controls */
-  --db-btn-bg: #0b1620;
-  --db-btn-fg: #ffffff;
-  --db-btn-hover: #26333f;
-  /* The outline of a control is what identifies it, so it clears the 3:1 of
-     the non-text rule. Plain dividers stay light, they carry no function. */
-  --db-btn-border: #8695a2;
-  --db-hover-border: #6b7885;
-  /* The quiet edge of a field or a secondary button: 1.5:1 on paper, so it
-     shows without drawing attention. Hover lifts it to the button line. */
-  --db-field-border: #cbd3da;
-  --db-switch-bg: #e7ecf0;
-  --db-switch-border: #8695a2;
-  --db-knob: #ffffff;
+  /* Roles. A tone box re-points these. */
+  --db-paper: var(--db-c-paper);
+  --db-panel: var(--db-c-panel);
+  --db-soft: var(--db-c-soft);
+  --db-line: var(--db-c-line);
+  --db-field-border: var(--db-c-field);
+  --db-ink: var(--db-c-ink);
+  --db-ink-2: var(--db-c-ink-2);
+  --db-muted: var(--db-c-muted);
+  /* Headings, arrow links and dice. Ink on neutral ground, the tint of a
+     deep block inside one. */
+  --db-accent: var(--db-c-ink);
+  /* The 2px rule between rows of a block. */
+  --db-rule: color-mix(in srgb, var(--db-c-ink) 16%, transparent);
+  --db-btn-bg: var(--db-c-ink);
+  --db-btn-fg: var(--db-c-paper);
+  --db-focus: var(--db-c-ink);
+  /* A selected row or option: the yellow with its dark text. */
+  --db-select: var(--db-sun);
+  --db-select-text: var(--db-on);
 
   /* Status. Text colors pass AA on paper and panel. */
   --db-ok: #15803d;
-  --db-ok-soft: #dcfce7;
+  --db-ok-soft: #d8f3e2;
   --db-warn: #b45309;
-  --db-warn-soft: #fef3c7;
+  --db-warn-soft: #fdefc8;
   --db-danger: #b91c1c;
-  --db-danger-soft: #fee2e2;
+  --db-danger-soft: #fde2dc;
   --db-note: #6d28d9;
-  --db-note-soft: #ede9fe;
+  --db-note-soft: #ece6ff;
 
   /* Code */
-  --db-code-bg: #f1f4f6;
-  --db-code-bar: #f1f4f6;
-  --db-code-line: #e4e9ed;
-  --db-code-ink: #0b1620;
+  --db-code-key: #0369a1;
   --db-code-string: #9a3412;
 
-  /* Third-party marks that may only appear in black or white */
-  --db-logo-mono: #000000;
+  /* Shadows */
+  --db-shadow: 0 22px 36px -22px rgba(21, 33, 59, 0.5);
+  --db-shadow-stage: 0 30px 48px -28px rgba(21, 33, 59, 0.45);
+  --db-shadow-pop:
+    0 24px 48px -24px rgba(21, 33, 59, 0.35), 0 2px 8px rgba(21, 33, 59, 0.08);
 
-  /* Shape */
-  --db-radius-1: 6px;
-  --db-radius-2: 8px;
-  --db-radius-3: 12px;
+  /* Shape. The named radii are the ones the design uses; the numbered scale
+     is for small inner parts. Every control is a pill. */
+  --db-radius-1: 8px;
+  --db-radius-2: 12px;
+  --db-radius-3: 14px;
   --db-radius-4: 16px;
   --db-radius-5: 20px;
   --db-radius-6: 24px;
-  --db-shadow-pop:
-    0 24px 48px -24px rgba(11, 22, 32, 0.35), 0 2px 8px rgba(11, 22, 32, 0.08);
+  --db-radius-card: 28px;
+  --db-radius-tile: clamp(24px, 3vw, 40px);
+  --db-radius-block: clamp(28px, 4vw, 56px);
+  --db-radius-code: clamp(24px, 2.6vw, 36px);
+  --db-radius-pill: 999px;
 
-  /* Layout */
-  --db-header-h: 64px;
-  /* The room between the header and the first line of a page. Docs pages
-     and the page head share it, so on wide screens both start at the same
-     height. */
+  /* Layout. Content is 1280px wide at most, with `--db-wrap` on each side.
+     `--db-edge` is the gap between two blocks, `--db-block` the inner room
+     of a block, top and bottom. */
+  --db-wrap: clamp(20px, 5.5vw, 80px);
+  --db-edge: clamp(16px, 2.8vw, 40px);
+  --db-block: clamp(48px, 5.6vw, 80px);
+  --db-block-x: clamp(24px, 4.5vw, 64px);
+  --db-content: 1280px;
+  --db-header-h: 72px;
+  /* The room between the header and the first line of a page. */
   --db-page-top: 40px;
-  --db-container: 84rem;
-  --db-gutter: 2rem;
 
   /* Type */
   --db-font:
     'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
     sans-serif;
+  --db-font-display:
+    'Gabarito Variable', 'Gabarito', 'Inter Variable', system-ui, sans-serif;
   --db-font-mono:
     ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 
@@ -92,43 +133,38 @@
   --duration-mid: 0.35s;
   --duration-slow: 0.6s;
   --duration-reveal: 0.8s;
+
+  /* Older names. Each points at the role that took its place. */
+  @include tone.derived;
+  --db-btn-hover: #24335a;
+  --db-knob: var(--db-c-panel);
+  --db-logo-mono: #000000;
+  --db-container: calc(var(--db-content) + 2 * var(--db-wrap));
+  --db-gutter: var(--db-wrap);
 }
 
 .dark {
-  /* Lifted off the near-black ground the theme started with: the same cool
-     grey, two steps brighter, so the page stops reading as a hole. */
-  --db-paper: #131d26;
-  --db-panel: #18242e;
-  --db-soft: #1d2a35;
-  /* Avatar tiles stay light, or styles drawn in black line work vanish. */
-  --db-tile: #eceef0;
-  --db-line: #27343f;
+  --db-c-paper: #131312;
+  --db-c-panel: #1d1d1b;
+  --db-c-soft: #232321;
+  --db-c-line: #30302d;
+  --db-c-field: #75726a;
+  --db-c-ink: #f7f2e8;
+  --db-c-ink-2: #c9c5bb;
+  --db-c-muted: #9c988e;
 
-  /* An almost neutral grey, so text reads as white on the blue ground. It
-     sits at 12.7:1, headings included, below the 15.7:1 at which the old
-     #e6edf3 glared. */
-  --db-ink: #dcdfe1;
-  --db-ink-2: #a2b0bc;
-  --db-muted: #87949f;
-  --db-chevron: #7a8791;
-  --db-on-ink: #69767f;
+  --db-sky: #0d3a6e;
+  --db-sky-acc: #9ed8ff;
+  --db-lilac: #32237a;
+  --db-lilac-acc: #cfc2ff;
+  --db-mint: #0c4a37;
+  --db-mint-acc: #9eeac6;
+  --db-deep-2: #d3d6dc;
+  --db-on: #161513;
+  --db-on-2: #3b3833;
+  --db-card: #161513;
 
-  --db-brand: #4cb3e6;
-  --db-brand-text: #7dd3fc;
-  --db-tint: #1b3a4f;
-  --db-tint-text: #9fdbfa;
-
-  /* A filled button is a large surface, so it follows the text down instead
-     of shining at 15.7:1, and its hover stops short of white. */
-  --db-btn-bg: #dcdfe1;
-  --db-btn-fg: #131d26;
-  --db-btn-hover: #e9ebed;
-  --db-btn-border: #5b6c7a;
-  --db-hover-border: #7a8b99;
-  --db-field-border: #364552;
-  --db-switch-bg: #27343f;
-  --db-switch-border: #5b6c7a;
-  --db-knob: #dcdfe1;
+  --db-focus: var(--db-sun);
 
   --db-ok: #4ade80;
   --db-ok-soft: #17331f;
@@ -139,20 +175,14 @@
   --db-note: #c4b5fd;
   --db-note-soft: #2a2348;
 
-  --db-code-bg: #1d2a35;
-  --db-code-bar: #1d2a35;
-  --db-code-line: #27343f;
-  --db-code-ink: #e0e2e4;
+  --db-code-key: #7dd3fc;
   --db-code-string: #fdba74;
 
-  --db-logo-mono: #ffffff;
-
+  --db-shadow: 0 22px 36px -22px rgba(0, 0, 0, 0.55);
+  --db-shadow-stage: 0 30px 48px -28px rgba(0, 0, 0, 0.7);
   --db-shadow-pop:
     0 24px 48px -24px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
-}
 
-@media (max-width: 767px) {
-  :root {
-    --db-gutter: 1rem;
-  }
+  --db-btn-hover: #ffffff;
+  --db-logo-mono: #ffffff;
 }
