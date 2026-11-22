@@ -90,12 +90,17 @@ $icon-chevron-right: url('lucide-static/icons/chevron-right.svg');
    pixels of the corner as a light rim around avatars that bring a dark or
    colored background of their own. So the ground stops one pixel short of
    the edge and the image alone covers it. The box needs a size of its own;
-   the image fills it. */
+   the image fills it. With `null` the box keeps the ground it paints
+   itself, set before the include. */
 @mixin avatar-ground($ground: var(--db-tile)) {
   position: relative;
   box-sizing: border-box;
   padding: 1px;
-  background: $ground;
+
+  @if $ground != null {
+    background: $ground;
+  }
+
   background-clip: content-box;
 
   img {

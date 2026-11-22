@@ -113,9 +113,14 @@ const detailOpen = ref(false);
 const phonePanel = ref<HTMLElement | null>(null);
 let listScroll = 0;
 
+const sheet = ref<InstanceType<typeof PlaygroundSheet> | null>(null);
+
+// The options of one entry are a step down in the sheet, so it rises to the
+// top for them.
 async function openDetail() {
   listScroll = phonePanel.value?.scrollTop ?? 0;
   detailOpen.value = true;
+  sheet.value?.expand();
 
   await nextTick();
 
@@ -367,12 +372,13 @@ async function showAdvanced() {
       />
       <PlaygroundSheet
         v-if="phone"
+        ref="sheet"
         :top="sheetTop"
         :bottom="0"
         :label="editor ? 'Parts and colors' : simple ? 'Looks' : 'Options'"
       >
-        <template #head="{ expanded }">
-          <div v-if="expanded" class="pg-app-sheet-head">
+        <template #head>
+          <div class="pg-app-sheet-head">
             <span class="pg-app-sheet-thumb">
               <PlaygroundThumb
                 :style-name="avatarStyleName"

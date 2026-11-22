@@ -61,7 +61,9 @@ const svg = computedAsync(() => {
 }
 </style>
 
-<style scoped>
+<style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .ui-avatar {
   width: calc(v-bind(size) * 1px);
   height: calc(v-bind(size) * 1px);
@@ -74,9 +76,6 @@ const svg = computedAsync(() => {
   line-height: 0;
   overflow: hidden;
 
-  img {
-    height: 100%;
-    width: 100%;
-  }
+  @include m.avatar-ground(null);
 }
 </style>

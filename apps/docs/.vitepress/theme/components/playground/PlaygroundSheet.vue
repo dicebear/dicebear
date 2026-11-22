@@ -220,12 +220,31 @@ function onHandleClick() {
   expanded.value = !expanded.value;
 }
 
+// How far the sheet is raised, from 0 (lowered) to 1 (raised). The head
+// grows with it, under the finger and in the animation alike, so it never
+// pops in and pushes the content down at the end of a pull.
+const rise = computed(() => {
+  if (dragTop.value === null) return expanded.value ? 1 : 0;
+
+  const travel = props.top - RAISED;
+
+  return travel > 0
+    ? Math.min(1, Math.max(0, (props.top - dragTop.value) / travel))
+    : 1;
+});
+
 const style = computed(() => ({
   top: `${dragTop.value ?? (expanded.value ? RAISED : props.top)}px`,
   bottom: `${props.bottom}px`,
+  '--pg-sheet-rise': rise.value.toFixed(3),
 }));
 
-defineExpose({ expanded });
+/** Raise the sheet, for example when a step inside it needs the room. */
+function expand() {
+  expanded.value = true;
+}
+
+defineExpose({ expanded, expand });
 </script>
 
 <template>
@@ -246,8 +265,15 @@ defineExpose({ expanded });
       >
         <span aria-hidden="true" />
       </button>
-      <div v-if="$slots.head" class="pg-sheet-head">
-        <slot name="head" :expanded="expanded" />
+      <div
+        v-if="$slots.head"
+        class="pg-sheet-head"
+        :aria-hidden="expanded ? undefined : 'true'"
+        :inert="!expanded"
+      >
+        <div class="pg-sheet-head-inner">
+          <slot name="head" :expanded="expanded" />
+        </div>
       </div>
     </div>
     <div class="pg-sheet-body">
@@ -317,8 +343,27 @@ defineExpose({ expanded });
     }
   }
 
-  &-head:empty {
-    display: none;
+  /* The head, a small avatar while raised: as high as the sheet is
+     raised, `--pg-sheet-head` at the top. */
+  &-head {
+    --pg-sheet-head: 62px;
+
+    height: calc(var(--pg-sheet-rise, 0) * var(--pg-sheet-head));
+    opacity: var(--pg-sheet-rise, 0);
+    overflow: hidden;
+    transition:
+      height var(--duration-mid) var(--ease-smooth),
+      opacity var(--duration-mid) var(--ease-smooth);
+  }
+
+  &.is-dragging &-head {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &-head {
+      transition: none;
+    }
   }
 
   &-body {

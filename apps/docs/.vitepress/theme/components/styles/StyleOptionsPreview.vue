@@ -240,6 +240,8 @@ function selectLabel(event: MouseEvent) {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .style-options-preview {
   display: flex;
   flex-direction: column;
@@ -269,6 +271,8 @@ function selectLabel(event: MouseEvent) {
       var(--db-tile);
     overflow: hidden;
     user-select: none;
+
+    @include m.avatar-ground(null);
   }
 
   &-img {
