@@ -55,6 +55,7 @@ import {
 } from './theme/config/styleCategories.ts';
 import { usageSnippets } from './theme/config/usageSnippets.ts';
 import { tools } from './theme/config/tools.ts';
+import { supportRepos, supportSections } from './theme/config/support.ts';
 import type { StylePreset } from './theme/config/presets.ts';
 import { formatLicenseName } from './theme/utils/format.ts';
 import { attributionKind, attributionPrefix } from './theme/utils/license.ts';
@@ -818,6 +819,37 @@ async function buildPage(
       .join('\n');
 
     markdown = `${renderMarkdown(`# Tools\n\n${mount?.[1].trim() ?? ''}`).trimEnd()}\n\n${list}\n`;
+  } else if (route === '/support/') {
+    // The prose sits in the slots of the SiteSupportPage mount; the titles,
+    // the repositories and the links come from the config the page reads.
+    const slots = new Map(
+      [...body.matchAll(/<template #(\w+)>\n([\s\S]*?)\n<\/template>/g)].map(
+        (match) => [match[1], match[2].trim()],
+      ),
+    );
+    const lead = body
+      .split(/^<SiteSupportPage\b[^>]*>$/m)[1]
+      ?.split(/^<template #/m)[0]
+      .trim();
+    const sections = Object.values(supportSections).map((section) => {
+      const links = [
+        ...(section.slot === 'star'
+          ? supportRepos.map(
+              (repo) =>
+                `- [${repo.name}](https://github.com/${repo.name}): ${repo.text}`,
+            )
+          : []),
+        ...section.links.map((link) => `- [${link.text}](${link.href})`),
+      ];
+
+      return [`## ${section.title}`, slots.get(section.slot), links.join('\n')]
+        .filter(Boolean)
+        .join('\n\n');
+    });
+
+    markdown = renderMarkdown(
+      [`# Support DiceBear`, lead ?? '', ...sections].join('\n\n'),
+    );
   } else if (route === '/understand/supported-versions/') {
     // The chart is the page's answer, and a mirror cannot draw one. Its mount
     // point marks where the same data belongs in prose form.

@@ -3,10 +3,12 @@
  * The support page: a star for the repositories on yellow, code and styles
  * on a soft block, questions on lilac, and the CDN sponsor. The prose comes
  * from the Markdown page through slots, so search and the Markdown mirror
- * read it; titles, links and the repositories live here.
+ * read it; titles, links and the repositories come from config/support.ts,
+ * which the mirror reads as well.
  */
 import { withBase } from 'vitepress';
 import { siGithub } from 'simple-icons';
+import { supportRepos, supportSections as S } from '@theme/config/support';
 import UiIcon from '../ui/UiIcon.vue';
 import SiteAvatar from './SiteAvatar.vue';
 import SitePageHead from './SitePageHead.vue';
@@ -20,15 +22,6 @@ defineSlots<{
   answer?: () => unknown;
   sponsor?: () => unknown;
 }>();
-
-const REPOS = [
-  {
-    name: 'dicebear/dicebear',
-    text: 'The core libraries for seven languages, the CLI, this documentation site, and the editor.',
-  },
-  { name: 'dicebear/styles', text: 'The avatar style definitions.' },
-  { name: 'dicebear/api', text: 'The self-hostable HTTP API.' },
-];
 
 const FAN = [
   { style: 'thumbs', seed: 'Felix' },
@@ -62,13 +55,13 @@ const FAN = [
     <SiteSection
       tone="sun"
       layout="stack"
-      title="A star costs nothing"
+      :title="S.star.title"
       class="site-support-first"
     >
       <template #hint><slot name="star" /></template>
       <div class="site-rows is-strong">
         <a
-          v-for="repo in REPOS"
+          v-for="repo in supportRepos"
           :key="repo.name"
           :href="`https://github.com/${repo.name}`"
           target="_blank"
@@ -91,54 +84,63 @@ const FAN = [
     <SiteSection tone="soft" layout="stack" title="Code and styles are welcome">
       <div class="site-grid site-support-cards">
         <div class="site-box is-tile">
-          <h3 class="site-h3">Code</h3>
+          <h3 class="site-h3">{{ S.code.title }}</h3>
           <div class="site-body site-support-text"><slot name="code" /></div>
           <div class="site-links site-support-links">
-            <a href="/contribute/library/" class="site-link-arrow"
-              >Contribute to the library</a
+            <a
+              v-for="link in S.code.links"
+              :key="link.href"
+              :href="link.href"
+              class="site-link-arrow"
+              >{{ link.text }}</a
             >
           </div>
         </div>
         <div class="site-box is-tile">
-          <h3 class="site-h3">Avatar styles</h3>
+          <h3 class="site-h3">{{ S.styles.title }}</h3>
           <div class="site-body site-support-text"><slot name="styles" /></div>
           <div class="site-links site-support-links">
-            <a href="/create-styles/with-figma/" class="site-link-arrow"
-              >With Figma</a
-            >
-            <a href="/create-styles/from-scratch/" class="site-link-arrow"
-              >From scratch</a
+            <a
+              v-for="link in S.styles.links"
+              :key="link.href"
+              :href="link.href"
+              class="site-link-arrow"
+              >{{ link.text }}</a
             >
           </div>
         </div>
       </div>
     </SiteSection>
 
-    <SiteSection tone="lilac" layout="stack" title="Answer a question">
+    <SiteSection tone="lilac" layout="stack" :title="S.answer.title">
       <template #hint><slot name="answer" /></template>
       <template #aside>
         <a
-          href="https://github.com/dicebear/dicebear/discussions"
+          v-for="link in S.answer.links"
+          :key="link.href"
+          :href="link.href"
           target="_blank"
           rel="noopener noreferrer"
           class="site-link-arrow"
-          >GitHub Discussions</a
+          >{{ link.text }}</a
         >
       </template>
     </SiteSection>
 
     <section class="site-box is-block is-ring site-support-sponsor">
       <div class="site-support-sponsor-main">
-        <h2 class="site-headline">Sponsored by bunny.net</h2>
+        <h2 class="site-headline">{{ S.sponsor.title }}</h2>
         <div class="site-lead site-support-sponsor-lead">
           <slot name="sponsor" />
         </div>
         <a
-          href="https://bunny.net/"
+          v-for="link in S.sponsor.links"
+          :key="link.href"
+          :href="link.href"
           target="_blank"
           rel="noopener sponsored"
           class="site-link-arrow site-support-sponsor-link"
-          >Visit bunny.net</a
+          >{{ link.text }}</a
         >
       </div>
       <div class="site-support-sponsor-logo">
