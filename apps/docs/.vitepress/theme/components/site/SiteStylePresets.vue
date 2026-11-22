@@ -146,7 +146,15 @@ function show(preset: StylePreset) {
       --site-sticker-edge: 3.5%;
 
       flex: 1;
-      transition: transform 0.25s var(--ease-spring);
+      /* The lift uses `translate`, apart from the turn in `transform`, so
+         it needs its own transition, or the stickers jump. */
+      transition:
+        transform 0.25s var(--ease-spring),
+        translate 0.35s var(--ease-smooth);
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
     }
 
     > :deep(.site-sticker + .site-sticker) {
