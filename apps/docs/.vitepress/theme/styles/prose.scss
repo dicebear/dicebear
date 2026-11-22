@@ -15,7 +15,6 @@ $icon-tip: url('lucide-static/icons/lightbulb.svg');
 $icon-info: url('lucide-static/icons/info.svg');
 $icon-warning: url('lucide-static/icons/triangle-alert.svg');
 $icon-danger: url('lucide-static/icons/octagon-alert.svg');
-$icon-chevron: url('lucide-static/icons/chevron-right.svg');
 $icon-external: url('lucide-static/icons/arrow-up-right.svg');
 
 @mixin icon($image, $size) {
@@ -487,51 +486,9 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
 
   details.custom-block {
     @include tone.tone('soft');
+    @include m.details-box;
 
-    padding: 0;
     color: var(--db-ink-2);
-
-    > summary {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 56px;
-      padding: 0 22px;
-      font-family: var(--db-font-display);
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--db-ink);
-      list-style: none;
-      cursor: pointer;
-
-      &::-webkit-details-marker {
-        display: none;
-      }
-
-      &::before {
-        @include icon($icon-chevron, 16px);
-        color: var(--db-muted);
-        transition: transform 0.15s;
-      }
-    }
-
-    &[open] > summary::before {
-      transform: rotate(90deg);
-    }
-
-    > summary ~ * {
-      margin-top: 14px;
-      margin-left: 48px;
-      margin-right: 22px;
-    }
-
-    > summary + * {
-      margin-top: 0;
-    }
-
-    > :last-child:not(summary) {
-      margin-bottom: 22px;
-    }
   }
 
   .footnotes {

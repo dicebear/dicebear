@@ -13,6 +13,7 @@
  * ground as the page.
  */
 @use '../tone';
+@use '../mixins' as m;
 
 .site-box {
   box-sizing: border-box;
@@ -59,6 +60,16 @@
       @include tone.tone($name);
     }
   }
+}
+
+/* A box that opens, such as a license text: on the card color with the
+   field edge. */
+.site-details {
+  @include m.details-box;
+
+  border: 1px solid var(--db-field-border);
+  border-radius: var(--db-radius-5);
+  background: var(--db-panel);
 }
 
 /* The space below the last block of a page. */

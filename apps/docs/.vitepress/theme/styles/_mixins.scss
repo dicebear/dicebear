@@ -7,6 +7,7 @@
 
 $icon-arrow: url('lucide-static/icons/arrow-right.svg');
 $icon-chevron-down: url('lucide-static/icons/chevron-down.svg');
+$icon-chevron-right: url('lucide-static/icons/chevron-right.svg');
 
 /* An icon drawn in the current color from a Lucide file. */
 @mixin icon($image, $size: 18px) {
@@ -256,6 +257,58 @@ $icon-chevron-down: url('lucide-static/icons/chevron-down.svg');
   th:last-child,
   td:last-child {
     padding-right: 0;
+  }
+}
+
+/* A box that opens, on the native `<details>`: a 56px summary row led by
+   a chevron that turns, the content below in line with the summary text.
+   The ground comes from where it is used. */
+@mixin details-box {
+  padding: 0;
+
+  > summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: 0 22px;
+    border-radius: inherit;
+    font-family: var(--db-font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--db-ink);
+    list-style: none;
+    cursor: pointer;
+    @include focus-ring(-2px);
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      content: '';
+      @include icon($icon-chevron-right, 16px);
+      color: var(--db-muted);
+      transition: transform 0.15s;
+    }
+  }
+
+  &[open] > summary::before {
+    transform: rotate(90deg);
+  }
+
+  > summary ~ * {
+    margin-top: 14px;
+    margin-left: 48px;
+    margin-right: 22px;
+  }
+
+  > summary + * {
+    margin-top: 0;
+  }
+
+  > :last-child:not(summary) {
+    margin-bottom: 22px;
   }
 }
 
