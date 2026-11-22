@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * Section two: the hosted API. The headline is the number of requests of the
- * latest complete month, the bars are the months up to it, the newest one
- * marked. The numbers arrive after mount; until then the headline says what
+ * Section two: the hosted API. The headline, across the block, is the number
+ * of requests of the latest complete month; under it the text and the bars
+ * of the months up to it, the newest one marked. The numbers arrive after mount; until then the headline says what
  * the API does and the bars keep their room.
  */
 import { computed } from 'vue';
@@ -39,20 +39,19 @@ const label = computed(() =>
 
 <template>
   <section class="site-box is-block is-soft home-api">
-    <div class="site-pair home-api-grid">
-      <div>
-        <h2 class="site-headline">
-          <template v-if="requests">
-            {{ requests.value }} {{ requests.unit }}<br />requests a month
-          </template>
-          <template v-else>An avatar<br />behind every URL</template>
-        </h2>
-        <p class="site-lead home-api-lead">
-          <template v-if="last">That was {{ last.long }}. </template>
-          The hosted API answers every URL with an image and is free for
-          non-commercial use. bunny.net sponsors the CDN behind it.
-        </p>
-      </div>
+    <h2 class="site-headline home-api-title">
+      <template v-if="requests">
+        {{ requests.value }} {{ requests.unit }} requests a month
+      </template>
+      <template v-else>An avatar behind every URL</template>
+    </h2>
+
+    <div class="site-pair is-top home-api-grid">
+      <p class="site-lead home-api-lead">
+        <template v-if="last">That was {{ last.long }}. </template>
+        The hosted API answers every URL with an image and is free for
+        non-commercial use. bunny.net sponsors the CDN behind it.
+      </p>
       <div class="home-api-chart">
         <div class="home-api-bars" role="img" :aria-label="label">
           <span
@@ -86,13 +85,16 @@ const label = computed(() =>
 
 <style scoped lang="scss">
 .home-api {
+  &-title {
+    margin-bottom: clamp(32px, 3.4vw, 48px);
+  }
+
   &-grid {
-    row-gap: 48px;
+    row-gap: 40px;
   }
 
   &-lead {
     max-width: 540px;
-    margin-top: 28px;
   }
 
   &-bars {

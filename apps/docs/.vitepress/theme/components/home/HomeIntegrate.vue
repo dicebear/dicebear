@@ -104,8 +104,13 @@ const current = computed(
     margin-bottom: clamp(32px, 3.4vw, 48px);
   }
 
+  /* The code gets five parts of eight, so a whole URL fits in its line. */
   &-grid {
     row-gap: 40px;
+
+    @media (min-width: 1120px) {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 5fr);
+    }
   }
 
   &-lead {
