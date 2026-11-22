@@ -153,6 +153,10 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
    playground: the style as its heading on the left, the history in the
    middle, the three views on the right. */
 .pg-toolbar {
+  /* Above the picture, so the tooltips of the history, which open
+     downwards, are not cut off by it. */
+  position: relative;
+  z-index: 6;
   box-sizing: border-box;
   height: 88px;
   /* A line above as well: the bar starts the playground, apart from the
