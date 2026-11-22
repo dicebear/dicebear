@@ -2,7 +2,8 @@
  * Button: one pill in three sizes (sm 36, md 44, lg 56) and four looks.
  *
  * - `site-btn-primary`: filled in the button color of the ground.
- * - `site-btn-secondary`: white inside with a 2px ring.
+ * - `site-btn-secondary`: a tint of the button color, without a line; lines
+ *   are for fields, pickers and chips.
  * - `site-btn-ghost`: text only, a tint on hover.
  * - `site-btn-accent`: yellow, for the one action that rolls or starts.
  *
@@ -25,7 +26,7 @@
   }
 
   &-secondary {
-    @include m.button-outline;
+    @include m.button-tonal;
   }
 
   &-ghost {
@@ -76,8 +77,8 @@
 }
 
 /* Two buttons as one: the action and its menu. A part may be the trigger
-   of a SiteMenu, so the rules reach into the wrappers. Filled parts keep a
-   2px gap; outlined ones share their ring. */
+   of a SiteMenu, so the rules reach into the wrappers. The parts keep a
+   2px gap, filled or tinted. */
 .site-btn-group {
   display: inline-flex;
 
@@ -95,10 +96,6 @@
 
   > :not(:first-child) {
     margin-inline-start: 2px;
-  }
-
-  &:has(.site-btn-secondary) > :not(:first-child) {
-    margin-inline-start: -2px;
   }
 
   &.is-fluid {

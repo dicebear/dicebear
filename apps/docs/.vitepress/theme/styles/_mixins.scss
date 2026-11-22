@@ -72,13 +72,16 @@ $icon-chevron-right: url('lucide-static/icons/chevron-right.svg');
 }
 
 /* White inside, a 2px ring in the button color. */
-@mixin button-outline {
-  background: var(--db-panel);
-  box-shadow: inset 0 0 0 2px var(--db-btn-bg);
+/* The second action: no line, a tint of the ground's button color. Lines
+   belong to fields, pickers and chips, so a button never reads as one. The
+   tint mixes with whatever ground it stands on, so it fits paper, the
+   colored blocks and the dark theme alike. */
+@mixin button-tonal {
+  background: color-mix(in srgb, var(--db-btn-bg) 10%, transparent);
   color: var(--db-btn-bg);
 
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--db-btn-bg) 8%, var(--db-panel));
+    background: color-mix(in srgb, var(--db-btn-bg) 16%, transparent);
   }
 }
 
