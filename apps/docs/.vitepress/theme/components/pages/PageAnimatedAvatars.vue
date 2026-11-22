@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { capitalCase } from 'change-case';
-import { ArrowRight } from '@lucide/vue';
 import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 import {
   SiteAnimatedHead,
@@ -33,24 +32,24 @@ const closing = [
 <template>
   <SiteAnimatedHead />
   <SiteAnimatedStrip />
-  <SiteAnimatedMoves />
-  <SiteAnimatedMotion />
-  <SiteAnimatedWeight />
+  <div class="page-animated-blocks">
+    <SiteAnimatedMoves />
+    <SiteAnimatedMotion />
+    <SiteAnimatedWeight />
+  </div>
   <SiteClosing title="Try it on your own seed">
     <template #avatars>
       <SiteAvatar
         v-for="item in closing"
         :key="item.styleName"
+        sticker
         :style-name="item.styleName"
         :options="{ seed: item.seed, animation: true }"
-        :size="72"
-        :radius="20"
         :alt="item.alt"
       />
     </template>
     <a href="/playground/" class="site-btn site-btn-lg site-btn-primary">
       Open the Playground
-      <ArrowRight :size="20" />
     </a>
     <a
       href="/integrations/http-api/"
@@ -60,3 +59,9 @@ const closing = [
     </a>
   </SiteClosing>
 </template>
+
+<style scoped>
+.page-animated-blocks {
+  margin-top: clamp(48px, 6vw, 88px);
+}
+</style>

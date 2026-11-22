@@ -34,13 +34,12 @@ const styles = computed(() =>
         v-for="style in styles"
         :key="style.slug"
         :href="`/styles/${style.slug}/`"
-        class="site-animated-strip-item hv-row"
+        class="site-animated-strip-item"
       >
         <SiteAvatar
+          sticker
           :style-name="style.styleName"
           :options="{ seed: style.seed, animation: true }"
-          :size="170"
-          :radius="28"
           :alt="`Animated ${style.title} avatar`"
         />
         <span class="site-animated-strip-text">
@@ -55,52 +54,49 @@ const styles = computed(() =>
 <style scoped lang="scss">
 .site-animated-strip {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 40px 24px;
-  margin-top: 72px;
+  grid-template-columns: repeat(auto-fill, minmax(min(140px, 42%), 1fr));
+  gap: clamp(28px, 3vw, 44px) clamp(16px, 2.4vw, 32px);
+  margin-top: clamp(48px, 6vw, 88px);
 
   &-item {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    align-items: center;
+    gap: 14px;
     min-width: 0;
+    color: var(--db-ink);
+    text-align: center;
 
-    :deep(.site-avatar) {
-      width: 100% !important;
-      height: auto !important;
-      aspect-ratio: 1;
+    > :first-child {
+      width: 100%;
+      transition: transform 0.25s var(--ease-spring);
+    }
+
+    &:nth-child(odd) > :first-child {
+      transform: rotate(-3deg);
+    }
+
+    &:nth-child(even) > :first-child {
+      transform: rotate(2deg);
+    }
+
+    &:hover > :first-child {
+      transform: translateY(-4px) rotate(0);
     }
   }
 
   &-text {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     min-width: 0;
   }
 
   &-name {
-    font-size: 16px;
+    font-family: var(--db-font-display);
+    font-size: 19px;
     line-height: 26px;
-    font-weight: 600;
-  }
-
-  @media (max-width: 1279px) {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-
-  @media (max-width: 959px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  @media (max-width: 767px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 32px 12px;
-    margin-top: 48px;
-
-    :deep(.site-avatar) {
-      border-radius: 20px !important;
-    }
+    font-weight: 700;
   }
 }
 </style>

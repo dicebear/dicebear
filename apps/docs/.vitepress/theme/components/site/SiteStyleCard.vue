@@ -72,8 +72,9 @@ function onPlayground() {
   gap: 32px;
 
   &-avatar {
+    --site-sticker-edge: 5%;
+
     width: min(400px, 90%);
-    padding: 5%;
     transform: rotate(3deg);
   }
 

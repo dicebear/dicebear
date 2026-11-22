@@ -17,17 +17,22 @@
   }
 }
 
+/* The white edge is a margin of the tile, which a percentage measures
+   against the sticker itself; a padding would measure against the row the
+   sticker stands in. `--site-sticker-edge` sets it. */
 .site-sticker {
+  --site-sticker-edge: 6%;
+
   display: block;
   flex-shrink: 0;
-  padding: 6%;
   box-sizing: border-box;
   border-radius: 28%;
   background: #ffffff;
   box-shadow: var(--db-shadow);
 
   > .site-tile {
-    width: 100%;
+    width: calc(100% - 2 * var(--site-sticker-edge));
+    margin: var(--site-sticker-edge);
     aspect-ratio: 1;
   }
 
@@ -48,7 +53,6 @@
 
   > .site-sticker {
     width: var(--site-fan-tile);
-    padding: calc(var(--site-fan-tile) * 0.06);
   }
 
   > .site-sticker + .site-sticker {

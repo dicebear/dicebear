@@ -143,8 +143,9 @@ function show(preset: StylePreset) {
     padding-right: 12%;
 
     > :deep(.site-sticker) {
+      --site-sticker-edge: 3.5%;
+
       flex: 1;
-      padding: 3.5%;
       transition: transform 0.25s var(--ease-spring);
     }
 
