@@ -7,12 +7,14 @@
 import { computed } from 'vue';
 import {
   aggregateMonthly,
+  averageWeeklyWebsites,
   formatMonthKey,
   useApiStatsRaw,
 } from '@theme/composables/useApiStats';
 
 const MAX_MONTHS = 12;
 const WEBSITES_STEP = 10_000;
+const SECONDS_PER_DAY = 86_400;
 
 /** 1.5 billion, 2.29 million: numbers at display size read as words. */
 export function spellNumber(value: number): { value: string; unit: string } {
@@ -98,5 +100,43 @@ export function useUsageStats() {
       : 0;
   });
 
-  return { months, first, last, downloads, websites };
+  /** Websites a week in the month the requests end with, on average. */
+  const monthlyWebsites = computed(() => {
+    const key = last.value?.key;
+    const referers = stats.value?.weekly?.referers;
+
+    return key && referers ? averageWeeklyWebsites(referers, key) : null;
+  });
+
+  /** Requests a second over the month the requests end with. */
+  const perSecond = computed(() => {
+    if (!last.value) {
+      return null;
+    }
+
+    const [year, month] = last.value.key.split('-').map(Number);
+    const days = new Date(Date.UTC(year, month, 0)).getUTCDate();
+
+    return Math.round(last.value.total / (days * SECONDS_PER_DAY));
+  });
+
+  /** Growth in percent from the first month shown to the last. */
+  const growth = computed(() => {
+    if (!first.value || !last.value || first.value === last.value) {
+      return null;
+    }
+
+    return Math.round((last.value.total / first.value.total - 1) * 100);
+  });
+
+  return {
+    months,
+    first,
+    last,
+    downloads,
+    websites,
+    monthlyWebsites,
+    perSecond,
+    growth,
+  };
 }

@@ -9,6 +9,7 @@ import { computed } from 'vue';
 import {
   aggregateMonthly,
   formatMonthKey,
+  averageWeeklyWebsites,
   lastCompleteMonth,
 } from './useApiStats';
 import { useStyleRankings } from './useStyleRankings';
@@ -191,15 +192,10 @@ export function useStatsCharts() {
         )?.total ?? 0,
     })).filter((registry) => registry.total > 0);
     const downloads = registries.reduce((sum, r) => sum + r.total, 0);
-    // The weeks that start in the month, averaged: there is no distinct
-    // count of websites for a whole month.
-    const referers = weekly.value?.referers ?? {};
-    const weeks = Object.entries(referers).filter(([week]) =>
-      week.startsWith(total.key),
+    const websites = averageWeeklyWebsites(
+      weekly.value?.referers ?? {},
+      total.key,
     );
-    const websites = weeks.length
-      ? Math.round(weeks.reduce((sum, [, n]) => sum + n, 0) / weeks.length)
-      : null;
     return {
       key: total.key,
       label: formatMonthKey(total.key, { month: 'long', year: 'numeric' }),

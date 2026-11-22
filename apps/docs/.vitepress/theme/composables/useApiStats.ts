@@ -35,6 +35,24 @@ export interface StatsData {
   weekly?: StatsWeekly;
 }
 
+/**
+ * Websites a week in a month: the average of the complete weeks that start
+ * in it. Weeks cannot be added up, as a site active in two counts once in
+ * each, and the stats hold no distinct count for a whole month.
+ */
+export function averageWeeklyWebsites(
+  referers: Record<string, number>,
+  monthKey: string,
+): number | null {
+  const weeks = Object.entries(referers).filter(([week]) =>
+    week.startsWith(monthKey),
+  );
+
+  return weeks.length
+    ? Math.round(weeks.reduce((sum, [, n]) => sum + n, 0) / weeks.length)
+    : null;
+}
+
 interface ApiStats {
   monthlyRequests: number;
   monthlyTraffic: number;
