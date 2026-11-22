@@ -298,8 +298,8 @@ function toggle() {
           <Link2 :size="14" aria-hidden="true" />
           <span>
             Linked to
-            <a :href="contrastHref" class="hv-link">{{ contrastLabel }}</a>. The
-            renderer picks the value with the strongest contrast against the
+            <a :href="contrastHref" class="site-link">{{ contrastLabel }}</a>.
+            The renderer picks the value with the strongest contrast against the
             selected {{ contrastLabel.toLowerCase() }} color, so additional
             values mainly serve as fallbacks.
           </span>
@@ -466,10 +466,6 @@ function toggle() {
     svg {
       flex-shrink: 0;
       margin-top: 3px;
-    }
-
-    a {
-      color: var(--db-brand-text);
     }
   }
 

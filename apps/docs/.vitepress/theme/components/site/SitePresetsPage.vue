@@ -176,9 +176,9 @@ function show(preset: StylePreset) {
         <span class="site-label">Back to the style</span>
         <a
           :href="`/styles/${slug}/`"
-          class="site-heading site-presets-page-back-link hv-row"
+          class="site-heading site-presets-page-back-link"
         >
-          <ArrowLeft :size="20" class="hv-chev" />
+          <ArrowLeft :size="20" aria-hidden="true" />
           {{ styleTitle }}
         </a>
       </div>

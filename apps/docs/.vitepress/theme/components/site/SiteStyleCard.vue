@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
- * The card at the top of a style page: one large avatar and the two actions
- * a style has, the playground and the definition file to download.
+ * The aside of a style page head: one large sticker and the two actions a
+ * style has, the playground and the definition file to download.
  */
 import { computed } from 'vue';
 import { kebabCase } from 'change-case';
@@ -35,18 +35,17 @@ function onPlayground() {
 <template>
   <div class="site-style-card">
     <SiteAvatar
+      sticker
       class="site-style-card-avatar"
       :style-name="styleName"
       :options="{ seed }"
-      :size="358"
-      :radius="18"
       :lazy="false"
       :alt="`${styleName} avatar for the seed ${seed}`"
     />
-    <div class="site-style-card-actions">
+    <div class="site-actions site-style-card-actions">
       <a
         :href="playgroundUrl"
-        class="site-btn site-btn-primary site-btn-fluid"
+        class="site-btn site-btn-primary site-btn-lg"
         @click="onPlayground"
       >
         Playground
@@ -54,11 +53,11 @@ function onPlayground() {
       <button
         v-if="definitionUrl"
         type="button"
-        class="site-btn site-btn-secondary site-btn-fluid"
+        class="site-btn site-btn-secondary site-btn-lg"
         :disabled="pending"
         @click="download"
       >
-        <Download :size="16" />
+        <Download :size="18" aria-hidden="true" />
         Definition
       </button>
     </div>
@@ -69,39 +68,17 @@ function onPlayground() {
 .site-style-card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px;
-  border: 1px solid var(--db-line);
-  border-radius: var(--db-radius-6);
-  background: var(--db-panel);
+  align-items: center;
+  gap: 32px;
 
-  /* The checkerboard shows where the style leaves the background empty. It
-     lies on the tile color, which stays light in dark mode, so line work in
-     black ink stays visible. */
   &-avatar {
-    width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 1;
-    background:
-      repeating-conic-gradient(
-          rgba(11, 22, 32, 0.02) 0% 25%,
-          rgba(11, 22, 32, 0.07) 0% 50%
-        )
-        50% / 12px 12px,
-      var(--db-tile);
+    width: min(400px, 90%);
+    padding: 5%;
+    transform: rotate(3deg);
   }
 
-  /* Two equal columns, whatever the button widths. The buttons are fluid
-     as well, so they fill their column even if this rule is not applied. */
   &-actions {
-    display: flex;
-    gap: 10px;
-
-    > * {
-      flex: 1 1 0;
-      min-width: 0;
-      white-space: nowrap;
-    }
+    justify-content: center;
   }
 }
 </style>

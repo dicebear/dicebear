@@ -124,7 +124,7 @@ function onOpenPlayground() {
         </p>
         <a
           :href="playgroundUrl"
-          class="preset-dialog-action hv-link"
+          class="site-link preset-dialog-action"
           @click="onOpenPlayground"
         >
           <Sparkles :size="14" />
@@ -209,10 +209,8 @@ function onOpenPlayground() {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 600;
-    color: var(--db-brand-text);
+    font-size: 15px;
+    line-height: 24px;
   }
 }
 </style>

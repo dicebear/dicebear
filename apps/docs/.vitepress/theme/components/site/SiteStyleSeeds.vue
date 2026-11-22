@@ -23,10 +23,9 @@ const seeds = computed(() => getPreviewRowSeeds(props.styleName));
       :style="{ animationDelay: `${400 + index * 60}ms` }"
     >
       <SiteAvatar
+        sticker
         :style-name="styleName"
         :options="{ seed }"
-        :size="128"
-        :radius="24"
         :alt="`${styleName} avatar for the seed ${seed}`"
       />
       <span class="site-mono">{{ seed }}</span>
@@ -37,9 +36,9 @@ const seeds = computed(() => getPreviewRowSeeds(props.styleName));
 <style scoped lang="scss">
 .site-style-seeds {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 64px;
+  grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+  gap: 24px clamp(12px, 1.6vw, 24px);
+  margin-top: clamp(48px, 6vw, 88px);
 
   &-item {
     display: flex;
@@ -48,17 +47,21 @@ const seeds = computed(() => getPreviewRowSeeds(props.styleName));
     gap: 12px;
     min-width: 0;
 
-    :deep(.site-avatar) {
-      width: 100% !important;
-      height: auto !important;
-      aspect-ratio: 1;
+    > :first-child {
+      width: 100%;
+    }
+
+    &:nth-child(odd) > :first-child {
+      transform: rotate(-3deg);
+    }
+
+    &:nth-child(even) > :first-child {
+      transform: rotate(2deg) translateY(6px);
     }
   }
 
-  @media (max-width: 959px) {
+  @media (max-width: 767px) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px 12px;
-    margin-top: 48px;
   }
 }
 </style>

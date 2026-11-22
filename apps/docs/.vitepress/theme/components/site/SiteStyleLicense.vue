@@ -32,7 +32,7 @@ const licenseName = computed(() =>
         :href="sourceUrl"
         target="_blank"
         rel="noopener noreferrer"
-        class="hv-link"
+        class="site-link"
         >{{ meta?.title ?? styleName }}</a
       >
       <template v-else>{{ meta?.title ?? styleName }}</template>
@@ -45,7 +45,7 @@ const licenseName = computed(() =>
         :href="sourceUrl"
         target="_blank"
         rel="noopener noreferrer"
-        class="hv-link"
+        class="site-link"
         >{{ meta?.title ?? 'a design' }}</a
       >
       <template v-else>{{ meta?.title ?? 'a design' }}</template>
@@ -55,7 +55,7 @@ const licenseName = computed(() =>
         :href="homepageUrl"
         target="_blank"
         rel="noopener noreferrer"
-        class="hv-link"
+        class="site-link"
         >{{ meta?.creator }}</a
       >
       <template v-else>{{ meta?.creator }}</template>, licensed under
@@ -65,17 +65,11 @@ const licenseName = computed(() =>
       :href="licenseUrl"
       target="_blank"
       rel="noopener noreferrer"
-      class="hv-link"
+      class="site-link"
       >{{ licenseName }}</a
     >
     <template v-else>{{ licenseName }}</template>. The
-    <a href="#details" class="hv-link">details</a> below link the source and the
-    full license text.
+    <a href="#details" class="site-link">details</a> below link the source and
+    the full license text.
   </p>
 </template>
-
-<style scoped lang="scss">
-.site-style-license a {
-  color: var(--db-brand-text);
-}
-</style>

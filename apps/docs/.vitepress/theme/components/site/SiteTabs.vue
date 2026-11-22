@@ -137,7 +137,7 @@ watch(
           <button
             type="button"
             class="site-pill site-pill-tab"
-            :class="{ 'is-active': hiddenActive, 'is-open': open }"
+            :class="{ 'is-active': hiddenActive }"
             :aria-expanded="open"
             aria-haspopup="menu"
             @click="toggle"
@@ -185,7 +185,7 @@ watch(
 .site-tabs-more {
   flex-shrink: 0;
 
-  .is-open:not(.is-active) {
+  [aria-expanded='true']:not(.is-active) {
     background: var(--db-soft);
     color: var(--db-ink);
   }
@@ -194,7 +194,7 @@ watch(
 .site-tabs-chevron {
   transition: transform 0.2s var(--ease-smooth);
 
-  .is-open & {
+  [aria-expanded='true'] > & {
     transform: rotate(180deg);
   }
 }

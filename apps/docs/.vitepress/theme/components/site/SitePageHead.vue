@@ -15,6 +15,8 @@ export interface SiteCrumb {
 export interface SiteChip {
   text: string;
   href?: string;
+  /** A block color for the chip, such as sky for Animated. */
+  tone?: 'sky' | 'lilac' | 'mint' | 'sun';
 }
 
 withDefaults(
@@ -70,15 +72,19 @@ function isExternal(href: string): boolean {
           <template v-for="chip in chips" :key="chip.text">
             <a
               v-if="chip.href"
-              class="site-tag site-tag-outline"
+              class="site-tag"
+              :class="chip.tone ? `site-tag-${chip.tone}` : 'site-tag-outline'"
               :href="chip.href"
               :target="isExternal(chip.href) ? '_blank' : undefined"
               :rel="isExternal(chip.href) ? 'noopener noreferrer' : undefined"
               >{{ chip.text }}</a
             >
-            <span v-else class="site-tag site-tag-outline">{{
-              chip.text
-            }}</span>
+            <span
+              v-else
+              class="site-tag"
+              :class="chip.tone ? `site-tag-${chip.tone}` : 'site-tag-outline'"
+              >{{ chip.text }}</span
+            >
           </template>
         </div>
         <div
@@ -224,19 +230,30 @@ function isExternal(href: string): boolean {
     }
   }
 
+  /* A fact under the lead: the term in the display face, the text beside
+     it, a hairline above. */
   &-note {
-    display: grid;
-    grid-template-columns: 110px minmax(0, 1fr);
-    gap: 20px;
-    align-items: baseline;
-    padding: 18px 0;
-    border-top: 1px solid var(--db-line);
-    border-bottom: 1px solid var(--db-line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
     max-width: 680px;
+    padding-top: 20px;
+    border-top: 1px solid var(--db-line);
 
-    @media (max-width: 767px) {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 8px;
+    > :first-child {
+      flex: 0 0 96px;
+      font-family: var(--db-font-display);
+      font-size: 16px;
+      line-height: 26px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--db-ink);
+    }
+
+    > :last-child {
+      flex: 1 1 320px;
+      min-width: 0;
     }
   }
 

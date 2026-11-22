@@ -6,7 +6,6 @@
  */
 import { computed } from 'vue';
 import { kebabCase } from 'change-case';
-import { ArrowRight } from '@lucide/vue';
 import {
   SPARK_WEEKS,
   useStyleRankings,
@@ -107,9 +106,8 @@ const chart = computed(() => {
         <span class="site-small">{{ SPARK_WEEKS }} weeks ago</span>
         <span class="site-small">Week of {{ currentWeekLabel }}</span>
       </div>
-      <a href="/stats/" class="site-style-popularity-link hv-link">
+      <a href="/stats/" class="site-link-arrow site-style-popularity-link">
         Style rankings and trends
-        <ArrowRight :size="16" />
       </a>
     </div>
   </div>
@@ -176,15 +174,8 @@ const chart = computed(() => {
   }
 
   &-link {
-    display: inline-flex;
-    align-items: center;
     align-self: flex-start;
-    gap: 6px;
     margin-top: 8px;
-    font-size: 15px;
-    line-height: 24px;
-    font-weight: 500;
-    color: var(--db-brand-text);
   }
 }
 </style>

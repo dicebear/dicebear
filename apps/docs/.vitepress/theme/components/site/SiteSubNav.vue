@@ -52,71 +52,42 @@ onBeforeUnmount(() => {
 
 <template>
   <nav class="site-container site-sub-nav" aria-label="On this page">
-    <div class="site-sub-nav-row">
-      <div class="site-sub-nav-items">
-        <a
-          v-for="item in items"
-          :key="item.id"
-          :href="`#${item.id}`"
-          :class="{ 'is-active': active === item.id }"
-          >{{ item.label }}</a
-        >
-      </div>
-      <span class="site-small">On this page</span>
-    </div>
+    <span class="site-sub-nav-label">On this page</span>
+    <a
+      v-for="item in items"
+      :key="item.id"
+      :href="`#${item.id}`"
+      class="site-pill site-pill-outline"
+      :aria-current="active === item.id ? 'true' : undefined"
+      >{{ item.label }}</a
+    >
   </nav>
 </template>
 
 <style scoped lang="scss">
+/* Chips to the sections of the page; the one in view fills. */
 .site-sub-nav {
   position: sticky;
   top: var(--db-header-h);
   z-index: 10;
-  margin-top: 120px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: clamp(32px, 4vw, 56px);
+  padding-top: 12px;
+  padding-bottom: 12px;
   background: var(--db-paper);
 
-  &-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 16px 0;
-    border-top: 1px solid var(--db-line);
-    border-bottom: 1px solid var(--db-line);
+  &-label {
+    margin-right: 8px;
     font-size: 15px;
-    line-height: 24px;
-  }
-
-  &-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 32px;
-    min-width: 0;
-
-    a {
-      color: var(--db-muted);
-      text-decoration: none;
-      transition: color var(--duration-fast);
-
-      &:hover,
-      &.is-active {
-        color: var(--db-ink);
-      }
-
-      &.is-active {
-        font-weight: 500;
-      }
-    }
-  }
-
-  .site-small {
-    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--db-muted);
   }
 
   @media (max-width: 767px) {
-    margin-top: 72px;
-
-    .site-small {
+    &-label {
       display: none;
     }
   }

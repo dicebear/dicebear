@@ -86,8 +86,11 @@ const titleClass = computed(() =>
 </template>
 
 <style scoped lang="scss">
+/* The space a sticky sub-navigation may take under the header. */
 .site-section {
-  scroll-margin-top: calc(var(--db-header-h) + 24px);
+  --site-section-top: calc(var(--db-header-h) + 96px);
+
+  scroll-margin-top: var(--site-section-top);
 
   &.site-container {
     padding-top: clamp(56px, 6.4vw, 96px);
@@ -109,7 +112,7 @@ const titleClass = computed(() =>
 
   &.is-split &-head {
     position: sticky;
-    top: calc(var(--db-header-h) + 24px);
+    top: var(--site-section-top);
   }
 
   &-stack > &-body {

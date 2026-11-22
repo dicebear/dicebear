@@ -66,7 +66,7 @@ const chips = computed<SiteChip[]>(() => {
     href: `/styles/#${category.value.toLowerCase()}`,
   });
   if (style.value?.animated) {
-    list.push({ text: 'Animated', href: '/animated-avatars/' });
+    list.push({ text: 'Animated', href: '/animated-avatars/', tone: 'sky' });
   }
   return list;
 });
@@ -101,7 +101,8 @@ const optionsHint = computed(() =>
       :crumbs="crumbs"
       :title="title"
       :chips="chips"
-      lead-size="body"
+      aside-align="center"
+      :aside-width="460"
     >
       <slot />
       <template #note>
@@ -114,16 +115,17 @@ const optionsHint = computed(() =>
 
     <SiteStyleSeeds :style-name="slug" />
 
-    <SiteSubNav :items="navItems" />
-
     <SiteSection
       id="usage"
+      tone="sun"
       title="Usage"
       hint="Same seed, same avatar, whichever way you render it."
-      class="site-style-page-first"
+      class="site-style-page-usage"
     >
       <SiteStyleUsage :style-name="slug" />
     </SiteSection>
+
+    <SiteSubNav :items="navItems" />
 
     <SiteSection
       v-show="presetCount > 0"
@@ -149,6 +151,7 @@ const optionsHint = computed(() =>
 
     <SiteSection
       id="details"
+      tone="lilac"
       title="Details"
       hint="Who drew it, what the license allows, and where the files live."
     >
@@ -161,8 +164,12 @@ const optionsHint = computed(() =>
 
 <style scoped lang="scss">
 .site-style-page {
-  &-first {
-    padding-top: 96px;
+  &-usage {
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+
+  :deep(#details) {
+    margin-top: clamp(32px, 4vw, 56px);
   }
 }
 </style>
