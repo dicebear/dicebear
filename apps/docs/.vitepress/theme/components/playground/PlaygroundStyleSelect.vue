@@ -157,18 +157,18 @@ const triggerOptions = { seed: exampleSeeds[0] };
 <style scoped lang="scss">
 /* The title of the playground: the picture, the name of the style as large
    as a heading with the chevron after it, and the credit under it. It is a
-   button to choose with, so it takes the tint on hover like a picker, but
-   rests without a ground, as a title does. */
+   button to choose with, so it stands on the tint of a picker, stronger on
+   hover and while the list is open. */
 .pg-style-field {
   display: inline-flex;
   align-items: center;
   gap: 14px;
   min-width: 0;
   max-width: 100%;
-  padding: 6px 18px 6px 6px;
+  padding: 6px 20px 6px 6px;
   border: 0;
-  border-radius: 24px;
-  background: transparent;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
   font: inherit;
   color: var(--db-ink);
   text-align: left;
@@ -177,7 +177,7 @@ const triggerOptions = { seed: exampleSeeds[0] };
 
   &:hover,
   &[aria-expanded='true'] {
-    background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+    background: color-mix(in srgb, var(--db-ink) 12%, transparent);
   }
 
   &:focus-visible {

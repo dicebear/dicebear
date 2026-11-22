@@ -191,11 +191,6 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     background: var(--db-line);
   }
 
-  /* The style title starts on the edge of the text below it. */
-  &-left {
-    margin-left: -6px;
-  }
-
   @media (max-width: 1279px) {
     &-grid {
       grid-template-columns: minmax(180px, 1fr) auto auto;
