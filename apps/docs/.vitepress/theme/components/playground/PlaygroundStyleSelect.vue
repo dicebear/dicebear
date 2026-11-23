@@ -117,17 +117,15 @@ const triggerOptions = { seed: exampleSeeds[0] };
     </span>
     <span class="pg-style-field-text">
       <span class="sr-only">Style:</span>
-      <span class="pg-style-field-title">
-        <span class="pg-style-field-name">{{ currentName }}</span>
-        <ChevronDown
-          :size="24"
-          :stroke-width="2.4"
-          aria-hidden="true"
-          class="pg-style-field-chevron"
-        />
-      </span>
+      <span class="pg-style-field-name">{{ currentName }}</span>
       <span v-if="credit" class="pg-style-field-credit">{{ credit }}</span>
     </span>
+    <ChevronDown
+      :size="20"
+      :stroke-width="2.4"
+      aria-hidden="true"
+      class="pg-style-field-chevron"
+    />
   </button>
 
   <SitePopover
@@ -155,16 +153,17 @@ const triggerOptions = { seed: exampleSeeds[0] };
 
 <style scoped lang="scss">
 /* The title of the playground: the picture, the name of the style as large
-   as a heading with the chevron after it, and the credit under it. It is a
-   button to choose with, so it stands on the tint of a picker, stronger on
-   hover and while the list is open. */
+   as a heading with the credit under it, and the chevron centered at the
+   right edge, where every picker has it. It is a button to choose with, so
+   it stands on the tint of a picker, stronger on hover and while the list is
+   open. */
 .pg-style-field {
   display: inline-flex;
   align-items: center;
   gap: 14px;
   min-width: 0;
   max-width: 100%;
-  padding: 6px 20px 6px 6px;
+  padding: 6px 16px 6px 6px;
   border: 0;
   border-radius: 22px;
   background: color-mix(in srgb, var(--db-ink) 7%, transparent);
@@ -197,14 +196,8 @@ const triggerOptions = { seed: exampleSeeds[0] };
 
   &-text {
     display: flex;
+    flex: 1;
     flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-  }
-
-  &-title {
-    display: flex;
-    align-items: center;
     gap: 6px;
     min-width: 0;
   }
