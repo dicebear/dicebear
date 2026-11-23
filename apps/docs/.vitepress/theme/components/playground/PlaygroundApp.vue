@@ -16,7 +16,11 @@
 import { computed, nextTick, provide, ref, watch } from 'vue';
 import { Redo2, Undo2, Upload } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
-import { useMediaQuery, useResizeObserver } from '@vueuse/core';
+import {
+  useEventListener,
+  useMediaQuery,
+  useResizeObserver,
+} from '@vueuse/core';
 import { kebabCase } from 'change-case';
 import useStore, { isPlaygroundMode } from '@theme/stores/playground';
 import { loadStylePreset } from '@theme/config/presets';
@@ -223,9 +227,26 @@ watch(avatarStyleName, (name) => remember(name), { immediate: true });
 // the one in the import dialog, stays with that box.
 const dragging = ref(false);
 let dragDepth = 0;
+let dragFromPage = false;
+
+// Browsers report a dragged image as a file too. Only a file from outside the
+// page can be a style, and a picture here is something to click, so it does
+// not lift off at all.
+useEventListener('dragstart', (event: DragEvent) => {
+  if (event.target instanceof HTMLImageElement) {
+    event.preventDefault();
+
+    return;
+  }
+
+  dragFromPage = true;
+  event.target?.addEventListener('dragend', () => (dragFromPage = false), {
+    once: true,
+  });
+});
 
 function carriesFiles(event: DragEvent): boolean {
-  return !!event.dataTransfer?.types.includes('Files');
+  return !dragFromPage && !!event.dataTransfer?.types.includes('Files');
 }
 
 function onDragEnter(event: DragEvent) {
@@ -442,6 +463,8 @@ async function showAdvanced() {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/tone';
+
 .pg-app {
   position: relative;
   display: flex;
@@ -653,10 +676,12 @@ async function showAdvanced() {
   }
 }
 
-/* Where a dragged style definition lands: the whole playground, marked
-   with the brand line and tint. It lets the drag events through to the
-   playground below. */
+/* Where a dragged style definition lands: the whole playground, a yellow
+   block with dark text in both themes. It lets the drag events through to
+   the playground below. */
 .pg-app-drop {
+  @include tone.tone('sun');
+
   position: absolute;
   z-index: 40;
   inset: 12px;
@@ -667,8 +692,7 @@ async function showAdvanced() {
   gap: 12px;
   border: 2px dashed var(--db-focus);
   border-radius: var(--db-radius-3);
-  background: color-mix(in srgb, var(--db-select) 94%, transparent);
-  color: var(--db-select-text);
+  background: color-mix(in srgb, var(--db-paper) 94%, transparent);
   pointer-events: none;
 
   &-icon {
@@ -678,7 +702,7 @@ async function showAdvanced() {
     width: 64px;
     height: 64px;
     border-radius: 16px;
-    background: var(--db-paper);
+    background: var(--db-panel);
     color: var(--db-focus);
   }
 
@@ -693,6 +717,7 @@ async function showAdvanced() {
   &-note {
     font-size: 15px;
     line-height: 24px;
+    color: var(--db-ink-2);
   }
 }
 </style>
