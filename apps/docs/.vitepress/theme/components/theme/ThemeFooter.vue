@@ -286,6 +286,12 @@ function licenseName(name?: string) {
     line-height: 18px;
     color: var(--db-muted);
   }
+
+  /* Inline padding adds to the target, not to the line: 24px for a finger. */
+  a {
+    padding-block: 4px;
+    white-space: nowrap;
+  }
 }
 
 .theme-footer-link {
@@ -311,6 +317,9 @@ function licenseName(name?: string) {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    /* 24px for a finger, without moving the line. */
+    margin-block: -3px;
+    padding-block: 3px;
   }
 }
 
