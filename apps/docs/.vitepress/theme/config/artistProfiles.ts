@@ -41,6 +41,7 @@ export const ARTIST_PROFILES: Record<string, readonly string[]> = {
   ],
   'vijay verma': [
     'https://x.com/realvjy',
+    'https://www.threads.com/@realvjy',
     'https://www.figma.com/@realvjy',
     'https://www.youtube.com/@realvjy',
   ],
