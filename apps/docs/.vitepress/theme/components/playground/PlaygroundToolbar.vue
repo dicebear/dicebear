@@ -33,9 +33,7 @@ function onReset() {
 }
 
 // Something to reset: any option set by hand.
-const hasChanges = computed(
-  () => Object.keys(store.avatarStyleOptionsWithoutDefaults).length > 0,
-);
+const hasChanges = computed(() => store.canReset);
 
 const fileItems: SiteMenuItem[] = [
   {

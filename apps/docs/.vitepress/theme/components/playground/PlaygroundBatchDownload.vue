@@ -3,7 +3,7 @@
  * Many avatars at once: random seeds or a pasted list, a look at the first
  * of them, the format, and one ZIP.
  */
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { Download, Shuffle } from '@lucide/vue';
 import JSZip from 'jszip';
 import { Avatar } from '@dicebear/core';
@@ -137,20 +137,6 @@ const previewItems = computed(() =>
   })),
 );
 
-// A listener further up suppresses the default Enter newline in the capture
-// phase, so the handler inserts the newline itself.
-async function onTextareaEnter(event: KeyboardEvent) {
-  event.preventDefault();
-  event.stopPropagation();
-  const ta = event.target as HTMLTextAreaElement;
-  const start = ta.selectionStart;
-  const end = ta.selectionEnd;
-  seedsInput.value = ta.value.slice(0, start) + '\n' + ta.value.slice(end);
-  await nextTick();
-  ta.selectionStart = ta.selectionEnd = start + 1;
-  ta.scrollTop = ta.scrollHeight;
-}
-
 function safeName(seed: string, used: Set<string>, ext: string): string {
   // eslint-disable-next-line no-control-regex
   const cleaned = seed.replace(/[/\\:*?"<>|\x00-\x1f]/g, '-').slice(0, 200);
@@ -201,8 +187,9 @@ async function rasterize(svg: string, kind: Exclude<Format, 'svg'>) {
 
     return await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob(
+        // A browser that cannot write the format hands back a PNG instead.
         (blob) =>
-          blob
+          blob?.type === MIME[kind]
             ? resolve(blob)
             : reject(
                 new Error(`The browser cannot write ${kind.toUpperCase()}.`),
@@ -336,7 +323,6 @@ watch([seeds, format], () => (successState.value = false));
         placeholder="One seed per line, for example a user ID"
         spellcheck="false"
         autocomplete="off"
-        @keydown.enter="onTextareaEnter"
       />
       <span class="pg-batch-counter" :class="{ 'is-over': overCap }">
         {{ seedCount }} / {{ SEED_CAP }}
@@ -351,8 +337,8 @@ watch([seeds, format], () => (successState.value = false));
       <span class="site-label">{{ previewLabel }}</span>
       <ul class="pg-batch-preview-grid">
         <li
-          v-for="item in previewItems"
-          :key="item.seed"
+          v-for="(item, index) in previewItems"
+          :key="`${index}:${item.seed}`"
           class="pg-batch-tile"
           :title="item.seed"
         >

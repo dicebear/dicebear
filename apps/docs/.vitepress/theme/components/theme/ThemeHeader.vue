@@ -8,8 +8,9 @@ import { useData, useRoute, withBase } from 'vitepress';
 import type { DefaultTheme } from 'vitepress';
 import { isActive } from 'vitepress/dist/client/shared.js';
 import { useBodyScrollLock } from 'vitepress/dist/client/theme-default/composables/scroll-lock.js';
-import { onKeyStroke } from '@vueuse/core';
+import { onKeyStroke, useMediaQuery } from '@vueuse/core';
 import { Menu, Search, X } from '@lucide/vue';
+import { useOverlayFocus } from '@theme/composables/useOverlayFocus';
 import { useSearch } from '@theme/composables/useSearch';
 import type { ThemeOptions } from '@theme/types';
 import ThemeGithubButton from './ThemeGithubButton.vue';
@@ -55,6 +56,24 @@ watch(
 onKeyStroke('Escape', () => {
   menuOpen.value = false;
 });
+
+// A tablet turned sideways has no menu button any more: the menu must not
+// stay open, unseen, with the page locked behind it.
+const roomForNav = useMediaQuery('(min-width: 1024px)');
+
+watch(roomForNav, (wide) => {
+  if (wide) menuOpen.value = false;
+});
+
+const menuButton = ref<HTMLButtonElement>();
+const menuPanel = ref<HTMLElement>();
+
+useOverlayFocus(
+  menuOpen,
+  () => menuPanel.value,
+  () => menuButton.value,
+  () => menuButton.value,
+);
 </script>
 
 <template>
@@ -114,6 +133,7 @@ onKeyStroke('Escape', () => {
         <ThemeGithubButton class="theme-header-github" />
         <ThemeGithubButton class="theme-header-github-compact" compact />
         <button
+          ref="menuButton"
           type="button"
           class="site-btn site-btn-ghost site-btn-icon theme-header-menu-button"
           :aria-expanded="menuOpen"
@@ -132,7 +152,12 @@ onKeyStroke('Escape', () => {
       </div>
     </div>
 
-    <div v-show="menuOpen" id="theme-header-menu" class="theme-header-menu">
+    <div
+      v-show="menuOpen"
+      id="theme-header-menu"
+      ref="menuPanel"
+      class="theme-header-menu"
+    >
       <nav class="theme-header-menu-nav" aria-label="Main">
         <a
           v-for="link in links"
@@ -140,6 +165,7 @@ onKeyStroke('Escape', () => {
           :href="link.href"
           class="site-pill site-pill-quiet site-pill-lg theme-header-menu-link"
           :aria-current="link.active ? 'page' : undefined"
+          @click="menuOpen = false"
           >{{ link.text }}</a
         >
       </nav>

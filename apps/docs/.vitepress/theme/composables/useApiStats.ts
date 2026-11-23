@@ -43,6 +43,8 @@ interface ApiStats {
 
 const cached = ref<ApiStats | null>(null);
 const rawData = ref<StatsData | null>(null);
+/** The last attempt to load the figures failed, so a page can say so. */
+export const apiStatsFailed = ref(false);
 let fetching: Promise<void> | null = null;
 
 export interface MonthlyEntry {
@@ -118,11 +120,39 @@ export function lastCompleteMonth(
   return { key: last.key, total: last.total, label };
 }
 
+/**
+ * Fills in what a response may lack, so no page has to guard every record.
+ * A monthly block with a part missing is dropped as a whole.
+ */
+function normalizeStats(data: Partial<StatsData>): StatsData {
+  const monthly = data.monthly;
+
+  return {
+    requests: data.requests ?? {},
+    traffic: data.traffic ?? {},
+    downloads: { npm: {}, ...data.downloads },
+    styles: data.styles ?? {},
+    versions: data.versions ?? {},
+    formats: data.formats ?? {},
+    monthly:
+      monthly?.referers && monthly.styles && monthly.versions && monthly.formats
+        ? monthly
+        : undefined,
+  };
+}
+
 async function doFetch() {
   try {
     const res = await fetch(STATS_API_URL);
-    const data: StatsData = await res.json();
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+
+    const data = normalizeStats(await res.json());
+
     rawData.value = data;
+    apiStatsFailed.value = false;
 
     const requests = lastCompleteMonth(data.requests);
     const traffic = lastCompleteMonth(data.traffic);
@@ -139,6 +169,7 @@ async function doFetch() {
       monthLabel: requests.label,
     };
   } catch (err) {
+    apiStatsFailed.value = !rawData.value;
     console.warn('[useApiStats] Failed to fetch stats:', err);
   } finally {
     fetching = null;

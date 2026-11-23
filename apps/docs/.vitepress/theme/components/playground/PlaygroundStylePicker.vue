@@ -294,7 +294,6 @@ defineExpose({ focus });
           <button
             v-else-if="option.custom"
             type="button"
-            tabindex="-1"
             class="site-btn site-btn-ghost site-btn-icon site-btn-sm pg-picker-remove"
             :aria-label="`Remove ${option.label}`"
             data-tip="Remove"

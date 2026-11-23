@@ -9,6 +9,7 @@
  */
 import { computed, onMounted, ref } from 'vue';
 import { useData } from 'vitepress';
+import { useEventListener } from '@vueuse/core';
 import { SlidersHorizontal } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
@@ -72,6 +73,19 @@ const category = computed<string>({
     selectedCategories.value = value === ALL ? [] : [value];
   },
 });
+
+/** `/styles/#characters`, the link in a style's crumbs, opens that category. */
+function applyCategoryHash() {
+  const wanted = decodeURIComponent(window.location.hash.slice(1));
+  const match = availableCategories.value.find(
+    (name) => name.toLowerCase() === wanted.toLowerCase(),
+  );
+
+  if (match) category.value = match;
+}
+
+onMounted(applyCategoryHash);
+useEventListener('hashchange', applyCategoryHash);
 
 function count(test: (style: (typeof allStyles.value)[number]) => boolean) {
   return allStyles.value.filter(test).length;

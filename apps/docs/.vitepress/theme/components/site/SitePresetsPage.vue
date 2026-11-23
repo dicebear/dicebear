@@ -66,6 +66,12 @@ const words = [
 
 const title = computed(() => {
   const n = presets.value.length;
+
+  // Until they have loaded, and in the prerendered page.
+  if (n === 0) {
+    return `${styleTitle.value} starting points`;
+  }
+
   const word = words[n] ?? String(n);
   const count = `${word.charAt(0).toUpperCase()}${word.slice(1)}`;
   return `${count} ${styleTitle.value} starting ${n === 1 ? 'point' : 'points'}`;
@@ -86,8 +92,10 @@ const crumbs = computed(() => [
 ]);
 
 const chips = computed(() => [
-  { text: `${presets.value.length} presets` },
-  { text: 'Any library', href: '/integrations/' },
+  ...(presets.value.length
+    ? [{ text: `${presets.value.length} presets` }]
+    : []),
+  { text: 'Any library', href: '/start/pick-your-integration/' },
   { text: 'HTTP API', href: '/integrations/http-api/' },
 ]);
 

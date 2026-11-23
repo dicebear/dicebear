@@ -114,12 +114,26 @@ function onClose(event: Event) {
 // A press on the backdrop targets the dialog element itself, because the box
 // has no padding. Press and release both have to land there, so dragging a
 // text selection out of the box does not close it.
+function onBackdrop(event: MouseEvent) {
+  if (!dialog.value || event.target !== dialog.value) return false;
+
+  // The handle of the phone's sheet is the dialog's own pseudo element.
+  const box = dialog.value.getBoundingClientRect();
+
+  return (
+    event.clientX < box.left ||
+    event.clientX > box.right ||
+    event.clientY < box.top ||
+    event.clientY > box.bottom
+  );
+}
+
 function onPointerDown(event: PointerEvent) {
-  pressedBackdrop = event.target === dialog.value;
+  pressedBackdrop = onBackdrop(event);
 }
 
 function onClick(event: MouseEvent) {
-  if (pressedBackdrop && event.target === dialog.value) requestClose();
+  if (pressedBackdrop && onBackdrop(event)) requestClose();
 
   pressedBackdrop = false;
 }

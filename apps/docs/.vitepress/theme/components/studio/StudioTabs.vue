@@ -22,7 +22,7 @@ const active = ref<StudioTab['id']>(props.tabs[0].id);
 
 function open(id: StudioTab['id']) {
   active.value = id;
-  history.replaceState(null, '', `#${id}`);
+  history.replaceState(history.state, '', `#${id}`);
 }
 
 function onKeydown(event: KeyboardEvent, index: number) {

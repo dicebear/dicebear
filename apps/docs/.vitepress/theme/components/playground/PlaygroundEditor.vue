@@ -248,6 +248,9 @@ const drawn = computedAsync<Drawn[]>(async () => {
       const variantKey = `${name}Variant`;
       const probabilityKey = `${name}Probability`;
       const optional = defaultProbability < 100;
+      // Set by hand, say to 0 in another view, it would hide every variant.
+      const forceShown =
+        optional || store.avatarStyleOptions[probabilityKey] !== undefined;
       const shown = resolved[variantKey];
       const result: Drawn[] = [];
 
@@ -269,7 +272,7 @@ const drawn = computedAsync<Drawn[]>(async () => {
           value: variant,
           src: draw({
             [variantKey]: [variant],
-            ...(optional ? { [probabilityKey]: 100 } : {}),
+            ...(forceShown ? { [probabilityKey]: 100 } : {}),
           }),
           active: shown === variant,
         });
@@ -357,7 +360,10 @@ function pick(tile: Drawn) {
     if (tile.kind === 'variant') {
       options[`${tab.info.name}Variant`] = [tile.value];
 
-      if (tab.info.defaultProbability < 100) {
+      if (
+        tab.info.defaultProbability < 100 ||
+        options[probabilityKey] !== undefined
+      ) {
         options[probabilityKey] = 100;
       }
     }

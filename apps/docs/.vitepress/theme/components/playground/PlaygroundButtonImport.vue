@@ -157,7 +157,12 @@ defineExpose({ show: () => (open.value = true) });
   </button>
 
   <UiDialog v-model:open="open" header="Import options" max-width="760px">
-    <div class="pg-transfer">
+    <div
+      class="pg-transfer"
+      @dragover.prevent="dragging = true"
+      @dragleave.self="dragging = false"
+      @drop.prevent="onDrop"
+    >
       <SiteTextarea
         v-model="input"
         mono
@@ -172,9 +177,6 @@ defineExpose({ show: () => (open.value = true) });
       <label
         class="pg-transfer-file hv-dashed"
         :class="{ 'is-dragging': dragging }"
-        @dragover.prevent="dragging = true"
-        @dragleave="dragging = false"
-        @drop.prevent="onDrop"
       >
         <FileUp :size="16" aria-hidden="true" />
         <span>Drop a file here or click to choose</span>

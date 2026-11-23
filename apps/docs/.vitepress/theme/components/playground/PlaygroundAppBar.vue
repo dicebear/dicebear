@@ -69,9 +69,7 @@ function pickMode(mode: PlaygroundMode) {
   viewsOpen.value = false;
 }
 
-const hasChanges = computed(
-  () => Object.keys(store.avatarStyleOptionsWithoutDefaults).length > 0,
-);
+const hasChanges = computed(() => store.canReset);
 
 // Each entry closes the menu first, so a dialog it opens is not stacked on
 // the sheet.

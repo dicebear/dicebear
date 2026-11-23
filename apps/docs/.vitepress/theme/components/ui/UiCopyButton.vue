@@ -5,8 +5,8 @@
  * reads "Copied".
  */
 import { computed } from 'vue';
-import { useClipboard } from '@vueuse/core';
 import { Copy, Check } from '@lucide/vue';
+import { useCopy } from '@theme/composables/useCopy';
 
 const props = withDefaults(
   defineProps<{
@@ -18,7 +18,7 @@ const props = withDefaults(
   { duration: 2000, size: 16, label: 'Copy' },
 );
 
-const { copy, copied } = useClipboard({ copiedDuring: props.duration });
+const { copy, copied } = useCopy(props.duration);
 
 const tip = computed(() => (copied.value ? 'Copied' : props.label));
 </script>
@@ -29,7 +29,7 @@ const tip = computed(() => (copied.value ? 'Copied' : props.label));
     class="site-btn site-btn-ghost site-btn-icon site-btn-sm ui-copy-button"
     :aria-label="tip"
     :data-tip="tip"
-    @click="copy(text)"
+    @click="void copy(text)"
   >
     <Check v-if="copied" :size="size" />
     <Copy v-else :size="size" />

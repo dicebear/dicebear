@@ -8,9 +8,11 @@
  */
 import { computed, ref } from 'vue';
 import { formatNumber } from '@theme/utils/format';
+import { apiStatsFailed } from '@theme/composables/useApiStats';
 import { spellNumber, useStatsCharts } from '@theme/composables/useStatsCharts';
 import { useStyleRankings } from '@theme/composables/useStyleRankings';
 import SiteAvatar from './SiteAvatar.vue';
+import SiteNotice from './SiteNotice.vue';
 import SitePageHead from './SitePageHead.vue';
 import SiteSection from './SiteSection.vue';
 import SiteStat from './SiteStat.vue';
@@ -135,6 +137,12 @@ const chartLabel = computed(() => {
       Every avatar the hosted API serves is counted, and the package registries
       report their downloads. All figures cover complete calendar months.
     </SitePageHead>
+
+    <div v-if="apiStatsFailed" class="site-container">
+      <SiteNotice tone="warn" role="alert">
+        The figures could not be loaded right now. Please try again later.
+      </SiteNotice>
+    </div>
 
     <section class="site-stats-page-figures" aria-label="The figures">
       <div class="site-box is-sky site-stats-page-rate">
@@ -374,6 +382,13 @@ const chartLabel = computed(() => {
     font-weight: 600;
     color: var(--db-ink-2);
     white-space: nowrap;
+
+    /* A phone has room for the two ends of the time span. */
+    @media (max-width: 599px) {
+      > :not(:first-child, :last-child) {
+        display: none;
+      }
+    }
   }
 }
 </style>

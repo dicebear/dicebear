@@ -208,7 +208,7 @@ if (styleParam) {
 }
 
 if (styleParam || modeParam) {
-  history.replaceState(null, '', window.location.pathname);
+  history.replaceState(history.state, '', window.location.pathname);
 }
 
 // The list at the style field starts with the styles used last, however
@@ -259,6 +259,9 @@ function onDrop(event: DragEvent) {
   if (!carriesFiles(event) || event.defaultPrevented) return;
 
   event.preventDefault();
+
+  // A dialog is about something else: the file is not a new style.
+  if ((event.target as Element).closest?.('dialog')) return;
 
   const file = event.dataTransfer?.files[0];
 

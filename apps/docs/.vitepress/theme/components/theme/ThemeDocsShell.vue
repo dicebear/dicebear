@@ -9,9 +9,10 @@ import { computed, ref, watch } from 'vue';
 import { useData, useRoute } from 'vitepress';
 import { getSidebar } from 'vitepress/dist/client/theme-default/support/sidebar.js';
 import { useBodyScrollLock } from 'vitepress/dist/client/theme-default/composables/scroll-lock.js';
-import { onKeyStroke } from '@vueuse/core';
+import { onKeyStroke, useMediaQuery } from '@vueuse/core';
 import { AlignLeft, ChevronDown, X } from '@lucide/vue';
 import { useOutline } from '@theme/composables/useOutline';
+import { useOverlayFocus } from '@theme/composables/useOverlayFocus';
 import type { ThemeOptions } from '@theme/types';
 import DocsEditLink from '../docs/DocsEditLink.vue';
 import DocsOutline from '../docs/DocsOutline.vue';
@@ -56,12 +57,38 @@ onKeyStroke('Escape', () => {
   drawerOpen.value = false;
   outlineOpen.value = false;
 });
+
+// A tablet turned sideways shows the sidebar in the page: the drawer must
+// not stay open, unseen, with the page locked behind it.
+const roomForSidebar = useMediaQuery('(min-width: 960px)');
+
+watch(roomForSidebar, (wide) => {
+  if (wide) {
+    drawerOpen.value = false;
+    outlineOpen.value = false;
+  }
+});
+
+const drawerButton = ref<HTMLButtonElement>();
+const drawer = ref<HTMLElement>();
+
+useOverlayFocus(
+  drawerOpen,
+  () => drawer.value,
+  () => drawerButton.value,
+);
+
+/** A link in the drawer closes it, also the one to the page already open. */
+function onDrawerClick(event: MouseEvent) {
+  if ((event.target as Element).closest('a[href]')) drawerOpen.value = false;
+}
 </script>
 
 <template>
   <div v-if="hasSidebar || (hasAside && items.length)" class="docs-local-nav">
     <button
       v-if="hasSidebar"
+      ref="drawerButton"
       type="button"
       class="site-btn site-btn-ghost site-btn-sm"
       :aria-expanded="drawerOpen"
@@ -96,8 +123,10 @@ onKeyStroke('Escape', () => {
   >
     <div
       v-if="hasSidebar"
+      ref="drawer"
       class="docs-sidebar"
       :class="{ 'is-open': drawerOpen }"
+      @click="onDrawerClick"
     >
       <div class="docs-sidebar-inner">
         <button

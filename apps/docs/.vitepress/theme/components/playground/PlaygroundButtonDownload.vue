@@ -6,6 +6,7 @@
  * browser, so it saves SVG and has no raster formats.
  */
 import { computed, ref } from 'vue';
+import { kebabCase } from 'change-case';
 import copy from 'copy-to-clipboard';
 import { ChevronDown, Copy, Download } from '@lucide/vue';
 import { Avatar } from '@dicebear/core';
@@ -53,38 +54,60 @@ async function svgMarkup(): Promise<string> {
   ).toString();
 }
 
-function announceDownload(format: string) {
-  done.value = { title: 'Your avatar will be downloaded', source: 'download' };
-  showDialog();
+/** The name of the saved file. `custom:` is a store key, not for a reader. */
+function fileName(format: string) {
+  const name = kebabCase(store.avatarStyleName.replace(/^custom:/, ''));
 
-  track('Playground: Download', {
-    style: styleLabel(store.avatarStyleName),
-    format,
-  });
+  return `${name}-${Date.now()}.${format}`;
 }
 
-async function downloadSvg() {
-  announceDownload('svg');
+// The dialog speaks once the file is on its way, or says that it is not.
+async function saveAs(format: string, makeBlob: () => Promise<Blob>) {
+  try {
+    triggerDownload(await makeBlob(), fileName(format));
 
-  const blob = new Blob([await svgMarkup()], { type: 'image/svg+xml' });
-
-  triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.svg`);
-}
-
-async function downloadBinary(format: string) {
-  announceDownload(format);
-
-  // A size set under Output wins, otherwise the largest the API renders.
-  const response = await fetch(
-    getAvatarApiUrl(
-      store.avatarStyleName,
-      { size: RASTER_DOWNLOAD_SIZE, ...options.value },
+    done.value = {
+      title: 'Your avatar will be downloaded',
+      source: 'download',
+    };
+    track('Playground: Download', {
+      style: styleLabel(store.avatarStyleName),
       format,
-    ),
-  );
-  const blob = await response.blob();
+    });
+  } catch {
+    done.value = {
+      title: 'Your avatar could not be downloaded',
+      source: 'download',
+    };
+  }
 
-  triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.${format}`);
+  showDialog();
+}
+
+function downloadSvg() {
+  return saveAs(
+    'svg',
+    async () => new Blob([await svgMarkup()], { type: 'image/svg+xml' }),
+  );
+}
+
+function downloadBinary(format: string) {
+  return saveAs(format, async () => {
+    // A size set under Output wins, otherwise the largest the API renders.
+    const response = await fetch(
+      getAvatarApiUrl(
+        store.avatarStyleName,
+        { size: RASTER_DOWNLOAD_SIZE, ...options.value },
+        format,
+      ),
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    return response.blob();
+  });
 }
 
 async function copySvg() {

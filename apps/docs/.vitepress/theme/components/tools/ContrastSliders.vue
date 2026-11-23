@@ -40,13 +40,13 @@ watch(
 );
 
 function commitHex() {
-  if (!isValidHex(hexInput.value)) {
+  const typed = hexInput.value.trim();
+
+  if (!isValidHex(typed)) {
     hexInput.value = props.hex;
     return;
   }
-  const normalized = hexInput.value.startsWith('#')
-    ? hexInput.value
-    : `#${hexInput.value}`;
+  const normalized = typed.startsWith('#') ? typed : `#${typed}`;
   const next = hexToRgb(normalized);
   emitFromRgb(next.r, next.g, next.b);
   hexInput.value = rgbToHex(next);
@@ -62,7 +62,8 @@ function updateRgbChannel(channel: 'r' | 'g' | 'b', value: number) {
 }
 
 function updateHslChannel(channel: 'h' | 's' | 'l', value: number) {
-  const next = { ...hsl.value, [channel]: value };
+  // A gray has no hue of its own, so the current one is kept through it.
+  const next = { ...hsl.value, h: props.hsv.h, [channel]: value };
   const asRgb = hslToRgb(next);
   // HSL lets the user move hue directly, so its hue is the authoritative one.
   const max = Math.max(asRgb.r, asRgb.g, asRgb.b) / 255;

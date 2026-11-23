@@ -11,13 +11,10 @@
  * its content, and the avatar grows with the height of the window.
  */
 import { computed, ref } from 'vue';
-import {
-  computedAsync,
-  useLocalStorage,
-  useResizeObserver,
-} from '@vueuse/core';
+import { computedAsync, useStorage, useResizeObserver } from '@vueuse/core';
 import { Avatar } from '@dicebear/core';
 import { clonePlain, loadAvatarStyle } from '@theme/utils/avatar/style';
+import { safeStorage } from '@theme/utils/safeStorage';
 import useStore from '@theme/stores/playground';
 import PlaygroundSeedField from './PlaygroundSeedField.vue';
 import PlaygroundSeedHint from './PlaygroundSeedHint.vue';
@@ -89,7 +86,11 @@ const otherSeeds = computed(
 // The seed hint shows once. It goes when dismissed or as soon as the seed
 // is touched, and only where it fits beside the field without covering the
 // avatar: a laptop or larger in the simple view.
-const seedHintSeen = useLocalStorage('dicebear-playground-seed-hint', false);
+const seedHintSeen = useStorage(
+  'dicebear-playground-seed-hint',
+  false,
+  safeStorage('localStorage'),
+);
 
 const ground = ref<HTMLElement | null>(null);
 const seedAnchor = ref<HTMLElement | null>(null);
@@ -325,6 +326,37 @@ function pickSeed(seed: string) {
 
   &.is-editor &-picture {
     width: clamp(180px, calc(100dvh - 560px), 320px);
+  }
+
+  /* Next to a panel the ground has a fixed height, and the avatar takes
+     what the seed field and the row of seeds leave of it, so nothing is cut
+     off in a short window such as a tablet held sideways. The field keeps a
+     width to type in. A very short ground gives up the row of seeds. */
+  @media (min-width: 960px) {
+    &:not(.is-editor) &-ground {
+      --pg-stage-rest: 216px;
+
+      container-type: size;
+    }
+
+    &:not(.is-editor) &-picture {
+      width: min(100%, calc(100cqh - var(--pg-stage-rest)), 480px);
+    }
+
+    &:not(.is-editor) &-seed-anchor,
+    &:not(.is-editor) &-seeds {
+      width: min(100%, max(320px, calc(100cqh - var(--pg-stage-rest))), 480px);
+    }
+
+    @container (max-height: 400px) {
+      &:not(.is-editor) &-seeds {
+        display: none;
+      }
+
+      &:not(.is-editor) &-picture {
+        width: min(100%, calc(100cqh - 152px), 480px);
+      }
+    }
   }
 
   @media (max-width: 959px) {

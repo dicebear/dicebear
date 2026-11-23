@@ -160,7 +160,13 @@ export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
       return existing.promise;
     }
 
-    const deferred = Promise.withResolvers<Style>();
+    let resolve!: PromiseWithResolvers<Style>['resolve'];
+    let reject!: PromiseWithResolvers<Style>['reject'];
+    const promise = new Promise<Style>((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+    const deferred = { promise, resolve, reject };
 
     pendingCustomStyles.set(avatarStyle, deferred);
 

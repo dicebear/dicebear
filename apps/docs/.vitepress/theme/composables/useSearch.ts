@@ -35,6 +35,11 @@ function isEditing(event: KeyboardEvent): boolean {
 /** Cmd or Ctrl with K, or a slash outside of fields. Call once, in the layout. */
 export function useSearchShortcuts() {
   useEventListener('keydown', (event: KeyboardEvent) => {
+    // An open dialog is above the page, the search box would open below it.
+    if (document.querySelector('dialog[open]')) {
+      return;
+    }
+
     if (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       open.value = true;
