@@ -19,8 +19,13 @@ export const ARTIST_PROFILES: Record<string, readonly string[]> = {
     'https://github.com/draftbit',
     'https://www.linkedin.com/company/draftbit',
   ],
-  'Johan Melin': ['https://x.com/thegamedev', 'https://github.com/Johan-Melin'],
+  'Johan Melin': [
+    'https://x.com/thegamedev',
+    'https://www.figma.com/@thegamedev',
+    'https://github.com/Johan-Melin',
+  ],
   'Matt Houser': ['https://www.figma.com/@matthou'],
+  'Micah Lanier': ['https://www.figma.com/@micah'],
   'Natalia Spivak': ['https://www.figma.com/@nataspvk'],
   'Pablo Stanley': [
     'https://www.pablostanley.com/',
@@ -40,6 +45,7 @@ export const ARTIST_PROFILES: Record<string, readonly string[]> = {
   Webpixels: [
     'https://x.com/webpixels_',
     'https://dribbble.com/webpixels',
+    'https://www.figma.com/@webpixels',
     'https://github.com/webpixels',
   ],
   Zoish: [
