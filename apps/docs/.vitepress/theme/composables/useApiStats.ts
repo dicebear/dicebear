@@ -11,6 +11,12 @@ export interface StatsMonthly {
   versions: Record<string, [string, number][]>;
   formats: Record<string, [string, number][]>;
   /**
+   * Unique referer hosts per style creator and complete month. A website
+   * using several styles of a creator counts once. Absent while a CDN-cached
+   * response predates this report.
+   */
+  creators?: Record<string, [string, number][]>;
+  /**
    * Months whose logs were only partially collected. Their referer counts
    * are removed from the records above, so charts and trends skip them.
    */

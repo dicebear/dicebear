@@ -22,7 +22,8 @@ import SitePageHead from './SitePageHead.vue';
 import SiteSection from './SiteSection.vue';
 
 const { theme } = useData<ThemeOptions>();
-const { rankings, currentMonthLabel } = useStyleRankings();
+const { monthly, rankings, currentMonth, currentMonthLabel } =
+  useStyleRankings();
 
 const artists = computed(() => guestArtists(theme.value.avatarStyles));
 const guestStyles = computed(() => artists.value.flatMap((a) => a.styles));
@@ -46,12 +47,21 @@ function styleSummary(titles: string[]): string {
   return `${titles[0]}, ${titles[1]} and ${titles.length - 2} more`;
 }
 
+/** The unique websites per artist, once the stats report them. */
+const artistWebsites = computed(() => {
+  const rows = currentMonth.value
+    ? monthly.value?.creators?.[currentMonth.value]
+    : undefined;
+
+  return rows ? new Map(rows) : null;
+});
+
 /**
- * The three guest artists with the most uses in the last month. The stats
- * count the websites per style, so the uses add up across an artist's styles
- * and a website with two of them counts twice. Four avatars show the range,
- * one per style for as long as there are styles left. A neutral variant is
- * the same face as its base style, so it does not take a place.
+ * The three guest artists seen on the most websites in the last month. A
+ * cached response without the artist figures falls back to the sum over the
+ * styles, where a website with two of them counts twice. Four avatars show
+ * the range, one per style for as long as there are styles left. A neutral
+ * variant is the same face as its base style, so it does not take a place.
  */
 const featured = computed(() => {
   if (!rankings.value) {
@@ -72,13 +82,15 @@ const featured = computed(() => {
       return {
         artist,
         styles,
-        uses: styles.reduce((sum, item) => sum + item.uses, 0),
+        count: artistWebsites.value
+          ? (artistWebsites.value.get(artist.name) ?? 0)
+          : styles.reduce((sum, item) => sum + item.uses, 0),
       };
     })
-    .filter((item) => item.uses > 0)
-    .sort((a, b) => b.uses - a.uses)
+    .filter((item) => item.count > 0 && item.styles.length > 0)
+    .sort((a, b) => b.count - a.count)
     .slice(0, 3)
-    .map(({ artist, styles, uses }) => {
+    .map(({ artist, styles, count }) => {
       const faces = styles.filter(
         (item) => !item.style.slug.endsWith('-neutral'),
       );
@@ -88,7 +100,7 @@ const featured = computed(() => {
         name: artist.name,
         id: artistId(artist.name),
         summary: styleSummary(styles.map((item) => item.style.title)),
-        uses: uses.toLocaleString('en-US'),
+        count: count.toLocaleString('en-US'),
         avatars: Array.from({ length: 4 }, (_, index) => {
           const { style } = shown[index % shown.length];
 
@@ -180,9 +192,15 @@ const FAN = [
     >
       <template #hint>
         <template v-if="currentMonthLabel">
-          The three guest artists whose styles websites used the most in
-          {{ currentMonthLabel }}. A website using two of an artist’s styles
-          counts twice.
+          <template v-if="artistWebsites">
+            The three guest artists whose styles the most websites used in
+            {{ currentMonthLabel }}.
+          </template>
+          <template v-else>
+            The three guest artists whose styles websites used the most in
+            {{ currentMonthLabel }}. A website using two of an artist’s styles
+            counts twice.
+          </template>
         </template>
         <template v-else>
           The guest artists whose styles websites use the most.
@@ -207,9 +225,10 @@ const FAN = [
             </span>
             <span class="site-heading">{{ item.name }}</span>
             <span class="site-body">{{ item.summary }}</span>
-            <span class="site-artists-card-figure">{{ item.uses }}</span>
+            <span class="site-artists-card-figure">{{ item.count }}</span>
             <span class="site-text"
-              >uses on websites in {{ currentMonthLabel }}</span
+              >{{ artistWebsites ? 'websites' : 'uses on websites' }} in
+              {{ currentMonthLabel }}</span
             >
           </a>
         </template>
