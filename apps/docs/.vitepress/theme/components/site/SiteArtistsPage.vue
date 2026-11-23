@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
- * The artists page: who drew the styles DiceBear did not draw itself. Their
- * three most seen styles on yellow, every artist with a link and their
+ * The artists page: who drew the styles DiceBear did not draw itself. The
+ * three most seen artists on yellow, every artist with a link and their
  * styles, what their licenses mean, and an invitation to draw the next one.
  * The figures arrive with the statistics after mount; until then the
  * yellow block keeps its place with the artists alone.
@@ -33,28 +33,75 @@ const ICONS: Partial<Record<ArtistLinkKind, { path: string }>> = {
   dribbble: siDribbble,
 };
 
-/** The three guest styles the most websites requested in the last month. */
+function artistId(name: string): string {
+  return `artist-${kebabCase(name)}`;
+}
+
+/** "Avataaars, Bottts and 3 more": the most used styles come first. */
+function styleSummary(titles: string[]): string {
+  if (titles.length <= 2) {
+    return titles.join(' and ');
+  }
+
+  return `${titles[0]}, ${titles[1]} and ${titles.length - 2} more`;
+}
+
+/**
+ * The three guest artists with the most uses in the last month. The stats
+ * count the websites per style, so the uses add up across an artist's styles
+ * and a website with two of them counts twice. Four avatars show the range,
+ * one per style for as long as there are styles left. A neutral variant is
+ * the same face as its base style, so it does not take a place.
+ */
 const featured = computed(() => {
   if (!rankings.value) {
     return [];
   }
 
-  const bySlug = new Map(
-    artists.value.flatMap((artist) =>
-      artist.styles.map((style) => [style.slug, { artist, style }] as const),
-    ),
+  const websites = new Map(
+    rankings.value.map((row) => [kebabCase(row.name), row.websites]),
   );
 
-  return rankings.value
-    .map((row) => ({ row, entry: bySlug.get(kebabCase(row.name)) }))
-    .filter((item) => item.entry)
+  return artists.value
+    .map((artist) => {
+      const styles = artist.styles
+        .map((style) => ({ style, uses: websites.get(style.slug) ?? 0 }))
+        .filter((item) => item.uses > 0)
+        .sort((a, b) => b.uses - a.uses);
+
+      return {
+        artist,
+        styles,
+        uses: styles.reduce((sum, item) => sum + item.uses, 0),
+      };
+    })
+    .filter((item) => item.uses > 0)
+    .sort((a, b) => b.uses - a.uses)
     .slice(0, 3)
-    .map(({ row, entry }) => ({
-      artist: entry!.artist.name,
-      style: entry!.style,
-      websites: row.websites.toLocaleString('en-US'),
-      seeds: getStyleCardSeeds(entry!.style.slug).slice(0, 4),
-    }));
+    .map(({ artist, styles, uses }) => {
+      const faces = styles.filter(
+        (item) => !item.style.slug.endsWith('-neutral'),
+      );
+      const shown = faces.length > 0 ? faces : styles;
+
+      return {
+        name: artist.name,
+        id: artistId(artist.name),
+        summary: styleSummary(styles.map((item) => item.style.title)),
+        uses: uses.toLocaleString('en-US'),
+        avatars: Array.from({ length: 4 }, (_, index) => {
+          const { style } = shown[index % shown.length];
+
+          return {
+            slug: style.slug,
+            title: style.title,
+            seed: getStyleCardSeeds(style.slug)[
+              Math.floor(index / shown.length)
+            ],
+          };
+        }),
+      };
+    });
 });
 
 const LICENSES: Record<LicenseBucket, { term: string; text: string }> = {
@@ -133,34 +180,37 @@ const FAN = [
     >
       <template #hint>
         <template v-if="currentMonthLabel">
-          The three styles by guest artists that the most websites used in
-          {{ currentMonthLabel }}.
+          The three guest artists whose styles websites used the most in
+          {{ currentMonthLabel }}. A website using two of an artist’s styles
+          counts twice.
         </template>
         <template v-else>
-          The styles by guest artists that the most websites use.
+          The guest artists whose styles websites use the most.
         </template>
       </template>
       <div class="site-grid site-artists-cards">
         <template v-if="featured.length">
           <a
             v-for="item in featured"
-            :key="item.style.slug"
-            :href="`/styles/${item.style.slug}/`"
+            :key="item.id"
+            :href="`#${item.id}`"
             class="site-box is-card is-code site-artists-card"
           >
             <span class="site-artists-card-avatars">
               <SiteAvatar
-                v-for="seed in item.seeds"
-                :key="seed"
-                :style-name="item.style.slug"
-                :options="{ seed }"
-                :alt="`${item.style.title} avatar`"
+                v-for="avatar in item.avatars"
+                :key="`${avatar.slug}-${avatar.seed}`"
+                :style-name="avatar.slug"
+                :options="{ seed: avatar.seed }"
+                :alt="`${avatar.title} avatar`"
               />
             </span>
-            <span class="site-heading">{{ item.artist }}</span>
-            <span class="site-body">{{ item.style.title }}</span>
-            <span class="site-artists-card-figure">{{ item.websites }}</span>
-            <span class="site-text">websites in {{ currentMonthLabel }}</span>
+            <span class="site-heading">{{ item.name }}</span>
+            <span class="site-body">{{ item.summary }}</span>
+            <span class="site-artists-card-figure">{{ item.uses }}</span>
+            <span class="site-text"
+              >uses on websites in {{ currentMonthLabel }}</span
+            >
           </a>
         </template>
         <template v-else>
@@ -186,6 +236,7 @@ const FAN = [
       <div class="site-rows is-between site-artists-rows">
         <div
           v-for="artist in artists"
+          :id="artistId(artist.name)"
           :key="artist.name"
           class="site-row site-artists-artist"
         >
@@ -296,7 +347,7 @@ const FAN = [
     gap: 16px;
   }
 
-  /* A card per style: four avatars, the artist, the style and its figure. */
+  /* A card per artist: four avatars, the name, the styles and their figure. */
   &-card {
     display: flex;
     flex-direction: column;
@@ -361,6 +412,7 @@ const FAN = [
     display: flex;
     flex-wrap: wrap;
     gap: 16px clamp(32px, 5vw, 80px);
+    scroll-margin-top: calc(var(--db-header-h) + 24px);
 
     .site-rows > & {
       padding: 32px 0;
