@@ -187,11 +187,9 @@ function onPointerDown(event: PointerEvent) {
 </template>
 
 <style scoped lang="scss">
-$thumb: 20px;
-
 @mixin thumb {
-  width: $thumb;
-  height: $thumb;
+  width: var(--site-slider-thumb);
+  height: var(--site-slider-thumb);
   box-sizing: border-box;
   border: 2px solid var(--db-btn-bg);
   border-radius: 50%;
@@ -213,10 +211,17 @@ $thumb: 20px;
 }
 
 .site-slider {
+  /* A finger needs a larger grip than a mouse. */
+  --site-slider-thumb: 20px;
+
+  @media (pointer: coarse) {
+    --site-slider-thumb: 28px;
+  }
+
   position: relative;
   display: block;
   width: 100%;
-  height: 20px;
+  height: var(--site-slider-thumb);
   isolation: isolate;
   touch-action: pan-y;
 
@@ -226,7 +231,7 @@ $thumb: 20px;
   &::after {
     content: '';
     position: absolute;
-    top: 7px;
+    top: calc((var(--site-slider-thumb) - 6px) / 2);
     height: 6px;
     border-radius: 3px;
     pointer-events: none;
@@ -241,13 +246,17 @@ $thumb: 20px;
   &::after {
     left: 0;
     right: calc(
-      (1 - var(--site-slider-hi)) * (100% - #{$thumb}) + #{$thumb} / 2
+      (1 - var(--site-slider-hi)) * (100% - var(--site-slider-thumb)) +
+        var(--site-slider-thumb) / 2
     );
     background: var(--db-btn-bg);
   }
 
   &.is-range::after {
-    left: calc(var(--site-slider-lo) * (100% - #{$thumb}) + #{$thumb} / 2);
+    left: calc(
+      var(--site-slider-lo) * (100% - var(--site-slider-thumb)) +
+        var(--site-slider-thumb) / 2
+    );
   }
 
   &.is-range {
@@ -264,7 +273,7 @@ $thumb: 20px;
     inset: 0;
     z-index: 1;
     width: 100%;
-    height: 20px;
+    height: var(--site-slider-thumb);
     margin: 0;
     padding: 0;
     outline: none;
@@ -281,18 +290,18 @@ $thumb: 20px;
     }
 
     &::-webkit-slider-runnable-track {
-      height: 20px;
+      height: var(--site-slider-thumb);
       background: transparent;
     }
 
     &::-moz-range-track {
-      height: 20px;
+      height: var(--site-slider-thumb);
       background: transparent;
     }
 
     &::-webkit-slider-thumb {
       @include thumb;
-      margin-top: 1px;
+      margin-top: 0;
       appearance: none;
     }
 

@@ -497,6 +497,15 @@ function formatSize(bytes: number): string {
       background: var(--db-ink);
     }
 
+    /* Beside the summary on a small tablet: the name and sizes come first. */
+    @media (min-width: 960px) and (max-width: 1099px) {
+      grid-template-columns: 20px 40px minmax(0, 1fr) 76px 92px;
+
+      > :nth-child(4) {
+        display: none;
+      }
+    }
+
     @media (max-width: 767px) {
       grid-template-columns: 20px 40px minmax(0, 1fr) auto;
 
