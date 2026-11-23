@@ -58,7 +58,6 @@ function choose(preset: StylePreset) {
           class="pg-presets-picture"
           :style-name="avatarStyleName"
           :options="row.options"
-          surface="tile"
         />
         <span class="pg-presets-text">
           <span class="pg-presets-name">{{ row.preset.name }}</span>

@@ -149,15 +149,11 @@ function onOpenPlayground() {
     grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: 8px;
 
-    /* The checkerboard of UiAvatar stays, so a preset with no background
-       reads as transparent here as it does on the tiles. It lies on the tile
-       color, which stays light in dark mode. */
     :deep(.ui-avatar) {
       width: 100%;
       height: auto;
       aspect-ratio: 1 / 1;
       border-radius: var(--db-radius-2);
-      background-color: var(--db-tile);
     }
 
     @media (max-width: 560px) {

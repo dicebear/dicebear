@@ -386,7 +386,6 @@ async function showAdvanced() {
               <PlaygroundThumb
                 :style-name="avatarStyleName"
                 :options="{ ...store.avatarStyleOptionsWithoutDefaults, seed }"
-                surface="tile"
                 :alt="`Avatar for the seed ${seed}`"
               />
             </span>

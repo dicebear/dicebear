@@ -242,6 +242,8 @@ function setRowWeight(variant: string, value: number | null) {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .pg-comp {
   display: flex;
   flex-direction: column;
@@ -321,13 +323,12 @@ function setRowWeight(variant: string, value: number | null) {
   }
 }
 
-/* The light tile stays light in dark mode, like everywhere behind avatars. */
 .pg-comp-tile-picture,
 .pg-comp-weight-picture {
   display: block;
   overflow: hidden;
   border-radius: var(--db-radius-2);
-  background: var(--db-tile);
+  @include m.avatar-checker;
 
   img {
     display: block;

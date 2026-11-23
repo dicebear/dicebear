@@ -259,6 +259,8 @@ function pickSeed(seed: string) {
     width: 100%;
     height: 100%;
 
+    @include m.avatar-checker(16px);
+
     :deep(svg) {
       display: block;
       width: 100%;

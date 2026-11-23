@@ -145,7 +145,6 @@ const current = computed(
   :deep(.site-tile) {
     border: 4px solid var(--db-paper);
     border-radius: 50%;
-    background: #ffffff;
   }
 }
 

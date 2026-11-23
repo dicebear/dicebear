@@ -90,14 +90,17 @@ $icon-chevron-right: url('lucide-static/icons/chevron-right.svg');
    pixels of the corner as a light rim around avatars that bring a dark or
    colored background of their own. So the ground stops one pixel short of
    the edge and the image alone covers it. The box needs a size of its own;
-   the image fills it. With `null` the box keeps the ground it paints
-   itself, set before the include. */
-@mixin avatar-ground($ground: var(--db-tile)) {
+   the image fills it. The ground is the checkerboard, so a transparent
+   avatar never reads as beige. With `null` the box keeps the ground it
+   paints itself, set before the include. */
+@mixin avatar-ground($ground: 'checker') {
   position: relative;
   box-sizing: border-box;
   padding: 1px;
 
-  @if $ground != null {
+  @if $ground == 'checker' {
+    @include avatar-checker;
+  } @else if $ground != null {
     background: $ground;
   }
 
@@ -110,6 +113,19 @@ $icon-chevron-right: url('lucide-static/icons/chevron-right.svg');
     width: 100%;
     height: 100%;
   }
+}
+
+/* The ground behind every avatar: a checkerboard, so a transparent background
+   does not read as part of the picture. It lies on the tile color, which
+   stays light in dark mode, or styles drawn in black line work would vanish. */
+@mixin avatar-checker($cell: 12px) {
+  background:
+    repeating-conic-gradient(
+        rgba(11, 22, 32, 0.02) 0% 25%,
+        rgba(11, 22, 32, 0.07) 0% 50%
+      )
+      50% / #{$cell} #{$cell},
+    var(--db-tile);
 }
 
 /* The ground of the item under the pointer or the keyboard in a menu or a

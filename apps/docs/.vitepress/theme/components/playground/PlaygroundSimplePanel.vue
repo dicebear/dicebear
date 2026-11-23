@@ -195,7 +195,6 @@ const shape = usePlaygroundShape();
             <PlaygroundThumb
               :style-name="avatarStyleName"
               :options="look.options"
-              surface="tile"
             />
           </button>
         </div>

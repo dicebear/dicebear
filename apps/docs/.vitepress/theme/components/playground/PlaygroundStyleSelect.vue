@@ -113,7 +113,6 @@ const triggerOptions = { seed: exampleSeeds[0] };
       <PlaygroundThumb
         :style-name="avatarStyleName"
         :options="triggerOptions"
-        surface="tile"
       />
     </span>
     <span class="pg-style-field-text">

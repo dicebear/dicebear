@@ -281,7 +281,6 @@ defineExpose({ focus });
               :style-name="option.name"
               :options="option.thumb"
               :mode="option.custom ? 'library' : 'http-api'"
-              surface="tile"
             />
           </span>
           <span class="pg-picker-name">{{ option.label }}</span>
@@ -364,6 +363,11 @@ defineExpose({ focus });
       font: inherit;
       font-size: 15px;
       color: var(--db-ink);
+
+      // Below 16px iOS zooms into a focused field.
+      @media (max-width: 767px) {
+        font-size: 16px;
+      }
 
       &::placeholder {
         color: var(--db-muted);

@@ -1,9 +1,10 @@
 @use '../mixins' as m;
 
 /**
- * Avatars. `site-tile` is the avatar itself: the warm ground and rounded
- * corners. `site-sticker` puts it on a white card with a shadow, the way it
- * would come off a sheet; `is-tilt-*` turns it a little.
+ * Avatars. `site-tile` is the avatar itself: the checkerboard that shows
+ * where it is transparent, and rounded corners. `site-sticker` puts it on a
+ * white card with a shadow, the way it would come off a sheet; `is-tilt-*`
+ * turns it a little.
  */
 .site-tile {
   flex-shrink: 0;
