@@ -58,10 +58,11 @@ const artistWebsites = computed(() => {
 
 /**
  * The three guest artists seen on the most websites in the last month. A
- * cached response without the artist figures falls back to the sum over the
- * styles, where a website with two of them counts twice. Four avatars show
- * the range, one per style for as long as there are styles left. A neutral
- * variant is the same face as its base style, so it does not take a place.
+ * cached response without the artist figures still orders them by the sum
+ * over their styles, but that sum counts a website twice when it uses two of
+ * them, so the card then shows no figure. Four avatars show the range, one
+ * per style for as long as there are styles left. A neutral variant is the
+ * same face as its base style, so it does not take a place.
  */
 const featured = computed(() => {
   if (!rankings.value) {
@@ -100,7 +101,7 @@ const featured = computed(() => {
         name: artist.name,
         id: artistId(artist.name),
         summary: styleSummary(styles.map((item) => item.style.title)),
-        count: count.toLocaleString('en-US'),
+        websites: artistWebsites.value ? count.toLocaleString('en-US') : null,
         avatars: Array.from({ length: 4 }, (_, index) => {
           const { style } = shown[index % shown.length];
 
@@ -192,15 +193,8 @@ const FAN = [
     >
       <template #hint>
         <template v-if="currentMonthLabel">
-          <template v-if="artistWebsites">
-            The three guest artists whose styles the most websites used in
-            {{ currentMonthLabel }}.
-          </template>
-          <template v-else>
-            The three guest artists whose styles websites used the most in
-            {{ currentMonthLabel }}. A website using two of an artist’s styles
-            counts twice.
-          </template>
+          The three guest artists whose styles the most websites used in
+          {{ currentMonthLabel }}.
         </template>
         <template v-else>
           The guest artists whose styles websites use the most.
@@ -225,11 +219,10 @@ const FAN = [
             </span>
             <span class="site-heading">{{ item.name }}</span>
             <span class="site-body">{{ item.summary }}</span>
-            <span class="site-artists-card-figure">{{ item.count }}</span>
-            <span class="site-text"
-              >{{ artistWebsites ? 'websites' : 'uses on websites' }} in
-              {{ currentMonthLabel }}</span
-            >
+            <template v-if="item.websites">
+              <span class="site-artists-card-figure">{{ item.websites }}</span>
+              <span class="site-text">websites in {{ currentMonthLabel }}</span>
+            </template>
           </a>
         </template>
         <template v-else>
