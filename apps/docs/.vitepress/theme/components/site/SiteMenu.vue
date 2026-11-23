@@ -27,7 +27,7 @@ export type SiteMenuItem =
  * the thumb, as the other menus there do.
  */
 import { computed, nextTick, ref, watch } from 'vue';
-import { useMediaQuery } from '@vueuse/core';
+import { useMediaQuery, useMounted } from '@vueuse/core';
 import SiteDialog from './SiteDialog.vue';
 import { Check } from '@lucide/vue';
 import {
@@ -140,7 +140,12 @@ async function onTriggerArrow(event: KeyboardEvent) {
   focusItem(event.key === 'ArrowUp' ? 'last' : 'first');
 }
 
-const phone = useMediaQuery('(max-width: 767px)');
+const phoneWidth = useMediaQuery('(max-width: 767px)');
+const mounted = useMounted();
+
+// The server knows no window, so the first render in the browser has to
+// leave the sheet out too, or a phone fails hydration.
+const phone = computed(() => mounted.value && phoneWidth.value);
 const sheetOpen = ref(false);
 
 watch(sheetOpen, (value) => (value ? emit('show') : emit('hide')));
