@@ -13,6 +13,9 @@
   --db-paper: var(--db-c-paper);
   --db-panel: var(--db-c-panel);
   --db-raised: var(--db-c-raised);
+  --db-checker-light: var(--db-c-checker-light);
+  --db-checker-dark: var(--db-c-checker-dark);
+  --db-sticker: var(--db-c-sticker);
   --db-soft: var(--db-c-soft);
   --db-line: var(--db-c-line);
   --db-field-border: var(--db-c-field);
@@ -28,8 +31,18 @@
   --db-select-text: var(--db-on);
 }
 
+/* The color blocks stay light in both themes, so avatars on them keep the
+   light checkerboard and the white edge. */
+@mixin light-avatars {
+  --db-checker-light: #f9f5ee;
+  --db-checker-dark: #f1ebe1;
+  --db-sticker: #ffffff;
+}
+
 /* Yellow and coral: bright in both themes, dark text, white cards. */
 @mixin bright-roles($bg) {
+  @include light-avatars;
+
   --db-paper: #{$bg};
   --db-panel: #ffffff;
   --db-raised: #ffffff;
@@ -54,6 +67,8 @@
    the button, in both themes. The text is the dark `--db-on`, so it stays
    dark on the pastels of the dark theme too. */
 @mixin deep-roles($bg, $acc) {
+  @include light-avatars;
+
   --db-paper: #{$bg};
   --db-panel: #ffffff;
   --db-raised: #ffffff;

@@ -55,13 +55,18 @@
   --db-mark: #1c1b19;
   /* The checkerboard behind an avatar. Not white, or white artwork would
      vanish on it. */
-  --db-checker-light: #f9f5ee;
-  --db-checker-dark: #f1ebe1;
+  --db-c-checker-light: #f9f5ee;
+  --db-c-checker-dark: #f1ebe1;
+  /* The edge around an avatar sticker. */
+  --db-c-sticker: #ffffff;
 
   /* Roles. A tone box re-points these. */
   --db-paper: var(--db-c-paper);
   --db-panel: var(--db-c-panel);
   --db-raised: var(--db-c-raised);
+  --db-checker-light: var(--db-c-checker-light);
+  --db-checker-dark: var(--db-c-checker-dark);
+  --db-sticker: var(--db-c-sticker);
   --db-soft: var(--db-c-soft);
   --db-line: var(--db-c-line);
   --db-field-border: var(--db-c-field);
@@ -154,8 +159,9 @@
   --db-c-panel: #272623;
   --db-c-raised: var(--db-c-panel);
   /* Dark, but lifted far enough off black that line work stays readable. */
-  --db-checker-light: #45423d;
-  --db-checker-dark: #383632;
+  --db-c-checker-light: #45423d;
+  --db-c-checker-dark: #383632;
+  --db-c-sticker: #302e2b;
   --db-c-soft: #302e2b;
   --db-c-line: #45423d;
   --db-c-field: #8f8a80;
