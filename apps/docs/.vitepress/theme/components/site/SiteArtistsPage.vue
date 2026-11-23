@@ -182,8 +182,9 @@ const FAN = [
       <p>
         {{ guestStyles.length }} of the {{ theme.styleCount }} styles were not
         drawn by us. They come from {{ artists.length }} independent artists and
-        teams who shared their work under an open license. DiceBear turns that
-        work into avatars. The credit stays theirs.
+        teams. Some worked with us directly. Others published their work for
+        anyone to use, and we built it into DiceBear. Either way, the credit
+        stays theirs.
       </p>
       <template #aside>
         <div class="site-fan" aria-hidden="true">
@@ -207,11 +208,11 @@ const FAN = [
     >
       <template #hint>
         <template v-if="currentMonthLabel">
-          The three guest artists whose styles the most websites used in
+          The three artists whose styles the most websites used in
           {{ currentMonthLabel }}.
         </template>
         <template v-else>
-          The guest artists whose styles websites use the most.
+          The artists whose styles websites use the most.
         </template>
       </template>
       <div class="site-grid site-artists-cards">
