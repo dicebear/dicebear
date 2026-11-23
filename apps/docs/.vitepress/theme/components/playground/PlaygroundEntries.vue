@@ -169,12 +169,11 @@ function pick(entry: PlaygroundEntry) {
   &-heading {
     margin: 0;
     padding: 0 12px 8px;
-    font-size: 13px;
-    line-height: 18px;
+    font-family: var(--db-font-display);
+    font-size: 18px;
+    line-height: 26px;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--db-muted);
+    color: var(--db-ink);
   }
 
   &-item {

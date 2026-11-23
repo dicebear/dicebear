@@ -1,11 +1,15 @@
 <script setup lang="ts">
 /**
- * The aside of a style page head: one large sticker and the two actions a
- * style has, the playground and the definition file to download.
+ * The aside of a style page head: one large sticker, moving if the style
+ * can, and the two actions a style has, the playground and the definition
+ * file to download. The avatar itself holds still for readers who ask for
+ * reduced motion.
  */
 import { computed } from 'vue';
+import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import { Download } from '@lucide/vue';
+import type { ThemeOptions } from '@theme/types';
 import { exampleSeeds } from '@theme/config/styleCategories';
 import { useDefinitionDownload } from '@theme/composables/useDefinitionDownload';
 import { styleLabel, track } from '@theme/utils/track';
@@ -15,7 +19,15 @@ const props = defineProps<{
   styleName: string;
 }>();
 
+const { theme } = useData<ThemeOptions>();
+
 const seed = exampleSeeds[0];
+
+const avatarOptions = computed(() =>
+  theme.value.avatarStyles[kebabCase(props.styleName)]?.animated
+    ? { seed, animation: true }
+    : { seed },
+);
 
 const playgroundUrl = computed(
   () => `/playground/?style=${kebabCase(props.styleName)}`,
@@ -38,7 +50,7 @@ function onPlayground() {
       sticker
       class="site-style-card-avatar"
       :style-name="styleName"
-      :options="{ seed }"
+      :options="avatarOptions"
       :lazy="false"
       :alt="`${styleName} avatar for the seed ${seed}`"
     />
