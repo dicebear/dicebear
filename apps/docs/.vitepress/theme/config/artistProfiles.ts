@@ -3,13 +3,14 @@
  * carry, keyed by the creator's name in the definitions. The profiles come
  * from the artists' own pages and from the Figma files their styles are based
  * on, so an account the artist does not point to stays out even when the
- * handle matches. LinkedIn stays out for individuals: it shows little of their
- * art and can tie a pen name to a legal name.
+ * handle matches. LinkedIn is an exception for individuals, chosen per artist:
+ * it shows little of their art and can tie a pen name to a legal name.
  */
 export const ARTIST_PROFILES: Record<string, readonly string[]> = {
   'Ashley Seo': [
     'https://dribbble.com/ashley-seo',
     'https://www.figma.com/@ashleykseo',
+    'https://www.linkedin.com/in/ashley-seo-14759a46',
   ],
   'Davis Uche': ['https://www.figma.com/@davedirect3'],
   'Draftbit - draftbit.com': [
@@ -23,8 +24,11 @@ export const ARTIST_PROFILES: Record<string, readonly string[]> = {
     'https://github.com/Johan-Melin',
   ],
   'Matt Houser': ['https://www.figma.com/@matthou'],
-  'Micah Lanier': ['https://www.figma.com/@micah'],
-  'Natalia Spivak': ['https://www.figma.com/@nataspvk'],
+  'Micah Lanier': ['https://x.com/micahlanier', 'https://www.figma.com/@micah'],
+  'Natalia Spivak': [
+    'https://x.com/life_glitched',
+    'https://www.figma.com/@nataspvk',
+  ],
   'Pablo Stanley': [
     'https://www.pablostanley.com/',
     'https://www.instagram.com/pablostanley',
