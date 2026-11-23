@@ -1,8 +1,9 @@
 /**
  * Where to find the guest artists beyond the one URL their style definitions
  * carry, keyed by the creator's name in the definitions. The profiles come
- * from the artists' own pages. LinkedIn stays out for individuals: it shows
- * little of their art and can tie a pen name to a legal name.
+ * from the artists' own pages and from the Figma files their styles are based
+ * on. LinkedIn stays out for individuals: it shows little of their art and can
+ * tie a pen name to a legal name.
  */
 export const ARTIST_PROFILES: Record<string, readonly string[]> = {
   'Ashley Seo': [
@@ -19,6 +20,7 @@ export const ARTIST_PROFILES: Record<string, readonly string[]> = {
     'https://www.linkedin.com/company/draftbit',
   ],
   'Johan Melin': ['https://x.com/thegamedev', 'https://github.com/Johan-Melin'],
+  'Matt Houser': ['https://www.figma.com/@matthou'],
   'Natalia Spivak': ['https://www.figma.com/@nataspvk'],
   'Pablo Stanley': [
     'https://www.pablostanley.com/',
@@ -30,7 +32,11 @@ export const ARTIST_PROFILES: Record<string, readonly string[]> = {
     'https://x.com/getbootstrap',
     'https://github.com/twbs',
   ],
-  'vijay verma': ['https://x.com/realvjy', 'https://www.youtube.com/@realvjy'],
+  'vijay verma': [
+    'https://x.com/realvjy',
+    'https://www.figma.com/@realvjy',
+    'https://www.youtube.com/@realvjy',
+  ],
   Webpixels: [
     'https://x.com/webpixels_',
     'https://dribbble.com/webpixels',
