@@ -486,6 +486,11 @@ const shape = usePlaygroundShape();
       position: sticky;
       bottom: 0;
       padding: 12px 16px 16px;
+
+      /* A phone held sideways: stuck, they would fill half the window. */
+      @media (max-height: 560px) {
+        position: static;
+      }
     }
   }
 }

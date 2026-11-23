@@ -303,33 +303,22 @@ function pick(entry: PlaygroundEntry) {
   /* The phone's list button, only next to the chips. */
 }
 
-/* A row of chips: no headings, no eye, sideways scroll. The list under
-   the picture on a phone keeps the list layout. */
+/* Chips: no headings, no eye. They wrap onto more lines rather than scroll
+   sideways, so every one stays in sight. The list under the picture on a
+   phone keeps the list layout. */
 @media (max-width: 959px) {
   .pg-entries:not(.is-list) {
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 6px;
     padding: 12px 16px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    overflow: visible;
 
     .pg-entries-group {
       flex-direction: row;
+      flex-wrap: wrap;
       gap: 6px;
-    }
-
-    .pg-entries-group + .pg-entries-group::before {
-      content: '';
-      align-self: center;
-      width: 1px;
-      height: 24px;
-      margin: 0 4px;
-      background: var(--db-line);
+      max-width: 100%;
     }
 
     .pg-entries-heading,

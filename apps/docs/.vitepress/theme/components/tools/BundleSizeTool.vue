@@ -360,6 +360,14 @@ function formatSize(bytes: number): string {
   &-variant {
     width: min(520px, 100%);
     margin-top: 4px;
+
+    /* Both sizes in full on the narrowest phones. */
+    @media (max-width: 359px) {
+      :deep(.site-segmented-item) {
+        padding: 0 6px;
+        font-size: 14px;
+      }
+    }
   }
 
   &-converter {
@@ -444,7 +452,7 @@ function formatSize(bytes: number): string {
     display: grid;
     grid-template-columns:
       20px 40px minmax(176px, 1fr) minmax(0, 1fr)
-      76px 84px;
+      76px 92px;
     gap: 16px;
     align-items: center;
     padding: 8px 0;

@@ -269,6 +269,15 @@ const triggerOptions = { seed: exampleSeeds[0] };
     &-credit {
       display: none;
     }
+
+    /* The narrowest phones keep the name, the avatar is on the stage. */
+    @media (max-width: 359px) {
+      padding-left: 12px;
+
+      &-thumb {
+        display: none;
+      }
+    }
   }
 }
 

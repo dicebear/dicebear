@@ -5,7 +5,8 @@ type Target = () => HTMLElement | null | undefined;
 /**
  * Focus for a menu or a drawer that lies over the page. While it is open,
  * what is behind it takes no focus; the part that holds `keep`, usually the
- * button that toggles it, stays reachable. When it closes, focus returns to
+ * button that toggles it, and a backdrop marked `data-overlay-part` stay
+ * reachable. When it closes, focus returns to
  * `opener`, unless the reader has already moved on to something else.
  */
 export function useOverlayFocus(
@@ -28,6 +29,7 @@ export function useOverlayFocus(
           sibling !== node &&
           sibling instanceof HTMLElement &&
           !sibling.inert &&
+          !sibling.hasAttribute('data-overlay-part') &&
           !(kept && sibling.contains(kept))
         ) {
           sibling.inert = true;

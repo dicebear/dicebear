@@ -142,6 +142,7 @@ function onDrawerClick(event: MouseEvent) {
     </div>
     <div
       v-if="hasSidebar && drawerOpen"
+      data-overlay-part
       class="docs-sidebar-backdrop"
       @click="drawerOpen = false"
     ></div>

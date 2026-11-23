@@ -57,7 +57,8 @@ const neighbours = computed(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 48px;
+  flex-wrap: wrap;
+  gap: 24px 48px;
   padding-top: clamp(48px, 6vw, 88px);
   /* The last block of a style page, so it also holds the space to the footer. */
   padding-bottom: clamp(64px, 8vw, 112px);
@@ -68,8 +69,10 @@ const neighbours = computed(() => {
     gap: 8px;
     min-width: 0;
 
+    /* Wrapped under the previous style, it still ends on the right. */
     &.is-next {
       align-items: flex-end;
+      margin-left: auto;
       text-align: right;
     }
   }

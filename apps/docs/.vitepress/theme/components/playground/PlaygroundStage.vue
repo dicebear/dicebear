@@ -95,23 +95,34 @@ const seedHintSeen = useStorage(
 const ground = ref<HTMLElement | null>(null);
 const seedAnchor = ref<HTMLElement | null>(null);
 const seedHintRoom = ref(0);
+const seedHintRoomBelow = ref(0);
 
 function measureSeedHintRoom() {
   if (!ground.value || !seedAnchor.value) return;
 
-  seedHintRoom.value =
-    ground.value.getBoundingClientRect().right -
-    seedAnchor.value.getBoundingClientRect().right;
+  const groundBox = ground.value.getBoundingClientRect();
+  const anchorBox = seedAnchor.value.getBoundingClientRect();
+
+  seedHintRoom.value = groundBox.right - anchorBox.right;
+  seedHintRoomBelow.value =
+    groundBox.bottom - (anchorBox.top + anchorBox.height / 2);
 }
 
 useResizeObserver(ground, measureSeedHintRoom);
 useResizeObserver(seedAnchor, measureSeedHintRoom);
 
+const SEED_HINT_HALF_HEIGHT = 100;
+
 // 12 pixels for the arrow on the left, 12 to the edge of the ground.
 const seedHintWidth = computed(() => Math.min(260, seedHintRoom.value - 24));
 
 const seedHintShown = computed(
-  () => props.seedHint && !seedHintSeen.value && seedHintWidth.value >= 200,
+  () =>
+    props.seedHint &&
+    !seedHintSeen.value &&
+    seedHintWidth.value >= 200 &&
+    // The bubble is centred on the field and the ground would cut it off.
+    seedHintRoomBelow.value >= SEED_HINT_HALF_HEIGHT,
 );
 
 function dismissSeedHint() {
@@ -382,18 +393,41 @@ function pickSeed(seed: string) {
       gap: 14px;
     }
 
-    &.is-compact &-picture {
-      width: 200px;
-    }
-
+    /* The sheet starts at three fifths of the window at most: on a short
+       phone the avatar gets smaller, so the field under it stays clear. */
+    &.is-compact &-picture,
     &.is-editor &-picture {
-      width: 200px;
+      width: clamp(96px, calc(60dvh - 226px), 200px);
     }
 
     /* Undo, redo and the download stand in the top corners of the ground,
        so the ground leaves room above the avatar for them. */
     &.has-corner &-ground {
       padding-top: 64px;
+    }
+
+    /* A small phone held sideways: the avatar and its field side by side,
+       or the sheet would cover the field. */
+    @media (max-height: 480px) {
+      &.is-compact &-ground {
+        flex-direction: row;
+        gap: 16px;
+        padding: 60px 16px 12px;
+      }
+
+      &.is-compact &-picture {
+        flex: none;
+        width: 96px;
+      }
+
+      &.is-compact &-seed-anchor {
+        width: min(100%, 320px);
+      }
+
+      &.is-compact :deep(.pg-editor-bar) {
+        flex: 0 1 auto;
+        align-self: center;
+      }
     }
   }
 }
