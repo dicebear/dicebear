@@ -157,6 +157,10 @@ const current = computed(
 
   &-more {
     padding: 0 8px;
+
+    &:hover {
+      background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+    }
   }
 }
 </style>

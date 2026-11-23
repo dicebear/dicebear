@@ -336,7 +336,16 @@ function pick(entry: PlaygroundEntry) {
       height: 40px;
       padding: 0 12px;
       border-radius: var(--db-radius-3);
-      background: var(--db-soft);
+
+      /* A tint like every control to choose from; the chosen chip keeps the
+         yellow of the chosen row. */
+      &:not([aria-pressed='true']) {
+        background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+
+        &:hover {
+          background: color-mix(in srgb, var(--db-ink) 12%, transparent);
+        }
+      }
     }
 
     .pg-entries-name {

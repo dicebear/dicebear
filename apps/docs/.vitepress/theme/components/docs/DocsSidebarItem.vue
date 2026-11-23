@@ -225,8 +225,9 @@ watch(activeChild, (child) => {
     transform: rotate(90deg);
   }
 
+  /* Its own color, so it also works on the yellow of the current page. */
   &:hover {
-    background: color-mix(in srgb, var(--db-ink) 8%, transparent);
+    background: color-mix(in srgb, currentColor 12%, transparent);
   }
 
   /* Beside the current page the row is yellow, so the arrow takes the text
