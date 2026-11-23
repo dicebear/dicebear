@@ -3,6 +3,7 @@ import type { AvatarStyles } from '@theme/types';
 import { createRequire } from 'node:module';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
+import { CREATOR_URL_FIXES } from '../theme/config/artistProfiles.ts';
 import { findUncategorizedStyles } from '../theme/config/styleCategories.ts';
 
 const require = createRequire(import.meta.url);
@@ -30,6 +31,7 @@ for (const file of fs.readdirSync(definitionsDir)) {
   const definition = JSON.parse(rawDefinition);
   const style = new Style(definition);
   const meta = style.meta();
+  const creator = meta.creator().name();
 
   avatarStyles[name] = {
     definitionUrl: style.id(),
@@ -37,8 +39,8 @@ for (const file of fs.readdirSync(definitionsDir)) {
     animations: style.animationNames(),
     meta: {
       title: meta.source().name(),
-      creator: meta.creator().name(),
-      homepage: meta.creator().url(),
+      creator,
+      homepage: (creator && CREATOR_URL_FIXES[creator]) || meta.creator().url(),
       source: meta.source().url(),
       license: {
         name: meta.license().name(),

@@ -9,8 +9,17 @@
 import { computed } from 'vue';
 import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
-import { ArrowRight, Globe } from '@lucide/vue';
-import { siDribbble, siInstagram, siX } from 'simple-icons';
+import { ArrowRight, Briefcase, Globe } from '@lucide/vue';
+import {
+  siDribbble,
+  siFigma,
+  siGithub,
+  siInstagram,
+  siSubstack,
+  siThreads,
+  siX,
+  siYoutube,
+} from 'simple-icons';
 import type { ThemeOptions } from '@theme/types';
 import type { LicenseBucket } from '@theme/config/styleCategories';
 import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
@@ -31,7 +40,12 @@ const guestStyles = computed(() => artists.value.flatMap((a) => a.styles));
 const ICONS: Partial<Record<ArtistLinkKind, { path: string }>> = {
   instagram: siInstagram,
   x: siX,
+  threads: siThreads,
   dribbble: siDribbble,
+  figma: siFigma,
+  youtube: siYoutube,
+  github: siGithub,
+  substack: siSubstack,
 };
 
 function artistId(name: string): string {
@@ -255,23 +269,31 @@ const FAN = [
           <div class="site-artists-artist-head">
             <h3 class="site-heading">{{ artist.name }}</h3>
             <p class="site-text">{{ countLabel(artist.styles.length) }}</p>
-            <a
-              v-if="artist.link"
-              :href="artist.link.href"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="site-btn site-btn-secondary site-artists-link"
-            >
-              <UiIcon
-                v-if="ICONS[artist.link.kind]"
-                :path="ICONS[artist.link.kind]!.path"
-                :size="16"
-                aria-hidden="true"
-              />
-              <Globe v-else :size="16" aria-hidden="true" />
-              {{ artist.link.label }}
-              <span class="sr-only">of {{ artist.name }}</span>
-            </a>
+            <div v-if="artist.links.length" class="site-artists-links">
+              <a
+                v-for="link in artist.links"
+                :key="link.kind"
+                :href="link.href"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="site-btn site-btn-secondary site-btn-icon"
+                :aria-label="`${link.label} of ${artist.name}`"
+                :data-tip="link.label"
+              >
+                <UiIcon
+                  v-if="ICONS[link.kind]"
+                  :path="ICONS[link.kind]!.path"
+                  :size="18"
+                  aria-hidden="true"
+                />
+                <Briefcase
+                  v-else-if="link.kind === 'linkedin'"
+                  :size="18"
+                  aria-hidden="true"
+                />
+                <Globe v-else :size="18" aria-hidden="true" />
+              </a>
+            </div>
           </div>
           <div class="site-rows site-artists-styles">
             <a
@@ -449,7 +471,10 @@ const FAN = [
     }
   }
 
-  &-link {
+  &-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     margin-top: 16px;
   }
 
