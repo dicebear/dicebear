@@ -100,9 +100,13 @@ useOverlayFocus(
             height="32"
           />
         </a>
-        <button type="button" class="theme-header-search" @click="show">
-          <Search :size="18" :stroke-width="1.8" aria-hidden="true" />
-          <span class="theme-header-search-label">Search</span>
+        <button
+          type="button"
+          class="site-btn site-btn-secondary theme-header-search"
+          @click="show"
+        >
+          <Search :size="18" aria-hidden="true" />
+          Search
           <span class="site-kbd" aria-hidden="true">
             <span class="only-mac">⌘</span
             ><span class="only-other">Ctrl</span>&nbsp;K
@@ -178,9 +182,6 @@ useOverlayFocus(
 </template>
 
 <style lang="scss" scoped>
-@use '../../styles/control' as c;
-@use '../../styles/mixins' as m;
-
 .theme-header {
   position: sticky;
   top: 0;
@@ -227,39 +228,18 @@ useOverlayFocus(
   }
 }
 
-/* The search opens the search dialog, so it is an action of the header like
-   the others: a tinted pill without a line, with the muted word of a field
-   and the shortcut. */
+/* The search only opens the search dialog, so it is a button like the others
+   and does not pose as a field. The shortcut sits on the paper, as a small
+   key on the button's tint. */
 .theme-header-search {
-  @include c.control-size(md);
-  @include m.focus-ring(2px);
+  padding: 0 8px 0 16px;
 
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: clamp(140px, 16vw, 220px);
-  padding: 0 8px 0 14px;
-  border: 0;
-  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
-  color: var(--db-ink-2);
-  cursor: pointer;
-  transition: background-color 0.12s;
-
-  &:hover {
-    background: color-mix(in srgb, var(--db-ink) 12%, transparent);
-  }
-
-  /* The shortcut sits on the paper, as a small key on the tint. */
   .site-kbd {
+    margin-left: 2px;
     border-color: transparent;
     background: var(--db-paper);
     color: var(--db-ink-2);
   }
-}
-
-.theme-header-search-label {
-  flex: 1;
-  text-align: left;
 }
 
 .theme-header-right {
