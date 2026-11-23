@@ -144,7 +144,7 @@ const MARGIN_Y = (HEIGHT - ROWS * STICKER - (ROWS - 1) * GAP) / 2;
 
 /** The ink and the beige of the site (`--db-c-ink`, `--db-tile`). */
 const INK = '#15213b';
-const BEIGE = '#f4ecdc';
+const BEIGE = '#f5eee2';
 
 function loadStyle(name) {
   const definition = JSON.parse(

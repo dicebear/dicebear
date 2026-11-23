@@ -24,7 +24,7 @@ const publicDir = join(rootDir, 'apps', 'docs', 'pages', 'public');
 // The charcoal of the dark theme (`--db-c-paper` in dark) and the beige of
 // the avatar tiles (`--db-tile`).
 const INK = '#1c1b19';
-const BEIGE = '#f4ecdc';
+const BEIGE = '#f5eee2';
 
 /** Corner radius of the rounded icons, as a share of the side. */
 const ROUNDED = 0.22;

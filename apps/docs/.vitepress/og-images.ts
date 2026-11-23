@@ -113,7 +113,7 @@ const RULE_Y = CREDIT_BASELINE - 40;
  * artwork disappears against a white tile: `lorelei` loses its face and shows
  * only hair and outlines, and `identicon` loses its negative space.
  */
-const TILE_BASE = '#f4ecdc';
+const TILE_BASE = '#f5eee2';
 
 /**
  * The lockup in ink, sitting bottom-right beside the credit block.
@@ -172,7 +172,7 @@ const DEFAULT_TILES = [
  * color passes AA on the ground by a wide margin, the muted source line
  * included (about 8:1).
  */
-const BACKGROUND = '#f4ecdc';
+const BACKGROUND = '#f5eee2';
 
 /** Title and credit line. */
 const COLOR_TITLE = '#15213b';

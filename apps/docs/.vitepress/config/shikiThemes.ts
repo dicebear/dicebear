@@ -59,7 +59,7 @@ export const shikiLight = theme('dicebear-light', 'light', {
   brand: '#0369A1',
   string: '#9A3412',
   muted: '#5E6880',
-  bg: '#F7EFE0',
+  bg: '#F7F1E6',
 });
 
 export const shikiDark = theme('dicebear-dark', 'dark', {

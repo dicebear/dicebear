@@ -18,14 +18,14 @@
 
 :root {
   /* Palette: neutrals */
-  --db-c-paper: #fff9ef;
+  --db-c-paper: #fffdf9;
   --db-c-panel: #ffffff;
   /* A surface set apart by a backdrop or an edge, so it needs no lighter
      color: the paper in light, the lifted panel in dark. White stays for what
      has to stand out from its ground, such as fields and cards on a block. */
   --db-c-raised: var(--db-c-paper);
-  --db-c-soft: #f7efe0;
-  --db-c-line: #eadfca;
+  --db-c-soft: #f7f1e6;
+  --db-c-line: #ece4d5;
   /* The edge of a field or a chip: 3:1 on paper, so the control shows. */
   --db-c-field: #8f856b;
   --db-c-ink: #15213b;
@@ -55,7 +55,7 @@
   --db-mark: #1c1b19;
   /* The ground behind an avatar, light in both themes, or styles drawn in
      black line work vanish. */
-  --db-tile: #f4ecdc;
+  --db-tile: #f5eee2;
 
   /* Roles. A tone box re-points these. */
   --db-paper: var(--db-c-paper);
