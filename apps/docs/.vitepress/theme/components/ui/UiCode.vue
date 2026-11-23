@@ -48,6 +48,8 @@ const current = computed<{ lang?: string; code: string }>(() => {
 const preRef = ref<HTMLPreElement>();
 const codeHtml = ref(marksToHtml(escapeHtml(current.value.code)));
 const plain = computed(() => stripMarks(current.value.code));
+/** One long line, a URL most of all, wraps: its end stays in sight. */
+const singleLine = computed(() => !plain.value.trim().includes('\n'));
 
 function scrollPreToBottom() {
   if (props.scrollToBottom && preRef.value) {
@@ -94,7 +96,11 @@ watch(current, async () => {
       </span>
       <UiCopyButton class="ui-code-copy" :text="plain" :duration="3000" />
     </div>
-    <pre ref="preRef" class="ui-code-text"><code v-html="codeHtml" /></pre>
+    <pre
+      ref="preRef"
+      class="ui-code-text"
+      :class="{ 'is-single': singleLine }"
+    ><code v-html="codeHtml" /></pre>
     <div v-if="$slots.foot" class="ui-code-foot">
       <slot name="foot" />
     </div>
@@ -158,6 +164,15 @@ watch(current, async () => {
       min-width: 100%;
       padding: 0 clamp(20px, 2.6vw, 32px);
       font: inherit;
+    }
+
+    &.is-single {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+
+      code {
+        width: auto;
+      }
     }
   }
 

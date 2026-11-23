@@ -54,9 +54,18 @@ const styles = computed(() =>
 <style scoped lang="scss">
 .site-animated-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(140px, 42%), 1fr));
+  /* 21 styles: three rows of seven, or seven of three. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(28px, 3vw, 44px) clamp(16px, 2.4vw, 32px);
   margin-top: clamp(48px, 6vw, 88px);
+
+  @media (min-width: 480px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
 
   &-item {
     display: flex;

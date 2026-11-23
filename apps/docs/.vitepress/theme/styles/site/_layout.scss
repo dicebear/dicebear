@@ -64,6 +64,19 @@
     minmax(min(var(--site-grid-min), 100%), 1fr)
   );
   gap: var(--db-edge);
+
+  /* Four tiles: in a row, two by two, then stacked, so none stands alone. */
+  &.is-four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    @media (max-width: 1099px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 519px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 }
 
 /* A row of buttons or links. */

@@ -103,14 +103,21 @@ function show(preset: StylePreset) {
 
 <style scoped lang="scss">
 .site-style-presets {
+  /* The column is what counts here, it shares the page with a heading. */
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: 32px;
 
+  /* Four tiles: two by two, or in a row where the column has the room. */
   &-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 40px 24px;
+
+    @container (min-width: 640px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
   &-tile {

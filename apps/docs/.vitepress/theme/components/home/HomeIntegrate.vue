@@ -104,11 +104,16 @@ const current = computed(
     margin-bottom: clamp(32px, 3.4vw, 48px);
   }
 
-  /* The code gets five parts of eight, so a whole URL fits in its line. */
+  /* The code gets the wider column, so a whole URL fits in its line: two
+     parts of three on a tablet held sideways, five of eight above. */
   &-grid {
     row-gap: 40px;
 
     @media (min-width: 1120px) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    @media (min-width: 1360px) {
       grid-template-columns: minmax(0, 3fr) minmax(0, 5fr);
     }
   }

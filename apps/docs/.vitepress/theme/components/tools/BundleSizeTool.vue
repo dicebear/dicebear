@@ -387,6 +387,7 @@ function formatSize(bytes: number): string {
 
   &-size {
     flex: 0 0 auto;
+    white-space: nowrap;
     font-family: var(--db-font-mono);
     font-size: 15px;
     line-height: 24px;
@@ -442,8 +443,8 @@ function formatSize(bytes: number): string {
   &-row {
     display: grid;
     grid-template-columns:
-      20px 40px minmax(120px, 1fr) minmax(0, 1.4fr)
-      80px 80px;
+      20px 40px minmax(176px, 1fr) minmax(0, 1fr)
+      76px 84px;
     gap: 16px;
     align-items: center;
     padding: 8px 0;
@@ -494,6 +495,12 @@ function formatSize(bytes: number): string {
       > :nth-child(4),
       > :nth-child(6) {
         display: none;
+      }
+
+      /* A long name takes a second line instead of losing its end. */
+      &-title {
+        overflow: visible;
+        white-space: normal;
       }
     }
   }

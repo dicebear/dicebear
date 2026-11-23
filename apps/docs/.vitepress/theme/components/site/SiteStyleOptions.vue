@@ -367,6 +367,14 @@ watch(
     margin-left: auto;
     text-align: right;
     max-width: 420px;
+
+    /* Under the filter, where the row is too short for both. */
+    @media (max-width: 1279px) {
+      flex-basis: 100%;
+      margin-left: 0;
+      max-width: none;
+      text-align: left;
+    }
   }
 
   @media (max-width: 767px) {

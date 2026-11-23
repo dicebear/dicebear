@@ -214,8 +214,10 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
     }
   }
 
-  /* Code blocks: a soft box. The language sits in the corner and gives way
-     to the copy button while the pointer is on the block. */
+  /* Code blocks: a soft box with a head row, the language on the left and
+     the copy button on the right, so neither ever lies on a line of code.
+     The button shows with the pointer on the block; on a touch screen,
+     which has no pointer, it stays. */
   div[class*='language-'] {
     position: relative;
     border-radius: var(--db-radius-5);
@@ -224,19 +226,13 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
 
     > span.lang {
       position: absolute;
-      top: 16px;
-      right: 22px;
+      top: 14px;
+      left: 22px;
       z-index: 1;
       font-family: var(--db-font-mono);
       font-size: 12px;
       line-height: 20px;
       color: var(--db-muted);
-      transition: opacity 0.12s;
-    }
-
-    &:hover > span.lang,
-    &:focus-within > span.lang {
-      opacity: 0;
     }
 
     /* The copy button is the small ghost icon button of the set. */
@@ -246,8 +242,8 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       @include m.button-size(sm);
 
       position: absolute;
-      top: 10px;
-      right: 12px;
+      top: 6px;
+      right: 8px;
       z-index: 2;
       width: 36px;
       padding: 0;
@@ -287,8 +283,14 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       opacity: 1;
     }
 
+    @media (hover: none) {
+      > button.copy {
+        opacity: 1;
+      }
+    }
+
     > pre {
-      padding: 18px 0 20px;
+      padding: 44px 0 20px;
       overflow-x: auto;
       font-size: 14px;
       line-height: 24px;
@@ -299,12 +301,11 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       }
     }
 
-    /* Room on the right, so the language label never covers a line. */
     > pre > code {
       display: block;
       width: fit-content;
       min-width: 100%;
-      padding: 0 64px 0 22px;
+      padding: 0 22px;
     }
 
     code .highlighted {
@@ -350,7 +351,9 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
     .tabs {
       display: flex;
       gap: 4px;
-      padding: 12px 60px 0 12px;
+      /* Stops short of the copy button, which sits in this row. */
+      margin-right: 52px;
+      padding: 12px 0 0 12px;
       overflow-x: auto;
       /* Visible, so the tabs past the edge can be reached without a
          touchpad. */
@@ -401,12 +404,13 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       }
 
       > button.copy {
-        top: -46px;
+        top: -40px;
         opacity: 1;
       }
 
       > pre {
         margin-top: 0;
+        padding-top: 18px;
       }
     }
   }

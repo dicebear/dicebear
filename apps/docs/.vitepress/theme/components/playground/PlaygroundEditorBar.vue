@@ -100,12 +100,15 @@ function randomize() {
 <style scoped lang="scss">
 @use '../../styles/mixins' as m;
 
-/* Three parts on one line, Randomize in the middle of the picture. Every
-   control of the bar is 56 high, the size of the page's actions; a phone
-   takes 44 for all of them. */
+/* Three parts on one line, Randomize in the middle of the picture while
+   the sides leave it there; on a tablet the wider actions push it left
+   instead of lying over it. Every control of the bar is 56 high, the size
+   of the page's actions; a phone takes 44 for all of them. */
 .pg-editor-bar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns:
+    minmax(max-content, 1fr) auto
+    minmax(max-content, 1fr);
   align-items: center;
   gap: 12px;
   align-self: stretch;

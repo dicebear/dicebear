@@ -36,7 +36,8 @@ const seeds = computed(() => getPreviewRowSeeds(props.styleName));
 <style scoped lang="scss">
 .site-style-seeds {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+  /* Eight seeds: one row, or two of four, never one left over. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px clamp(12px, 1.6vw, 24px);
   margin-top: clamp(48px, 6vw, 88px);
 
@@ -60,8 +61,8 @@ const seeds = computed(() => getPreviewRowSeeds(props.styleName));
     }
   }
 
-  @media (max-width: 767px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 }
 </style>
