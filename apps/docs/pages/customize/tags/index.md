@@ -22,7 +22,13 @@ facial hair, eyewear, and accessory.
 `tags` is a [core option](/customize/options/), so it works everywhere the
 avatar is generated. Pass the tags you want to keep:
 
-```js
+::: code-group
+
+```http [HTTP API]
+https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,mood:positive
+```
+
+```js [JavaScript]
 import { Style, Avatar } from '@dicebear/core';
 import adventurer from '@dicebear/styles/adventurer.json' with { type: 'json' };
 
@@ -33,12 +39,87 @@ const avatar = new Avatar(style, {
 });
 ```
 
-In the [HTTP API](/integrations/http-api/) the same filter is a comma-separated
-query parameter:
+```php [PHP]
+use Composer\InstalledVersions;
+use DiceBear\Avatar;
+use DiceBear\Style;
 
-```http
-https://api.dicebear.com/11.x/adventurer/svg?seed=John&tags=hairLength:long,mood:positive
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
+$style = Style::fromJson(file_get_contents($basePath . '/src/adventurer.json'));
+
+$avatar = new Avatar($style, [
+  'seed' => 'John',
+  'tags' => ['hairLength:long', 'mood:positive'],
+]);
 ```
+
+```python [Python]
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+style = Style.from_json(
+    files("dicebear_styles").joinpath("adventurer.json").read_text("utf-8")
+)
+
+avatar = Avatar(style, {
+    "seed": "John",
+    "tags": ["hairLength:long", "mood:positive"],
+})
+```
+
+```rust [Rust]
+// cargo add dicebear-styles --features adventurer
+use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::ADVENTURER)?;
+let avatar = Avatar::new(&style, json!({
+    "seed": "John",
+    "tags": ["hairLength:long", "mood:positive"],
+}))?;
+```
+
+```go [Go]
+import (
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.Adventurer))
+avatar, _ := dicebear.NewAvatar(style, map[string]any{
+	"seed": "John",
+	"tags": []string{"hairLength:long", "mood:positive"},
+})
+```
+
+```dart [Dart]
+import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/adventurer.dart';
+
+final style = Style.parse(adventurer);
+final avatar = Avatar(style, {
+  'seed': 'John',
+  'tags': ['hairLength:long', 'mood:positive'],
+});
+```
+
+```csharp [C#]
+using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(Styles.Adventurer);
+var avatar = new Avatar(style, new JsonObject
+{
+    ["seed"] = "John",
+    ["tags"] = new JsonArray("hairLength:long", "mood:positive"),
+});
+```
+
+:::
+
+In the [HTTP API](/integrations/http-api/) the tags are one comma-separated
+query parameter.
 
 ## How the filter works
 

@@ -473,6 +473,34 @@ export default defineConfig<ThemeOptions>({
           .replaceAll(STYLE_COUNT_TOKEN, String(styleCount))
           .replaceAll(ANIMATED_STYLE_COUNT_TOKEN, String(animatedStyleCount));
       });
+
+      // Code groups render as DocsCodeGroup, so they get the site's tabs. As
+      // in VitePress's own rule, the first titled block starts out active.
+      md.renderer.rules['container_code-group_open'] = (tokens, idx) => {
+        const labels: string[] = [];
+
+        for (
+          let i = idx + 1;
+          tokens[i].type !== 'container_code-group_close';
+          i++
+        ) {
+          const label =
+            tokens[i].type === 'fence'
+              ? tokens[i].info.match(/\[(.+?)\]/)?.[1]
+              : undefined;
+
+          if (label === undefined) continue;
+          if (labels.length === 0) tokens[i].info += ' active';
+
+          labels.push(label);
+        }
+
+        const attribute = md.utils.escapeHtml(JSON.stringify(labels));
+
+        return `<DocsCodeGroup :labels="${attribute}">\n`;
+      };
+      md.renderer.rules['container_code-group_close'] = () =>
+        '</DocsCodeGroup>\n';
     },
   },
 });

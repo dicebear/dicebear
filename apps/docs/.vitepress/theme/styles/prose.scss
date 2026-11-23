@@ -1,6 +1,6 @@
 /**
  * Rendered Markdown. The renderer's class names stay (.vp-doc, .custom-block,
- * .vp-code-group, div.language-*), the look is ours. Element rules target
+ * DocsCodeGroup, div.language-*), the look is ours. Element rules target
  * direct children of the prose root and a few prose containers, so components
  * mounted inside a docs page keep their own styles.
  */
@@ -343,51 +343,15 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
   }
 
   /* Code groups: the same box with tab pills in the top row */
-  .vp-code-group {
+  .docs-code-group {
     border-radius: var(--db-radius-5);
     background: var(--db-soft);
     overflow: hidden;
 
-    .tabs {
-      display: flex;
-      gap: 4px;
-      /* Stops short of the copy button, which sits in this row. */
+    /* Stops short of the copy button, which sits in this row. */
+    &-tabs {
       margin-right: 52px;
       padding: 12px 0 0 12px;
-      overflow-x: auto;
-      /* Visible, so the tabs past the edge can be reached without a
-         touchpad. */
-      scrollbar-width: thin;
-
-      input {
-        position: fixed;
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      label {
-        @include m.pill-base;
-
-        flex-shrink: 0;
-        padding: 0 16px;
-        color: var(--db-ink-2);
-
-        &:hover {
-          background: color-mix(in srgb, var(--db-ink) 7%, transparent);
-          color: var(--db-ink);
-        }
-      }
-
-      input:checked + label {
-        background: var(--db-btn-bg);
-        font-weight: 700;
-        color: var(--db-btn-fg);
-      }
-
-      input:focus-visible + label {
-        outline: 2px solid var(--db-focus);
-        outline-offset: 2px;
-      }
     }
 
     .blocks > div[class*='language-'] {

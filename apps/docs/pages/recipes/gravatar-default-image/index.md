@@ -66,6 +66,21 @@ gravatar_image = f"https://www.gravatar.com/avatar/{email_hash}?d={default_image
 ```
 
 <!-- prettier-ignore -->
+```rust [Rust]
+// cargo add urlencoding
+use urlencoding::encode;
+
+let email_hash = encode("00000000000000000000000000000000");
+let options = format!("seed={email_hash}");
+let image_url = format!("https://api.dicebear.com/11.x/lorelei/png?{options}"); // [!code --]
+let image_url = format!("https://api.dicebear.com/11.x/lorelei/png/{}", encode(&options)); // [!code ++]
+let default_image = encode(&image_url);
+
+let gravatar_image = format!("https://www.gravatar.com/avatar/{email_hash}?d={default_image}");
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F11.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+```
+
+<!-- prettier-ignore -->
 ```go [Go]
 import (
 	"fmt"
