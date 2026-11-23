@@ -2,14 +2,12 @@
 /**
  * Every style ranked by the websites that requested it in the latest
  * complete month. The first three stand on a podium, the next ten in a list
- * with a bar for their share and a tag for their trend; the rest on
- * request, and a search across all of them.
+ * with a bar for their share; the rest on request, and a search across all
+ * of them.
  */
 import { computed, ref } from 'vue';
 import { capitalCase, kebabCase } from 'change-case';
-import { ArrowDown, ArrowUp } from '@lucide/vue';
 import type { StyleRankingRow } from '@theme/utils/statsTrends';
-import { formatGrowth, growthDirection } from '@theme/utils/statsTrends';
 import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 import SiteAvatar from './SiteAvatar.vue';
 import SiteSearch from './SiteSearch.vue';
@@ -17,8 +15,6 @@ import SiteSearch from './SiteSearch.vue';
 const props = defineProps<{
   rows: StyleRankingRow[];
   monthLabel: string;
-  /** The month the trend compares with, when it has complete data. */
-  previousMonth: string | null;
   websites: number | null;
 }>();
 
@@ -57,15 +53,6 @@ const list = computed(() => {
 /** The bars measure against the largest share in the list. */
 const top = computed(() => Math.max(...list.value.map((row) => row.share), 1));
 
-/** A new style counts as a gain, like the arrow beside it says. */
-function direction(row: StyleRankingRow): 'up' | 'down' | 'flat' {
-  return row.isNew ? 'up' : growthDirection(row.growth);
-}
-
-function trend(row: StyleRankingRow): string {
-  return row.isNew ? 'New' : formatGrowth(row.growth);
-}
-
 function share(value: number): string {
   return `${value.toFixed(1)}%`;
 }
@@ -82,9 +69,6 @@ function seed(name: string): string {
       <p class="site-lead">
         Every style, ranked by the number of websites that requested it in
         {{ monthLabel }}.
-        <template v-if="previousMonth"
-          >The trend compares it with {{ previousMonth }}.</template
-        >
       </p>
     </div>
 
@@ -139,22 +123,6 @@ function seed(name: string): string {
           <span :style="{ width: `${(row.share / top) * 100}%` }"></span>
         </span>
         <span class="site-stats-rankings-share">{{ share(row.share) }}</span>
-        <span
-          class="site-tag site-stats-rankings-trend"
-          :class="`is-${direction(row)}`"
-        >
-          <ArrowUp
-            v-if="direction(row) === 'up'"
-            :size="14"
-            aria-hidden="true"
-          />
-          <ArrowDown
-            v-else-if="direction(row) === 'down'"
-            :size="14"
-            aria-hidden="true"
-          />
-          {{ trend(row) }}
-        </span>
       </a>
       <p v-if="list.length === 0" class="site-text site-stats-rankings-empty">
         No style matches “{{ query.trim() }}”.
@@ -275,12 +243,12 @@ function seed(name: string): string {
     flex-direction: column;
   }
 
-  /* Rank, avatar, name, bar, share and trend in one row. */
+  /* Rank, avatar, name, bar and share in one row. */
   &-row {
     display: grid;
     grid-template-columns:
       28px 52px minmax(96px, 1.1fr) minmax(0, 3fr)
-      auto auto;
+      auto;
     gap: 8px clamp(10px, 1.6vw, 24px);
     align-items: center;
     min-height: 68px;
@@ -291,8 +259,7 @@ function seed(name: string): string {
 
       --site-avatar-size: 44px;
 
-      > :nth-child(4),
-      > :nth-child(6) {
+      > :nth-child(4) {
         display: none;
       }
     }
@@ -342,27 +309,6 @@ function seed(name: string): string {
     font-weight: 700;
     text-align: right;
     font-variant-numeric: tabular-nums;
-  }
-
-  /* Up in mint, down in coral, both in their light shade in every theme. */
-  &-trend {
-    justify-content: center;
-    min-width: 68px;
-    font-variant-numeric: tabular-nums;
-
-    &.is-up {
-      background: var(--db-mint-light);
-      color: var(--db-on);
-    }
-
-    &.is-down {
-      background: var(--db-coral);
-      color: var(--db-on);
-    }
-
-    &.is-flat {
-      background: var(--db-soft);
-    }
   }
 
   &-empty {

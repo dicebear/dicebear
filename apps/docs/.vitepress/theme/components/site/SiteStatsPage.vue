@@ -30,7 +30,7 @@ const {
   formats,
 } = useStatsCharts();
 
-const { monthly, previousMonthLabel } = useStyleRankings();
+const { monthly } = useStyleRankings();
 
 /** The websites of the month the rankings stand for. */
 const rankedWebsites = computed(() => {
@@ -263,7 +263,6 @@ const chartLabel = computed(() => {
       v-if="rankings && currentMonthLabel"
       :rows="rankings"
       :month-label="currentMonthLabel"
-      :previous-month="previousMonthLabel"
       :websites="rankedWebsites"
     />
 
