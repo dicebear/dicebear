@@ -495,10 +495,14 @@ function onOwnColor(event: Event) {
     flex-shrink: 0;
   }
 
-  /* The tiles scroll on their own, so the avatar stays in view. */
+  /* The tiles scroll on their own, so the avatar stays in view. A scroll box
+     clips on every side and a tile's ring reaches 4px past it, so the box
+     takes a little more room while the tiles stay on the column's edge. */
   &-body {
     flex: 1;
     min-height: 0;
+    margin-inline: -6px;
+    padding-inline: 6px;
     overflow-y: auto;
   }
 
@@ -607,6 +611,11 @@ function onOwnColor(event: Event) {
   @media (max-width: 959px) {
     &-head {
       padding: 10px 16px;
+    }
+
+    &-body {
+      margin-inline: 0;
+      padding-inline: 0;
     }
 
     &-tiles {
