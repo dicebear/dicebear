@@ -79,5 +79,12 @@ const model = defineModel<string>({ required: true });
       display: none;
     }
   }
+
+  // Below 16px iOS zooms into a focused field.
+  @media (max-width: 767px) {
+    &-input {
+      font-size: 16px;
+    }
+  }
 }
 </style>

@@ -7,10 +7,10 @@
  * Phones keep the search above the list and move the rest of the filters
  * into a sheet.
  */
-import { computed, onMounted, ref } from 'vue';
-import { useData } from 'vitepress';
-import { useEventListener } from '@vueuse/core';
-import { SlidersHorizontal } from '@lucide/vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import { useData, useRoute } from 'vitepress';
+import { useTimeoutFn } from '@vueuse/core';
+import { SlidersHorizontal, X } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
 import { useStyleRankings } from '@theme/composables/useStyleRankings';
@@ -41,13 +41,7 @@ const {
 } = useStyleFiltering(theme.value.avatarStyles);
 
 const { rankingByName } = useStyleRankings();
-
-/** `/styles/?animated=true` opens the list with the animated filter on. */
-onMounted(() => {
-  if (new URLSearchParams(window.location.search).get('animated') === 'true') {
-    animatedOnly.value = true;
-  }
-});
+const route = useRoute();
 
 type SortMode = 'name' | 'popular' | 'trending';
 const sortBy = ref<SortMode>('name');
@@ -74,18 +68,136 @@ const category = computed<string>({
   },
 });
 
-/** `/styles/#characters`, the link in a style's crumbs, opens that category. */
-function applyCategoryHash() {
-  const wanted = decodeURIComponent(window.location.hash.slice(1));
-  const match = availableCategories.value.find(
-    (name) => name.toLowerCase() === wanted.toLowerCase(),
-  );
+/** The filters and the sort as a query string, the way the URL carries them. */
+function filtersToSearch(): string {
+  const params = new URLSearchParams();
+  const query = searchQuery.value.trim();
 
-  if (match) category.value = match;
+  if (query) params.set('q', query);
+  if (selectedCategories.value[0]) {
+    params.set('category', selectedCategories.value[0].toLowerCase());
+  }
+  selectedLicenses.value.forEach((value) => params.append('license', value));
+  if (animatedOnly.value) params.set('animated', 'true');
+  if (sortBy.value !== 'name') params.set('sort', sortBy.value);
+
+  const search = params.toString();
+
+  return search ? `?${search}` : '';
 }
 
-onMounted(applyCategoryHash);
-useEventListener('hashchange', applyCategoryHash);
+let pagePath = '';
+let lastSearch = '';
+
+/**
+ * Reads the filters from the URL, so a link, a reload and the way back from a
+ * style find the list as it was. `/styles/#characters`, the link in a style's
+ * crumbs, still opens that category.
+ */
+function applyUrl() {
+  if (window.location.pathname !== pagePath) return;
+  if (window.location.search === filtersToSearch() && !window.location.hash) {
+    return;
+  }
+
+  writeUrl.stop();
+
+  const params = new URLSearchParams(window.location.search);
+  const wanted = (params.get('category') ?? route.hash.slice(1)).toLowerCase();
+  const sort = params.get('sort');
+
+  searchQuery.value = params.get('q') ?? '';
+  category.value =
+    availableCategories.value.find((name) => name.toLowerCase() === wanted) ??
+    ALL;
+  selectedLicenses.value = params
+    .getAll('license')
+    .filter((value) => availableLicenses.value.includes(value));
+  animatedOnly.value = params.get('animated') === 'true';
+  sortBy.value = sortOptions.some((option) => option.value === sort)
+    ? (sort as SortMode)
+    : 'name';
+  lastSearch = filtersToSearch();
+}
+
+/**
+ * Replaces the URL without a history entry, and tells the router, which keeps
+ * its own copy of the query. Waits for a pause in typing, as Safari limits how
+ * often a page may do this.
+ */
+function replaceUrl() {
+  if (window.location.pathname !== pagePath) return;
+
+  history.replaceState(history.state, '', pagePath + filtersToSearch());
+  route.query = window.location.search;
+  route.hash = '';
+}
+
+const writeUrl = useTimeoutFn(replaceUrl, 200, { immediate: false });
+
+/** Writes a pending change at once, before a click can leave the page. */
+function flushUrl() {
+  if (!writeUrl.isPending.value) return;
+
+  writeUrl.stop();
+  replaceUrl();
+}
+
+onMounted(() => {
+  pagePath = window.location.pathname;
+  applyUrl();
+  lastSearch = filtersToSearch();
+});
+
+watch(() => route.query + route.hash, applyUrl);
+
+const statusLine = ref<HTMLElement | null>(null);
+const sidebar = ref<HTMLElement | null>(null);
+const list = ref<HTMLElement | null>(null);
+
+/**
+ * After a change the first result has to be in view, or a shorter list leaves
+ * the reader looking at the footer. A sidebar that scrolls with the page
+ * stays put as long as results stand next to it, so the control just used
+ * does not jump away.
+ */
+function revealResults() {
+  const line = statusLine.value;
+
+  if (!line) return;
+
+  const header = parseFloat(
+    getComputedStyle(line).getPropertyValue('--db-header-h'),
+  );
+
+  if (line.getBoundingClientRect().top >= header) return;
+
+  const side = sidebar.value;
+  const sideScrolls =
+    side?.offsetParent != null && getComputedStyle(side).position !== 'sticky';
+  const resultsInView =
+    (list.value?.getBoundingClientRect().bottom ?? 0) > header + 120;
+
+  if (sideScrolls && resultsInView) return;
+
+  line.scrollIntoView({ block: 'start', behavior: 'instant' });
+}
+
+watch(
+  [searchQuery, selectedCategories, selectedLicenses, animatedOnly, sortBy],
+  () => {
+    const search = filtersToSearch();
+
+    if (search === lastSearch) return;
+
+    lastSearch = search;
+    writeUrl.start();
+
+    // The page does not scroll under an open sheet: closing it reveals.
+    if (!sheetOpen.value) revealResults();
+  },
+  { flush: 'post' },
+);
 
 function count(test: (style: (typeof allStyles.value)[number]) => boolean) {
   return allStyles.value.filter(test).length;
@@ -136,7 +248,27 @@ function clearFilters() {
   animatedOnly.value = false;
 }
 
+/** Whether anything narrows the list, the search included. */
+const isFiltered = computed(
+  () => activeFilters.value > 0 || searchQuery.value.trim() !== '',
+);
+
+const resultLabel = computed(() => {
+  const total = allStyles.value.length;
+
+  return isFiltered.value
+    ? `${styleList.value.length} of ${total} styles`
+    : `${total} styles`;
+});
+
 const sheetOpen = ref(false);
+
+watch(sheetOpen, async (open) => {
+  if (open) return;
+
+  await nextTick();
+  revealResults();
+});
 
 function usageRank(slug: string): number {
   return rankingByName.value?.[slug]?.rank ?? Number.MAX_SAFE_INTEGER;
@@ -187,9 +319,13 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
 </script>
 
 <template>
-  <div class="site-styles-table">
+  <div class="site-styles-table" @focusout="flushUrl">
     <div class="site-container site-styles-layout">
-      <aside class="site-box is-soft site-styles-side" aria-label="Filters">
+      <aside
+        ref="sidebar"
+        class="site-box is-soft site-styles-side"
+        aria-label="Filters"
+      >
         <SiteSearch
           v-model="searchQuery"
           placeholder="Name or artist"
@@ -231,7 +367,20 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
           </button>
         </div>
 
-        <div v-if="styles.length" class="site-styles-list">
+        <div ref="statusLine" class="site-styles-status">
+          <p class="site-styles-status-text" role="status">{{ resultLabel }}</p>
+          <button
+            v-if="isFiltered"
+            type="button"
+            class="site-btn site-btn-ghost site-btn-sm"
+            @click="clearFilters"
+          >
+            <X :size="16" aria-hidden="true" />
+            Clear filters
+          </button>
+        </div>
+
+        <div v-if="styles.length" ref="list" class="site-styles-list">
           <SiteStylesRow
             v-for="(style, index) in styles"
             :key="style.slug"
@@ -249,13 +398,6 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
         </div>
         <div v-else class="site-styles-empty">
           <p class="site-text">No styles match these filters.</p>
-          <button
-            type="button"
-            class="site-btn site-btn-secondary"
-            @click="clearFilters"
-          >
-            Clear filters
-          </button>
         </div>
       </div>
     </div>
@@ -277,7 +419,7 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
           <button
             type="button"
             class="site-btn site-btn-secondary"
-            :disabled="!activeFilters"
+            :disabled="!isFiltered"
             @click="clearFilters"
           >
             Clear
@@ -375,6 +517,27 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
     font-size: 12px;
     line-height: 18px;
     text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Always there and always as high as its button, so the list does not move
+   when a filter turns the button on. */
+.site-styles-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+  margin-bottom: 12px;
+  scroll-margin-top: calc(var(--db-header-h) + 16px);
+
+  &-text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 600;
+    color: var(--db-ink-2);
     font-variant-numeric: tabular-nums;
   }
 }

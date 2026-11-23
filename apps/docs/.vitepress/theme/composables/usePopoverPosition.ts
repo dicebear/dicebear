@@ -8,6 +8,8 @@ interface PopoverPositionOptions {
   /** Anchor to use when `show()` gets no event, for example a trigger slot. */
   anchor?: () => HTMLElement | null | undefined;
   align?: () => PopoverAlign;
+  /** Makes the panel at least as wide as its anchor, as a select's list is. */
+  matchWidth?: () => boolean;
   onShow?: () => void;
   onHide?: () => void;
 }
@@ -58,6 +60,12 @@ export function usePopoverPosition(options: PopoverPositionOptions) {
     // Measure the panel at its own height, not at a limit set last time.
     el.style.maxHeight = '';
 
+    const minWidth = options.matchWidth?.()
+      ? `${Math.ceil(rect.width)}px`
+      : undefined;
+
+    if (minWidth) el.style.minWidth = minWidth;
+
     const width = el.offsetWidth;
     const height = el.offsetHeight;
     const align = options.align?.() ?? 'left';
@@ -92,6 +100,7 @@ export function usePopoverPosition(options: PopoverPositionOptions) {
     style.value = {
       top: `${Math.round(top)}px`,
       left: `${Math.round(left)}px`,
+      ...(minWidth ? { minWidth } : {}),
       ...(maxHeight === undefined
         ? {}
         : { maxHeight: `${Math.floor(maxHeight)}px` }),

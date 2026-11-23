@@ -41,6 +41,8 @@ const props = withDefaults(
     align?: PopoverAlign;
     /** Accessible name of the menu. */
     label?: string;
+    /** Fills its column, and the list opens as wide as the trigger. */
+    fluid?: boolean;
   }>(),
   { align: 'left', label: undefined },
 );
@@ -66,6 +68,7 @@ const { ready, native, open, style, show, hide, toggle, onToggle } =
     anchor: () =>
       (trigger.value?.firstElementChild as HTMLElement | null) ?? trigger.value,
     align: () => props.align,
+    matchWidth: () => props.fluid,
     onShow: () => {
       emit('show');
       focusItem('first');
@@ -181,7 +184,7 @@ defineExpose({ toggle: toggleMenu, show: showMenu, hide: hideMenu });
 </script>
 
 <template>
-  <span class="site-menu">
+  <span class="site-menu" :class="{ 'is-fluid': fluid }">
     <span
       ref="trigger"
       class="site-menu-trigger"
@@ -290,6 +293,11 @@ defineExpose({ toggle: toggleMenu, show: showMenu, hide: hideMenu });
 .site-menu {
   position: relative;
   display: inline-flex;
+
+  &.is-fluid {
+    display: flex;
+    width: 100%;
+  }
 
   &-trigger {
     display: flex;

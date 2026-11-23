@@ -22,17 +22,49 @@
 
   color: var(--db-ink);
 
-  .shell {
-    border-radius: var(--db-radius-card);
+  /* Doubled classes: the box's own scoped rules weigh as much as a single
+     one and load later. */
+  .shell.shell {
     box-shadow: var(--db-shadow-pop);
+
+    /* On a phone the box fills the screen and keeps its square corners. */
+    @media (min-width: 768px) {
+      border-radius: var(--db-radius-card);
+    }
   }
 
-  .search-bar {
-    border-radius: 24px;
+  /* The field every search on the site has: a 44px pill on the panel. */
+  .search-bar.search-bar {
+    box-sizing: border-box;
+    height: 44px;
+    padding: 0 6px 0 8px;
     border-color: var(--db-field-border);
+    border-radius: 22px;
+    background: var(--db-panel);
+    transition:
+      border-color 0.12s,
+      box-shadow 0.12s;
+
+    &:hover {
+      border-color: var(--db-ink-2);
+    }
+
+    &:focus-within {
+      border-color: var(--db-focus);
+      box-shadow: 0 0 0 1px var(--db-focus);
+    }
   }
 
-  .result {
+  .search-actions button {
+    border-radius: 50%;
+    transition: background-color 0.12s;
+
+    &:not([disabled]):hover {
+      background: color-mix(in srgb, var(--db-ink) 12%, transparent);
+    }
+  }
+
+  .result.result {
     border-radius: var(--db-radius-5);
   }
 

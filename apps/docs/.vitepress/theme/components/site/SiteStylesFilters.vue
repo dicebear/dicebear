@@ -5,9 +5,10 @@
  * would list with the other filters as they are. The sidebar and the phone
  * sheet each render their own copy on the same state.
  */
-import { useId } from 'vue';
+import { computed, useId } from 'vue';
+import { ChevronDown } from '@lucide/vue';
 import SiteCheckbox from './SiteCheckbox.vue';
-import SiteSelect from './SiteSelect.vue';
+import SiteMenu, { type SiteMenuItem } from './SiteMenu.vue';
 
 export interface SiteStylesFacet {
   value: string;
@@ -15,7 +16,7 @@ export interface SiteStylesFacet {
   count: number;
 }
 
-defineProps<{
+const props = defineProps<{
   categoryOptions: SiteStylesFacet[];
   licenseOptions: SiteStylesFacet[];
   animatedCount: number;
@@ -32,6 +33,20 @@ const sort = defineModel<S>('sort', { required: true });
 // Both copies are in the page at once, and radios sharing a name would form
 // one group across them.
 const name = useId();
+
+const sortLabel = computed(
+  () => props.sortOptions.find((option) => option.value === sort.value)?.label,
+);
+
+const sortItems = computed<SiteMenuItem[]>(() =>
+  props.sortOptions.map((option) => ({
+    label: option.label,
+    checked: option.value === sort.value,
+    command: () => {
+      sort.value = option.value;
+    },
+  })),
+);
 
 function toggleLicense(value: string, on: boolean) {
   selectedLicenses.value = on
@@ -99,13 +114,29 @@ function toggleLicense(value: string, on: boolean) {
 
     <div class="site-styles-filters-sort">
       <span class="site-styles-filters-label" aria-hidden="true">Sort by</span>
-      <SiteSelect v-model="sort" :options="sortOptions" label="Sort by" fluid />
+      <SiteMenu :items="sortItems" label="Sort by" fluid>
+        <template #trigger="{ open, toggle }">
+          <button
+            type="button"
+            class="site-styles-filters-sort-button"
+            :aria-label="`Sort by ${sortLabel}`"
+            :aria-expanded="open"
+            aria-haspopup="menu"
+            @click="toggle"
+          >
+            {{ sortLabel }}
+            <ChevronDown :size="16" aria-hidden="true" />
+          </button>
+        </template>
+      </SiteMenu>
       <p v-if="sortHint" class="site-styles-filters-hint">{{ sortHint }}</p>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/control' as c;
+
 .site-styles-filters {
   display: flex;
   flex-direction: column;
@@ -181,6 +212,19 @@ function toggleLicense(value: string, on: boolean) {
   &-sort {
     display: flex;
     flex-direction: column;
+  }
+
+  &-sort-button {
+    @include c.control-picker(md);
+
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 16px;
+
+    svg {
+      flex-shrink: 0;
+      color: var(--db-muted);
+    }
   }
 
   &-hint {
