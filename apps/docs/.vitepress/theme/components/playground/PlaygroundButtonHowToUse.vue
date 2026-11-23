@@ -426,7 +426,7 @@ defineExpose({ show: () => (open.value = true) });
         tone="warn"
         compact
       >
-        Some options you selected are not supported by our public HTTP-API and
+        Some options you selected are not supported by our public HTTP API and
         have been omitted from the URL. You can enable them by
         <a href="/recipes/self-host-the-http-api/">hosting your own instance</a
         >.

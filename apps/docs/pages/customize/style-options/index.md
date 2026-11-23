@@ -107,18 +107,20 @@ Console.WriteLine(descriptor.ToJsonString());
 The descriptor maps each option name to a field descriptor. Each descriptor has
 a `type` and further properties depending on the type:
 
-| Type      | Properties                            | Example option           |
-| --------- | ------------------------------------- | ------------------------ |
-| `string`  | `list?`                               | `seed`, `fontFamily`     |
-| `number`  | `min?`, `max?`, `list?`               | `fontWeight`             |
-| `boolean` |                                       | `idRandomization`        |
-| `enum`    | `values`, `list?`, `weighted?`        | `flip`, `*Variant`       |
-| `color`   | `list?`, `contrastTo?`, `notEqualTo?` | `*Color`                 |
-| `range`   | `min?`, `max?`                        | `rotate`, `borderRadius` |
+| Type      | Properties                              | Example option           |
+| --------- | --------------------------------------- | ------------------------ |
+| `string`  | `list?`                                 | `seed`, `fontFamily`     |
+| `number`  | `min?`, `max?`, `list?`                 | `fontWeight`             |
+| `boolean` |                                         | `idRandomization`        |
+| `enum`    | `values`, `list?`, `weighted?`, `open?` | `flip`, `*Variant`       |
+| `color`   | `list?`, `contrastTo?`, `notEqualTo?`   | `*Color`                 |
+| `range`   | `min?`, `max?`                          | `rotate`, `borderRadius` |
 
 - `list` means the option also accepts an array of values.
 - `weighted` means an enum option also accepts a map of weights, such as
   `{ round: 4, mono: 1 }`.
+- `open` means `values` are suggestions and other input is valid too, as with
+  the `!` form of `tags`.
 - `contrastTo` names the color group this group is contrasted against, so a UI
   can show that the renderer picks this color for contrast rather than at
   random.

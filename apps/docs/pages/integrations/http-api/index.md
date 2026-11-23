@@ -61,7 +61,8 @@ https://api.dicebear.com/11.x
 
 ```json
 {
-  "styles": ["adventurer", "adventurer-neutral", "avataaars", "..."]
+  "styles": ["adventurer", "adventurer-neutral", "avataaars", "..."],
+  "documentation": "https://www.dicebear.com/llms.txt"
 }
 ```
 

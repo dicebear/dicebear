@@ -33,7 +33,6 @@ export const DEFINITION_READERS = [
   'Dart',
   'C#',
   'CLI',
-  'HTTP API',
 ];
 
 /** The day of the first commit in the repository. */

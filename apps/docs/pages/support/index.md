@@ -12,8 +12,9 @@ import SiteSupportPage from '@theme/components/site/SiteSupportPage.vue';
 
 <SiteSupportPage>
 
-DiceBear is free and MIT licensed. There is no paid tier and no company behind
-it. If you use it and want to give something back, you have a few options.
+The DiceBear code is free and MIT licensed. There is no paid tier and no company
+behind it. If you use it and want to give something back, you have a few
+options.
 
 <template #star>
 
@@ -47,7 +48,7 @@ answered by anyone who has used DiceBear in a real project.
 <template #sponsor>
 
 bunny.net supports DiceBear with CDN infrastructure. It sits in front of the
-hosted API, so the API stays free of charge.
+hosted API, so the API stays free for non-commercial use.
 
 </template>
 

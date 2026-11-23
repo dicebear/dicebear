@@ -7,11 +7,11 @@ description: >
 
 # Self-hosted avatar API: host DiceBear yourself
 
-The public HTTP API is free and needs no signup, and for most projects that is
-all you ever use. Hosting it yourself becomes interesting when avatar requests
-should stay on your own infrastructure, be it for data control, for your own
-rate limits, or because your app runs in a closed network. The source code is on
-[GitHub](https://github.com/dicebear/api).
+The public HTTP API is free for non-commercial use and needs no signup, and for
+most projects that is all you ever use. Hosting it yourself becomes interesting
+when avatar requests should stay on your own infrastructure, be it for data
+control, for your own rate limits, or because your app runs in a closed network.
+The source code is on [GitHub](https://github.com/dicebear/api).
 
 ## With Docker
 

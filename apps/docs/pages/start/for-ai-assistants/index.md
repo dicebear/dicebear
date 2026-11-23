@@ -126,8 +126,10 @@ it through the `animation` option: `true` plays every animation of a style,
 `${name}AnimationSpeed` set the pace, and `animationDelay` or
 `${name}AnimationDelay` shift the start. The `animationVariant` option and the
 `animation` tag from 10.x are gone. Passing them renders the static avatar.
-Nothing else changed, and the static output of every style is byte-identical to
-10.x.
+Static avatars look the same as in 10.x, apart from fixes to Notionists and
+Avataaars and the `{color}ColorOrder: 'fixed'` change. The markup is not
+byte-identical: every component `<use>` now carries a `data-dicebear-component`
+attribute.
 
 :::
 

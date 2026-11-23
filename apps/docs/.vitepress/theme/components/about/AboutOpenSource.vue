@@ -51,7 +51,7 @@ const rows = computed<AboutRow[]>(() => [
   },
   {
     title: 'A free hosted API',
-    text: 'bunny.net sponsors the CDN behind the hosted API, so it stays free of charge.',
+    text: 'bunny.net sponsors the CDN behind the hosted API, so it stays free for non-commercial use.',
     link: 'Visit bunny.net',
     href: 'https://bunny.net/',
     sponsored: true,
@@ -70,7 +70,7 @@ const rows = computed<AboutRow[]>(() => [
     tone="mint"
     layout="stack"
     title="No paid tier. No company behind it."
-    hint="DiceBear is MIT licensed and built in the open. Bug reports, pull requests and new styles are welcome."
+    hint="The DiceBear code is MIT licensed and built in the open. Bug reports, pull requests and new styles are welcome."
   >
     <template #title>No paid tier<br />No company behind it</template>
     <template #aside>

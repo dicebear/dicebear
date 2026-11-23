@@ -14,8 +14,7 @@ import SiteSection from '../site/SiteSection.vue';
     <SiteComparisonTable />
     <p class="site-text about-compare-note">
       This comparison is based on publicly available information and may not
-      reflect the latest updates. Each tool has its own strengths, so choose
-      what works best for your project.
+      reflect the latest updates.
     </p>
   </SiteSection>
 </template>

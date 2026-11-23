@@ -1,14 +1,13 @@
 ---
 title: Contribute to the Editor
 description: >
-  Pointer to the contribution guide for the DiceBear editor at
-  editor.dicebear.com.
+  How to set up and contribute to the DiceBear editor at editor.dicebear.com.
 ---
 
 # Contribute to the editor
 
 The editor at [editor.dicebear.com](https://editor.dicebear.com) is a
-[Vue 3](https://vuejs.org/) + [Vite](https://vitejs.dev/) +
+[Vue 3](https://vuejs.org/) + [Vite](https://vite.dev/) +
 [PrimeVue](https://primevue.org/) app.
 
 It lives under `apps/editor/` in the main

@@ -23,9 +23,9 @@ happens under the hood.
 ## Where it runs
 
 Libraries for JavaScript, PHP, Python, Rust, Go, Dart, and C# generate avatars
-in your own code. The free HTTP API serves them by URL, the CLI exports files in
-batches, and the [Editor](https://editor.dicebear.com) needs no code at all. All
-of them render the same avatar for the same seed. The
+in your own code. The HTTP API, free for non-commercial use, serves them by URL,
+the CLI exports files in batches, and the [Editor](https://editor.dicebear.com)
+needs no code at all. All of them render the same avatar for the same seed. The
 [integration picker](/start/pick-your-integration/) helps you choose.
 
 ## Privacy

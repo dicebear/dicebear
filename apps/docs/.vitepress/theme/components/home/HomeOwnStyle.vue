@@ -48,7 +48,7 @@ const GALLERY_ALT =
     <h2 class="site-headline">A style of your own</h2>
     <p class="site-lead home-own-lead">
       Draw it in Figma or write it by hand. Either way you end up with one file
-      that works wherever DiceBear runs.
+      that works in the libraries, the CLI and the Playground.
     </p>
 
     <div class="home-own-grid">

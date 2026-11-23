@@ -1,14 +1,13 @@
 ---
 title: Contribute to the HTTP API
 description: >
-  Pointer to the contribution guide for the DiceBear HTTP API at
-  api.dicebear.com.
+  How to set up and contribute to the DiceBear HTTP API at api.dicebear.com.
 ---
 
 # Contribute to the API
 
 The HTTP API at [api.dicebear.com](https://api.dicebear.com) is a
-[Fastify](https://www.fastify.io/) server that lives in its own repository:
+[Fastify](https://fastify.dev/) server that lives in its own repository:
 [`dicebear/api`](https://github.com/dicebear/api).
 
 The contribution guide, including local setup, the test suite, the Docker-based

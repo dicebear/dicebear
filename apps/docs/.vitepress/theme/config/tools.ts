@@ -24,7 +24,7 @@ export const tools: ToolEntry[] = [
     href: 'https://editor.dicebear.com',
     host: 'editor.dicebear.com',
     name: 'Editor',
-    text: 'Design your own DiceBear-compatible avatar style in a visual editor. Export the definition and use it like any built-in style.',
+    text: 'Put together a single avatar in a visual editor, without any code, and download it.',
   },
   {
     slug: 'studio',

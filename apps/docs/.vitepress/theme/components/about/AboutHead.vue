@@ -56,8 +56,8 @@ const facts = computed(() => {
   <SitePageHead :crumbs="crumbs" title="Why DiceBear?">
     <p>
       DiceBear is an open source avatar library. It draws avatars from a seed,
-      in {{ theme.styleCount }} styles, from your own code or through a free
-      HTTP API.
+      in {{ theme.styleCount }} styles, from your own code or through an HTTP
+      API that is free for non-commercial use.
     </p>
     <template #actions>
       <a href="/playground/" class="site-btn site-btn-lg site-btn-primary">
@@ -69,7 +69,10 @@ const facts = computed(() => {
     </template>
   </SitePageHead>
 
-  <section class="site-container site-grid about-head-facts" aria-label="Facts">
+  <section
+    class="site-container site-grid is-four about-head-facts"
+    aria-label="Facts"
+  >
     <div
       v-for="fact in facts"
       :key="fact.figure"
@@ -83,8 +86,6 @@ const facts = computed(() => {
 
 <style scoped lang="scss">
 .about-head-facts {
-  --site-grid-min: 240px;
-
   padding-top: clamp(40px, 5vw, 72px);
 }
 </style>

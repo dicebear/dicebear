@@ -12,9 +12,9 @@ browser-based editor, and as a plugin for Figma. All of them render the same
 avatar for the same seed, so you can switch later without your avatars changing.
 
 **Can you point an `<img>` tag at a URL?** Then the
-[HTTP API](/integrations/http-api/) is the shortest path. It's free, needs no
-installation, and works from any language and platform. If you're unsure, start
-here.
+[HTTP API](/integrations/http-api/) is the shortest path. It's free for
+non-commercial use, needs no installation, and works from any language and
+platform. If you're unsure, start here.
 
 **Do you want avatars generated on your own infrastructure?** Use a library.
 Your user data stays on your systems and there's no external request per avatar.

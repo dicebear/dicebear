@@ -1,4 +1,5 @@
 ---
+title: Avatar Style Licenses
 layout: page
 editLink: false
 sidebar: false
