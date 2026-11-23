@@ -1,21 +1,27 @@
 <script setup lang="ts">
 /**
  * One split button. The wide part saves the avatar as PNG, the format most
- * downloads ask for. The arrow holds SVG and the other formats, copying the
- * SVG and the batch download. An uploaded style only renders in the
- * browser, so it saves SVG and has no raster formats.
+ * downloads ask for. The arrow holds SVG and the other formats and copying
+ * the SVG. Seed-based views add the batch download. The editor builds one
+ * fixed avatar, where more seeds would only repeat it, so it offers the image
+ * URL instead. An uploaded style only renders in the browser, so it saves SVG
+ * and has neither raster formats nor a URL.
  */
 import { computed, ref } from 'vue';
 import { kebabCase } from 'change-case';
 import copy from 'copy-to-clipboard';
-import { ChevronDown, Copy, Download } from '@lucide/vue';
+import { ChevronDown, Copy, Download, Link } from '@lucide/vue';
 import { Avatar } from '@dicebear/core';
-import { getAvatarApiUrl } from '@theme/utils/avatar/api';
+import {
+  getAvatarApiUrl,
+  unsupportedHttpApiOptions,
+} from '@theme/utils/avatar/api';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
 import { track, styleLabel } from '@theme/utils/track';
 import SiteDialog from '../site/SiteDialog.vue';
 import SiteMenu, { type SiteMenuItem } from '../site/SiteMenu.vue';
+import SiteNotice from '../site/SiteNotice.vue';
 import PlaygroundBatchDownload from './PlaygroundBatchDownload.vue';
 import PlaygroundDone from './PlaygroundDone.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
@@ -35,11 +41,13 @@ const { store, open, options, showDialog } = usePlaygroundDialog(
 
 const batchOpen = ref(false);
 const raster = computed(() => !store.isCustomStyle);
+const editor = computed(() => store.mode === 'editor');
 
 // The dialog after a download or a copy, with the words for either.
 const done = ref({
   title: 'Your avatar will be downloaded',
   source: 'download',
+  omitted: false,
 });
 
 async function svgMarkup(): Promise<string> {
@@ -69,6 +77,7 @@ async function saveAs(format: string, makeBlob: () => Promise<Blob>) {
     done.value = {
       title: 'Your avatar will be downloaded',
       source: 'download',
+      omitted: false,
     };
     track('Playground: Download', {
       style: styleLabel(store.avatarStyleName),
@@ -78,6 +87,7 @@ async function saveAs(format: string, makeBlob: () => Promise<Blob>) {
     done.value = {
       title: 'Your avatar could not be downloaded',
       source: 'download',
+      omitted: false,
     };
   }
 
@@ -124,6 +134,34 @@ async function copySvg() {
       ? 'Your avatar was copied'
       : 'Your avatar could not be copied',
     source: 'copy',
+    omitted: false,
+  };
+  showDialog();
+}
+
+async function copyUrl() {
+  const successful = await copy(
+    getAvatarApiUrl(store.avatarStyleName, options.value),
+  );
+
+  if (successful) {
+    track('Playground: Copy URL', {
+      style: styleLabel(store.avatarStyleName),
+    });
+  }
+
+  done.value = {
+    title: successful
+      ? 'Your image URL was copied'
+      : 'Your image URL could not be copied',
+    source: 'copy-url',
+    // The public API ignores a few options, so the picture can differ.
+    omitted:
+      successful &&
+      Object.entries(options.value).some(
+        ([key, value]) =>
+          unsupportedHttpApiOptions.has(key) && value !== undefined,
+      ),
   };
   showDialog();
 }
@@ -165,12 +203,24 @@ const items = computed<SiteMenuItem[]>(() => [
       ] satisfies SiteMenuItem[])
     : []),
   { label: 'Copy SVG', icon: Copy, command: () => void copySvg() },
-  { separator: true },
-  {
-    label: 'Batch download',
-    hint: 'many seeds',
-    command: () => (batchOpen.value = true),
-  },
+  ...(editor.value
+    ? raster.value
+      ? ([
+          {
+            label: 'Copy image URL',
+            icon: Link,
+            command: () => void copyUrl(),
+          },
+        ] satisfies SiteMenuItem[])
+      : []
+    : ([
+        { separator: true },
+        {
+          label: 'Batch download',
+          hint: 'many seeds',
+          command: () => (batchOpen.value = true),
+        },
+      ] satisfies SiteMenuItem[])),
 ]);
 </script>
 
@@ -214,7 +264,13 @@ const items = computed<SiteMenuItem[]>(() => [
     :title="done.title"
     :options="options"
     :source="done.source"
-  />
+  >
+    <SiteNotice v-if="done.omitted" tone="warn" compact>
+      Some options you selected are not supported by our public HTTP API and
+      have been omitted from the URL. You can enable them by
+      <a href="/recipes/self-host-the-http-api/">hosting your own instance</a>.
+    </SiteNotice>
+  </PlaygroundDone>
 
   <SiteDialog
     v-model:open="batchOpen"

@@ -352,11 +352,7 @@ async function showAdvanced() {
           <PlaygroundButtonDownload :seed="seed" primary compact />
         </template>
         <template v-if="editor" #controls>
-          <PlaygroundEditorBar
-            :seed="seed"
-            :actions="!phone"
-            @how-to-use="howToUse?.show()"
-          />
+          <PlaygroundEditorBar :seed="seed" :actions="!phone" />
         </template>
         <PlaygroundEditor v-if="editor && !phone" />
       </PlaygroundStage>

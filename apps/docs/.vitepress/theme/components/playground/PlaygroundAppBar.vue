@@ -3,8 +3,9 @@
  * The bar of the playground on a phone, in place of the site header and the
  * toolbar: the bear leads home, the style opens its list, the drawing of the
  * view opens the three views with what each is for, and the menu holds what
- * is used less often (how to use, reset, option files), the pages of the
- * site and the license. Undo, redo and the download stand on the stage.
+ * is used less often (how to use outside the editor, reset, option files),
+ * the pages of the site and the license. Undo, redo and the download stand on
+ * the stage.
  */
 import { computed, ref } from 'vue';
 import { useData, withBase } from 'vitepress';
@@ -177,6 +178,7 @@ const links = computed(() => [
       <div class="pg-appbar-list">
         <p class="pg-appbar-group">Playground</p>
         <button
+          v-if="store.mode !== 'editor'"
           type="button"
           class="pg-appbar-item"
           @click="run(() => emit('how-to-use'))"

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 /**
  * The row under the avatar in the editor view: the shape on the left,
- * Randomize in the middle, the ways out on the right. The editor has no
- * column of its own, so the actions live here. A phone keeps them in the bar
- * at the bottom instead.
+ * Randomize in the middle, saving on the right. The editor has no column of
+ * its own, so the download lives here. A phone keeps it on the stage instead.
  */
 import { inject } from 'vue';
 import { Shuffle } from '@lucide/vue';
@@ -18,7 +17,7 @@ import {
 } from '@theme/composables/usePlaygroundShape';
 import { track, styleLabel } from '@theme/utils/track';
 import SiteSegmented from '../site/SiteSegmented.vue';
-import PlaygroundEditorActions from './PlaygroundEditorActions.vue';
+import PlaygroundButtonDownload from './PlaygroundButtonDownload.vue';
 
 withDefaults(
   defineProps<{
@@ -27,10 +26,6 @@ withDefaults(
   }>(),
   { actions: true },
 );
-
-const emit = defineEmits<{
-  'how-to-use': [];
-}>();
 
 const injected = inject(playgroundEntriesKey);
 
@@ -88,12 +83,9 @@ function randomize() {
       Randomize
     </button>
 
-    <PlaygroundEditorActions
-      v-if="actions"
-      :seed="seed"
-      class="pg-editor-bar-actions"
-      @how-to-use="emit('how-to-use')"
-    />
+    <div v-if="actions" class="pg-editor-bar-actions">
+      <PlaygroundButtonDownload :seed="seed" primary />
+    </div>
   </div>
 </template>
 
@@ -118,7 +110,12 @@ function randomize() {
   }
 
   &-actions {
+    display: flex;
     justify-self: end;
+
+    :deep(.site-btn-group) {
+      width: auto;
+    }
   }
 
   /* Too narrow for one line: the shape and Randomize, the actions under
@@ -151,6 +148,10 @@ function randomize() {
       flex-basis: auto;
       grid-column: 1 / -1;
       justify-self: stretch;
+
+      :deep(.site-btn-group) {
+        width: 100%;
+      }
     }
   }
 
