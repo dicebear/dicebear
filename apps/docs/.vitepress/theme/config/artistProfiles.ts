@@ -2,18 +2,16 @@
  * Where to find the guest artists beyond the one URL their style definitions
  * carry, keyed by the creator's name in the definitions. The profiles come
  * from the artists' own pages and from the Figma files their styles are based
- * on. LinkedIn stays out for individuals: it shows little of their art and can
- * tie a pen name to a legal name.
+ * on, so an account the artist does not point to stays out even when the
+ * handle matches. LinkedIn stays out for individuals: it shows little of their
+ * art and can tie a pen name to a legal name.
  */
 export const ARTIST_PROFILES: Record<string, readonly string[]> = {
   'Ashley Seo': [
     'https://dribbble.com/ashley-seo',
     'https://www.figma.com/@ashleykseo',
   ],
-  'Davis Uche': [
-    'https://dribbble.com/davedirect3',
-    'https://www.figma.com/@davedirect3',
-  ],
+  'Davis Uche': ['https://www.figma.com/@davedirect3'],
   'Draftbit - draftbit.com': [
     'https://x.com/draftbit',
     'https://github.com/draftbit',
