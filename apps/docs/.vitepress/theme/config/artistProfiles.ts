@@ -57,12 +57,3 @@ export const ARTIST_PROFILES: Record<string, readonly string[]> = {
     'https://www.threads.net/@heyzoish',
   ],
 };
-
-/**
- * Creator URLs in the published definitions that no longer lead to the
- * artist. They replace the URL everywhere the site credits the creator.
- */
-export const CREATOR_URL_FIXES: Record<string, string> = {
-  // The team's own domain is parked.
-  'The Visual Team': 'https://www.figma.com/@thevisualteam',
-};
