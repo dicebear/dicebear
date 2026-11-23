@@ -595,6 +595,13 @@ function onOwnColor(event: Event) {
     color: var(--db-muted);
   }
 
+  /* A short window keeps more of the second row of tiles in view. */
+  @media (min-width: 960px) and (max-height: 799px) {
+    &-tiles {
+      padding: 12px 0;
+    }
+  }
+
   /* Without the page's edge the tray keeps 16px of its own, as everywhere
      else on a small screen. */
   @media (max-width: 959px) {

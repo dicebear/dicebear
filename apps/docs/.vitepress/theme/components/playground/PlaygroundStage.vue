@@ -339,6 +339,21 @@ function pickSeed(seed: string) {
     width: clamp(180px, calc(100dvh - 560px), 320px);
   }
 
+  /* A short, wide window such as a tablet held sideways: the controls stand
+     beside the avatar, so the height goes to the tray of parts. */
+  @media (min-width: 960px) and (max-height: 799px) {
+    &.is-editor &-ground {
+      flex-direction: row;
+      gap: 32px;
+      padding: 16px 0;
+    }
+
+    &.is-editor &-picture {
+      flex: none;
+      width: clamp(150px, calc(100dvh - 500px), 200px);
+    }
+  }
+
   /* Next to a panel the ground has a fixed height, and the avatar takes
      what the seed field and the row of seeds leave of it, so nothing is cut
      off in a short window such as a tablet held sideways. The field keeps a

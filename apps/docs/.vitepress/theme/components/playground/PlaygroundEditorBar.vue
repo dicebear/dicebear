@@ -121,6 +121,24 @@ function randomize() {
     justify-self: end;
   }
 
+  /* Beside the avatar in a short, wide window: the shape and Randomize, the
+     actions under them, as one block with even edges. */
+  @media (min-width: 960px) and (max-height: 799px) {
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 8px;
+    flex: none;
+    align-self: center;
+
+    &-random {
+      justify-self: stretch;
+    }
+
+    &-actions {
+      grid-column: 1 / -1;
+      justify-self: stretch;
+    }
+  }
+
   /* Too narrow for one line: the shape and Randomize, the actions under
      them. */
   @media (max-width: 959px) {
