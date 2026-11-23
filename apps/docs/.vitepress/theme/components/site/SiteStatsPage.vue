@@ -52,15 +52,23 @@ const perDay = computed(() => {
   return `${day.value} ${day.unit}`.trim();
 });
 
-/** The stickers around the rate, placed by hand. */
+/** The stickers around the rate, placed by hand, each on its own beat. */
 const CLOUD = [
-  { style: 'avataaars', x: 6, y: 8, w: 18.5, turn: -8 },
-  { style: 'notionists', x: 44, y: 2, w: 13.8, turn: 6 },
-  { style: 'thumbs', x: 70, y: 30, w: 16.9, turn: -5 },
-  { style: 'lorelei', x: 22, y: 46, w: 15.4, turn: 7 },
-  { style: 'bottts', x: 56, y: 62, w: 13.1, turn: -6 },
-  { style: 'pixel-art', x: 2, y: 70, w: 11.5, turn: 5 },
-  { style: 'shapes', x: 84, y: 74, w: 10.8, turn: 8 },
+  { style: 'avataaars', x: 5, y: 6, w: 22, turn: -8, time: 7.2, delay: -1.4 },
+  {
+    style: 'notionists',
+    x: 42,
+    y: 3,
+    w: 16.5,
+    turn: 6,
+    time: 5.8,
+    delay: -4.1,
+  },
+  { style: 'thumbs', x: 70, y: 26, w: 20, turn: -5, time: 6.6, delay: -2.7 },
+  { style: 'lorelei', x: 21, y: 44, w: 18.5, turn: 7, time: 8.1, delay: -5.6 },
+  { style: 'bottts', x: 54, y: 58, w: 15.5, turn: -6, time: 6.1, delay: -0.8 },
+  { style: 'pixel-art', x: 2, y: 70, w: 14, turn: 5, time: 7.7, delay: -3.5 },
+  { style: 'shapes', x: 83, y: 70, w: 13, turn: 8, time: 5.5, delay: -2.2 },
 ];
 
 /* Month by month */
@@ -168,6 +176,8 @@ const chartLabel = computed(() => {
               top: `${item.y}%`,
               width: `${item.w}%`,
               transform: `rotate(${item.turn}deg)`,
+              animationDuration: `${item.time}s`,
+              animationDelay: `${item.delay}s`,
             }"
           />
         </div>
@@ -314,8 +324,12 @@ const chartLabel = computed(() => {
     }
   }
 
-  /* Stickers scattered around the rate, placed in percent of the cloud. */
+  /* Stickers scattered around the rate, placed in percent of the cloud.
+     They float on `translate` and `rotate` alone, which the compositor runs
+     without layout or paint, and keep the tilt set in `transform`. */
   &-cloud {
+    --float: clamp(5px, 0.8vw, 12px);
+
     position: relative;
     flex: 1 1 320px;
     max-width: 520px;
@@ -323,6 +337,12 @@ const chartLabel = computed(() => {
 
     > :deep(.site-sticker) {
       position: absolute;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      > :deep(.site-sticker) {
+        animation: site-stats-float 6s ease-in-out infinite alternate;
+      }
     }
   }
 
@@ -388,6 +408,18 @@ const chartLabel = computed(() => {
         display: none;
       }
     }
+  }
+}
+
+@keyframes site-stats-float {
+  from {
+    translate: 0 calc(-1 * var(--float));
+    rotate: -1.5deg;
+  }
+
+  to {
+    translate: 0 var(--float);
+    rotate: 1.5deg;
   }
 }
 </style>
