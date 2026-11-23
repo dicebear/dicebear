@@ -30,10 +30,10 @@ your app gets a stable avatar, without uploads and without storing images.
 
 ## Pick a style
 
-The four styles above are a taste of %STYLE_COUNT%, drawn by different artists,
-from minimal geometric marks to fully illustrated characters and robots. No
-other avatar library offers a collection like it, and switching is one word in
-the URL:
+The four styles above are a taste of %STYLE_COUNT%, drawn by different
+[artists](/artists/), from minimal geometric marks to fully illustrated
+characters and robots. No other avatar library offers a collection like it, and
+switching is one word in the URL:
 
 ```html
 <img src="https://api.dicebear.com/11.x/bottts/svg?seed=Alice" alt="avatar" />

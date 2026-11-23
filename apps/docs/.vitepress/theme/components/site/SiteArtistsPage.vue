@@ -24,7 +24,11 @@ import type { ThemeOptions } from '@theme/types';
 import type { LicenseBucket } from '@theme/config/styleCategories';
 import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 import { useStyleRankings } from '@theme/composables/useStyleRankings';
-import { guestArtists, type ArtistLinkKind } from '@theme/utils/artists';
+import {
+  artistId,
+  guestArtists,
+  type ArtistLinkKind,
+} from '@theme/utils/artists';
 import UiIcon from '../ui/UiIcon.vue';
 import SiteAvatar from './SiteAvatar.vue';
 import SitePageHead from './SitePageHead.vue';
@@ -47,10 +51,6 @@ const ICONS: Partial<Record<ArtistLinkKind, { path: string }>> = {
   github: siGithub,
   substack: siSubstack,
 };
-
-function artistId(name: string): string {
-  return `artist-${kebabCase(name)}`;
-}
 
 /** "Avataaars, Bottts and 3 more": the most used styles come first. */
 function styleSummary(titles: string[]): string {

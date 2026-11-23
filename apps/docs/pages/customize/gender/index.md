@@ -16,7 +16,8 @@ look you want, such as the hair or facial hair, and leave the rest to the seed.
 
 The [Playground](/playground/) previews every option value and lets you combine
 them. Every [style page](/styles/) lists the same options with previews, and the
-[Editor](https://editor.dicebear.com) lets you adjust them without any code.
+Playground's [Editor](/playground/?mode=editor) lets you adjust them without any
+code.
 
 Pass the options you picked as
 [query parameters in the HTTP API](/integrations/http-api/#options) or as

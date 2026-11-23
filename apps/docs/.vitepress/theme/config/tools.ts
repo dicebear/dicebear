@@ -21,8 +21,7 @@ export const tools: ToolEntry[] = [
   },
   {
     slug: 'editor',
-    href: 'https://editor.dicebear.com',
-    host: 'editor.dicebear.com',
+    href: '/playground/?mode=editor',
     name: 'Editor',
     text: 'Put together a single avatar in a visual editor, without any code, and download it.',
   },

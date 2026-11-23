@@ -24,9 +24,9 @@ const crumbs = [{ text: 'Home', link: '/' }, { text: 'Styles' }];
 
 <SitePageHead :crumbs="crumbs" :title="title" aside-align="end" :aside-width="380">
 
-Characters, animals, robots, scenes and abstract marks. Every style is one word
-in your code, and every one has its own page with presets, options and the
-license it comes with.
+Characters, animals, robots, scenes and abstract marks, many of them by
+[independent artists](/artists/). Every style is one word in your code, and
+every one has its own page with presets, options and the license it comes with.
 
 <template #aside>
   <div class="site-fan" aria-hidden="true">

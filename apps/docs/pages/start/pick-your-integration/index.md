@@ -23,7 +23,7 @@ Pick your language below.
 **Do you need image files rather than running code?** The
 [CLI](/integrations/cli/) exports batches to SVG, PNG, JPEG, and more. For a
 single avatar, say a default profile picture for your app, the
-[Editor](https://editor.dicebear.com) is the no-code way.
+[Editor](/playground/?mode=editor) is the no-code way.
 
 **Designing before you build?** [DiceBear Studio](/integrations/figma/), our
 plugin for Figma, fills the placeholders in your mockups and tells the developer

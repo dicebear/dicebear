@@ -112,6 +112,8 @@ function licenseName(name?: string) {
           <h3>Styles by other artists</h3>
           <span>
             All avatars are remixes of the original works.
+            <a :href="withBase('/artists/')" class="site-link">All artists</a>
+            ·
             <a :href="withBase('/licenses/')" class="site-link">All licenses</a>
           </span>
         </div>

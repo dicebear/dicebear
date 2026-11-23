@@ -44,7 +44,7 @@ export const footerColumns: FooterColumn[] = [
       { label: 'Animated avatars', href: '/animated-avatars/' },
       { label: 'Playground', href: '/playground/' },
       { label: 'DiceBear Studio', href: '/studio/' },
-      { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
+      { label: 'Editor', href: '/playground/?mode=editor' },
       { label: 'Tools', href: '/tools/' },
     ],
   },

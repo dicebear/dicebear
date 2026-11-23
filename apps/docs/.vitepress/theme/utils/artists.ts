@@ -50,6 +50,16 @@ export interface Artist {
   styles: ArtistStyle[];
 }
 
+/** The anchor of an artist's entry on the artists page. */
+export function artistId(name: string): string {
+  return `artist-${kebabCase(name)}`;
+}
+
+/** The link to an artist's entry on the artists page. */
+export function artistHref(name: string): string {
+  return `/artists/#${artistId(name)}`;
+}
+
 /** Whether a style comes from an artist outside DiceBear. */
 export function isGuestStyle(meta: AvatarStyleMeta): boolean {
   return attributionKind(meta) !== 'own-work' && meta.creator !== undefined;

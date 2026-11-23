@@ -10,6 +10,7 @@ import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { getStyleCategory } from '@theme/config/styleCategories';
 import { useStyleRankings } from '@theme/composables/useStyleRankings';
+import { artistHref, isGuestStyle } from '@theme/utils/artists';
 import { formatLicenseName } from '@theme/utils/format';
 import { styleDisplayName } from '@theme/utils/styleMeta';
 import { safeHttpUrl } from '@theme/utils/url';
@@ -43,16 +44,19 @@ const crumbs = computed(() => [
   { text: title.value },
 ]);
 
-// Every chip leads somewhere: the artist's site, the license text, the
-// category on the overview, the animated styles. Where a style carries no
-// link of its own, the licenses page has the artist and the license.
+// Every chip leads somewhere: the artist's entry with all their profiles, the
+// license text, the category on the overview, the animated styles. Where a
+// style carries no link of its own, the licenses page has the artist and the
+// license.
 const chips = computed<SiteChip[]>(() => {
   const meta = style.value?.meta;
   const list: SiteChip[] = [];
   if (meta?.creator) {
     list.push({
       text: `by ${meta.creator}`,
-      href: safeHttpUrl(meta.homepage) ?? '/licenses/',
+      href: isGuestStyle(meta)
+        ? artistHref(meta.creator)
+        : (safeHttpUrl(meta.homepage) ?? '/licenses/'),
     });
   }
   if (meta?.license?.name) {

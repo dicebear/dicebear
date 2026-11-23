@@ -19,7 +19,7 @@ individual features like hair or glasses.
 
 [Playground](https://www.dicebear.com/playground) |
 [Documentation](https://www.dicebear.com/start/what-is-dicebear/) |
-[Editor](https://editor.dicebear.com)
+[Editor](https://www.dicebear.com/playground/?mode=editor)
 
 ## One library, seven languages
 
@@ -72,8 +72,8 @@ with Figma or from scratch.
 - The [CLI](https://www.dicebear.com/integrations/cli/) prints an avatar to the
   terminal or generates files in bulk:
   `npx dicebear create lorelei -o ./avatars --count 10`.
-- The [editor](https://editor.dicebear.com) lets you assemble a single avatar by
-  hand and export it.
+- The [editor](https://www.dicebear.com/playground/?mode=editor) lets you
+  assemble a single avatar by hand and export it.
 
 ## This repository
 

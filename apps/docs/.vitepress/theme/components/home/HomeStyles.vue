@@ -74,8 +74,11 @@ const belts = computed(() =>
     <div class="site-container home-styles-head">
       <h2 class="site-headline">{{ theme.styleCount }} styles in the box</h2>
       <p class="site-lead home-styles-lead">
-        People, animals, robots, scenes and abstract marks, by independent
-        artists and by us. Switching is one word in your code, and
+        People, animals, robots, scenes and abstract marks, by
+        <a :href="withBase('/artists/')" class="site-link"
+          >independent artists</a
+        >
+        and by us. Switching is one word in your code, and
         {{ theme.animatedStyleCount }} of them can move.
       </p>
     </div>
