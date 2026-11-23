@@ -114,7 +114,10 @@ const legal = legalLinks.filter((link) => link.label !== 'Licenses');
     margin-left: auto;
     white-space: nowrap;
 
+    /* Inline padding adds to the target, not to the line: 24px for a finger,
+       still inside the gap to the license line. */
     a {
+      padding-block: 4.5px;
       color: var(--db-ink-2);
       text-decoration: underline;
       text-underline-offset: 3px;

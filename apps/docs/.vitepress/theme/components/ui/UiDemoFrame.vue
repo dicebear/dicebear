@@ -48,7 +48,9 @@ defineProps<{
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0;
+  /* A larger target for a finger, without taking more room in the caption. */
+  margin-block: -6px;
+  padding: 6px 0;
   border: 0;
   background: none;
   font-family: inherit;
