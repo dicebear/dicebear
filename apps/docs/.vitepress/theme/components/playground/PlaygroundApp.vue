@@ -495,7 +495,7 @@ async function showAdvanced() {
 
   @media (max-width: 1279px) {
     &-body {
-      grid-template-columns: 224px minmax(0, 1fr) 324px;
+      grid-template-columns: 240px minmax(0, 1fr) 324px;
     }
 
     &-body.is-simple {
@@ -547,6 +547,19 @@ async function showAdvanced() {
     &.is-editor &-stage {
       flex: 1;
       min-height: 0;
+    }
+
+    /* A phone held sideways has no height for a tray that scrolls by
+       itself: the page scrolls instead. */
+    @media (min-width: 768px) and (max-height: 520px) {
+      &.is-fixed.is-editor {
+        height: auto;
+        min-height: calc(100dvh - var(--db-header-h));
+      }
+
+      &.is-editor &-stage {
+        flex: none;
+      }
     }
 
     /* The list of options, or the options of one entry, under the picture. */

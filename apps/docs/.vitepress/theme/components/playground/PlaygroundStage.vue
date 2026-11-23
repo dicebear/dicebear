@@ -341,7 +341,7 @@ function pickSeed(seed: string) {
 
   /* A short, wide window such as a tablet held sideways: the controls stand
      beside the avatar, so the height goes to the tray of parts. */
-  @media (min-width: 960px) and (max-height: 799px) {
+  @media (min-width: 768px) and (max-height: 799px) {
     &.is-editor &-ground {
       flex-direction: row;
       gap: 32px;

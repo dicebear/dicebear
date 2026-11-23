@@ -229,7 +229,19 @@ function pick(entry: PlaygroundEntry) {
   /* The eye is the last thing in its row, laid over the row's right end so
      the count keeps its place under the rows without one. */
   &-item &-row {
-    padding-right: 48px;
+    padding-right: 44px;
+  }
+
+  /* In the column a row keeps to its width, so a long name shortens instead
+     of pushing the count under the eye. As chips they keep their own width. */
+  @media (min-width: 960px) {
+    &-row {
+      gap: 8px;
+    }
+
+    &-item &-row {
+      flex: 1 1 0;
+    }
   }
 
   &-name {

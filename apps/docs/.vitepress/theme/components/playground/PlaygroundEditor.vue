@@ -596,7 +596,7 @@ function onOwnColor(event: Event) {
   }
 
   /* A short window keeps more of the second row of tiles in view. */
-  @media (min-width: 960px) and (max-height: 799px) {
+  @media (min-width: 768px) and (max-height: 799px) {
     &-tiles {
       padding: 12px 0;
     }
