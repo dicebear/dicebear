@@ -20,6 +20,10 @@
   /* Palette: neutrals */
   --db-c-paper: #fff9ef;
   --db-c-panel: #ffffff;
+  /* A surface set apart by a backdrop or an edge, so it needs no lighter
+     color: the paper in light, the lifted panel in dark. White stays for what
+     has to stand out from its ground, such as fields and cards on a block. */
+  --db-c-raised: var(--db-c-paper);
   --db-c-soft: #f7efe0;
   --db-c-line: #eadfca;
   /* The edge of a field or a chip: 3:1 on paper, so the control shows. */
@@ -56,6 +60,7 @@
   /* Roles. A tone box re-points these. */
   --db-paper: var(--db-c-paper);
   --db-panel: var(--db-c-panel);
+  --db-raised: var(--db-c-raised);
   --db-soft: var(--db-c-soft);
   --db-line: var(--db-c-line);
   --db-field-border: var(--db-c-field);
@@ -146,6 +151,7 @@
 .dark {
   --db-c-paper: #1c1b19;
   --db-c-panel: #272623;
+  --db-c-raised: var(--db-c-panel);
   --db-c-soft: #302e2b;
   --db-c-line: #45423d;
   --db-c-field: #8f8a80;

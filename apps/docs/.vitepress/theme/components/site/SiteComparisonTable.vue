@@ -162,8 +162,8 @@ const rows = computed(() =>
       left: 0;
       z-index: 1;
       width: 150px;
-      background: var(--db-panel);
-      box-shadow: -32px 0 0 var(--db-panel);
+      background: var(--db-raised);
+      box-shadow: -32px 0 0 var(--db-raised);
     }
   }
 }

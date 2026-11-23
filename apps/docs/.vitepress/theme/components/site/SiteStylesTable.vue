@@ -413,7 +413,7 @@ function rowSeeds(avatars: { seed: string }[]): string[] {
     gap: 8px;
     margin-top: -12px;
     padding: 12px 0 max(16px, env(safe-area-inset-bottom));
-    background: var(--db-panel);
+    background: var(--db-paper);
   }
 }
 </style>

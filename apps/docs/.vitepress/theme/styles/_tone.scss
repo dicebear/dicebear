@@ -5,13 +5,14 @@
  *
  * `tone(name)` is used by `.site-box.is-*` and by the few other grounds that
  * take a block color (the Studio tabs, the docs callouts). `tone(paper)`,
- * `tone(panel)` and `tone(code)` reset to neutral; dialogs, menus and code
- * cards use them, so they look the same wherever they open.
+ * `tone(panel)`, `tone(raised)` and `tone(code)` reset to neutral; menus,
+ * dialogs and code cards use them, so they look the same wherever they open.
  */
 
 @mixin neutral-roles {
   --db-paper: var(--db-c-paper);
   --db-panel: var(--db-c-panel);
+  --db-raised: var(--db-c-raised);
   --db-soft: var(--db-c-soft);
   --db-line: var(--db-c-line);
   --db-field-border: var(--db-c-field);
@@ -31,6 +32,7 @@
 @mixin bright-roles($bg) {
   --db-paper: #{$bg};
   --db-panel: #ffffff;
+  --db-raised: #ffffff;
   --db-soft: color-mix(in srgb, #ffffff 42%, transparent);
   --db-ink: var(--db-on);
   --db-ink-2: var(--db-on-2);
@@ -54,6 +56,7 @@
 @mixin deep-roles($bg, $acc) {
   --db-paper: #{$bg};
   --db-panel: #ffffff;
+  --db-raised: #ffffff;
   --db-soft: color-mix(in srgb, #ffffff 42%, transparent);
   --db-ink: var(--db-on);
   --db-ink-2: var(--db-deep-2);
@@ -79,6 +82,9 @@
   } @else if $name == 'panel' {
     @include neutral-roles;
     --db-paper: var(--db-c-panel);
+  } @else if $name == 'raised' {
+    @include neutral-roles;
+    --db-paper: var(--db-c-raised);
   } @else if $name == 'code' {
     @include neutral-roles;
     --db-paper: var(--db-card);

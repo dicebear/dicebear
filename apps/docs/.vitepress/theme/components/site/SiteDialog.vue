@@ -219,10 +219,11 @@ onBeforeUnmount(() => {
   margin: auto;
   padding: 0;
   border: 1px solid var(--db-line);
-  /* It opens inside the box of its trigger, so it resets to neutral. */
-  @include tone.tone('panel');
+  /* It opens inside the box of its trigger, so it resets to neutral. The
+     backdrop sets it apart, so it stays on the paper. */
+  @include tone.tone('raised');
   border-radius: var(--db-radius-card);
-  background: var(--db-panel);
+  background: var(--db-paper);
   color: var(--db-ink);
   box-shadow: var(--db-shadow-pop);
   overflow: hidden;

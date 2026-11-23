@@ -300,7 +300,7 @@ defineExpose({ expanded, expand });
   display: flex;
   flex-direction: column;
   border-radius: 28px 28px 0 0;
-  background: var(--db-panel);
+  background: var(--db-raised);
   box-shadow:
     0 0 0 1px var(--db-line),
     0 -16px 32px -24px rgba(0, 0, 0, 0.45);

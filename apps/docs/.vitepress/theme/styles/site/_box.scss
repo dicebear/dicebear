@@ -47,6 +47,7 @@
   }
 
   &.is-ring {
+    background-color: var(--db-raised);
     box-shadow: 0 0 0 1px var(--db-c-line);
   }
 
@@ -62,14 +63,13 @@
   }
 }
 
-/* A box that opens, such as a license text: on the card color with the
-   field edge. */
+/* A box that opens, such as a license text: its field edge sets it apart. */
 .site-details {
   @include m.details-box;
 
   border: 1px solid var(--db-field-border);
   border-radius: var(--db-radius-5);
-  background: var(--db-panel);
+  background: var(--db-raised);
 }
 
 /* The space below the last block of a page. */

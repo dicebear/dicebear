@@ -363,6 +363,11 @@ defineExpose({ toggle: toggleMenu, show: showMenu, hide: hideMenu });
       outline-offset: -2px;
       @include m.option-hover;
     }
+
+    /* The tint of the row takes too much from the muted color. */
+    &:is(:hover, :focus-visible) .site-menu-hint {
+      color: var(--db-ink-2);
+    }
   }
 
   &-icon {
