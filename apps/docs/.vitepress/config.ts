@@ -190,6 +190,15 @@ export default defineConfig<ThemeOptions>({
       pageData.description = fill(pageData.description);
     }
   },
+  // VitePress's inline theme script reads localStorage unguarded. Where a
+  // browser blocks site data that throws, and a reader who prefers dark gets
+  // the light theme until the app has loaded.
+  transformHtml: (html) =>
+    html.replace(
+      /(<script id="check-dark-mode">)[\s\S]*?(<\/script>)/,
+      (_, open: string, close: string) =>
+        `${open}(()=>{let p;try{p=localStorage.getItem('vitepress-theme-appearance')}catch{}p=p||'auto';if(p==='auto'?matchMedia('(prefers-color-scheme: dark)').matches:p==='dark')document.documentElement.classList.add('dark')})();${close}`,
+    ),
   transformHead: (ctx) => {
     const result: HeadConfig[] = [];
 
