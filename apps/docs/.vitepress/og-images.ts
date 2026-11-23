@@ -109,11 +109,28 @@ const RULE_Y = CREDIT_BASELINE - 40;
  * color the artist chose. Cats and dogs declare none but paint the whole tile
  * with a scene. The other 19 render transparent and sit on this.
  *
- * The tile beige of the site (`--db-tile`) rather than white, because white
- * artwork disappears against a white tile: `lorelei` loses its face and shows
- * only hair and outlines, and `identicon` loses its negative space.
+ * The checkerboard of the site (`--db-checker-*`), sixteen fields across, so
+ * a transparent background does not read as part of the picture. Not white,
+ * because white artwork disappears against it: `lorelei` loses its face and
+ * shows only hair and outlines, and `identicon` loses its negative space.
  */
-const TILE_BASE = '#f5eee2';
+const CHECKER_LIGHT = '#f9f5ee';
+const CHECKER_DARK = '#f1ebe1';
+const CHECKER_FIELDS = 16;
+
+/** One checkerboard for all tiles. The fields only touch at their corners. */
+function checkerboard(size: number): string {
+  const field = +(size / CHECKER_FIELDS).toFixed(3);
+  let path = '';
+
+  for (let row = 0; row < CHECKER_FIELDS; row++) {
+    for (let column = (row + 1) % 2; column < CHECKER_FIELDS; column += 2) {
+      path += `M${+(column * field).toFixed(3)} ${+(row * field).toFixed(3)}h${field}v${field}h-${field}z`;
+    }
+  }
+
+  return `<g id="db-checker"><rect width="${size}" height="${size}" fill="${CHECKER_LIGHT}"/><path d="${path}" fill="${CHECKER_DARK}"/></g>`;
+}
 
 /**
  * The lockup in ink, sitting bottom-right beside the credit block.
@@ -172,7 +189,7 @@ const DEFAULT_TILES = [
  * color passes AA on the ground by a wide margin, the muted source line
  * included (about 8:1).
  */
-const BACKGROUND = '#f5eee2';
+const BACKGROUND = '#f7f1e6';
 
 /** Title and credit line. */
 const COLOR_TITLE = '#15213b';
@@ -430,12 +447,12 @@ function buildCard({
       // mouth at all.
       const svg = normalizeMaskType(rawSvg);
 
-      // The beige base shows through for the transparent styles; the ones
+      // The checkerboard shows through for the transparent styles; the ones
       // carrying their own background paint straight over it. The white edge
       // keeps every tile apart from the beige ground, whatever its color.
       return `<g transform="translate(${x}, ${y}) rotate(${STICKER_TURNS[index]}) translate(${-center}, ${-center})">
       <rect width="${STICKER_SIZE}" height="${STICKER_SIZE}" rx="${STICKER_RADIUS}" fill="${STICKER_EDGE}" filter="url(#shadow)"/>
-      <g transform="translate(${TILE_INSET}, ${TILE_INSET})" clip-path="url(#tile)"><rect width="${TILE_SIZE}" height="${TILE_SIZE}" fill="${TILE_BASE}"/>${svg}</g>
+      <g transform="translate(${TILE_INSET}, ${TILE_INSET})" clip-path="url(#tile)"><use href="#db-checker"/>${svg}</g>
     </g>`;
     })
     .join('');
@@ -505,6 +522,7 @@ function buildCard({
       <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="${COLOR_TITLE}" flood-opacity="0.28"/>
     </filter>
     <clipPath id="tile"><rect width="${TILE_SIZE}" height="${TILE_SIZE}" rx="${TILE_RADIUS}"/></clipPath>
+    ${checkerboard(TILE_SIZE)}
   </defs>
   <rect width="${WIDTH}" height="${HEIGHT}" fill="${BACKGROUND}"/>
   ${tileMarkup}

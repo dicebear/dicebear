@@ -53,9 +53,10 @@
   /* The logo's mark: charcoal on light grounds, cream on dark ones, as in
      logo.svg and logo-dark.svg. */
   --db-mark: #1c1b19;
-  /* The ground behind an avatar, light in both themes, or styles drawn in
-     black line work vanish. */
-  --db-tile: #f5eee2;
+  /* The checkerboard behind an avatar. Not white, or white artwork would
+     vanish on it. */
+  --db-checker-light: #f9f5ee;
+  --db-checker-dark: #f1ebe1;
 
   /* Roles. A tone box re-points these. */
   --db-paper: var(--db-c-paper);
@@ -152,6 +153,9 @@
   --db-c-paper: #1c1b19;
   --db-c-panel: #272623;
   --db-c-raised: var(--db-c-panel);
+  /* Dark, but lifted far enough off black that line work stays readable. */
+  --db-checker-light: #45423d;
+  --db-checker-dark: #383632;
   --db-c-soft: #302e2b;
   --db-c-line: #45423d;
   --db-c-field: #8f8a80;

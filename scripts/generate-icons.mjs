@@ -22,9 +22,9 @@ const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const publicDir = join(rootDir, 'apps', 'docs', 'pages', 'public');
 
 // The charcoal of the dark theme (`--db-c-paper` in dark) and the beige of
-// the avatar tiles (`--db-tile`).
+// the site (`--db-c-soft`).
 const INK = '#1c1b19';
-const BEIGE = '#f5eee2';
+const BEIGE = '#f7f1e6';
 
 /** Corner radius of the rounded icons, as a share of the side. */
 const ROUNDED = 0.22;

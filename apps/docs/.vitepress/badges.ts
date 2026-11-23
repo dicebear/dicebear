@@ -27,7 +27,7 @@ const ICON_GAP = 4;
 /** The ink and the beige of the site: the label dark, the value light. */
 const LABEL_BG = '#15213b';
 const LABEL_FG = '#ffffff';
-const VALUE_BG = '#f5eee2';
+const VALUE_BG = '#f7f1e6';
 const VALUE_FG = '#15213b';
 
 /** Round ends, like every pill on the site. */

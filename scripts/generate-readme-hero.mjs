@@ -142,9 +142,27 @@ const HEIGHT = 494;
 const MARGIN_X = (WIDTH - COLUMNS * STICKER - (COLUMNS - 1) * GAP) / 2;
 const MARGIN_Y = (HEIGHT - ROWS * STICKER - (ROWS - 1) * GAP) / 2;
 
-/** The ink and the beige of the site (`--db-c-ink`, `--db-tile`). */
+/** The ink and the beige of the site (`--db-c-ink`, `--db-c-soft`). */
 const INK = '#15213b';
-const BEIGE = '#f5eee2';
+const BEIGE = '#f7f1e6';
+
+/** The checkerboard behind the avatars (`--db-checker-*`), 16 fields across. */
+const CHECKER_LIGHT = '#f9f5ee';
+const CHECKER_DARK = '#f1ebe1';
+const CHECKER_FIELDS = 16;
+
+function checkerboard(size) {
+  const field = +(size / CHECKER_FIELDS).toFixed(3);
+  let path = '';
+
+  for (let row = 0; row < CHECKER_FIELDS; row++) {
+    for (let column = (row + 1) % 2; column < CHECKER_FIELDS; column += 2) {
+      path += `M${+(column * field).toFixed(3)} ${+(row * field).toFixed(3)}h${field}v${field}h-${field}z`;
+    }
+  }
+
+  return `<g id="db-checker"><rect width="${size}" height="${size}" fill="${CHECKER_LIGHT}"/><path d="${path}" fill="${CHECKER_DARK}"/></g>`;
+}
 
 function loadStyle(name) {
   const definition = JSON.parse(
@@ -171,7 +189,7 @@ function tileMarkup(tile, x, y, turn) {
 
   return `  <g transform="translate(${x + center}, ${y + center}) rotate(${turn}) translate(${-center}, ${-center})">
     <rect width="${STICKER}" height="${STICKER}" rx="${STICKER_RADIUS}" fill="#ffffff" filter="url(#shadow)"/>
-    <g transform="translate(${INSET}, ${INSET})" clip-path="url(#tile)"><rect width="${TILE}" height="${TILE}" fill="${BEIGE}"/>${avatar.toString()}</g>
+    <g transform="translate(${INSET}, ${INSET})" clip-path="url(#tile)"><use href="#db-checker"/>${avatar.toString()}</g>
   </g>`;
 }
 
@@ -194,6 +212,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${WIDTH} ${HEI
       <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="${INK}" flood-opacity="0.26"/>
     </filter>
     <clipPath id="tile"><rect width="${TILE}" height="${TILE}" rx="${TILE_RADIUS}"/></clipPath>
+    ${checkerboard(TILE)}
   </defs>
   <rect width="${WIDTH}" height="${HEIGHT}" rx="48" fill="${BEIGE}"/>
 ${tiles.join('\n')}
