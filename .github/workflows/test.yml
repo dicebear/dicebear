@@ -232,6 +232,23 @@ jobs:
         working-directory: src/rust/core
         run: cargo test
 
+  test-rust-msrv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # The `rust-version` in Cargo.toml. The lockfile is not committed, so
+      # this resolves the dependencies fresh, the way a new user's build does.
+      - name: Set up Rust 1.88
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: '1.88'
+      - name: Run tests
+        working-directory: src/rust/core
+        run: cargo test
+
   test-go:
     runs-on: ubuntu-latest
 

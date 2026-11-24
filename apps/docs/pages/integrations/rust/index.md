@@ -2,12 +2,12 @@
 title: Rust Avatar Library
 description: >
   Use the DiceBear Rust library to generate SVG profile pictures on the server.
-  Rust 1.80+ with an API identical to the JavaScript library.
+  Rust 1.88+ with an API identical to the JavaScript library.
 ---
 
 # Rust avatar library
 
-Generate avatars natively in Rust (1.80 or higher), with no external service
+Generate avatars natively in Rust (1.88 or higher), with no external service
 involved.
 
 The API mirrors the [JavaScript library](/integrations/javascript/), and the
@@ -89,7 +89,7 @@ let avatar = Avatar::new(&style, json!({
     "translateY": 0,                 // -1000 to 1000 (percent of canvas height)
     "idRandomization": true,
     "title": "User Avatar",
-    "fontFamily": "Arial",           // or ["Arial", "Helvetica"]
+    "fontFamily": "Arial",           // or ["Arial", "Helvetica"], one per seed
     "fontWeight": 700,               // 1-1000
     "backgroundColor": ["#b6e3f4", "#c0aede"],
     "backgroundColorFill": "solid",  // "solid", "linear", "radial"
