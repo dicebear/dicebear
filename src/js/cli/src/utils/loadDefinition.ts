@@ -22,9 +22,12 @@ export function loadDefinition(filePath: string): {
   try {
     style = new Style(JSON.parse(source));
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    // The original error, so its class (e.g. StyleValidationError) stays.
+    if (error instanceof Error) {
+      error.message = `${definitionPath}: ${error.message}`;
+    }
 
-    throw new Error(`${definitionPath}: ${message}`);
+    throw error;
   }
   const name = path.basename(definitionPath, path.extname(definitionPath));
 
