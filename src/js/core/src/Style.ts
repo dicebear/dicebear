@@ -12,12 +12,22 @@ import { Color } from './Style/Color.js';
 
 export type { StyleDefinition } from './StyleDefinition.js';
 
+/** Key of the type-only member that carries the definition type. */
+declare const definitionType: unique symbol;
+
 /**
  * Validated, lazily-decomposed wrapper around a style definition. Construction
  * runs the JSON Schema validator and stores a deep clone of the input so that
  * later mutation of the source object cannot leak into the rendered avatar.
  */
 export class Style<D = unknown> {
+  /**
+   * Carries `D` in the shape of the class, so the definition type survives
+   * when a style is passed around, and `new Avatar(style, options)` checks the
+   * options against it. It exists for the type checker only and is never set.
+   */
+  declare readonly [definitionType]?: D;
+
   #data: StyleDefinition;
   #meta?: Meta;
   #canvas?: Canvas;

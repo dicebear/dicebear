@@ -16,6 +16,16 @@ export interface TagFilterToken {
   readonly negated: boolean;
 }
 
+/**
+ * Keeps TypeScript from inferring `T` at this position, so the options of an
+ * avatar are checked against the style instead of widening the style's type
+ * to fit them. The same as the built-in `NoInfer` of TypeScript 5.4, written
+ * out so that the declarations also work with older compilers.
+ *
+ * @internal
+ */
+export type NoInferStyle<T> = [T][T extends unknown ? 0 : never];
+
 // ---------------------------------------------------------------------------
 // StyleOptions
 //

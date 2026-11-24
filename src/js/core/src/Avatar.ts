@@ -2,7 +2,7 @@ import { Style } from './Style.js';
 import { Options } from './Options.js';
 import { Resolver } from './Resolver.js';
 import { Renderer } from './Renderer.js';
-import type { StyleOptions } from './StyleOptions.js';
+import type { NoInferStyle, StyleOptions } from './StyleOptions.js';
 
 interface AvatarJson<D = unknown> {
   readonly svg: string;
@@ -23,7 +23,7 @@ export class Avatar<D = unknown> {
    * Pass a {@link Style} instance and reuse it across avatars. The parsed
    * style carries the validation, so nothing is re-checked per render.
    */
-  constructor(style: Style<D>, optionsInput?: StyleOptions<D>) {
+  constructor(style: Style<D>, optionsInput?: StyleOptions<NoInferStyle<D>>) {
     if (!(style instanceof Style)) {
       throw new TypeError(
         '[DiceBear] `new Avatar()` expects a Style. Wrap the definition first: ' +
