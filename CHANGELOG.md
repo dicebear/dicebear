@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-rc.4] - 2026-11-24
+
 ### Changed
 
 - **Core (all languages):** `animationMotionQuery` from 11.0.0-rc.3 is now
@@ -742,7 +744,9 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.3...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.4...HEAD
+[11.0.0-rc.4]:
+  https://github.com/dicebear/dicebear/compare/v11.0.0-rc.3...v11.0.0-rc.4
 [11.0.0-rc.3]:
   https://github.com/dicebear/dicebear/compare/v11.0.0-rc.2...v11.0.0-rc.3
 [11.0.0-rc.2]:
