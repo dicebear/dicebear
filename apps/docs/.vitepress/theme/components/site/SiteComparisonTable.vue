@@ -128,7 +128,8 @@ const rows = computed(() =>
     min-width: 880px;
   }
 
-  thead th {
+  /* The picked head keeps the column's own line, which shows on its fill. */
+  thead th:not(.is-pick) {
     border-bottom-color: var(--db-line);
   }
 

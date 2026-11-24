@@ -35,7 +35,15 @@
     }
   }
 
+  // The picked column is filled in the line color, so the rows' hairlines
+  // would vanish in it. They run on through it a shade off its ground: a
+  // touch of ink, which darkens them in light mode and lightens them in dark.
   .is-pick {
+    border-bottom-color: color-mix(
+      in srgb,
+      var(--db-ink) 12%,
+      var(--db-c-line)
+    );
     background: var(--db-c-line);
     font-weight: 700;
     color: var(--db-ink);
@@ -43,7 +51,6 @@
 
   thead .is-pick {
     border-radius: 20px 20px 0 0;
-    border-bottom-color: transparent;
     font-size: 20px;
   }
 
