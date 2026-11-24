@@ -16,8 +16,11 @@ style, and options, regardless of the language used.
 ## Installation
 
 ```sh
-npm install @dicebear/core
+npm install @dicebear/core @dicebear/styles
 ```
+
+`@dicebear/styles` holds the definitions of the avatar styles. Leave it out when
+you bring your own definitions.
 
 Requires Node.js 22+ or any modern browser.
 
