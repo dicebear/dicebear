@@ -1,9 +1,12 @@
 /**
  * Rendered Markdown. The renderer's class names stay (.vp-doc, .custom-block,
- * .vp-code-group, div.language-*), the look is ours. Element rules target
+ * DocsCodeGroup, div.language-*), the look is ours. Element rules target
  * direct children of the prose root and a few prose containers, so components
  * mounted inside a docs page keep their own styles.
  */
+@use './mixins' as m;
+@use './tone';
+
 // Icons come from Lucide. The files serve as masks, so the icon takes the
 // text color of the element it sits on.
 $icon-copy: url('lucide-static/icons/copy.svg');
@@ -12,7 +15,6 @@ $icon-tip: url('lucide-static/icons/lightbulb.svg');
 $icon-info: url('lucide-static/icons/info.svg');
 $icon-warning: url('lucide-static/icons/triangle-alert.svg');
 $icon-danger: url('lucide-static/icons/octagon-alert.svg');
-$icon-chevron: url('lucide-static/icons/chevron-right.svg');
 $icon-external: url('lucide-static/icons/arrow-up-right.svg');
 
 @mixin icon($image, $size) {
@@ -44,11 +46,11 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
   }
 
   > div > h2:not(:first-child) {
-    margin-top: 54px;
+    margin-top: 64px;
   }
 
   > div > h3:not(:first-child) {
-    margin-top: 34px;
+    margin-top: 40px;
   }
 
   > div > :is(h4, h5, h6):not(:first-child) {
@@ -59,62 +61,46 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
     margin-top: 40px;
   }
 
-  /* Headings */
-  > div > h1 {
-    font-size: 48px;
-    line-height: 52px;
-    font-weight: 700;
-    letter-spacing: -0.04em;
+  /* Headings: the display face, a step below the marketing pages. */
+  > div > :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--db-font-display);
     color: var(--db-ink);
     text-wrap: balance;
+  }
 
-    @media (max-width: 767px) {
-      font-size: 32px;
-      line-height: 36px;
-    }
+  > div > h1 {
+    font-size: clamp(36px, 4.2vw, 60px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.025em;
   }
 
   /* The paragraph under the title is the lead. */
   > div > h1 + p {
-    font-size: 20px;
-    line-height: 32px;
-
-    @media (max-width: 767px) {
-      font-size: 18px;
-      line-height: 30px;
-    }
+    margin-top: 24px;
+    font-size: clamp(18px, 1.5vw, 21px);
+    line-height: 1.55;
   }
 
   > div > h2 {
-    font-size: 32px;
-    line-height: 38px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--db-ink);
-    text-wrap: balance;
-
-    @media (max-width: 767px) {
-      font-size: 24px;
-      line-height: 30px;
-      letter-spacing: -0.01em;
-    }
+    font-size: clamp(28px, 2.6vw, 36px);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.015em;
   }
 
   > div > h3 {
     font-size: 24px;
-    line-height: 32px;
+    line-height: 1.25;
     font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--db-ink);
   }
 
   > div > h4,
   > div > h5,
   > div > h6 {
-    font-size: 17px;
-    line-height: 28px;
-    font-weight: 600;
-    color: var(--db-ink);
+    font-size: 19px;
+    line-height: 26px;
+    font-weight: 700;
   }
 
   :where(h1, h2, h3, h4, h5, h6) {
@@ -124,7 +110,7 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
   .header-anchor {
     margin-left: 10px;
     font-weight: 500;
-    color: var(--db-brand-text);
+    color: var(--db-muted);
     text-decoration: none;
     opacity: 0;
     transition: opacity 0.12s;
@@ -143,14 +129,8 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
   :where(p, li, td, th, blockquote, summary, h1, h2, h3, h4)
     > a:not(.header-anchor),
   :where(p, li, td) > :where(strong, em) > a {
-    color: var(--db-brand-text);
-    font-weight: 500;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
+    @include m.link-inline;
+    color: var(--db-ink);
   }
 
   :where(p, li, td, th, blockquote, summary)
@@ -215,56 +195,18 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
   :where(p, li, td, th, summary, h1, h2, h3, h4, strong, .custom-block-title)
     > code,
   :where(p, li, td, th, summary) > a > code {
-    padding: 2px 6px;
-    border-radius: var(--db-radius-1);
-    background: var(--db-soft);
-    font-size: 0.875em;
-    color: var(--db-ink);
+    @include m.code-inline;
     overflow-wrap: anywhere;
   }
 
   :where(p, li, td) > kbd {
-    padding: 2px 6px;
-    border: 1px solid var(--db-line);
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 0.8em;
-    font-weight: 500;
+    @include m.kbd;
   }
 
-  /* Tables: hairlines, no fills */
+  /* Tables: the shared table look. */
   > div > table,
   :where(.custom-block, details) table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th {
-      padding: 0 16px 10px 0;
-      border-bottom: 1px solid var(--db-line);
-      text-align: left;
-      vertical-align: bottom;
-      font-size: 13px;
-      line-height: 18px;
-      font-weight: 600;
-      color: var(--db-muted);
-    }
-
-    td {
-      padding: 12px 16px 12px 0;
-      border-top: 1px solid var(--db-line);
-      vertical-align: top;
-      font-size: 15px;
-      line-height: 24px;
-    }
-
-    tbody tr:first-child td {
-      border-top: 0;
-    }
-
-    th:last-child,
-    td:last-child {
-      padding-right: 0;
-    }
+    @include m.table;
 
     @media (max-width: 767px) {
       display: block;
@@ -272,56 +214,43 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
     }
   }
 
-  /* Code blocks: a plain frame. The language sits in the corner and gives
-     way to the copy button while the pointer is on the block. */
+  /* Code blocks: a soft box with a head row, the language on the left and
+     the copy button on the right, so neither ever lies on a line of code.
+     The button shows with the pointer on the block; on a touch screen,
+     which has no pointer, it stays. */
   div[class*='language-'] {
     position: relative;
-    border: 1px solid var(--db-line);
-    border-radius: 14px;
-    background: var(--db-code-bg);
+    border-radius: var(--db-radius-5);
+    background: var(--db-soft);
     overflow: hidden;
 
     > span.lang {
       position: absolute;
-      top: 10px;
-      right: 14px;
+      top: 14px;
+      left: 22px;
       z-index: 1;
       font-family: var(--db-font-mono);
       font-size: 12px;
       line-height: 20px;
       color: var(--db-muted);
-      transition: opacity 0.12s;
     }
 
-    &:hover > span.lang,
-    &:focus-within > span.lang {
-      opacity: 0;
-    }
-
+    /* The copy button is the small ghost icon button of the set. */
     > button.copy {
+      @include m.button-base;
+      @include m.button-ghost;
+      @include m.button-size(sm);
+
       position: absolute;
       top: 6px;
       right: 8px;
       z-index: 2;
+      width: 36px;
+      padding: 0;
       opacity: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: var(--db-radius-2);
-      color: var(--db-muted);
-      transition:
-        background-color 0.12s,
-        color 0.12s;
 
       &::after {
         @include icon($icon-copy, 16px);
-      }
-
-      &:hover {
-        background: var(--db-switch-bg);
-        color: var(--db-ink);
       }
 
       &.copied {
@@ -337,13 +266,14 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
         content: attr(data-copied);
         position: absolute;
         right: calc(100% + 6px);
-        padding: 6px 10px;
-        border-radius: var(--db-radius-2);
-        background: var(--db-ink);
-        color: var(--db-paper);
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 16px;
+        padding: 6px 12px;
+        border-radius: 16px;
+        background: var(--db-btn-bg);
+        color: var(--db-btn-fg);
+        font-family: var(--db-font-display);
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 20px;
         white-space: nowrap;
       }
     }
@@ -353,12 +283,18 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       opacity: 1;
     }
 
+    @media (hover: none) {
+      > button.copy {
+        opacity: 1;
+      }
+    }
+
     > pre {
-      padding: 18px 0;
+      padding: 44px 0 20px;
       overflow-x: auto;
       font-size: 14px;
       line-height: 24px;
-      color: var(--db-code-ink);
+      color: var(--db-ink);
 
       @media (max-width: 767px) {
         font-size: 13px;
@@ -369,22 +305,22 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       display: block;
       width: fit-content;
       min-width: 100%;
-      padding: 0 20px;
+      padding: 0 22px;
     }
 
     code .highlighted {
       display: inline-block;
-      width: calc(100% + 40px);
-      margin: 0 -20px;
-      padding: 0 20px;
-      background: color-mix(in srgb, var(--db-brand) 10%, transparent);
+      width: calc(100% + 44px);
+      margin: 0 -22px;
+      padding: 0 22px;
+      background: color-mix(in srgb, var(--db-sun) 32%, transparent);
     }
 
     code .diff {
       display: inline-block;
-      width: calc(100% + 40px);
-      margin: 0 -20px;
-      padding: 0 20px;
+      width: calc(100% + 44px);
+      margin: 0 -22px;
+      padding: 0 22px;
     }
 
     code .diff.add {
@@ -406,58 +342,20 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
     }
   }
 
-  /* Code groups: the same frame with tabs in the top row */
-  .vp-code-group {
-    border: 1px solid var(--db-line);
-    border-radius: 14px;
-    background: var(--db-code-bg);
+  /* Code groups: the same box with tab pills in the top row */
+  .docs-code-group {
+    border-radius: var(--db-radius-5);
+    background: var(--db-soft);
     overflow: hidden;
 
-    .tabs {
-      display: flex;
-      height: 44px;
-      padding: 0 46px 0 8px;
-      border-bottom: 1px solid var(--db-code-line);
-      overflow-x: auto;
-
-      input {
-        position: fixed;
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      label {
-        display: flex;
-        align-items: center;
-        padding: 0 12px;
-        border-bottom: 2px solid transparent;
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--db-muted);
-        white-space: nowrap;
-        cursor: pointer;
-        transition: color 0.12s;
-
-        &:hover {
-          color: var(--db-ink);
-        }
-      }
-
-      input:checked + label {
-        border-bottom-color: var(--db-brand);
-        font-weight: 600;
-        color: var(--db-ink);
-      }
-
-      input:focus-visible + label {
-        outline: 2px solid var(--db-brand);
-        outline-offset: -2px;
-      }
+    /* Stops short of the copy button, which sits in this row. */
+    &-tabs {
+      margin-right: 52px;
+      padding: 12px 0 0 12px;
     }
 
     .blocks > div[class*='language-'] {
       display: none;
-      border: 0;
       border-radius: 0;
       overflow: visible;
 
@@ -470,67 +368,84 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
       }
 
       > button.copy {
-        top: -38px;
+        top: -40px;
+        opacity: 1;
       }
 
       > pre {
         margin-top: 0;
-        border-top: 0;
+        padding-top: 18px;
       }
     }
   }
 
-  /* Callouts: a framed box, the kind shows in the icon and label */
+  /* Callouts: a small box in the tone of its kind, like SiteNotice. Each
+     kind takes exactly one tone, or the dark rules of one would reach into
+     another. */
+  .custom-block:not(.tip, .important, .warning, .caution, .danger, .details) {
+    @include tone.tone('sky');
+  }
+
   .custom-block {
-    padding: 18px 20px;
-    border: 1px solid var(--db-line);
-    border-radius: 14px;
-    background: var(--db-paper);
+    padding: 22px 26px;
+    border-radius: var(--db-radius-6);
     font-size: 16px;
     line-height: 26px;
+    color: var(--db-ink-2);
 
     > * + * {
       margin-top: 8px;
+    }
+
+    :where(p, li) > a {
+      color: var(--db-ink);
     }
 
     .custom-block-title {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 15px;
-      line-height: 24px;
-      font-weight: 600;
-      color: var(--db-brand-text);
+      font-family: var(--db-font-display);
+      font-size: 18px;
+      line-height: 26px;
+      font-weight: 700;
+      color: var(--db-accent);
 
       &::before {
         @include icon($icon-info, 18px);
       }
     }
 
-    &.tip .custom-block-title,
-    &.important .custom-block-title {
-      color: var(--db-ok);
+    &.tip,
+    &.important {
+      @include tone.tone('mint');
 
-      &::before {
+      color: var(--db-ink-2);
+
+      .custom-block-title::before {
         -webkit-mask-image: $icon-tip;
         mask-image: $icon-tip;
       }
     }
 
-    &.warning .custom-block-title,
-    &.caution .custom-block-title {
-      color: var(--db-warn);
+    &.warning,
+    &.caution {
+      @include tone.tone('sun');
 
-      &::before {
+      color: var(--db-ink-2);
+
+      .custom-block-title::before {
         -webkit-mask-image: $icon-warning;
         mask-image: $icon-warning;
       }
     }
 
-    &.danger .custom-block-title {
-      color: var(--db-danger);
+    &.danger {
+      @include tone.tone('coral');
 
-      &::before {
+      color: var(--db-ink-2);
+
+      .custom-block-title::before {
         -webkit-mask-image: $icon-danger;
         mask-image: $icon-danger;
       }
@@ -538,52 +453,10 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
   }
 
   details.custom-block {
-    padding: 0;
+    @include tone.tone('soft');
+    @include m.details-box;
 
-    > summary {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 16px 20px;
-      font-weight: 600;
-      color: var(--db-ink);
-      list-style: none;
-      cursor: pointer;
-      transition: color 0.12s;
-
-      &::-webkit-details-marker {
-        display: none;
-      }
-
-      &::before {
-        @include icon($icon-chevron, 16px);
-        color: var(--db-muted);
-        transition: transform 0.15s;
-      }
-
-      &:hover,
-      &:hover::before {
-        color: var(--db-brand-text);
-      }
-    }
-
-    &[open] > summary::before {
-      transform: rotate(90deg);
-    }
-
-    > summary ~ * {
-      margin-top: 14px;
-      margin-left: 46px;
-      margin-right: 20px;
-    }
-
-    > summary + * {
-      margin-top: 0;
-    }
-
-    > :last-child:not(summary) {
-      margin-bottom: 20px;
-    }
+    color: var(--db-ink-2);
   }
 
   .footnotes {

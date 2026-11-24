@@ -19,6 +19,7 @@ import PlaygroundAnimationSection from './PlaygroundAnimationSection.vue';
 import PlaygroundAnimationNameSection from './PlaygroundAnimationNameSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
+import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 import PlaygroundFontSection from './PlaygroundFontSection.vue';
 import PlaygroundOutputSection from './PlaygroundOutputSection.vue';
 import PlaygroundPresetSection from './PlaygroundPresetSection.vue';
@@ -125,14 +126,7 @@ function reset() {
             <ChevronLeft :size="20" aria-hidden="true" />
           </button>
           <h2 class="pg-inspector-title">{{ title }}</h2>
-          <button
-            v-if="changed"
-            type="button"
-            class="pg-field-reset"
-            @click="reset"
-          >
-            Reset
-          </button>
+          <PlaygroundFieldReset v-if="changed" @click="reset" />
         </div>
 
         <PlaygroundComponentSection
@@ -232,25 +226,29 @@ function reset() {
   &-body {
     flex: 1;
     min-height: 0;
-    padding: 20px 12px 24px;
+    padding: 24px 0 24px 24px;
     overflow-y: auto;
     container: pg-options / inline-size;
   }
 
+  /* As high as the back button, so the reset can come and go. */
   &-head {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 16px;
+    min-height: 36px;
+    margin-bottom: 22px;
   }
 
+  /* The title of the open entry, the card title of the site. */
   &-title {
     flex: 1;
     min-width: 0;
     margin: 0;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 600;
+    font-family: var(--db-font-display);
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 700;
     color: var(--db-ink);
   }
 
@@ -263,7 +261,7 @@ function reset() {
   &-stack {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
   }
 
   /* Rows behind hairlines, closed by one at the end. */
@@ -274,7 +272,7 @@ function reset() {
   /* Fixed under the options, whatever is open above. */
   &-actions {
     flex-shrink: 0;
-    padding: 16px 12px 20px;
+    padding: 16px 0 20px 24px;
     border-top: 1px solid var(--db-line);
     background: var(--db-paper);
   }
@@ -288,6 +286,11 @@ function reset() {
       position: sticky;
       bottom: 0;
       padding: 12px 16px 16px;
+
+      /* A phone held sideways: stuck, they would fill half the window. */
+      @media (max-height: 560px) {
+        position: static;
+      }
     }
   }
 }

@@ -240,6 +240,8 @@ function selectLabel(event: MouseEvent) {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .style-options-preview {
   display: flex;
   flex-direction: column;
@@ -255,20 +257,13 @@ function selectLabel(event: MouseEvent) {
     min-height: 80px;
   }
 
-  /* The checkerboard shows through where an avatar is transparent. It lies
-     on the tile color, which stays light in dark mode. */
   &-img,
   & &-avatar {
     border-radius: var(--db-radius-4);
-    background:
-      repeating-conic-gradient(
-          rgba(11, 22, 32, 0.02) 0% 25%,
-          rgba(11, 22, 32, 0.07) 0% 50%
-        )
-        50% / 12px 12px,
-      var(--db-tile);
     overflow: hidden;
     user-select: none;
+
+    @include m.avatar-ground;
   }
 
   &-img {

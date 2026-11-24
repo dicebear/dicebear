@@ -5,9 +5,10 @@
  * would list with the other filters as they are. The sidebar and the phone
  * sheet each render their own copy on the same state.
  */
-import { useId } from 'vue';
+import { computed, useId } from 'vue';
+import { ChevronDown } from '@lucide/vue';
 import SiteCheckbox from './SiteCheckbox.vue';
-import SiteSelect from './SiteSelect.vue';
+import SiteMenu, { type SiteMenuItem } from './SiteMenu.vue';
 
 export interface SiteStylesFacet {
   value: string;
@@ -15,7 +16,7 @@ export interface SiteStylesFacet {
   count: number;
 }
 
-defineProps<{
+const props = defineProps<{
   categoryOptions: SiteStylesFacet[];
   licenseOptions: SiteStylesFacet[];
   animatedCount: number;
@@ -33,6 +34,20 @@ const sort = defineModel<S>('sort', { required: true });
 // one group across them.
 const name = useId();
 
+const sortLabel = computed(
+  () => props.sortOptions.find((option) => option.value === sort.value)?.label,
+);
+
+const sortItems = computed<SiteMenuItem[]>(() =>
+  props.sortOptions.map((option) => ({
+    label: option.label,
+    checked: option.value === sort.value,
+    command: () => {
+      sort.value = option.value;
+    },
+  })),
+);
+
 function toggleLicense(value: string, on: boolean) {
   selectedLicenses.value = on
     ? [...selectedLicenses.value, value]
@@ -47,7 +62,7 @@ function toggleLicense(value: string, on: boolean) {
       <label
         v-for="option in categoryOptions"
         :key="option.value"
-        class="site-styles-filters-option is-radio"
+        class="site-pill site-pill-row site-styles-filters-radio"
         :class="{
           'is-active': category === option.value,
           'is-empty': option.count === 0,
@@ -99,17 +114,33 @@ function toggleLicense(value: string, on: boolean) {
 
     <div class="site-styles-filters-sort">
       <span class="site-styles-filters-label" aria-hidden="true">Sort by</span>
-      <SiteSelect v-model="sort" :options="sortOptions" label="Sort by" fluid />
+      <SiteMenu :items="sortItems" label="Sort by" fluid>
+        <template #trigger="{ open, toggle }">
+          <button
+            type="button"
+            class="site-styles-filters-sort-button"
+            :aria-label="`Sort by ${sortLabel}`"
+            :aria-expanded="open"
+            aria-haspopup="menu"
+            @click="toggle"
+          >
+            {{ sortLabel }}
+            <ChevronDown :size="16" aria-hidden="true" />
+          </button>
+        </template>
+      </SiteMenu>
       <p v-if="sortHint" class="site-styles-filters-hint">{{ sortHint }}</p>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/control' as c;
+
 .site-styles-filters {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
 
   &-group {
     min-width: 0;
@@ -118,58 +149,60 @@ function toggleLicense(value: string, on: boolean) {
     border: 0;
   }
 
+  /* Group titles: the control label of the set. */
   &-label {
     display: block;
     padding: 0 0 8px;
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--db-muted);
+    font-family: var(--db-font-display);
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
+    color: var(--db-ink);
   }
 
-  &-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 36px;
-    padding: 0 10px;
-    border-radius: var(--db-radius-2);
-    font-size: 15px;
-    color: var(--db-ink);
+  /* A category is a row pill: yellow while chosen. */
+  &-radio {
     cursor: pointer;
+
+    &:has(:focus-visible) {
+      outline: 2px solid var(--db-focus);
+      outline-offset: 2px;
+    }
 
     & + & {
       margin-top: 2px;
     }
+  }
 
-    &:not(.is-active):hover {
-      background: var(--db-soft);
-    }
+  /* A license or the motion filter: a checkbox row. */
+  &-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 22px;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--db-ink-2);
+    cursor: pointer;
+    transition: background-color 0.12s;
 
-    &.is-radio:has(:focus-visible) {
-      outline: 2px solid var(--db-brand);
-      outline-offset: -2px;
-    }
-
-    &.is-active {
-      background: var(--db-tint);
-      color: var(--db-tint-text);
-      font-weight: 600;
-    }
-
-    &.is-empty {
-      color: var(--db-muted);
+    &:hover {
+      background: color-mix(in srgb, var(--db-ink) 6%, transparent);
     }
   }
 
+  .is-empty {
+    color: var(--db-muted);
+  }
+
+  /* The second text color rather than the muted one: it keeps 4.5:1 on the
+     ground a row takes on hover too. */
   &-count {
     margin-left: auto;
-    font-size: 14px;
-    font-weight: 400;
     font-variant-numeric: tabular-nums;
-    color: var(--db-muted);
+    color: var(--db-ink-2);
 
     .is-active & {
       color: inherit;
@@ -179,16 +212,26 @@ function toggleLicense(value: string, on: boolean) {
   &-sort {
     display: flex;
     flex-direction: column;
+  }
 
-    .site-styles-filters-label {
-      padding-bottom: 8px;
+  &-sort-button {
+    @include c.control-picker(md);
+
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 16px;
+
+    svg {
+      flex-shrink: 0;
+      color: var(--db-muted);
     }
   }
 
   &-hint {
     margin: 8px 0 0;
+    padding: 0 4px;
     font-size: 13px;
-    line-height: 18px;
+    line-height: 20px;
     color: var(--db-muted);
   }
 }

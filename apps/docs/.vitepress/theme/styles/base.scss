@@ -24,6 +24,11 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+    /* No zoom on a double tap, which Safari does on a quick second tap on
+       Randomize, Undo or any other button. Pinch zoom stays. The value
+       holds for every element on the page, as touch-action is the
+       intersection of an element's and its ancestors'. */
+    touch-action: manipulation;
     color-scheme: light;
 
     &.dark {
@@ -148,7 +153,7 @@
 
   /* One focus ring for links, buttons and fields. */
   :focus-visible {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: 3px;
   }
 
@@ -173,8 +178,11 @@
   }
 }
 
+/* The selection takes the select color of its ground: yellow on paper,
+   ink on yellow, the tint on a deep block. */
 ::selection {
-  background: color-mix(in srgb, var(--db-brand) 30%, transparent);
+  background: color-mix(in srgb, var(--db-select) 75%, transparent);
+  color: var(--db-select-text);
 }
 
 .sr-only {

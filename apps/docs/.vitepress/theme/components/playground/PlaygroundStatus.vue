@@ -62,8 +62,14 @@ const legal = legalLinks.filter((link) => link.label !== 'Licenses');
   gap: 4px 16px;
   box-sizing: border-box;
   min-height: 16px;
-  padding: 8px 20px 10px;
+  padding: 8px 0 10px;
   border-top: 1px solid var(--db-line);
+
+  /* Next to the panel: clear of its line. */
+  @media (min-width: 1024px) {
+    padding-right: 24px;
+  }
+
   font-size: 12px;
   line-height: 16px;
   color: var(--db-muted);
@@ -108,7 +114,10 @@ const legal = legalLinks.filter((link) => link.label !== 'Licenses');
     margin-left: auto;
     white-space: nowrap;
 
+    /* Inline padding adds to the target, not to the line: 24px for a finger,
+       still inside the gap to the license line. */
     a {
+      padding-block: 4.5px;
       color: var(--db-ink-2);
       text-decoration: underline;
       text-underline-offset: 3px;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-/** Ways to give something back. The rows look like those in AboutOpenSource. */
-import AboutSection from './AboutSection.vue';
+/** Ways to give something back, in the rows of AboutOpenSource. */
+import SiteSection from '../site/SiteSection.vue';
 import AboutRows, { type AboutRow } from './AboutRows.vue';
 
 const rows: AboutRow[] = [
@@ -26,7 +26,7 @@ const rows: AboutRow[] = [
 </script>
 
 <template>
-  <AboutSection :title="['Give something back']">
+  <SiteSection layout="stack" title="Give something back">
     <AboutRows :rows="rows" />
-  </AboutSection>
+  </SiteSection>
 </template>

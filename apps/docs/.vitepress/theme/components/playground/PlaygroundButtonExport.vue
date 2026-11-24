@@ -8,7 +8,7 @@
  * and copying beats downloading when the target is a source file.
  */
 import { computed } from 'vue';
-import { useClipboard } from '@vueuse/core';
+import { useCopy } from '@theme/composables/useCopy';
 import { kebabCase } from 'change-case';
 import { Check, Copy, FileDown } from '@lucide/vue';
 import { UiCode, UiDialog } from '../ui';
@@ -30,7 +30,7 @@ const props = withDefaults(
 // what gets written out here is the block those snippets print, seed and all.
 const { store, open, options } = usePlaygroundDialog(() => props.seed);
 
-const { copy, copied } = useClipboard({ copiedDuring: 3000 });
+const { copy, copied } = useCopy(3000);
 
 const json = computed(() =>
   serializePlaygroundConfig({
@@ -63,9 +63,7 @@ function download() {
 // the JSON is still on screen to select by hand, so the failure stays quiet.
 // It must not be counted as an export, though.
 async function copyOptions() {
-  await copy(optionsJson.value).catch(() => undefined);
-
-  if (copied.value) {
+  if (await copy(optionsJson.value)) {
     track('Playground: Options Exported', {
       style: styleLabel(store.avatarStyleName),
       via: 'clipboard',

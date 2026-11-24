@@ -159,14 +159,14 @@ function setRowWeight(variant: string, value: number | null) {
             />
             <button
               type="button"
-              class="site-btn site-btn-ghost site-btn-sm"
+              class="site-pill site-pill-outline site-pill-xs"
               @click="selectAll"
             >
               All
             </button>
             <button
               type="button"
-              class="site-btn site-btn-ghost site-btn-sm"
+              class="site-pill site-pill-outline site-pill-xs"
               @click="selectNone"
             >
               None
@@ -179,7 +179,6 @@ function setRowWeight(variant: string, value: number | null) {
             :key="variant"
             type="button"
             class="pg-comp-tile"
-            :class="{ 'hv-thumb': variantWeights[variant] === undefined }"
             :aria-pressed="variantWeights[variant] !== undefined"
             :title="variant"
             @click="toggleVariant(variant)"
@@ -243,6 +242,8 @@ function setRowWeight(variant: string, value: number | null) {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .pg-comp {
   display: flex;
   flex-direction: column;
@@ -250,7 +251,7 @@ function setRowWeight(variant: string, value: number | null) {
 }
 
 .pg-comp-tools {
-  gap: 4px;
+  gap: 6px;
 
   .pg-field-reset {
     margin-right: 6px;
@@ -288,39 +289,46 @@ function setRowWeight(variant: string, value: number | null) {
   background: var(--db-paper);
   font: inherit;
   cursor: pointer;
-  transition:
-    opacity var(--duration-fast) ease,
-    border-color 0.12s;
+  transition: border-color 0.12s;
 
+  /* Left out: a dashed line in the field color and a faded picture. */
   &[aria-pressed='false'] {
+    border-color: var(--db-field-border);
     border-style: dashed;
-    opacity: 0.35;
+
+    .pg-comp-tile-picture {
+      opacity: 0.4;
+    }
   }
 
   &[aria-pressed='false']:hover,
   &[aria-pressed='false']:focus-visible {
-    opacity: 0.7;
+    border-color: var(--db-ink-2);
+
+    .pg-comp-tile-picture {
+      opacity: 0.75;
+    }
   }
 
+  /* Chosen: a solid line in the text color, so each chosen tile stands
+     out by itself (3:1 and more), not only through the faded ones. */
   &[aria-pressed='true'] {
-    border-color: var(--db-brand);
+    border-color: var(--db-ink);
   }
 
-  /* Hovering a chosen tile shows the dashed line of the unchosen ones, in
-     the same weight: a click will take it out. */
+  /* Hovering a chosen tile turns its line dashed: a click takes it out. */
   &[aria-pressed='true']:hover,
   &[aria-pressed='true']:focus-visible {
     border-style: dashed;
   }
 }
 
-/* The light tile stays light in dark mode, like everywhere behind avatars. */
 .pg-comp-tile-picture,
 .pg-comp-weight-picture {
   display: block;
   overflow: hidden;
   border-radius: var(--db-radius-2);
-  background: var(--db-tile);
+  @include m.avatar-checker;
 
   img {
     display: block;
@@ -338,6 +346,7 @@ function setRowWeight(variant: string, value: number | null) {
   box-sizing: border-box;
   padding: 12%;
   border-radius: calc(var(--db-radius-3) - 2px);
+  transition: opacity var(--duration-fast) ease;
 }
 
 .pg-comp-weights {
@@ -395,7 +404,7 @@ function setRowWeight(variant: string, value: number | null) {
     display: block;
     height: 100%;
     border-radius: 2px;
-    background: var(--db-brand);
+    background: var(--db-focus);
     transition: width var(--duration-fast) ease;
   }
 }

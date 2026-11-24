@@ -30,10 +30,10 @@ your app gets a stable avatar, without uploads and without storing images.
 
 ## Pick a style
 
-The four styles above are a taste of %STYLE_COUNT%, drawn by different artists,
-from minimal geometric marks to fully illustrated characters and robots. No
-other avatar library offers a collection like it, and switching is one word in
-the URL:
+The four styles above are a taste of %STYLE_COUNT%, drawn by different
+[artists](/artists/), from minimal geometric marks to fully illustrated
+characters and robots. No other avatar library offers a collection like it, and
+switching is one word in the URL:
 
 ```html
 <img src="https://api.dicebear.com/11.x/bottts/svg?seed=Alice" alt="avatar" />
@@ -63,13 +63,12 @@ and copy the finished URL.
 ## Generate avatars in your own code
 
 If you'd rather create avatars locally, without a request to the API, use one of
-the libraries. In JavaScript:
+the libraries. The first lines of each example install it:
 
-```sh
-npm install @dicebear/core @dicebear/styles
-```
+::: code-group
 
-```js
+```js [JavaScript]
+// npm install @dicebear/core @dicebear/styles
 import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
@@ -79,10 +78,89 @@ const avatar = new Avatar(style, { seed: 'Alice' });
 const svg = avatar.toString();
 ```
 
-The same libraries exist for PHP, Python, Rust, Go, Dart, and C#, and the seed
-`Alice` renders the same avatar in every one of them. Unsure which route fits
-your project? The [integration picker](/start/pick-your-integration/) helps you
-choose.
+```php [PHP]
+// composer require dicebear/core dicebear/styles
+use Composer\InstalledVersions;
+use DiceBear\Avatar;
+use DiceBear\Style;
+
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
+$style = Style::fromJson(file_get_contents($basePath . '/src/lorelei.json'));
+
+$avatar = new Avatar($style, ['seed' => 'Alice']);
+
+$svg = (string) $avatar;
+```
+
+```python [Python]
+# pip install dicebear-core dicebear-styles
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+style = Style.from_json(
+    files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
+)
+
+avatar = Avatar(style, {"seed": "Alice"})
+
+svg = avatar.to_string()
+```
+
+```rust [Rust]
+// cargo add dicebear-core serde_json
+// cargo add dicebear-styles --features lorelei
+use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::LORELEI)?;
+let avatar = Avatar::new(&style, json!({ "seed": "Alice" }))?;
+
+let svg = avatar.to_svg();
+```
+
+```go [Go]
+// go get github.com/dicebear/dicebear-go/v11
+// go get github.com/dicebear/styles/v11
+import (
+	dicebear "github.com/dicebear/dicebear-go/v11"
+	"github.com/dicebear/styles/v11"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.Lorelei))
+avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
+
+svg := avatar.SVG()
+```
+
+```dart [Dart]
+// dart pub add dicebear_core dicebear_styles
+import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/lorelei.dart';
+
+final style = Style.parse(lorelei);
+final avatar = Avatar(style, {'seed': 'Alice'});
+
+final svg = avatar.svg;
+```
+
+```csharp [C#]
+// dotnet add package DiceBear.Core
+// dotnet add package DiceBear.Styles
+using System.Text.Json.Nodes;
+using DiceBear;
+
+var style = Style.Parse(Styles.Lorelei);
+var avatar = new Avatar(style, new JsonObject { ["seed"] = "Alice" });
+
+var svg = avatar.ToSvg();
+```
+
+:::
+
+The seed `Alice` renders the same avatar in every language. Unsure which route
+fits your project? The [integration picker](/start/pick-your-integration/) helps
+you choose.
 
 ## Where to next?
 

@@ -1,0 +1,14 @@
+/**
+ * Links. `site-link` sits in running text: bold, underlined. `site-link-arrow`
+ * stands on its own line, in the display face and the accent of its ground,
+ * with an arrow that moves on hover.
+ */
+@use '../mixins' as m;
+
+.site-link {
+  @include m.link-inline;
+
+  &-arrow {
+    @include m.link-arrow;
+  }
+}

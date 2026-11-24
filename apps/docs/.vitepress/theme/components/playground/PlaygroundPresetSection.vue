@@ -50,7 +50,7 @@ function choose(preset: StylePreset) {
         v-for="row in rows"
         :key="row.preset.id"
         type="button"
-        class="pg-presets-row hv-fill"
+        class="pg-presets-row"
         :aria-pressed="row.active"
         @click="choose(row.preset)"
       >
@@ -58,7 +58,6 @@ function choose(preset: StylePreset) {
           class="pg-presets-picture"
           :style-name="avatarStyleName"
           :options="row.options"
-          surface="tile"
         />
         <span class="pg-presets-text">
           <span class="pg-presets-name">{{ row.preset.name }}</span>
@@ -88,28 +87,33 @@ function choose(preset: StylePreset) {
   gap: 12px;
   width: 100%;
   min-width: 0;
-  padding: 6px 8px 6px 6px;
+  padding: 6px 12px 6px 6px;
   box-sizing: border-box;
   border: 0;
-  border-radius: var(--db-radius-3);
+  border-radius: 28px;
   background: transparent;
   font: inherit;
   color: var(--db-ink);
   text-align: left;
   cursor: pointer;
+  transition: background-color 0.12s;
+
+  &:hover:not([aria-pressed='true']) {
+    background: color-mix(in srgb, var(--db-ink) 6%, transparent);
+  }
 
   &[aria-pressed='true'] {
-    background: var(--db-tint);
-    color: var(--db-tint-text);
+    background: var(--db-select);
+    color: var(--db-select-text);
     cursor: default;
 
     .pg-presets-summary {
-      color: var(--db-tint-text);
+      color: var(--db-select-text);
     }
   }
 
   &:focus-visible {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: -2px;
   }
 }
@@ -118,7 +122,7 @@ function choose(preset: StylePreset) {
   flex-shrink: 0;
   width: 44px;
   height: 44px;
-  border-radius: 10px;
+  border-radius: 50%;
 }
 
 .pg-presets-text {
@@ -129,15 +133,15 @@ function choose(preset: StylePreset) {
 }
 
 .pg-presets-name {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 15px;
+  line-height: 22px;
   font-weight: 600;
 }
 
 .pg-presets-summary {
   overflow: hidden;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 13px;
+  line-height: 18px;
   color: var(--db-muted);
   white-space: nowrap;
   text-overflow: ellipsis;

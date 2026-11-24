@@ -190,29 +190,43 @@ export default defineConfig<ThemeOptions>({
       pageData.description = fill(pageData.description);
     }
   },
+  // VitePress's inline theme script reads localStorage unguarded. Where a
+  // browser blocks site data that throws, and a reader who prefers dark gets
+  // the light theme until the app has loaded.
+  transformHtml: (html) =>
+    html.replace(
+      /(<script id="check-dark-mode">)[\s\S]*?(<\/script>)/,
+      (_, open: string, close: string) =>
+        `${open}(()=>{let p;try{p=localStorage.getItem('vitepress-theme-appearance')}catch{}p=p||'auto';if(p==='auto'?matchMedia('(prefers-color-scheme: dark)').matches:p==='dark')document.documentElement.classList.add('dark')})();${close}`,
+    ),
   transformHead: (ctx) => {
     const result: HeadConfig[] = [];
 
-    // The theme renders text with the self-hosted variable Inter (see
-    // theme/index.ts); VitePress's built-in Inter is disabled via
-    // theme-without-fonts. Preload the latin subset so the first paint
-    // doesn't wait a full round trip after the CSS arrives. Font preloads
-    // always need `crossorigin`, even for same-origin requests.
-    const interFont = ctx.assets.find((asset) =>
-      /inter-latin-wght-normal\.[\w-]+\.woff2$/.test(asset),
-    );
+    // The theme renders text with the self-hosted variable Inter and its
+    // headings with Gabarito (see theme/index.ts); VitePress's built-in Inter
+    // is disabled via theme-without-fonts. Preload the latin subsets so the
+    // first paint doesn't wait a full round trip after the CSS arrives. Font
+    // preloads always need `crossorigin`, even for same-origin requests.
+    const fonts = [
+      /inter-latin-wght-normal\.[\w-]+\.woff2$/,
+      /gabarito-latin-wght-normal\.[\w-]+\.woff2$/,
+    ];
 
-    if (interFont) {
-      result.push([
-        'link',
-        {
-          rel: 'preload',
-          href: interFont,
-          as: 'font',
-          type: 'font/woff2',
-          crossorigin: '',
-        },
-      ]);
+    for (const pattern of fonts) {
+      const font = ctx.assets.find((asset) => pattern.test(asset));
+
+      if (font) {
+        result.push([
+          'link',
+          {
+            rel: 'preload',
+            href: font,
+            as: 'font',
+            type: 'font/woff2',
+            crossorigin: '',
+          },
+        ]);
+      }
     }
 
     if (ctx.pageData.relativePath) {
@@ -375,9 +389,6 @@ export default defineConfig<ThemeOptions>({
         },
       },
     ],
-    ssr: {
-      noExternal: ['vue-chartjs'],
-    },
     resolve: {
       alias: {
         '@playground': path.resolve(
@@ -471,6 +482,34 @@ export default defineConfig<ThemeOptions>({
           .replaceAll(STYLE_COUNT_TOKEN, String(styleCount))
           .replaceAll(ANIMATED_STYLE_COUNT_TOKEN, String(animatedStyleCount));
       });
+
+      // Code groups render as DocsCodeGroup, so they get the site's tabs. As
+      // in VitePress's own rule, the first titled block starts out active.
+      md.renderer.rules['container_code-group_open'] = (tokens, idx) => {
+        const labels: string[] = [];
+
+        for (
+          let i = idx + 1;
+          tokens[i].type !== 'container_code-group_close';
+          i++
+        ) {
+          const label =
+            tokens[i].type === 'fence'
+              ? tokens[i].info.match(/\[(.+?)\]/)?.[1]
+              : undefined;
+
+          if (label === undefined) continue;
+          if (labels.length === 0) tokens[i].info += ' active';
+
+          labels.push(label);
+        }
+
+        const attribute = md.utils.escapeHtml(JSON.stringify(labels));
+
+        return `<DocsCodeGroup :labels="${attribute}">\n`;
+      };
+      md.renderer.rules['container_code-group_close'] = () =>
+        '</DocsCodeGroup>\n';
     },
   },
 });

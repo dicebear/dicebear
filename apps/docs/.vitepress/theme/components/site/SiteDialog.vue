@@ -114,12 +114,26 @@ function onClose(event: Event) {
 // A press on the backdrop targets the dialog element itself, because the box
 // has no padding. Press and release both have to land there, so dragging a
 // text selection out of the box does not close it.
+function onBackdrop(event: MouseEvent) {
+  if (!dialog.value || event.target !== dialog.value) return false;
+
+  // The handle of the phone's sheet is the dialog's own pseudo element.
+  const box = dialog.value.getBoundingClientRect();
+
+  return (
+    event.clientX < box.left ||
+    event.clientX > box.right ||
+    event.clientY < box.top ||
+    event.clientY > box.bottom
+  );
+}
+
 function onPointerDown(event: PointerEvent) {
-  pressedBackdrop = event.target === dialog.value;
+  pressedBackdrop = onBackdrop(event);
 }
 
 function onClick(event: MouseEvent) {
-  if (pressedBackdrop && event.target === dialog.value) requestClose();
+  if (pressedBackdrop && onBackdrop(event)) requestClose();
 
   pressedBackdrop = false;
 }
@@ -187,6 +201,8 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/tone';
+
 .site-dialog {
   // The same gap above and below, which centers the box and keeps a tall one
   // off the edges of the window.
@@ -203,8 +219,11 @@ onBeforeUnmount(() => {
   margin: auto;
   padding: 0;
   border: 1px solid var(--db-line);
-  border-radius: var(--db-radius-5);
-  background: var(--db-panel);
+  /* It opens inside the box of its trigger, so it resets to neutral. The
+     backdrop sets it apart, so it stays on the paper. */
+  @include tone.tone('raised');
+  border-radius: var(--db-radius-card);
+  background: var(--db-paper);
   color: var(--db-ink);
   box-shadow: var(--db-shadow-pop);
   overflow: hidden;
@@ -217,7 +236,7 @@ onBeforeUnmount(() => {
   }
 
   &::backdrop {
-    background: rgba(6, 12, 18, 0.4);
+    background: rgba(21, 33, 59, 0.4);
   }
 
   &[open]::backdrop {
@@ -239,10 +258,10 @@ onBeforeUnmount(() => {
     min-width: 0;
     margin: 0;
     padding: 12px 0;
-    font-size: 20px;
-    line-height: 28px;
+    font-family: var(--db-font-display);
+    font-size: 24px;
+    line-height: 30px;
     font-weight: 700;
-    letter-spacing: -0.01em;
     color: var(--db-ink);
   }
 
@@ -251,11 +270,11 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 0;
-    border-radius: var(--db-radius-2);
+    border-radius: 22px;
     background: transparent;
     color: var(--db-muted);
 
@@ -284,7 +303,7 @@ onBeforeUnmount(() => {
     max-height: 88dvh;
     margin: 0;
     border-bottom: 0;
-    border-radius: var(--db-radius-6) var(--db-radius-6) 0 0;
+    border-radius: var(--db-radius-card) var(--db-radius-card) 0 0;
 
     &[open] {
       animation: site-sheet-in var(--duration-fast) var(--ease-smooth);
@@ -339,7 +358,7 @@ onBeforeUnmount(() => {
 }
 
 .dark .site-dialog::backdrop {
-  background: rgba(6, 12, 18, 0.6);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 @keyframes site-dialog-in {

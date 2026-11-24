@@ -1,0 +1,95 @@
+@use '../mixins' as m;
+
+/**
+ * Avatars. `site-tile` is the avatar itself: the checkerboard that shows
+ * where it is transparent, and rounded corners. `site-sticker` puts it on a
+ * card with a shadow, the way it would come off a sheet; `is-tilt-*`
+ * turns it a little.
+ */
+.site-tile {
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 24%;
+
+  @include m.avatar-ground;
+}
+
+/* The white edge is a margin of the tile, which a percentage measures
+   against the sticker itself; a padding would measure against the row the
+   sticker stands in. `--site-sticker-edge` sets it. `flow-root` keeps the
+   top and bottom margins inside the sticker; as a plain block they would
+   collapse through it and leave the edge only at the sides. */
+.site-sticker {
+  --site-sticker-edge: 6%;
+
+  display: flow-root;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: 28%;
+  background: var(--db-sticker);
+  box-shadow: var(--db-shadow);
+
+  > .site-tile {
+    width: calc(100% - 2 * var(--site-sticker-edge));
+    margin: var(--site-sticker-edge);
+    aspect-ratio: 1;
+  }
+
+  &.is-tilt-l {
+    transform: rotate(-3deg);
+  }
+
+  &.is-tilt-r {
+    transform: rotate(3deg);
+  }
+}
+
+/* A fan of stickers that overlap, as in a page head. */
+.site-fan {
+  --site-fan-tile: clamp(88px, 9vw, 132px);
+  display: flex;
+  padding: 0 24px 12px 0;
+
+  > .site-sticker {
+    width: var(--site-fan-tile);
+  }
+
+  > .site-sticker + .site-sticker {
+    margin-left: calc(var(--site-fan-tile) * -0.14);
+  }
+
+  > .site-sticker:nth-child(3n + 1) {
+    transform: rotate(-8deg) translateY(10%);
+  }
+
+  > .site-sticker:nth-child(3n + 2) {
+    transform: rotate(4deg) translateY(-8%);
+  }
+
+  > .site-sticker:nth-child(3n) {
+    transform: rotate(11deg) translateY(12%);
+  }
+}
+
+/* A stack of small stickers, as in a closing block. */
+.site-stack {
+  --site-stack-tile: clamp(40px, 6.2vw, 80px);
+  display: flex;
+  justify-content: center;
+
+  > .site-sticker {
+    width: var(--site-stack-tile);
+  }
+
+  > .site-sticker + .site-sticker {
+    margin-left: clamp(-16px, -1.2vw, -8px);
+  }
+
+  > .site-sticker:nth-child(odd) {
+    transform: rotate(-3deg);
+  }
+
+  > .site-sticker:nth-child(even) {
+    transform: rotate(3deg) translateY(6px);
+  }
+}

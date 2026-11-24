@@ -226,7 +226,7 @@ defineExpose({ focus });
       <div class="pg-picker-chips" role="group" aria-label="Category">
         <button
           type="button"
-          class="site-chip"
+          class="site-pill site-pill-outline site-pill-sm"
           :aria-pressed="selectedCategories.length === 0"
           @click="toggleCategory(undefined)"
         >
@@ -236,7 +236,7 @@ defineExpose({ focus });
           v-for="category in categories"
           :key="category"
           type="button"
-          class="site-chip"
+          class="site-pill site-pill-outline site-pill-sm"
           :aria-pressed="selectedCategories[0] === category"
           @click="toggleCategory(category)"
         >
@@ -281,7 +281,6 @@ defineExpose({ focus });
               :style-name="option.name"
               :options="option.thumb"
               :mode="option.custom ? 'library' : 'http-api'"
-              surface="tile"
             />
           </span>
           <span class="pg-picker-name">{{ option.label }}</span>
@@ -294,7 +293,6 @@ defineExpose({ focus });
           <button
             v-else-if="option.custom"
             type="button"
-            tabindex="-1"
             class="site-btn site-btn-ghost site-btn-icon site-btn-sm pg-picker-remove"
             :aria-label="`Remove ${option.label}`"
             data-tip="Remove"
@@ -327,6 +325,7 @@ defineExpose({ focus });
 
 <style scoped lang="scss">
 @use '../../styles/control' as c;
+@use '../../styles/mixins' as m;
 
 .pg-picker {
   display: flex;
@@ -365,6 +364,11 @@ defineExpose({ focus });
       font-size: 15px;
       color: var(--db-ink);
 
+      // Below 16px iOS zooms into a focused field.
+      @media (max-width: 767px) {
+        font-size: 16px;
+      }
+
       &::placeholder {
         color: var(--db-muted);
       }
@@ -381,7 +385,7 @@ defineExpose({ focus });
     font-weight: 400;
     color: var(--db-muted);
 
-    .site-chip[aria-pressed='true'] & {
+    .site-pill[aria-pressed='true'] & {
       color: inherit;
       opacity: 0.8;
     }
@@ -413,12 +417,12 @@ defineExpose({ focus });
     cursor: pointer;
 
     &.is-active {
-      background: var(--db-soft);
+      @include m.option-hover;
     }
 
     &[aria-selected='true'] {
-      background: var(--db-tint);
-      color: var(--db-tint-text);
+      background: var(--db-select);
+      color: var(--db-select-text);
 
       .pg-picker-name {
         font-weight: 600;
@@ -460,7 +464,7 @@ defineExpose({ focus });
   &-check {
     flex-shrink: 0;
     margin-right: 2px;
-    color: var(--db-brand);
+    color: var(--db-focus);
   }
 
   &-empty {

@@ -1,9 +1,11 @@
 import '@fontsource-variable/inter';
+import '@fontsource-variable/gabarito';
 import { App, onMounted, watchEffect } from 'vue';
 import Layout from './Layout.vue';
 import { createPinia } from 'pinia';
 import { useData } from 'vitepress';
 import ThemeBadge from './components/theme/ThemeBadge.vue';
+import DocsCodeGroup from './components/docs/DocsCodeGroup.vue';
 import { track } from '@theme/utils/track';
 
 let clickListenerAdded = false;
@@ -12,6 +14,7 @@ export default {
   Layout,
   enhanceApp({ app }: { app: App }) {
     app.component('Badge', ThemeBadge);
+    app.component('DocsCodeGroup', DocsCodeGroup);
 
     const pinia = createPinia();
 

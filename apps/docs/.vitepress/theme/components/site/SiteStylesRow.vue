@@ -39,15 +39,16 @@ defineProps<{
         :key="seed"
         :style-name="slug"
         :options="{ seed }"
-        :size="48"
-        :radius="12"
+        :size="52"
         :alt="`${displayName} avatar`"
       />
     </span>
     <span class="site-styles-row-text">
       <span class="site-styles-row-name">
         {{ displayName }}
-        <span v-if="animated" class="site-styles-row-tag">Animated</span>
+        <span v-if="animated" class="site-tag site-tag-sky site-styles-row-tag"
+          >Animated</span
+        >
       </span>
       <span class="site-styles-row-meta">
         <span class="site-styles-row-creator">{{ creator }} · </span>{{ license
@@ -109,7 +110,7 @@ defineProps<{
     position: absolute;
     inset: -1px -12px 0;
     z-index: -1;
-    border-radius: var(--db-radius-3);
+    border-radius: var(--db-radius-5);
     transition: background-color 0.12s;
   }
 
@@ -123,7 +124,7 @@ defineProps<{
     @include raised;
 
     &::before {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
     }
   }
 
@@ -150,18 +151,16 @@ defineProps<{
   }
 
   &-name {
-    width: 180px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    width: 220px;
     flex-shrink: 0;
-    font-size: 16px;
-    line-height: 26px;
-    font-weight: 600;
-  }
-
-  &-tag {
-    margin-left: 4px;
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--db-muted);
+    font-family: var(--db-font-display);
+    font-size: 21px;
+    line-height: 28px;
+    font-weight: 700;
   }
 
   /* The credit names the artist and the license, so it wraps on a narrow
@@ -171,7 +170,7 @@ defineProps<{
     min-width: 0;
     font-size: 15px;
     line-height: 24px;
-    color: var(--db-ink-2);
+    color: var(--db-muted);
   }
 
   &-meta-tag {
@@ -197,12 +196,13 @@ defineProps<{
     }
 
     &.is-new {
-      color: var(--db-brand-text);
+      color: var(--db-ink);
     }
   }
 
-  // The arrow sits centered in a 32px circle that fills on hover. The
-  // negative margin keeps the arrow itself on the list's edge.
+  // The arrow sits centered in a 32px circle that fills on hover. The circle
+  // ends on the list's edge, so the hover surface leaves the same 12px
+  // beside it as beside the avatars on the left.
   &-go {
     display: flex;
     align-items: center;
@@ -210,7 +210,6 @@ defineProps<{
     flex-shrink: 0;
     width: 32px;
     height: 32px;
-    margin-right: -7px;
     border-radius: 50%;
     color: var(--db-ink-2);
     transition:
@@ -258,7 +257,7 @@ defineProps<{
     }
 
     &-name {
-      font-size: 15px;
+      font-size: 17px;
       line-height: 24px;
     }
 
@@ -280,7 +279,6 @@ defineProps<{
     &-go {
       width: 28px;
       height: 28px;
-      margin-right: -6px;
 
       .is-wide {
         display: none;

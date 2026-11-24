@@ -118,6 +118,7 @@ const sources = computedAsync<Record<string, string>>(async () => {
 
 <style lang="scss" scoped>
 @use '../../styles/control' as c;
+@use '../../styles/mixins' as m;
 
 .docs-seed-demo {
   display: flex;
@@ -194,15 +195,15 @@ const sources = computedAsync<Record<string, string>>(async () => {
   }
 
   &:focus-visible {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: 3px;
   }
 
   &[aria-pressed='true'] {
-    box-shadow: 0 0 0 2px var(--db-brand);
+    box-shadow: 0 0 0 2px var(--db-focus);
 
     code {
-      color: var(--db-brand-text);
+      color: var(--db-ink);
     }
   }
 
@@ -220,14 +221,9 @@ const sources = computedAsync<Record<string, string>>(async () => {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 10px;
-  background: var(--db-tile);
   overflow: hidden;
 
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
+  @include m.avatar-ground;
 }
 
 .docs-seed-demo-url {
@@ -253,7 +249,7 @@ const sources = computedAsync<Record<string, string>>(async () => {
 
   b {
     font-weight: 600;
-    color: var(--db-brand-text);
+    color: var(--db-ink);
   }
 }
 </style>

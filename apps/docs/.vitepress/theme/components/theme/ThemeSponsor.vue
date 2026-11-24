@@ -5,7 +5,7 @@
  */
 import { withBase } from 'vitepress';
 
-withDefaults(defineProps<{ logoHeight?: number }>(), { logoHeight: 56 });
+withDefaults(defineProps<{ logoHeight?: number }>(), { logoHeight: 48 });
 </script>
 
 <template>
@@ -16,7 +16,7 @@ withDefaults(defineProps<{ logoHeight?: number }>(), { logoHeight: 56 });
       target="_blank"
       rel="noopener sponsored"
       aria-label="bunny.net"
-      class="theme-sponsor-logo hv-fade"
+      class="theme-sponsor-logo"
     >
       <img
         class="only-light"
@@ -44,7 +44,7 @@ withDefaults(defineProps<{ logoHeight?: number }>(), { logoHeight: 56 });
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 8px;
 }
 
 .theme-sponsor-label {
@@ -63,8 +63,8 @@ withDefaults(defineProps<{ logoHeight?: number }>(), { logoHeight: 56 });
 }
 
 .theme-sponsor-ad {
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 12px;
+  line-height: 16px;
   color: var(--db-muted);
 }
 </style>

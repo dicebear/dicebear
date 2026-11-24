@@ -124,7 +124,7 @@ function onOpenPlayground() {
         </p>
         <a
           :href="playgroundUrl"
-          class="preset-dialog-action hv-link"
+          class="site-link preset-dialog-action"
           @click="onOpenPlayground"
         >
           <Sparkles :size="14" />
@@ -149,15 +149,11 @@ function onOpenPlayground() {
     grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: 8px;
 
-    /* The checkerboard of UiAvatar stays, so a preset with no background
-       reads as transparent here as it does on the tiles. It lies on the tile
-       color, which stays light in dark mode. */
     :deep(.ui-avatar) {
       width: 100%;
       height: auto;
       aspect-ratio: 1 / 1;
       border-radius: var(--db-radius-2);
-      background-color: var(--db-tile);
     }
 
     @media (max-width: 560px) {
@@ -209,10 +205,8 @@ function onOpenPlayground() {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 600;
-    color: var(--db-brand-text);
+    font-size: 15px;
+    line-height: 24px;
   }
 }
 </style>

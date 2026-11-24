@@ -66,9 +66,10 @@ function sortIndicator(column: SortColumn): string {
               : 'none'
           "
           class="sortable"
-          @click="toggleSort('title')"
         >
-          Style{{ sortIndicator('title') }}
+          <button type="button" @click="toggleSort('title')">
+            Style{{ sortIndicator('title') }}
+          </button>
         </th>
         <th
           :aria-sort="
@@ -79,9 +80,10 @@ function sortIndicator(column: SortColumn): string {
               : 'none'
           "
           class="sortable numeric"
-          @click="toggleSort('value')"
         >
-          Distinct Avatars{{ sortIndicator('value') }}
+          <button type="button" @click="toggleSort('value')">
+            Distinct Avatars{{ sortIndicator('value') }}
+          </button>
         </th>
       </tr>
     </thead>
@@ -134,9 +136,23 @@ td:last-child {
 }
 
 .sortable {
-  cursor: pointer;
   user-select: none;
   transition: color 0.12s;
+
+  button {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--db-focus);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  }
 
   &:hover,
   &[aria-sort='ascending'],

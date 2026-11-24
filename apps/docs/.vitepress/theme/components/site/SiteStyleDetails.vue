@@ -5,7 +5,6 @@
  */
 import { computed } from 'vue';
 import { kebabCase } from 'change-case';
-import { Download } from '@lucide/vue';
 import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { safeHttpUrl } from '@theme/utils/url';
@@ -79,7 +78,7 @@ const rows = computed<Row[]>(() => {
 </script>
 
 <template>
-  <div class="site-facts site-style-details">
+  <div class="site-facts is-strong site-style-details">
     <div v-for="row in rows" :key="row.label" class="site-fact">
       <b>{{ row.label }}</b>
       <span>
@@ -88,7 +87,7 @@ const rows = computed<Row[]>(() => {
           :href="row.href"
           target="_blank"
           rel="noopener noreferrer"
-          class="hv-link"
+          class="site-link"
           >{{ row.text }}</a
         >
         <template v-else>{{ row.text }}</template>
@@ -108,11 +107,10 @@ const rows = computed<Row[]>(() => {
           <code>{{ kebabCase(styleName) }}.json</code>
           <button
             type="button"
-            class="site-style-details-download hv-link"
+            class="site-link-arrow site-style-details-download"
             :disabled="pending"
             @click="download"
           >
-            <Download :size="14" />
             Download
           </button>
           <UiCopyButton :text="definitionUrl" />
@@ -123,11 +121,12 @@ const rows = computed<Row[]>(() => {
             href="https://www.figma.com/community/plugin/1005765655729342787"
             target="_blank"
             rel="noopener noreferrer"
-            class="hv-link"
+            class="site-link"
             >DiceBear Studio</a
           >
           to change the style. See
-          <a href="/create-styles/edit-a-style/" class="hv-link">the guide</a>.
+          <a href="/create-styles/edit-a-style/" class="site-link">the guide</a
+          >.
         </p>
       </div>
     </div>
@@ -141,38 +140,27 @@ const rows = computed<Row[]>(() => {
     overflow-wrap: anywhere;
   }
 
-  a {
-    color: var(--db-brand-text);
-  }
-
   &-file {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 4px 16px;
     min-width: 0;
 
     code {
       min-width: 0;
       font-family: var(--db-font-mono);
-      font-size: 14px;
+      font-size: 15px;
+      line-height: 28px;
       color: var(--db-ink);
       word-break: break-all;
     }
   }
 
   &-download {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
     padding: 0;
     border: 0;
     background: none;
-    font: inherit;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 500;
-    color: var(--db-brand-text);
     cursor: pointer;
 
     &:disabled {
@@ -182,10 +170,10 @@ const rows = computed<Row[]>(() => {
   }
 
   &-note {
-    margin: 8px 0 0;
-    font-size: 14px;
-    line-height: 20px;
-    color: var(--db-muted);
+    margin: 4px 0 0;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--db-ink-2);
   }
 }
 </style>

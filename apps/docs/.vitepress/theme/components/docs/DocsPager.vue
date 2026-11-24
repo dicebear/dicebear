@@ -15,18 +15,18 @@ const control = usePrevNext();
     <a
       v-if="control.prev?.link"
       :href="withBase(control.prev.link)"
-      class="docs-pager-link hv-outline"
+      class="docs-pager-link"
     >
-      <span class="docs-pager-label">Previous page</span>
+      <span class="site-label">Previous</span>
       <span class="docs-pager-title">{{ control.prev.text }}</span>
     </a>
     <span v-else></span>
     <a
       v-if="control.next?.link"
       :href="withBase(control.next.link)"
-      class="docs-pager-link docs-pager-next hv-outline"
+      class="docs-pager-link docs-pager-next"
     >
-      <span class="docs-pager-label">Next page</span>
+      <span class="site-label">Next</span>
       <span class="docs-pager-title">{{ control.next.text }}</span>
     </a>
   </nav>
@@ -36,7 +36,9 @@ const control = usePrevNext();
 .docs-pager {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 12px;
+  padding-top: 32px;
+  border-top: 1px solid var(--db-line);
 
   @media (max-width: 767px) {
     grid-template-columns: minmax(0, 1fr);
@@ -47,25 +49,26 @@ const control = usePrevNext();
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 16px 20px;
+  padding: 18px 22px;
   border: 1px solid var(--db-line);
-  border-radius: 14px;
+  border-radius: var(--db-radius-6);
+  color: var(--db-ink);
+  transition: border-color 0.12s;
+
+  &:hover {
+    border-color: var(--db-ink-2);
+  }
 }
 
 .docs-pager-next {
+  align-items: flex-end;
   text-align: right;
 }
 
-.docs-pager-label {
-  font-size: 13px;
-  line-height: 18px;
-  color: var(--db-muted);
-}
-
 .docs-pager-title {
-  font-size: 17px;
+  font-family: var(--db-font-display);
+  font-size: 22px;
   line-height: 28px;
-  font-weight: 600;
-  color: var(--db-brand-text);
+  font-weight: 700;
 }
 </style>

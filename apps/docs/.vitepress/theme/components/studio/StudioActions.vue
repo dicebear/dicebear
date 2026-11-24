@@ -34,7 +34,7 @@ const actions: StudioAction[] = [
 </script>
 
 <template>
-  <div class="studio-actions">
+  <div class="site-actions">
     <a
       v-for="action in actions"
       :key="action.text"
@@ -53,11 +53,3 @@ const actions: StudioAction[] = [
     </a>
   </div>
 </template>
-
-<style scoped lang="scss">
-.studio-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-</style>

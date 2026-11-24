@@ -104,8 +104,8 @@ dicebear create lorelei -o ./avatars --count 10 --format png
 
 An extension that contradicts `--format` is an error.
 
-`--size` sets the width and height in pixels for every format. The default is
-`512`, and raster formats are capped at `2048`:
+`--size` sets the width and height in pixels. Raster formats default to `512`
+and are capped at `2048`. An SVG without `--size` scales to its container:
 
 ```sh
 dicebear create lorelei --format png --size 256 > alice.png

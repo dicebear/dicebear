@@ -24,7 +24,9 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-/* The window minus the header. On a phone the page scrolls instead. */
+/* The window minus the header. Between phone and desktop the page scrolls
+   instead. A phone hides the site header and gives the playground the
+   whole window, with a bar of its own. */
 .pg-page {
   height: calc(100dvh - var(--db-header-h));
   min-height: 560px;
@@ -32,6 +34,13 @@ onMounted(() => {
   @media (max-width: 959px) {
     height: auto;
     min-height: calc(100dvh - var(--db-header-h));
+  }
+
+  @media (max-width: 767px) {
+    --db-header-h: 0px;
+
+    height: 100dvh;
+    min-height: 0;
   }
 }
 </style>

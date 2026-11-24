@@ -80,13 +80,13 @@ const styleLink = computed(() => `/styles/${kebabCase(props.styleName)}/`);
 
   a {
     font-weight: 500;
-    color: var(--db-brand-text);
+    color: var(--db-ink);
     text-decoration-style: dotted;
     transition: color var(--duration-fast);
     cursor: pointer;
 
     &:hover {
-      color: var(--db-brand);
+      color: var(--db-focus);
     }
   }
 }

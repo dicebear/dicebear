@@ -44,7 +44,7 @@ export const footerColumns: FooterColumn[] = [
       { label: 'Animated avatars', href: '/animated-avatars/' },
       { label: 'Playground', href: '/playground/' },
       { label: 'DiceBear Studio', href: '/studio/' },
-      { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
+      { label: 'Editor', href: '/playground/?mode=editor' },
       { label: 'Tools', href: '/tools/' },
     ],
   },
@@ -65,6 +65,7 @@ export const footerColumns: FooterColumn[] = [
     links: [
       { label: 'Why DiceBear?', href: '/why-dicebear/' },
       { label: 'Statistics', href: '/stats/' },
+      { label: 'Artists', href: '/artists/' },
       { label: 'Supported versions', href: '/understand/supported-versions/' },
       { label: 'Support DiceBear', href: '/support/' },
       {

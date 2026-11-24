@@ -1,55 +1,139 @@
 <script setup lang="ts">
 /**
- * The statistics page: the head, the request map across the full width, the
- * latest month in three numbers, the weekly chart with one tab per source,
- * the style rankings, and the shares of API versions and output formats.
+ * The statistics page: the head, the figures as color tiles (the request
+ * rate first, then the latest complete month), the months as bars with one
+ * chip per source, the style rankings with a podium, and the shares of API
+ * versions and output formats. Everything arrives after mount; the tiles
+ * keep their room until then.
  */
 import { computed, ref } from 'vue';
 import { formatNumber } from '@theme/utils/format';
-import { useStatsCharts } from '@theme/composables/useStatsCharts';
+import { apiStatsFailed } from '@theme/composables/useApiStats';
+import { spellNumber, useStatsCharts } from '@theme/composables/useStatsCharts';
+import { useStyleRankings } from '@theme/composables/useStyleRankings';
+import SiteAvatar from './SiteAvatar.vue';
+import SiteNotice from './SiteNotice.vue';
 import SitePageHead from './SitePageHead.vue';
-import SiteStatsChart from './SiteStatsChart.vue';
-import SiteStatsMap from './SiteStatsMap.vue';
+import SiteSection from './SiteSection.vue';
+import SiteStat from './SiteStat.vue';
 import SiteStatsRankings from './SiteStatsRankings.vue';
 import SiteStatsShares from './SiteStatsShares.vue';
 
 const {
   rankings,
-  currentWeekLabel,
+  currentMonthLabel,
   requests,
   downloads,
   requestsPerSecond,
   month,
   versions,
   formats,
-  websites,
 } = useStatsCharts();
 
-const activeTab = ref('api');
+const { monthly } = useStyleRankings();
 
-const tabs = computed(() => [
+/** The websites of the month the rankings stand for. */
+const rankedWebsites = computed(() => {
+  const referers = monthly.value?.referers;
+  const key = referers ? Object.keys(referers).sort().at(-1) : undefined;
+
+  return key && referers ? referers[key] : null;
+});
+
+const perSecond = computed(() =>
+  requestsPerSecond.value ? Math.round(requestsPerSecond.value) : null,
+);
+
+const perDay = computed(() => {
+  if (!requestsPerSecond.value) return null;
+
+  const day = spellNumber(requestsPerSecond.value * 86400);
+
+  return `${day.value} ${day.unit}`.trim();
+});
+
+/** The stickers around the rate, placed by hand, each on its own beat. */
+const CLOUD = [
+  { style: 'avataaars', x: 5, y: 6, w: 22, turn: -8, time: 7.2, delay: -1.4 },
+  {
+    style: 'notionists',
+    x: 42,
+    y: 3,
+    w: 16.5,
+    turn: 6,
+    time: 5.8,
+    delay: -4.1,
+  },
+  { style: 'thumbs', x: 70, y: 26, w: 20, turn: -5, time: 6.6, delay: -2.7 },
+  { style: 'lorelei', x: 21, y: 44, w: 18.5, turn: 7, time: 8.1, delay: -5.6 },
+  { style: 'bottts', x: 54, y: 58, w: 15.5, turn: -6, time: 6.1, delay: -0.8 },
+  { style: 'pixel-art', x: 2, y: 70, w: 14, turn: 5, time: 7.7, delay: -3.5 },
+  { style: 'shapes', x: 83, y: 70, w: 13, turn: 8, time: 5.5, delay: -2.2 },
+];
+
+/* Month by month */
+
+const MONTHS = 12;
+const LABELS = 6;
+
+const source = ref('api');
+
+const sources = computed(() => [
   { key: 'api', label: 'HTTP API' },
   ...downloads.value.map((chart) => ({ key: chart.key, label: chart.label })),
 ]);
 
-const series = computed(() => {
-  if (activeTab.value === 'api') {
-    return requests.value ?? null;
-  }
-  return (
-    downloads.value.find((item) => item.key === activeTab.value)?.series ?? null
+const series = computed(() =>
+  source.value === 'api'
+    ? (requests.value ?? null)
+    : (downloads.value.find((item) => item.key === source.value)?.series ??
+      null),
+);
+
+const bars = computed(() => {
+  const s = series.value;
+
+  if (!s) return [];
+
+  const labels = s.labels.slice(-MONTHS);
+  const values = s.values.slice(-MONTHS);
+  const top = Math.max(...values, 1);
+
+  return values.map((value, index) => ({
+    label: labels[index],
+    value,
+    height: `${Math.max(2, (value / top) * 100).toFixed(1)}%`,
+    // Older months fade, the latest stands in full color.
+    opacity: (0.35 + (0.65 * index) / Math.max(1, values.length - 1)).toFixed(
+      2,
+    ),
+  }));
+});
+
+const axis = computed(() => {
+  const list = bars.value;
+
+  if (list.length <= LABELS) return list.map((bar) => bar.label);
+
+  const step = (list.length - 1) / (LABELS - 1);
+
+  return Array.from(
+    { length: LABELS },
+    (_, i) => list[Math.round(i * step)].label,
   );
 });
 
-const numbers = computed(() =>
-  month.value
-    ? [
-        { value: month.value.requests, label: 'API requests' },
-        { value: month.value.traffic, label: 'served through the CDN' },
-        { value: month.value.downloads, label: 'downloads' },
-      ].filter((item) => item.value)
-    : [],
-);
+const chartLabel = computed(() => {
+  const list = bars.value;
+  const name = sources.value.find((s) => s.key === source.value)?.label;
+
+  if (list.length === 0) return `Monthly totals for ${name}`;
+
+  const first = list[0];
+  const last = list[list.length - 1];
+
+  return `Monthly totals for ${name} over the last ${list.length} complete months, from ${formatNumber(first.value)} in ${first.label} to ${formatNumber(last.value)} in ${last.label}`;
+});
 </script>
 
 <template>
@@ -59,200 +143,283 @@ const numbers = computed(() =>
       title="In numbers"
     >
       Every avatar the hosted API serves is counted, and the package registries
-      report their downloads. The page updates once a week.
+      report their downloads. All figures cover complete calendar months.
     </SitePageHead>
 
-    <div class="site-stats-page-map site-rise">
-      <ClientOnly>
-        <SiteStatsMap :rate="requestsPerSecond" />
-      </ClientOnly>
+    <div v-if="apiStatsFailed" class="site-container">
+      <SiteNotice tone="warn" role="alert">
+        The figures could not be loaded right now. Please try again later.
+      </SiteNotice>
     </div>
 
-    <section class="site-container site-stats-page-month">
-      <span class="site-label">{{ month?.label ?? '\xa0' }}</span>
-      <div class="site-stats-page-numbers">
-        <div
-          v-for="item in numbers"
-          :key="item.label"
-          class="site-stats-page-number"
-        >
-          <span class="site-stats-page-number-value">{{ item.value }}</span>
-          <span class="site-body">{{ item.label }}</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="site-container site-stats-page-chart">
-      <div class="site-stats-page-chart-head">
-        <div class="site-stats-page-intro">
-          <h2 class="site-headline">Week by week</h2>
-          <p class="site-lead">
-            Weekly totals for the hosted HTTP API and the package registries. A
-            week shows up once it is complete.
-          </p>
-        </div>
-        <div class="site-stats-page-tabs" role="group" aria-label="Source">
-          <button
-            v-for="tab in tabs"
-            :key="tab.key"
-            type="button"
-            class="site-chip site-chip-lg hv-outline"
-            :aria-pressed="activeTab === tab.key"
-            @click="activeTab = tab.key"
-          >
-            {{ tab.label }}
-          </button>
-        </div>
-      </div>
-      <ClientOnly>
-        <div v-if="series" class="site-stats-page-plot">
-          <SiteStatsChart
-            :labels="series.labels"
-            :values="series.values"
-            :format-value="formatNumber"
+    <section class="site-stats-page-figures" aria-label="The figures">
+      <div class="site-box is-sky site-stats-page-rate">
+        <SiteStat
+          size="xl"
+          :value="perSecond?.toLocaleString('en-US') ?? '\xa0'"
+          label="avatars a second"
+          :note="
+            month && perDay
+              ? `On average in ${month.label}. That is ${perDay} a day.`
+              : undefined
+          "
+        />
+        <div class="site-stats-page-cloud" aria-hidden="true">
+          <SiteAvatar
+            v-for="item in CLOUD"
+            :key="item.style"
+            sticker
+            :style-name="item.style"
+            :options="{ seed: 'Felix' }"
+            :style="{
+              left: `${item.x}%`,
+              top: `${item.y}%`,
+              width: `${item.w}%`,
+              transform: `rotate(${item.turn}deg)`,
+              animationDuration: `${item.time}s`,
+              animationDelay: `${item.delay}s`,
+            }"
           />
         </div>
-      </ClientOnly>
+      </div>
+
+      <div class="site-grid">
+        <div class="site-box is-tile is-sun">
+          <SiteStat
+            :value="month?.requests.value ?? '\xa0'"
+            :unit="month?.requests.unit"
+            label="API requests"
+            :note="month?.label"
+          />
+        </div>
+        <div
+          v-if="!month || month.websites !== null"
+          class="site-box is-tile is-lilac"
+        >
+          <SiteStat
+            :value="month?.websites?.toLocaleString('en-US') ?? '\xa0'"
+            label="websites"
+            :note="month?.label"
+          />
+        </div>
+        <div class="site-box is-tile is-mint">
+          <SiteStat
+            :value="month?.traffic?.value ?? '\xa0'"
+            :unit="month?.traffic?.unit"
+            label="served through the CDN"
+            :note="month?.label"
+          />
+        </div>
+      </div>
+
+      <div class="site-box is-tile is-soft site-stats-page-downloads">
+        <SiteStat
+          :value="month?.downloads?.value ?? '\xa0'"
+          :unit="month?.downloads?.unit"
+          label="downloads"
+          :note="month ? `${month.label}, all registries` : undefined"
+        />
+        <div class="site-stats-page-registries">
+          <div
+            v-for="registry in month?.registries ?? []"
+            :key="registry.label"
+            class="site-box is-inset"
+          >
+            <SiteStat
+              size="sm"
+              :value="registry.value"
+              :label="registry.label"
+            />
+          </div>
+        </div>
+      </div>
     </section>
 
+    <SiteSection
+      tone="lilac"
+      layout="stack"
+      title="Month by month"
+      hint="Monthly totals for the hosted HTTP API and the package registries. A month shows up once it is complete."
+      class="site-stats-page-months"
+    >
+      <div class="site-stats-page-sources" role="group" aria-label="Source">
+        <button
+          v-for="item in sources"
+          :key="item.key"
+          type="button"
+          class="site-pill site-pill-outline"
+          :aria-pressed="source === item.key"
+          @click="source = item.key"
+        >
+          {{ item.label }}
+        </button>
+      </div>
+      <div class="site-stats-page-chart">
+        <div class="site-stats-page-bars" role="img" :aria-label="chartLabel">
+          <span
+            v-for="bar in bars"
+            :key="bar.label"
+            :title="`${bar.label}: ${formatNumber(bar.value)}`"
+            :style="{ height: bar.height, opacity: bar.opacity }"
+          ></span>
+        </div>
+        <div class="site-stats-page-axis" aria-hidden="true">
+          <span v-for="label in axis" :key="label">{{ label }}</span>
+        </div>
+      </div>
+    </SiteSection>
+
     <SiteStatsRankings
-      v-if="rankings && currentWeekLabel"
+      v-if="rankings && currentMonthLabel"
       :rows="rankings"
-      :week-label="currentWeekLabel"
-      :websites="websites"
+      :month-label="currentMonthLabel"
+      :websites="rankedWebsites"
     />
 
-    <section class="site-container site-stats-page-shares">
-      <h2 class="site-headline">Versions and formats</h2>
-      <div class="site-stats-page-shares-grid">
+    <SiteSection
+      v-if="versions.length || formats.length"
+      tone="soft"
+      layout="stack"
+      title="Versions and formats"
+      class="site-stats-page-shares"
+    >
+      <div class="site-pair is-top">
         <SiteStatsShares
           title="API versions"
-          :lead="`Share of the websites active in the week of ${currentWeekLabel ?? ''}.`"
+          :lead="`Share of the websites active in ${currentMonthLabel ?? ''}.`"
           :items="versions"
         />
         <SiteStatsShares
           title="Output formats"
-          lead="Share of the websites active in the same week."
+          lead="Share of the websites active in the same month."
           :items="formats"
         />
       </div>
-    </section>
+    </SiteSection>
+    <div class="site-end"></div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .site-stats-page {
-  &-map {
-    margin-top: 56px;
-    animation-delay: 200ms;
-  }
-
-  &-month {
-    padding-top: 96px;
-  }
-
-  &-numbers {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 48px;
-    margin-top: 20px;
-    padding-top: 28px;
-    border-top: 1px solid var(--db-line);
-
-    @media (max-width: 959px) {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 32px;
-    }
-  }
-
-  &-number {
+  /* The figures: a column of tiles, as wide as a block. */
+  &-figures {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    min-width: 0;
-
-    &-value {
-      font-size: clamp(40px, 4.5vw, 64px);
-      line-height: 1;
-      letter-spacing: -0.04em;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--db-ink);
-    }
+    gap: var(--db-edge);
+    width: min(var(--db-content), 100% - 2 * var(--db-wrap));
+    margin: clamp(40px, 5vw, 72px) auto 0;
   }
 
-  &-intro {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    min-width: 0;
-
-    .site-lead {
-      max-width: 640px;
-    }
-  }
-
-  &-chart {
-    padding-top: 168px;
-
-    &-head {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 32px 48px;
-    }
-  }
-
-  &-tabs {
+  &-rate {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    align-items: center;
+    gap: 24px clamp(32px, 4vw, 64px);
+    padding: clamp(32px, 4.5vw, 64px);
+    border-radius: var(--db-radius-block);
+
+    > .site-stat {
+      flex: 1 1 360px;
+    }
   }
 
-  &-plot {
-    margin-top: 56px;
-  }
+  /* Stickers scattered around the rate, placed in percent of the cloud.
+     They float on `translate` and `rotate` alone, which the compositor runs
+     without layout or paint, and keep the tilt set in `transform`. */
+  &-cloud {
+    --float: clamp(5px, 0.8vw, 12px);
 
-  /* The last section of the page, so it also holds the space to the footer. */
-  &-shares {
-    padding-top: 168px;
-    padding-bottom: 168px;
+    position: relative;
+    flex: 1 1 320px;
+    max-width: 520px;
+    aspect-ratio: 1.25;
 
-    &-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 80px;
-      margin-top: 64px;
+    > :deep(.site-sticker) {
+      position: absolute;
+    }
 
-      @media (max-width: 959px) {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 64px;
+    @media (prefers-reduced-motion: no-preference) {
+      > :deep(.site-sticker) {
+        animation: site-stats-float 6s ease-in-out infinite alternate;
       }
     }
   }
 
-  @media (max-width: 767px) {
-    &-map {
-      margin-top: 40px;
+  &-downloads {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px clamp(32px, 4vw, 64px);
+
+    > .site-stat {
+      flex: 0 1 360px;
     }
+  }
 
-    &-month {
-      padding-top: 64px;
+  &-registries {
+    display: grid;
+    flex: 999 1 420px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  &-months {
+    margin-top: var(--db-edge);
+  }
+
+  &-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Bars with round tops, the older months fainter. */
+  &-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.8%;
+    height: clamp(240px, 28vw, 380px);
+
+    > span {
+      flex: 1;
+      border-radius: 999px 999px 4px 4px;
+      background: var(--db-accent);
+      transition: height 0.4s var(--ease-smooth);
     }
+  }
 
-    &-chart,
-    &-shares {
-      padding-top: 96px;
-    }
+  &-axis {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 14px;
+    overflow: hidden;
+    font-family: var(--db-font-display);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    color: var(--db-ink-2);
+    white-space: nowrap;
 
-    &-shares {
-      padding-bottom: 96px;
-
-      &-grid {
-        margin-top: 40px;
+    /* A phone has room for the two ends of the time span. */
+    @media (max-width: 599px) {
+      > :not(:first-child, :last-child) {
+        display: none;
       }
     }
+  }
+}
+
+@keyframes site-stats-float {
+  from {
+    translate: 0 calc(-1 * var(--float));
+    rotate: -1.5deg;
+  }
+
+  to {
+    translate: 0 var(--float);
+    rotate: 1.5deg;
   }
 }
 </style>

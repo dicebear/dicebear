@@ -5,8 +5,8 @@
  * reads "Copied".
  */
 import { computed } from 'vue';
-import { useClipboard } from '@vueuse/core';
 import { Copy, Check } from '@lucide/vue';
+import { useCopy } from '@theme/composables/useCopy';
 
 const props = withDefaults(
   defineProps<{
@@ -18,7 +18,7 @@ const props = withDefaults(
   { duration: 2000, size: 16, label: 'Copy' },
 );
 
-const { copy, copied } = useClipboard({ copiedDuring: props.duration });
+const { copy, copied } = useCopy(props.duration);
 
 const tip = computed(() => (copied.value ? 'Copied' : props.label));
 </script>
@@ -26,39 +26,12 @@ const tip = computed(() => (copied.value ? 'Copied' : props.label));
 <template>
   <button
     type="button"
-    class="ui-copy-button hv-ghost"
+    class="site-btn site-btn-ghost site-btn-icon site-btn-sm ui-copy-button"
     :aria-label="tip"
     :data-tip="tip"
-    @click="copy(text)"
+    @click="void copy(text)"
   >
     <Check v-if="copied" :size="size" />
     <Copy v-else :size="size" />
   </button>
 </template>
-
-<style lang="scss" scoped>
-.ui-copy-button {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--db-radius-2);
-  background: transparent;
-  color: var(--db-muted);
-  cursor: pointer;
-
-  &:hover {
-    background: var(--db-soft);
-    color: var(--db-ink);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--db-brand);
-    outline-offset: 2px;
-  }
-}
-</style>

@@ -33,9 +33,9 @@ const neighbours = computed(() => {
       <span class="site-label">Previous style</span>
       <a
         :href="`/styles/${neighbours.previous}/`"
-        class="site-heading site-style-next-link hv-row"
+        class="site-heading site-style-next-link"
       >
-        <ArrowLeft :size="20" class="hv-chev" />
+        <ArrowLeft :size="20" />
         {{ styleDisplayName(neighbours.previous) }}
       </a>
     </div>
@@ -43,10 +43,10 @@ const neighbours = computed(() => {
       <span class="site-label">Next style</span>
       <a
         :href="`/styles/${neighbours.next}/`"
-        class="site-heading site-style-next-link hv-row"
+        class="site-heading site-style-next-link"
       >
         {{ styleDisplayName(neighbours.next) }}
-        <ArrowRight :size="20" class="hv-chev" />
+        <ArrowRight :size="20" />
       </a>
     </div>
   </nav>
@@ -57,10 +57,11 @@ const neighbours = computed(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 48px;
-  padding-top: 120px;
+  flex-wrap: wrap;
+  gap: 24px 48px;
+  padding-top: clamp(48px, 6vw, 88px);
   /* The last block of a style page, so it also holds the space to the footer. */
-  padding-bottom: 96px;
+  padding-bottom: clamp(64px, 8vw, 112px);
 
   &-target {
     display: flex;
@@ -68,8 +69,10 @@ const neighbours = computed(() => {
     gap: 8px;
     min-width: 0;
 
+    /* Wrapped under the previous style, it still ends on the right. */
     &.is-next {
       align-items: flex-end;
+      margin-left: auto;
       text-align: right;
     }
   }
@@ -79,15 +82,20 @@ const neighbours = computed(() => {
     align-items: center;
     gap: 12px;
 
+    color: var(--db-ink);
+
     svg {
       flex-shrink: 0;
+      transition: transform 0.25s var(--ease-spring);
+    }
+
+    &:hover svg {
+      transform: translateX(4px);
     }
   }
 
-  @media (max-width: 767px) {
-    gap: 24px;
-    padding-top: 80px;
-    padding-bottom: 64px;
+  &-target:not(.is-next) &-link:hover svg {
+    transform: translateX(-4px);
   }
 }
 </style>

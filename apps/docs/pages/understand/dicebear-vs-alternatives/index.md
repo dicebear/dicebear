@@ -7,7 +7,7 @@ aside: false
 ---
 
 <script setup>
-import DocsComparisonTable from '@theme/components/docs/DocsComparisonTable.vue';
+import SiteComparisonTable from '@theme/components/site/SiteComparisonTable.vue';
 </script>
 
 # Avatar library comparison
@@ -23,7 +23,7 @@ recolor the avatar, swap individual features, control the background, and weight
 how likely each variant is, so two avatars from the same style can look
 completely different.
 
-<DocsComparisonTable />
+<SiteComparisonTable />
 
 _This comparison is based on publicly available information and may not reflect
 the latest updates._
@@ -35,9 +35,10 @@ gradient-based styles. It installs in seconds and the gradients look great,
 which makes it a strong pick for a React app that wants that exact style. The
 hosted API is a separate, paid product.
 
-DiceBear comes at it differently: more styles from different artists, no
-framework dependency, and a free HTTP API. As a Boring Avatars alternative
-DiceBear fits when you want a wider range of looks or you build outside React.
+DiceBear comes at it differently: more styles from different
+[artists](/artists/), no framework dependency, and a free HTTP API. As a Boring
+Avatars alternative DiceBear fits when you want a wider range of looks or you
+build outside React.
 
 ## DiceBear vs. Avvvatars
 

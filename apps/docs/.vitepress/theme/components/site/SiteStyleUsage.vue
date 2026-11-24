@@ -5,7 +5,6 @@
  */
 import { computed } from 'vue';
 import { useData } from 'vitepress';
-import { ArrowRight } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
 import { httpApiUrl, usageSnippets } from '@theme/config/usageSnippets';
 import { exampleSeeds } from '@theme/config/styleCategories';
@@ -83,9 +82,8 @@ function onTab(id: string | undefined) {
   <div class="site-style-usage">
     <UiCode :tabs="tabs" :model-value="active" @update:model-value="onTab" />
     <p v-if="current.note" class="site-style-usage-note">{{ current.note }}</p>
-    <a :href="current.docs" class="site-style-usage-docs hv-link">
+    <a :href="current.docs" class="site-link-arrow site-style-usage-docs">
       {{ current.docsLabel }} documentation
-      <ArrowRight :size="16" />
     </a>
   </div>
 </template>
@@ -99,20 +97,13 @@ function onTab(id: string | undefined) {
 
   &-note {
     margin: 0;
-    font-size: 15px;
-    line-height: 24px;
-    color: var(--db-muted);
+    font-size: 17px;
+    line-height: 28px;
+    color: var(--db-ink-2);
   }
 
   &-docs {
     align-self: flex-start;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
-    line-height: 24px;
-    font-weight: 500;
-    color: var(--db-brand-text);
   }
 }
 </style>

@@ -4,6 +4,8 @@ title: Playground
 editLink: false
 aside: false
 footer: false
+# On a phone the playground brings its own bar and hides the site header.
+appBar: true
 
 description: >
   Free online avatar maker. Design custom profile pictures, preview avatar

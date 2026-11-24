@@ -1,0 +1,110 @@
+/**
+ * Lists with dividers. `site-rows` holds `site-row`s with a hairline
+ * between them; `is-strong` makes the lines the 2px rule of a block,
+ * `is-between` leaves out the lines at both ends.
+ * `site-facts` is the same list as term and text.
+ */
+.site-rows {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--db-line);
+
+  &.is-strong {
+    border-bottom: 2px solid var(--db-rule);
+  }
+
+  &.is-between {
+    border-bottom: 0;
+  }
+}
+
+.site-row {
+  padding: 16px 0;
+  border-top: 1px solid var(--db-line);
+
+  .is-strong > & {
+    padding: 22px 0;
+    border-top: 2px solid var(--db-rule);
+  }
+
+  /* Lines only between the rows, none above the first or below the last. */
+  .is-between > &:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .is-between > &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+/* A row that is a link: the whole row reacts. */
+a.site-row,
+.site-row-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 28px;
+  min-height: 60px;
+  color: var(--db-ink);
+  text-decoration: none;
+  transition: background-color 0.12s;
+
+  &:hover {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--db-ink) 4%, transparent) 20%,
+      color-mix(in srgb, var(--db-ink) 4%, transparent) 80%,
+      transparent
+    );
+  }
+}
+
+.site-facts {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border-bottom: 1px solid var(--db-line);
+
+  &.is-strong {
+    border-bottom: 2px solid var(--db-rule);
+  }
+}
+
+.site-fact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--db-line);
+
+  .is-strong > & {
+    border-top: 2px solid var(--db-rule);
+  }
+
+  > :first-child {
+    flex: 0 0 160px;
+    margin: 0;
+    font-family: var(--db-font-display);
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 700;
+    color: var(--db-accent);
+  }
+
+  > :last-child {
+    flex: 1 1 280px;
+    min-width: 0;
+    margin: 0;
+    font-size: 17px;
+    line-height: 28px;
+    color: var(--db-ink-2);
+    overflow-wrap: anywhere;
+  }
+}
+
+/* The closing line under the last row of an accordion (SiteDisclosure). */
+.site-disclosures {
+  border-bottom: 2px solid var(--db-rule);
+}

@@ -330,7 +330,7 @@ const contrastedNames = computed(() =>
   border: 0;
   background: transparent;
   font: inherit;
-  color: var(--db-brand-text);
+  color: var(--db-ink);
   cursor: pointer;
 }
 </style>

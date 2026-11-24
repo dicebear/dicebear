@@ -1,0 +1,109 @@
+/**
+ * Tag: a static mark, 32px high. Neutral by default; `-outline` draws a
+ * ring, a block color fills it, a status tints it. `-sm` is the 24px mark
+ * that sits inside a line of text.
+ */
+@use '../mixins' as m;
+
+.site-tag {
+  @include m.tag-base;
+
+  &-outline {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--db-field-border);
+  }
+
+  &-solid {
+    background: var(--db-btn-bg);
+    color: var(--db-btn-fg);
+  }
+
+  &-sun {
+    background: var(--db-sun);
+    color: var(--db-on);
+  }
+
+  &-sky {
+    background: var(--db-sky);
+    color: var(--db-sky-acc);
+  }
+
+  &-lilac {
+    background: var(--db-lilac);
+    color: var(--db-lilac-acc);
+  }
+
+  &-mint {
+    background: var(--db-mint);
+    color: var(--db-mint-acc);
+  }
+
+  &-ok {
+    background: var(--db-ok-soft);
+    color: var(--db-ok);
+  }
+
+  &-warn {
+    background: var(--db-warn-soft);
+    color: var(--db-warn);
+  }
+
+  &-danger {
+    background: var(--db-danger-soft);
+    color: var(--db-danger);
+  }
+
+  &-sm {
+    height: 24px;
+    padding: 0 9px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+
+  /* A tag that links underlines on hover like every link of the site; an
+     outlined one also takes a ground. */
+  &:is(a, button) {
+    cursor: pointer;
+    transition: background-color 0.12s;
+    @include m.focus-ring(2px);
+
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+    }
+  }
+
+  &-outline:is(a, button):hover {
+    background: color-mix(in srgb, var(--db-ink) 6%, transparent);
+  }
+}
+
+/* A yes or a no in a table: a round mark, 32px. `is-yes` fills it in the
+   button colors of its ground. */
+.site-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--db-ink) 10%, transparent);
+  color: var(--db-muted);
+  vertical-align: middle;
+
+  &.is-yes {
+    background: var(--db-btn-bg);
+    color: var(--db-btn-fg);
+  }
+}
+
+/* A keyboard key. */
+.site-kbd {
+  @include m.kbd;
+}
+
+.site-code {
+  @include m.code-inline;
+}

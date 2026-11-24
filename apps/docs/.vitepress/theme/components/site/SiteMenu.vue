@@ -9,6 +9,8 @@ export type SiteMenuItem =
       icon?: Component;
       command: () => void;
       disabled?: boolean;
+      /** Makes the item one of a choice: a check marks the chosen one. */
+      checked?: boolean;
       separator?: false;
     }
   | { separator: true };
@@ -16,12 +18,18 @@ export type SiteMenuItem =
 
 <script setup lang="ts">
 /**
- * A dropdown menu under its trigger. The trigger slot receives `toggle` and
- * `open` for the button's click handler and `aria-expanded`. A trigger that
- * lives elsewhere calls the exposed `toggle(event)` instead, and the menu
- * opens under that event's `currentTarget`.
+ * A dropdown menu under its trigger: a card with one row per item, the row
+ * under the pointer soft. The trigger slot receives `toggle` and `open` for
+ * the button's click handler and `aria-expanded`. A trigger that lives
+ * elsewhere calls the exposed `toggle(event)` instead, and the menu opens
+ * under that event's `currentTarget`. Items with `checked` form a choice.
+ * On a phone the same items open as a sheet from the bottom, with rows for
+ * the thumb, as the other menus there do.
  */
-import { nextTick, ref } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
+import { useMediaQuery, useMounted } from '@vueuse/core';
+import SiteDialog from './SiteDialog.vue';
+import { Check } from '@lucide/vue';
 import {
   usePopoverPosition,
   type PopoverAlign,
@@ -33,6 +41,8 @@ const props = withDefaults(
     align?: PopoverAlign;
     /** Accessible name of the menu. */
     label?: string;
+    /** Fills its column, and the list opens as wide as the trigger. */
+    fluid?: boolean;
   }>(),
   { align: 'left', label: undefined },
 );
@@ -58,6 +68,7 @@ const { ready, native, open, style, show, hide, toggle, onToggle } =
     anchor: () =>
       (trigger.value?.firstElementChild as HTMLElement | null) ?? trigger.value,
     align: () => props.align,
+    matchWidth: () => props.fluid,
     onShow: () => {
       emit('show');
       focusItem('first');
@@ -68,7 +79,7 @@ const { ready, native, open, style, show, hide, toggle, onToggle } =
 function enabledItems(): HTMLElement[] {
   return Array.from(
     panel.value?.querySelectorAll<HTMLElement>(
-      '[role="menuitem"]:not(:disabled)',
+      ':is([role="menuitem"], [role="menuitemradio"]):not(:disabled)',
     ) ?? [],
   );
 }
@@ -114,33 +125,78 @@ function onKeyDown(event: KeyboardEvent) {
 }
 
 async function onTriggerArrow(event: KeyboardEvent) {
-  if (open.value) return;
+  if (isOpen.value) return;
 
   event.preventDefault();
+
+  if (phone.value) {
+    sheetOpen.value = true;
+
+    return;
+  }
+
   await show();
   await nextTick();
   focusItem(event.key === 'ArrowUp' ? 'last' : 'first');
 }
 
+const phoneWidth = useMediaQuery('(max-width: 767px)');
+const mounted = useMounted();
+
+// The server knows no window, so the first render in the browser has to
+// leave the sheet out too, or a phone fails hydration.
+const phone = computed(() => mounted.value && phoneWidth.value);
+const sheetOpen = ref(false);
+
+watch(sheetOpen, (value) => (value ? emit('show') : emit('hide')));
+
+/** Open, as a popover or, on a phone, as a sheet. */
+const isOpen = computed(() => (phone.value ? sheetOpen.value : open.value));
+
+function toggleMenu(event?: Event) {
+  if (phone.value) {
+    sheetOpen.value = !sheetOpen.value;
+
+    return;
+  }
+
+  toggle(event);
+}
+
+function showMenu(event?: Event) {
+  if (phone.value) {
+    sheetOpen.value = true;
+
+    return;
+  }
+
+  return show(event);
+}
+
+function hideMenu() {
+  sheetOpen.value = false;
+  hide();
+}
+
 function pick(item: SiteMenuItem) {
   if (item.separator || item.disabled) return;
 
-  hide();
+  hideMenu();
   item.command();
 }
 
-defineExpose({ toggle, show, hide });
+defineExpose({ toggle: toggleMenu, show: showMenu, hide: hideMenu });
 </script>
 
 <template>
-  <span class="site-menu">
+  <span class="site-menu" :class="{ 'is-fluid': fluid }">
     <span
       ref="trigger"
       class="site-menu-trigger"
       @keydown.down="onTriggerArrow"
       @keydown.up="onTriggerArrow"
     >
-      <slot name="trigger" :open="open" :toggle="toggle" />
+      <slot name="trigger" :open="isOpen" :toggle="toggleMenu" />
     </span>
 
     <div
@@ -165,9 +221,10 @@ defineExpose({ toggle, show, hide });
         <button
           v-else
           type="button"
-          role="menuitem"
+          :role="item.checked === undefined ? 'menuitem' : 'menuitemradio'"
+          :aria-checked="item.checked"
           tabindex="-1"
-          class="site-menu-item hv-ghost"
+          class="site-menu-item"
           :disabled="item.disabled"
           @click="pick(item)"
         >
@@ -180,16 +237,72 @@ defineExpose({ toggle, show, hide });
           />
           <span class="site-menu-label">{{ item.label }}</span>
           <span v-if="item.hint" class="site-menu-hint">{{ item.hint }}</span>
+          <Check
+            v-if="item.checked"
+            :size="16"
+            :stroke-width="2.6"
+            aria-hidden="true"
+          />
         </button>
       </template>
     </div>
+
+    <SiteDialog
+      v-if="phone"
+      v-model:open="sheetOpen"
+      sheet
+      :header="label ?? 'Menu'"
+    >
+      <div class="site-menu-sheet" role="menu" :aria-label="label">
+        <template v-for="(item, index) in items" :key="index">
+          <div
+            v-if="item.separator"
+            class="site-menu-separator"
+            role="separator"
+          />
+          <button
+            v-else
+            type="button"
+            :role="item.checked === undefined ? 'menuitem' : 'menuitemradio'"
+            :aria-checked="item.checked"
+            class="site-menu-item"
+            :disabled="item.disabled"
+            @click="pick(item)"
+          >
+            <component
+              :is="item.icon"
+              v-if="item.icon"
+              :size="18"
+              aria-hidden="true"
+              class="site-menu-icon"
+            />
+            <span class="site-menu-label">{{ item.label }}</span>
+            <span v-if="item.hint" class="site-menu-hint">{{ item.hint }}</span>
+            <Check
+              v-if="item.checked"
+              :size="18"
+              :stroke-width="2.6"
+              aria-hidden="true"
+            />
+          </button>
+        </template>
+      </div>
+    </SiteDialog>
   </span>
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/tone';
+@use '../../styles/mixins' as m;
+
 .site-menu {
   position: relative;
   display: inline-flex;
+
+  &.is-fluid {
+    display: flex;
+    width: 100%;
+  }
 
   &-trigger {
     display: flex;
@@ -201,16 +314,20 @@ defineExpose({ toggle, show, hide });
     position: fixed;
     inset: auto;
     box-sizing: border-box;
-    min-width: 240px;
+    min-width: 200px;
     max-width: calc(100vw - 16px);
     max-height: calc(100vh - 16px);
     margin: 0;
     padding: 6px;
-    border: 1px solid var(--db-line);
-    border-radius: var(--db-radius-3);
+    border: 0;
+    /* It opens inside the box of its trigger, so it resets to neutral. */
+    @include tone.tone('panel');
+    border-radius: var(--db-radius-6);
     background: var(--db-panel);
     color: var(--db-ink);
-    box-shadow: var(--db-shadow-pop);
+    box-shadow:
+      0 0 0 1px var(--db-line),
+      var(--db-shadow-pop);
     overflow-y: auto;
   }
 
@@ -224,16 +341,30 @@ defineExpose({ toggle, show, hide });
     align-items: center;
     gap: 10px;
     height: 40px;
-    padding: 0 12px;
+    padding: 0 14px;
     border: 0;
-    border-radius: var(--db-radius-1);
+    border-radius: 20px;
     background: transparent;
-    color: var(--db-ink);
-    font-size: 15px;
+    font-family: var(--db-font-display);
+    font-size: 16px;
     line-height: 24px;
     font-weight: 600;
+    color: var(--db-ink-2);
     text-align: left;
     white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.12s,
+      color 0.12s;
+
+    &:hover {
+      @include m.option-hover;
+    }
+
+    &[aria-checked='true'] {
+      font-weight: 700;
+      color: var(--db-ink);
+    }
 
     &:disabled {
       color: var(--db-muted);
@@ -243,7 +374,12 @@ defineExpose({ toggle, show, hide });
 
     &:focus-visible {
       outline-offset: -2px;
-      background-color: var(--db-soft);
+      @include m.option-hover;
+    }
+
+    /* The tint of the row takes too much from the muted color. */
+    &:is(:hover, :focus-visible) .site-menu-hint {
+      color: var(--db-ink-2);
     }
   }
 
@@ -269,6 +405,20 @@ defineExpose({ toggle, show, hide });
     height: 1px;
     margin: 6px 4px;
     background: var(--db-line);
+  }
+
+  /* The sheet of a phone: the same rows, 48px for the thumb. */
+  &-sheet {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 8px 8px;
+
+    .site-menu-item {
+      height: 48px;
+      border-radius: 24px;
+      font-size: 17px;
+    }
   }
 }
 </style>

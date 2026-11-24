@@ -21,8 +21,8 @@ const crumbs = [
 
 <SitePageHead :crumbs="crumbs" title="Bundle size estimator">
 
-Pick the styles you plan to use and see how many minified, gzipped kilobytes
-they add to your JavaScript bundle.
+Choose the library, tick the styles you plan to ship, and see what they add to
+your bundle, minified and gzipped.
 
 </SitePageHead>
 

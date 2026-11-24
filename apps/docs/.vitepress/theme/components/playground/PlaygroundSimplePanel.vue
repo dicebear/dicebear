@@ -195,7 +195,6 @@ const shape = usePlaygroundShape();
             <PlaygroundThumb
               :style-name="avatarStyleName"
               :options="look.options"
-              surface="tile"
             />
           </button>
         </div>
@@ -289,7 +288,7 @@ const shape = usePlaygroundShape();
     flex-direction: column;
     gap: 28px;
     min-height: 0;
-    padding: 20px 12px 24px;
+    padding: 24px 0 24px 24px;
     overflow-y: auto;
   }
 
@@ -299,11 +298,13 @@ const shape = usePlaygroundShape();
     gap: 12px;
   }
 
+  /* The label of a group of controls, as everywhere on the site. */
   &-title {
     margin: 0;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 600;
+    font-family: var(--db-font-display);
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
     color: var(--db-ink);
   }
 
@@ -330,18 +331,18 @@ const shape = usePlaygroundShape();
     }
 
     &:hover {
-      outline: 2px solid var(--db-hover-border);
+      outline: 2px solid var(--db-ink-2);
       outline-offset: 2px;
     }
 
     &[aria-pressed='true'] {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
       cursor: default;
     }
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
   }
@@ -370,18 +371,18 @@ const shape = usePlaygroundShape();
     cursor: pointer;
 
     &:hover {
-      border-color: var(--db-hover-border);
+      border-color: var(--db-ink-2);
     }
 
     &[aria-pressed='true'],
     &.is-active {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
 
     &:focus-visible,
     &:has(:focus-visible) {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
 
@@ -413,21 +414,21 @@ const shape = usePlaygroundShape();
      what it adds. That keeps it with the options and apart from the
      actions. */
   &-more {
-    @include c.control;
+    @include c.control-tint;
 
     display: flex;
     align-items: center;
     gap: 12px;
     width: 100%;
-    min-height: 60px;
-    padding: 8px 12px 8px 10px;
-    border-radius: var(--db-radius-2);
+    min-height: 64px;
+    padding: 10px 16px 10px 12px;
+    border-radius: 32px;
     font: inherit;
     text-align: left;
     cursor: pointer;
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
 
@@ -445,14 +446,12 @@ const shape = usePlaygroundShape();
     }
 
     &-name {
-      font-size: 14px;
-      line-height: 20px;
-      font-weight: 600;
+      @include c.control-value;
     }
 
     &-note {
-      font-size: 13px;
-      line-height: 18px;
+      font-size: 14px;
+      line-height: 20px;
       color: var(--db-muted);
     }
 
@@ -465,7 +464,7 @@ const shape = usePlaygroundShape();
   /* Fixed under the options, as in the inspector of the advanced view. */
   &-actions {
     flex-shrink: 0;
-    padding: 16px 12px 20px;
+    padding: 16px 0 20px 24px;
     border-top: 1px solid var(--db-line);
     background: var(--db-paper);
   }
@@ -486,6 +485,11 @@ const shape = usePlaygroundShape();
       position: sticky;
       bottom: 0;
       padding: 12px 16px 16px;
+
+      /* A phone held sideways: stuck, they would fill half the window. */
+      @media (max-height: 560px) {
+        position: static;
+      }
     }
   }
 }

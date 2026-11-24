@@ -14,14 +14,9 @@ const props = withDefaults(
     styleName: string;
     options?: Record<string, unknown>;
     mode?: 'library' | 'http-api';
-    /**
-     * The checkerboard shows where an avatar is transparent. The tile color
-     * is the plain surface behind the avatars of the style picker.
-     */
-    surface?: 'checker' | 'tile';
     alt?: string;
   }>(),
-  { options: () => ({}), mode: 'library', surface: 'checker', alt: '' },
+  { options: () => ({}), mode: 'library', alt: '' },
 );
 
 // Every prop is read before the first await. What a computed touches after
@@ -50,12 +45,14 @@ const src = computedAsync(async () => {
 </script>
 
 <template>
-  <span class="pg-thumb" :class="`pg-thumb-${surface}`">
+  <span class="pg-thumb">
     <img v-if="src" :src="src" :alt="alt" loading="lazy" decoding="async" />
   </span>
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .pg-thumb {
   display: block;
   flex-shrink: 0;
@@ -64,37 +61,6 @@ const src = computedAsync(async () => {
   border-radius: 10px;
   overflow: hidden;
 
-  &-tile {
-    background: var(--db-tile);
-  }
-
-  &-checker {
-    background-color: var(--db-paper);
-    background-image:
-      linear-gradient(
-        45deg,
-        var(--db-soft) 25%,
-        transparent 25%,
-        transparent 75%,
-        var(--db-soft) 75%
-      ),
-      linear-gradient(
-        45deg,
-        var(--db-soft) 25%,
-        transparent 25%,
-        transparent 75%,
-        var(--db-soft) 75%
-      );
-    background-size: 20px 20px;
-    background-position:
-      0 0,
-      10px 10px;
-  }
-
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
+  @include m.avatar-ground;
 }
 </style>

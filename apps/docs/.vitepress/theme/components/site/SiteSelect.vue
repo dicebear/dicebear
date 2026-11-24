@@ -51,18 +51,12 @@ const model = defineModel<T>({ required: true });
   }
 
   &-input {
-    @include c.control;
+    @include c.control-tint;
     @include c.control-size(md);
 
-    padding-right: 38px;
+    padding-right: 42px;
     cursor: pointer;
     appearance: none;
-
-    &:focus-visible {
-      border-color: var(--db-brand);
-      outline: 2px solid var(--db-brand);
-      outline-offset: 0;
-    }
 
     &:disabled {
       @include c.control-disabled;
@@ -84,7 +78,7 @@ const model = defineModel<T>({ required: true });
   &-icon {
     position: absolute;
     top: 50%;
-    right: 12px;
+    right: 16px;
     transform: translateY(-50%);
     color: var(--db-muted);
     pointer-events: none;

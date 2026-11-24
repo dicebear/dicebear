@@ -96,17 +96,18 @@ export function getAvatarApiCommand(
       const classified = classifyOptionValue(v);
       switch (classified.kind) {
         case 'array':
-          return `  --${k} ${classified.values
-            .map(formatCliArg)
-            .join(' ')}`.trimEnd();
+          // Arrays are not greedy on the CLI: a list is one comma-joined value.
+          return classified.values.length > 0
+            ? `  --${k} ${shellQuote(classified.values.join(','))}`
+            : `  --${k}`;
         case 'primitive':
           return `  --${k} ${formatCliArg(classified.value)}`;
         case 'object': {
           const pairs = classified.entries
-            .map(([vk, vv]) => shellQuote(`${vk}:${vv}`))
-            .join(' ');
+            .map(([vk, vv]) => `${vk}:${vv}`)
+            .join(',');
 
-          return `  --${k} ${pairs}`;
+          return `  --${k} ${shellQuote(pairs)}`;
         }
 
         case 'string':

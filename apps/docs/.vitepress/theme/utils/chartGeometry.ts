@@ -1,6 +1,6 @@
 /**
- * Coordinate scaling shared by the stats charts (SiteStatsSparkline,
- * AppStatsBannerCard, StylePopularity).
+ * Coordinate scaling for the line charts of the site, such as the
+ * popularity of a style.
  *
  * The y scale runs from zero to the series' own peak. A min-to-max scale
  * would blow every wiggle up to the full height and make a noisy small

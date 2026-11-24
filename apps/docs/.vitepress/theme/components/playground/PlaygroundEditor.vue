@@ -7,13 +7,8 @@
  * part, since one color can paint several parts. Tabs of parts and colors
  * the avatar does not show are greyed out.
  */
-import { computed, inject, nextTick, reactive, ref, watch } from 'vue';
-import {
-  computedAsync,
-  useDebounceFn,
-  useEventListener,
-  useResizeObserver,
-} from '@vueuse/core';
+import { computed, inject, ref, watch } from 'vue';
+import { computedAsync, useDebounceFn } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Avatar } from '@dicebear/core';
 import useStore from '@theme/stores/playground';
@@ -26,6 +21,7 @@ import {
   type PlaygroundEntries,
 } from '@theme/composables/usePlaygroundEntries';
 import SiteSegmented from '../site/SiteSegmented.vue';
+import SiteTabs from '../site/SiteTabs.vue';
 
 const injected = inject(playgroundEntriesKey);
 
@@ -169,82 +165,21 @@ function choose(tab: Tab) {
   chosen.value[activeGroup.value] = tab.id;
 }
 
-const tabButtons = ref<HTMLButtonElement[]>([]);
-const tabList = ref<HTMLElement | null>(null);
-
-// Where the strip runs on past an edge, that edge fades out, so a phone
-// shows there are more parts than fit.
-const cut = reactive({ start: false, end: false });
-
-function measureCut() {
-  const list = tabList.value;
-
-  if (!list) return;
-
-  cut.start = list.scrollLeft > 1;
-  cut.end = list.scrollLeft + list.clientWidth < list.scrollWidth - 1;
-}
-
-useEventListener(tabList, 'scroll', measureCut, { passive: true });
-useResizeObserver(tabList, measureCut);
-watch(tabs, () => nextTick(measureCut));
-
-// The open tab stays in view when the strip scrolls sideways, as it does on
-// a phone, where the hair would otherwise start out of sight. It moves to
-// the middle, so the tabs on both sides of it show.
-watch(
-  () => current.value?.id,
-  async (id) => {
-    await nextTick();
-
-    const list = tabList.value;
-    const tab = tabButtons.value.find((button) => button.dataset.id === id);
-
-    if (!list || !tab) return;
-
-    const start = tab.offsetLeft;
-    const end = start + tab.offsetWidth;
-
-    if (start < list.scrollLeft || end > list.scrollLeft + list.clientWidth) {
-      list.scrollLeft = start - (list.clientWidth - tab.offsetWidth) / 2;
-    }
-
-    measureCut();
-  },
-  { immediate: true },
+/** The tabs as the shared tab row takes them; greyed out ones stay disabled. */
+const tabItems = computed(() =>
+  tabs.value.map((tab) => ({
+    id: tab.id,
+    label: tab.label,
+    disabled: isUnused(tab),
+  })),
 );
 
-// The arrow keys pass over greyed out tabs.
-function onTabKeydown(event: KeyboardEvent, index: number) {
-  const open = tabs.value.flatMap((tab, i) => (isUnused(tab) ? [] : [i]));
-  const position = open.indexOf(index);
-  const last = open.length - 1;
-  let target: number;
+function chooseId(id: string) {
+  const tab = tabs.value.find((entry) => entry.id === id);
 
-  switch (event.key) {
-    case 'ArrowRight':
-      target = open[position >= last ? 0 : position + 1];
-      break;
-    case 'ArrowLeft':
-      target = open[position <= 0 ? last : position - 1];
-      break;
-    case 'Home':
-      target = open[0];
-      break;
-    case 'End':
-      target = open[last];
-      break;
-    default:
-      return;
+  if (tab && !isUnused(tab)) {
+    choose(tab);
   }
-
-  if (target === undefined) return;
-
-  event.preventDefault();
-  choose(tabs.value[target]);
-  tabButtons.value
-    .find((button) => Number(button.dataset.index) === target)
-    ?.focus();
 }
 
 /**
@@ -313,6 +248,9 @@ const drawn = computedAsync<Drawn[]>(async () => {
       const variantKey = `${name}Variant`;
       const probabilityKey = `${name}Probability`;
       const optional = defaultProbability < 100;
+      // Set by hand, say to 0 in another view, it would hide every variant.
+      const forceShown =
+        optional || store.avatarStyleOptions[probabilityKey] !== undefined;
       const shown = resolved[variantKey];
       const result: Drawn[] = [];
 
@@ -334,7 +272,7 @@ const drawn = computedAsync<Drawn[]>(async () => {
           value: variant,
           src: draw({
             [variantKey]: [variant],
-            ...(optional ? { [probabilityKey]: 100 } : {}),
+            ...(forceShown ? { [probabilityKey]: 100 } : {}),
           }),
           active: shown === variant,
         });
@@ -422,7 +360,10 @@ function pick(tile: Drawn) {
     if (tile.kind === 'variant') {
       options[`${tab.info.name}Variant`] = [tile.value];
 
-      if (tab.info.defaultProbability < 100) {
+      if (
+        tab.info.defaultProbability < 100 ||
+        options[probabilityKey] !== undefined
+      ) {
         options[probabilityKey] = 100;
       }
     }
@@ -466,36 +407,17 @@ function onOwnColor(event: Event) {
         v-if="groups.length > 1"
         v-model="group"
         :options="groups"
-        size="sm"
         aria-label="Edit"
         class="pg-editor-group"
       />
 
-      <div
-        ref="tabList"
-        class="pg-editor-tabs"
-        :class="{ 'is-cut-start': cut.start, 'is-cut-end': cut.end }"
-        role="tablist"
+      <SiteTabs
+        :model-value="current?.id ?? ''"
+        :tabs="tabItems"
         :aria-label="activeGroup === 'parts' ? 'Parts' : 'Colors'"
-      >
-        <button
-          v-for="(tab, index) in tabs"
-          :key="tab.id"
-          ref="tabButtons"
-          type="button"
-          role="tab"
-          class="pg-editor-tab"
-          :aria-selected="tab.id === current?.id"
-          :tabindex="tab.id === current?.id ? 0 : -1"
-          :disabled="isUnused(tab)"
-          :data-index="index"
-          :data-id="tab.id"
-          @click="choose(tab)"
-          @keydown="onTabKeydown($event, index)"
-        >
-          {{ tab.label }}
-        </button>
-      </div>
+        class="pg-editor-tabs"
+        @update:model-value="chooseId"
+      />
     </div>
 
     <div
@@ -539,6 +461,8 @@ function onOwnColor(event: Event) {
           </button>
         </template>
       </div>
+      <!-- What scrolls in after the tiles, such as a phone's status line. -->
+      <slot name="end" />
     </div>
 
     <p v-else class="pg-editor-empty">
@@ -548,6 +472,8 @@ function onOwnColor(event: Event) {
 </template>
 
 <style scoped lang="scss">
+@use '../../styles/mixins' as m;
+
 .pg-editor {
   display: flex;
   flex: 1;
@@ -560,8 +486,7 @@ function onOwnColor(event: Event) {
     flex-shrink: 0;
     align-items: stretch;
     gap: 12px;
-    height: 52px;
-    padding-left: 12px;
+    padding: 10px 0;
     border-bottom: 1px solid var(--db-line);
   }
 
@@ -570,91 +495,14 @@ function onOwnColor(event: Event) {
     flex-shrink: 0;
   }
 
-  /* The tabs scroll sideways when a style has more than fit. */
-  &-tabs {
-    --pg-tabs-fade-start: 0px;
-    --pg-tabs-fade-end: 0px;
-
-    position: relative;
-    display: flex;
-    flex: 1;
-    gap: 2px;
-    min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 var(--pg-tabs-fade-start),
-      #000 calc(100% - var(--pg-tabs-fade-end)),
-      transparent
-    );
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    &.is-cut-start {
-      --pg-tabs-fade-start: 32px;
-    }
-
-    &.is-cut-end {
-      --pg-tabs-fade-end: 32px;
-    }
-  }
-
-  &-tab {
-    position: relative;
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    padding: 0 10px;
-    border: 0;
-    background: none;
-    font: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--db-muted);
-    white-space: nowrap;
-    cursor: pointer;
-
-    &:hover:not(:disabled) {
-      color: var(--db-ink);
-    }
-
-    /* A part or color the avatar does not show, like the disabled
-       controls of the site. */
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    &[aria-selected='true'] {
-      color: var(--db-ink);
-      cursor: default;
-
-      &::after {
-        content: '';
-        position: absolute;
-        right: 10px;
-        bottom: 0;
-        left: 10px;
-        height: 2px;
-        border-radius: 1px;
-        background: var(--db-brand);
-      }
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--db-brand);
-      outline-offset: -4px;
-    }
-  }
-
-  /* The tiles scroll on their own, so the avatar stays in view. */
+  /* The tiles scroll on their own, so the avatar stays in view. A scroll box
+     clips on every side and a tile's ring reaches 4px past it, so the box
+     takes a little more room while the tiles stay on the column's edge. */
   &-body {
     flex: 1;
     min-height: 0;
+    margin-inline: -6px;
+    padding-inline: 6px;
     overflow-y: auto;
   }
 
@@ -662,39 +510,32 @@ function onOwnColor(event: Event) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
     gap: 8px;
-    padding: 12px;
+    padding: 20px 0;
   }
 
   &-tile {
-    position: relative;
     display: block;
     aspect-ratio: 1 / 1;
-    padding: 0;
     border: 0;
     border-radius: var(--db-radius-3);
-    background: var(--db-tile);
     overflow: hidden;
     cursor: pointer;
 
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
+    @include m.avatar-ground;
 
     &:hover {
-      outline: 2px solid var(--db-hover-border);
+      outline: 2px solid var(--db-ink-2);
       outline-offset: 2px;
     }
 
     &.is-active {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
 
     &:focus-visible,
     &:has(:focus-visible) {
-      outline: 2px solid var(--db-brand);
+      outline: 2px solid var(--db-focus);
       outline-offset: 2px;
     }
   }
@@ -752,21 +593,43 @@ function onOwnColor(event: Event) {
 
   &-empty {
     margin: 0;
-    padding: 24px 12px;
+    padding: 24px 0;
     font-size: 15px;
     line-height: 24px;
     color: var(--db-muted);
   }
 
-  /* The phone's edge, as everywhere else on the page. */
-  @media (max-width: 767px) {
+  /* A short window keeps more of the second row of tiles in view. */
+  @media (min-width: 768px) and (max-height: 799px) {
+    &-tiles {
+      padding: 12px 0;
+    }
+  }
+
+  /* Without the page's edge the tray keeps 16px of its own, as everywhere
+     else on a small screen. */
+  @media (max-width: 959px) {
     &-head {
-      padding-left: 16px;
+      padding: 10px 16px;
+    }
+
+    &-body {
+      margin-inline: 0;
+      padding-inline: 0;
     }
 
     &-tiles {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
       padding: 12px 16px;
+    }
+
+    &-empty {
+      padding: 24px 16px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    &-tiles {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 }

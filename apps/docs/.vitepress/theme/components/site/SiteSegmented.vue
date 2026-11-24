@@ -3,7 +3,9 @@
  * A segmented control for two to six options, built as a radio group. One
  * segment is always chosen. Tab reaches the chosen segment, and the arrow
  * keys move the choice. An option with an icon shows only the icon, its
- * label becomes the name and the tooltip.
+ * label becomes the name and the tooltip. A `tip` adds a tooltip below the
+ * segment, and the `option` slot draws a segment's content in place of the
+ * label or icon.
  */
 import { computed, ref, type Component } from 'vue';
 
@@ -13,9 +15,10 @@ const props = withDefaults(
       value: T;
       label: string;
       icon?: Component;
+      tip?: string;
     }[];
     ariaLabel?: string;
-    size?: 'sm' | 'md';
+    size?: 'sm' | 'md' | 'lg';
     fluid?: boolean;
     disabled?: boolean;
   }>(),
@@ -72,7 +75,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
 <template>
   <span
     role="radiogroup"
-    class="site-segmented"
+    class="site-seg site-segmented"
     :class="[`is-${size}`, { 'is-fluid': fluid }]"
     :aria-label="ariaLabel"
     :aria-disabled="disabled || undefined"
@@ -83,88 +86,44 @@ function onKeydown(event: KeyboardEvent, index: number) {
       ref="buttons"
       type="button"
       role="radio"
-      class="site-segmented-item hv-seg"
+      class="site-pill site-pill-tab site-segmented-item"
       :class="{ 'is-icon': option.icon }"
       :aria-checked="index === chosen"
       :aria-label="option.icon ? option.label : undefined"
-      :data-tip="option.icon ? option.label : undefined"
+      :data-tip="option.tip ?? (option.icon ? option.label : undefined)"
+      :data-tip-side="option.tip ? 'bottom' : undefined"
       :tabindex="index === tabStop ? 0 : -1"
       :disabled="disabled"
       :data-index="index"
       @click="pick(index)"
       @keydown="onKeydown($event, index)"
     >
-      <component
-        :is="option.icon"
-        v-if="option.icon"
-        :size="16"
-        aria-hidden="true"
-      />
-      <span v-else class="site-segmented-label">{{ option.label }}</span>
+      <slot name="option" :option="option" :chosen="index === chosen">
+        <component
+          :is="option.icon"
+          v-if="option.icon"
+          :size="size === 'lg' ? 20 : 16"
+          aria-hidden="true"
+        />
+        <span v-else class="site-segmented-label">{{ option.label }}</span>
+      </slot>
     </button>
   </span>
 </template>
 
 <style scoped lang="scss">
+/* The track and the segments are the shared `site-seg` and `site-pill-tab`;
+   this adds the square icon segment and the small and large sizes. The
+   track is as high as a field or a button of the same size: sm 36, md 44,
+   lg 56. */
 .site-segmented {
-  display: inline-grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 4px;
-  max-width: 100%;
-  padding: 3px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-field-border);
-  border-radius: var(--db-radius-2);
-  background: var(--db-soft);
-
-  &.is-fluid {
-    display: grid;
-    width: 100%;
-  }
-
-  &.is-sm {
-    border-radius: var(--db-radius-1);
-  }
-
   &-item {
-    min-width: 0;
-    height: 32px;
-    padding: 0 12px;
-    box-sizing: border-box;
-    border: 0;
-    border-radius: var(--db-radius-1);
-    background: transparent;
-    font: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-    color: var(--db-muted);
-    white-space: nowrap;
-    cursor: pointer;
-
     &[aria-checked='true'] {
-      background: var(--db-paper);
-      color: var(--db-ink);
       cursor: default;
     }
 
-    &:focus-visible {
-      outline-offset: 1px;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    /* The label clips a long text rather than the segment, whose tooltip
-       has to reach past its edge. */
     &.is-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px;
+      width: 36px;
       padding: 0;
     }
   }
@@ -175,12 +134,36 @@ function onKeydown(event: KeyboardEvent, index: number) {
     text-overflow: ellipsis;
   }
 
+  &.is-sm {
+    border-radius: 18px;
+  }
+
   &.is-sm &-item {
-    height: 24px;
-    padding: 0 10px;
-    border-radius: 4px;
-    font-size: 13px;
-    line-height: 18px;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 14px;
+    font-size: 14px;
+
+    &.is-icon {
+      width: 28px;
+      padding: 0;
+    }
+  }
+
+  &.is-lg {
+    border-radius: 28px;
+  }
+
+  &.is-lg &-item {
+    height: 48px;
+    padding: 0 22px;
+    border-radius: 24px;
+    font-size: 17px;
+
+    &.is-icon {
+      width: 48px;
+      padding: 0;
+    }
   }
 }
 </style>

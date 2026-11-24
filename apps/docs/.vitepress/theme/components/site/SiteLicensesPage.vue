@@ -1,13 +1,13 @@
 <script setup lang="ts">
 /**
- * The licenses page: how many styles each license covers, then every style
- * grouped by its license with the artist and the source work linked, then
- * the software license. The deeds are linked, not quoted. The credits use the
+ * The licenses page: how many styles each license covers, as tiles on a
+ * yellow block that jump to their section, then every style grouped by its
+ * license with the artist and the source work linked, then the software
+ * license on a soft block. The deeds are linked, not quoted. The credits use the
  * same wording as the OG cards.
  */
 import { useData } from 'vitepress';
 import { capitalCase, kebabCase } from 'change-case';
-import { ArrowUpRight } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
 import {
   normalizeLicense,
@@ -23,6 +23,8 @@ import { formatLicenseName } from '@theme/utils/format';
 import { safeHttpUrl } from '@theme/utils/url';
 import SiteAvatar from './SiteAvatar.vue';
 import SitePageHead from './SitePageHead.vue';
+import SiteSection from './SiteSection.vue';
+import SiteStat from './SiteStat.vue';
 
 const { theme } = useData<ThemeOptions>();
 
@@ -158,27 +160,18 @@ function reflowParagraphs(text: string): string {
       <slot />
     </SitePageHead>
 
-    <div class="site-container">
-      <div class="site-licenses-summary">
-        <div v-for="group in groups" :key="group.id">
-          <div class="site-h2">{{ group.styles.length }}</div>
-          <div class="site-body site-licenses-summary-label">
-            {{ group.title }}
-          </div>
-        </div>
-      </div>
-      <nav class="site-licenses-nav" aria-label="On this page">
+    <section class="site-box is-block is-sun site-licenses-summary">
+      <nav class="site-grid site-licenses-counts" aria-label="On this page">
         <a
           v-for="group in groups"
           :key="group.id"
           :href="`#${group.id}`"
-          class="site-btn site-btn-secondary site-licenses-nav-item"
+          class="site-box is-card site-licenses-count"
         >
-          {{ group.title }}
-          <span>{{ group.styles.length }}</span>
+          <SiteStat :value="String(group.styles.length)" :label="group.title" />
         </a>
       </nav>
-    </div>
+    </section>
 
     <section
       v-for="group in groups"
@@ -188,9 +181,9 @@ function reflowParagraphs(text: string): string {
     >
       <div class="site-licenses-group-head">
         <h2 class="site-h2">{{ group.title }}</h2>
-        <span class="site-licenses-group-count">{{
-          countLabel(group.styles.length)
-        }}</span>
+        <p class="site-control site-licenses-group-count">
+          {{ countLabel(group.styles.length) }}
+        </p>
       </div>
       <p class="site-body site-licenses-group-intro">{{ group.intro }}</p>
       <a
@@ -198,32 +191,30 @@ function reflowParagraphs(text: string): string {
         :href="group.deedHref"
         target="_blank"
         rel="noopener noreferrer"
-        class="site-control site-licenses-link hv-link"
+        class="site-link-arrow"
       >
         Read the {{ group.deedLabel }}
-        <ArrowUpRight :size="16" />
       </a>
       <ul class="site-licenses-rows">
         <li
           v-for="row in group.styles"
           :key="row.slug"
-          class="site-licenses-row"
+          class="site-row site-licenses-row"
         >
           <SiteAvatar
             :style-name="row.slug"
             :options="{ seed: row.seed }"
-            :size="44"
-            :radius="12"
+            :size="48"
             :alt="`${row.displayName} avatar`"
           />
           <div class="site-licenses-row-text">
             <a
-              class="site-licenses-row-name hv-link"
+              class="site-title site-licenses-row-name"
               :href="`/styles/${row.slug}/`"
             >
               {{ row.displayName }}
             </a>
-            <span class="site-licenses-row-credit">
+            <p class="site-text site-licenses-row-credit">
               <template v-if="row.kind === 'own-work'">By DiceBear</template>
               <template v-else>
                 {{ attributionPrefix(row.kind) }}
@@ -232,7 +223,6 @@ function reflowParagraphs(text: string): string {
                   :href="row.sourceUrl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="hv-row"
                   >{{ row.title ?? 'the original work' }}</a
                 >
                 <template v-else>{{
@@ -244,109 +234,96 @@ function reflowParagraphs(text: string): string {
                   :href="row.creatorUrl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="hv-row"
                   >{{ row.creator }}</a
                 >
                 <template v-else>{{ row.creator }}</template>
               </template>
-            </span>
-            <a
-              v-if="!group.deedHref && row.licenseUrl"
-              :href="row.licenseUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="site-licenses-row-license hv-link"
-            >
-              {{ row.licenseName }}
-              <ArrowUpRight :size="14" />
-            </a>
-            <template v-if="group.key === 'MIT' && row.credit">
-              <span class="site-licenses-row-credit">{{
-                copyrightLine(row.credit)
-              }}</span>
-              <details class="site-licenses-notice">
-                <summary>License text</summary>
-                <pre>{{ reflowParagraphs(row.credit) }}</pre>
-              </details>
-            </template>
+              <template v-if="!group.deedHref && row.licenseUrl">
+                ·
+                <a
+                  :href="row.licenseUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ row.licenseName }}</a
+                >
+              </template>
+            </p>
           </div>
         </li>
       </ul>
+      <template v-for="row in group.styles" :key="row.slug">
+        <template v-if="group.key === 'MIT' && row.credit">
+          <p class="site-mono site-licenses-copyright">
+            {{ copyrightLine(row.credit) }}
+          </p>
+          <details class="site-details site-licenses-notice">
+            <summary>License text</summary>
+            <pre>{{ reflowParagraphs(row.credit) }}</pre>
+          </details>
+        </template>
+      </template>
     </section>
 
-    <section id="software" class="site-container site-licenses-group">
-      <div class="site-licenses-group-head">
-        <h2 class="site-h2">Software</h2>
+    <SiteSection
+      id="software"
+      tone="soft"
+      title="Software"
+      class="site-licenses-software"
+    >
+      <div class="site-licenses-software-body">
+        <p class="site-body">
+          The DiceBear code is published under the MIT license. That covers the
+          libraries, the CLI and this website, not the avatar styles above.
+        </p>
+        <a
+          :href="softwareLicenseUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="site-link-arrow"
+        >
+          Read the MIT license
+        </a>
+        <dl class="site-facts site-licenses-facts">
+          <div class="site-fact">
+            <dt>Copyright</dt>
+            <dd class="site-mono">{{ copyrightLine(softwareLicense) }}</dd>
+          </div>
+        </dl>
+        <details class="site-details site-licenses-notice">
+          <summary>License text</summary>
+          <pre>{{ reflowParagraphs(softwareLicense) }}</pre>
+        </details>
       </div>
-      <p class="site-body site-licenses-group-intro">
-        The DiceBear code is published under the MIT license. That covers the
-        libraries, the CLI and this website, not the avatar styles above.
-      </p>
-      <a
-        :href="softwareLicenseUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="site-control site-licenses-link hv-link"
-      >
-        Read the MIT license
-        <ArrowUpRight :size="16" />
-      </a>
-      <div class="site-facts site-licenses-software">
-        <div class="site-fact">
-          <b>Copyright</b>
-          <span>{{ copyrightLine(softwareLicense) }}</span>
-        </div>
-        <div class="site-fact">
-          <b>Text</b>
-          <span>
-            <details class="site-licenses-notice">
-              <summary>License text</summary>
-              <pre>{{ reflowParagraphs(softwareLicense) }}</pre>
-            </details>
-          </span>
-        </div>
-      </div>
-    </section>
+    </SiteSection>
 
-    <div class="site-container site-licenses-end">
-      <p class="site-text">
-        The summaries on this page are meant as orientation, not as legal
-        advice. The linked license texts are the authoritative source.
-      </p>
-    </div>
+    <p class="site-container site-text site-licenses-end">
+      The summaries on this page are meant as orientation, not as legal advice.
+      The linked license texts are the authoritative source.
+    </p>
   </div>
 </template>
 
 <style scoped lang="scss">
 .site-licenses {
+  /* The counts: translucent cards on yellow, each a jump to its section. */
   &-summary {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
-    margin-top: 64px;
-    padding-top: 32px;
-    border-top: 1px solid var(--db-line);
-
-    &-label {
-      margin-top: 8px;
-    }
-
-    @media (max-width: 767px) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 32px 24px;
-      margin-top: 48px;
-    }
+    margin-top: clamp(40px, 5vw, 72px);
   }
 
-  &-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 40px;
+  &-counts {
+    --site-grid-min: 140px;
 
-    &-item span {
-      font-weight: 500;
-      color: var(--db-muted);
+    gap: clamp(8px, 1.4vw, 20px);
+  }
+
+  &-count {
+    background: var(--db-soft);
+    color: var(--db-ink);
+    text-decoration: none;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background: var(--db-soft-hover, var(--db-panel));
     }
   }
 
@@ -354,7 +331,7 @@ function reflowParagraphs(text: string): string {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding-top: 96px;
+    padding-top: clamp(48px, 5.6vw, 80px);
     scroll-margin-top: calc(var(--db-header-h) + 24px);
 
     /* The router focuses the section a hash points at. The outline that
@@ -367,12 +344,12 @@ function reflowParagraphs(text: string): string {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
-      gap: 4px 20px;
+      gap: 8px 20px;
     }
 
     &-count {
-      font-size: 16px;
-      line-height: 26px;
+      margin: 0;
+      font-weight: 600;
       color: var(--db-muted);
     }
 
@@ -381,114 +358,110 @@ function reflowParagraphs(text: string): string {
       margin-top: 16px;
     }
 
-    @media (max-width: 767px) {
-      padding-top: 88px;
+    > .site-link-arrow {
+      margin-top: 12px;
     }
   }
 
-  &-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 20px;
-    color: var(--db-brand-text);
-  }
-
+  /* The styles in columns of hairline rows. */
   &-rows {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 64px;
+    grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
+    gap: 0 clamp(32px, 4vw, 64px);
     align-self: stretch;
-    margin: 36px 0 0;
+    margin: 28px 0 0;
     padding: 0;
     list-style: none;
-
-    @media (max-width: 767px) {
-      grid-template-columns: minmax(0, 1fr);
-    }
   }
 
   &-row {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 16px;
     min-width: 0;
+    padding: 10px 0;
 
     &-text {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 2px;
       min-width: 0;
     }
 
     &-name {
-      font-size: 18px;
-      line-height: 24px;
-      font-weight: 600;
+      color: var(--db-ink);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
+      }
     }
 
     /* Credits and license names wrap and are never cut. */
     &-credit {
-      font-size: 16px;
-      line-height: 26px;
-      color: var(--db-muted);
       overflow-wrap: anywhere;
-    }
 
-    &-license {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 15px;
-      line-height: 24px;
-      font-weight: 500;
-      color: var(--db-brand-text);
+      a {
+        font-weight: 600;
+        color: inherit;
+        text-decoration: underline;
+        text-decoration-color: var(--db-field-border);
+        text-underline-offset: 3px;
+
+        &:hover {
+          color: var(--db-ink);
+          text-decoration-color: currentColor;
+        }
+      }
     }
   }
 
-  &-notice {
+  &-copyright {
+    margin: 16px 0 0;
     font-size: 14px;
-    line-height: 20px;
+    line-height: 22px;
+    color: var(--db-ink-2);
+  }
 
-    summary {
-      cursor: pointer;
-      color: var(--db-ink);
-    }
+  &-notice {
+    align-self: stretch;
+    margin-top: 16px;
 
     pre {
-      margin: 12px 0 0;
       white-space: pre-wrap;
-      font-family: inherit;
-      font-size: 14px;
-      line-height: 20px;
+      font-family: var(--db-font-mono);
+      font-size: 13px;
+      line-height: 22px;
       color: var(--db-ink-2);
     }
   }
 
   &-software {
+    margin-top: clamp(56px, 6.4vw, 96px);
+
+    &-body {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      > .site-link-arrow {
+        margin-top: 12px;
+      }
+    }
+  }
+
+  &-facts {
     align-self: stretch;
-    margin-top: 36px;
+    margin-top: 16px;
+    border-bottom: 0;
+
+    dd {
+      font-size: 14px;
+    }
   }
 
   &-end {
-    padding-top: 96px;
-    padding-bottom: 120px;
-
-    p {
-      max-width: 720px;
-      color: var(--db-muted);
-    }
-
-    @media (max-width: 767px) {
-      padding-bottom: 64px;
-    }
+    margin-top: clamp(32px, 4vw, 48px);
+    margin-bottom: clamp(8px, 1vw, 16px);
   }
-}
-
-/* Kept at low specificity so the shared hover color applies. */
-:where(.site-licenses-row-credit) a {
-  border-bottom: 1px dashed var(--db-hover-border);
-  color: var(--db-ink-2);
 }
 </style>

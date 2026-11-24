@@ -1,0 +1,129 @@
+/**
+ * Tones. A tone paints a ground and re-points the role tokens for everything
+ * on it: text, accent, lines, fields, buttons, focus. Components inside read
+ * the roles as usual, so they need no variant per ground.
+ *
+ * `tone(name)` is used by `.site-box.is-*` and by the few other grounds that
+ * take a block color (the Studio tabs, the docs callouts). `tone(paper)`,
+ * `tone(panel)`, `tone(raised)` and `tone(code)` reset to neutral; menus,
+ * dialogs and code cards use them, so they look the same wherever they open.
+ */
+
+@mixin neutral-roles {
+  --db-paper: var(--db-c-paper);
+  --db-panel: var(--db-c-panel);
+  --db-raised: var(--db-c-raised);
+  --db-checker-light: var(--db-c-checker-light);
+  --db-checker-dark: var(--db-c-checker-dark);
+  --db-sticker: var(--db-c-sticker);
+  --db-soft: var(--db-c-soft);
+  --db-line: var(--db-c-line);
+  --db-field-border: var(--db-c-field);
+  --db-ink: var(--db-c-ink);
+  --db-ink-2: var(--db-c-ink-2);
+  --db-muted: var(--db-c-muted);
+  --db-accent: var(--db-c-ink);
+  --db-rule: color-mix(in srgb, var(--db-c-ink) 16%, transparent);
+  --db-btn-bg: var(--db-c-ink);
+  --db-btn-fg: var(--db-c-paper);
+  --db-focus: var(--db-c-ink);
+  --db-select: var(--db-sun);
+  --db-select-text: var(--db-on);
+}
+
+/* The color blocks stay light in both themes, so avatars on them keep the
+   light checkerboard and the white edge. */
+@mixin light-avatars {
+  --db-checker-light: #f9f5ee;
+  --db-checker-dark: #f1ebe1;
+  --db-sticker: #ffffff;
+}
+
+/* Yellow and coral: bright in both themes, dark text, white cards. */
+@mixin bright-roles($bg) {
+  @include light-avatars;
+
+  --db-paper: #{$bg};
+  --db-panel: #ffffff;
+  --db-raised: #ffffff;
+  --db-soft: color-mix(in srgb, #ffffff 42%, transparent);
+  /* A lighter step of the block's color for a card under the pointer; white
+     would drop out of the block. */
+  --db-soft-hover: color-mix(in srgb, #ffffff 66%, transparent);
+  --db-ink: var(--db-on);
+  --db-ink-2: var(--db-on-2);
+  --db-muted: var(--db-on-2);
+  --db-accent: var(--db-on);
+  --db-line: color-mix(in srgb, var(--db-on) 22%, transparent);
+  --db-rule: color-mix(in srgb, var(--db-on) 22%, transparent);
+  /* 60% keeps the edge of a field or chip at 3:1 on coral, the lighter of
+     the two bright grounds in contrast terms. */
+  --db-field-border: color-mix(in srgb, var(--db-on) 60%, transparent);
+  --db-btn-bg: var(--db-on);
+  --db-btn-fg: #ffffff;
+  --db-focus: var(--db-on);
+  --db-select: var(--db-on);
+  --db-select-text: #ffffff;
+}
+
+/* Sky, lilac and mint: a light ground with a dark tint for the headings and
+   the button, in both themes. The text is the dark `--db-on`, so it stays
+   dark on the pastels of the dark theme too. */
+@mixin deep-roles($bg, $acc) {
+  @include light-avatars;
+
+  --db-paper: #{$bg};
+  --db-panel: #ffffff;
+  --db-raised: #ffffff;
+  --db-soft: color-mix(in srgb, #ffffff 42%, transparent);
+  --db-soft-hover: color-mix(in srgb, #ffffff 66%, transparent);
+  --db-ink: var(--db-on);
+  --db-ink-2: var(--db-deep-2);
+  --db-muted: var(--db-deep-2);
+  --db-accent: #{$acc};
+  --db-line: color-mix(in srgb, #{$acc} 24%, transparent);
+  --db-rule: color-mix(in srgb, #{$acc} 24%, transparent);
+  --db-field-border: color-mix(in srgb, #{$acc} 55%, transparent);
+  --db-btn-bg: #{$acc};
+  --db-btn-fg: #ffffff;
+  --db-focus: #{$acc};
+  --db-select: #{$acc};
+  --db-select-text: #{$bg};
+}
+
+@mixin tone($name) {
+  @if $name == 'paper' {
+    @include neutral-roles;
+  } @else if $name == 'soft' {
+    @include neutral-roles;
+    --db-paper: var(--db-c-soft);
+    --db-soft: var(--db-c-paper);
+  } @else if $name == 'panel' {
+    @include neutral-roles;
+    --db-paper: var(--db-c-panel);
+  } @else if $name == 'raised' {
+    @include neutral-roles;
+    --db-paper: var(--db-c-raised);
+  } @else if $name == 'code' {
+    @include neutral-roles;
+    --db-paper: var(--db-card);
+  } @else if $name == 'sun' {
+    @include bright-roles(var(--db-sun));
+  } @else if $name == 'coral' {
+    @include bright-roles(var(--db-coral));
+  } @else if $name == 'sky' {
+    @include deep-roles(var(--db-sky), var(--db-sky-acc));
+  } @else if $name == 'lilac' {
+    @include deep-roles(var(--db-lilac), var(--db-lilac-acc));
+  } @else if $name == 'mint' {
+    @include deep-roles(var(--db-mint), var(--db-mint-acc));
+  } @else {
+    @error 'Unknown tone #{$name}';
+  }
+
+  background-color: var(--db-paper);
+  color: var(--db-ink);
+}
+
+$tones:
+  'paper', 'soft', 'panel', 'code', 'sun', 'coral', 'sky', 'lilac', 'mint';

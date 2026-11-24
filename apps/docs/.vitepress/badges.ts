@@ -24,8 +24,17 @@ const PADDING = 6;
 const ICON_SIZE = 14;
 const ICON_GAP = 4;
 
-const LABEL_BG = '#3f3f46';
-const VALUE_BG = '#0284c7';
+/** The ink and the beige of the site: the label dark, the value light. */
+const LABEL_BG = '#15213b';
+const LABEL_FG = '#ffffff';
+const VALUE_BG = '#f7f1e6';
+const VALUE_FG = '#15213b';
+
+/** Round ends, like every pill on the site. */
+const RADIUS = HEIGHT / 2;
+
+/** The value is set bold, which runs about a tenth wider. */
+const BOLD_FACTOR = 1.1;
 
 /**
  * Approximate Verdana 11px advance widths. Only accurate enough to keep the
@@ -64,10 +73,15 @@ function escapeXml(value: string): string {
   );
 }
 
-function label(text: string, x: number): string {
-  const width = textWidth(text);
+function label(text: string, x: number, bold = false): string {
+  const width = valueWidthOf(text, bold);
+  const weight = bold ? ` font-weight="bold" fill="${VALUE_FG}"` : '';
 
-  return `<text x="${x}" y="14" textLength="${width}" lengthAdjust="spacingAndGlyphs">${escapeXml(text)}</text>`;
+  return `<text x="${x}" y="14" textLength="${width}" lengthAdjust="spacingAndGlyphs"${weight}>${escapeXml(text)}</text>`;
+}
+
+function valueWidthOf(text: string, bold: boolean): number {
+  return bold ? Math.ceil(textWidth(text) * BOLD_FACTOR) : textWidth(text);
 }
 
 interface BadgeOptions {
@@ -86,7 +100,9 @@ function renderBadge({
 }: BadgeOptions): string {
   const iconWidth = iconPath ? ICON_SIZE + ICON_GAP : 0;
   const labelWidth = PADDING + iconWidth + textWidth(labelText) + PADDING;
-  const valueWidth = valueText ? PADDING + textWidth(valueText) + PADDING : 0;
+  const valueWidth = valueText
+    ? PADDING + valueWidthOf(valueText, true) + PADDING
+    : 0;
   const total = labelWidth + valueWidth;
 
   const alt = valueText ? `${labelText}: ${valueText}` : labelText;
@@ -94,24 +110,26 @@ function renderBadge({
 
   // simple-icons paths use a 24x24 viewBox.
   const icon = iconPath
-    ? `<path transform="translate(${PADDING} ${(HEIGHT - ICON_SIZE) / 2}) scale(${ICON_SIZE / 24})" d="${iconPath}" fill="#fff"/>`
+    ? `<path transform="translate(${PADDING} ${(HEIGHT - ICON_SIZE) / 2}) scale(${ICON_SIZE / 24})" d="${iconPath}" fill="${LABEL_FG}"/>`
     : '';
 
   const valueSegment = valueText
     ? `<rect x="${labelWidth}" width="${valueWidth}" height="${HEIGHT}" fill="${VALUE_BG}"/>`
     : '';
 
-  const valueLabel = valueText ? label(valueText, labelWidth + PADDING) : '';
+  const valueLabel = valueText
+    ? label(valueText, labelWidth + PADDING, true)
+    : '';
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${total}" height="${HEIGHT}" viewBox="0 0 ${total} ${HEIGHT}" role="img" aria-label="${escapeXml(alt)}">`,
     `<title>${escapeXml(alt)}</title>`,
-    `<clipPath id="${clipId}"><rect width="${total}" height="${HEIGHT}" rx="3" fill="#fff"/></clipPath>`,
+    `<clipPath id="${clipId}"><rect width="${total}" height="${HEIGHT}" rx="${RADIUS}" fill="#fff"/></clipPath>`,
     `<g clip-path="url(#${clipId})">`,
     `<rect width="${labelWidth}" height="${HEIGHT}" fill="${LABEL_BG}"/>`,
     valueSegment,
     `</g>`,
-    `<g fill="#fff" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="${FONT_SIZE}">`,
+    `<g fill="${LABEL_FG}" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="${FONT_SIZE}">`,
     icon,
     label(labelText, PADDING + iconWidth),
     valueLabel,

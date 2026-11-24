@@ -1,0 +1,57 @@
+/**
+ * Table. The head sits on a 2px ink rule, rows on hairlines. In a card it
+ * scrolls sideways when narrow. `is-centered` centers every cell but the
+ * first; a `is-pick` cell is the highlighted column.
+ */
+@use '../mixins' as m;
+
+.site-table-card {
+  overflow-x: auto;
+  padding: clamp(8px, 1.6vw, 24px) clamp(16px, 2.4vw, 32px);
+  border-radius: var(--db-radius-tile);
+  background: var(--db-raised);
+  box-shadow: 0 0 0 1px var(--db-line);
+}
+
+.site-table {
+  @include m.table;
+
+  td {
+    vertical-align: middle;
+  }
+
+  tbody th {
+    border-bottom: 1px solid var(--db-line);
+    font-family: var(--db-font);
+    font-size: 16px;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+
+  &.is-centered {
+    :is(th, td):not(:first-child) {
+      padding-inline: 16px;
+      text-align: center;
+    }
+  }
+
+  .is-pick {
+    background: var(--db-c-line);
+    font-weight: 700;
+    color: var(--db-ink);
+  }
+
+  thead .is-pick {
+    border-radius: 20px 20px 0 0;
+    border-bottom-color: transparent;
+    font-size: 20px;
+  }
+
+  tbody tr:last-child .is-pick {
+    border-radius: 0 0 20px 20px;
+  }
+
+  tbody tr:last-child :is(td, th) {
+    border-bottom: 0;
+  }
+}

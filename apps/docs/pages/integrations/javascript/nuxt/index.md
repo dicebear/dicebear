@@ -77,7 +77,7 @@ export default defineEventHandler((event) => {
 });
 ```
 
-Consume it from any component with `<img :src="`/api/avatar/${seed}`">`.
+Consume it from any component with ``<img :src="`/api/avatar/${seed}`">``.
 
 ## With the HTTP API
 

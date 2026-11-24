@@ -3,63 +3,105 @@
     {
       "id": "puppies",
       "name": "Puppies",
-      "summary": "Big glossy eyes on the compact sitting build.",
-      "description": "The puppy eyes are one of eleven eye sets, and the sitting body is the smallest of the three builds. Together they make every dog look a few months old.",
+      "summary": "Round muzzles and big glossy or button eyes.",
+      "description": "The round muzzle is the shortest of the six, and the puppy and button eyes are the two youngest of the ten eye sets. Ears, coat and everything else keep varying.",
       "options": {
-        "eyesVariant": ["puppy"],
-        "bodyVariant": ["sitting"]
-      }
-    },
-    {
-      "id": "big-dogs",
-      "name": "Big Dogs",
-      "summary": "The tall build with the small head and long legs.",
-      "description": "The Great Dane build: a smaller head on a deep chest, the shoulders right under the chin. The head family still varies, so a tall poodle and a tall husky both turn up.",
-      "options": {
-        "bodyVariant": ["tall"]
-      }
-    },
-    {
-      "id": "stocky",
-      "name": "Stocky",
-      "summary": "A big head low in wide shoulders.",
-      "description": "The bulldog build, short legs set wide. Pairs well with the flat-faced heads but is not limited to them.",
-      "options": {
-        "bodyVariant": ["stocky"]
+        "muzzleVariant": ["round"],
+        "eyesVariant": ["puppy", "button"]
       }
     },
     {
       "id": "floppy-ears",
       "name": "Floppy Ears",
-      "summary": "Beagle, basset and poodle heads only.",
-      "description": "Three of the nine head families let the ears hang: the labrador and beagle head, the basset and cocker head with ears down to the shoulders, and the scalloped poodle head.",
+      "summary": "Ears that hang: drop, long and curly.",
+      "description": "Three of the eight ear shapes lie on the head as flaps: the labrador's drop ear, the basset's long ear down past the chin, and the poodle's ear of curls.",
       "options": {
-        "headVariant": ["floppy", "droopy", "fluffy"]
+        "earsVariant": ["drop", "long", "pompon"]
       }
     },
     {
       "id": "pointed-ears",
       "name": "Pointed Ears",
-      "summary": "Shepherd, spitz and french bulldog heads only.",
-      "description": "The three families whose ears stand up: the shepherd and husky head, the pomeranian head with its ruff, and the wide head with the tall bat ears.",
+      "summary": "Ears that stand: prick and bat.",
+      "description": "The shepherd's tall prick ear and the broad, round bat ear of a corgi or a french bulldog. Both stand behind the skull with a darker inside.",
       "options": {
-        "headVariant": ["pointed", "spitz", "bat"]
+        "earsVariant": ["prick", "bat"]
+      }
+    },
+    {
+      "id": "one-up-one-down",
+      "name": "One Up, One Down",
+      "summary": "One ear stands, the other tips over.",
+      "description": "The mongrel's ear: a prick ear on one side and a folded one on the other. The muzzle, the coat and the hair still vary.",
+      "options": {
+        "earsVariant": ["half"]
+      }
+    },
+    {
+      "id": "long-noses",
+      "name": "Long Noses",
+      "summary": "The long muzzle with the nose low on every dog.",
+      "description": "The collie's and the shepherd's muzzle: a bridge from between the eyes down past the chin. A white blaze runs into it without a seam.",
+      "options": {
+        "muzzleVariant": ["long"]
       }
     },
     {
       "id": "flat-faces",
       "name": "Flat Faces",
-      "summary": "Pug, bulldog and french bulldog heads only.",
-      "description": "The short-muzzled families. The pug carries a dark muzzle instead of markings, and the bulldog has jowls that hang past the mouth.",
+      "summary": "Short or heavy muzzles under small ears.",
+      "description": "The dark mask of a pug and the flews of a boxer, under ears that stay small or stand like a french bulldog's.",
       "options": {
-        "headVariant": ["pug", "blocky", "bat"]
+        "muzzleVariant": ["short", "wide"],
+        "earsVariant": ["small", "bat", "button"]
+      }
+    },
+    {
+      "id": "scruffy",
+      "name": "Scruffy",
+      "summary": "Beards, fluffy muzzles and hair on every head.",
+      "description": "The schnauzer's beard with its brows or the doodle's cloud of a muzzle, and always a tuft, a topknot or bangs on top.",
+      "options": {
+        "muzzleVariant": ["beard", "fluffy"],
+        "hairProbability": 100
+      }
+    },
+    {
+      "id": "tricolour",
+      "name": "Tricolour",
+      "summary": "Dark sides or a cap, and a white blaze between them.",
+      "description": "A dark marking and a white one on every dog, the way a beagle, a bernese or a husky wears them. The fur colour decides what the three tones are.",
+      "options": {
+        "patternProbability": 100,
+        "patternVariant": ["sides", "cap"],
+        "blazeProbability": 100,
+        "blazeVariant": ["stripe", "bib"]
+      }
+    },
+    {
+      "id": "plain-coats",
+      "name": "Plain Coats",
+      "summary": "No markings at all.",
+      "description": "Neither a dark marking nor a white one. The lighter muzzle stays, it is part of the muzzle and not of the coat.",
+      "options": {
+        "patternProbability": 0,
+        "blazeProbability": 0
+      }
+    },
+    {
+      "id": "playtime",
+      "name": "Playtime",
+      "summary": "A toy on the ground next to every dog.",
+      "description": "A ball, a stick, a bone or a frisbee lies in the corner three times out of ten. This makes it every dog. The frisbee takes the collar's colour.",
+      "options": {
+        "toyProbability": 100
       }
     },
     {
       "id": "bandanas",
       "name": "Bandanas",
       "summary": "A bandana around every neck.",
-      "description": "One of the four collar variants, on every dog instead of a share of them. The bandana takes the collar color, so the shipped red, blue, green and gold still spread across a set.",
+      "description": "Dogs wear a collar six times out of ten, and one collar in four is a bandana. This makes it every dog, in the four collar colours.",
       "options": {
         "collarProbability": 100,
         "collarVariant": ["bandana"]
@@ -69,7 +111,7 @@
       "id": "bare-neck",
       "name": "Bare Neck",
       "summary": "No collar on anyone.",
-      "description": "Six in ten dogs wear a collar by default. Turning it off leaves the chest patch as the only thing between the head and the paws.",
+      "description": "Turns the collar off, tags and bandanas included.",
       "options": {
         "collarProbability": 0
       }
@@ -77,26 +119,26 @@
     {
       "id": "indoors",
       "name": "Indoors",
-      "summary": "Living room, bedroom or nursery behind the dog.",
-      "description": "Three of the six scenes are rooms. Keeping to those gives a set one kind of place and a narrower band of wall colors.",
+      "summary": "Living room or kitchen behind the dog.",
+      "description": "The two rooms of the seven scenes: the living room the pets share and the kitchen with the bowl.",
       "options": {
-        "sceneVariant": ["livingRoom", "bedroom", "nursery"]
+        "sceneVariant": ["livingRoom", "kitchen"]
       }
     },
     {
       "id": "outdoors",
       "name": "Outdoors",
-      "summary": "Meadow, forest or playground behind the dog.",
-      "description": "The other half of the scenes, all under a sky. The greens and blues sit further from the fur colors than the room walls do.",
+      "summary": "Meadow, forest, yard, street or beach behind the dog.",
+      "description": "The five scenes under open sky, from the meadow and the forest the pets share to the yard with the kennel, the street and the beach.",
       "options": {
-        "sceneVariant": ["meadow", "forest", "playground"]
+        "sceneVariant": ["meadow", "forest", "yard", "street", "beach"]
       }
     },
     {
       "id": "studio",
       "name": "Studio",
       "summary": "No scene, a flat pale ground instead.",
-      "description": "The scene is what paints the tile, and without it the dog sits on nothing. A background color fills that in. Use this when the avatars have to sit on one flat color across a whole interface.",
+      "description": "Turns the scene off and puts a pale background colour in its place, for avatars that sit on a coloured page.",
       "options": {
         "sceneProbability": 0,
         "backgroundColor": ["ffe3ea", "e3edff", "e2f5e9", "fdf1d4", "efe6ff"]
@@ -105,10 +147,11 @@
     {
       "id": "greyscale",
       "name": "Greyscale",
-      "summary": "Grey fur on a grey ground, scene off.",
-      "description": "The scenes carry their own colors and no option reaches them, so a monochrome set has to drop the scene first. Fur, tongue, blush and collar all move to grey.",
+      "summary": "Grey fur on a grey ground, scene and toys off.",
+      "description": "Every colour slot in grey and the scene off. The ball and the stick have colours of their own, so the toys are off as well.",
       "options": {
         "sceneProbability": 0,
+        "toyProbability": 0,
         "backgroundColor": ["f4f4f5"],
         "furColor": ["d4d4d8", "c1c1c7", "e4e4e7", "a1a1aa"],
         "tongueColor": ["8a8a92"],
@@ -121,7 +164,7 @@
       "id": "animated",
       "name": "Animated",
       "summary": "Turns the style's built-in animation on.",
-      "description": "The animation is off by default and `animation: true` switches it on, so the head tilts and the tail wags. `tiltAnimation: true` or `wagAnimation: true` plays just one of the two, and `animationSpeed` sets the pace. The motion respects prefers-reduced-motion.",
+      "description": "The head tilts slowly from side to side and the tail wags, faster than a cat's.",
       "options": {
         "animation": true
       }

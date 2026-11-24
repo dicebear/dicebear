@@ -9,12 +9,15 @@ import { Moon, Sun } from '@lucide/vue';
 
 const { isDark } = useData();
 const mounted = ref(false);
+/** Only a switch by hand moves the knob, not the first paint. */
+const moved = ref(false);
 
 onMounted(() => {
   mounted.value = true;
 });
 
 function toggle() {
+  moved.value = true;
   isDark.value = !isDark.value;
 }
 </script>
@@ -23,7 +26,8 @@ function toggle() {
   <button
     type="button"
     role="switch"
-    class="theme-switch hv-border"
+    class="theme-switch"
+    :class="{ 'is-moved': moved }"
     :aria-checked="mounted ? isDark : false"
     aria-label="Dark theme"
     @click="toggle"
@@ -31,13 +35,13 @@ function toggle() {
     <span class="theme-switch-knob">
       <Sun
         class="theme-switch-sun"
-        :size="12"
+        :size="16"
         :stroke-width="2.5"
         aria-hidden="true"
       />
       <Moon
         class="theme-switch-moon"
-        :size="11"
+        :size="15"
         :stroke-width="2.5"
         aria-hidden="true"
       />
@@ -46,29 +50,36 @@ function toggle() {
 </template>
 
 <style lang="scss" scoped>
+/* The size of the large switch (SiteSwitch md), with the sun or the moon on
+   its knob. In the header it is an action like its neighbours, so its track
+   is a tint without a line, as the search and the tonal buttons. */
 .theme-switch {
   position: relative;
   flex-shrink: 0;
-  width: 40px;
-  height: 22px;
-  border: 1px solid var(--db-switch-border);
-  border-radius: 11px;
-  background: var(--db-switch-bg);
+  width: 72px;
+  height: 44px;
+  border: 0;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+  transition: background-color 0.12s;
+
+  &:hover {
+    background: color-mix(in srgb, var(--db-ink) 12%, transparent);
+  }
 }
 
 .theme-switch-knob {
   position: absolute;
-  top: 1px;
-  left: 1px;
+  top: 6px;
+  left: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: var(--db-knob);
-  box-shadow: 0 1px 2px rgba(11, 22, 32, 0.25);
-  color: var(--db-muted);
+  background: var(--db-ink);
+  color: var(--db-paper);
   transition: transform var(--duration-fast) var(--ease-smooth);
 }
 
@@ -77,8 +88,7 @@ function toggle() {
 }
 
 .dark .theme-switch-knob {
-  transform: translateX(18px);
-  color: var(--db-btn-fg);
+  transform: translateX(28px);
 }
 
 .dark .theme-switch-sun {
@@ -87,5 +97,51 @@ function toggle() {
 
 .dark .theme-switch-moon {
   display: block;
+}
+
+/* VitePress turns transitions off for the moment the theme changes, so the
+   knob slides and the icon turns in with animations instead. */
+.is-moved .theme-switch-knob {
+  animation: theme-switch-off 0.35s var(--ease-spring);
+}
+
+.dark .is-moved .theme-switch-knob {
+  animation-name: theme-switch-on;
+}
+
+.is-moved :is(.theme-switch-sun, .theme-switch-moon) {
+  animation: theme-switch-icon 0.45s var(--ease-spring);
+}
+
+@keyframes theme-switch-on {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(28px);
+  }
+}
+
+@keyframes theme-switch-off {
+  from {
+    transform: translateX(28px);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes theme-switch-icon {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 </style>

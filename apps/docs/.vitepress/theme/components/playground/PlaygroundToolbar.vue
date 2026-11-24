@@ -2,11 +2,10 @@
 /**
  * The bar across the top of the playground: the style on the left, above
  * the list whose entries depend on it, undo, redo, reset and a menu for
- * option files at the right edge of the picture, and the menu of views over
- * the right column. On a phone the menu moves next to the style.
+ * option files at the right edge of the picture, and the views over the
+ * right column. A phone has a bar of its own (PlaygroundAppBar).
  */
 import { computed, ref } from 'vue';
-import { useMediaQuery } from '@vueuse/core';
 import {
   Ellipsis,
   FileDown,
@@ -28,19 +27,13 @@ const emit = defineEmits<{
 
 const store = useStore();
 
-// A phone's bar has no room for redo and reset, which move into the menu
-// there, above the option files. Undo stays in the bar.
-const phone = useMediaQuery('(max-width: 767px)');
-
 function onReset() {
   track('Playground: Reset', { style: styleLabel(store.avatarStyleName) });
   store.resetOptions();
 }
 
 // Something to reset: any option set by hand.
-const hasChanges = computed(
-  () => Object.keys(store.avatarStyleOptionsWithoutDefaults).length > 0,
-);
+const hasChanges = computed(() => store.canReset);
 
 const fileItems: SiteMenuItem[] = [
   {
@@ -51,27 +44,6 @@ const fileItems: SiteMenuItem[] = [
   },
   { label: 'Import options', icon: FileUp, command: () => emit('import') },
 ];
-
-const menuItems = computed<SiteMenuItem[]>(() =>
-  phone.value
-    ? [
-        {
-          label: 'Redo',
-          icon: Redo2,
-          command: () => store.redo(),
-          disabled: !store.canRedo,
-        },
-        {
-          label: 'Reset everything',
-          icon: RotateCcw,
-          command: onReset,
-          disabled: !hasChanges.value,
-        },
-        { separator: true },
-        ...fileItems,
-      ]
-    : fileItems,
-);
 
 const modePicker = ref<InstanceType<typeof PlaygroundModePicker> | null>(null);
 
@@ -100,7 +72,7 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
           </button>
           <button
             type="button"
-            class="site-btn site-btn-ghost site-btn-icon pg-toolbar-wide"
+            class="site-btn site-btn-ghost site-btn-icon"
             aria-label="Redo"
             data-tip="Redo"
             data-tip-side="bottom"
@@ -109,10 +81,10 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
           >
             <Redo2 :size="18" aria-hidden="true" />
           </button>
-          <span class="pg-toolbar-divider pg-toolbar-wide" aria-hidden="true" />
+          <span class="pg-toolbar-divider" aria-hidden="true" />
           <button
             type="button"
-            class="site-btn site-btn-ghost site-btn-icon pg-toolbar-wide"
+            class="site-btn site-btn-ghost site-btn-icon"
             aria-label="Reset everything"
             data-tip="Reset everything"
             data-tip-side="bottom"
@@ -121,7 +93,7 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
           >
             <RotateCcw :size="18" aria-hidden="true" />
           </button>
-          <SiteMenu :items="menuItems" label="More">
+          <SiteMenu :items="fileItems" label="More">
             <template #trigger="{ open, toggle }">
               <button
                 type="button"
@@ -149,10 +121,19 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
 
 <style scoped lang="scss">
 /* The toolbar keeps to the container like the header above it, and its
-   line runs across the page like the header's. */
+   line runs across the page like the header's. It is the title bar of the
+   playground: the style as its heading on the left, the history in the
+   middle, the three views on the right. */
 .pg-toolbar {
+  /* Above the picture, so the tooltips of the history, which open
+     downwards, are not cut off by it. */
+  position: relative;
+  z-index: 6;
   box-sizing: border-box;
-  height: 56px;
+  height: 88px;
+  /* A line above as well: the bar starts the playground, apart from the
+     site's header. */
+  border-top: 1px solid var(--db-line);
   border-bottom: 1px solid var(--db-line);
 
   &-inner {
@@ -161,21 +142,16 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     max-width: var(--db-container);
     height: 100%;
     margin: 0 auto;
-    padding: 0 var(--db-gutter);
+    padding: 0 var(--db-wrap);
   }
 
-  /* The same three columns as the body below: the style over the list, the
-     history over the picture, the switch over the column on the right. That
-     column keeps its place in both views, so nothing in the bar moves when
-     the list comes and goes. */
   &-grid {
     display: grid;
-    grid-template-columns: 260px minmax(0, 1fr) 360px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    gap: 12px;
+    gap: 24px;
     box-sizing: border-box;
     height: 100%;
-    padding: 0 12px;
   }
 
   &-left,
@@ -187,11 +163,6 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     min-width: 0;
   }
 
-  &-middle,
-  &-right {
-    justify-content: flex-end;
-  }
-
   &-divider {
     width: 1px;
     height: 22px;
@@ -199,70 +170,10 @@ defineExpose({ focusView: () => modePicker.value?.focus() });
     background: var(--db-line);
   }
 
-  /* As wide as the text of the list below, which starts on the same edge.
-     The field is one of several roots of its component, so the class
-     arrives without this file's scope. */
-  &-left :deep(.pg-toolbar-style) {
-    width: calc(100% - 24px);
-    min-width: 0;
-  }
-
-  @media (min-width: 960px) {
-    &-inner {
-      padding: 0 calc(var(--db-gutter) - 12px);
-    }
-
-    /* The buttons end as far before the column's line as its content
-       starts after it. */
-    &-middle {
-      margin-right: -12px;
-    }
-
-    /* As wide as the content of the column below. */
-    &-right :deep(.pg-toolbar-view) {
-      width: calc(100% - 24px);
-    }
-  }
-
   @media (max-width: 1279px) {
     &-grid {
-      grid-template-columns: 224px minmax(0, 1fr) 324px;
-    }
-  }
-
-  @media (max-width: 959px) {
-    &-grid {
-      grid-template-columns: minmax(0, 1fr) auto auto;
-      padding: 0;
-    }
-
-    &-left :deep(.pg-toolbar-style) {
-      width: 100%;
-      max-width: 260px;
-    }
-  }
-
-  /* One row on a phone: the style across the width, the view as a small
-     button next to it, then undo and the menu. */
-  @media (max-width: 767px) {
-    &-grid {
-      gap: 4px;
-    }
-
-    &-right {
-      order: 1;
-    }
-
-    &-middle {
-      order: 2;
-    }
-
-    &-wide {
-      display: none;
-    }
-
-    &-left :deep(.pg-toolbar-style) {
-      max-width: none;
+      grid-template-columns: minmax(180px, 1fr) auto auto;
+      gap: 12px;
     }
   }
 }

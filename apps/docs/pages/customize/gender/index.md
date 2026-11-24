@@ -16,7 +16,8 @@ look you want, such as the hair or facial hair, and leave the rest to the seed.
 
 The [Playground](/playground/) previews every option value and lets you combine
 them. Every [style page](/styles/) lists the same options with previews, and the
-[Editor](https://editor.dicebear.com) lets you adjust them without any code.
+Playground's [Editor](/playground/?mode=editor) lets you adjust them without any
+code.
 
 Pass the options you picked as
 [query parameters in the HTTP API](/integrations/http-api/#options) or as
@@ -35,16 +36,63 @@ Most character styles tag their variants with labels such as `hairLength:long`
 or `headwear:headscarf`. The [`tags`](/customize/tags/) option keeps only the
 variants you choose, for example long hair without facial hair:
 
-```js
+::: code-group
+
+```http [HTTP API]
+https://api.dicebear.com/11.x/adventurer/svg?seed=Casey&tags=hairLength:long,!facialHair
+```
+
+```js [JavaScript]
 const avatar = new Avatar(style, {
   seed: 'Casey',
   tags: ['hairLength:long', '!facialHair'],
 });
 ```
 
-```http
-https://api.dicebear.com/11.x/adventurer/svg?seed=Casey&tags=hairLength:long,!facialHair
+```php [PHP]
+$avatar = new Avatar($style, [
+  'seed' => 'Casey',
+  'tags' => ['hairLength:long', '!facialHair'],
+]);
 ```
+
+```python [Python]
+avatar = Avatar(style, {
+    "seed": "Casey",
+    "tags": ["hairLength:long", "!facialHair"],
+})
+```
+
+```rust [Rust]
+let avatar = Avatar::new(&style, json!({
+    "seed": "Casey",
+    "tags": ["hairLength:long", "!facialHair"],
+}))?;
+```
+
+```go [Go]
+avatar, _ := dicebear.NewAvatar(style, map[string]any{
+	"seed": "Casey",
+	"tags": []string{"hairLength:long", "!facialHair"},
+})
+```
+
+```dart [Dart]
+final avatar = Avatar(style, {
+  'seed': 'Casey',
+  'tags': ['hairLength:long', '!facialHair'],
+});
+```
+
+```csharp [C#]
+var avatar = new Avatar(style, new JsonObject
+{
+    ["seed"] = "Casey",
+    ["tags"] = new JsonArray("hairLength:long", "!facialHair"),
+});
+```
+
+:::
 
 Tags combine with the per-feature options, such as `facialHairProbability`.
 

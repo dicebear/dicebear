@@ -175,7 +175,7 @@ function lineTitle(line: VersionLine): string {
   -webkit-overflow-scrolling: touch;
   border: 1px solid var(--db-line);
   border-radius: 14px;
-  background: var(--db-panel);
+  background: var(--db-raised);
 }
 
 .vt-chart {

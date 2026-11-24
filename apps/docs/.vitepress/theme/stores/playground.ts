@@ -1,10 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, nextTick, ref, watch } from 'vue';
-import {
-  useLocalStorage,
-  useSessionStorage,
-  watchDebounced,
-} from '@vueuse/core';
+import { useStorage, watchDebounced } from '@vueuse/core';
 import { useIDBKeyval } from '@vueuse/integrations/useIDBKeyval';
 import type {
   CustomStyleEntry,
@@ -19,6 +15,7 @@ import {
   unregisterCustomStyle,
   flushPendingCustomStyles,
 } from '@theme/utils/avatar/style';
+import { safeStorage } from '@theme/utils/safeStorage';
 import { track, styleLabel } from '@theme/utils/track';
 import type { StylePreset } from '@theme/config/presets';
 import type { PlaygroundConfig } from '@theme/utils/playgroundConfig';
@@ -26,6 +23,7 @@ import type { PlaygroundConfig } from '@theme/utils/playgroundConfig';
 const STYLE_KEY = 'dicebear-playground-style';
 const OPTIONS_KEY = 'dicebear-playground-options';
 const SEED_KEY = 'dicebear-playground-seed';
+const DEFAULT_SEED = 'Felix';
 const MODE_KEY = 'dicebear-playground-mode';
 
 /**
@@ -57,28 +55,31 @@ export default defineStore('playground', () => {
   // what Export is for, and it hands them a file they own. The uploaded style
   // definitions below are the exception and stay: they are a good deal of work
   // to hand in again, and losing them would take the picker entry with them.
-  const avatarStyleName = useSessionStorage<PlaygroundStoreStyle>(
+  const session = safeStorage('sessionStorage');
+  const local = safeStorage('localStorage');
+
+  const avatarStyleName = useStorage<PlaygroundStoreStyle>(
     STYLE_KEY,
     defaultStyle,
+    session,
   );
-  const avatarStyleOptions = useSessionStorage<PlaygroundStoreOptions>(
+  const avatarStyleOptions = useStorage<PlaygroundStoreOptions>(
     OPTIONS_KEY,
     {},
+    session,
   );
-  const seed = useSessionStorage<string>(SEED_KEY, 'Felix');
+  const seed = useStorage<string>(SEED_KEY, DEFAULT_SEED, session);
 
   // The same three keys used to live in localStorage. Nothing reads them any
   // more, so left alone they would sit on the reader's disk for good, seed
   // included.
-  if (typeof localStorage !== 'undefined') {
-    for (const key of [STYLE_KEY, OPTIONS_KEY, SEED_KEY]) {
-      localStorage.removeItem(key);
-    }
+  for (const key of [STYLE_KEY, OPTIONS_KEY, SEED_KEY]) {
+    local.removeItem(key);
   }
 
   // The view is a habit of the reader rather than part of the look, so it
   // outlasts the tab: whoever switched to another view finds it again.
-  const mode = useLocalStorage<PlaygroundMode>(MODE_KEY, 'simple');
+  const mode = useStorage<PlaygroundMode>(MODE_KEY, 'simple', local);
 
   /**
    * Switches the view. The menu in the toolbar does it, and so can a link
@@ -151,8 +152,13 @@ export default defineStore('playground', () => {
     delete customStyles.value[key];
     unregisterCustomStyle(key);
 
+    // Undo must not lead back to a style that is gone.
+    past.value = past.value.filter((step) => step.style !== key);
+    future.value = future.value.filter((step) => step.style !== key);
+
     if (avatarStyleName.value === key) {
       avatarStyleName.value = defaultStyle;
+      present = { style: defaultStyle, options: {}, seed: seed.value };
     }
   }
 
@@ -177,8 +183,15 @@ export default defineStore('playground', () => {
   function resetOptions() {
     clearOptions();
 
-    seed.value = 'Felix';
+    seed.value = DEFAULT_SEED;
   }
+
+  /** Whether "Reset everything" has anything to do. */
+  const canReset = computed(
+    () =>
+      seed.value !== DEFAULT_SEED ||
+      Object.keys(avatarStyleOptionsWithoutDefaults.value).length > 0,
+  );
 
   /**
    * Replaces the current options with a preset's, keeping the seed.
@@ -285,26 +298,29 @@ export default defineStore('playground', () => {
   const future = ref<Step[]>([]);
   let present = takeStep();
 
-  watchDebounced(
-    [avatarStyleName, seed, avatarStyleOptions],
-    () => {
-      const next = takeStep();
+  // A change becomes a step after a short pause, so a drag on a slider is one
+  // step. Undo and redo do not wait for it, or they would skip the change.
+  function commitStep() {
+    const next = takeStep();
 
-      if (sameStep(next, present)) {
-        return;
-      }
+    if (sameStep(next, present)) {
+      return;
+    }
 
-      past.value.push(present);
+    past.value.push(present);
 
-      if (past.value.length > HISTORY_LIMIT) {
-        past.value.shift();
-      }
+    if (past.value.length > HISTORY_LIMIT) {
+      past.value.shift();
+    }
 
-      present = next;
-      future.value = [];
-    },
-    { deep: true, debounce: 300 },
-  );
+    present = next;
+    future.value = [];
+  }
+
+  watchDebounced([avatarStyleName, seed, avatarStyleOptions], commitStep, {
+    deep: true,
+    debounce: 300,
+  });
 
   async function restoreStep(step: Step) {
     if (avatarStyleName.value !== step.style) {
@@ -325,6 +341,8 @@ export default defineStore('playground', () => {
   const canRedo = computed(() => future.value.length > 0);
 
   function undo() {
+    commitStep();
+
     const step = past.value.pop();
 
     if (!step) return;
@@ -336,6 +354,8 @@ export default defineStore('playground', () => {
   }
 
   function redo() {
+    commitStep();
+
     const step = future.value.pop();
 
     if (!step) return;
@@ -392,6 +412,7 @@ export default defineStore('playground', () => {
     addCustomStyle,
     removeCustomStyle,
     resetOptions,
+    canReset,
     resetOption,
     applyPreset,
     applyConfig,

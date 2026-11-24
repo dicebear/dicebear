@@ -1,9 +1,8 @@
 <script setup lang="ts">
 /**
  * The row under the avatar in the editor view: the shape on the left,
- * Randomize in the middle, the ways out on the right. The editor has no
- * column of its own, so the actions live here. A phone keeps them in the bar
- * at the bottom instead.
+ * Randomize in the middle, saving on the right. The editor has no column of
+ * its own, so the download lives here. A phone keeps it on the stage instead.
  */
 import { inject } from 'vue';
 import { Shuffle } from '@lucide/vue';
@@ -18,7 +17,7 @@ import {
 } from '@theme/composables/usePlaygroundShape';
 import { track, styleLabel } from '@theme/utils/track';
 import SiteSegmented from '../site/SiteSegmented.vue';
-import PlaygroundEditorActions from './PlaygroundEditorActions.vue';
+import PlaygroundButtonDownload from './PlaygroundButtonDownload.vue';
 
 withDefaults(
   defineProps<{
@@ -27,10 +26,6 @@ withDefaults(
   }>(),
   { actions: true },
 );
-
-const emit = defineEmits<{
-  'how-to-use': [];
-}>();
 
 const injected = inject(playgroundEntriesKey);
 
@@ -75,32 +70,37 @@ function randomize() {
       v-model="shape"
       :options="PLAYGROUND_SHAPES"
       aria-label="Shape"
+      size="lg"
       class="pg-editor-bar-shape"
     />
 
     <button
       type="button"
-      class="site-btn site-btn-secondary pg-editor-bar-random"
+      class="site-btn site-btn-accent site-btn-lg pg-editor-bar-random"
       @click="randomize"
     >
-      <Shuffle :size="16" aria-hidden="true" />
+      <Shuffle :size="18" aria-hidden="true" />
       Randomize
     </button>
 
-    <PlaygroundEditorActions
-      v-if="actions"
-      :seed="seed"
-      class="pg-editor-bar-actions"
-      @how-to-use="emit('how-to-use')"
-    />
+    <div v-if="actions" class="pg-editor-bar-actions">
+      <PlaygroundButtonDownload :seed="seed" primary />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-/* Three parts on one line, Randomize in the middle of the picture. */
+@use '../../styles/mixins' as m;
+
+/* Three parts on one line, Randomize in the middle of the picture while
+   the sides leave it there; on a tablet the wider actions push it left
+   instead of lying over it. Every control of the bar is 56 high, the size
+   of the page's actions; a phone takes 44 for all of them. */
 .pg-editor-bar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns:
+    minmax(max-content, 1fr) auto
+    minmax(max-content, 1fr);
   align-items: center;
   gap: 12px;
   align-self: stretch;
@@ -110,7 +110,12 @@ function randomize() {
   }
 
   &-actions {
+    display: flex;
     justify-self: end;
+
+    :deep(.site-btn-group) {
+      width: auto;
+    }
   }
 
   /* Too narrow for one line: the shape and Randomize, the actions under
@@ -126,9 +131,47 @@ function randomize() {
     }
   }
 
+  /* Beside the avatar in a short, wide window: the shape and Randomize, the
+     actions under them, as one block with even edges. */
+  @media (min-width: 768px) and (max-height: 799px) {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 8px;
+    flex: none;
+    align-self: center;
+
+    &-random {
+      justify-self: stretch;
+    }
+
+    &-actions {
+      flex-basis: auto;
+      grid-column: 1 / -1;
+      justify-self: stretch;
+
+      :deep(.site-btn-group) {
+        width: 100%;
+      }
+    }
+  }
+
   /* A phone has the shape on the left and Randomize on the right. */
   @media (max-width: 767px) {
     justify-content: space-between;
+
+    &-random {
+      @include m.button-size(md);
+    }
+
+    &-shape:deep(.site-segmented-item) {
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+    }
+
+    &-shape {
+      border-radius: 22px;
+    }
   }
 }
 </style>

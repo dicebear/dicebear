@@ -37,9 +37,10 @@ the JavaScript library goes back further than 10.x. The others arrived during
 it, so 9.x and older concern JavaScript alone.
 
 Coming from 10.x there is barely anything to change. Avatars render the same,
-and [animations](/animated-avatars/) are new and stay off until you switch them
-on. One exception: if you keep a style definition of your own and pin colors
-with `{color}ColorOrder: 'fixed'`, 11.x draws from a palette in the order the
+apart from small fixes to Notionists and Avataaars, and
+[animations](/animated-avatars/) are new and stay off until you switch them on.
+One exception: if you keep a style definition of your own and pin colors with
+`{color}ColorOrder: 'fixed'`, 11.x draws from a palette in the order the
 definition lists it, where 10.x sorted the values first. Sorting the palette in
 the definition gives you the old result back.
 
@@ -68,7 +69,8 @@ date the HTTP API shuts them down and the URLs stop working. See the
 
 ::: info
 
-You can [host the API yourself](/recipes/self-host-the-http-api/) to keep using
-discontinued versions after their end of life.
+To keep using `5.x` to `9.x` after their end of life, host the `dicebear/api:3`
+image yourself, as described in the
+[self-hosting guide](/recipes/self-host-the-http-api/).
 
 :::

@@ -187,15 +187,13 @@ function onPointerDown(event: PointerEvent) {
 </template>
 
 <style scoped lang="scss">
-$thumb: 18px;
-
 @mixin thumb {
-  width: $thumb;
-  height: $thumb;
+  width: var(--site-slider-thumb);
+  height: var(--site-slider-thumb);
   box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
+  border: 2px solid var(--db-btn-bg);
   border-radius: 50%;
-  background: var(--db-knob);
+  background: var(--db-panel);
   cursor: pointer;
   pointer-events: auto;
   transition:
@@ -204,21 +202,26 @@ $thumb: 18px;
 }
 
 @mixin thumb-hover {
-  border-color: var(--db-hover-border);
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--db-brand) 16%, transparent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--db-btn-bg) 14%, transparent);
 }
 
 @mixin thumb-focus {
-  border-color: var(--db-brand);
-  outline: 2px solid var(--db-brand);
+  outline: 2px solid var(--db-focus);
   outline-offset: 2px;
 }
 
 .site-slider {
+  /* A finger needs a larger grip than a mouse. */
+  --site-slider-thumb: 20px;
+
+  @media (pointer: coarse) {
+    --site-slider-thumb: 28px;
+  }
+
   position: relative;
   display: block;
   width: 100%;
-  height: 20px;
+  height: var(--site-slider-thumb);
   isolation: isolate;
   touch-action: pan-y;
 
@@ -228,28 +231,32 @@ $thumb: 18px;
   &::after {
     content: '';
     position: absolute;
-    top: 8px;
-    height: 4px;
-    border-radius: 2px;
+    top: calc((var(--site-slider-thumb) - 6px) / 2);
+    height: 6px;
+    border-radius: 3px;
     pointer-events: none;
   }
 
   &::before {
     left: 0;
     right: 0;
-    background: var(--db-switch-bg);
+    background: color-mix(in srgb, var(--db-ink) 14%, transparent);
   }
 
   &::after {
     left: 0;
     right: calc(
-      (1 - var(--site-slider-hi)) * (100% - #{$thumb}) + #{$thumb} / 2
+      (1 - var(--site-slider-hi)) * (100% - var(--site-slider-thumb)) +
+        var(--site-slider-thumb) / 2
     );
-    background: var(--db-brand);
+    background: var(--db-btn-bg);
   }
 
   &.is-range::after {
-    left: calc(var(--site-slider-lo) * (100% - #{$thumb}) + #{$thumb} / 2);
+    left: calc(
+      var(--site-slider-lo) * (100% - var(--site-slider-thumb)) +
+        var(--site-slider-thumb) / 2
+    );
   }
 
   &.is-range {
@@ -266,7 +273,7 @@ $thumb: 18px;
     inset: 0;
     z-index: 1;
     width: 100%;
-    height: 20px;
+    height: var(--site-slider-thumb);
     margin: 0;
     padding: 0;
     outline: none;
@@ -283,18 +290,18 @@ $thumb: 18px;
     }
 
     &::-webkit-slider-runnable-track {
-      height: 20px;
+      height: var(--site-slider-thumb);
       background: transparent;
     }
 
     &::-moz-range-track {
-      height: 20px;
+      height: var(--site-slider-thumb);
       background: transparent;
     }
 
     &::-webkit-slider-thumb {
       @include thumb;
-      margin-top: 1px;
+      margin-top: 0;
       appearance: none;
     }
 

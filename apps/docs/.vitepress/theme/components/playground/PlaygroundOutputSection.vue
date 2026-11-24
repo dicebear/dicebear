@@ -105,7 +105,7 @@ const idRandomizationId = useId();
       </div>
     </div>
 
-    <div class="pg-output-switch">
+    <div class="pg-switch-row">
       <label :for="idRandomizationId">Randomize element IDs</label>
       <PlaygroundFieldReset
         v-if="store.isOptionSet(idRandomizationKey)"
@@ -125,21 +125,6 @@ const idRandomizationId = useId();
 .pg-output {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.pg-output-switch {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  label {
-    flex: 1;
-    font-size: 15px;
-    line-height: 24px;
-    font-weight: 600;
-    color: var(--db-ink);
-    cursor: pointer;
-  }
+  gap: 22px;
 }
 </style>

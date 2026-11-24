@@ -92,11 +92,17 @@ watch(activeChild, (child) => {
       <a
         v-if="item.link"
         :href="withBase(item.link)"
-        class="docs-sidebar-link"
+        class="site-pill site-pill-row docs-sidebar-link"
+        :class="{ 'has-toggle': foldable }"
         :aria-current="active ? 'page' : undefined"
         >{{ item.text }}</a
       >
-      <span v-else class="docs-sidebar-link">{{ item.text }}</span>
+      <span
+        v-else
+        class="site-pill site-pill-row docs-sidebar-link"
+        :class="{ 'has-toggle': foldable }"
+        >{{ item.text }}</span
+      >
       <button
         v-if="foldable"
         type="button"
@@ -129,25 +135,16 @@ watch(activeChild, (child) => {
 </template>
 
 <style lang="scss" scoped>
-/* A section is a card: quiet fill while it is closed, paper with a hairline
-   while it is open. The hover moves the fill one step, in both states. */
+/* A section is a soft pill while closed and a soft card while open; the
+   pages in it are rows, the current one yellow. */
 .is-depth-0 {
-  border: 1px solid transparent;
-  border-radius: var(--db-radius-3);
+  border-radius: 24px;
   background: var(--db-soft);
-}
+  transition: background-color 0.12s;
 
-.is-depth-0:hover {
-  background: var(--db-switch-bg);
-}
-
-.is-depth-0.is-open {
-  border-color: var(--db-line);
-  background: var(--db-paper);
-}
-
-.is-depth-0.is-open:hover {
-  background: color-mix(in srgb, var(--db-paper) 92%, var(--db-soft));
+  &:not(.is-open):hover {
+    background: color-mix(in srgb, var(--db-ink) 7%, var(--db-soft));
+  }
 }
 
 /* The panel opens on its row height, which keeps the cards below in step.
@@ -173,19 +170,22 @@ watch(activeChild, (child) => {
 .docs-sidebar-group {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   width: 100%;
-  padding: 9px 14px;
-  font-size: 15px;
-  line-height: 24px;
-  font-weight: 600;
+  height: 48px;
+  padding: 0 14px 0 18px;
+  border-radius: 24px;
+  font-family: var(--db-font-display);
+  font-size: 17px;
+  line-height: 1;
+  font-weight: 700;
   color: var(--db-ink);
   text-align: left;
 }
 
 .docs-sidebar-chevron {
   flex-shrink: 0;
-  margin-left: auto;
   color: var(--db-muted);
   transition: transform var(--duration-fast) var(--ease-smooth);
 }
@@ -200,91 +200,56 @@ watch(activeChild, (child) => {
   align-items: center;
 }
 
-.docs-sidebar-link {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-width: 0;
-  // Every row keeps the slot of the fold arrow free, so the badges of all
-  // entries end on the same line.
-  padding: 5px 24px 5px 0;
-  // A step below the article, so the column stays a list of addresses and
-  // does not compete with the text.
-  font-size: 15px;
-  line-height: 24px;
-  font-weight: 500;
-  color: var(--db-muted);
-  transition: color var(--duration-fast) var(--ease-smooth);
-}
-
-.docs-sidebar-link:hover {
-  color: var(--db-ink);
-}
-
-/* The page you are on keeps its color under the pointer: it marks where you
-   are, and a hover is not a change of that. */
-.is-active > .docs-sidebar-row > .docs-sidebar-link,
-.is-active > .docs-sidebar-row > .docs-sidebar-link:hover {
-  font-weight: 600;
-  color: var(--db-brand-text);
+/* Every row of a level keeps the slot of the fold arrow free when one of
+   them has it, so the text of all entries ends on the same line. */
+.docs-sidebar-link.has-toggle {
+  padding-right: 44px;
 }
 
 .docs-sidebar-toggle {
   position: absolute;
-  top: 50%;
-  right: 0;
+  top: 8px;
+  right: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
+  width: 28px;
   height: 28px;
-  border-radius: var(--db-radius-1);
-  color: var(--db-muted);
-  transform: translateY(-50%);
+  border-radius: 14px;
+  color: inherit;
   transition:
     transform var(--duration-fast) var(--ease-smooth),
-    color var(--duration-fast) var(--ease-smooth);
+    background-color 0.12s;
 
   &[aria-expanded='true'] {
-    transform: translateY(-50%) rotate(90deg);
+    transform: rotate(90deg);
   }
 
+  /* Its own color, so it also works on the yellow of the current page. */
   &:hover {
-    color: var(--db-ink);
+    background: color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  /* Beside the current page the row is yellow, so the arrow takes the text
+     color of the selection, dark in both themes. */
+  [aria-current='page'] ~ & {
+    color: var(--db-select-text);
+
+    &:hover {
+      background: color-mix(in srgb, var(--db-select-text) 10%, transparent);
+    }
   }
 }
 
 .is-depth-0 > .docs-sidebar-panel > .docs-sidebar-children {
-  padding: 0 14px;
+  padding: 0 8px;
 }
 
 .is-depth-0 > .docs-sidebar-panel > .docs-sidebar-children > :last-child {
   padding-bottom: 8px;
 }
 
-.is-depth-1 > .docs-sidebar-panel > .docs-sidebar-children {
-  padding-left: 2px;
-}
-
-.is-depth-1 > .docs-sidebar-panel > .docs-sidebar-children > :first-child {
-  padding-top: 2px;
-}
-
-.is-depth-1 > .docs-sidebar-panel > .docs-sidebar-children > :last-child {
-  padding-bottom: 6px;
-}
-
-.is-depth-2 {
-  border-left: 1px solid var(--db-line);
-
-  &.is-active {
-    border-left-color: var(--db-brand);
-  }
-
-  > .docs-sidebar-row > .docs-sidebar-link {
-    padding-left: 14px;
-  }
+.is-depth-2 > .docs-sidebar-row > .docs-sidebar-link {
+  padding-left: 32px;
 }
 </style>

@@ -157,7 +157,12 @@ defineExpose({ show: () => (open.value = true) });
   </button>
 
   <UiDialog v-model:open="open" header="Import options" max-width="760px">
-    <div class="pg-transfer">
+    <div
+      class="pg-transfer"
+      @dragover.prevent="dragging = true"
+      @dragleave.self="dragging = false"
+      @drop.prevent="onDrop"
+    >
       <SiteTextarea
         v-model="input"
         mono
@@ -172,9 +177,6 @@ defineExpose({ show: () => (open.value = true) });
       <label
         class="pg-transfer-file hv-dashed"
         :class="{ 'is-dragging': dragging }"
-        @dragover.prevent="dragging = true"
-        @dragleave="dragging = false"
-        @drop.prevent="onDrop"
       >
         <FileUp :size="16" aria-hidden="true" />
         <span>Drop a file here or click to choose</span>
@@ -238,7 +240,7 @@ defineExpose({ show: () => (open.value = true) });
   justify-content: center;
   gap: 8px;
   height: 56px;
-  border: 1px dashed var(--db-btn-border);
+  border: 1px dashed var(--db-field-border);
   border-radius: var(--db-radius-3);
   font-size: 14px;
   line-height: 20px;
@@ -246,13 +248,13 @@ defineExpose({ show: () => (open.value = true) });
   cursor: pointer;
 
   &.is-dragging {
-    border-color: var(--db-brand);
-    background: var(--db-tint);
+    border-color: var(--db-focus);
+    background: var(--db-select);
   }
 
   /* The input stays focusable, so the label shows its focus ring. */
-  &:focus-within {
-    outline: 2px solid var(--db-brand);
+  &:has(:focus-visible) {
+    outline: 2px solid var(--db-focus);
     outline-offset: 2px;
   }
 

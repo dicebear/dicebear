@@ -1,14 +1,14 @@
 <script setup lang="ts">
 /**
- * Three steps of the Generate tab share one plugin window: the accordion on
- * the left picks the step, the screenshot on the right follows. One step is
- * always open.
+ * The Generate tab: filling selected layers, then three more steps as a
+ * small accordion. The screenshot on the right follows the open row and
+ * shows the fill when none is open.
  */
 import { ref } from 'vue';
-import { ChevronDown } from '@lucide/vue';
+import SiteDisclosure from '../site/SiteDisclosure.vue';
 import StudioRow from './StudioRow.vue';
 import StudioShot from './StudioShot.vue';
-import type { StudioShotImage, StudioTheme } from './types';
+import type { StudioShotImage, StudioShotName, StudioTheme } from './types';
 
 interface StudioStep {
   title: string;
@@ -16,15 +16,16 @@ interface StudioStep {
   shot: StudioShotImage;
 }
 
-const steps: StudioStep[] = [
-  {
-    title: 'Fill selected layers',
-    text: 'Select the placeholders: rectangles, ellipses, frames or any other shape. Each layer keeps its shape, corners and masks and gets the avatar as an image fill. One undo reverts the whole batch, and a filled layer remembers its style and seed, so you can draw new seeds or switch the style later.',
-    shot: {
-      name: 'fill',
-      alt: 'The Generate tab with five selected layers: Fill 5 selected, seeds from the layer names, and a preview of five Lorelei avatars named Aneka, Felix, Jade, Leo and Mia',
-    },
+const fill: StudioStep = {
+  title: 'Fill selected layers',
+  text: 'Select the placeholders: rectangles, ellipses, frames or any other shape. Each layer keeps its shape, corners and masks and gets the avatar as an image fill. One undo reverts the whole batch, and a filled layer remembers its style and seed, so you can draw new seeds or switch the style later.',
+  shot: {
+    name: 'fill',
+    alt: 'The Generate tab with five selected layers: Fill 5 selected, seeds from the layer names, and a preview of five Lorelei avatars named Aneka, Felix, Jade, Leo and Mia',
   },
+};
+
+const steps: StudioStep[] = [
   {
     title: 'Choose where the seeds come from',
     text: 'The seed decides which avatar a layer gets. Random draws a name per layer. Layer names use the name of each layer, so a placeholder called Felix shows the same face in every mockup. From a list takes one seed per line, Numbered builds them from a prefix and a counter.',
@@ -41,10 +42,26 @@ const steps: StudioStep[] = [
       alt: 'The Generate tab set to Insert new, with six Shapes avatars in the preview and the layout settings',
     },
   },
+  {
+    title: 'Bring your own style',
+    text: 'The gallery has a second tab, Library. Upload a definition file there and the style sits next to the collection in every Figma file you open. The plugin shows the license the file names, but it cannot check it.',
+    shot: {
+      name: 'library',
+      alt: 'The Library tab of the style gallery with two uploaded definitions and the Upload definition button',
+    },
+  },
 ];
 
-const shots = steps.map((step) => step.shot);
-const open = ref(steps[0].shot.name);
+const shots = [fill.shot, ...steps.map((step) => step.shot)];
+const open = ref<StudioShotName>();
+
+function toggle(name: StudioShotName, isOpen: boolean) {
+  if (isOpen) {
+    open.value = name;
+  } else if (open.value === name) {
+    open.value = undefined;
+  }
+}
 
 // Hidden screenshots load lazily, which for a hidden image means not at all.
 // The first pointer or focus on the accordion fetches them for the theme in
@@ -61,103 +78,33 @@ function warmUp() {
 <template>
   <StudioRow>
     <template #text>
-      <div class="studio-steps" @pointerenter="warmUp" @focusin="warmUp">
-        <div
+      <h3 class="site-heading">{{ fill.title }}</h3>
+      <p class="site-body">{{ fill.text }}</p>
+      <div
+        class="site-disclosures studio-steps"
+        @pointerenter="warmUp"
+        @focusin="warmUp"
+      >
+        <SiteDisclosure
           v-for="step in steps"
           :key="step.shot.name"
-          class="studio-steps-item"
+          name="studio-steps"
+          :title="step.title"
+          :open="open === step.shot.name"
+          @update:open="toggle(step.shot.name, $event)"
         >
-          <h3 class="site-h3">
-            <button
-              :id="`studio-step-${step.shot.name}`"
-              type="button"
-              class="studio-steps-button hv-row"
-              :aria-expanded="open === step.shot.name"
-              :aria-disabled="open === step.shot.name"
-              :aria-controls="`studio-step-${step.shot.name}-panel`"
-              @click="open = step.shot.name"
-            >
-              {{ step.title }}
-              <ChevronDown
-                class="studio-steps-chev hv-chev"
-                :size="22"
-                aria-hidden="true"
-              />
-            </button>
-          </h3>
-          <p
-            v-show="open === step.shot.name"
-            :id="`studio-step-${step.shot.name}-panel`"
-            class="site-body studio-steps-panel"
-            role="region"
-            :aria-labelledby="`studio-step-${step.shot.name}`"
-          >
-            {{ step.text }}
-          </p>
-        </div>
+          {{ step.text }}
+        </SiteDisclosure>
       </div>
     </template>
     <template #shot>
-      <StudioShot :images="shots" :current="open" :eager="warm" />
+      <StudioShot :images="shots" :current="open ?? 'fill'" :eager="warm" />
     </template>
   </StudioRow>
 </template>
 
 <style scoped lang="scss">
 .studio-steps {
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid var(--db-line);
-
-  &-item {
-    border-top: 1px solid var(--db-line);
-  }
-
-  &-button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    width: 100%;
-    padding: 24px 0;
-    border: 0;
-    background: transparent;
-    font: inherit;
-    letter-spacing: inherit;
-    color: var(--db-muted);
-    text-align: left;
-    cursor: pointer;
-
-    &[aria-expanded='true'] {
-      color: var(--db-ink);
-      cursor: default;
-    }
-  }
-
-  &-chev {
-    flex-shrink: 0;
-    color: var(--db-muted);
-    transition: transform var(--duration-fast) var(--ease-smooth);
-
-    [aria-expanded='true'] > & {
-      transform: rotate(180deg);
-    }
-  }
-
-  /* Scoped rules outrank the shared hv-row hover, so it is repeated here. */
-  &-button[aria-expanded='false']:hover,
-  &-button[aria-expanded='false']:hover &-chev {
-    color: var(--db-brand-text);
-  }
-
-  &-panel {
-    padding-bottom: 28px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    &-chev {
-      transition: none;
-    }
-  }
+  margin-top: 10px;
 }
 </style>

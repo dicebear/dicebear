@@ -13,15 +13,6 @@
 }
 
 /* The :root prefix lifts these above the scoped base rules of components. */
-:root .hv-primary:hover {
-  background-color: var(--db-btn-hover);
-}
-
-:root .hv-outline:not([aria-pressed='true']):hover {
-  background-color: var(--db-soft);
-  border-color: var(--db-hover-border);
-}
-
 :root .hv-ghost:hover {
   background-color: var(--db-soft);
 }
@@ -31,7 +22,7 @@
 }
 
 :root .hv-fill:hover {
-  background-color: var(--db-switch-bg);
+  background-color: var(--db-soft);
   color: var(--db-ink);
 }
 
@@ -46,7 +37,7 @@
 
 :root .hv-row:hover,
 :root .hv-row:hover .hv-chev {
-  color: var(--db-brand-text);
+  color: var(--db-ink);
 }
 
 :root .hv-tile:hover {
@@ -54,35 +45,17 @@
 }
 
 :root .hv-thumb:hover {
-  border-color: var(--db-hover-border);
-}
-
-:root .hv-swatch:not([aria-pressed='true']):hover {
-  box-shadow:
-    0 0 0 2px var(--db-paper),
-    0 0 0 4px var(--db-hover-border);
+  border-color: var(--db-ink-2);
 }
 
 :root .hv-dashed:hover,
 :root .hv-dashed:hover span {
-  border-color: var(--db-brand);
-  color: var(--db-brand-text);
+  border-color: var(--db-focus);
+  color: var(--db-ink);
 }
 
 :root .hv-border:hover:not(:focus):not(:focus-within) {
-  border-color: var(--db-hover-border);
-}
-
-:root .hv-switch:hover .hv-track {
-  filter: brightness(0.93);
-}
-
-:root.dark .hv-switch:hover .hv-track {
-  filter: brightness(1.25);
-}
-
-:root .hv-fade:hover {
-  opacity: 0.7;
+  border-color: var(--db-ink-2);
 }
 
 /* Tooltip for icon buttons. The button carries aria-label for assistive
@@ -100,13 +73,14 @@
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  padding: 6px 10px;
-  border-radius: var(--db-radius-2);
-  background: var(--db-ink);
-  color: var(--db-paper);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 16px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: var(--db-btn-bg);
+  color: var(--db-btn-fg);
+  font-family: var(--db-font-display);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
   white-space: nowrap;
   pointer-events: none;
 }

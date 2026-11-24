@@ -8,7 +8,7 @@ import { withBase } from 'vitepress';
     <p class="site-lead">
       The address may be from an older version of these docs, or it has a typo.
     </p>
-    <div class="theme-not-found-actions">
+    <div class="site-actions theme-not-found-actions">
       <a :href="withBase('/')" class="site-btn site-btn-primary site-btn-lg"
         >Go to the homepage</a
       >
@@ -33,9 +33,6 @@ import { withBase } from 'vitepress';
 }
 
 .theme-not-found-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
   margin-top: 40px;
 }
 </style>

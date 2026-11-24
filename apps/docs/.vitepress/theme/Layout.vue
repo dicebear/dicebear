@@ -46,6 +46,9 @@ const showFooter = computed(
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  /* The height that is visible: on a phone 100vh counts the room under the
+     address bar too, and a page as high as the window would scroll by it. */
+  min-height: 100dvh;
 }
 
 .theme-main {

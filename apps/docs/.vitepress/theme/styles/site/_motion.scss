@@ -1,0 +1,39 @@
+/* Entry motion. The reveal runs once per element, staggered by inline delay. */
+:root {
+  --site-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.site-rise {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: site-rise var(--duration-reveal) var(--site-ease) forwards;
+}
+
+.site-pop {
+  opacity: 0;
+  transform: scale(0.6) translateY(24px);
+  animation: site-pop 0.7s var(--ease-spring) forwards;
+}
+
+@keyframes site-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes site-pop {
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-rise,
+  .site-pop {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

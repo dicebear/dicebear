@@ -1,0 +1,37 @@
+/**
+ * Fields that are no text field. `site-swatch` is a native color input drawn
+ * as its color: a 44px rounded square with the field edge, the system
+ * picker on click.
+ */
+@use '../mixins' as m;
+
+.site-swatch {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid var(--db-field-border);
+  border-radius: var(--db-radius-3);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.12s;
+  @include m.focus-ring(2px);
+
+  &:hover {
+    border-color: var(--db-ink-2);
+  }
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+  }
+
+  &::-moz-color-swatch {
+    border: none;
+  }
+}

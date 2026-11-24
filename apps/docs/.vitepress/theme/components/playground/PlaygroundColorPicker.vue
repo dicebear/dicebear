@@ -55,10 +55,10 @@ function addFromPicker() {
   <button
     v-if="row"
     type="button"
-    class="pg-color-picker-row hv-link"
+    class="site-pill site-pill-outline site-pill-sm pg-color-picker-row"
     @click="toggle"
   >
-    <Plus :size="16" aria-hidden="true" />
+    <Plus :size="14" aria-hidden="true" />
     Add a color
   </button>
   <button
@@ -80,7 +80,7 @@ function addFromPicker() {
             v-model="nativePickerColor"
             type="color"
             aria-label="Color"
-            class="pg-picker-native hv-border"
+            class="site-swatch"
           />
           <span class="pg-picker-preview">
             <span :style="{ background: `#${pickedHex}` }"></span>
@@ -126,19 +126,7 @@ function addFromPicker() {
 
 <style scoped lang="scss">
 .pg-color-picker-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-  color: var(--db-brand-text);
-  cursor: pointer;
+  align-self: flex-start;
 }
 
 .pg-color-picker-trigger {
@@ -149,7 +137,7 @@ function addFromPicker() {
   height: 32px;
   padding: 0;
   box-sizing: border-box;
-  border: 1px dashed var(--db-btn-border);
+  border: 1px dashed var(--db-field-border);
   border-radius: var(--db-radius-1);
   background: transparent;
   color: var(--db-muted);
@@ -168,32 +156,6 @@ function addFromPicker() {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.pg-picker-native {
-  flex-shrink: 0;
-  width: 56px;
-  height: 40px;
-  padding: 3px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-btn-border);
-  border-radius: 10px;
-  background: var(--db-paper);
-  cursor: pointer;
-
-  &::-webkit-color-swatch-wrapper {
-    padding: 0;
-  }
-
-  &::-webkit-color-swatch {
-    border: none;
-    border-radius: var(--db-radius-1);
-  }
-
-  &::-moz-color-swatch {
-    border: none;
-    border-radius: var(--db-radius-1);
-  }
 }
 
 /* The checker shows through a color with reduced opacity. */

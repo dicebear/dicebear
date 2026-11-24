@@ -1,0 +1,157 @@
+/**
+ * Pill: the 44px control for choosing, as opposed to doing. One shape, four
+ * looks, each with an "on" state (aria-pressed, -selected, -current,
+ * -checked or `is-active`):
+ *
+ * - `site-pill-outline`: a chip, filter or jump link. A tint of the text
+ *   color without a line, like a select; on, it fills. (The name is from
+ *   when it had a ring.)
+ * - `site-pill-tab`: a tab. Bare; on, it fills.
+ * - `site-pill-quiet`: main navigation. Bare; on, it fills like a tab, so
+ *   the current page stands 3:1 against the ground and hover and current
+ *   are one family.
+ * - `site-pill-row`: a row of a side navigation or list filter, full width
+ *   in the text face; on, yellow.
+ *
+ * `site-pill-sm` is the 36px size for dense panels, `site-pill-xs` the 28px
+ * one for tools in a label row (reset, all, none), as high as the row's
+ * text, so a tool that appears does not move anything. `site-pill-lg` is
+ * the larger text of the main navigation.
+ *
+ * `site-seg` is the track of a segmented control: pills on a tint.
+ */
+@use '../mixins' as m;
+
+.site-pill {
+  @include m.pill-base;
+
+  &-outline {
+    background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+
+    @include m.off {
+      &:hover {
+        background: color-mix(in srgb, var(--db-ink) 12%, transparent);
+      }
+    }
+
+    @include m.on {
+      background: var(--db-btn-bg);
+      box-shadow: none;
+      font-weight: 700;
+      color: var(--db-btn-fg);
+    }
+  }
+
+  &-tab {
+    padding: 0 16px;
+    color: var(--db-ink-2);
+
+    @include m.off {
+      &:hover {
+        background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+        color: var(--db-ink);
+      }
+    }
+
+    @include m.on {
+      background: var(--db-btn-bg);
+      font-weight: 700;
+      color: var(--db-btn-fg);
+    }
+  }
+
+  &-quiet {
+    padding: 0 14px;
+
+    @include m.off {
+      &:hover {
+        background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+      }
+    }
+
+    @include m.on {
+      background: var(--db-btn-bg);
+      color: var(--db-btn-fg);
+    }
+  }
+
+  &-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+    min-height: 44px;
+    padding: 10px 16px;
+    font-family: var(--db-font);
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 500;
+    color: var(--db-ink-2);
+    text-align: left;
+    white-space: normal;
+
+    @include m.off {
+      &:hover {
+        background: color-mix(in srgb, var(--db-ink) 6%, transparent);
+        color: var(--db-ink);
+      }
+    }
+
+    @include m.on {
+      background: var(--db-select);
+      font-weight: 600;
+      color: var(--db-select-text);
+    }
+  }
+
+  &-lg {
+    font-size: 18px;
+  }
+
+  &-sm {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 18px;
+    font-size: 14px;
+  }
+
+  &-xs {
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 14px;
+    font-size: 13px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+/* Segmented control: tabs on a tint without a line, like a select. */
+.site-seg {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 2px;
+  max-width: 100%;
+  padding: 4px;
+  box-sizing: border-box;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
+
+  &.is-fluid {
+    display: grid;
+    width: 100%;
+  }
+
+  /* 4 + 36 + 4: the track is 44 high, like a field or a button. */
+  > .site-pill {
+    justify-content: center;
+    height: 36px;
+    min-width: 0;
+    padding: 0 14px;
+    border-radius: 18px;
+    font-size: 15px;
+  }
+}

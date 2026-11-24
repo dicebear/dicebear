@@ -65,6 +65,8 @@ const parts = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+@use '../../styles/mixins' as m;
+
 .ui-browser-preview {
   display: flex;
   align-items: center;
@@ -76,7 +78,7 @@ const parts = computed(() => {
   text-decoration: none;
 
   &:hover {
-    border-color: var(--db-hover-border);
+    border-color: var(--db-ink-2);
   }
 
   /* Rows that follow each other in a page read as one group. */
@@ -90,14 +92,9 @@ const parts = computed(() => {
     width: 80px;
     height: 80px;
     border-radius: 10px;
-    background: var(--db-tile);
     overflow: hidden;
 
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
+    @include m.avatar-ground;
   }
 
   &-url {
@@ -116,7 +113,7 @@ const parts = computed(() => {
   }
 
   &-key {
-    color: var(--db-brand-text);
+    color: var(--db-ink);
   }
 
   &-arrow {

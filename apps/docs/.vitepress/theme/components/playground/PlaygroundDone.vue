@@ -33,6 +33,7 @@ const store = useStore();
         />
         <p class="pg-done-text">Please note the license below before using.</p>
       </div>
+      <slot />
       <PlaygroundLicenseAlert />
       <PlaygroundStarCta :source="source" />
     </div>

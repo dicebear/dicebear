@@ -130,7 +130,7 @@ const shapes = computed(() =>
   }
 
   &-avatar {
-    fill: var(--db-hover-border);
+    fill: var(--db-ink-2);
   }
 
   &-part,
@@ -139,15 +139,15 @@ const shapes = computed(() =>
   }
 
   &.is-active &-frame {
-    stroke: var(--db-brand);
+    stroke: var(--db-focus);
   }
 
   &.is-active &-avatar {
-    fill: var(--db-brand);
+    fill: var(--db-focus);
   }
 
   &.is-active &-pick {
-    fill: color-mix(in srgb, var(--db-brand) 50%, transparent);
+    fill: color-mix(in srgb, var(--db-focus) 50%, transparent);
   }
 }
 </style>

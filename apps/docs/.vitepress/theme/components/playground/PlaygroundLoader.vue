@@ -11,10 +11,9 @@ const entryRows = [24, 44, 44, 44, 24, 44, 44, 44, 44, 44, 24, 44, 44];
     <div class="pg-loader-toolbar" aria-hidden="true">
       <div class="pg-loader-toolbar-inner">
         <div class="pg-loader-toolbar-grid">
-          <span class="pg-loader-block" style="width: 38px" />
-          <span class="pg-loader-block" style="width: 104px" />
-          <span class="pg-loader-block pg-loader-style" />
-          <span class="pg-loader-block" style="width: 84px" />
+          <span class="pg-loader-block pg-loader-thumb" />
+          <span class="pg-loader-block pg-loader-title" />
+          <span class="pg-loader-block pg-loader-views" />
         </div>
       </div>
     </div>
@@ -61,16 +60,18 @@ const entryRows = [24, 44, 44, 44, 24, 44, 44, 44, 44, 44, 24, 44, 44];
     width: 100%;
     max-width: var(--db-container);
     margin: 0 auto;
-    padding: 0 var(--db-gutter);
+    padding: 0 var(--db-wrap);
 
     @media (min-width: 960px) {
-      padding: 0 calc(var(--db-gutter) - 12px);
+      padding: 0 calc(var(--db-wrap) - 12px);
     }
   }
 
+  /* As the toolbar: 88px, the style as a title, the views on the right. */
   &-toolbar {
     flex-shrink: 0;
-    height: 56px;
+    height: 88px;
+    border-top: 1px solid var(--db-line);
     border-bottom: 1px solid var(--db-line);
 
     &-inner {
@@ -88,8 +89,29 @@ const entryRows = [24, 44, 44, 44, 24, 44, 44, 44, 44, 44, 24, 44, 44];
       padding: 0 12px;
     }
 
-    .pg-loader-block {
-      height: 40px;
+    .pg-loader-thumb {
+      width: 52px;
+      height: 52px;
+    }
+
+    .pg-loader-title {
+      width: min(240px, 40%);
+      height: 32px;
+    }
+
+    .pg-loader-views {
+      width: min(400px, 30%);
+      height: 56px;
+      margin-left: auto;
+    }
+
+    @media (max-width: 767px) {
+      height: 64px;
+
+      .pg-loader-thumb {
+        width: 40px;
+        height: 40px;
+      }
     }
   }
 
@@ -97,11 +119,6 @@ const entryRows = [24, 44, 44, 44, 24, 44, 44, 44, 44, 44, 24, 44, 44];
     &-toolbar-grid {
       padding: 0;
     }
-  }
-
-  &-style {
-    width: 300px;
-    margin: 0 auto;
   }
 
   & &-seed {
@@ -161,10 +178,6 @@ const entryRows = [24, 44, 44, 44, 24, 44, 44, 44, 44, 44, 24, 44, 44];
 
     &-entries,
     &-inspector {
-      display: none;
-    }
-
-    &-style {
       display: none;
     }
   }

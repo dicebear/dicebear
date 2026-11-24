@@ -5,7 +5,6 @@
  */
 import { computed, ref, shallowRef, watch } from 'vue';
 import { kebabCase } from 'change-case';
-import { ArrowRight } from '@lucide/vue';
 import type { StyleDefinition } from '@dicebear/core';
 import { loadStylePresets, type StylePreset } from '@theme/config/presets';
 import { getPreviewRowSeeds } from '@theme/config/previewRowSeeds';
@@ -72,27 +71,25 @@ function show(preset: StylePreset) {
         v-for="preset in shown"
         :key="preset.id"
         type="button"
-        class="site-style-presets-tile hv-row"
+        class="site-style-presets-tile"
         @click="show(preset)"
       >
         <span class="site-style-presets-strip">
           <SiteAvatar
             v-for="seed in tileSeeds"
             :key="seed"
+            sticker
             :style-name="styleName"
             :options="{ seed, ...preset.options }"
-            :size="62"
-            :radius="15"
             mode="library"
           />
         </span>
         <span class="site-style-presets-name">{{ preset.name }}</span>
-        <span class="site-small">{{ preset.summary }}</span>
+        <span class="site-text">{{ preset.summary }}</span>
       </button>
     </div>
-    <a :href="allPresetsUrl" class="site-style-presets-all hv-link">
+    <a :href="allPresetsUrl" class="site-link-arrow site-style-presets-all">
       All {{ presets.length }} presets
-      <ArrowRight :size="16" />
     </a>
     <StylePresetDialog
       v-model:open="open"
@@ -106,17 +103,20 @@ function show(preset: StylePreset) {
 
 <style scoped lang="scss">
 .site-style-presets {
+  /* The column is what counts here, it shares the page with a heading. */
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
 
+  /* Four tiles: two by two, or in a row where the column has the room. */
   &-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 40px 24px;
 
-    @media (max-width: 959px) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    @container (min-width: 640px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
@@ -124,52 +124,76 @@ function show(preset: StylePreset) {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
+    gap: 4px;
     min-width: 0;
     padding: 0;
     border: 0;
-    border-radius: var(--db-radius-2);
     background: none;
     font: inherit;
+    color: var(--db-ink);
     text-align: left;
     cursor: pointer;
 
     &:focus-visible {
-      outline: 2px solid var(--db-brand);
-      outline-offset: 4px;
+      outline: 2px solid var(--db-focus);
+      outline-offset: 6px;
+      border-radius: var(--db-radius-4);
     }
   }
 
-  /* Three tiles of 62 pixels that shrink with a narrow column. */
+  /* Three stickers that overlap, turned in turn; they rise a little on
+     hover. */
   &-strip {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 62px));
-    gap: 6px;
+    display: flex;
     width: 100%;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
+    padding-right: 12%;
 
-    :deep(.site-avatar) {
-      width: 100% !important;
-      height: auto !important;
-      aspect-ratio: 1;
+    > :deep(.site-sticker) {
+      --site-sticker-edge: 3.5%;
+
+      flex: 1;
+      /* The lift uses `translate`, apart from the turn in `transform`, so
+         it needs its own transition, or the stickers jump. */
+      transition:
+        transform 0.25s var(--ease-spring),
+        translate 0.35s var(--ease-smooth);
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
     }
+
+    > :deep(.site-sticker + .site-sticker) {
+      margin-left: -8%;
+    }
+
+    > :deep(.site-sticker:nth-child(1)) {
+      transform: rotate(-5deg);
+    }
+
+    > :deep(.site-sticker:nth-child(2)) {
+      transform: translateY(-6%) rotate(2deg);
+    }
+
+    > :deep(.site-sticker:nth-child(3)) {
+      transform: rotate(6deg);
+    }
+  }
+
+  &-tile:hover &-strip > :deep(.site-sticker) {
+    translate: 0 -4px;
   }
 
   &-name {
-    font-size: 16px;
-    line-height: 26px;
-    font-weight: 600;
+    font-family: var(--db-font-display);
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 700;
   }
 
   &-all {
     align-self: flex-start;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
-    line-height: 24px;
-    font-weight: 500;
-    color: var(--db-brand-text);
   }
 }
 </style>

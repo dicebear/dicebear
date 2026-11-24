@@ -377,7 +377,7 @@ autocomplete and validate your definition file:
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@2.1.0/dist/definition.min.json",
   "canvas": { ... }
 }
 ```

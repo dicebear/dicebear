@@ -10,6 +10,7 @@ import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { getStyleCategory } from '@theme/config/styleCategories';
 import { useStyleRankings } from '@theme/composables/useStyleRankings';
+import { artistHref, isGuestStyle } from '@theme/utils/artists';
 import { formatLicenseName } from '@theme/utils/format';
 import { styleDisplayName } from '@theme/utils/styleMeta';
 import { safeHttpUrl } from '@theme/utils/url';
@@ -43,16 +44,19 @@ const crumbs = computed(() => [
   { text: title.value },
 ]);
 
-// Every chip leads somewhere: the artist's site, the license text, the
-// category on the overview, the animated styles. Where a style carries no
-// link of its own, the licenses page has the artist and the license.
+// Every chip leads somewhere: the artist's entry with all their profiles, the
+// license text, the category on the overview, the animated styles. Where a
+// style carries no link of its own, the licenses page has the artist and the
+// license.
 const chips = computed<SiteChip[]>(() => {
   const meta = style.value?.meta;
   const list: SiteChip[] = [];
   if (meta?.creator) {
     list.push({
       text: `by ${meta.creator}`,
-      href: safeHttpUrl(meta.homepage) ?? '/licenses/',
+      href: isGuestStyle(meta)
+        ? artistHref(meta.creator)
+        : (safeHttpUrl(meta.homepage) ?? '/licenses/'),
     });
   }
   if (meta?.license?.name) {
@@ -66,7 +70,7 @@ const chips = computed<SiteChip[]>(() => {
     href: `/styles/#${category.value.toLowerCase()}`,
   });
   if (style.value?.animated) {
-    list.push({ text: 'Animated', href: '/animated-avatars/' });
+    list.push({ text: 'Animated', href: '/animated-avatars/', tone: 'sky' });
   }
   return list;
 });
@@ -101,7 +105,8 @@ const optionsHint = computed(() =>
       :crumbs="crumbs"
       :title="title"
       :chips="chips"
-      lead-size="body"
+      aside-align="center"
+      :aside-width="460"
     >
       <slot />
       <template #note>
@@ -114,16 +119,17 @@ const optionsHint = computed(() =>
 
     <SiteStyleSeeds :style-name="slug" />
 
-    <SiteSubNav :items="navItems" />
-
     <SiteSection
       id="usage"
+      tone="sun"
       title="Usage"
       hint="Same seed, same avatar, whichever way you render it."
-      class="site-style-page-first"
+      class="site-style-page-usage"
     >
       <SiteStyleUsage :style-name="slug" />
     </SiteSection>
+
+    <SiteSubNav :items="navItems" />
 
     <SiteSection
       v-show="presetCount > 0"
@@ -142,13 +148,14 @@ const optionsHint = computed(() =>
       v-if="hasPopularity"
       id="popularity"
       title="Popularity"
-      hint="Counted from the requests to the hosted API, per website and week."
+      hint="Counted from the requests to the hosted API, per website and month."
     >
       <SiteStylePopularity :style-name="slug" />
     </SiteSection>
 
     <SiteSection
       id="details"
+      tone="lilac"
       title="Details"
       hint="Who drew it, what the license allows, and where the files live."
     >
@@ -161,8 +168,12 @@ const optionsHint = computed(() =>
 
 <style scoped lang="scss">
 .site-style-page {
-  &-first {
-    padding-top: 96px;
+  &-usage {
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+
+  :deep(#details) {
+    margin-top: clamp(32px, 4vw, 56px);
   }
 }
 </style>

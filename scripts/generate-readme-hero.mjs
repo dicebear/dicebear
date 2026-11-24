@@ -2,12 +2,11 @@
 // top of the repository README (served as https://www.dicebear.com/readme-hero.svg).
 // Rerun after visual style updates: `node scripts/generate-readme-hero.mjs`.
 //
-// The layout follows the release-notes graphic: staggered 116px tiles with
-// rounded corners, a soft shadow, and a translucent white border on a blue
-// gradient with a dot pattern. A few tiles use animated style variants; the
-// animations are plain CSS inside the embedded avatars and respect
-// prefers-reduced-motion, so the hero stays still for readers who ask for
-// that.
+// The layout follows the stickers of the website: staggered, slightly turned
+// white cards with a soft shadow on the beige of the site. A few tiles use
+// animated style variants; the animations are plain CSS inside the embedded
+// avatars and respect prefers-reduced-motion, so the hero stays still for
+// readers who ask for that.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -122,16 +121,48 @@ const TILES = [
   ],
 ];
 
-const TILE = 116;
-const GAP = 18;
-const RADIUS = 30;
-const MARGIN_X = 73;
-const MARGIN_Y = 40;
-// Per-column vertical offsets, mirroring the staggered look of the reference.
-const STAGGER = [0, 16, 6, 30, 12, 26, 2, 20];
+// Each avatar is a sticker, as on the website: a white card with the avatar
+// inset by 6%, turned a little, on the beige of the site.
+const STICKER = 116;
+const GAP = 22;
+const TILE = Math.round(STICKER * 0.88);
+const INSET = (STICKER - TILE) / 2;
+const STICKER_RADIUS = STICKER * 0.28;
+const TILE_RADIUS = TILE * 0.24;
+const COLUMNS = 8;
+const ROWS = 3;
+
+// Per-column vertical offsets and per-sticker turns, so the grid looks laid
+// by hand rather than set.
+const OFFSETS = [0, 14, -8, 10, -4, 12, -10, 6];
+const TURNS = [-5, 3, -2, 6, -4, 2, -6, 4];
 
 const WIDTH = 1200;
-const HEIGHT = MARGIN_Y * 2 + 3 * TILE + 2 * GAP + Math.max(...STAGGER);
+const HEIGHT = 494;
+const MARGIN_X = (WIDTH - COLUMNS * STICKER - (COLUMNS - 1) * GAP) / 2;
+const MARGIN_Y = (HEIGHT - ROWS * STICKER - (ROWS - 1) * GAP) / 2;
+
+/** The ink and the beige of the site (`--db-c-ink`, `--db-c-soft`). */
+const INK = '#15213b';
+const BEIGE = '#f7f1e6';
+
+/** The checkerboard behind the avatars (`--db-checker-*`), 16 fields across. */
+const CHECKER_LIGHT = '#f9f5ee';
+const CHECKER_DARK = '#f1ebe1';
+const CHECKER_FIELDS = 16;
+
+function checkerboard(size) {
+  const field = +(size / CHECKER_FIELDS).toFixed(3);
+  let path = '';
+
+  for (let row = 0; row < CHECKER_FIELDS; row++) {
+    for (let column = (row + 1) % 2; column < CHECKER_FIELDS; column += 2) {
+      path += `M${+(column * field).toFixed(3)} ${+(row * field).toFixed(3)}h${field}v${field}h-${field}z`;
+    }
+  }
+
+  return `<g id="db-checker"><rect width="${size}" height="${size}" fill="${CHECKER_LIGHT}"/><path d="${path}" fill="${CHECKER_DARK}"/></g>`;
+}
 
 function loadStyle(name) {
   const definition = JSON.parse(
@@ -147,17 +178,18 @@ function loadStyle(name) {
   return definition;
 }
 
-function tileMarkup(tile, x, y) {
+function tileMarkup(tile, x, y, turn) {
   const definition = new Style(loadStyle(tile.style));
   const avatar = new Avatar(definition, {
     seed: tile.seed,
     size: TILE,
     ...tile.options,
   });
+  const center = STICKER / 2;
 
-  return `  <g transform="translate(${x}, ${y})" filter="url(#shadow)">
-    <g clip-path="url(#tile)"><rect width="${TILE}" height="${TILE}" fill="#e0f2fe"/>${avatar.toString()}</g>
-    <rect x="0.5" y="0.5" width="${TILE - 1}" height="${TILE - 1}" rx="${RADIUS}" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.5"/>
+  return `  <g transform="translate(${x + center}, ${y + center}) rotate(${turn}) translate(${-center}, ${-center})">
+    <rect width="${STICKER}" height="${STICKER}" rx="${STICKER_RADIUS}" fill="#ffffff" filter="url(#shadow)"/>
+    <g transform="translate(${INSET}, ${INSET})" clip-path="url(#tile)"><use href="#db-checker"/>${avatar.toString()}</g>
   </g>`;
 }
 
@@ -165,30 +197,24 @@ const tiles = [];
 
 TILES.forEach((row, rowIndex) => {
   row.forEach((tile, colIndex) => {
-    const x = MARGIN_X + colIndex * (TILE + GAP);
-    const y = MARGIN_Y + rowIndex * (TILE + GAP) + STAGGER[colIndex];
+    const x = MARGIN_X + colIndex * (STICKER + GAP);
+    const y = MARGIN_Y + rowIndex * (STICKER + GAP) + OFFSETS[colIndex];
+    const turn = TURNS[(colIndex + rowIndex * 3) % TURNS.length];
 
-    tiles.push(tileMarkup(tile, x, y));
+    tiles.push(tileMarkup(tile, x, y, turn));
   });
 });
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-labelledby="hero-title">
   <title id="hero-title">A grid of DiceBear avatars in twenty-four different styles</title>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0284c7"/>
-      <stop offset="1" stop-color="#075985"/>
-    </linearGradient>
-    <pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse">
-      <circle cx="16" cy="16" r="1.6" fill="#ffffff" fill-opacity="0.07"/>
-    </pattern>
-    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#082f49" flood-opacity="0.25"/>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="${INK}" flood-opacity="0.26"/>
     </filter>
-    <clipPath id="tile"><rect width="${TILE}" height="${TILE}" rx="${RADIUS}"/></clipPath>
+    <clipPath id="tile"><rect width="${TILE}" height="${TILE}" rx="${TILE_RADIUS}"/></clipPath>
+    ${checkerboard(TILE)}
   </defs>
-  <rect width="${WIDTH}" height="${HEIGHT}" rx="24" fill="url(#bg)"/>
-  <rect width="${WIDTH}" height="${HEIGHT}" rx="24" fill="url(#dots)"/>
+  <rect width="${WIDTH}" height="${HEIGHT}" rx="48" fill="${BEIGE}"/>
 ${tiles.join('\n')}
 </svg>
 `;

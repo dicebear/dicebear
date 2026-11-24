@@ -1,14 +1,19 @@
 <script setup lang="ts">
 /**
- * The style field in the toolbar. It opens the list of styles right under
- * it, aligned to its left edge, on a phone as a sheet from the bottom.
+ * The style as the title of the playground: its picture, its name as large
+ * as a heading and, under it, who drew it and its license. A press opens the
+ * list of styles right under it, aligned to its left edge, on a phone as a
+ * sheet from the bottom.
  */
 import { computed, ref } from 'vue';
 import { capitalCase } from 'change-case';
 import { storeToRefs } from 'pinia';
+import { useData } from 'vitepress';
 import { useMediaQuery } from '@vueuse/core';
 import { ChevronDown } from '@lucide/vue';
 import { exampleSeeds } from '@theme/config/styleCategories';
+import type { ThemeOptions } from '@theme/types';
+import { formatLicenseName } from '@theme/utils/format';
 import useStore from '@theme/stores/playground';
 import { usePlaygroundStyles } from '@theme/composables/usePlaygroundStyles';
 import SiteDialog from '../site/SiteDialog.vue';
@@ -18,6 +23,7 @@ import PlaygroundThumb from './PlaygroundThumb.vue';
 
 defineOptions({ inheritAttrs: false });
 
+const { theme } = useData<ThemeOptions>();
 const store = useStore();
 const { avatarStyleName } = storeToRefs(store);
 const { chooseStyle, openUpload } = usePlaygroundStyles();
@@ -80,6 +86,16 @@ const currentName = computed(() =>
     : capitalCase(avatarStyleName.value),
 );
 
+// Who drew the style and under which license, the line under its name.
+const credit = computed(() => {
+  if (store.isCustomStyle) return 'Your own style';
+
+  const meta = theme.value.avatarStyles[avatarStyleName.value]?.meta;
+  const license = formatLicenseName(meta?.license?.name);
+
+  return [meta?.creator, license].filter(Boolean).join(' · ');
+});
+
 const triggerOptions = { seed: exampleSeeds[0] };
 </script>
 
@@ -97,12 +113,19 @@ const triggerOptions = { seed: exampleSeeds[0] };
       <PlaygroundThumb
         :style-name="avatarStyleName"
         :options="triggerOptions"
-        surface="tile"
       />
     </span>
-    <span class="pg-style-field-label">Style</span>
-    <span class="pg-style-field-name">{{ currentName }}</span>
-    <ChevronDown :size="16" aria-hidden="true" class="pg-style-field-chevron" />
+    <span class="pg-style-field-text">
+      <span class="sr-only">Style:</span>
+      <span class="pg-style-field-name">{{ currentName }}</span>
+      <span v-if="credit" class="pg-style-field-credit">{{ credit }}</span>
+    </span>
+    <ChevronDown
+      :size="20"
+      :stroke-width="2.4"
+      aria-hidden="true"
+      class="pg-style-field-chevron"
+    />
   </button>
 
   <SitePopover
@@ -129,60 +152,62 @@ const triggerOptions = { seed: exampleSeeds[0] };
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/control' as c;
-
-/* The field in the toolbar: the picture, the word Style and the name of the
-   style, the same order as the view field on the other end of the bar. */
+/* The title of the playground: the picture, the name of the style as large
+   as a heading with the credit under it, and the chevron centered at the
+   right edge, where every picker has it. It is a button to choose with, so
+   it stands on the tint of a picker, stronger on hover and while the list is
+   open. */
 .pg-style-field {
-  @include c.control;
-  @include c.control-size(md);
-
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   min-width: 0;
-  padding: 0 10px 0 5px;
+  max-width: 100%;
+  padding: 6px 16px 6px 6px;
+  border: 0;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--db-ink) 7%, transparent);
   font: inherit;
+  color: var(--db-ink);
+  text-align: left;
   cursor: pointer;
+  transition: background-color 0.12s;
+
+  &:hover,
+  &[aria-expanded='true'] {
+    background: color-mix(in srgb, var(--db-ink) 12%, transparent);
+  }
 
   &:focus-visible {
-    outline: 2px solid var(--db-brand);
+    outline: 2px solid var(--db-focus);
     outline-offset: 2px;
   }
 
   &-thumb {
     flex-shrink: 0;
     display: block;
-    width: 28px;
-    height: 28px;
+    width: 52px;
+    height: 52px;
 
     :deep(.pg-thumb) {
-      border-radius: var(--db-radius-1);
+      border-radius: 16px;
     }
   }
 
-  &-label {
-    flex-shrink: 0;
-    font-size: 15px;
-    line-height: 20px;
-    font-weight: 500;
-    color: var(--db-muted);
-
-    /* A phone's bar has no room for the word. Screen readers still get it. */
-    @media (max-width: 767px) {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      white-space: nowrap;
-      clip-path: inset(50%);
-    }
+  &-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
   }
 
   &-name {
-    font-size: 15px;
-    line-height: 20px;
-    font-weight: 600;
+    font-family: var(--db-font-display);
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -190,16 +215,60 @@ const triggerOptions = { seed: exampleSeeds[0] };
 
   &-chevron {
     flex-shrink: 0;
-    margin-left: auto;
-    color: var(--db-muted);
     transition: transform 0.15s;
   }
 
-  &[aria-expanded='true'] {
-    border-color: var(--db-brand);
+  &[aria-expanded='true'] &-chevron {
+    transform: rotate(180deg);
+  }
 
-    .pg-style-field-chevron {
-      transform: rotate(180deg);
+  &-credit {
+    font-size: 14px;
+    line-height: 18px;
+    color: var(--db-ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Smaller in a phone's app bar, a pill as high as its neighbours; the
+     credit stays on the style's own page. */
+  @media (max-width: 767px) {
+    gap: 8px;
+    height: 44px;
+    padding: 0 12px 0 4px;
+    border-radius: 22px;
+
+    /* Round in the round pill, with the same room on every side. */
+    &-thumb {
+      width: 36px;
+      height: 36px;
+
+      :deep(.pg-thumb) {
+        border-radius: 50%;
+      }
+    }
+
+    &-name {
+      font-size: 18px;
+    }
+
+    &-chevron {
+      width: 16px;
+      height: 16px;
+    }
+
+    &-credit {
+      display: none;
+    }
+
+    /* The narrowest phones keep the name, the avatar is on the stage. */
+    @media (max-width: 359px) {
+      padding-left: 12px;
+
+      &-thumb {
+        display: none;
+      }
     }
   }
 }

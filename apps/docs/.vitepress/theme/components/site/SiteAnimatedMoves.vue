@@ -7,12 +7,12 @@
 import { computed, ref } from 'vue';
 import { useData } from 'vitepress';
 import { capitalCase } from 'change-case';
-import { ArrowRight } from '@lucide/vue';
 import type { ThemeOptions } from '@theme/types';
 import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 import StyleOptionsCodePanel from '../styles/StyleOptionsCodePanel.vue';
 import SiteAvatar from './SiteAvatar.vue';
 import SiteSwitch from './SiteSwitch.vue';
+import SiteSection from './SiteSection.vue';
 
 const { theme } = useData<ThemeOptions>();
 
@@ -79,32 +79,23 @@ const label = computed(() =>
 </script>
 
 <template>
-  <section class="site-container site-animated-moves">
-    <h2 class="site-headline">Every move has a switch</h2>
-    <p class="site-lead site-animated-moves-lead">
+  <SiteSection tone="sun" layout="stack" title="Every move has a switch">
+    <template #hint>
       Each style has its own moves, and every move has a name. {{ title }} has
       {{ moves.length }} of them. Switch them one by one and watch the code
       follow.
-    </p>
-    <a
-      href="/playground/"
-      class="site-control site-animated-moves-link hv-link"
-    >
-      Try all {{ animatedCount }} animated styles in the Playground
-      <ArrowRight :size="18" />
-    </a>
-    <div class="site-animated-moves-body">
+    </template>
+    <div class="site-pair is-top site-animated-moves">
       <SiteAvatar
+        sticker
         class="site-animated-moves-stage"
         :style-name="styleName"
         :options="avatarOptions"
         mode="library"
-        :size="480"
-        :radius="64"
         :alt="label"
       />
       <div class="site-animated-moves-panel">
-        <span class="site-label">Moves of {{ title }}</span>
+        <span class="site-control">Moves of {{ title }}</span>
         <div class="site-animated-moves-switches">
           <label
             v-for="move in moves"
@@ -112,133 +103,66 @@ const label = computed(() =>
             class="site-animated-moves-switch"
           >
             <SiteSwitch
-              class="site-animated-moves-track"
               :model-value="!off[move]"
               @update:model-value="toggle(move, $event)"
             />
-            <code>{{ move }}</code>
+            <code class="site-animated-moves-name">{{ move }}</code>
           </label>
         </div>
-        <p class="site-text site-animated-moves-note">
-          Every move also takes its own speed and delay.
-        </p>
-        <div class="site-animated-moves-code">
-          <StyleOptionsCodePanel
-            :style-name="styleName"
-            :options="codeOptions"
-          />
-        </div>
+        <p class="site-text">Every move also takes its own speed and delay.</p>
+        <StyleOptionsCodePanel :style-name="styleName" :options="codeOptions" />
+        <a href="/playground/" class="site-link-arrow">
+          Try all {{ animatedCount }} animated styles in the Playground
+        </a>
       </div>
     </div>
-  </section>
+  </SiteSection>
 </template>
-
 <style scoped lang="scss">
 .site-animated-moves {
-  padding-top: 168px;
-
-  &-lead {
-    max-width: 760px;
-    margin-top: 32px;
-  }
-
-  &-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 24px;
-    color: var(--db-brand-text);
-  }
-
-  &-body {
-    display: grid;
-    grid-template-columns: 480px minmax(0, 1fr);
-    gap: 64px;
-    align-items: start;
-    margin-top: 56px;
-
-    @media (max-width: 1023px) {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 40px;
-    }
-  }
-
   &-stage {
-    width: 100% !important;
-    max-width: 480px;
-    height: auto !important;
-    aspect-ratio: 1;
+    --site-sticker-edge: 5%;
+
+    width: min(100%, 440px);
+    transform: rotate(-2deg);
   }
 
   &-panel {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
     min-width: 0;
+
+    > :deep(*:not(a)) {
+      align-self: stretch;
+    }
   }
 
   &-switches {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 40px;
-    margin-top: 16px;
-    padding: 12px 0;
-    border-top: 1px solid var(--db-line);
-    border-bottom: 1px solid var(--db-line);
+    gap: 4px 32px;
   }
 
   &-switch {
     display: flex;
     align-items: center;
-    gap: 12px;
-    height: 44px;
+    gap: 14px;
+    min-height: 48px;
     cursor: pointer;
-
-    code {
-      font-family: var(--db-font-mono);
-      font-size: 16px;
-      line-height: 24px;
-      color: var(--db-ink);
-    }
   }
 
-  /* The switch one step larger than in a filter row. */
-  & &-track {
-    width: 44px;
-    height: 26px;
-    border-radius: 13px;
-
-    &::before {
-      top: 2px;
-      left: 2px;
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  &-note {
-    margin-top: 16px;
-    color: var(--db-muted);
-  }
-
-  &-code {
-    min-width: 0;
-    margin-top: 40px;
-  }
-
-  @media (max-width: 767px) {
-    padding-top: 96px;
-
-    &-lead {
-      margin-top: 24px;
-    }
-
-    &-body {
-      margin-top: 40px;
-    }
-
-    &-stage {
-      border-radius: 40px !important;
-    }
+  /* The name of the move as it goes into the options. */
+  &-name {
+    padding: 2px 10px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--db-ink) 10%, transparent);
+    font-family: var(--db-font-mono);
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 600;
+    color: var(--db-ink);
   }
 }
 </style>

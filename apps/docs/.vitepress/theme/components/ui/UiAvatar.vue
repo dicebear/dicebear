@@ -49,34 +49,16 @@ const svg = computedAsync(() => {
   </div>
 </template>
 
-<style>
-:root {
-  --db-avatar-checker-1: rgba(0, 0, 0, 0.02);
-  --db-avatar-checker-2: rgba(0, 0, 0, 0.07);
-}
+<style scoped lang="scss">
+@use '../../styles/mixins' as m;
 
-.dark {
-  --db-avatar-checker-1: rgba(255, 255, 255, 0.02);
-  --db-avatar-checker-2: rgba(255, 255, 255, 0.07);
-}
-</style>
-
-<style scoped>
 .ui-avatar {
   width: calc(v-bind(size) * 1px);
   height: calc(v-bind(size) * 1px);
   border-radius: 3px;
-  background: repeating-conic-gradient(
-      var(--db-avatar-checker-1) 0% 25%,
-      var(--db-avatar-checker-2) 0% 50%
-    )
-    50% / 12px 12px;
   line-height: 0;
   overflow: hidden;
 
-  img {
-    height: 100%;
-    width: 100%;
-  }
+  @include m.avatar-ground;
 }
 </style>

@@ -1,0 +1,84 @@
+/**
+ * Box: every ground in one class. The size sets the room and the corners:
+ *
+ * - `is-block`: a section of a page, at most as wide as the content.
+ * - `is-tile`: a figure or a group inside a block.
+ * - `is-card`: a card.
+ * - `is-inset`: a small card, such as a callout.
+ *
+ * A box without a tone takes the card color of the ground it sits on: white
+ * on yellow, a deeper shade inside a dark lilac block. A tone (`is-sun`,
+ * `is-soft`, …) paints it instead and sets the colors of what is inside, see
+ * `_tone.scss`. `is-ring` draws a hairline around a box that has the same
+ * ground as the page.
+ */
+@use '../tone';
+@use '../mixins' as m;
+
+.site-box {
+  box-sizing: border-box;
+  min-width: 0;
+  background-color: var(--db-panel);
+
+  &.is-block {
+    width: min(var(--db-content), 100% - 2 * var(--db-wrap));
+    margin-inline: auto;
+    padding: var(--db-block) var(--db-block-x);
+    border-radius: var(--db-radius-block);
+  }
+
+  &.is-block + &.is-block {
+    margin-top: var(--db-edge);
+  }
+
+  &.is-tile {
+    padding: clamp(24px, 2.8vw, 40px);
+    border-radius: var(--db-radius-tile);
+  }
+
+  &.is-card {
+    padding: clamp(20px, 2.4vw, 32px);
+    border-radius: var(--db-radius-card);
+  }
+
+  &.is-inset {
+    padding: 18px 22px;
+    border-radius: var(--db-radius-5);
+  }
+
+  &.is-ring {
+    background-color: var(--db-raised);
+    box-shadow: 0 0 0 1px var(--db-c-line);
+  }
+
+  &.is-clip {
+    overflow: hidden;
+  }
+
+  /* After the sizes, so a tone paints over the card color. */
+  @each $name in tone.$tones {
+    &.is-#{$name} {
+      @include tone.tone($name);
+    }
+  }
+}
+
+/* A box that opens, such as a license text: its field edge sets it apart. */
+.site-details {
+  @include m.details-box;
+
+  border: 1px solid var(--db-field-border);
+  border-radius: var(--db-radius-5);
+  background: var(--db-raised);
+}
+
+/* The space below the last block of a page. */
+.site-end {
+  height: var(--db-edge);
+}
+
+@media print {
+  .site-box {
+    print-color-adjust: exact;
+  }
+}

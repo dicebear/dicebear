@@ -8,14 +8,15 @@ import { useData, useRoute, withBase } from 'vitepress';
 import type { DefaultTheme } from 'vitepress';
 import { isActive } from 'vitepress/dist/client/shared.js';
 import { useBodyScrollLock } from 'vitepress/dist/client/theme-default/composables/scroll-lock.js';
-import { onKeyStroke } from '@vueuse/core';
+import { onKeyStroke, useMediaQuery } from '@vueuse/core';
 import { Menu, Search, X } from '@lucide/vue';
+import { useOverlayFocus } from '@theme/composables/useOverlayFocus';
 import { useSearch } from '@theme/composables/useSearch';
 import type { ThemeOptions } from '@theme/types';
 import ThemeGithubButton from './ThemeGithubButton.vue';
 import ThemeSwitch from './ThemeSwitch.vue';
 
-const { theme, page } = useData<ThemeOptions>();
+const { theme, page, frontmatter } = useData<ThemeOptions>();
 const route = useRoute();
 const { show } = useSearch();
 
@@ -55,10 +56,28 @@ watch(
 onKeyStroke('Escape', () => {
   menuOpen.value = false;
 });
+
+// A tablet turned sideways has no menu button any more: the menu must not
+// stay open, unseen, with the page locked behind it.
+const roomForNav = useMediaQuery('(min-width: 1024px)');
+
+watch(roomForNav, (wide) => {
+  if (wide) menuOpen.value = false;
+});
+
+const menuButton = ref<HTMLButtonElement>();
+const menuPanel = ref<HTMLElement>();
+
+useOverlayFocus(
+  menuOpen,
+  () => menuPanel.value,
+  () => menuButton.value,
+  () => menuButton.value,
+);
 </script>
 
 <template>
-  <header class="theme-header">
+  <header class="theme-header" :class="{ 'is-app': frontmatter.appBar }">
     <div class="theme-header-inner">
       <div class="theme-header-left">
         <a
@@ -83,19 +102,19 @@ onKeyStroke('Escape', () => {
         </a>
         <button
           type="button"
-          class="theme-header-search hv-border"
+          class="site-btn site-btn-secondary theme-header-search"
           @click="show"
         >
-          <Search :size="18" :stroke-width="1.8" aria-hidden="true" />
-          <span class="theme-header-search-label">Search</span>
-          <span class="theme-header-search-keys" aria-hidden="true">
-            <kbd class="only-mac">⌘</kbd><kbd class="only-other">Ctrl</kbd
-            ><kbd>K</kbd>
+          <Search :size="18" aria-hidden="true" />
+          Search
+          <span class="site-kbd" aria-hidden="true">
+            <span class="only-mac">⌘</span
+            ><span class="only-other">Ctrl</span>&nbsp;K
           </span>
         </button>
         <button
           type="button"
-          class="theme-header-icon theme-header-search-icon hv-ghost"
+          class="site-btn site-btn-ghost site-btn-icon theme-header-search-icon"
           aria-label="Search"
           @click="show"
         >
@@ -109,19 +128,18 @@ onKeyStroke('Escape', () => {
             v-for="link in links"
             :key="link.href"
             :href="link.href"
-            class="theme-header-link"
-            :class="{ 'is-active': link.active }"
+            class="site-pill site-pill-quiet site-pill-lg"
             :aria-current="link.active ? 'page' : undefined"
             >{{ link.text }}</a
           >
         </nav>
-        <span class="theme-header-divider" aria-hidden="true"></span>
         <ThemeSwitch class="theme-header-switch" />
         <ThemeGithubButton class="theme-header-github" />
         <ThemeGithubButton class="theme-header-github-compact" compact />
         <button
+          ref="menuButton"
           type="button"
-          class="theme-header-icon theme-header-menu-button hv-ghost"
+          class="site-btn site-btn-ghost site-btn-icon theme-header-menu-button"
           :aria-expanded="menuOpen"
           aria-controls="theme-header-menu"
           :aria-label="menuOpen ? 'Close menu' : 'Menu'"
@@ -138,15 +156,20 @@ onKeyStroke('Escape', () => {
       </div>
     </div>
 
-    <div v-show="menuOpen" id="theme-header-menu" class="theme-header-menu">
+    <div
+      v-show="menuOpen"
+      id="theme-header-menu"
+      ref="menuPanel"
+      class="theme-header-menu"
+    >
       <nav class="theme-header-menu-nav" aria-label="Main">
         <a
           v-for="link in links"
           :key="link.href"
           :href="link.href"
-          class="theme-header-menu-link"
-          :class="{ 'is-active': link.active }"
+          class="site-pill site-pill-quiet site-pill-lg theme-header-menu-link"
           :aria-current="link.active ? 'page' : undefined"
+          @click="menuOpen = false"
           >{{ link.text }}</a
         >
       </nav>
@@ -164,8 +187,15 @@ onKeyStroke('Escape', () => {
   top: 0;
   z-index: 50;
   height: var(--db-header-h);
-  border-bottom: 1px solid var(--db-line);
   background: var(--db-paper);
+
+  /* A page with a bar of its own, the playground, shows it in place of
+     the header on a phone; its menu leads back to the site. */
+  &.is-app {
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
 }
 
 .theme-header-inner {
@@ -176,19 +206,21 @@ onKeyStroke('Escape', () => {
   max-width: var(--db-container);
   height: 100%;
   margin: 0 auto;
-  padding: 0 var(--db-gutter);
+  padding: 0 var(--db-wrap);
 }
 
 .theme-header-left {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: clamp(12px, 2vw, 28px);
   min-width: 0;
 }
 
 .theme-header-logo {
   display: flex;
+  align-items: center;
   flex-shrink: 0;
+  min-height: 44px;
 
   img {
     width: 137px;
@@ -196,93 +228,30 @@ onKeyStroke('Escape', () => {
   }
 }
 
-/* The search is a field of the set: the soft ground with the quiet line,
-   40px like every other field. */
+/* The search only opens the search dialog, so it is a button like the others
+   and does not pose as a field. The shortcut sits on the paper, as a small
+   key on the button's tint. */
 .theme-header-search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 220px;
-  height: 40px;
-  padding: 0 8px 0 12px;
-  box-sizing: border-box;
-  border: 1px solid var(--db-field-border);
-  border-radius: var(--db-radius-2);
-  background: var(--db-soft);
-  color: var(--db-muted);
-  font-size: 13px;
-  line-height: 1;
-}
+  padding: 0 8px 0 16px;
 
-.theme-header-search-label {
-  flex: 1;
-  text-align: left;
-}
-
-.theme-header-search-keys {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 6px;
-  border: 1px solid var(--db-line);
-  border-radius: 4px;
-  font-size: 12px;
-
-  kbd {
-    font-family: inherit;
-    font-weight: 500;
+  .site-kbd {
+    margin-left: 2px;
+    border-color: transparent;
+    background: var(--db-paper);
+    color: var(--db-ink-2);
   }
 }
 
 .theme-header-right {
   display: flex;
   align-items: center;
-  height: 100%;
+  gap: 12px;
 }
 
 .theme-header-nav {
   display: flex;
   align-items: center;
-  height: 100%;
-}
-
-.theme-header-link {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  padding: 0 12px;
-  // The size of the breadcrumb and the sidebar: all three say where you are.
-  font-size: 16px;
-  line-height: 26px;
-  font-weight: 500;
-  color: var(--db-ink);
-  transition: color 0.12s;
-
-  &:hover,
-  &.is-active {
-    color: var(--db-brand-text);
-  }
-}
-
-.theme-header-divider {
-  width: 1px;
-  height: 24px;
-  margin: 0 16px 0 8px;
-  background: var(--db-line);
-}
-
-.theme-header-github {
-  margin-left: 16px;
-}
-
-.theme-header-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--db-radius-2);
-  color: var(--db-ink);
+  gap: 2px;
 }
 
 .theme-header-search-icon,
@@ -295,7 +264,7 @@ onKeyStroke('Escape', () => {
   position: fixed;
   inset: var(--db-header-h) 0 0;
   z-index: 49;
-  padding: 16px var(--db-gutter) 32px;
+  padding: 16px var(--db-wrap) 32px;
   background: var(--db-paper);
   overflow-y: auto;
 }
@@ -303,33 +272,37 @@ onKeyStroke('Escape', () => {
 .theme-header-menu-nav {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid var(--db-line);
+  gap: 4px;
 }
 
 .theme-header-menu-link {
-  padding: 14px 0;
-  border-top: 1px solid var(--db-line);
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 600;
-  color: var(--db-ink);
-
-  &:first-child {
-    border-top: 0;
-  }
-
-  &.is-active {
-    color: var(--db-brand-text);
-  }
+  height: 52px;
+  font-size: 22px;
 }
 
 .theme-header-menu-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0;
-  font-size: 16px;
-  color: var(--db-ink-2);
+  margin-top: 16px;
+  padding: 20px 18px;
+  border-top: 2px solid var(--db-rule);
+  font-family: var(--db-font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--db-ink);
+}
+
+/* Between the menu and the full width the search folds into its icon, so it
+   never runs into the navigation. */
+@media (max-width: 1199px) {
+  .theme-header-search {
+    display: none;
+  }
+
+  .theme-header-search-icon {
+    display: inline-flex;
+  }
 }
 
 @media (max-width: 1023px) {
@@ -344,7 +317,6 @@ onKeyStroke('Escape', () => {
 
   .theme-header-search,
   .theme-header-nav,
-  .theme-header-divider,
   .theme-header-switch,
   .theme-header-github {
     display: none;
@@ -353,7 +325,7 @@ onKeyStroke('Escape', () => {
   .theme-header-search-icon,
   .theme-header-menu-button,
   .theme-header-github-compact {
-    display: flex;
+    display: inline-flex;
   }
 
   .theme-header-right {

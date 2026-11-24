@@ -100,7 +100,7 @@ const customStyleDisplayName = computed(
 
   a {
     font-weight: 500;
-    color: var(--db-brand-text);
+    color: var(--db-ink);
     text-decoration: none;
 
     &:hover {

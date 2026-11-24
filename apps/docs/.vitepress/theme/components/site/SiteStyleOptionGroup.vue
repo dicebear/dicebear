@@ -18,7 +18,9 @@ defineProps<{
       <h3 :id="`options-group-${group.id}`" class="site-h3">
         {{ group.label }}
       </h3>
-      <span class="site-small">{{ Object.keys(group.options).length }}</span>
+      <span class="site-tag site-tag-sm">{{
+        Object.keys(group.options).length
+      }}</span>
     </div>
     <div class="site-style-option-group-rows">
       <SiteStyleOptionRow

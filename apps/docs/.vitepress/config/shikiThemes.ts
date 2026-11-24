@@ -55,17 +55,17 @@ function theme(
 }
 
 export const shikiLight = theme('dicebear-light', 'light', {
-  ink: '#0B1620',
+  ink: '#15213B',
   brand: '#0369A1',
   string: '#9A3412',
-  muted: '#5F6D79',
-  bg: '#F1F4F6',
+  muted: '#5E6880',
+  bg: '#F7F1E6',
 });
 
 export const shikiDark = theme('dicebear-dark', 'dark', {
-  ink: '#E6EDF3',
+  ink: '#F7F2E8',
   brand: '#7DD3FC',
   string: '#FDBA74',
-  muted: '#8595A3',
-  bg: '#16202A',
+  muted: '#9C988E',
+  bg: '#232321',
 });
