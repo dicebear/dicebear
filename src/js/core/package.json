@@ -27,6 +27,13 @@
     "./lite": "./lib/lite.js"
   },
   "types": "./lib/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "lite": [
+        "./lib/lite.d.ts"
+      ]
+    }
+  },
   "sideEffects": false,
   "files": [
     "LICENSE",

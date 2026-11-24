@@ -164,13 +164,14 @@ type ColorOptions<C extends string> = [C] extends [never]
 // One `${name}Animation` switch, one `${name}AnimationSpeed` factor and one
 // `${name}AnimationDelay` offset per animation name the style carries. The
 // names are not derived from the definition type, so any camelCase name is
-// accepted here and the schema decides at runtime.
+// accepted here and the schema checks names and values at runtime. The values
+// are `unknown` on purpose: a template index signature with a narrower type
+// would refuse options typed as `StyleOptions` or `Record<string, unknown>`,
+// such as options read from a query string, for every typed style.
 type AnimationOptions = {
-  readonly [key: `${string}Animation`]: boolean | undefined;
-  readonly [key: `${string}AnimationSpeed`]:
-    number | readonly [number, number] | undefined;
-  readonly [key: `${string}AnimationDelay`]:
-    number | readonly [number, number] | undefined;
+  readonly [key: `${string}Animation`]: unknown;
+  readonly [key: `${string}AnimationSpeed`]: unknown;
+  readonly [key: `${string}AnimationDelay`]: unknown;
 };
 
 export type StyleOptions<D = unknown> = StyleOptionsBase &
