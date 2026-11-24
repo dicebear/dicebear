@@ -173,7 +173,7 @@ import (
 	"github.com/dicebear/styles/v11"
 )
 
-style, _ := dicebear.NewStyle([]byte(styles.Thumbs))
+var style, _ = dicebear.NewStyle([]byte(styles.Thumbs))
 
 func placeholderAvatar(style *dicebear.Style, userID string) (string, error) {
 	avatar, err := dicebear.NewAvatar(style, map[string]any{

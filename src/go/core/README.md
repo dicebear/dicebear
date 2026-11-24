@@ -17,6 +17,7 @@ style, and options, regardless of the language used.
 
 ```sh
 go get github.com/dicebear/dicebear-go/v11
+go get github.com/dicebear/styles/v11
 ```
 
 Requires Go 1.23 or newer.
@@ -26,7 +27,7 @@ Requires Go 1.23 or newer.
 ```go
 import (
 	dicebear "github.com/dicebear/dicebear-go/v11"
-	"github.com/dicebear/styles/v10"
+	"github.com/dicebear/styles/v11"
 )
 
 // From a style definition (raw JSON, e.g. the pure-data styles module)

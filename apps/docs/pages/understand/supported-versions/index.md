@@ -36,13 +36,31 @@ All libraries share one version number and move to a new major together. Only
 the JavaScript library goes back further than 10.x. The others arrived during
 it, so 9.x and older concern JavaScript alone.
 
-Coming from 10.x there is barely anything to change. Avatars render the same,
-apart from small fixes to Notionists and Avataaars, and
-[animations](/animated-avatars/) are new and stay off until you switch them on.
-One exception: if you keep a style definition of your own and pin colors with
-`{color}ColorOrder: 'fixed'`, 11.x draws from a palette in the order the
-definition lists it, where 10.x sorted the values first. Sorting the palette in
-the definition gives you the old result back.
+Coming from 10.x, most code keeps working, and most avatars look the same.
+[Animations](/animated-avatars/) are new and stay off until you switch them on.
+These are the changes to check:
+
+- **Avatars:** Fixes change some drawings. Pixel Art shows dark beards in full,
+  which 10.x drew barely visible, Stripes adds stripes at the edges, so nearly
+  every Stripes avatar changes, and Notionists and Avataaars each fix a hair or
+  eyebrow variant. A seed with ill-formed text, such as half of an emoji,
+  renders a different avatar. The HTTP API keeps serving 10.x avatars unchanged
+  under `/10.x/`.
+- **Animated styles:** The `animationVariant` option and the `animation` tag are
+  gone. Pass `animation: true` instead.
+- **`new Avatar()`** takes a `Style` and no longer a raw definition:
+  `new Avatar(new Style(definition), options)`.
+- **Color helpers:** `Color` is no longer exported in JavaScript, Python, Rust,
+  Go and Dart.
+- **Go:** Import `github.com/dicebear/dicebear-go/v11` and
+  `github.com/dicebear/styles/v11`.
+- **CLI:** Style names are no longer commands. `dicebear lorelei` is now
+  `dicebear create lorelei`, which prints to stdout unless `-o` names a file or
+  directory, and `--optimize` is now `dicebear optimize`. See
+  [CLI](/integrations/cli/).
+- **Own style definitions:** With `{color}ColorOrder: 'fixed'`, 11.x draws from
+  a palette in the order the definition lists it, where 10.x sorted the values
+  first. Sorting the palette in the definition gives you the old result back.
 
 Coming from 9.x it is a real port: `@dicebear/collection` became
 [`@dicebear/styles`](/integrations/javascript/), `createAvatar()` became

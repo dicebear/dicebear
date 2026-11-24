@@ -81,6 +81,34 @@ place.
 | `toJSON()`    | `{ svg: string, options: StyleOptions }` with the SVG and the resolved options                          |
 | `toDataUri()` | The SVG as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme), for an `<img>` source or in CSS |
 
+## Errors
+
+Invalid input throws. The error classes are exported from `@dicebear/core` and
+`@dicebear/core/lite`, so a caller can tell a broken definition from wrong
+options:
+
+| Error                         | Thrown when                                 |
+| ----------------------------- | ------------------------------------------- |
+| `StyleValidationError`        | A style definition violates the schema      |
+| `OptionsValidationError`      | The options violate the schema              |
+| `CircularColorReferenceError` | A color in the definition references itself |
+
+Both validation errors extend `ValidationError` and carry the individual field
+failures in `details`, each with the failing JSON pointer (`instancePath`), the
+schema rule (`schemaPath`) and the keyword that rejected it.
+
+```js
+import { Avatar, OptionsValidationError } from '@dicebear/core';
+
+try {
+  new Avatar(style, { scale: 99 });
+} catch (error) {
+  if (error instanceof OptionsValidationError) {
+    console.log(error.details); // [{ instancePath: '/scale', … }]
+  }
+}
+```
+
 ## Core options
 
 These options are the same across every DiceBear core. See
@@ -99,7 +127,7 @@ const avatar = new Avatar(style, {
   translateY: 0, // -1000 to 1000 (percent of canvas height)
   idRandomization: true,
   title: 'User Avatar',
-  fontFamily: 'Arial', // or ['Arial', 'Helvetica']
+  fontFamily: 'Arial', // or ['Arial', 'Helvetica'], one per seed
   fontWeight: 700, // 1-1000
   backgroundColor: ['#b6e3f4', '#c0aede'],
   backgroundColorFill: 'solid', // 'solid', 'linear', 'radial'
@@ -212,6 +240,13 @@ const avatar = new Avatar(style, {
   backgroundColor: ['#b6e3f4'],
   // ... other options
 });
+```
+
+The options are checked against the definition, so a variant the style does not
+have is a type error:
+
+```ts
+new Avatar(style, { eyesVariant: ['variant99'] }); // type error
 ```
 
 ## Convert to other formats

@@ -108,7 +108,7 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{
 	"translateY":          0,                        // -1000 to 1000 (percent of canvas height)
 	"idRandomization":     true,
 	"title":               "User Avatar",
-	"fontFamily":          "Arial",                  // or []string{"Arial", "Helvetica"}
+	"fontFamily":          "Arial",                  // or []string{"Arial", "Helvetica"}, one per seed
 	"fontWeight":          700,                      // 1-1000
 	"backgroundColor":     []string{"#b6e3f4", "#c0aede"},
 	"backgroundColorFill": "solid",                  // "solid", "linear", "radial"

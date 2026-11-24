@@ -16,8 +16,11 @@ style, and options, regardless of the language used.
 ## Installation
 
 ```sh
-pip install dicebear-core
+pip install dicebear-core dicebear-styles
 ```
+
+`dicebear-styles` holds the definitions of the avatar styles. Leave it out when
+you bring your own definitions.
 
 Requires Python 3.10 or newer.
 
