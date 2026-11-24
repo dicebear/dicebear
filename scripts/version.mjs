@@ -7,6 +7,8 @@ import {
   collectWorkspaceNames,
   updateChangelog,
   expectedGoModulePath,
+  findPrereleaseDependencies,
+  updateReleaseDate,
 } from './lib/version.mjs';
 import { resolveWorkspacePackages } from './lib/workspace.mjs';
 
@@ -50,6 +52,41 @@ const packageJsonPaths = [
 const workspaceNames = collectWorkspaceNames(
   packageJsonPaths.map((p) => readFileSync(p, 'utf-8')),
 );
+
+// A stable release has to depend on stable releases of the schema and the
+// styles. NuGet refuses to pack it otherwise, after npm and PyPI may already
+// have published, and Go and NuGet would resolve the release candidate.
+if (!version.includes('-')) {
+  const manifests = [
+    ...packageJsonPaths,
+    'src/go/core/go.mod',
+    'src/php/core/composer.json',
+    'src/dart/core/pubspec.yaml',
+    'src/rust/core/Cargo.toml',
+    'src/python/core/pyproject.toml',
+    'src/csharp/core/DiceBear.Core.csproj',
+  ]
+    .map((p) => (p.startsWith('/') ? p : join(ROOT, p)))
+    .filter((p) => existsSync(p))
+    .map((p) => ({
+      path: p.slice(ROOT.length + 1),
+      raw: readFileSync(p, 'utf-8'),
+    }));
+
+  const prerelease = findPrereleaseDependencies(manifests, workspaceNames);
+
+  if (prerelease.length > 0) {
+    console.error(
+      `${version} is a stable release, but these dependencies still point ` +
+        `at a prerelease. Release the schema and the styles first, raise ` +
+        `the requirements, then run the release again:\n` +
+        prerelease
+          .map(({ path, dependency }) => `  ${path}: ${dependency}`)
+          .join('\n'),
+    );
+    process.exit(1);
+  }
+}
 
 // Update each package.json
 for (const pkgPath of packageJsonPaths) {
@@ -151,6 +188,27 @@ if (existsSync(changelogPath)) {
     console.log(`\nCHANGELOG.md: Unreleased → ${version} (${date})`);
   } else {
     console.log('\nCHANGELOG.md: nothing to promote (skipped)');
+  }
+}
+
+// The first release of a major starts its line on the supported versions
+// page of the docs.
+const major = version.match(/^(\d+)\.0\.0$/)?.[1];
+const versionSupportPath = join(
+  ROOT,
+  'apps/docs/.vitepress/theme/config/versionSupport.ts',
+);
+if (major && existsSync(versionSupportPath)) {
+  const date = new Date().toISOString().slice(0, 10);
+  const updated = updateReleaseDate(
+    readFileSync(versionSupportPath, 'utf-8'),
+    Number(major),
+    date,
+  );
+
+  if (updated !== null) {
+    writeFileSync(versionSupportPath, updated);
+    console.log(`versionSupport.ts: ${major}.x released on ${date}`);
   }
 }
 
