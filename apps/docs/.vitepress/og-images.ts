@@ -171,17 +171,17 @@ const DEFAULT_CARD = 'default';
  * artist behind it, so it carries none. That only holds while every style on
  * it waives attribution. Restricted to CC0 and asserted
  * at build time in {@link generateOgImages}. Picked for contrast: line art,
- * monster, clay figure, pixel grid, scene. Everything but lorelei shipped
- * with v10, so the card also shows what is new. The seeds are hand-picked for
- * this row and set the tile order, warm and cool tiles alternating along
- * the row.
+ * a cat in its scene, clay figure, pixel grid, a dog in its scene. Cats and
+ * Dogs are new in 11.0, so the card also shows what is new. The seeds are
+ * hand-picked for this row and set the tile order, light and dark, warm and
+ * cool tiles alternating along the row.
  */
 const DEFAULT_TILES = [
   { styleName: 'lorelei', seed: 'Felix' },
-  { styleName: 'critters', seed: 'Pia' },
+  { styleName: 'cats', seed: 'Milo' },
   { styleName: 'clay', seed: 'Ilan' },
   { styleName: 'pixelbot', seed: 'Iker' },
-  { styleName: 'planets', seed: 'Ruby' },
+  { styleName: 'dogs', seed: 'Mira' },
 ];
 
 /**
