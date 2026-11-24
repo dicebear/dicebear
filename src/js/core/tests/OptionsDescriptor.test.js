@@ -311,7 +311,7 @@ describe('OptionsDescriptor', () => {
           'animation',
           'animationSpeed',
           'animationDelay',
-          'animationMotionQuery',
+          'animationRespectReducedMotion',
           'blinkAnimation',
           'blinkAnimationSpeed',
           'blinkAnimationDelay',

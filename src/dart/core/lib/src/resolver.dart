@@ -111,10 +111,10 @@ class Resolver {
   /// Whether the animation CSS sits inside a `prefers-reduced-motion` media
   /// query. On by default. Renderers that ignore media queries need it off,
   /// and the app then decides about `animation` from the system setting.
-  bool animationMotionQuery() {
-    final value = _options.animationMotionQuery() ?? true;
+  bool animationRespectReducedMotion() {
+    final value = _options.animationRespectReducedMotion() ?? true;
 
-    return _memo('animationMotionQuery', () => value);
+    return _memo('animationRespectReducedMotion', () => value);
   }
 
   String? title() => _memo('title', () => _options.title());

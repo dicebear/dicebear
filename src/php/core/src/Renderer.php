@@ -728,7 +728,7 @@ class Renderer
         // that keeps the query must not pick them up on the same page, so the
         // two get different names. The default adds nothing and leaves the
         // hash as it was.
-        $motion = $this->resolver->animationMotionQuery() ? '' : ':nomotionquery';
+        $motion = $this->resolver->animationRespectReducedMotion() ? '' : ':nomotionquery';
 
         return $this->cachedAnimationHash = Fnv1a::hex(
             ($this->style->meta()->source()->name() ?? '')
@@ -1001,8 +1001,8 @@ class Renderer
      * Registers the accumulated animation CSS as a single `<style>` entry in
      * the shared `<defs>` block, wrapped in a reduced-motion media query so
      * users who prefer reduced motion get the static avatar. With
-     * `animationMotionQuery` off the rules stand without the query. A no-op
-     * when no animation CSS was produced.
+     * `animationRespectReducedMotion` off the rules stand without the query. A
+     * no-op when no animation CSS was produced.
      */
     private function registerAnimationStyle(): void
     {
@@ -1020,7 +1020,7 @@ class Renderer
 
         $css = implode('', $this->keyframesCss) . implode('', $this->animationCss);
 
-        $this->defs[$key] = $this->resolver->animationMotionQuery()
+        $this->defs[$key] = $this->resolver->animationRespectReducedMotion()
             ? '<style>@media (prefers-reduced-motion:no-preference){' . $css . '}</style>'
             : '<style>' . $css . '</style>';
     }

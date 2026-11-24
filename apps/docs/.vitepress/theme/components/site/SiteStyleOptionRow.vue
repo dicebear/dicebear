@@ -90,7 +90,7 @@ const skipPreview = computed(
   () =>
     (fieldType.value === 'boolean' && !isAnimationOption(props.name)) ||
     // Browsers honor the media query, so both tiles would look the same.
-    props.name === 'animationMotionQuery' ||
+    props.name === 'animationRespectReducedMotion' ||
     props.name === 'fontFamily' ||
     props.name === 'title',
 );

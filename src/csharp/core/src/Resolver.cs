@@ -129,8 +129,8 @@ namespace DiceBear.Internal
         /// need it off, and the app then decides about <c>animation</c> from
         /// the system setting.
         /// </summary>
-        internal bool AnimationMotionQuery() =>
-            Memo("animationMotionQuery", this, static self => self._options.AnimationMotionQuery() ?? true);
+        internal bool AnimationRespectReducedMotion() =>
+            Memo("animationRespectReducedMotion", this, static self => self._options.AnimationRespectReducedMotion() ?? true);
 
         internal string? Title() => Memo("title", this, static self => self._options.Title());
 

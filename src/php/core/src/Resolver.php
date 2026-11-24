@@ -133,9 +133,9 @@ class Resolver
      * query. On by default. Renderers that ignore media queries need it off,
      * and the app then decides about `animation` from the system setting.
      */
-    public function animationMotionQuery(): bool
+    public function animationRespectReducedMotion(): bool
     {
-        return $this->memo('animationMotionQuery', fn() => $this->options->animationMotionQuery() ?? true);
+        return $this->memo('animationRespectReducedMotion', fn() => $this->options->animationRespectReducedMotion() ?? true);
     }
 
     public function title(): ?string

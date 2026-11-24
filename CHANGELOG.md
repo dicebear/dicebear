@@ -10,6 +10,15 @@ and this project adheres to
 
 ### Changed
 
+- **Core (all languages):** `animationMotionQuery` from 11.0.0-rc.3 is now
+  called `animationRespectReducedMotion`. The new name says what the option is
+  about, the viewer's `prefers-reduced-motion` setting, rather than how the core
+  honors it. Behavior and default stay the same, and so does every avatar.
+  Options that still use the old name fail validation, so replace
+  `animationMotionQuery=false` with `animationRespectReducedMotion=false`.
+  Requires `@dicebear/schema` 3.0.0-rc.1, and the Go core now imports
+  `github.com/dicebear/schema/v3`.
+
 - **Core (all languages):** Ill-formed text in `seed` and `title` becomes U+FFFD
   before the core hashes or renders it. In JS, Python, C# and Dart that is a
   lone surrogate, for example half of an emoji. In Go and PHP it is an

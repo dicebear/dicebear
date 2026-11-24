@@ -145,7 +145,7 @@ class OptionsDescriptor
             $result['animation'] = ['type' => 'boolean'];
             $result['animationSpeed'] = ['type' => 'range', 'min' => 0.1, 'max' => 10];
             $result['animationDelay'] = ['type' => 'range', 'min' => -3600, 'max' => 3600];
-            $result['animationMotionQuery'] = ['type' => 'boolean'];
+            $result['animationRespectReducedMotion'] = ['type' => 'boolean'];
 
             foreach ($this->style->animationNames() as $name) {
                 $result["{$name}Animation"] = ['type' => 'boolean'];

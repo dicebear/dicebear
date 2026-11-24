@@ -137,10 +137,10 @@ export class Resolver<D = unknown> {
    * query. On by default. Renderers that ignore media queries need it off,
    * and the app then decides about `animation` from the system setting.
    */
-  animationMotionQuery(): boolean {
+  animationRespectReducedMotion(): boolean {
     return this.#memo(
-      'animationMotionQuery',
-      () => this.#options.animationMotionQuery() ?? true,
+      'animationRespectReducedMotion',
+      () => this.#options.animationRespectReducedMotion() ?? true,
     );
   }
 

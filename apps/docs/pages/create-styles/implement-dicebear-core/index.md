@@ -396,28 +396,28 @@ the core reports invalid options.
 
 ### Core options
 
-| Option                  | PRNG key                | Resolution                                                                                            |
-| ----------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `seed`                  | —                       | Literal string; defaults to `''` if not provided. Not memoized.                                       |
-| `size`                  | —                       | Literal number; defaults to unset (renderer omits `width`/`height`).                                  |
-| `idRandomization`       | —                       | Boolean; defaults to `false`. Uses host RNG, not the DiceBear PRNG.                                   |
-| `title`                 | —                       | Literal string; defaults to unset (omits `<title>`, uses `aria-hidden`).                              |
-| `flip`                  | `flip`                  | `pick` from `['none', 'horizontal', 'vertical', 'both']`, default `'none'`                            |
-| `rotate`                | `rotate`                | `float` from range, default `0`                                                                       |
-| `scale`                 | `scale`                 | `float` from range, default `1`                                                                       |
-| `borderRadius`          | `borderRadius`          | `float` from range, default `0`                                                                       |
-| `translateX`            | `translateX`            | `float` from range, default `0`                                                                       |
-| `translateY`            | `translateY`            | `float` from range, default `0`                                                                       |
-| `fontFamily`            | `fontFamily`            | `pick` from array, default `'system-ui'`                                                              |
-| `fontWeight`            | `fontWeight`            | `pick` from array, default `400`                                                                      |
-| `tags`                  | —                       | Parsed token list, empty when unset; no memo, never in `resolvedOptions`                              |
-| `animation`             | —                       | Boolean, default `false`; a `${name}Animation` switch wins for its timelines (see below)              |
-| `${name}Animation`      | —                       | Boolean, only for named timelines the style carries; recorded when set and met                        |
-| `animationSpeed`        | `animationSpeed`        | `float` from range, default `1`                                                                       |
-| `${name}AnimationSpeed` | `${name}AnimationSpeed` | `float` from range, default is the global factor; only for playing timelines of that name (see below) |
-| `animationDelay`        | `animationDelay`        | `float` from range, default `0`; a start offset in seconds                                            |
-| `${name}AnimationDelay` | `${name}AnimationDelay` | `float` from range, default is the global offset; only for playing timelines of that name             |
-| `animationMotionQuery`  | —                       | Boolean, default `true`, read only when animation CSS is produced (see below)                         |
+| Option                          | PRNG key                | Resolution                                                                                            |
+| ------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `seed`                          | —                       | Literal string; defaults to `''` if not provided. Not memoized.                                       |
+| `size`                          | —                       | Literal number; defaults to unset (renderer omits `width`/`height`).                                  |
+| `idRandomization`               | —                       | Boolean; defaults to `false`. Uses host RNG, not the DiceBear PRNG.                                   |
+| `title`                         | —                       | Literal string; defaults to unset (omits `<title>`, uses `aria-hidden`).                              |
+| `flip`                          | `flip`                  | `pick` from `['none', 'horizontal', 'vertical', 'both']`, default `'none'`                            |
+| `rotate`                        | `rotate`                | `float` from range, default `0`                                                                       |
+| `scale`                         | `scale`                 | `float` from range, default `1`                                                                       |
+| `borderRadius`                  | `borderRadius`          | `float` from range, default `0`                                                                       |
+| `translateX`                    | `translateX`            | `float` from range, default `0`                                                                       |
+| `translateY`                    | `translateY`            | `float` from range, default `0`                                                                       |
+| `fontFamily`                    | `fontFamily`            | `pick` from array, default `'system-ui'`                                                              |
+| `fontWeight`                    | `fontWeight`            | `pick` from array, default `400`                                                                      |
+| `tags`                          | —                       | Parsed token list, empty when unset; no memo, never in `resolvedOptions`                              |
+| `animation`                     | —                       | Boolean, default `false`; a `${name}Animation` switch wins for its timelines (see below)              |
+| `${name}Animation`              | —                       | Boolean, only for named timelines the style carries; recorded when set and met                        |
+| `animationSpeed`                | `animationSpeed`        | `float` from range, default `1`                                                                       |
+| `${name}AnimationSpeed`         | `${name}AnimationSpeed` | `float` from range, default is the global factor; only for playing timelines of that name (see below) |
+| `animationDelay`                | `animationDelay`        | `float` from range, default `0`; a start offset in seconds                                            |
+| `${name}AnimationDelay`         | `${name}AnimationDelay` | `float` from range, default is the global offset; only for playing timelines of that name             |
+| `animationRespectReducedMotion` | —                       | Boolean, default `true`, read only when animation CSS is produced (see below)                         |
 
 Options with no PRNG key are read directly from the user input. The rest sample
 from a user-supplied range/list under the given key, falling back to the listed
@@ -1061,7 +1061,7 @@ zero-padded) of
 ```text
 {source.name or ''} + ':' + seed + ':' + formatNumber(animationSpeed) + ':' + formatNumber(animationDelay)
   [+ ':' + states]       // only when the style carries named timelines, see below
-  [+ ':nomotionquery']   // only when animationMotionQuery is false
+  [+ ':nomotionquery']   // only when animationRespectReducedMotion is false
   [+ ':' + suffix]       // only when idRandomization is on: the same suffix the id rewrite uses
 ```
 
@@ -1075,7 +1075,7 @@ renders of the same seed with different speeds or selections placed on one page
 must not pick up each other's rules, while identical renders sharing identical
 rules is harmless.
 
-Read `animationMotionQuery` right after `states`, so it reaches
+Read `animationRespectReducedMotion` right after `states`, so it reaches
 `resolvedOptions` only when animation CSS is produced. With the query off the
 rules apply to every viewer, so a render without it must not share names with
 one that keeps it. The default adds nothing, which keeps the hash of every
@@ -1157,8 +1157,8 @@ The map key is `animation-style`. An authored `<defs>` child may already use
 that id, so append `-` to the key until it is free rather than replacing the
 def. Because the entry is registered after the whole walk, it is the last child
 of `<defs>`. The media query gives users who prefer reduced motion the static
-avatar. With `animationMotionQuery` set to `false` the entry drops the media
-query and is `<style><keyframes blocks><class rules></style>`.
+avatar. With `animationRespectReducedMotion` set to `false` the entry drops the
+media query and is `<style><keyframes blocks><class rules></style>`.
 
 A style may still ship the older mechanism next to the declarative one: a
 component with an authored `<style>` element, gated behind a tag. The `coexist`
@@ -1175,7 +1175,7 @@ code unit order:
 "animation": { "type": "boolean" },
 "animationSpeed": { "type": "range", "min": 0.1, "max": 10 },
 "animationDelay": { "type": "range", "min": -3600, "max": 3600 },
-"animationMotionQuery": { "type": "boolean" },
+"animationRespectReducedMotion": { "type": "boolean" },
 "driftAnimation": { "type": "boolean" },
 "driftAnimationSpeed": { "type": "range", "min": 0.1, "max": 10 },
 "driftAnimationDelay": { "type": "range", "min": -3600, "max": 3600 },

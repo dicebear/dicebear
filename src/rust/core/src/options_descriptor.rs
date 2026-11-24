@@ -141,7 +141,10 @@ impl<'a> OptionsDescriptor<'a> {
             result.insert("animation".into(), json!({ "type": "boolean" }));
             result.insert("animationSpeed".into(), animation_speed_range());
             result.insert("animationDelay".into(), animation_delay_range());
-            result.insert("animationMotionQuery".into(), json!({ "type": "boolean" }));
+            result.insert(
+                "animationRespectReducedMotion".into(),
+                json!({ "type": "boolean" }),
+            );
 
             // Every animation name gets its own switch, speed, and delay
             // field, in the order of the name list.

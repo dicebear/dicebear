@@ -126,7 +126,7 @@ class OptionsDescriptor {
       result['animation'] = {'type': 'boolean'};
       result['animationSpeed'] = _animationSpeedRange;
       result['animationDelay'] = _animationDelayRange;
-      result['animationMotionQuery'] = {'type': 'boolean'};
+      result['animationRespectReducedMotion'] = {'type': 'boolean'};
 
       for (final name in _style.animationNames) {
         result['${name}Animation'] = {'type': 'boolean'};

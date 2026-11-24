@@ -161,7 +161,7 @@ const globalAnimationKeys = [
   'animation',
   'animationSpeed',
   'animationDelay',
-  'animationMotionQuery',
+  'animationRespectReducedMotion',
 ];
 
 function namedAnimationKeys(name: string): string[] {
