@@ -23,7 +23,8 @@ export class Options<D = unknown> {
   #tags?: readonly TagFilterToken[];
 
   constructor(data: StyleOptions<D> = {} as StyleOptions<D>) {
-    this.#data = structuredClone(data);
+    // `null` renders the default avatar, as in the other ports.
+    this.#data = structuredClone(data ?? ({} as StyleOptions<D>));
   }
 
   /**

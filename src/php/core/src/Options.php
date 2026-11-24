@@ -61,7 +61,10 @@ class Options
 
     public function size(): ?int
     {
-        return $this->data['size'] ?? null;
+        $size = $this->data['size'] ?? null;
+
+        // The schema accepts 64.0 as an integer, json_decode keeps it a float.
+        return $size === null ? null : (int) $size;
     }
 
     public function idRandomization(): ?bool

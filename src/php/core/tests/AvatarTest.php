@@ -112,4 +112,16 @@ class AvatarTest extends TestCase
         $payload = substr($avatar->toDataUri(), strlen('data:image/svg+xml;charset=utf-8,'));
         $this->assertSame($avatar->toString(), rawurldecode($payload));
     }
+
+    public function testAcceptsAWholeNumberSizeGivenAsFloat(): void
+    {
+        $style = new Style([
+            'canvas' => ['width' => 10, 'height' => 10, 'elements' => []],
+        ]);
+
+        $this->assertSame(
+            (string) new Avatar($style, ['size' => 64]),
+            (string) new Avatar($style, ['size' => 64.0]),
+        );
+    }
 }

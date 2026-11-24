@@ -141,7 +141,13 @@ func (p *Prng) Integer(key string, r *Range) int {
 	min := math.Min(r.Min, r.Max)
 	max := math.Max(r.Min, r.Max)
 
-	return int(math.Floor(p.GetValue(key)*(max-min+1)) + min)
+	value := math.Floor(p.GetValue(key)*(max-min+1)) + min
+
+	// int() of a float beyond the int range is undefined in Go and lands on
+	// MinInt64 on amd64. The schema sets no maximum for a stop count, and
+	// every count past the palette size draws the same gradient, so clamp
+	// to the int32 range, which is also what the other ports reach.
+	return int(math.Max(math.MinInt32, math.Min(math.MaxInt32, value)))
 }
 
 // Shuffle is a Fisher-Yates shuffle with chained Mulberry32 state. Duplicate
