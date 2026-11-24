@@ -10,27 +10,28 @@ and this project adheres to
 
 The first stable release of the 11.x line. Compared to 10.7.0:
 
-- **Animations.** 21 styles move, played by the core in every language. They
-  stay off until `animation: true`. `${name}Animation` switches one animation,
-  `animationSpeed` and `animationDelay` set pace and start, also per name, and
-  `animationRespectReducedMotion: false` drops the `prefers-reduced-motion`
-  query for renderers that ignore media queries.
-- **Two new styles,** Cats and Dogs, which take the collection to 63. 35
-  character styles tag their variants, so the `tags` option filters them by
-  mood, hair length, headwear, facial hair, eyewear and accessories.
-- **CLI:** `dicebear create`, `dicebear optimize` and the new
-  `dicebear compare`, which checks whether a new version of a style still
-  renders like the released one.
-- **JavaScript:** `@dicebear/core/lite` without the validators, about half the
-  size, `all()` and `get()` in `@dicebear/styles`, and the error classes as
-  exports.
+- **Animations:** 21 styles can move, in every language the core runs in.
+  Animation stays off until you pass `animation: true`. `${name}Animation`
+  switches a single animation on or off, `animationSpeed` and `animationDelay`
+  set pace and start, also per name, and `animationRespectReducedMotion: false`
+  drops the `prefers-reduced-motion` query for renderers that ignore media
+  queries.
+- **Styles:** Cats and Dogs are new, which makes 63 styles. 35 character styles
+  tag their variants, so the `tags` option can filter them by mood, hair length,
+  headwear, facial hair, eyewear and accessories.
+- **CLI:** `dicebear create` and `dicebear optimize` replace the old style
+  commands and flags. `dicebear compare` is new and checks whether a new version
+  of a style still renders like the released one.
+- **JavaScript:** `@dicebear/core/lite` leaves out the validators and is about
+  half the size. `@dicebear/styles` has `all()` and `get()`, and the error
+  classes are exported.
 - **Markup:** Every component `<use>` carries a `data-dicebear-component`
   attribute with the component's name.
 
-Most code written for 10.x keeps working. The changes to check, from the CLI
-commands to the Go module path, are listed under
-[Supported versions](https://www.dicebear.com/understand/supported-versions/).
-The entries of the release candidates below hold the details.
+Most code written for 10.x keeps working. The page
+[Supported versions](https://www.dicebear.com/understand/supported-versions/)
+lists what to check when you upgrade, from the CLI commands to the Go module
+path. The release candidate entries below have the details.
 
 ### Added
 
@@ -69,7 +70,7 @@ The entries of the release candidates below hold the details.
   snippet of the placeholder recipe did not compile. The C# pages name .NET
   Framework 4.6.2, the oldest version `System.Text.Json` supports. A list in
   `fontFamily` picks one font per seed, which the examples now say instead of
-  calling it a font stack. The upgrade notes from 10.x list every change to
+  calling it a font stack. The upgrade notes for 10.x list every change to
   check, including the Pixel Art and Stripes drawings that 11.x changes.
 
 ## [11.0.0-rc.4] - 2026-11-24
