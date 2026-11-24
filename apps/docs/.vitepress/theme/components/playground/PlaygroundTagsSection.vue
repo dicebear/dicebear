@@ -113,6 +113,7 @@ function chipTitle(label: string, state: RowState): string {
         :key="chip.token"
         type="button"
         class="site-pill site-pill-outline site-pill-sm pg-tags-chip"
+        :class="{ 'is-active': chip.state !== 'neutral' }"
         :data-state="chip.state"
         :disabled="chipsDisabled"
         :title="chipTitle(chip.label, chip.state)"
@@ -158,7 +159,9 @@ function chipTitle(label: string, state: RowState): string {
   margin-top: 10px;
 }
 
-/* Neutral is the plain chip, allowed yellow, disallowed struck through. */
+/* Neutral is the plain chip, allowed yellow, disallowed struck through. A set
+   chip counts as on, so the hover tint of a plain chip does not cover its
+   color, as with every other chip that is on. */
 .pg-tags-chip {
   &[data-state='allow'] {
     background: var(--db-select);
