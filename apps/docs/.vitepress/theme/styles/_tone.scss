@@ -47,6 +47,9 @@
   --db-panel: #ffffff;
   --db-raised: #ffffff;
   --db-soft: color-mix(in srgb, #ffffff 42%, transparent);
+  /* A lighter step of the block's color for a card under the pointer; white
+     would drop out of the block. */
+  --db-soft-hover: color-mix(in srgb, #ffffff 66%, transparent);
   --db-ink: var(--db-on);
   --db-ink-2: var(--db-on-2);
   --db-muted: var(--db-on-2);
@@ -73,6 +76,7 @@
   --db-panel: #ffffff;
   --db-raised: #ffffff;
   --db-soft: color-mix(in srgb, #ffffff 42%, transparent);
+  --db-soft-hover: color-mix(in srgb, #ffffff 66%, transparent);
   --db-ink: var(--db-on);
   --db-ink-2: var(--db-deep-2);
   --db-muted: var(--db-deep-2);

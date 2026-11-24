@@ -323,7 +323,7 @@ function reflowParagraphs(text: string): string {
     transition: background-color 0.15s;
 
     &:hover {
-      background: var(--db-panel);
+      background: var(--db-soft-hover, var(--db-panel));
     }
   }
 
