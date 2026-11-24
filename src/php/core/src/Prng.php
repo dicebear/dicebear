@@ -155,10 +155,17 @@ class Prng
      */
     public function integer(string $key, array $range): int
     {
-        $min = (int) min($range['min'], $range['max']);
-        $max = (int) max($range['min'], $range['max']);
+        // Floats, like the other ports: an (int) cast of a bound past the int
+        // range would wrap around before the clamp below.
+        $min = (float) min($range['min'], $range['max']);
+        $max = (float) max($range['min'], $range['max']);
 
-        return (int) floor($this->getValue($key) * ($max - $min + 1)) + $min;
+        $value = floor($this->getValue($key) * ($max - $min + 1)) + $min;
+
+        // A float beyond the int range wraps around in an (int) cast. The
+        // schema sets no maximum for a stop count, and every count past the
+        // palette size draws the same gradient, so clamp to the int32 range.
+        return (int) max(-2147483648, min(2147483647, $value));
     }
 
     /**

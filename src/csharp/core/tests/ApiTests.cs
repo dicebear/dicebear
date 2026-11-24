@@ -410,6 +410,49 @@ public class ApiTests
         Assert.Contains(exception.Details, detail => detail.InstancePath == "/size");
     }
 
+    /// <remarks>
+    /// JSON Schema counts code points. JsonSchema.Net counts text elements, so
+    /// 129 decomposed accents passed as 129 characters, where every other port
+    /// counts 258 and turns the title down.
+    /// </remarks>
+    [Theory]
+    [InlineData(128, true)]
+    [InlineData(129, false)]
+    public void CountsTheTitleLengthInCodePoints(int accents, bool valid)
+    {
+        var title = string.Concat(Enumerable.Repeat("e\u0301", accents));
+        var options = Options(("title", title));
+
+        if (valid)
+        {
+            Assert.StartsWith("<svg", new Avatar(Style.Parse(MinimalStyle), options).ToSvg());
+        }
+        else
+        {
+            Assert.Throws<OptionsValidationException>(
+                () => new Avatar(Style.Parse(MinimalStyle), options));
+        }
+    }
+
+    [Theory]
+    [InlineData(256, true)]
+    [InlineData(257, false)]
+    public void CountsASurrogatePairAsOneCodePoint(int emoji, bool valid)
+    {
+        var title = string.Concat(Enumerable.Repeat("\uD83D\uDE00", emoji));
+        var options = Options(("title", title));
+
+        if (valid)
+        {
+            Assert.StartsWith("<svg", new Avatar(Style.Parse(MinimalStyle), options).ToSvg());
+        }
+        else
+        {
+            Assert.Throws<OptionsValidationException>(
+                () => new Avatar(Style.Parse(MinimalStyle), options));
+        }
+    }
+
     [Fact]
     public void RejectsNonFiniteNumbersInOptions()
     {

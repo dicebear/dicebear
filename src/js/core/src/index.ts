@@ -6,6 +6,7 @@ import type { NoInferStyle, StyleOptions } from './StyleOptions.js';
 import { StyleValidationError } from './Error/StyleValidationError.js';
 import { OptionsValidationError } from './Error/OptionsValidationError.js';
 import { Depth } from './Utils/Depth.js';
+import { Finite } from './Utils/Finite.js';
 
 /**
  * A style whose definition is checked against the definition schema before
@@ -38,6 +39,15 @@ export class Avatar<D = unknown> extends AvatarBase<D> {
     }
 
     OptionsValidator.validate(optionsInput ?? {});
+
+    const nonFinite = Finite.find(optionsInput);
+
+    if (nonFinite !== undefined) {
+      throw new OptionsValidationError([
+        { instancePath: nonFinite, keyword: 'type', message: Finite.MESSAGE },
+      ]);
+    }
+
     super(style, optionsInput);
   }
 }

@@ -183,9 +183,88 @@ namespace DiceBear.Internal
                 ?? throw new InvalidOperationException("The schema is empty");
 
             RewritePatterns(schema);
+            RewriteLengths(schema);
 
             return JsonSchema.FromText(schema.ToJsonString());
         }
+
+        /// <summary>
+        /// Replaces every <c>minLength</c> and <c>maxLength</c> with a
+        /// <c>pattern</c> that counts code points.
+        /// </summary>
+        /// <remarks>
+        /// JSON Schema counts the length of a string in code points, and so do
+        /// the validators of every other port. JsonSchema.Net counts text
+        /// elements instead, so a title of 129 decomposed accents (each an
+        /// <c>e</c> and a combining mark) passed here as 129 characters while
+        /// everywhere else it is 258, too long. The pattern takes a surrogate
+        /// pair as one code point and anything else, a lone surrogate
+        /// included, as one, and ends on <c>\z</c> for the reason given on
+        /// <see cref="Compile"/>. It goes into <c>allOf</c>, because the
+        /// object may already carry a <c>pattern</c> of its own.
+        /// </remarks>
+        private static void RewriteLengths(JsonNode? node)
+        {
+            switch (node)
+            {
+                case JsonArray array:
+                    foreach (var item in array)
+                    {
+                        RewriteLengths(item);
+                    }
+
+                    break;
+
+                case JsonObject obj:
+                    foreach (var entry in new List<KeyValuePair<string, JsonNode?>>(obj))
+                    {
+                        if (IsSchemaMap(entry.Key) && entry.Value is JsonObject named)
+                        {
+                            foreach (var member in named)
+                            {
+                                RewriteLengths(member.Value);
+                            }
+                        }
+                        else if (!HoldsInstanceData(entry.Key))
+                        {
+                            RewriteLengths(entry.Value);
+                        }
+                    }
+
+                    var min = LengthBound(obj, "minLength");
+                    var max = LengthBound(obj, "maxLength");
+
+                    if (min is null && max is null)
+                    {
+                        break;
+                    }
+
+                    obj.Remove("minLength");
+                    obj.Remove("maxLength");
+
+                    // One way to match at every position: a pair, a high
+                    // surrogate without its low half, or any other unit. An
+                    // alternation that let a pair also match as two units
+                    // backtracked exponentially on long emoji strings.
+                    var pattern = @"^(?:[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[^\uD800-\uDBFF]){"
+                        + (min ?? 0) + "," + (max is null ? string.Empty : max.ToString()) + @"}\z";
+
+                    if (obj["allOf"] is not JsonArray allOf)
+                    {
+                        allOf = new JsonArray();
+                        obj["allOf"] = allOf;
+                    }
+
+                    allOf.Add(new JsonObject { ["pattern"] = pattern });
+
+                    break;
+            }
+        }
+
+        private static long? LengthBound(JsonObject obj, string keyword) =>
+            obj[keyword] is JsonValue value && value.TryGetValue<long>(out var bound)
+                ? bound
+                : null;
 
         /// <summary>
         /// Walks a parsed schema and replaces every <c>pattern</c> value and

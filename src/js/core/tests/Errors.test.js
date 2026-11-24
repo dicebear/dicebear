@@ -67,3 +67,36 @@ describe('error classes', () => {
     );
   });
 });
+
+describe('options the other ports turn down or accept', () => {
+  const style = new root.Style({
+    canvas: {
+      width: 10,
+      height: 10,
+      elements: [{ type: 'component', name: 'eyes' }],
+    },
+    components: {
+      eyes: {
+        width: 10,
+        height: 10,
+        variants: { a: { elements: [] }, b: { elements: [] } },
+      },
+    },
+  });
+
+  it('should reject a weight of Infinity, which JSON cannot carry', () => {
+    assert.throws(
+      () => new root.Avatar(style, { eyesVariant: { a: Infinity } }),
+      (error) =>
+        error instanceof root.OptionsValidationError &&
+        error.details[0].instancePath === '/eyesVariant/a',
+    );
+  });
+
+  it('should render the default avatar for null options', () => {
+    assert.equal(
+      new root.Avatar(style, null).toString(),
+      new root.Avatar(style).toString(),
+    );
+  });
+});

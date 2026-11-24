@@ -561,4 +561,14 @@ class PrngTest extends TestCase
 
         $this->assertSame(['a', 'b', 'c'], $result);
     }
+
+    // integer bounds past the int range
+
+    public function testIntegerClampsABoundPastTheIntRange(): void
+    {
+        $prng = new Prng('test');
+
+        $this->assertSame(2147483647, $prng->integer('key', ['min' => 1e19, 'max' => 1e19]));
+        $this->assertGreaterThanOrEqual(2, $prng->integer('key', ['min' => 2, 'max' => 1e300]));
+    }
 }
