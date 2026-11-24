@@ -3,10 +3,10 @@
 // Rerun after visual style updates: `node scripts/generate-readme-hero.mjs`.
 //
 // The layout follows the stickers of the website: staggered, slightly turned
-// white cards with a soft shadow on the beige of the site. A few tiles use
-// animated style variants; the animations are plain CSS inside the embedded
-// avatars and respect prefers-reduced-motion, so the hero stays still for
-// readers who ask for that.
+// white cards with a soft shadow on the beige of the site. A few tiles are
+// animated; the animations are plain CSS inside the embedded avatars and
+// respect prefers-reduced-motion, so the hero stays still for readers who ask
+// for that.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -34,19 +34,20 @@ const outFile = join(
 // - Styles with a transparent default background get assigned pastels, and
 //   the strongly colored styles sit apart from each other, for an even hue
 //   spread across the grid.
-// - The six animated tiles (`animationVariant`) land on columns 2/6, 4/8,
-//   and 1/5, two per row, so motion is spread instead of clustered.
+// - The six animated tiles land on columns 2/6, 4/8, and 1/5, two per row,
+//   so motion is spread instead of clustered. Cats and Dogs, new in 11.0,
+//   take two of these places.
+// - Animated tiles play a little slower than the default and start at
+//   different points, so the grid does not move in unison.
+const ANIMATED = { animation: true, animationSpeed: 0.7 };
+
 const TILES = [
   [
     { style: 'lorelei', seed: 'Mia', options: { backgroundColor: 'fde68a' } },
     {
-      style: 'moods',
-      seed: 'Felix',
-      options: {
-        animationVariant: 'slow',
-        eyesVariant: 'happy',
-        mouthVariant: 'bigSmile',
-      },
+      style: 'cats',
+      seed: 'Milo',
+      options: { ...ANIMATED, animationDelay: 0 },
     },
     {
       style: 'pixel-art',
@@ -66,7 +67,7 @@ const TILES = [
     {
       style: 'constellation',
       seed: 'Nora',
-      options: { animationVariant: 'medium' },
+      options: { ...ANIMATED, animationDelay: -1.2 },
     },
     {
       style: 'clay',
@@ -87,7 +88,11 @@ const TILES = [
       options: { backgroundColor: 'bbf7d0', expressionVariant: 'cute' },
     },
     { style: 'rings', seed: 'Tara' },
-    { style: 'landscape', seed: 'Lea', options: { animationVariant: 'slow' } },
+    {
+      style: 'landscape',
+      seed: 'Lisa',
+      options: { ...ANIMATED, animationDelay: -0.6 },
+    },
     { style: 'identicon', seed: 'Zoe' },
     {
       style: 'critters',
@@ -95,21 +100,25 @@ const TILES = [
       options: { eyesVariant: 'happy', mouthVariant: 'smile' },
     },
     { style: 'waves', seed: 'Juno' },
-    { style: 'planets', seed: 'Elif', options: { animationVariant: 'slow' } },
+    {
+      style: 'planets',
+      seed: 'Elif',
+      options: { ...ANIMATED, animationDelay: -1.8 },
+    },
   ],
   [
-    { style: 'blobs', seed: 'Lina', options: { animationVariant: 'slow' } },
+    {
+      style: 'blobs',
+      seed: 'Lina',
+      options: { ...ANIMATED, animationDelay: -0.9 },
+    },
     { style: 'squircles', seed: 'Jonas' },
     { style: 'voxel-bot', seed: 'Rex' },
     { style: 'disco', seed: 'Ivy' },
     {
-      style: 'sprouts',
-      seed: 'Emma',
-      options: {
-        animationVariant: 'slow',
-        eyesVariant: 'happy',
-        mouthVariant: 'smile',
-      },
+      style: 'dogs',
+      seed: 'Mira',
+      options: { ...ANIMATED, animationDelay: -1.5 },
     },
     { style: 'shapes', seed: 'Finn' },
     {
