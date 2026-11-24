@@ -16,10 +16,12 @@ style, and options, regardless of the language used.
 ## Installation
 
 ```sh
-cargo add dicebear-core
+cargo add dicebear-core serde_json
 ```
 
-Requires Rust 1.80 or newer (uses `std::sync::LazyLock`).
+The examples build the options with `serde_json::json!`.
+
+Requires Rust 1.88 or newer.
 
 ## Usage
 
