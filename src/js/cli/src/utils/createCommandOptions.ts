@@ -29,7 +29,12 @@ export const createCommandOptions: Record<string, Options> = {
     type: 'number',
     default: 1,
     describe: 'How many avatars to create. More than one needs --output <dir>.',
-    coerce: (value: number) => {
+    coerce: (input: unknown) => {
+      // A repeated flag arrives as an array, the last value wins.
+      const value = Number(
+        Array.isArray(input) ? input[input.length - 1] : input,
+      );
+
       if (!Number.isInteger(value) || value < 1) {
         throw new Error(
           'The --count value must be a whole number of 1 or more.',

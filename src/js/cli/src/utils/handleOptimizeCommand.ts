@@ -38,6 +38,28 @@ export async function handleOptimizeCommand(
     );
   }
 
+  // Two inputs with one basename, such as `a/x.json` and `b/x.json`, would
+  // land on the same file in the output directory, and the second would
+  // silently replace the first. Refuse before anything is written.
+  if (target?.kind === 'dir') {
+    const seen = new Map<string, string>();
+
+    for (const file of files) {
+      const name = path.basename(file);
+      const other = seen.get(name);
+
+      if (other !== undefined) {
+        throw new Error(
+          `${other} and ${file} would both be written to ` +
+            `${path.join(target.path, name)}. Optimize them into separate ` +
+            'directories.',
+        );
+      }
+
+      seen.set(name, file);
+    }
+  }
+
   // In stdout mode the report must not mix with the JSON.
   const report = (line: string) =>
     target?.kind === 'stdout' ? console.error(line) : console.log(line);
@@ -97,7 +119,9 @@ export async function handleOptimizeCommand(
       case 'stdout':
         await new Promise<void>((resolve, reject) => {
           process.stdout.write(result, (error) =>
-            error ? reject(error) : resolve(),
+            error && (error as NodeJS.ErrnoException).code !== 'EPIPE'
+              ? reject(error)
+              : resolve(),
           );
         });
         break;

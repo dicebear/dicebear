@@ -49,7 +49,12 @@ function writeStdout(data: string | ArrayBufferLike): Promise<void> {
   const chunk = typeof data === 'string' ? data : new Uint8Array(data);
 
   return new Promise((resolve, reject) => {
-    process.stdout.write(chunk, (error) => (error ? reject(error) : resolve()));
+    process.stdout.write(chunk, (error) =>
+      // A reader that closed the pipe early has what it wanted.
+      error && (error as NodeJS.ErrnoException).code !== 'EPIPE'
+        ? reject(error)
+        : resolve(),
+    );
   });
 }
 

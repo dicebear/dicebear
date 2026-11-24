@@ -27,7 +27,19 @@ function listDefinitions(dir: string): Map<string, string> {
       continue;
     }
 
-    result.set(pairKey(file), path.join(dir, file));
+    const key = pairKey(file);
+    const existing = result.get(key);
+
+    // `x.json` and `x.min.json` in one directory both pair as `x`, and only
+    // one of them could be compared. Refuse instead of dropping one.
+    if (existing !== undefined) {
+      throw new Error(
+        `${path.join(dir, file)} and ${existing} both pair as "${key}". ` +
+          'Keep one of them in the directory.',
+      );
+    }
+
+    result.set(key, path.join(dir, file));
   }
 
   return result;

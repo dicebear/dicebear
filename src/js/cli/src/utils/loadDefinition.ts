@@ -15,7 +15,17 @@ export function loadDefinition(filePath: string): {
 } {
   const definitionPath = path.resolve(process.cwd(), filePath);
   const source = fs.readFileSync(definitionPath, 'utf-8');
-  const style = new Style(JSON.parse(source));
+  let style: Style;
+
+  // Name the file: with several definitions in one call, a bare JSON or
+  // schema message does not say which of them is broken.
+  try {
+    style = new Style(JSON.parse(source));
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+
+    throw new Error(`${definitionPath}: ${message}`);
+  }
   const name = path.basename(definitionPath, path.extname(definitionPath));
 
   return { style, name, definitionPath, source };

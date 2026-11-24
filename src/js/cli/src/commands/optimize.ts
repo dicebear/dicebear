@@ -34,7 +34,12 @@ export const optimizeCommand: CommandModule = {
           type: 'number',
           default: 3,
           describe: 'Float precision for path and transform data',
-          coerce: (value: number) => {
+          coerce: (input: unknown) => {
+            // A repeated flag arrives as an array, the last value wins.
+            const value = Number(
+              Array.isArray(input) ? input[input.length - 1] : input,
+            );
+
             // yargs turns a non-numeric value into NaN instead of erroring,
             // and `toFixed` throws on negative digits, so bad input has to
             // be caught here before it surfaces as an svgo-internal crash.
