@@ -43,9 +43,10 @@ These are the changes to check:
 - **Avatars:** Fixes change some drawings. Pixel Art shows dark beards in full,
   which 10.x drew barely visible, Stripes adds stripes at the edges, so nearly
   every Stripes avatar changes, and Notionists and Avataaars each fix a hair or
-  eyebrow variant. A seed with ill-formed text, such as half of an emoji,
-  renders a different avatar. The HTTP API keeps serving 10.x avatars unchanged
-  under `/10.x/`.
+  eyebrow variant. A seed with ill-formed text, such as an emoji cut in half by
+  `slice()`, renders a different avatar. Under `/10.x/` the HTTP API draws the
+  same images as before, and only the markup gains the `data-dicebear-component`
+  attribute.
 - **Animated styles:** The `animationVariant` option and the `animation` tag are
   gone. Pass `animation: true` instead.
 - **`new Avatar()`** takes a `Style` and no longer a raw definition:
