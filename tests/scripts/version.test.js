@@ -6,6 +6,8 @@ import {
   collectWorkspaceNames,
   updateChangelog,
   expectedGoModulePath,
+  findPrereleaseDependencies,
+  updateReleaseDate,
 } from "../../scripts/lib/version.mjs";
 
 const CHANGELOG = [
@@ -218,4 +220,76 @@ test("expectedGoModulePath names the path a mismatching major needs", () => {
 
 test("expectedGoModulePath rejects a go.mod without a module line", () => {
   assert.throws(() => expectedGoModulePath("go 1.23\n", "11.0.0"));
+});
+
+test("findPrereleaseDependencies names prerelease DiceBear dependencies in every manifest", () => {
+  const manifests = [
+    {
+      path: "src/js/cli/package.json",
+      raw: JSON.stringify({
+        dependencies: {
+          "@dicebear/core": "11.0.0-rc.4",
+          "@dicebear/styles": "^11.0.0-rc.5",
+          yargs: "^18.0.0-beta.1",
+        },
+      }),
+    },
+    { path: "src/go/core/go.mod", raw: "require (\n\tgithub.com/dicebear/schema/v3 v3.0.0-rc.1\n)\n" },
+    { path: "src/php/core/composer.json", raw: '{\n  "require": {\n    "dicebear/schema": "^3.0.0-rc.1"\n  }\n}\n' },
+    { path: "src/dart/core/pubspec.yaml", raw: "dependencies:\n  dicebear_schema: ^3.0.0-rc.1\n" },
+    { path: "src/rust/core/Cargo.toml", raw: '# the `dicebear-schema` crate 3.0.0-rc.1\ndicebear-schema = "3.0.0-rc.1"\n' },
+    { path: "src/python/core/pyproject.toml", raw: 'dependencies = ["jsonschema>=4.0", "dicebear-schema>=3.0.0rc1,<4"]\n' },
+    { path: "src/csharp/core/DiceBear.Core.csproj", raw: '<PackageReference Include="DiceBear.Schema" Version="[3.0.0-rc.1,4.0.0)" />\n' },
+  ];
+
+  const found = findPrereleaseDependencies(manifests, new Set(["@dicebear/core"]));
+
+  assert.deepEqual(
+    found.map((entry) => entry.path),
+    [
+      "src/js/cli/package.json",
+      "src/go/core/go.mod",
+      "src/php/core/composer.json",
+      "src/dart/core/pubspec.yaml",
+      "src/rust/core/Cargo.toml",
+      "src/python/core/pyproject.toml",
+      "src/csharp/core/DiceBear.Core.csproj",
+    ],
+  );
+  assert.equal(found[0].dependency, "@dicebear/styles ^11.0.0-rc.5");
+});
+
+test("findPrereleaseDependencies accepts stable requirements", () => {
+  const manifests = [
+    { path: "a/package.json", raw: JSON.stringify({ dependencies: { "@dicebear/styles": "^11.0.0" } }) },
+    { path: "go.mod", raw: "\tgithub.com/dicebear/schema/v3 v3.0.0\n" },
+    { path: "pyproject.toml", raw: 'dependencies = ["dicebear-schema>=3.0.0,<4"]\n' },
+    { path: "x.csproj", raw: '<PackageReference Include="DiceBear.Schema" Version="[3.0.0,4.0.0)" />\n' },
+  ];
+
+  assert.deepEqual(findPrereleaseDependencies(manifests, new Set()), []);
+});
+
+const VERSION_SUPPORT = [
+  "const RELEASED = {",
+  "  10: '2026-05-27',",
+  "  // TODO: replace with the actual 11.0.0 release date once it ships.",
+  "  11: '2026-09-01',",
+  "} as const;",
+  "",
+].join("\n");
+
+test("updateReleaseDate sets the date of the major and drops the reminder", () => {
+  assert.equal(
+    updateReleaseDate(VERSION_SUPPORT, 11, "2026-11-25"),
+    ["const RELEASED = {", "  10: '2026-05-27',", "  11: '2026-11-25',", "} as const;", ""].join("\n"),
+  );
+});
+
+test("updateReleaseDate leaves other majors alone", () => {
+  assert.equal(updateReleaseDate(VERSION_SUPPORT, 12, "2027-01-01"), null);
+  assert.equal(
+    updateReleaseDate(VERSION_SUPPORT, 10, "2026-05-27"),
+    null,
+  );
 });

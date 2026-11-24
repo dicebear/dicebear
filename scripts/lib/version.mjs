@@ -128,3 +128,102 @@ export function updateChangelog(raw, newVersion, date) {
 
   return result !== raw ? result : null;
 }
+
+/**
+ * A version with a prerelease part: `3.0.0-rc.1`, or PEP 440's `3.0.0rc1`.
+ */
+const PRERELEASE_VERSION = /\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+|(?:a|b|rc)\d+)/;
+
+/**
+ * Names of DiceBear packages in the manifests of every port: `@dicebear/…`
+ * and `dicebear` on npm, `dicebear/…` on Packagist, `dicebear-…` on PyPI and
+ * crates.io, `dicebear_…` on pub.dev, `DiceBear.…` on NuGet and
+ * `github.com/dicebear/…` for Go.
+ */
+const DICEBEAR_PACKAGE = /@dicebear\/|github\.com\/dicebear\/|dicebear[/_-][a-z]|DiceBear\.[A-Z]/;
+
+/**
+ * Lists the dependencies on DiceBear packages outside this repository that
+ * still point at a prerelease, such as `@dicebear/schema` `^3.0.0-rc.1`.
+ *
+ * A stable release must not carry them: NuGet refuses to pack a stable
+ * package with a prerelease dependency, and Go and NuGet resolve the lowest
+ * version a requirement allows, which would hand users the release candidate
+ * of the schema. The workspace packages are left out, the release bumps them
+ * itself.
+ *
+ * @param {{ path: string, raw: string }[]} manifests - package.json, go.mod,
+ *   composer.json, pubspec.yaml, Cargo.toml, pyproject.toml and .csproj files
+ * @param {Set<string>} workspaceNames
+ * @returns {{ path: string, dependency: string }[]}
+ */
+export function findPrereleaseDependencies(manifests, workspaceNames) {
+  const found = [];
+
+  for (const { path, raw } of manifests) {
+    if (path.endsWith("package.json")) {
+      const pkg = JSON.parse(raw);
+
+      for (const field of ["dependencies", "devDependencies", "peerDependencies"]) {
+        for (const [name, spec] of Object.entries(pkg[field] ?? {})) {
+          const external =
+            (name === "dicebear" || name.startsWith("@dicebear/")) &&
+            !workspaceNames.has(name);
+
+          if (external && PRERELEASE_VERSION.test(String(spec))) {
+            found.push({ path, dependency: `${name} ${spec}` });
+          }
+        }
+      }
+
+      continue;
+    }
+
+    for (const line of raw.split("\n")) {
+      const code = line.trim();
+
+      if (/^(#|\/\/|<!--)/.test(code)) {
+        continue;
+      }
+
+      if (DICEBEAR_PACKAGE.test(code) && PRERELEASE_VERSION.test(code)) {
+        found.push({ path, dependency: code });
+      }
+    }
+  }
+
+  return found;
+}
+
+/**
+ * Sets the release date of a major line in the version support data of the
+ * docs (`RELEASED` in `versionSupport.ts`) and drops the reminder comment
+ * above it, so the support timeline starts on the day the release is cut.
+ *
+ * @param {string} raw - Raw versionSupport.ts content
+ * @param {number} major
+ * @param {string} date - Release date in `YYYY-MM-DD` form
+ * @returns {string | null} Updated content, or null if there is nothing to do
+ */
+export function updateReleaseDate(raw, major, date) {
+  const line = new RegExp(
+    `^((?:[ \\t]*//[^\\n]*\\n)*)([ \\t]*)${major}: '\\d{4}-\\d{2}-\\d{2}',$`,
+    "m",
+  );
+
+  if (!line.test(raw)) {
+    return null;
+  }
+
+  const updated = raw.replace(line, (_, comments, indent) => {
+    const kept = comments
+      .split("\n")
+      .filter((comment) => comment !== "" && !/TODO/.test(comment))
+      .map((comment) => `${comment}\n`)
+      .join("");
+
+    return `${kept}${indent}${major}: '${date}',`;
+  });
+
+  return updated !== raw ? updated : null;
+}
