@@ -15,7 +15,7 @@ import '../error/validation_error.dart';
 /// consumer's environment into validation error output. Keep the version in
 /// sync with the `dicebear_schema` dependency in `pubspec.yaml`.
 const String schemaBaseUrl =
-    'https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/';
+    'https://cdn.hopjs.net/npm/@dicebear/schema@3.0.0-rc.1/dist/';
 
 /// How many levels of maps and lists a style definition or the options may
 /// nest, counting the value itself as the first. The deepest style definition
