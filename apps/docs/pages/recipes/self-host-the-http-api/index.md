@@ -369,7 +369,7 @@ SignedAvatarUrl(
 | `PORT`                             | `3000`                                        | Port to listen on.                                                   |
 | `HOST`                             | `0.0.0.0`                                     | Host to bind to (all IPv4 addresses by default).                     |
 | `LOGGER`                           | `0`                                           | Enable request logger (1 = on, 0 = off).                             |
-| `WORKERS`                          | `1`                                           | Number of Node.js worker threads.                                    |
+| `WORKERS`                          | `1`                                           | Number of worker processes (Node.js cluster).                        |
 | `VERSIONS`                         | `10,11`                                       | Comma-separated list of supported DiceBear major versions.           |
 | `CACHE_CONTROL_AVATARS`            | `31536000`                                    | Cache duration for avatar responses in seconds (1 year).             |
 | `CACHE_CONTROL_STYLES`             | `3600`                                        | Cache duration for the styles listing in seconds (1 hour).           |

@@ -13,7 +13,7 @@ Every DiceBear avatar style is a JSON file that follows the
 everything needed to generate an avatar: the canvas size, the SVG elements, the
 components that can be randomized, the color palettes, and optional animations.
 The definition is purely declarative, and the rendering logic lives in the
-DiceBear Core. This page documents schema version 2.1.0, the version DiceBear 11
+DiceBear Core. This page documents schema version 3.0.0, the version DiceBear 11
 uses. For a guided example, see
 [Create an avatar style from scratch](/create-styles/from-scratch/).
 
@@ -679,7 +679,7 @@ Install via your package manager:
 | Composer  | `composer require dicebear/schema`     |
 | PyPI      | `pip install dicebear-schema`          |
 | Cargo     | `cargo add dicebear-schema`            |
-| Go        | `go get github.com/dicebear/schema/v2` |
+| Go        | `go get github.com/dicebear/schema/v3` |
 | pub.dev   | `dart pub add dicebear_schema`         |
 | NuGet     | `dotnet add package DiceBear.Schema`   |
 
@@ -688,6 +688,6 @@ your style definition so editors like VS Code provide autocomplete and inline
 validation:
 
 ```http
-https://cdn.hopjs.net/npm/@dicebear/schema@2.1.0/dist/definition.min.json
-https://cdn.hopjs.net/npm/@dicebear/schema@2.1.0/dist/options.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@3.0.0/dist/definition.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@3.0.0/dist/options.min.json
 ```

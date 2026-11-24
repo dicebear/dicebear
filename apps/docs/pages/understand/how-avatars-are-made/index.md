@@ -37,11 +37,12 @@ anything secret.
 
 ## The same in every language
 
-All DiceBear libraries and the HTTP API implement this pipeline with
-byte-identical output. The style definitions are plain JSON that every
-implementation consumes as-is, and the PRNG behaves the same everywhere. That is
-why you can render avatars in the browser today and move rendering to a Rust
-backend later without a single avatar changing.
+All DiceBear libraries implement this pipeline with byte-identical output, and
+the HTTP API renders with the JavaScript library, so it draws the same avatars.
+The style definitions are plain JSON that every implementation consumes as-is,
+and the PRNG behaves the same everywhere. That is why you can render avatars in
+the browser today and move rendering to a Rust backend later without a single
+avatar changing.
 
 ## Dig deeper
 

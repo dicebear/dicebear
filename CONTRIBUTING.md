@@ -12,7 +12,7 @@ own `CONTRIBUTING.md`:
   JSON Schema for definitions and options
 - [`dicebear/styles`](https://github.com/dicebear/styles/blob/main/CONTRIBUTING.md):
   Official avatar style definitions
-- [`dicebear/api`](https://github.com/dicebear/api/blob/main/CONTRIBUTING.md):
+- [`dicebear/api`](https://github.com/dicebear/api/blob/4.x/CONTRIBUTING.md):
   Self-hostable HTTP API
 - [`dicebear/studio`](https://github.com/dicebear/studio/blob/main/CONTRIBUTING.md):
   DiceBear Studio (plugin for Figma)
@@ -23,8 +23,8 @@ instructions below only cover this monorepo.
 ## Before you start
 
 - Bug fixes, small improvements, new tests: open a pull request against the
-  branch that matches the target major (for DiceBear 10 that's `10.x`; the
-  current stable line lives on `9.x`).
+  branch that matches the target major (for DiceBear 11 that's `11.x`; fixes for
+  10 go to `10.x`).
 - New avatar styles: contribute them to
   [`dicebear/styles`](https://github.com/dicebear/styles), not here. The
   walkthrough is in
@@ -40,22 +40,23 @@ instructions below only cover this monorepo.
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/) 20 or newer (CI runs on 20, 22, 24, 25)
-- npm 11 (this repo pins `packageManager` in `package.json`; use
+- [Node.js](https://nodejs.org/) 22 or newer (CI runs on 22, 24, 26)
+- npm 12 (this repo pins `packageManager` in `package.json`; use
   [Corepack](https://nodejs.org/api/corepack.html) if you don't already)
 - For PHP work: PHP 8.2+ and Composer, plus `vendor/bin/phpunit` via
   `composer install` inside `src/php/core/`
 - For Python work: Python 3.10+ (CI runs on 3.10 to 3.14); install the package
   in a virtualenv with `pip install -e ".[dev]"` inside `src/python/core/`
-- For Rust work: Rust 1.80+ with the `clippy` and `rustfmt` components; build
+- For Rust work: Rust 1.88+ with the `clippy` and `rustfmt` components; build
   and test with `cargo test`, `cargo clippy`, and `cargo fmt` inside
   `src/rust/core/`
-- For Go work: Go 1.23+ (CI runs on 1.23 to 1.25); test with `go test ./...` and
-  check with `gofmt -l .` and `go vet ./...` inside `src/go/core/`
+- For Go work: Go 1.23+ (CI runs on 1.23, 1.26 and 1.27); test with
+  `go test ./...` and check with `gofmt -l .` and `go vet ./...` inside
+  `src/go/core/`
 - For Dart work: Dart SDK 3.4+ (CI runs on 3.4 and stable); test with
   `dart test` and check with `dart format --output=none --set-exit-if-changed .`
   and `dart analyze --fatal-infos` inside `src/dart/core/`
-- For C# work: the .NET SDK 8.0+ (CI runs on 8.0). Build with
+- For C# work: the .NET SDK 8.0+ (CI runs on 8.0 and 10.0). Build with
   `dotnet build DiceBear.Core.csproj` and test with
   `dotnet test tests/DiceBear.Core.Tests.csproj` inside `src/csharp/core/`.
   Warnings are errors, so the build fails on an unused variable or a missing XML
@@ -181,8 +182,8 @@ gofmt -l .   # prints nothing when formatting is correct
 The Go core reads the two draft-07 schemas from the `github.com/dicebear/schema`
 module (the Go counterpart of `@dicebear/schema` / `dicebear/schema`) as a
 dependency. Nothing is vendored. Style definitions come from
-`github.com/dicebear/styles/v10`. The module path carries the major version
-(`/v10`), so a major bump changes the path by hand; `scripts/version.mjs` only
+`github.com/dicebear/styles/v11`. The module path carries the major version
+(`/v11`), so a major bump changes the path by hand; `scripts/version.mjs` only
 creates the Git tag the module proxy reads.
 
 ### Dart core (`src/dart/core/`)
@@ -217,9 +218,9 @@ dotnet format tests/DiceBear.Core.Tests.csproj --verify-no-changes
 
 There is no solution file, so the project is named explicitly. The library
 multi-targets `netstandard2.0` and `net8.0`, so it also runs in Godot 4.2+ with
-.NET, in Unity, and on .NET Framework. The test project targets `net8.0` only,
-which is why building the library on its own is a separate step: a net8.0 test
-project pulls in only the net8.0 build of what it references.
+.NET, in Unity, and on .NET Framework. The test project targets `net8.0` and
+`net10.0`, which is why building the library on its own is a separate step: the
+test project pulls in only the net8.0 build of what it references.
 
 The C# core reads the two draft-07 schemas from the `DiceBear.Schema` package
 (the NuGet counterpart of `@dicebear/schema` / `dicebear/schema`) as a runtime
@@ -384,7 +385,7 @@ The tag triggers the
 [Publish](https://github.com/dicebear/dicebear/actions/workflows/publish.yml)
 workflow, which:
 
-1. Runs the test suite on Node 20, 22, 24, and 25
+1. Runs the test suite on Node 22, 24, and 26
 2. Builds every package
 3. Picks the npm dist-tag:
    - Tags containing `alpha`, `beta`, or `rc` go out as `next`
