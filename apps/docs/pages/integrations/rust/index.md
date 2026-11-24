@@ -105,7 +105,7 @@ all available patterns.
 ### Multiple avatars on the same page
 
 When you inline several avatars into one page, use `idRandomization` to keep
-their SVG IDs from colliding:
+their SVG IDs and animation names from colliding:
 
 ```rust
 let avatars: Vec<String> = ["alice", "bob", "charlie"]

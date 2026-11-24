@@ -143,8 +143,9 @@ all available patterns.
 ### Multiple avatars on the same page
 
 When you inline several SVGs into one document, rather than loading them through
-`<img>`, their internal IDs can collide. `idRandomization` adds a random suffix
-to every ID:
+`<img>`, their internal IDs can collide, and so can the class and keyframe names
+of two animated avatars with the same seed. `idRandomization` adds a random
+suffix to all of them:
 
 ```js
 const avatars = ['alice', 'bob', 'charlie'].map((seed) =>
