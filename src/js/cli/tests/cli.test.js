@@ -166,14 +166,7 @@ describe('dicebear CLI', () => {
 
     it('renders from a definition file', () => {
       const out = path.join(workdir, 'out-definition');
-      const result = runCli([
-        'create',
-        definition,
-        '-o',
-        out,
-        '--count',
-        '2',
-      ]);
+      const result = runCli(['create', definition, '-o', out, '--count', '2']);
 
       assert.equal(result.status, 0, result.stderr);
       assert.deepEqual(fs.readdirSync(out).sort(), [
@@ -228,6 +221,91 @@ describe('dicebear CLI', () => {
 
       assert.equal(result.status, 0, result.stderr);
       assert.match(result.stdout, /#(b6e3f4|c0aede)/);
+    });
+
+    // The commands the style pages of dicebear.com print take this form.
+    it('checks the choices of a comma-separated enum list value by value', () => {
+      const result = runCli([
+        'create',
+        'initials',
+        '--seed',
+        'Alice',
+        '--format',
+        'json',
+        '--flip',
+        'none,horizontal',
+        '--backgroundColorFill',
+        'solid,linear',
+      ]);
+
+      assert.equal(result.status, 0, result.stderr);
+
+      const { options } = JSON.parse(result.stdout);
+      assert.ok(['none', 'horizontal'].includes(options.flip));
+      assert.ok(['solid', 'linear'].includes(options.backgroundColorFill));
+    });
+
+    it('still rejects an enum value outside the choices', () => {
+      const result = runCli(['create', 'initials', '--flip', 'none,sideways']);
+
+      assert.notEqual(result.status, 0);
+      assert.match(result.stderr, /sideways/);
+    });
+
+    it('turns a comma-separated number list into numbers', () => {
+      const result = runCli([
+        'create',
+        'initials',
+        '--seed',
+        'Alice',
+        '--format',
+        'json',
+        '--fontWeight',
+        '100,400',
+      ]);
+
+      assert.equal(result.status, 0, result.stderr);
+      assert.ok(
+        [100, 400].includes(JSON.parse(result.stdout).options.fontWeight),
+      );
+    });
+
+    it('takes a range with a negative minimum after a space', () => {
+      const result = runCli([
+        'create',
+        'initials',
+        '--seed',
+        'Alice',
+        '--format',
+        'json',
+        '--rotate',
+        '-10,10',
+      ]);
+
+      assert.equal(result.status, 0, result.stderr);
+
+      const { rotate } = JSON.parse(result.stdout).options;
+      assert.ok(rotate >= -10 && rotate <= 10, `rotate ${rotate}`);
+    });
+
+    it('takes a range as two repeated flags', () => {
+      const result = runCli([
+        'create',
+        'initials',
+        '--seed',
+        'Alice',
+        '--format',
+        'json',
+        '--rotate',
+        '10',
+        '--rotate',
+        '20',
+      ]);
+
+      assert.equal(result.status, 0, result.stderr);
+
+      const { rotate } = JSON.parse(result.stdout).options;
+      assert.ok(rotate >= 10 && rotate <= 20, `rotate ${rotate}`);
     });
 
     it('lists the style options in --help', () => {

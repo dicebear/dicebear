@@ -1,6 +1,5 @@
 import updateNotifier from 'update-notifier';
 import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
 import { chalkStderr } from 'chalk';
 
 import { getPackageJson } from './utils/getPackageJson.js';
@@ -9,6 +8,7 @@ import { optimizeCommand } from './commands/optimize.js';
 import { compareCommand } from './commands/compare.js';
 import { resolveBuiltInPath } from './utils/resolveStyle.js';
 import { reportError } from './utils/reportError.js';
+import { cliArguments } from './utils/cliArguments.js';
 
 // A reader that stops early (`dicebear create ... | head -c 100`) closes the
 // pipe. That is not an error worth a stack trace.
@@ -24,7 +24,7 @@ process.stdout.on('error', (error: NodeJS.ErrnoException) => {
   const pkg = await getPackageJson();
   updateNotifier({ pkg }).notify();
 
-  const cli = yargs(hideBin(process.argv))
+  const cli = yargs(cliArguments())
     .scriptName('dicebear')
     // With greedy arrays `--flip horizontal lorelei` would read the style
     // name as a second flip value. Lists are given as repeated flags or as
