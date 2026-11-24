@@ -650,7 +650,7 @@ impl<'a> Renderer<'a> {
                 // render that keeps the query must not pick them up on the
                 // same page, so the two get different names. The default adds
                 // nothing and leaves the hash as it was.
-                let motion = if self.resolver.animation_motion_query() {
+                let motion = if self.resolver.animation_respect_reduced_motion() {
                     ""
                 } else {
                     ":nomotionquery"
@@ -872,8 +872,8 @@ impl<'a> Renderer<'a> {
     /// Registers the accumulated animation CSS as a single `<style>` entry in
     /// the shared `<defs>` block, wrapped in a reduced-motion media query so
     /// users who prefer reduced motion get the static avatar. With
-    /// `animationMotionQuery` off the rules stand without the query. A no-op
-    /// when no animation CSS was produced.
+    /// `animationRespectReducedMotion` off the rules stand without the query. A
+    /// no-op when no animation CSS was produced.
     fn register_animation_style(&mut self) {
         if self.keyframes_css.is_empty() {
             return;
@@ -892,7 +892,7 @@ impl<'a> Renderer<'a> {
             self.keyframes_css.concat(),
             self.animation_css.concat()
         );
-        let style = if self.resolver.animation_motion_query() {
+        let style = if self.resolver.animation_respect_reduced_motion() {
             format!("<style>@media (prefers-reduced-motion:no-preference){{{css}}}</style>")
         } else {
             format!("<style>{css}</style>")

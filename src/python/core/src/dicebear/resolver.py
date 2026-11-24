@@ -110,15 +110,15 @@ class Resolver:
 
         return self._memo_float(f"{name}AnimationDelay", range_, 0.0)
 
-    def animation_motion_query(self) -> bool:
+    def animation_respect_reduced_motion(self) -> bool:
         """Whether the animation CSS sits inside a ``prefers-reduced-motion``
         media query. On by default. Renderers that ignore media queries need
         it off, and the app then decides about ``animation`` from the system
         setting.
         """
         return self._memo(
-            "animationMotionQuery",
-            lambda: self._options.animation_motion_query() is not False,
+            "animationRespectReducedMotion",
+            lambda: self._options.animation_respect_reduced_motion() is not False,
         )
 
     def title(self) -> str | None:

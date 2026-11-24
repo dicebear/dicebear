@@ -150,16 +150,16 @@ func (r *resolver) animationDelayFor(name string) float64 {
 	return r.floatOpt(name+"AnimationDelay", rng, 0)
 }
 
-// animationMotionQuery reports whether the animation CSS sits inside a
-// `prefers-reduced-motion` media query, recorded under `animationMotionQuery`,
-// default true. Renderers that ignore media queries need it off, and the app
+// animationRespectReducedMotion reports whether the animation CSS sits inside
+// a `prefers-reduced-motion` media query, recorded under
+// `animationRespectReducedMotion`, default true. Renderers that ignore media queries need it off, and the app
 // then decides about `animation` from the system setting.
-func (r *resolver) animationMotionQuery() bool {
+func (r *resolver) animationRespectReducedMotion() bool {
 	v := true
-	if p := r.options.animationMotionQuery(); p != nil {
+	if p := r.options.animationRespectReducedMotion(); p != nil {
 		v = *p
 	}
-	r.record("animationMotionQuery", v)
+	r.record("animationRespectReducedMotion", v)
 	return v
 }
 

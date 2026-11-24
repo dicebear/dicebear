@@ -170,9 +170,9 @@ class Options
         return $this->toRange($this->dynamic($name . 'AnimationDelay'));
     }
 
-    public function animationMotionQuery(): ?bool
+    public function animationRespectReducedMotion(): ?bool
     {
-        return $this->data['animationMotionQuery'] ?? null;
+        return $this->data['animationRespectReducedMotion'] ?? null;
     }
 
     /**

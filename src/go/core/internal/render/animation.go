@@ -298,8 +298,8 @@ func directionCss(direction string) string {
 // registerAnimationStyle registers the accumulated animation CSS as a single
 // <style> entry in the shared <defs> block, wrapped in a reduced-motion media
 // query so users who prefer reduced motion get the static avatar. With
-// animationMotionQuery off the rules stand without the query. A no-op when no
-// animation CSS was produced.
+// animationRespectReducedMotion off the rules stand without the query. A no-op
+// when no animation CSS was produced.
 func (r *renderer) registerAnimationStyle() {
 	if len(r.keyframesCss) == 0 {
 		return
@@ -314,7 +314,7 @@ func (r *renderer) registerAnimationStyle() {
 
 	css := strings.Join(r.keyframesCss, "") + strings.Join(r.animationCss, "")
 
-	if r.resolver.animationMotionQuery() {
+	if r.resolver.animationRespectReducedMotion() {
 		r.defs.set(key, "<style>@media (prefers-reduced-motion:no-preference){"+css+"}</style>")
 	} else {
 		r.defs.set(key, "<style>"+css+"</style>")
@@ -366,7 +366,7 @@ func (r *renderer) animationHash() string {
 		// two get different names. The default adds nothing and leaves the
 		// hash as it was.
 		motion := ""
-		if !r.resolver.animationMotionQuery() {
+		if !r.resolver.animationRespectReducedMotion() {
 			motion = ":nomotionquery"
 		}
 

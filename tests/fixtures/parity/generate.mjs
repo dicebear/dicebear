@@ -1466,10 +1466,12 @@ const optionsValidationCases = [
   { id: 'named-animation-delay', options: { blinkAnimationDelay: [-1, 1] } },
   { id: 'named-animation-delay-range-excess', options: { blinkAnimationDelay: [0, 1, 2] } },
   { id: 'named-animation-delay-string', options: { blinkAnimationDelay: 'later' } },
-  // The media query switch takes a boolean only.
-  { id: 'animation-motion-query-off', options: { animationMotionQuery: false } },
-  { id: 'animation-motion-query-on', options: { animationMotionQuery: true } },
-  { id: 'animation-motion-query-string', options: { animationMotionQuery: 'false' } },
+  // The reduced motion switch takes a boolean only.
+  { id: 'animation-respect-reduced-motion-off', options: { animationRespectReducedMotion: false } },
+  { id: 'animation-respect-reduced-motion-on', options: { animationRespectReducedMotion: true } },
+  { id: 'animation-respect-reduced-motion-string', options: { animationRespectReducedMotion: 'false' } },
+  // The name it carried in 11.0.0-rc.3 is gone.
+  { id: 'animation-motion-query-removed', options: { animationMotionQuery: false } },
 ];
 
 // A style whose canvas uses color `a`, so resolving it walks the (circular)
@@ -1885,23 +1887,23 @@ const avatarFixtures = {
       id: 'named-delay-off',
       options: { seed: 'parity-1', pulseAnimation: true, squashAnimationDelay: 2 },
     },
-    // Without the motion query the rules stand bare in the style element,
+    // Without the media query the rules stand bare in the style element,
     // and the class and keyframe names move to a hash of their own.
     {
-      id: 'motion-query-off',
-      options: { seed: 'parity-1', animation: true, animationMotionQuery: false },
+      id: 'reduced-motion-off',
+      options: { seed: 'parity-1', animation: true, animationRespectReducedMotion: false },
     },
     // The explicit default must byte-match `animation-on`.
     {
-      id: 'motion-query-on',
-      options: { seed: 'parity-1', animation: true, animationMotionQuery: true },
+      id: 'reduced-motion-on',
+      options: { seed: 'parity-1', animation: true, animationRespectReducedMotion: true },
     },
     // With nothing playing there is no CSS to wrap: this render must
     // byte-match `plain-seed`, and the option stays out of the resolved
     // options.
     {
-      id: 'motion-query-off-static',
-      options: { seed: 'parity-1', animationMotionQuery: false },
+      id: 'reduced-motion-off-static',
+      options: { seed: 'parity-1', animationRespectReducedMotion: false },
     },
   ]),
   coexist: avatarCases([

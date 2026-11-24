@@ -128,8 +128,9 @@ impl Options {
     }
 
     /// Returns the media query switch, or `None` when unset.
-    pub fn animation_motion_query(&self) -> Option<bool> {
-        self.get("animationMotionQuery").and_then(Value::as_bool)
+    pub fn animation_respect_reduced_motion(&self) -> Option<bool> {
+        self.get("animationRespectReducedMotion")
+            .and_then(Value::as_bool)
     }
 
     /// Returns the global `tags` filter as parsed tokens, or an empty list when

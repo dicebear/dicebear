@@ -120,8 +120,8 @@ class Options {
       _toRange(_get('${name}AnimationDelay'));
 
   /// Returns the media query switch, or `null` when unset.
-  bool? animationMotionQuery() {
-    final value = _get('animationMotionQuery');
+  bool? animationRespectReducedMotion() {
+    final value = _get('animationRespectReducedMotion');
 
     return value is bool ? value : null;
   }

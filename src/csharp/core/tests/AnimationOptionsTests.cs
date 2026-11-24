@@ -510,7 +510,7 @@ public class AnimationOptionsTests
         Assert.Equal(
             new[]
             {
-                "animation", "animationSpeed", "animationDelay", "animationMotionQuery",
+                "animation", "animationSpeed", "animationDelay", "animationRespectReducedMotion",
                 "blinkAnimation", "blinkAnimationSpeed", "blinkAnimationDelay",
                 "swayAnimation", "swayAnimationSpeed", "swayAnimationDelay",
             },

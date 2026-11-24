@@ -114,8 +114,8 @@ export class Options<D = unknown> {
     return this.#toRange(this.#data.animationDelay);
   }
 
-  animationMotionQuery(): boolean | undefined {
-    return this.#data.animationMotionQuery;
+  animationRespectReducedMotion(): boolean | undefined {
+    return this.#data.animationRespectReducedMotion;
   }
 
   /**

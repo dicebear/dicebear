@@ -134,9 +134,10 @@ func (o *options) animationDelayFor(name string) *prng.Range {
 	return toRange(v)
 }
 
-// animationMotionQuery returns the media query switch, or nil when unset.
-func (o *options) animationMotionQuery() *bool {
-	if v, ok := o.get("animationMotionQuery"); ok {
+// animationRespectReducedMotion returns the reduced motion switch, or nil when
+// unset.
+func (o *options) animationRespectReducedMotion() *bool {
+	if v, ok := o.get("animationRespectReducedMotion"); ok {
 		if b, ok := v.(bool); ok {
 			return &b
 		}

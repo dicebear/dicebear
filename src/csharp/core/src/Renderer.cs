@@ -1121,9 +1121,9 @@ namespace DiceBear.Internal
         /// Registers the accumulated animation CSS as a single
         /// <c>&lt;style&gt;</c> entry in the shared <c>&lt;defs&gt;</c> block,
         /// wrapped in a reduced-motion media query so users who prefer reduced
-        /// motion get the static avatar. With <c>animationMotionQuery</c> off
-        /// the rules stand without the query. A no-op when no animation CSS
-        /// was produced.
+        /// motion get the static avatar. With
+        /// <c>animationRespectReducedMotion</c> off the rules stand without the
+        /// query. A no-op when no animation CSS was produced.
         /// </summary>
         private void RegisterAnimationStyle()
         {
@@ -1145,7 +1145,7 @@ namespace DiceBear.Internal
 
             _defs.Set(
                 key,
-                _resolver.AnimationMotionQuery()
+                _resolver.AnimationRespectReducedMotion()
                     ? "<style>@media (prefers-reduced-motion:no-preference){" + css + "}</style>"
                     : "<style>" + css + "</style>");
         }
@@ -1193,7 +1193,7 @@ namespace DiceBear.Internal
                 // render that keeps the query must not pick them up on the
                 // same page, so the two get different names. The default adds
                 // nothing and leaves the hash as it was.
-                var motion = _resolver.AnimationMotionQuery() ? string.Empty : ":nomotionquery";
+                var motion = _resolver.AnimationRespectReducedMotion() ? string.Empty : ":nomotionquery";
 
                 _cachedAnimationHash = Fnv1a.Hex(
                     (_style.MetaBlock().Source().Name() ?? string.Empty) + ":" + _resolver.Seed()

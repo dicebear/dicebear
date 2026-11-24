@@ -113,7 +113,7 @@
     "min": -3600,
     "max": 3600
   },
-  "animationMotionQuery": {
+  "animationRespectReducedMotion": {
     "type": "boolean"
   },
   "driftAnimation": {

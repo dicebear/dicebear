@@ -621,7 +621,11 @@ class Renderer:
             # render that keeps the query must not pick them up on the same
             # page, so the two get different names. The default adds nothing
             # and leaves the hash as it was.
-            motion = "" if self._resolver.animation_motion_query() else ":nomotionquery"
+            motion = (
+                ""
+                if self._resolver.animation_respect_reduced_motion()
+                else ":nomotionquery"
+            )
             source_name = self._style.meta().source().name() or ""
             self._cached_animation_hash = Fnv1a.hex(
                 source_name
@@ -892,7 +896,7 @@ class Renderer:
         """Register the accumulated animation CSS as a single ``<style>`` entry
         in the shared ``<defs>`` block, wrapped in a reduced-motion media query
         so users who prefer reduced motion get the static avatar. With
-        ``animationMotionQuery`` off the rules stand without the query.
+        ``animationRespectReducedMotion`` off the rules stand without the query.
 
         A no-op when no animation CSS was produced.
         """
@@ -910,6 +914,6 @@ class Renderer:
 
         self._defs[key] = (
             "<style>@media (prefers-reduced-motion:no-preference){" + css + "}</style>"
-            if self._resolver.animation_motion_query()
+            if self._resolver.animation_respect_reduced_motion()
             else "<style>" + css + "</style>"
         )

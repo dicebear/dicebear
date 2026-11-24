@@ -2907,23 +2907,30 @@
       "valid": false
     },
     {
-      "id": "animation-motion-query-off",
+      "id": "animation-respect-reduced-motion-off",
+      "options": {
+        "animationRespectReducedMotion": false
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-respect-reduced-motion-on",
+      "options": {
+        "animationRespectReducedMotion": true
+      },
+      "valid": true
+    },
+    {
+      "id": "animation-respect-reduced-motion-string",
+      "options": {
+        "animationRespectReducedMotion": "false"
+      },
+      "valid": false
+    },
+    {
+      "id": "animation-motion-query-removed",
       "options": {
         "animationMotionQuery": false
-      },
-      "valid": true
-    },
-    {
-      "id": "animation-motion-query-on",
-      "options": {
-        "animationMotionQuery": true
-      },
-      "valid": true
-    },
-    {
-      "id": "animation-motion-query-string",
-      "options": {
-        "animationMotionQuery": "false"
       },
       "valid": false
     }

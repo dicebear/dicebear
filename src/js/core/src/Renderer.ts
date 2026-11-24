@@ -707,7 +707,7 @@ export class Renderer {
     // Without the media query the rules apply to every viewer. A render that
     // keeps the query must not pick them up on the same page, so the two get
     // different names. The default adds nothing and leaves the hash as it was.
-    const motion = this.#resolver.animationMotionQuery()
+    const motion = this.#resolver.animationRespectReducedMotion()
       ? ''
       : ':nomotionquery';
 
@@ -977,8 +977,8 @@ export class Renderer {
    * Registers the accumulated animation CSS as a single `<style>` entry in
    * the shared `<defs>` block, wrapped in a reduced-motion media query so
    * users who prefer reduced motion get the static avatar. With
-   * `animationMotionQuery` off the rules stand without the query. A no-op
-   * when no animation CSS was produced.
+   * `animationRespectReducedMotion` off the rules stand without the query. A
+   * no-op when no animation CSS was produced.
    */
   #registerAnimationStyle(): void {
     if (this.#keyframesCss.length === 0) {
@@ -997,7 +997,7 @@ export class Renderer {
 
     this.#defs.set(
       key,
-      this.#resolver.animationMotionQuery()
+      this.#resolver.animationRespectReducedMotion()
         ? `<style>@media (prefers-reduced-motion:no-preference){${css}}</style>`
         : `<style>${css}</style>`,
     );
