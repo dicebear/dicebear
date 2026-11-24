@@ -1212,6 +1212,13 @@ are no initials. Take the whole code point, not the first UTF-16 code unit: for
 a letter outside the Basic Multilingual Plane, `charAt(0)` would return a lone
 surrogate, which is ill-formed XML.
 
+Which characters count as letters and how they are uppercased comes from the
+Unicode tables of the language runtime, not from DiceBear. The ports agree for
+every script that has been in Unicode for a while. For a letter added in one of
+the latest Unicode versions, a runtime with older tables may not see a letter
+at all, or not uppercase it, so such a seed can yield different initials in
+different ports.
+
 ## Testing your implementation
 
 The DiceBear repository ships a language-neutral parity test suite at
