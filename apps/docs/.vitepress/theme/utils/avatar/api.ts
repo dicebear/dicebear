@@ -87,6 +87,17 @@ function formatCliArg(value: unknown): string {
   return shellQuote(String(value));
 }
 
+/**
+ * One `--key value` pair of the CLI command. A value that starts with a dash
+ * is joined with `=`: the CLI's parser would read `--seed -x` as two flags,
+ * whatever the shell quoting, and only `--seed=-x` keeps it a value.
+ */
+function cliFlag(key: string, raw: string, formatted: string): string {
+  return raw.startsWith('-')
+    ? `  --${key}=${formatted}`
+    : `  --${key} ${formatted}`;
+}
+
 export function getAvatarApiCommand(
   avatarStyle: string,
   options: Record<string, unknown> = {},
@@ -95,23 +106,31 @@ export function getAvatarApiCommand(
     .map(([k, v]) => {
       const classified = classifyOptionValue(v);
       switch (classified.kind) {
-        case 'array':
+        case 'array': {
           // Arrays are not greedy on the CLI: a list is one comma-joined value.
+          const joined = classified.values.join(',');
+
           return classified.values.length > 0
-            ? `  --${k} ${shellQuote(classified.values.join(','))}`
+            ? cliFlag(k, joined, shellQuote(joined))
             : `  --${k}`;
+        }
+
         case 'primitive':
-          return `  --${k} ${formatCliArg(classified.value)}`;
+          return cliFlag(
+            k,
+            String(classified.value),
+            formatCliArg(classified.value),
+          );
         case 'object': {
           const pairs = classified.entries
             .map(([vk, vv]) => `${vk}:${vv}`)
             .join(',');
 
-          return `  --${k} ${shellQuote(pairs)}`;
+          return cliFlag(k, pairs, shellQuote(pairs));
         }
 
         case 'string':
-          return `  --${k} ${formatCliArg(classified.value)}`;
+          return cliFlag(k, classified.value, formatCliArg(classified.value));
       }
     })
     .join(' \\\n');
