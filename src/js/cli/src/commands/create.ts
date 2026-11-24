@@ -1,5 +1,4 @@
 import type { CommandModule } from 'yargs';
-import { hideBin } from 'yargs/helpers';
 
 import { createCommandOptions } from '../utils/createCommandOptions.js';
 import { getStyleCommandOptions } from '../utils/getStyleCommandOptions.js';
@@ -7,6 +6,7 @@ import { handleCreateCommand } from '../utils/handleCreateCommand.js';
 import { listBuiltInStyles, resolveStyle } from '../utils/resolveStyle.js';
 import { resolveStyleArgument } from '../utils/resolveStyleArgument.js';
 import { reportError } from '../utils/reportError.js';
+import { cliArguments } from '../utils/cliArguments.js';
 
 /**
  * `dicebear create <style>`: renders avatars from a built-in style or a
@@ -19,7 +19,7 @@ export const createCommand: CommandModule = {
   command: 'create <style>',
   describe: 'Create avatars from a built-in style or a definition file',
   builder: (yargs) => {
-    const argument = resolveStyleArgument(hideBin(process.argv));
+    const argument = resolveStyleArgument(cliArguments());
     const styleOptions = argument
       ? getStyleCommandOptions(resolveStyle(argument).style)
       : {};

@@ -7,7 +7,7 @@ import { Parser } from 'yargs/helpers';
  * Flags and the values they consume are ignored, so `--count 2 lorelei`,
  * `lorelei --count 2` and `-o out.svg lorelei` all resolve to `lorelei`.
  * The boolean flags are declared so the parser does not swallow the style as
- * their value (`--json lorelei`). Pass the result of `hideBin(process.argv)`.
+ * their value (`--json lorelei`). Pass the result of `cliArguments()`.
  */
 export function resolveStyleArgument(args: string[]): string | undefined {
   const parsed = Parser(args, {

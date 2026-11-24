@@ -20,16 +20,20 @@ function parseWeightedValue(value: string[]): Record<string, number> {
 }
 
 /**
- * Parses a comma-separated string like `"10,50"` into a `[min, max]` tuple
- * for range options, or a single numeric string like `"50"` into a number.
- * Passes the value through unchanged when it matches neither form.
+ * Parses a range option into a number or a `[min, max]` tuple. It takes one
+ * comma-separated value (`"10,50"`, `"-10,10"`), a single number (`"50"`), or
+ * the two values of a repeated flag (`--rotate 10 --rotate 20`). A value that
+ * fits none of these passes through unchanged, so the options validation
+ * reports it.
  */
 function parseRangeValue(value: unknown): unknown {
-  if (typeof value !== 'string' || value.trim() === '') {
+  const joined = Array.isArray(value) ? value.join(',') : value;
+
+  if (typeof joined !== 'string' || joined.trim() === '') {
     return value;
   }
 
-  const parts = value.split(',').map((part) => Number(part.trim()));
+  const parts = joined.split(',').map((part) => Number(part.trim()));
 
   if (!parts.every((n) => !isNaN(n))) {
     return value;
@@ -44,26 +48,6 @@ function parseRangeValue(value: unknown): unknown {
   }
 
   return value;
-}
-
-/**
- * Splits comma-separated list values (`b6e3f4,c0aede`) that yargs hands over
- * as single array entries. Arrays are not greedy on this CLI, so a list is
- * either repeated flags or one comma-joined value.
- */
-function splitListValue(value: unknown): unknown {
-  if (!Array.isArray(value)) {
-    return value;
-  }
-
-  return value.flatMap((entry) =>
-    typeof entry === 'string' && entry.includes(',')
-      ? entry
-          .split(',')
-          .map((part) => part.trim())
-          .filter((part) => part !== '')
-      : [entry],
-  );
 }
 
 /**
@@ -84,7 +68,8 @@ export function extractStyleOptions(
       continue;
     }
 
-    let value: unknown = splitListValue(argv[key]);
+    // List values arrive split already, see `getStyleCommandOptions`.
+    let value: unknown = argv[key];
 
     if (field.type === 'enum' && field.weighted && Array.isArray(value)) {
       value = parseWeightedValue(value);
