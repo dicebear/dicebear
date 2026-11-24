@@ -227,9 +227,10 @@ dicebear compare ./node_modules/@dicebear/styles/dist ./src
 For every pair the CLI runs three checks:
 
 1. The definitions are compared on everything apart from the element trees:
-   canvas size, meta, animation names, components with their probabilities and
-   ranges, variants with their weights and tags, and palettes with their values,
-   order and constraints.
+   canvas size, meta, animations with their keyframes, components with their
+   probabilities and ranges, variants with their weights and tags, and palettes
+   with their values, order and constraints. The renders below are still images,
+   so this is where a change to an animation shows up.
 2. A number of seeds (`--seeds`, default `20`) is rendered with default options
    on both sides.
 3. Every variant that exists on both sides is rendered on its own, with every
@@ -296,9 +297,8 @@ dicebear compare ./before ./after --json
 
 :::info
 
-Text styles such as `initials` render their text only with `--system-fonts`,
-which loads the fonts of your system for every render and slows the run down.
-Without it, the text is left out on both sides and everything else is still
-compared.
+A style with text, such as `initials`, is rendered with the fonts of your
+system, so a change to its text shows up. That is slower, and the result can
+differ between machines. `--system-fonts` loads the fonts for every style.
 
 :::

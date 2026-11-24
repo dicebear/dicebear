@@ -31,10 +31,21 @@ async function comparePair(
   afterPath: string,
   options: CompareOptions,
 ): Promise<PairReport> {
-  const before = loadDefinition(beforePath).style;
-  const after = loadDefinition(afterPath).style;
+  const beforeFile = loadDefinition(beforePath);
+  const afterFile = loadDefinition(afterPath);
+  const before = beforeFile.style;
+  const after = afterFile.style;
   const changes = diffDefinition(before, after);
   const report: PairReport = { name, status: 'identical', changes };
+
+  // Without fonts resvg draws no text at all, so a text style would pass as
+  // identical whatever its text did. Load the system fonts for such styles,
+  // even without --system-fonts.
+  const hasText = (source: string) => /"name"\s*:\s*"text"/.test(source);
+
+  if (hasText(beforeFile.source) || hasText(afterFile.source)) {
+    options = { ...options, systemFonts: true };
+  }
 
   try {
     report.seeds = await sweep(

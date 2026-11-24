@@ -2,11 +2,37 @@ import type { CommandModule } from 'yargs';
 
 import { reportError } from '../utils/reportError.js';
 
+/** yargs hands a repeated flag over as an array, the last value wins. */
+function lastValue(value: unknown): unknown {
+  return Array.isArray(value) ? value[value.length - 1] : value;
+}
+
 function wholeNumber(flag: string, min: number) {
-  return (value: number) => {
+  return (input: unknown) => {
+    const value = Number(lastValue(input));
+
     if (!Number.isInteger(value) || value < min) {
       throw new Error(
         `The ${flag} value must be a whole number of ${min} or more.`,
+      );
+    }
+
+    return value;
+  };
+}
+
+/**
+ * A finite number between `min` and `max`. Without this check a typo such as
+ * `--tolerance abc` became NaN, every comparison against it came out false,
+ * and a changed style passed as identical.
+ */
+function numberBetween(flag: string, min: number, max: number) {
+  return (input: unknown) => {
+    const value = Number(lastValue(input));
+
+    if (!Number.isFinite(value) || value < min || value > max) {
+      throw new Error(
+        `The ${flag} value must be a number from ${min} to ${max}.`,
       );
     }
 
@@ -44,11 +70,13 @@ export const compareCommand: CommandModule = {
           describe:
             'Share of differing pixels, in percent, a render may have ' +
             'before it is reported',
+          coerce: numberBetween('--tolerance', 0, 100),
         },
         threshold: {
           type: 'number',
           default: 0.1,
           describe: 'Per-pixel color sensitivity, 0 (strict) to 1 (lenient)',
+          coerce: numberBetween('--threshold', 0, 1),
         },
         size: {
           type: 'number',
@@ -60,7 +88,8 @@ export const compareCommand: CommandModule = {
           type: 'boolean',
           default: false,
           describe:
-            'Load the system fonts for text styles. Slower, off by default.',
+            'Load the system fonts for every style. Styles with text always ' +
+            'load them.',
         },
         json: {
           type: 'boolean',

@@ -11,13 +11,23 @@ import { reportError } from './utils/reportError.js';
 import { cliArguments } from './utils/cliArguments.js';
 
 // A reader that stops early (`dicebear create ... | head -c 100`) closes the
-// pipe. That is not an error worth a stack trace.
+// pipe. That is not an error worth a stack trace, and it must not end the
+// command either: `compare` and `optimize --check` still have to finish and
+// set their exit code, or a pipeline with `pipefail` would pass a changed
+// style. Later output goes nowhere.
 process.stdout.on('error', (error: NodeJS.ErrnoException) => {
-  if (error.code === 'EPIPE') {
-    process.exit(0);
+  if (error.code !== 'EPIPE') {
+    throw error;
   }
 
-  throw error;
+  process.stdout.write = ((...args: unknown[]) => {
+    const callback = args.find((arg) => typeof arg === 'function') as
+      (() => void) | undefined;
+
+    callback?.();
+
+    return true;
+  }) as typeof process.stdout.write;
 });
 
 (async () => {

@@ -29,6 +29,66 @@ function show(value: unknown): string {
   return value === undefined ? 'unset' : JSON.stringify(value);
 }
 
+/** JSON with sorted keys, so a re-export that reorders keys is no change. */
+function canonical(value: unknown): string {
+  return JSON.stringify(value, (_key, inner: unknown) =>
+    inner && typeof inner === 'object' && !Array.isArray(inner)
+      ? Object.fromEntries(
+          Object.entries(inner as Json).sort(([x], [y]) => x.localeCompare(y)),
+        )
+      : inner,
+  );
+}
+
+/** Every `animations` block below `node`, in document order. */
+function collectAnimations(node: unknown, found: unknown[] = []): unknown[] {
+  if (Array.isArray(node)) {
+    for (const item of node) {
+      collectAnimations(item, found);
+    }
+  } else if (node && typeof node === 'object') {
+    for (const [key, value] of Object.entries(node as Json)) {
+      if (key === 'animations') {
+        found.push(value);
+      } else {
+        collectAnimations(value, found);
+      }
+    }
+  }
+
+  return found;
+}
+
+/**
+ * The animations of a definition, grouped by where they sit: `canvas`, or
+ * `<component>/<variant>`. The pixel sweeps render still images, so a change
+ * to keyframes, durations or easing only shows up here.
+ */
+function animationsByPlace(definition: Json): Map<string, string> {
+  const places = new Map<string, string>();
+  const add = (place: string, node: unknown) => {
+    const animations = collectAnimations(node);
+
+    if (animations.length > 0) {
+      places.set(place, canonical(animations));
+    }
+  };
+
+  add('canvas', definition.canvas);
+
+  for (const [component, value] of Object.entries(
+    (definition.components ?? {}) as Record<string, Json>,
+  )) {
+    for (const [variant, body] of Object.entries(
+      (value.variants ?? {}) as Json,
+    )) {
+      add(`${component}/${variant}`, body);
+    }
+  }
+
+  return places;
+}
+
 /**
  * Compares two definitions on everything that shapes an avatar apart from
  * the element trees themselves: canvas, meta, animations, components with
@@ -80,6 +140,29 @@ export function diffDefinition(
     before.animationNames(),
     after.animationNames(),
   );
+
+  const animationsBefore = animationsByPlace(a);
+  const animationsAfter = animationsByPlace(b);
+
+  for (const place of new Set([
+    ...animationsBefore.keys(),
+    ...animationsAfter.keys(),
+  ])) {
+    const from = animationsBefore.get(place);
+    const to = animationsAfter.get(place);
+
+    if (from === to) {
+      continue;
+    }
+
+    changes.push({
+      scope: 'animations',
+      kind:
+        from === undefined ? 'added' : to === undefined ? 'removed' : 'changed',
+      name: place,
+      detail: from !== undefined && to !== undefined ? 'keyframes' : undefined,
+    });
+  }
 
   diffRecords(
     changes,
