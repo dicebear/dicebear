@@ -221,7 +221,7 @@ const FAN = [
             v-for="item in featured"
             :key="item.id"
             :href="`#${item.id}`"
-            class="site-box is-card is-code site-artists-card"
+            class="site-box is-card site-artists-card"
           >
             <span class="site-artists-card-avatars">
               <SiteAvatar
@@ -244,7 +244,7 @@ const FAN = [
           <div
             v-for="n in 3"
             :key="n"
-            class="site-box is-card is-code site-artists-card is-empty"
+            class="site-box is-card site-artists-card is-empty"
             aria-hidden="true"
           ></div>
         </template>
@@ -382,12 +382,19 @@ const FAN = [
     gap: 16px;
   }
 
-  /* A card per artist: four avatars, the name, the styles and their figure. */
+  /* A card per artist: four avatars, the name, the styles and their figure.
+     The lighter yellow is the one the license counts use on their block. */
   &-card {
     display: flex;
     flex-direction: column;
+    background: var(--db-soft);
     color: var(--db-ink);
     text-decoration: none;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background: var(--db-panel);
+    }
 
     &.is-empty {
       min-height: 320px;
