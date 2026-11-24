@@ -31,9 +31,12 @@ defineEmits<{
   'update:open': [value: boolean];
 }>();
 
+// With the trailing slash: VitePress rewrites `/playground` to `/playground/`
+// one tick after the page loads, and that rewrite put the query back after the
+// playground had already removed it, so a reload reapplied the preset.
 const playgroundUrl = computed(() =>
   props.preset
-    ? `/playground?style=${kebabCase(props.styleName)}&preset=${encodeURIComponent(
+    ? `/playground/?style=${kebabCase(props.styleName)}&preset=${encodeURIComponent(
         props.preset.id,
       )}`
     : '',
