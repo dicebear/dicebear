@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Styles:** Bumped `@dicebear/styles` to `11.0.0-rc.5` for the CLI, the docs,
+  and the editor.
+
 ## [11.0.0-rc.4] - 2026-11-24
 
 ### Changed
