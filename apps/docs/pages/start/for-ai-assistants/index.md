@@ -127,12 +127,12 @@ it through the `animation` option: `true` plays every animation of a style,
 `${name}AnimationDelay` shift the start. The `animationVariant` option and the
 `animation` tag from 10.x are gone. Passing them renders the static avatar.
 Static avatars look the same as in 10.x, apart from fixes to Pixel Art, Stripes,
-Notionists and Avataaars and the `{color}ColorOrder: 'fixed'` change.
-`new Avatar()` requires a `Style`, the `Color` helpers are no longer exported,
-the Go module paths end in `/v11`, and the CLI renders with
-`dicebear create <style>` and compresses with `dicebear optimize`. The markup is
-not byte-identical: every component `<use>` now carries a
-`data-dicebear-component` attribute.
+Notionists and Avataaars, the `{color}ColorOrder: 'fixed'` change, and seeds
+with ill-formed text such as half an emoji. `new Avatar()` requires a `Style`,
+the `Color` helpers are no longer exported, the Go module paths end in `/v11`,
+and the CLI renders with `dicebear create <style>` and compresses with
+`dicebear optimize`. The markup is not byte-identical: every component `<use>`
+now carries a `data-dicebear-component` attribute.
 
 :::
 

@@ -572,8 +572,9 @@ ${usageSnippets(name, { major: versions.major, seed: EXAMPLE_SEED })
 
 ## Options
 
-Every option below works in all libraries and as a query parameter of the HTTP
-API. The ones built from a component name (\`<component>Variant\`,
+Every option below works in all libraries. The public HTTP API takes all of
+them as query parameters except \`idRandomization\`, \`fontFamily\`,
+\`fontWeight\` and \`title\`. The ones built from a component name (\`<component>Variant\`,
 \`<component>Probability\`) or from a color group (\`<group>Color\`,
 \`<group>ColorFill\`, \`<group>ColorFillStops\`, \`<group>ColorAngle\`,
 \`<group>ColorOrder\`) belong to this style; the rest are
@@ -708,7 +709,8 @@ ${rows.Other.join('\n')}`);
   sections.push(`## Software
 
 The source code in the dicebear/dicebear repository is available under the
-MIT license. That covers the libraries, the HTTP API, and this website. The
+MIT license. That covers the libraries, the CLI, and this website. The HTTP API
+in the dicebear/api repository is MIT licensed as well. The
 LICENSE file: https://github.com/dicebear/dicebear/blob/${versions.major}.x/LICENSE
 
 ${fence('', softwareLicense)}`);

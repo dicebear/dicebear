@@ -8,9 +8,10 @@ description: >
 
 # Core options
 
-These options work with every avatar style, in every DiceBear library and in the
-[HTTP API](/integrations/http-api/). Only the syntax for passing them differs,
-and each library page shows its own.
+These options work with every avatar style and in every DiceBear library. The
+[HTTP API](/integrations/http-api/) takes them as query parameters, except
+`idRandomization`, `fontFamily`, `fontWeight` and `title`. Only the syntax for
+passing them differs, and each library page shows its own.
 
 Where the type lists `[min, max]`, pass either a fixed value or a two-element
 range, and the seed picks a value within it.

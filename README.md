@@ -23,7 +23,7 @@ individual features like hair or glasses.
 
 ## One library, seven languages
 
-DiceBear 10 ships as native libraries for JavaScript, PHP, Python, Rust, Go,
+DiceBear 11 ships as native libraries for JavaScript, PHP, Python, Rust, Go,
 Dart, and C#. Every port passes a shared test suite that requires byte-identical
 SVG output to the JavaScript reference. Generate an avatar in the browser,
 regenerate it later in a Go or PHP backend, and you get the same bytes.
@@ -65,7 +65,7 @@ with Figma or from scratch.
 
 - The [HTTP API](https://www.dicebear.com/integrations/http-api/) returns
   avatars from a plain URL, free and without an account:
-  `https://api.dicebear.com/10.x/lorelei/svg?seed=Felix`. For full control and
+  `https://api.dicebear.com/11.x/lorelei/svg?seed=Felix`. For full control and
   privacy you can
   [host it yourself](https://www.dicebear.com/recipes/self-host-the-http-api/)
   with a single Docker container.

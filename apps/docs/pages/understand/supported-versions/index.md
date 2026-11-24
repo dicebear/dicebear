@@ -61,7 +61,9 @@ These are the changes to check:
   [CLI](/integrations/cli/).
 - **Own style definitions:** With `{color}ColorOrder: 'fixed'`, 11.x draws from
   a palette in the order the definition lists it, where 10.x sorted the values
-  first. Sorting the palette in the definition gives you the old result back.
+  first. Sorting the palette in the definition gives you the old order back. A
+  gradient now uses every palette color as a stop unless `{color}ColorFillStops`
+  is set, and a color with `contrastTo` is no longer sorted by contrast.
 
 Coming from 9.x it is a real port: `@dicebear/collection` became
 [`@dicebear/styles`](/integrations/javascript/), `createAvatar()` became
