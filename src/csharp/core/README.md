@@ -21,7 +21,7 @@ dotnet add package DiceBear.Styles
 ```
 
 Targets `netstandard2.0` and `net8.0`, so it runs on .NET 8 and newer, on Godot
-4.2+ with .NET, on Unity, and on .NET Framework 4.6.1+.
+4.2+ with .NET, on Unity, and on .NET Framework 4.6.2+.
 
 ## Usage
 

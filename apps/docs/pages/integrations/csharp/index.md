@@ -10,7 +10,7 @@ description: >
 Generate avatars in C#, from web backends to games.
 
 The library targets `netstandard2.0` and `net8.0`, so it runs on .NET 8 and
-newer and on .NET Framework 4.6.1 and newer. The API mirrors the
+newer and on .NET Framework 4.6.2 and newer. The API mirrors the
 [JavaScript library](/integrations/javascript/), and the output is
 byte-identical: the same seed and style produce the same SVG in every DiceBear
 library.
@@ -120,7 +120,7 @@ var avatar = new Avatar(style, new JsonObject
     ["translateY"] = 0, // -1000 to 1000 (percent of canvas height)
     ["idRandomization"] = true,
     ["title"] = "User Avatar",
-    ["fontFamily"] = "Arial", // or new JsonArray("Arial", "Helvetica")
+    ["fontFamily"] = "Arial", // or new JsonArray("Arial", "Helvetica"), one per seed
     ["fontWeight"] = 700, // 1-1000
     ["backgroundColor"] = new JsonArray("#b6e3f4", "#c0aede"),
     ["backgroundColorFill"] = "solid", // "solid", "linear", "radial"

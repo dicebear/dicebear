@@ -12,8 +12,10 @@ AVIF. Works in Node.js and modern browsers.
 ## Installation
 
 ```sh
-npm install @dicebear/converter
+npm install @dicebear/converter @dicebear/core @dicebear/styles
 ```
+
+The converter takes the SVG that `@dicebear/core` renders.
 
 Requires Node.js 22+ or any modern browser.
 

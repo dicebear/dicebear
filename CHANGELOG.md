@@ -8,10 +8,69 @@ and this project adheres to
 
 ## [Unreleased]
 
+The first stable release of the 11.x line. Compared to 10.7.0:
+
+- **Animations.** 21 styles move, played by the core in every language. They
+  stay off until `animation: true`. `${name}Animation` switches one animation,
+  `animationSpeed` and `animationDelay` set pace and start, also per name, and
+  `animationRespectReducedMotion: false` drops the `prefers-reduced-motion`
+  query for renderers that ignore media queries.
+- **Two new styles,** Cats and Dogs, which take the collection to 63. 35
+  character styles tag their variants, so the `tags` option filters them by
+  mood, hair length, headwear, facial hair, eyewear and accessories.
+- **CLI:** `dicebear create`, `dicebear optimize` and the new
+  `dicebear compare`, which checks whether a new version of a style still
+  renders like the released one.
+- **JavaScript:** `@dicebear/core/lite` without the validators, about half the
+  size, `all()` and `get()` in `@dicebear/styles`, and the error classes as
+  exports.
+- **Markup:** Every component `<use>` carries a `data-dicebear-component`
+  attribute with the component's name.
+
+Most code written for 10.x keeps working. The changes to check, from the CLI
+commands to the Go module path, are listed under
+[Supported versions](https://www.dicebear.com/understand/supported-versions/).
+The entries of the release candidates below hold the details.
+
+### Added
+
+- **Core (JS):** `@dicebear/core` and `@dicebear/core/lite` export
+  `ValidationError`, `StyleValidationError`, `OptionsValidationError` and
+  `CircularColorReferenceError`, as the other languages already did. A caller
+  can now tell a broken definition from wrong options with `instanceof` instead
+  of comparing `error.name`.
+
 ### Changed
 
 - **Styles:** Bumped `@dicebear/styles` to `11.0.0-rc.5` for the CLI, the docs,
   and the editor.
+- **Core (Rust):** The crate declares `rust-version = "1.88"`. The ICU crates
+  that `jsonschema` pulls in need it, so a fresh build already failed on older
+  compilers, while the docs promised 1.80.
+- **Release:** `scripts/version.mjs` refuses a stable version while a port still
+  depends on a prerelease of `@dicebear/schema` or `@dicebear/styles`. NuGet
+  refuses to pack such a package, and Go and NuGet would resolve the release
+  candidate. The first release of a major also sets its date on the supported
+  versions page.
+
+### Fixed
+
+- **CLI:** List values with a fixed set of choices, such as
+  `--flip none,horizontal` and `--backgroundColorFill solid,linear`, were
+  checked as one value and rejected. Number lists such as `--fontWeight 400,700`
+  failed validation, a range with a negative minimum such as `--rotate -10,10`
+  was read as flags, and a range given as two repeated flags was rejected. All
+  of these work now, which also repairs the CLI commands the style pages of the
+  docs print.
+- **Core (JS):** TypeScript checks the options of `new Avatar(style, options)`
+  against the style's definition. The definition type got lost when a `Style`
+  was passed on, so an unknown variant name compiled without an error.
+- **Docs:** The Go README imported `github.com/dicebear/styles/v10`, and the Go
+  snippet of the placeholder recipe did not compile. The C# pages name .NET
+  Framework 4.6.2, the oldest version `System.Text.Json` supports. A list in
+  `fontFamily` picks one font per seed, which the examples now say instead of
+  calling it a font stack. The upgrade notes from 10.x list every change to
+  check, including the Pixel Art and Stripes drawings that 11.x changes.
 
 ## [11.0.0-rc.4] - 2026-11-24
 
