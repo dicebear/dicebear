@@ -72,6 +72,41 @@ path. The release candidate entries below have the details.
   `fontFamily` picks one font per seed, which the examples now say instead of
   calling it a font stack. The upgrade notes for 10.x list every change to
   check, including the Pixel Art and Stripes drawings that 11.x changes.
+- **CLI:** `compare` reported changes as identical in two cases. Styles with
+  text were rendered without fonts, so resvg drew no text at all; such styles
+  now load the system fonts. And the renders are still images, so a changed
+  animation went unnoticed; `compare` now diffs the keyframes of every animation
+  as well.
+- **CLI:** `--tolerance abc` or `--threshold 5` turned every render into a pass.
+  Both must be numbers in range now.
+- **CLI:** A reader that closes the pipe early, as in
+  `dicebear compare … | head`, ended the process with exit code 0. `compare` and
+  `optimize --check` now finish and keep their exit code.
+- **CLI:** `optimize -o <dir>` with two inputs of the same file name wrote one
+  over the other, and `compare` of a directory with both `x.json` and
+  `x.min.json` ignored one of them. Both refuse now.
+- **CLI:** `-o -` writes to stdout, `-o avatar.gif` is refused instead of
+  creating a directory of that name, `--blinkAnimation` and
+  `--animationRespectReducedMotion` work before the style name, a repeated
+  `--count`, `--precision` or `--seeds` takes the last value, and the error for
+  a broken definition names the file.
+- **Core (JS):** A typed style refused options typed as `StyleOptions` or
+  `Record<string, unknown>`, such as options read from a query string, which
+  10.x accepted. `@dicebear/core/lite` resolves under `moduleResolution: "node"`
+  too.
+- **Core (JS):** `options` set to `null` threw a `TypeError`. It renders the
+  default avatar, as in the other ports.
+- **Core (JS, Python):** A variant weight of `Infinity` rendered, where the
+  other ports turn it down. Non-finite numbers in options are a validation error
+  now.
+- **Core (Go, PHP):** A `{color}ColorFillStops` past the integer range, such as
+  `1e19`, dropped the gradient. It draws the same gradient as in the other ports
+  now.
+- **Core (PHP):** `size: 64.0`, which the schema accepts as an integer, threw a
+  `TypeError`.
+- **Core (C#):** `minLength` and `maxLength` counted text elements instead of
+  code points, so a title of 129 accented letters written with combining marks
+  passed where the other ports reject it.
 
 ## [11.0.0-rc.4] - 2026-11-24
 
