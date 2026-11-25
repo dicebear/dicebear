@@ -10,12 +10,13 @@ and this project adheres to
 
 The first stable release of the 11.x line. Compared to 10.7.0:
 
-- **Animations:** 21 styles can move, in every language the core runs in.
-  Animation stays off until you pass `animation: true`. `${name}Animation`
-  switches a single animation on or off, `animationSpeed` and `animationDelay`
-  set pace and start, also per name, and `animationRespectReducedMotion: false`
-  drops the `prefers-reduced-motion` query for renderers that ignore media
-  queries.
+- **Animations:** The 21 animated styles describe their animations as keyframes
+  in the definition, and every core turns them into CSS. `animation: true`
+  replaces `animationVariant` and the `animation` tag, and animation stays off
+  without it. `${name}Animation` switches a single animation on or off,
+  `animationSpeed` and `animationDelay` set pace and start, also per name, and
+  `animationRespectReducedMotion: false` drops the `prefers-reduced-motion`
+  query for renderers that ignore media queries.
 - **Styles:** Cats and Dogs are new, which makes 63 styles. 35 character styles
   tag their variants, so the `tags` option can filter them by mood, hair length,
   headwear, facial hair, eyewear and accessories.
