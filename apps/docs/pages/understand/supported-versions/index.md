@@ -37,13 +37,14 @@ the JavaScript library goes back further than 10.x. The others arrived during
 it, so 9.x and older concern JavaScript alone.
 
 Coming from 10.x, most code keeps working, and most avatars look the same.
-[Animations](/animated-avatars/) are new and stay off until you switch them on.
-These are the changes to check:
+[Animations](/animated-avatars/) live in the style definitions now, and you
+switch them on with `animation: true`. These are the changes to check:
 
 - **Avatars:** Fixes change some drawings. Pixel Art shows dark beards in full,
   which 10.x drew barely visible, Stripes adds stripes at the edges, so nearly
-  every Stripes avatar changes, and Notionists and Avataaars each fix a hair or
-  eyebrow variant. A seed with ill-formed text, such as an emoji cut in half by
+  every Stripes avatar changes, Notionists closes a gap between hair and head in
+  24 hair variants, and the natural unibrow of Avataaars takes the color of the
+  other eyebrows. A seed with ill-formed text, such as an emoji cut in half by
   `slice()`, renders a different avatar. Under `/10.x/` the HTTP API draws the
   same images as before, and only the markup gains the `data-dicebear-component`
   attribute.
