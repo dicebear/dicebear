@@ -3,7 +3,7 @@ module github.com/dicebear/dicebear-go/v11
 go 1.23
 
 require (
-	github.com/dicebear/schema/v3 v3.0.0-rc.1
+	github.com/dicebear/schema/v3 v3.0.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
 )
 
