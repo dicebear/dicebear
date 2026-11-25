@@ -38,6 +38,15 @@
       }
     },
     {
+      "id": "playtime",
+      "name": "Playtime",
+      "summary": "A toy on the ground next to every cat.",
+      "description": "A ball of yarn or a toy mouse lies in the corner, behind the tail, three times out of ten. This makes it every cat. The yarn takes the collar's color.",
+      "options": {
+        "toyProbability": 100
+      }
+    },
+    {
       "id": "indoors",
       "name": "Indoors",
       "summary": "Living room, bedroom or nursery behind the cat.",
