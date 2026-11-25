@@ -1,6 +1,6 @@
 [package]
 name = "dicebear-core"
-version = "11.0.0-rc.4"
+version = "11.0.0"
 edition = "2021"
 # The oldest compiler the crate builds with, checked against a fresh lockfile.
 # The ICU crates behind `jsonschema` set the floor, the crate itself only

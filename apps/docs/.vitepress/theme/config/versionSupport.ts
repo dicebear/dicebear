@@ -39,8 +39,7 @@ const RELEASED = {
   8: '2024-03-16',
   9: '2024-06-15',
   10: '2026-05-27',
-  // TODO: replace with the actual 11.0.0 release date once it ships.
-  11: '2026-09-01',
+  11: '2026-11-25',
 } as const;
 
 /**

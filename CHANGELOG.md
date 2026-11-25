@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [11.0.0] - 2026-11-25
+
 The first stable release of the 11.x line. Compared to 10.7.0:
 
 - **Animations:** The 21 animated styles describe their animations as keyframes
@@ -860,7 +862,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.4...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v11.0.0...HEAD
+[11.0.0]: https://github.com/dicebear/dicebear/compare/v11.0.0-rc.4...v11.0.0
 [11.0.0-rc.4]:
   https://github.com/dicebear/dicebear/compare/v11.0.0-rc.3...v11.0.0-rc.4
 [11.0.0-rc.3]:
