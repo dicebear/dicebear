@@ -83,11 +83,12 @@ unmistakable shape carries one of the values below, any other one the bare
 - `turban` for wrapped cloth that covers the hair and leaves the neck free.
 - `headscarf` for wrapped cloth that covers the hair together with the neck or
   the shoulders.
-- `headband` for a band alone, with the hair still visible.
+- `headband` for a band alone, with the hair still visible. What the band is
+  made of doesn't matter, so a wreath of flowers around the head counts too.
 
-Decorations worn in the hair, such as flowers, bows, pins, or a scrunchie, get
-the bare tag as well. If the decoration belongs to a hair variant, `!headwear`
-leaves out that hairstyle too.
+Single decorations worn in the hair, such as a few flowers, a bow, a pin, or a
+scrunchie, get the bare tag. If the decoration belongs to a hair variant,
+`!headwear` leaves out that hairstyle too.
 
 The values name the shape of the garment, not the person wearing it. That is why
 the two wrapped forms are told apart by the neck, and why the tag says

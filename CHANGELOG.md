@@ -108,6 +108,14 @@ path. The release candidate entries below have the details.
 - **Core (C#):** `minLength` and `maxLength` counted text elements instead of
   code points, so a title of 129 accented letters written with combining marks
   passed where the other ports reject it.
+- **Docs:** The HTTP API URLs that the site generates keep a colon as it is,
+  `tags=eyewear:glasses` instead of `tags=eyewear%3Aglasses`. Both work.
+- **Docs:** The download menu of the Playground names the size a JPEG, WebP or
+  AVIF file really gets. The HTTP API stops at 256 px, so a larger size set
+  under Output now reads "256 px max" instead of a size the file never had.
+- **Docs:** The tag reference counts a wreath of flowers around the head as
+  `headwear:headband`, as Adventurer and Avataaars tag it. Single decorations in
+  the hair keep the bare `headwear` tag.
 
 ## [11.0.0-rc.4] - 2026-11-24
 

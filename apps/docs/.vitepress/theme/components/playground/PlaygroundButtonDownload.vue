@@ -178,7 +178,20 @@ const mainLabel = computed(() =>
   raster.value ? 'Download PNG' : 'Download SVG',
 );
 
-const size = `${RASTER_DOWNLOAD_SIZE} px`;
+// The API clamps the size of raster images to RASTER_DOWNLOAD_SIZE. The hint
+// names the size the file really gets, and says so when a larger size set
+// under Output is cut down.
+const size = computed(() => {
+  const requested = (options.value as Record<string, unknown>).size;
+
+  if (typeof requested !== 'number') {
+    return `${RASTER_DOWNLOAD_SIZE} px`;
+  }
+
+  return requested > RASTER_DOWNLOAD_SIZE
+    ? `${RASTER_DOWNLOAD_SIZE} px max`
+    : `${requested} px`;
+});
 
 const items = computed<SiteMenuItem[]>(() => [
   ...(raster.value
@@ -186,17 +199,17 @@ const items = computed<SiteMenuItem[]>(() => [
         { label: 'SVG', hint: 'vector', command: () => void downloadSvg() },
         {
           label: 'JPEG',
-          hint: size,
+          hint: size.value,
           command: () => void downloadBinary('jpg'),
         },
         {
           label: 'WebP',
-          hint: size,
+          hint: size.value,
           command: () => void downloadBinary('webp'),
         },
         {
           label: 'AVIF',
-          hint: size,
+          hint: size.value,
           command: () => void downloadBinary('avif'),
         },
         { separator: true },
