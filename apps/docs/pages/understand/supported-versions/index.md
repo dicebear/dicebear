@@ -36,11 +36,44 @@ All libraries share one version number and move to a new major together. Only
 the JavaScript library goes back further than 10.x. The others arrived during
 it, so 9.x and older concern JavaScript alone.
 
-Coming from 10.x, most code keeps working, and most avatars look the same.
-[Animations](/animated-avatars/) live in the style definitions now, and you
-switch them on with `animation: true`. These are the changes to check:
+Coming from 10.x, you can update the core and keep your styles. Core 11 draws
+the 10.x styles exactly as Core 10 did: the same SVG for every style and seed,
+animated variants included, with one new attribute, `data-dicebear-component`,
+on each component. The HTTP API draws the same images under `/10.x/`. The
+breaking changes are mostly in Styles 11, so you can switch to them when you're
+ready.
 
-- **Avatars:** Fixes change some drawings. Pixel Art shows dark beards in full,
+These changes come with Core 11, whatever styles you use:
+
+- **`new Avatar()`** takes a `Style` and no longer a raw definition:
+  `new Avatar(new Style(definition), options)`.
+- **Color helpers:** `Color` is no longer exported in JavaScript, Python, Rust,
+  Go and Dart.
+- **Go:** Import the core from `github.com/dicebear/dicebear-go/v11`.
+- **CLI:** Style names are no longer commands. `dicebear lorelei` is now
+  `dicebear create lorelei`, which prints to stdout unless `-o` names a file or
+  directory, and `--optimize` is now `dicebear optimize`. See
+  [CLI](/integrations/cli/).
+- **`{color}ColorOrder: 'fixed'`:** Core 11 draws from a palette in the order
+  the definition lists it, where Core 10 sorted the values first. Sorting the
+  palette in the definition gives you the old order back. A gradient now uses
+  every palette color as a stop unless `{color}ColorFillStops` is set, and a
+  color with `contrastTo` is no longer sorted by contrast. Without this option,
+  nothing changes.
+- **Ill-formed text:** A seed with broken Unicode, such as an emoji cut in half
+  by `slice()`, renders a different avatar.
+
+These changes come with Styles 11, which need Core 11:
+
+- **Animated styles:** [Animations](/animated-avatars/) live in the style
+  definitions now. The `animationVariant` option and the `animation` tag are
+  gone. Pass `animation: true` instead.
+- **Removed variants:** Four variants were copies of another one and are gone:
+  the icon `brightnessHigh`, the Pixel Art clothes `variant14`, the Slice cut
+  `sixStep` and the Stripes stripe `variant10`. Options that name them fail
+  validation, and other seeds pick differently too: about a third of the Icons
+  and Slice avatars and a quarter of the Pixel Art avatars change.
+- **Drawings:** Fixes change some avatars. Pixel Art shows dark beards in full,
   which 10.x drew barely visible, Stripes adds stripes at the edges, so nearly
   every Stripes avatar changes, Notionists closes a gap between hair and head in
   24 hair variants, and the natural unibrow of Avataaars takes the color of the
@@ -48,32 +81,10 @@ switch them on with `animation: true`. These are the changes to check:
   from it: Big Smile hair no longer takes the skin color, which changes the hair
   color of about one in ten avatars, Open Peeps hair no longer matches `#ae5d29`
   skin, and six hair colors of Voxel Art and one mouth color of Pixel Art shift
-  by a shade. A seed with ill-formed text, such as an emoji cut in half by
-  `slice()`, renders a different avatar. Under `/10.x/` the HTTP API draws the
-  same images as before, and only the markup gains the `data-dicebear-component`
-  attribute.
-- **Removed variants:** Four variants were copies of another one and are gone:
-  the icon `brightnessHigh`, the Pixel Art clothes `variant14`, the Slice cut
-  `sixStep` and the Stripes stripe `variant10`. Options that name them fail
-  validation, and other seeds pick differently too: about a third of the Icons
-  and Slice avatars and a quarter of the Pixel Art avatars change.
-- **Animated styles:** The `animationVariant` option and the `animation` tag are
-  gone. Pass `animation: true` instead.
-- **`new Avatar()`** takes a `Style` and no longer a raw definition:
-  `new Avatar(new Style(definition), options)`.
-- **Color helpers:** `Color` is no longer exported in JavaScript, Python, Rust,
-  Go and Dart.
-- **Go:** Import `github.com/dicebear/dicebear-go/v11` and
-  `github.com/dicebear/styles/v11`.
-- **CLI:** Style names are no longer commands. `dicebear lorelei` is now
-  `dicebear create lorelei`, which prints to stdout unless `-o` names a file or
-  directory, and `--optimize` is now `dicebear optimize`. See
-  [CLI](/integrations/cli/).
-- **Own style definitions:** With `{color}ColorOrder: 'fixed'`, 11.x draws from
-  a palette in the order the definition lists it, where 10.x sorted the values
-  first. Sorting the palette in the definition gives you the old order back. A
-  gradient now uses every palette color as a stop unless `{color}ColorFillStops`
-  is set, and a color with `contrastTo` is no longer sorted by contrast.
+  by a shade.
+- **Tags:** 35 character styles tag their variants now, and a few tags were
+  corrected, so a `tags` filter can pick differently than in 10.x.
+- **Go:** Import the styles from `github.com/dicebear/styles/v11`.
 
 Coming from 9.x it is a real port: `@dicebear/collection` became
 [`@dicebear/styles`](/integrations/javascript/), `createAvatar()` became
