@@ -42,9 +42,10 @@ These changes come with Styles 11, which need Core 11:
   gone. Pass `animation: true` instead.
 - **Removed variants:** Four variants were copies of another one and are gone:
   the icon `brightnessHigh`, the Pixel Art clothes `variant14`, the Slice cut
-  `sixStep` and the Stripes stripe `variant10`. Options that name them fail
-  validation, and other seeds pick differently too: about a third of the Icons
-  and Slice avatars and a quarter of the Pixel Art avatars change.
+  `sixStep` and the Stripes stripe `variant10`. Options that still name them
+  raise no error, but the avatar is drawn without that part, and other seeds
+  pick differently too: about a third of the Icons and Slice avatars and a
+  quarter of the Pixel Art avatars change.
 - **Drawings:** Fixes change some avatars. Pixel Art shows dark beards in full,
   which 10.x drew barely visible, Stripes adds stripes at the edges, so nearly
   every Stripes avatar changes, Notionists closes a gap between hair and head in
