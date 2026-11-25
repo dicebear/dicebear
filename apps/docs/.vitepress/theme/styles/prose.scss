@@ -450,6 +450,13 @@ $icon-external: url('lucide-static/icons/arrow-up-right.svg');
         mask-image: $icon-danger;
       }
     }
+
+    /* Code keeps the neutral roles, so the box, the copy button and the
+       Shiki colors look the same as outside the callout, in both themes.
+       Details are neutral already and set code on paper. */
+    &:not(details) :where(div[class*='language-'], .docs-code-group) {
+      @include tone.neutral-roles;
+    }
   }
 
   details.custom-block {
