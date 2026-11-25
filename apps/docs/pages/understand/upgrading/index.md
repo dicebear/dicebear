@@ -60,8 +60,73 @@ These changes come with Styles 11, which need Core 11:
 
 ## From 9.x
 
-Coming from 9.x it is a real port: `@dicebear/collection` became
-[`@dicebear/styles`](/integrations/javascript/), `createAvatar()` became
-`new Avatar(new Style(definition))`, and options named after a component now end
-in `Variant`. The 9.x documentation stays online at
-[v9.dicebear.com](https://v9.dicebear.com).
+10.0 rebuilt DiceBear, so moving from 9.x is a port rather than an update, and
+everything under [From 10.x](#from-10-x) applies on top. Expect different
+avatars: the same seed draws a different picture in 11.x than in 9.x. If you
+store avatar URLs, the HTTP API keeps answering `/9.x/` with the old images. 9.x
+itself still gets security fixes, with no end announced, and its documentation
+stays online at [v9.dicebear.com](https://v9.dicebear.com).
+
+### Packages and code
+
+`@dicebear/collection` and the packages per style, such as `@dicebear/lorelei`,
+are gone. Every style is a JSON definition in
+[`@dicebear/styles`](/integrations/javascript/), and `createAvatar()` became two
+classes:
+
+**Before (9.x):**
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+
+const avatar = createAvatar(lorelei, { seed: 'Felix' });
+```
+
+**After (11.x):**
+
+```js
+import { Avatar, Style } from '@dicebear/core';
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const avatar = new Avatar(new Style(lorelei), { seed: 'Felix' });
+```
+
+To load a style by name instead, `await get('lorelei')` from `@dicebear/styles`
+returns its definition, and bundlers put each one into a chunk of its own.
+`toString()` and `toDataUri()` work as before, and `toJson()` is now `toJSON()`,
+which returns the SVG together with the options it was drawn with. `toPng()` and
+the other formats stay in `@dicebear/converter`. On the command line,
+`dicebear lorelei ./avatars` is now `dicebear create lorelei -o ./avatars`.
+
+### Options
+
+Options that pick a component variant end in `Variant` now, and some variant
+names changed with the move to JSON, so check the page of your style:
+
+```js
+// 9.x
+{
+  eyes: ['blink'];
+}
+
+// 11.x
+{
+  eyesVariant: ['blink'];
+}
+```
+
+Most of the general options kept their name and meaning: `seed`, `size`,
+`rotate`, `translateX`, `translateY`, the colors and the `Probability` options.
+These changed:
+
+| 9.x                                  | 11.x                                                 |
+| ------------------------------------ | ---------------------------------------------------- |
+| `flip: true`                         | `flip: 'horizontal'`, also `'vertical'` and `'both'` |
+| `scale: 80`, in percent              | `scale: 0.8`, as a factor                            |
+| `radius: 50`                         | `borderRadius: 50`                                   |
+| `backgroundType: ['gradientLinear']` | `backgroundColorFill: 'linear'`, also `'radial'`     |
+| `backgroundRotation: [0, 360]`       | `backgroundColorAngle: [0, 360]`                     |
+| `backgroundColor: ['transparent']`   | `backgroundColor: []`                                |
+| `randomizeIds: true`                 | `idRandomization: true`                              |
+| `clip: false`                        | gone, the avatar always stays inside its box         |
