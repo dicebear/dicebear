@@ -29,10 +29,11 @@ The first stable release of the 11.x line. Compared to 10.7.0:
 - **Markup:** Every component `<use>` carries a `data-dicebear-component`
   attribute with the component's name.
 
-Most code written for 10.x keeps working. The page
-[Supported versions](https://www.dicebear.com/understand/supported-versions/)
-lists what to check when you upgrade, from the CLI commands to the Go module
-path. The release candidate entries below have the details.
+Core 11 draws the 10.x styles unchanged, so most projects can update the core
+first. The page
+[Upgrading to DiceBear 11](https://www.dicebear.com/understand/upgrading/) lists
+what to check, from the CLI commands to the changes in Styles 11. The release
+candidate entries below have the details.
 
 ### Added
 

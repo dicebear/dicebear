@@ -135,6 +135,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         text: 'Supported versions',
         link: '/understand/supported-versions/',
       },
+      {
+        text: 'Upgrading to 11',
+        link: '/understand/upgrading/',
+      },
     ],
   },
   {
