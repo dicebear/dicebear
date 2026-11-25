@@ -14,7 +14,6 @@ import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
 <style scoped lang="scss">
 .playground-license-alert {
   padding: 14px 16px;
-  border: 1px solid var(--db-line);
   border-radius: var(--db-radius-3);
   background: var(--db-soft);
   font-size: 14px;

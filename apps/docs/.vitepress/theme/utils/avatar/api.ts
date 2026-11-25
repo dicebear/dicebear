@@ -34,6 +34,13 @@ function classifyOptionValue(value: unknown): ApiOptionValue {
   return { kind: 'string', value: String(value) };
 }
 
+// A colon is allowed as is in a query string, and tags such as
+// `eyewear:glasses` read better without `%3A`. Everything else is encoded as
+// encodeURIComponent does.
+function encodeQueryValue(value: string | number | boolean): string {
+  return encodeURIComponent(value).replace(/%3A/gi, ':');
+}
+
 export function getAvatarApiUrl(
   avatarStyle: string,
   options: Record<string, unknown> = {},
@@ -46,15 +53,15 @@ export function getAvatarApiUrl(
       switch (classified.kind) {
         case 'array':
           return `${encodeURIComponent(k)}=${classified.values
-            .map((c) => encodeURIComponent(String(c)))
+            .map((c) => encodeQueryValue(String(c)))
             .join(',')}`;
         case 'primitive':
-          return `${encodeURIComponent(k)}=${encodeURIComponent(classified.value)}`;
+          return `${encodeURIComponent(k)}=${encodeQueryValue(classified.value)}`;
         case 'object': {
           const pairs = classified.entries
             .map(
               ([vk, vv]) =>
-                `${encodeURIComponent(vk)}:${encodeURIComponent(String(vv))}`,
+                `${encodeURIComponent(vk)}:${encodeQueryValue(String(vv))}`,
             )
             .join(',');
 
@@ -62,7 +69,7 @@ export function getAvatarApiUrl(
         }
 
         case 'string':
-          return `${encodeURIComponent(k)}=${encodeURIComponent(classified.value)}`;
+          return `${encodeURIComponent(k)}=${encodeQueryValue(classified.value)}`;
       }
     })
     .join('&');
