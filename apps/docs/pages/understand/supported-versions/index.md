@@ -44,10 +44,19 @@ switch them on with `animation: true`. These are the changes to check:
   which 10.x drew barely visible, Stripes adds stripes at the edges, so nearly
   every Stripes avatar changes, Notionists closes a gap between hair and head in
   24 hair variants, and the natural unibrow of Avataaars takes the color of the
-  other eyebrows. A seed with ill-formed text, such as an emoji cut in half by
+  other eyebrows. Hair and mouth colors that blended into the skin moved away
+  from it: Big Smile hair no longer takes the skin color, which changes the hair
+  color of about one in ten avatars, Open Peeps hair no longer matches `#ae5d29`
+  skin, and six hair colors of Voxel Art and one mouth color of Pixel Art shift
+  by a shade. A seed with ill-formed text, such as an emoji cut in half by
   `slice()`, renders a different avatar. Under `/10.x/` the HTTP API draws the
   same images as before, and only the markup gains the `data-dicebear-component`
   attribute.
+- **Removed variants:** Four variants were copies of another one and are gone:
+  the icon `brightnessHigh`, the Pixel Art clothes `variant14`, the Slice cut
+  `sixStep` and the Stripes stripe `variant10`. Options that name them fail
+  validation, and other seeds pick differently too: about a third of the Icons
+  and Slice avatars and a quarter of the Pixel Art avatars change.
 - **Animated styles:** The `animationVariant` option and the `animation` tag are
   gone. Pass `animation: true` instead.
 - **`new Avatar()`** takes a `Style` and no longer a raw definition:
