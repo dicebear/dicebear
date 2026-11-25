@@ -45,8 +45,14 @@ candidate entries below have the details.
 
 ### Changed
 
-- **Styles:** Bumped `@dicebear/styles` to `11.0.0-rc.5` for the CLI, the docs,
-  and the editor.
+- **Styles:** Bumped `@dicebear/styles` to `11.0.0` for the CLI, the docs, and
+  the editor.
+- **Core (all languages):** The cores require the released `@dicebear/schema`
+  3.0.0 instead of 3.0.0-rc.1: npm `@dicebear/schema` `^3.0.0`, Packagist
+  `dicebear/schema` `^3.0.0`, PyPI `dicebear-schema>=3.0.0,<4`, crates.io
+  `dicebear-schema` `3.0.0`, pub.dev `dicebear_schema` `^3.0.0`, NuGet
+  `DiceBear.Schema` `[3.0.0,4.0.0)` and Go `github.com/dicebear/schema/v3`
+  `v3.0.0`.
 - **Core (Rust):** The crate declares `rust-version = "1.88"`. The ICU crates
   that `jsonschema` pulls in need it, so a fresh build already failed on older
   compilers, while the docs promised 1.80.
