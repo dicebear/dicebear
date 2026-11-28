@@ -52,7 +52,15 @@ export class StyleValidator {
       }
 
       const target = data.extends;
-      const targetData = components[target];
+
+      // Own keys only: a plain lookup would find "constructor" or "toString"
+      // on Object.prototype and take them for base components.
+      const targetData = Object.prototype.hasOwnProperty.call(
+        components,
+        target,
+      )
+        ? components[target]
+        : undefined;
 
       if (!targetData) {
         errors.push({

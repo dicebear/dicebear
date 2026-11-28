@@ -1074,6 +1074,15 @@ const styleValidationCases = [
       components: { a: { extends: 'missing' } },
     },
   },
+  // A name that only exists on Object.prototype in JavaScript is unknown in
+  // every port, like any other missing component.
+  {
+    id: 'alias-to-prototype-member',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: { a: { extends: 'constructor' } },
+    },
+  },
   // A component that renders itself, directly or through others, must be
   // rejected at load: rendering it would recurse until the stack runs out.
   {

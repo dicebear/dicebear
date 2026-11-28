@@ -27,6 +27,10 @@ and this project adheres to
   used to catch the cycle while rendering and threw
   `CircularComponentReferenceException`. It now rejects the definition at load
   with `StyleValidationException`, like the other languages.
+- **JavaScript:** An alias whose `extends` named a member of `Object.prototype`,
+  such as `constructor` or `toString`, passed validation and failed later while
+  rendering with a `TypeError`. It is now rejected as an unknown component, as
+  in the other languages.
 
 ## [11.0.0] - 2026-11-25
 

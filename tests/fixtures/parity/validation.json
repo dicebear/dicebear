@@ -88,6 +88,22 @@
       "valid": false
     },
     {
+      "id": "alias-to-prototype-member",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        },
+        "components": {
+          "a": {
+            "extends": "constructor"
+          }
+        }
+      },
+      "valid": false
+    },
+    {
       "id": "component-cycle-self",
       "definition": {
         "canvas": {

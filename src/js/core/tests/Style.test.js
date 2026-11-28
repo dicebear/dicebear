@@ -370,6 +370,22 @@ describe('Style', () => {
       );
     });
 
+    it('should reject extends naming an Object.prototype member', () => {
+      for (const target of ['constructor', 'toString', 'valueOf']) {
+        assert.throws(
+          () =>
+            new Style({
+              canvas: { width: 100, height: 100, elements: [] },
+              components: {
+                eyesRight: { extends: target },
+              },
+            }),
+          StyleValidationError,
+          target,
+        );
+      }
+    });
+
     it('should reject extends pointing at another alias', () => {
       assert.throws(
         () =>
