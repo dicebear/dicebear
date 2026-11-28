@@ -38,9 +38,10 @@ void main() {
     expect(optionCases, isNotEmpty);
   });
 
-  // The style cases go through the Style constructor, not bare validateStyle:
-  // `alias-to-unknown-component` passes the JSON Schema in every port and is
-  // only rejected by the constructor's alias cross-reference check.
+  // The style cases go through the Style constructor, not bare
+  // validateStyleSchema: `alias-to-unknown-component` passes the JSON Schema
+  // in every port and is only rejected by the constructor's alias
+  // cross-reference check.
   group('styles', () {
     for (final c in styleCases) {
       final id = c['id'] as String;

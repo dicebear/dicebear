@@ -344,7 +344,7 @@ class Renderer
      * the shared `<defs>` block.
      *
      * Element names and attribute names are not escaped here — they are
-     * validated by StyleValidator against a strict allowlist schema (no
+     * validated by StyleSchemaValidator against a strict allowlist schema (no
      * `<script>`, no event handlers). Values are escaped via `Xml::escape()`.
      */
     private function renderSvgElement(Element $element): string

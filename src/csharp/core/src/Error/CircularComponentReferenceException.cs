@@ -9,9 +9,9 @@ namespace DiceBear
     /// path.
     /// </summary>
     /// <remarks>
-    /// <see cref="Style"/> rejects component cycles with a
-    /// <see cref="StyleValidationException"/> when it loads a definition, so a
-    /// render no longer meets one. The renderer keeps its guard as a backstop:
+    /// A style rejects component cycles with a
+    /// <see cref="StyleValidationException"/> when it loads, so a render no
+    /// longer meets one. The renderer keeps its guard as a backstop:
     /// .NET kills the process on a stack overflow instead of throwing, and
     /// this error is the safer outcome should a cycle ever get past the load.
     /// </remarks>

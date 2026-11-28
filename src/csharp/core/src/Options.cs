@@ -211,14 +211,6 @@ namespace DiceBear.Internal
         {
             var input = data ?? new JsonObject();
 
-            if (JsonSnapshot.ExceedsMaxDepth(input))
-            {
-                throw new OptionsValidationException(new[]
-                {
-                    new ValidationErrorDetail(message: JsonSnapshot.DepthMessage),
-                });
-            }
-
             try
             {
                 OptionsValidator.Validate(input);

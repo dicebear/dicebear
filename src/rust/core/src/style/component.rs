@@ -38,8 +38,7 @@ pub(crate) struct ComponentData {
 
 impl ComponentData {
     /// The variants of a base component, before alias resolution. Consumed by
-    /// the definition-level walks in `Style` (animation validation and
-    /// detection).
+    /// the definition-level walk in `Style` (animation detection).
     pub(crate) fn variants(&self) -> &IndexMap<String, ComponentVariant> {
         &self.variants
     }

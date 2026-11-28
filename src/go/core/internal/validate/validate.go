@@ -1,14 +1,14 @@
 // Package validate checks style definitions and options against the shared
-// draft-07 JSON schemas (the pure-data github.com/dicebear/schema module). The
-// compiled validators are built once, lazily, and reused.
+// draft-07 JSON schemas (the pure-data github.com/dicebear/schema module),
+// plus the cross-reference checks on a style definition that the schema
+// cannot express. The compiled validators are built once, lazily, and reused.
 package validate
 
 import (
 	"bytes"
 	"fmt"
-	"sync"
+	"sort"
 
-	"github.com/dicebear/schema/v3"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 
 	"github.com/dicebear/dicebear-go/v11/internal/errs"
@@ -19,14 +19,6 @@ import (
 // consumer's filesystem paths into validation error messages. Keep the
 // version in sync with the github.com/dicebear/schema dependency in go.mod.
 const schemaBaseURL = "https://cdn.hopjs.net/npm/@dicebear/schema@3.0.0-rc.1/dist/"
-
-var definitionValidator = sync.OnceValue(func() *jsonschema.Schema {
-	return compileSchema(schemaBaseURL+"definition.min.json", schema.Definition)
-})
-
-var optionsValidator = sync.OnceValue(func() *jsonschema.Schema {
-	return compileSchema(schemaBaseURL+"options.min.json", schema.Options)
-})
 
 func compileSchema(name, raw string) *jsonschema.Schema {
 	doc, err := jsonschema.UnmarshalJSON(bytes.NewReader([]byte(raw)))
@@ -47,16 +39,6 @@ func compileSchema(name, raw string) *jsonschema.Schema {
 	return sch
 }
 
-// Definition validates a style definition against definition.json.
-func Definition(instanceJSON []byte) error {
-	return check(definitionValidator(), instanceJSON, "style definition")
-}
-
-// Options validates an options object against options.json.
-func Options(instanceJSON []byte) error {
-	return check(optionsValidator(), instanceJSON, "options")
-}
-
 // MaxDepth is how many levels of objects and arrays a style definition or the
 // options may nest, counting the value itself as the first. Every port turns
 // down a deeper value as invalid, so a definition renders in all of them or in
@@ -64,9 +46,12 @@ func Options(instanceJSON []byte) error {
 // less than a quarter of the limit.
 const MaxDepth = 64
 
-func check(sch *jsonschema.Schema, instanceJSON []byte, subject string) error {
+// decode runs the depth check and decodes the instance generically, the way
+// the schema validator reads it: objects as map[string]any, arrays as []any
+// and numbers as json.Number.
+func decode(instanceJSON []byte, subject string) (any, error) {
 	if exceedsMaxDepth(instanceJSON) {
-		return &errs.ValidationError{
+		return nil, &errs.ValidationError{
 			Subject: subject,
 			Details: []string{fmt.Sprintf("nesting is deeper than the %d levels this port reads", MaxDepth)},
 		}
@@ -74,9 +59,14 @@ func check(sch *jsonschema.Schema, instanceJSON []byte, subject string) error {
 
 	inst, err := jsonschema.UnmarshalJSON(bytes.NewReader(instanceJSON))
 	if err != nil {
-		return &errs.ValidationError{Subject: subject, Details: []string{err.Error()}}
+		return nil, &errs.ValidationError{Subject: subject, Details: []string{err.Error()}}
 	}
 
+	return inst, nil
+}
+
+// checkSchema validates a decoded instance against a compiled schema.
+func checkSchema(sch *jsonschema.Schema, inst any, subject string) error {
 	if err := sch.Validate(inst); err != nil {
 		return &errs.ValidationError{Subject: subject, Details: []string{err.Error()}}
 	}
@@ -117,4 +107,14 @@ func exceedsMaxDepth(instanceJSON []byte) bool {
 	}
 
 	return false
+}
+
+// sortedKeys returns a map's keys in sorted order.
+func sortedKeys[V any](m map[string]V) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
 }
