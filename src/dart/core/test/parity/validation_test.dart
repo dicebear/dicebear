@@ -40,8 +40,8 @@ void main() {
 
   // The style cases go through the Style constructor, not bare
   // validateStyleSchema: `alias-to-unknown-component` passes the JSON Schema
-  // in every port and is only rejected by the constructor's alias
-  // cross-reference check.
+  // in every port and is only rejected by the alias check in validateStyle,
+  // which the constructor runs.
   group('styles', () {
     for (final c in styleCases) {
       final id = c['id'] as String;
