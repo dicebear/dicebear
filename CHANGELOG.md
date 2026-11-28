@@ -31,6 +31,9 @@ and this project adheres to
   such as `constructor` or `toString`, passed validation and failed later while
   rendering with a `TypeError`. It is now rejected as an unknown component, as
   in the other languages.
+- **Go, Dart:** Validation errors named the schemas by a URI with version
+  `3.0.0-rc.1`, although both cores use the released schema 3.0.0. They now name
+  `3.0.0`.
 
 ## [11.0.0] - 2026-11-25
 
