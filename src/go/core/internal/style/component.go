@@ -63,7 +63,7 @@ func (c *Component) TranslateY() *prng.Range {
 func (c *Component) Variants() map[string]ComponentVariant { return c.data.Variants }
 
 // decodeComponents splits the raw components block into base components and
-// aliases (name → source name), leaving alias validity for validateAliases.
+// aliases (name → source name), leaving alias validity to validate.Style.
 func decodeComponents(raw map[string]json.RawMessage) (map[string]*componentData, map[string]string, error) {
 	bases := map[string]*componentData{}
 	aliases := map[string]string{}
@@ -93,7 +93,7 @@ func decodeComponents(raw map[string]json.RawMessage) (map[string]*componentData
 
 // flattenComponents resolves the base/alias split into a single map. Each alias
 // shares its source's data; an alias whose source is missing is skipped (the
-// missing source is reported by validateAliases).
+// missing source is reported by validate.Style).
 func flattenComponents(bases map[string]*componentData, aliases map[string]string) map[string]*Component {
 	components := make(map[string]*Component, len(bases)+len(aliases))
 

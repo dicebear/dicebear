@@ -1001,6 +1001,41 @@ function nestedGroupsStyle(groups, leaf) {
   return { canvas: { width: 100, height: 100, elements: [element] } };
 }
 
+// A canvas rendering component `a`, with components given as name → list of
+// referenced component names, or name → source name for an alias. Each
+// reference sits inside a group, so the walk into children is covered too.
+function cycleStyle(graph) {
+  const components = {};
+
+  for (const [name, value] of Object.entries(graph)) {
+    components[name] =
+      typeof value === 'string'
+        ? { extends: value }
+        : {
+            width: 10,
+            height: 10,
+            variants: {
+              only: {
+                elements: value.map((target) => ({
+                  type: 'element',
+                  name: 'g',
+                  children: [{ type: 'component', name: target }],
+                })),
+              },
+            },
+          };
+  }
+
+  return {
+    canvas: {
+      width: 10,
+      height: 10,
+      elements: [{ type: 'component', name: 'a' }],
+    },
+    components,
+  };
+}
+
 // A canvas holding one animated group, for the animation validation cases.
 function animatedStyle(animations) {
   return {
@@ -1038,6 +1073,43 @@ const styleValidationCases = [
       canvas: { width: 100, height: 100, elements: [] },
       components: { a: { extends: 'missing' } },
     },
+  },
+  // A name that only exists on Object.prototype in JavaScript is unknown in
+  // every port, like any other missing component.
+  {
+    id: 'alias-to-prototype-member',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: { a: { extends: 'constructor' } },
+    },
+  },
+  // A component that renders itself, directly or through others, must be
+  // rejected at load: rendering it would recurse until the stack runs out.
+  {
+    id: 'component-cycle-self',
+    definition: cycleStyle({ a: ['a'] }),
+  },
+  {
+    id: 'component-cycle-indirect',
+    definition: cycleStyle({ a: ['b'], b: ['c'], c: ['a'] }),
+  },
+  {
+    id: 'component-cycle-through-alias',
+    definition: cycleStyle({ a: ['aCopy'], aCopy: 'a' }),
+  },
+  {
+    id: 'component-cycle-unreachable',
+    definition: cycleStyle({ a: [], b: ['c'], c: ['b'] }),
+  },
+  {
+    id: 'component-graph-without-cycle',
+    definition: cycleStyle({
+      a: ['b', 'c', 'bCopy'],
+      b: ['d'],
+      c: ['d'],
+      d: ['missing'],
+      bCopy: 'b',
+    }),
   },
   {
     id: 'unknown-root-key',

@@ -35,37 +35,9 @@ namespace DiceBear
         /// </exception>
         public Style(JsonNode? definition)
         {
-            // Before the validator, which walks the definition with recursion
-            // and would run out of stack rather than report anything.
-            if (JsonSnapshot.ExceedsMaxDepth(definition))
-            {
-                throw new StyleValidationException(new[]
-                {
-                    new ValidationErrorDetail(message: JsonSnapshot.DepthMessage),
-                });
-            }
-
-            try
-            {
-                StyleValidator.Validate(definition);
-            }
-            catch (System.Text.Json.JsonException exception)
-            {
-                // The validator reads the definition through a serializer,
-                // which turns some documents down on its own: one nested past
-                // its limit, or a string that came in as JSON text carrying an
-                // unpaired surrogate. Either way it leaves here as this port's
-                // own error.
-                throw new StyleValidationException(new[]
-                {
-                    new ValidationErrorDetail(message: exception.Message),
-                });
-            }
+            StyleValidator.Validate(definition);
 
             _data = JsonSnapshot.Of(definition);
-
-            ValidateAliases();
-            ValidateAnimations();
         }
 
         /// <summary>
@@ -215,111 +187,6 @@ namespace DiceBear
         }
 
         private static bool IsAlias(JsonObject data) => data.ContainsKey("extends");
-
-        /// <summary>
-        /// Verifies that every component declared via <c>extends</c> references
-        /// an existing, non-alias component in the same <c>components</c> map.
-        /// The schema itself cannot enforce cross-references between sibling
-        /// keys.
-        /// </summary>
-        private void ValidateAliases()
-        {
-            var components = JsonRead.Obj(_data, "components");
-
-            if (components is null)
-            {
-                return;
-            }
-
-            var errors = new List<ValidationErrorDetail>();
-
-            foreach (var entry in components)
-            {
-                if (entry.Value is not JsonObject data || !IsAlias(data))
-                {
-                    continue;
-                }
-
-                var target = JsonRead.Str(data, "extends") ?? string.Empty;
-                var targetData = components[target];
-
-                if (targetData is null)
-                {
-                    errors.Add(new ValidationErrorDetail(
-                        message: $"references unknown component \"{target}\"",
-                        instancePath: $"/components/{entry.Key}/extends"));
-
-                    continue;
-                }
-
-                if (targetData is JsonObject targetObj && IsAlias(targetObj))
-                {
-                    errors.Add(new ValidationErrorDetail(
-                        message: $"references alias \"{target}\" — alias chains are not allowed",
-                        instancePath: $"/components/{entry.Key}/extends"));
-                }
-            }
-
-            if (errors.Count > 0)
-            {
-                throw new StyleValidationException(errors);
-            }
-        }
-
-        /// <summary>
-        /// Verifies that every animation track lists its keyframes in strictly
-        /// ascending <c>at</c> order. The schema cannot express ordering
-        /// between array items. Step jumps are expressed with the <c>hold</c>
-        /// easing rather than duplicate positions.
-        /// </summary>
-        private void ValidateAnimations()
-        {
-            var errors = new List<ValidationErrorDetail>();
-
-            VisitElements((element, path) =>
-            {
-                if (element["animations"] is not JsonArray animations)
-                {
-                    return;
-                }
-
-                for (var a = 0; a < animations.Count; a++)
-                {
-                    if (animations[a] is not JsonObject animation
-                        || JsonRead.Obj(animation, "tracks") is not JsonObject tracks)
-                    {
-                        continue;
-                    }
-
-                    foreach (var trackEntry in tracks)
-                    {
-                        if (trackEntry.Value is not JsonObject track
-                            || track["keyframes"] is not JsonArray keyframes)
-                        {
-                            continue;
-                        }
-
-                        for (var i = 1; i < keyframes.Count; i++)
-                        {
-                            var current = JsonRead.Num(keyframes[i] as JsonObject, "at");
-                            var previous = JsonRead.Num(keyframes[i - 1] as JsonObject, "at");
-
-                            if (current.HasValue && previous.HasValue && current.Value <= previous.Value)
-                            {
-                                errors.Add(new ValidationErrorDetail(
-                                    message: "must be greater than the previous keyframe",
-                                    instancePath: $"{path}/animations/{a}/tracks/{trackEntry.Key}/keyframes/{i}/at"));
-                            }
-                        }
-                    }
-                }
-            });
-
-            if (errors.Count > 0)
-            {
-                throw new StyleValidationException(errors);
-            }
-        }
 
         /// <summary>
         /// Walks every element in the definition — the canvas tree and every

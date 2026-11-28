@@ -69,11 +69,9 @@ impl Style {
 
     /// Validates and builds a style from an already-parsed JSON value.
     pub fn from_value(value: Value) -> Result<Self, Error> {
-        validate::definition(&value)?;
+        validate::style(&value)?;
 
         let def: Definition = serde_json::from_value(value)?;
-        validate_aliases(def.components.as_ref())?;
-        validate_animations(&def)?;
 
         let has_animations = has_animations(&def);
         let animation_names = animation_names(&def);
@@ -141,68 +139,6 @@ impl Style {
     /// regardless of how it walks the definition.
     pub(crate) fn animation_names(&self) -> &[String] {
         &self.animation_names
-    }
-}
-
-/// Verifies that every `extends` references an existing, non-alias component —
-/// a cross-key constraint the JSON Schema cannot express.
-fn validate_aliases(components: Option<&IndexMap<String, RawComponent>>) -> Result<(), Error> {
-    let Some(components) = components else {
-        return Ok(());
-    };
-
-    let mut errors: Vec<String> = Vec::new();
-
-    for (name, entry) in components {
-        let RawComponent::Alias { extends } = entry else {
-            continue;
-        };
-
-        match components.get(extends) {
-            None => errors.push(format!(
-                "/components/{name}/extends references unknown component \"{extends}\""
-            )),
-            Some(RawComponent::Alias { .. }) => errors.push(format!(
-                "/components/{name}/extends references alias \"{extends}\" — alias chains are not allowed"
-            )),
-            Some(RawComponent::Base(_)) => {}
-        }
-    }
-
-    if errors.is_empty() {
-        Ok(())
-    } else {
-        Err(Error::Validation(errors.join("; ")))
-    }
-}
-
-/// Verifies that every animation track lists its keyframes in strictly
-/// ascending `at` order — an ordering between array items the JSON Schema
-/// cannot express. Step jumps are expressed with the `hold` easing rather
-/// than duplicate positions.
-fn validate_animations(def: &Definition) -> Result<(), Error> {
-    let mut errors: Vec<String> = Vec::new();
-
-    visit_elements(def, &mut |element, path| {
-        for (animation_index, animation) in element.animations().iter().enumerate() {
-            for (track_name, track) in animation.tracks() {
-                let keyframes = track.keyframes();
-
-                for i in 1..keyframes.len() {
-                    if keyframes[i].at() <= keyframes[i - 1].at() {
-                        errors.push(format!(
-                            "{path}/animations/{animation_index}/tracks/{track_name}/keyframes/{i}/at must be greater than the previous keyframe"
-                        ));
-                    }
-                }
-            }
-        }
-    });
-
-    if errors.is_empty() {
-        Ok(())
-    } else {
-        Err(Error::Validation(errors.join("; ")))
     }
 }
 

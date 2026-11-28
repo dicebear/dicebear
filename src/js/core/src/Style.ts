@@ -1,4 +1,3 @@
-import { StyleValidationError } from './Error/StyleValidationError.js';
 import type {
   StyleDefinition,
   StyleDefinitionAttributes,
@@ -16,9 +15,10 @@ export type { StyleDefinition } from './StyleDefinition.js';
 declare const definitionType: unique symbol;
 
 /**
- * Validated, lazily-decomposed wrapper around a style definition. Construction
- * runs the JSON Schema validator and stores a deep clone of the input so that
- * later mutation of the source object cannot leak into the rendered avatar.
+ * Lazily-decomposed wrapper around a style definition. Construction stores a
+ * deep clone of the input so that later mutation of the source object cannot
+ * leak into the rendered avatar. It validates nothing: the package root runs
+ * {@link StyleValidator} first, the lite entry trusts its input.
  */
 export class Style<D = unknown> {
   /**
@@ -38,9 +38,6 @@ export class Style<D = unknown> {
 
   constructor(data: D) {
     this.#data = structuredClone(data) as StyleDefinition;
-
-    this.#validateAliases();
-    this.#validateAnimations();
   }
 
   /**
@@ -126,85 +123,10 @@ export class Style<D = unknown> {
     return this.#components;
   }
 
-  /**
-   * Verifies that every component declared via `extends` references an
-   * existing, non-alias component in the same `components` map. The schema
-   * itself cannot enforce cross-references between sibling keys.
-   */
-  #validateAliases(): void {
-    const components = this.#data.components;
-
-    if (!components) {
-      return;
-    }
-
-    const errors: { instancePath: string; message: string }[] = [];
-
-    for (const [name, data] of Object.entries(components)) {
-      if (!Style.#isAlias(data)) {
-        continue;
-      }
-
-      const target = data.extends;
-      const targetData = components[target];
-
-      if (!targetData) {
-        errors.push({
-          instancePath: `/components/${name}/extends`,
-          message: `references unknown component "${target}"`,
-        });
-
-        continue;
-      }
-
-      if (Style.#isAlias(targetData)) {
-        errors.push({
-          instancePath: `/components/${name}/extends`,
-          message: `references alias "${target}" — alias chains are not allowed`,
-        });
-      }
-    }
-
-    if (errors.length > 0) {
-      throw new StyleValidationError(errors);
-    }
-  }
-
   static #isAlias(
     data: StyleDefinitionComponent,
   ): data is Extract<StyleDefinitionComponent, { extends: string }> {
     return 'extends' in data;
-  }
-
-  /**
-   * Verifies that every animation track lists its keyframes in strictly
-   * ascending `at` order. The schema cannot express ordering between array
-   * items. Step jumps are expressed with the `hold` easing rather than
-   * duplicate positions.
-   */
-  #validateAnimations(): void {
-    const errors: { instancePath: string; message: string }[] = [];
-
-    this.#visitElements((element, path) => {
-      element.animations?.forEach((animation, animationIndex) => {
-        for (const [trackName, track] of Object.entries(animation.tracks)) {
-          const keyframes = track.keyframes;
-
-          for (let i = 1; i < keyframes.length; i++) {
-            if (keyframes[i].at <= keyframes[i - 1].at) {
-              errors.push({
-                instancePath: `${path}/animations/${animationIndex}/tracks/${trackName}/keyframes/${i}/at`,
-                message: 'must be greater than the previous keyframe',
-              });
-            }
-          }
-        }
-      });
-    });
-
-    if (errors.length > 0) {
-      throw new StyleValidationError(errors);
-    }
   }
 
   /**

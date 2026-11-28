@@ -53,7 +53,7 @@ fixture pass before moving on. The fixtures are described in
 | ---- | ------------------------------------------------------ | -------------------------------------- | -------------------------------------------------------------------------------------------- |
 | 1    | `Fnv1a` and `Mulberry32`                               | `fnv1a.json`, `mulberry32.json`        | [PRNG contract](#prng-contract)                                                              |
 | 2    | The `Prng` methods and number formatting               | `prng.json`, `numbers.json`            | [Selection methods](#selection-methods), [Number formatting](#number-formatting)             |
-| 3    | `Style`: schema validation, aliases, animations        | `validation.json`                      | [Definition schema](/create-styles/definition-schema/), [Loading a style](#loading-a-style)  |
+| 3    | The style validator and `Style`                        | `validation.json`                      | [Definition schema](/create-styles/definition-schema/), [Loading a style](#loading-a-style)  |
 | 4    | The `Color` helpers                                    | `colors.json`                          | [Color options](#color-options)                                                              |
 | 5    | `Initials`                                             | `initials.json`                        | [Initials extraction](#initials-extraction)                                                  |
 | 6    | `Options`, `Resolver`, `Renderer`, `OptionsDescriptor` | `avatars/*.json`, `descriptors/*.json` | [Options resolution](#options-resolution), [SVG rendering pipeline](#svg-rendering-pipeline) |
@@ -314,23 +314,41 @@ which creates a fresh PRNG for each key.
 
 ## Loading a style
 
-`Style` checks a definition once, when it is constructed, and every avatar
-rendered from it relies on that. Three checks run:
+A definition is validated once, before `Style` reads it, and every avatar
+rendered from it relies on that. The checks belong to the style validator. The
+`Style` constructor runs it in every port except JavaScript, where the package
+root runs it before it builds a `Style`, so that the lite entry can leave it
+out. The validator runs five checks in this order:
 
-1. The definition must pass `definition.json` from the
+1. The definition must not nest deeper than 64 levels. Objects and arrays count
+   as levels, and the value itself is the first. The limit keeps schema
+   validators from running out of stack, and with one limit in every port a
+   definition renders in all of them or in none. No real input comes close:
+   valid options nest two levels and the deepest style definition 15. The
+   `nesting-at-the-depth-limit` and `nesting-past-the-depth-limit` cases in
+   `validation.json` pin the boundary.
+2. The definition must pass `definition.json` from the
    [schema package](/create-styles/definition-schema/#schema-package), a JSON
    Schema draft-07 document.
-2. Every component alias must point to a component in the same `components` map
+3. Every component alias must point to a component in the same `components` map
    that is not an alias itself. The schema cannot relate sibling keys, so this
    check lives in the core.
-3. Every animation track must list its keyframes in strictly ascending `at`
+4. No component may render itself, directly or through other components. A
+   component reference inside a variant points at the referenced component, or
+   at its source when the name is an alias. A reference to an unknown name
+   renders nothing and closes no cycle. The check covers every component, also
+   those the canvas never reaches. Without it the renderer recurses until the
+   stack runs out, because a variant's `<defs>` entry is registered only after
+   its body has rendered.
+5. Every animation track must list its keyframes in strictly ascending `at`
    order (see [Validation](#validation) under animation rendering).
 
-The user options pass `options.json` when the `Avatar` is constructed. Circular
-`contrastTo` or `notEqualTo` chains are not a load-time error. The resolver
-detects them while rendering (see [Color options](#color-options)). For all of
-these checks only the accept/reject outcome is part of the contract. Error
-messages are up to each language.
+The options validator does the same for the user options when the `Avatar` is
+constructed: they must stay within the same depth limit and pass `options.json`.
+Circular `contrastTo` or `notEqualTo` chains are not a load-time error. The
+resolver detects them while rendering (see [Color options](#color-options)). For
+all of these checks only the accept/reject outcome is part of the contract.
+Error messages are up to each language.
 
 Watch the regex engine behind your JSON Schema validator. An anchored pattern
 such as the one for hex colors has to match up to the very end of the input. In
@@ -338,9 +356,10 @@ PCRE (used by PHP) and Python's `re`, `$` matches before a trailing newline as
 well, so a naive port accepts `"#00ff00\n"` or a component named `"eyes\n"`, and
 the newline ends up in the SVG. The `validation.json` fixture pins these cases.
 
-The JavaScript package also exports `@dicebear/core/lite`, which skips both
-schema validations. It is meant for definitions and options that come from your
-own code. The alias and keyframe checks still run there.
+The JavaScript package also exports `@dicebear/core/lite`, which runs neither
+validator, so the depth, alias, cycle and keyframe checks are skipped along with
+the schemas. It is meant for definitions and options that come from your own
+code.
 
 ## Options resolution
 
@@ -995,14 +1014,6 @@ and the filter primitives), so no constructor check is needed for them. The
 wrappers the renderer adds would be lost in both places: a `<use>` clones only
 the node it references, and a `<g>` is no valid clipPath content. Masks accept
 groups, so animations below a `mask` element pass.
-
-Before it runs the schema, every port turns down a style definition or options
-nested deeper than 64 levels as invalid. Objects and arrays count as levels, and
-the value itself is the first. The limit keeps schema validators from running
-out of stack, and with one limit in every port a definition renders in all of
-them or in none. No real input comes close: valid options nest two levels and
-the deepest style definition 15. The `nesting-at-the-depth-limit` and
-`nesting-past-the-depth-limit` cases in `validation.json` pin the boundary.
 
 ### Selecting timelines
 

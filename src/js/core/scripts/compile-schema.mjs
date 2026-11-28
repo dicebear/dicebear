@@ -1,12 +1,12 @@
 import { validator } from '@exodus/schemasafe';
 import { createRequire } from 'module';
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, rmSync } from 'fs';
 
 const require = createRequire(import.meta.url);
 
 function compileValidator({ schemaModule, domain }) {
   const errorClass = `${domain}ValidationError`;
-  const validatorClass = `${domain}Validator`;
+  const validatorClass = `${domain}SchemaValidator`;
 
   const schema = require(schemaModule);
 
@@ -83,6 +83,12 @@ export class ${validatorClass} {
 }
 
 mkdirSync('./src/Validator', { recursive: true });
+
+// Earlier builds generated the schema validators as StyleValidator.js and
+// OptionsValidator.js. Those names now belong to the hand-written entries in
+// TypeScript, and with allowJs a leftover file would collide with them.
+rmSync('./src/Validator/StyleValidator.js', { force: true });
+rmSync('./src/Validator/OptionsValidator.js', { force: true });
 
 compileValidator({
   schemaModule: '@dicebear/schema/definition.json',

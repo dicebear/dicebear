@@ -370,6 +370,22 @@ describe('Style', () => {
       );
     });
 
+    it('should reject extends naming an Object.prototype member', () => {
+      for (const target of ['constructor', 'toString', 'valueOf']) {
+        assert.throws(
+          () =>
+            new Style({
+              canvas: { width: 100, height: 100, elements: [] },
+              components: {
+                eyesRight: { extends: target },
+              },
+            }),
+          StyleValidationError,
+          target,
+        );
+      }
+    });
+
     it('should reject extends pointing at another alias', () => {
       assert.throws(
         () =>
@@ -387,6 +403,101 @@ describe('Style', () => {
           }),
         StyleValidationError,
       );
+    });
+  });
+
+  describe('component cycles', () => {
+    const component = (...elements) => ({
+      width: 10,
+      height: 10,
+      variants: { only: { elements } },
+    });
+    const reference = (name) => ({ type: 'component', name });
+    const styleWith = (components) => ({
+      canvas: { width: 10, height: 10, elements: [reference('a')] },
+      components,
+    });
+
+    it('should reject a component that references itself', () => {
+      assert.throws(
+        () => new Style(styleWith({ a: component(reference('a')) })),
+        (error) =>
+          error instanceof StyleValidationError &&
+          error.details.some(
+            (d) => d.instancePath === '/components/a/variants/only/elements/0',
+          ),
+      );
+    });
+
+    it('should reject a cycle through several components', () => {
+      assert.throws(
+        () =>
+          new Style(
+            styleWith({
+              a: component(reference('b')),
+              b: component(reference('c')),
+              c: component(reference('a')),
+            }),
+          ),
+        StyleValidationError,
+      );
+    });
+
+    it('should reject a cycle through an alias of the component', () => {
+      assert.throws(
+        () =>
+          new Style(
+            styleWith({
+              a: component(reference('aCopy')),
+              aCopy: { extends: 'a' },
+            }),
+          ),
+        StyleValidationError,
+      );
+    });
+
+    it('should reject a cycle nested inside a group', () => {
+      assert.throws(
+        () =>
+          new Style(
+            styleWith({
+              a: component({
+                type: 'element',
+                name: 'g',
+                children: [reference('a')],
+              }),
+            }),
+          ),
+        StyleValidationError,
+      );
+    });
+
+    it('should reject a cycle the canvas never reaches', () => {
+      assert.throws(
+        () =>
+          new Style(
+            styleWith({
+              a: component(),
+              b: component(reference('c')),
+              c: component(reference('b')),
+            }),
+          ),
+        StyleValidationError,
+      );
+    });
+
+    it('should accept components shared without a cycle', () => {
+      const style = new Style(
+        styleWith({
+          a: component(reference('b'), reference('c'), reference('bCopy')),
+          b: component(reference('d')),
+          c: component(reference('d')),
+          d: component(reference('missing')),
+          bCopy: { extends: 'b' },
+        }),
+      );
+
+      assert.equal(style.components().size, 5);
     });
   });
 

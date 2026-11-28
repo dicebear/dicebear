@@ -8,6 +8,30 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **JavaScript:** `@dicebear/core/lite` now runs no validator at all. It used to
+  skip only the schemas and still checked that every alias points at a base
+  component, that no component renders itself and that keyframes are in order. A
+  definition from your own code that breaks one of these rules is no longer
+  rejected there and may fail while rendering. The package root checks
+  everything as before.
+
+### Fixed
+
+- **Core:** A component that renders itself, directly, through other components
+  or through one of its aliases, made the renderer recurse until the stack ran
+  out. JavaScript, Python and Dart threw a stack overflow error, while Go, Rust
+  and PHP before 8.3 could end the whole process. `Style` now rejects such a
+  definition when it loads and names the reference that closes the cycle. C#
+  used to catch the cycle while rendering and threw
+  `CircularComponentReferenceException`. It now rejects the definition at load
+  with `StyleValidationException`, like the other languages.
+- **JavaScript:** An alias whose `extends` named a member of `Object.prototype`,
+  such as `constructor` or `toString`, passed validation and failed later while
+  rendering with a `TypeError`. It is now rejected as an unknown component, as
+  in the other languages.
+
 ## [11.0.0] - 2026-11-25
 
 The first stable release of the 11.x line. Compared to 10.7.0:

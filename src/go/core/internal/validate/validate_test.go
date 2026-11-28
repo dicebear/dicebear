@@ -54,7 +54,7 @@ func TestSeparatorsKeepInjectionPayloadsOut(t *testing.T) {
 			"javascript" + s + ":alert(1)",
 			"url" + s + "(" + s + "https://evil.example)",
 		} {
-			if err := Definition(definitionWithFill(t, value)); err == nil {
+			if err := Style(definitionWithFill(t, value)); err == nil {
 				t.Errorf("fill %q was accepted, want rejected", value)
 			}
 		}
@@ -69,7 +69,7 @@ func TestPayloadsHeldTogetherByOtherCharactersStayAccepted(t *testing.T) {
 			"javascript" + s + ":alert(1)",
 			"url" + s + "(" + s + "https://evil.example)",
 		} {
-			if err := Definition(definitionWithFill(t, value)); err != nil {
+			if err := Style(definitionWithFill(t, value)); err != nil {
 				t.Errorf("fill %q with U+%04X was rejected, want accepted: %v", value, sep, err)
 			}
 		}
@@ -85,7 +85,7 @@ func TestLocalPaintServerReferencesStayAccepted(t *testing.T) {
 	}
 
 	for _, value := range values {
-		if err := Definition(definitionWithFill(t, value)); err != nil {
+		if err := Style(definitionWithFill(t, value)); err != nil {
 			t.Errorf("fill %q was rejected, want accepted: %v", value, err)
 		}
 	}
@@ -98,7 +98,7 @@ func TestReferencesOpeningOnANonSeparatorAreRejected(t *testing.T) {
 	for _, sep := range nonSeparators {
 		value := "url(" + string(sep) + "#local)"
 
-		if err := Definition(definitionWithFill(t, value)); err == nil {
+		if err := Style(definitionWithFill(t, value)); err == nil {
 			t.Errorf("fill %q with U+%04X was accepted, want rejected", value, sep)
 		}
 	}
@@ -129,7 +129,7 @@ func TestExceedsMaxDepthIgnoresBracketsInStrings(t *testing.T) {
 }
 
 func TestDeepNestingIsInvalid(t *testing.T) {
-	for _, check := range []func([]byte) error{Options, Definition} {
+	for _, check := range []func([]byte) error{Options, Style} {
 		err := check([]byte(`{"seed":` + nestJSON(5000, `"x"`) + `}`))
 
 		if err == nil || !strings.Contains(err.Error(), "nesting is deeper") {

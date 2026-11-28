@@ -291,8 +291,8 @@ class Renderer:
         """Render an SVG element; the special ``defs`` name diverts children.
 
         Element and attribute names are not escaped here — they are validated by
-        StyleValidator against a strict allowlist schema. Values are escaped via
-        :meth:`Xml.escape`.
+        StyleSchemaValidator against a strict allowlist schema. Values are
+        escaped via :meth:`Xml.escape`.
         """
         name = element.name()
 

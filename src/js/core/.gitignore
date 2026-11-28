@@ -8,5 +8,5 @@ node_modules
 lib
 
 # Generated files
-src/Validator/StyleValidator.js
-src/Validator/OptionsValidator.js
+src/Validator/StyleSchemaValidator.js
+src/Validator/OptionsSchemaValidator.js

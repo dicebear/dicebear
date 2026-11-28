@@ -87,12 +87,12 @@ Invalid input throws instead of returning a result type, which is what a .NET
 caller expects. The other ports name these types `ValidationError` after their
 own conventions.
 
-| Exception                             | Thrown when                                     |
-| ------------------------------------- | ----------------------------------------------- |
-| `StyleValidationException`            | A style definition violates the schema          |
-| `OptionsValidationException`          | The options violate the schema                  |
-| `CircularColorReferenceException`     | A color in the definition references itself     |
-| `CircularComponentReferenceException` | A component in the definition references itself |
+| Exception                             | Thrown when                                                   |
+| ------------------------------------- | ------------------------------------------------------------- |
+| `StyleValidationException`            | A style definition violates the schema                        |
+| `OptionsValidationException`          | The options violate the schema                                |
+| `CircularColorReferenceException`     | A color in the definition references itself                   |
+| `CircularComponentReferenceException` | Backstop only: `Style` rejects component cycles when it loads |
 
 Both validation exceptions carry the individual field failures in `Details`.
 

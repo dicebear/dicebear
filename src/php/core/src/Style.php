@@ -13,7 +13,7 @@ use DiceBear\Validator\StyleValidator;
 
 /**
  * Validated, lazily-decomposed wrapper around a style definition. Construction
- * runs the JSON Schema validator and stores a deep copy of the input so that
+ * runs the style validator and stores a deep copy of the input so that
  * later mutation of the source object cannot leak into the rendered avatar.
  */
 class Style
@@ -35,9 +35,6 @@ class Style
         StyleValidator::validate($data);
 
         $this->data = is_array($data) ? $data : json_decode(json_encode($data), true);
-
-        $this->validateAliases();
-        $this->validateAnimations();
     }
 
     /**
@@ -140,89 +137,11 @@ class Style
     }
 
     /**
-     * Verifies that every component declared via `extends` references an
-     * existing, non-alias component in the same `components` map. The schema
-     * itself cannot enforce cross-references between sibling keys.
-     */
-    private function validateAliases(): void
-    {
-        $components = $this->data['components'] ?? null;
-
-        if ($components === null) {
-            return;
-        }
-
-        $errors = [];
-
-        foreach ($components as $name => $data) {
-            if (!self::isAlias($data)) {
-                continue;
-            }
-
-            $target = $data['extends'];
-            $targetData = $components[$target] ?? null;
-
-            if ($targetData === null) {
-                $errors[] = [
-                    'instancePath' => "/components/{$name}/extends",
-                    'message' => "references unknown component \"{$target}\"",
-                ];
-
-                continue;
-            }
-
-            if (self::isAlias($targetData)) {
-                $errors[] = [
-                    'instancePath' => "/components/{$name}/extends",
-                    'message' => "references alias \"{$target}\" — alias chains are not allowed",
-                ];
-            }
-        }
-
-        if (count($errors) > 0) {
-            throw new StyleValidationError($errors);
-        }
-    }
-
-    /**
      * @param array<string, mixed> $data
      */
     private static function isAlias(array $data): bool
     {
         return array_key_exists('extends', $data);
-    }
-
-    /**
-     * Verifies that every animation track lists its keyframes in strictly
-     * ascending `at` order. The schema cannot express ordering between array
-     * items. Step jumps are expressed with the `hold` easing rather than
-     * duplicate positions.
-     */
-    private function validateAnimations(): void
-    {
-        $errors = [];
-
-        $this->visitElements(function (array $element, string $path) use (&$errors): void {
-            foreach ($element['animations'] ?? [] as $animationIndex => $animation) {
-                foreach ($animation['tracks'] as $trackName => $track) {
-                    $keyframes = $track['keyframes'];
-                    $count = count($keyframes);
-
-                    for ($i = 1; $i < $count; $i++) {
-                        if ($keyframes[$i]['at'] <= $keyframes[$i - 1]['at']) {
-                            $errors[] = [
-                                'instancePath' => "{$path}/animations/{$animationIndex}/tracks/{$trackName}/keyframes/{$i}/at",
-                                'message' => 'must be greater than the previous keyframe',
-                            ];
-                        }
-                    }
-                }
-            }
-        });
-
-        if (count($errors) > 0) {
-            throw new StyleValidationError($errors);
-        }
     }
 
     /**

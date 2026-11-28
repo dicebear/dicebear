@@ -9,11 +9,11 @@ namespace DiceBear
     /// path.
     /// </summary>
     /// <remarks>
-    /// The schema cannot express this, so the definition validates and the
-    /// cycle only shows up while rendering. The reference runs out of stack
-    /// there and throws a <c>RangeError</c> the caller can catch. .NET kills
-    /// the process on a stack overflow instead, so the renderer counts the
-    /// components it is inside and reports the cycle before that happens.
+    /// A style rejects component cycles with a
+    /// <see cref="StyleValidationException"/> when it loads, so a render no
+    /// longer meets one. The renderer keeps its guard as a backstop:
+    /// .NET kills the process on a stack overflow instead of throwing, and
+    /// this error is the safer outcome should a cycle ever get past the load.
     /// </remarks>
     public sealed class CircularComponentReferenceException : Exception
     {

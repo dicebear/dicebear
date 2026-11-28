@@ -1,16 +1,24 @@
 //! Validates style definitions and options against the shared draft-07 JSON
 //! schemas (the pure-data `dicebear-schema` crate). The compiled validators are
 //! built once and reused.
+//!
+//! Each schema lives in its own submodule (`style_schema`, `options_schema`).
+//! The entry points [`style`] and [`options`] run the shared depth check and
+//! the schema validation; [`style`] then adds the cross-key checks on the
+//! definition that the JSON Schema cannot express.
 
-use std::sync::LazyLock;
+mod options;
+mod options_schema;
+mod style;
+mod style_schema;
+
+pub(crate) use options::options;
+pub(crate) use style::style;
 
 use jsonschema::Validator;
 use serde_json::Value;
 
 use crate::error::Error;
-
-static DEFINITION: LazyLock<Validator> = LazyLock::new(|| compile(dicebear_schema::DEFINITION));
-static OPTIONS: LazyLock<Validator> = LazyLock::new(|| compile(dicebear_schema::OPTIONS));
 
 /// Parses one of the shared schemas and compiles it.
 ///
@@ -23,16 +31,6 @@ fn compile(schema: &str) -> Validator {
     let schema: Value = serde_json::from_str(schema).expect("embedded schema is valid JSON");
 
     jsonschema::validator_for(&schema).expect("embedded schema compiles")
-}
-
-/// Validates a style definition against `definition.json`.
-pub(crate) fn definition(instance: &Value) -> Result<(), Error> {
-    check(&DEFINITION, instance)
-}
-
-/// Validates an options object against `options.json`.
-pub(crate) fn options(instance: &Value) -> Result<(), Error> {
-    check(&OPTIONS, instance)
 }
 
 /// How many levels of objects and arrays a style definition or the options may
@@ -79,4 +77,14 @@ fn check(validator: &Validator, instance: &Value) -> Result<(), Error> {
         .collect();
 
     Err(Error::Validation(messages.join("; ")))
+}
+
+/// Turns the collected messages of one check into a result, joining them
+/// with `"; "` into a single [`Error::Validation`].
+fn collected(errors: Vec<String>) -> Result<(), Error> {
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(Error::Validation(errors.join("; ")))
+    }
 }

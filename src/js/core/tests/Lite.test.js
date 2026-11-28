@@ -35,6 +35,16 @@ describe('lite entry', () => {
     assert.ok(new LiteStyle(extra));
   });
 
+  it('should skip the checks the schema cannot express', () => {
+    const unknownAlias = {
+      ...definition,
+      components: { eyesRight: { extends: 'missing' } },
+    };
+
+    assert.throws(() => new Style(unknownAlias));
+    assert.ok(new LiteStyle(unknownAlias));
+  });
+
   it('should skip the options check', () => {
     const style = new LiteStyle(definition);
 

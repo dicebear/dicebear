@@ -7,7 +7,7 @@ import json
 from collections.abc import Callable
 from typing import Any, cast
 
-from ..errors import ErrorDetail, StyleValidationError
+from ..errors import StyleValidationError
 from ..validator import MAX_DEPTH_MESSAGE, StyleValidator
 from .canvas import Canvas
 from .color import Color
@@ -18,7 +18,7 @@ from .meta import Meta
 class Style:
     """Validated, lazily-decomposed wrapper around a style definition.
 
-    Construction runs the JSON Schema validator and stores a deep copy of the
+    Construction runs :class:`StyleValidator` and stores a deep copy of the
     input so that later mutation of the source object cannot leak into the
     rendered avatar.
     """
@@ -33,9 +33,6 @@ class Style:
         self._colors: dict[str, Color] | None = None
         self._has_animations: bool | None = None
         self._animation_names: list[str] | None = None
-
-        self._validate_aliases()
-        self._validate_animations()
 
     @classmethod
     def from_json(cls, raw: str) -> Style:
@@ -162,82 +159,6 @@ class Style:
             self._animation_names = sorted(names)
 
         return self._animation_names
-
-    def _validate_aliases(self) -> None:
-        """Verify every ``extends`` references an existing, non-alias component.
-
-        The schema cannot enforce cross-references between sibling keys.
-        """
-        components: dict[str, Any] | None = self._data.get("components")
-
-        if components is None:
-            return
-
-        errors: list[ErrorDetail] = []
-
-        for name, data in components.items():
-            if not self._is_alias(data):
-                continue
-
-            target = data["extends"]
-            target_data = components.get(target)
-
-            if target_data is None:
-                errors.append(
-                    {
-                        "instancePath": f"/components/{name}/extends",
-                        "message": f'references unknown component "{target}"',
-                    }
-                )
-
-                continue
-
-            if self._is_alias(target_data):
-                errors.append(
-                    {
-                        "instancePath": f"/components/{name}/extends",
-                        "message": (
-                            f'references alias "{target}" — '
-                            "alias chains are not allowed"
-                        ),
-                    }
-                )
-
-        if len(errors) > 0:
-            raise StyleValidationError(errors)
-
-    def _validate_animations(self) -> None:
-        """Verify every animation track lists its keyframes in strictly
-        ascending ``at`` order.
-
-        The schema cannot express ordering between array items. Step jumps are
-        expressed with the ``hold`` easing rather than duplicate positions.
-        """
-        errors: list[ErrorDetail] = []
-
-        def visit(element: dict[str, Any], path: str) -> None:
-            for animation_index, animation in enumerate(element.get("animations", [])):
-                for track_name, track in animation["tracks"].items():
-                    keyframes = track["keyframes"]
-
-                    for i in range(1, len(keyframes)):
-                        if keyframes[i]["at"] <= keyframes[i - 1]["at"]:
-                            errors.append(
-                                {
-                                    "instancePath": (
-                                        f"{path}/animations/{animation_index}"
-                                        f"/tracks/{track_name}/keyframes/{i}/at"
-                                    ),
-                                    "message": (
-                                        "must be greater than the previous keyframe"
-                                    ),
-                                }
-                            )
-
-        self._visit_elements(visit)
-
-        if len(errors) > 0:
-            raise StyleValidationError(errors)
 
     def _visit_elements(self, visit: Callable[[dict[str, Any], str], None]) -> None:
         """Walk every element in the definition — the canvas tree and every
