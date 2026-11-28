@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **JavaScript:** `@dicebear/core/lite` now runs no validator at all. It used to
+  skip only the schemas and still checked that every alias points at a base
+  component, that no component renders itself and that keyframes are in order. A
+  definition from your own code that breaks one of these rules is no longer
+  rejected there and may fail while rendering. The package root checks
+  everything as before.
+
 ### Fixed
 
 - **Core:** A component that renders itself, directly, through other components

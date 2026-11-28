@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 
 function compileValidator({ schemaModule, domain }) {
   const errorClass = `${domain}ValidationError`;
-  const validatorClass = `${domain}Validator`;
+  const validatorClass = `${domain}SchemaValidator`;
 
   const schema = require(schemaModule);
 
