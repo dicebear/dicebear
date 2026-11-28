@@ -40,6 +40,7 @@ export class Style<D = unknown> {
     this.#data = structuredClone(data) as StyleDefinition;
 
     this.#validateAliases();
+    this.#validateComponentCycles();
     this.#validateAnimations();
   }
 
@@ -162,6 +163,108 @@ export class Style<D = unknown> {
           instancePath: `/components/${name}/extends`,
           message: `references alias "${target}" — alias chains are not allowed`,
         });
+      }
+    }
+
+    if (errors.length > 0) {
+      throw new StyleValidationError(errors);
+    }
+  }
+
+  /**
+   * Verifies that no component renders itself, directly or through other
+   * components. The renderer registers a variant's `<defs>` entry only after
+   * its body has rendered, so a cycle would recurse until the stack runs out.
+   * A reference to an alias counts as a reference to its source, since the
+   * alias renders the source's variants. Unknown names render nothing and
+   * close no cycle. Runs after {@link #validateAliases}, so every alias points
+   * at a base component here.
+   */
+  #validateComponentCycles(): void {
+    const components = this.#data.components;
+
+    if (!components) {
+      return;
+    }
+
+    type Reference = { name: string; source: string; path: string };
+
+    const references = new Map<string, Reference[]>();
+
+    for (const [name, data] of Object.entries(components)) {
+      if (Style.#isAlias(data)) {
+        continue;
+      }
+
+      const found: Reference[] = [];
+      const walk = (
+        elements: readonly StyleDefinitionElement[],
+        path: string,
+      ): void => {
+        elements.forEach((element, index) => {
+          const elementPath = `${path}/${index}`;
+          const referenced = element.name;
+
+          if (element.type === 'component' && referenced !== undefined) {
+            const target = Object.prototype.hasOwnProperty.call(
+              components,
+              referenced,
+            )
+              ? components[referenced]
+              : undefined;
+
+            if (target) {
+              found.push({
+                name: referenced,
+                source: Style.#isAlias(target) ? target.extends : referenced,
+                path: elementPath,
+              });
+            }
+          }
+
+          if (element.children) {
+            walk(element.children, `${elementPath}/children`);
+          }
+        });
+      };
+
+      for (const [variantName, variant] of Object.entries(data.variants)) {
+        walk(
+          variant.elements,
+          `/components/${name}/variants/${variantName}/elements`,
+        );
+      }
+
+      references.set(name, found);
+    }
+
+    // Depth-first search: a reference to a component that is still on the
+    // stack closes a cycle. The depth is bounded by the number of components.
+    const onStack = new Set<string>();
+    const done = new Set<string>();
+    const errors: { instancePath: string; message: string }[] = [];
+
+    const visit = (name: string): void => {
+      onStack.add(name);
+
+      for (const reference of references.get(name) ?? []) {
+        if (onStack.has(reference.source)) {
+          errors.push({
+            instancePath: reference.path,
+            message: `references component "${reference.name}", which leads back to "${reference.source}" — component cycles are not allowed`,
+          });
+        } else if (!done.has(reference.source)) {
+          visit(reference.source);
+        }
+      }
+
+      onStack.delete(name);
+      done.add(name);
+    };
+
+    for (const name of references.keys()) {
+      if (!done.has(name)) {
+        visit(name);
       }
     }
 

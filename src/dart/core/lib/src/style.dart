@@ -38,6 +38,7 @@ class Style {
   /// directly from a raw JSON string.
   Style(Map<String, Object?> definition) : _data = _validatedCopy(definition) {
     _validateAliases();
+    _validateComponentCycles();
     _validateAnimations();
   }
 
@@ -197,6 +198,108 @@ class Style {
           instancePath: '/components/${entry.key}/extends',
           message: 'references alias "$target" — alias chains are not allowed',
         ));
+      }
+    }
+
+    if (errors.isNotEmpty) {
+      throw StyleValidationError(errors);
+    }
+  }
+
+  /// Verifies that no component renders itself, directly or through other
+  /// components. The renderer registers a variant's `<defs>` entry only after
+  /// its body has rendered, so a cycle would recurse until the stack runs out.
+  /// A reference to an alias counts as a reference to its source, since the
+  /// alias renders the source's variants. Unknown names render nothing and
+  /// close no cycle. Runs after [_validateAliases], so every alias points at a
+  /// base component here.
+  void _validateComponentCycles() {
+    final components = _data['components'] as Map<String, Object?>?;
+
+    if (components == null) {
+      return;
+    }
+
+    final references =
+        <String, List<({String name, String source, String path})>>{};
+
+    for (final entry in components.entries) {
+      final data = entry.value as Map<String, Object?>;
+
+      if (_isAlias(data)) {
+        continue;
+      }
+
+      final found = <({String name, String source, String path})>[];
+
+      void walk(List<Object?> elements, String path) {
+        for (var index = 0; index < elements.length; index++) {
+          final element = elements[index] as Map<String, Object?>;
+          final elementPath = '$path/$index';
+          final referenced = element['name'];
+
+          if (element['type'] == 'component' && referenced is String) {
+            final target = components[referenced] as Map<String, Object?>?;
+
+            if (target != null) {
+              found.add((
+                name: referenced,
+                source:
+                    _isAlias(target) ? target['extends'] as String : referenced,
+                path: elementPath,
+              ));
+            }
+          }
+
+          final children = element['children'] as List<Object?>?;
+
+          if (children != null) {
+            walk(children, '$elementPath/children');
+          }
+        }
+      }
+
+      final variants = data['variants'] as Map<String, Object?>;
+
+      for (final variant in variants.entries) {
+        walk(
+          (variant.value as Map<String, Object?>)['elements'] as List<Object?>,
+          '/components/${entry.key}/variants/${variant.key}/elements',
+        );
+      }
+
+      references[entry.key] = found;
+    }
+
+    // Depth-first search: a reference to a component that is still on the
+    // stack closes a cycle. The depth is bounded by the number of components.
+    final onStack = <String>{};
+    final done = <String>{};
+    final errors = <ValidationErrorDetail>[];
+
+    void visit(String name) {
+      onStack.add(name);
+
+      for (final reference in references[name] ??
+          const <({String name, String source, String path})>[]) {
+        if (onStack.contains(reference.source)) {
+          errors.add(ValidationErrorDetail(
+            instancePath: reference.path,
+            message: 'references component "${reference.name}", which leads '
+                'back to "${reference.source}" — component cycles are not allowed',
+          ));
+        } else if (!done.contains(reference.source)) {
+          visit(reference.source);
+        }
+      }
+
+      onStack.remove(name);
+      done.add(name);
+    }
+
+    for (final name in references.keys) {
+      if (!done.contains(name)) {
+        visit(name);
       }
     }
 

@@ -88,6 +88,351 @@
       "valid": false
     },
     {
+      "id": "component-cycle-self",
+      "definition": {
+        "canvas": {
+          "width": 10,
+          "height": 10,
+          "elements": [
+            {
+              "type": "component",
+              "name": "a"
+            }
+          ]
+        },
+        "components": {
+          "a": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "a"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "component-cycle-indirect",
+      "definition": {
+        "canvas": {
+          "width": 10,
+          "height": 10,
+          "elements": [
+            {
+              "type": "component",
+              "name": "a"
+            }
+          ]
+        },
+        "components": {
+          "a": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "b"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "b": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "c"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "c": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "a"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "component-cycle-through-alias",
+      "definition": {
+        "canvas": {
+          "width": 10,
+          "height": 10,
+          "elements": [
+            {
+              "type": "component",
+              "name": "a"
+            }
+          ]
+        },
+        "components": {
+          "a": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "aCopy"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "aCopy": {
+            "extends": "a"
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "component-cycle-unreachable",
+      "definition": {
+        "canvas": {
+          "width": 10,
+          "height": 10,
+          "elements": [
+            {
+              "type": "component",
+              "name": "a"
+            }
+          ]
+        },
+        "components": {
+          "a": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": []
+              }
+            }
+          },
+          "b": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "c"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "c": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "b"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "component-graph-without-cycle",
+      "definition": {
+        "canvas": {
+          "width": 10,
+          "height": 10,
+          "elements": [
+            {
+              "type": "component",
+              "name": "a"
+            }
+          ]
+        },
+        "components": {
+          "a": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "b"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "c"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "bCopy"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "b": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "d"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "c": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "d"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "d": {
+            "width": 10,
+            "height": 10,
+            "variants": {
+              "only": {
+                "elements": [
+                  {
+                    "type": "element",
+                    "name": "g",
+                    "children": [
+                      {
+                        "type": "component",
+                        "name": "missing"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "bCopy": {
+            "extends": "b"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
       "id": "unknown-root-key",
       "definition": {
         "canvas": {

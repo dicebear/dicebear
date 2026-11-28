@@ -928,7 +928,7 @@ public class ApiTests
     [Fact]
     public void RejectsAComponentThatReferencesItself()
     {
-        var style = Style.Parse("""
+        const string definition = """
             {
               "canvas": {
                 "width": 100,
@@ -945,12 +945,11 @@ public class ApiTests
                 }
               }
             }
-            """);
+            """;
 
-        var exception = Assert.Throws<CircularComponentReferenceException>(
-            () => new Avatar(style, Options(("seed", "x"))));
+        var exception = Assert.Throws<StyleValidationException>(() => Style.Parse(definition));
 
-        Assert.Equal(new[] { "face", "face" }, exception.Chain);
+        Assert.Equal("/components/face/variants/v0/elements/0", exception.Details[0].InstancePath);
     }
 
     [Theory]

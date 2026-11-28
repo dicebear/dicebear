@@ -65,6 +65,7 @@ namespace DiceBear
             _data = JsonSnapshot.Of(definition);
 
             ValidateAliases();
+            ValidateComponentCycles();
             ValidateAnimations();
         }
 
@@ -257,6 +258,133 @@ namespace DiceBear
                     errors.Add(new ValidationErrorDetail(
                         message: $"references alias \"{target}\" — alias chains are not allowed",
                         instancePath: $"/components/{entry.Key}/extends"));
+                }
+            }
+
+            if (errors.Count > 0)
+            {
+                throw new StyleValidationException(errors);
+            }
+        }
+
+        /// <summary>
+        /// Verifies that no component renders itself, directly or through
+        /// other components. The renderer registers a variant's
+        /// <c>&lt;defs&gt;</c> entry only after its body has rendered, so a
+        /// cycle would recurse until the stack runs out. A reference to an
+        /// alias counts as a reference to its source, since the alias renders
+        /// the source's variants. Unknown names render nothing and close no
+        /// cycle. Runs after <see cref="ValidateAliases"/>, so every alias
+        /// points at a base component here.
+        /// </summary>
+        private void ValidateComponentCycles()
+        {
+            var components = JsonRead.Obj(_data, "components");
+
+            if (components is null)
+            {
+                return;
+            }
+
+            var references = new Dictionary<string, List<(string Name, string Source, string Path)>>(StringComparer.Ordinal);
+            var order = new List<string>();
+
+            foreach (var entry in components)
+            {
+                if (entry.Value is not JsonObject data || IsAlias(data))
+                {
+                    continue;
+                }
+
+                var found = new List<(string Name, string Source, string Path)>();
+
+                void Walk(JsonArray? elements, string path)
+                {
+                    if (elements is null)
+                    {
+                        return;
+                    }
+
+                    for (var i = 0; i < elements.Count; i++)
+                    {
+                        if (elements[i] is not JsonObject element)
+                        {
+                            continue;
+                        }
+
+                        var elementPath = path + "/" + i;
+
+                        if (JsonRead.Str(element, "type") == "component"
+                            && JsonRead.Str(element, "name") is string referenced
+                            && components[referenced] is JsonObject target)
+                        {
+                            var source = IsAlias(target)
+                                ? JsonRead.Str(target, "extends") ?? referenced
+                                : referenced;
+
+                            found.Add((referenced, source, elementPath));
+                        }
+
+                        Walk(element["children"] as JsonArray, elementPath + "/children");
+                    }
+                }
+
+                var variants = JsonRead.Obj(data, "variants");
+
+                if (variants is not null)
+                {
+                    foreach (var variantEntry in variants)
+                    {
+                        if (variantEntry.Value is JsonObject variant)
+                        {
+                            Walk(
+                                variant["elements"] as JsonArray,
+                                $"/components/{entry.Key}/variants/{variantEntry.Key}/elements");
+                        }
+                    }
+                }
+
+                references[entry.Key] = found;
+                order.Add(entry.Key);
+            }
+
+            // Depth-first search: a reference to a component that is still on
+            // the stack closes a cycle. The depth is bounded by the number of
+            // components.
+            var onStack = new HashSet<string>(StringComparer.Ordinal);
+            var done = new HashSet<string>(StringComparer.Ordinal);
+            var errors = new List<ValidationErrorDetail>();
+
+            void Visit(string name)
+            {
+                onStack.Add(name);
+
+                if (references.TryGetValue(name, out var outgoing))
+                {
+                    foreach (var reference in outgoing)
+                    {
+                        if (onStack.Contains(reference.Source))
+                        {
+                            errors.Add(new ValidationErrorDetail(
+                                message: $"references component \"{reference.Name}\", which leads back to \"{reference.Source}\" — component cycles are not allowed",
+                                instancePath: reference.Path));
+                        }
+                        else if (!done.Contains(reference.Source))
+                        {
+                            Visit(reference.Source);
+                        }
+                    }
+                }
+
+                onStack.Remove(name);
+                done.Add(name);
+            }
+
+            foreach (var name in order)
+            {
+                if (!done.Contains(name))
+                {
+                    Visit(name);
                 }
             }
 

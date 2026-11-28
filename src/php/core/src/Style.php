@@ -37,6 +37,7 @@ class Style
         $this->data = is_array($data) ? $data : json_decode(json_encode($data), true);
 
         $this->validateAliases();
+        $this->validateComponentCycles();
         $this->validateAnimations();
     }
 
@@ -176,6 +177,97 @@ class Style
                     'instancePath' => "/components/{$name}/extends",
                     'message' => "references alias \"{$target}\" — alias chains are not allowed",
                 ];
+            }
+        }
+
+        if (count($errors) > 0) {
+            throw new StyleValidationError($errors);
+        }
+    }
+
+    /**
+     * Verifies that no component renders itself, directly or through other
+     * components. The renderer registers a variant's `<defs>` entry only after
+     * its body has rendered, so a cycle would recurse until the stack runs out.
+     * A reference to an alias counts as a reference to its source, since the
+     * alias renders the source's variants. Unknown names render nothing and
+     * close no cycle. Runs after {@see validateAliases()}, so every alias
+     * points at a base component here.
+     */
+    private function validateComponentCycles(): void
+    {
+        $components = $this->data['components'] ?? null;
+
+        if ($components === null) {
+            return;
+        }
+
+        /** @var array<string, list<array{name: string, source: string, path: string}>> $references */
+        $references = [];
+
+        foreach ($components as $name => $data) {
+            if (self::isAlias($data)) {
+                continue;
+            }
+
+            $found = [];
+            $walk = function (array $elements, string $path) use (&$walk, &$found, $components): void {
+                foreach ($elements as $index => $element) {
+                    $elementPath = "{$path}/{$index}";
+                    $referenced = $element['name'] ?? null;
+
+                    if (($element['type'] ?? null) === 'component' && is_string($referenced)) {
+                        $target = $components[$referenced] ?? null;
+
+                        if ($target !== null) {
+                            $found[] = [
+                                'name' => $referenced,
+                                'source' => self::isAlias($target) ? $target['extends'] : $referenced,
+                                'path' => $elementPath,
+                            ];
+                        }
+                    }
+
+                    if (isset($element['children'])) {
+                        $walk($element['children'], "{$elementPath}/children");
+                    }
+                }
+            };
+
+            foreach ($data['variants'] as $variantName => $variant) {
+                $walk($variant['elements'], "/components/{$name}/variants/{$variantName}/elements");
+            }
+
+            $references[(string) $name] = $found;
+        }
+
+        // Depth-first search: a reference to a component that is still on the
+        // stack closes a cycle. The depth is bounded by the number of components.
+        $onStack = [];
+        $done = [];
+        $errors = [];
+
+        $visit = function (string $name) use (&$visit, &$onStack, &$done, &$errors, $references): void {
+            $onStack[$name] = true;
+
+            foreach ($references[$name] ?? [] as $reference) {
+                if (isset($onStack[$reference['source']])) {
+                    $errors[] = [
+                        'instancePath' => $reference['path'],
+                        'message' => "references component \"{$reference['name']}\", which leads back to \"{$reference['source']}\" — component cycles are not allowed",
+                    ];
+                } elseif (!isset($done[$reference['source']])) {
+                    $visit($reference['source']);
+                }
+            }
+
+            unset($onStack[$name]);
+            $done[$name] = true;
+        };
+
+        foreach (array_keys($references) as $name) {
+            if (!isset($done[$name])) {
+                $visit((string) $name);
             }
         }
 

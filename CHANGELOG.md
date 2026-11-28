@@ -8,6 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **Core:** A component that renders itself, directly, through other components
+  or through one of its aliases, made the renderer recurse until the stack ran
+  out. JavaScript, Python and Dart threw a stack overflow error, while Go, Rust
+  and PHP before 8.3 could end the whole process. `Style` now rejects such a
+  definition when it loads and names the reference that closes the cycle. C#
+  used to catch the cycle while rendering and threw
+  `CircularComponentReferenceException`. It now rejects the definition at load
+  with `StyleValidationException`, like the other languages.
+
 ## [11.0.0] - 2026-11-25
 
 The first stable release of the 11.x line. Compared to 10.7.0:

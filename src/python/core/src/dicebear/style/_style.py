@@ -35,6 +35,7 @@ class Style:
         self._animation_names: list[str] | None = None
 
         self._validate_aliases()
+        self._validate_component_cycles()
         self._validate_animations()
 
     @classmethod
@@ -202,6 +203,99 @@ class Style:
                         ),
                     }
                 )
+
+        if len(errors) > 0:
+            raise StyleValidationError(errors)
+
+    def _validate_component_cycles(self) -> None:
+        """Verify no component renders itself, directly or through others.
+
+        The renderer registers a variant's ``<defs>`` entry only after its
+        body has rendered, so a cycle would recurse until the stack runs out.
+        A reference to an alias counts as a reference to its source, since the
+        alias renders the source's variants. Unknown names render nothing and
+        close no cycle. Runs after :meth:`_validate_aliases`, so every alias
+        points at a base component here.
+        """
+        components: dict[str, Any] | None = self._data.get("components")
+
+        if components is None:
+            return
+
+        references: dict[str, list[tuple[str, str, str]]] = {}
+
+        for name, data in components.items():
+            if self._is_alias(data):
+                continue
+
+            found: list[tuple[str, str, str]] = []
+
+            def walk(
+                elements: list[dict[str, Any]],
+                path: str,
+                found: list[tuple[str, str, str]] = found,
+            ) -> None:
+                for index, element in enumerate(elements):
+                    element_path = f"{path}/{index}"
+                    referenced = element.get("name")
+
+                    if element.get("type") == "component" and isinstance(
+                        referenced, str
+                    ):
+                        target = components.get(referenced)
+
+                        if target is not None:
+                            source = (
+                                target["extends"]
+                                if self._is_alias(target)
+                                else referenced
+                            )
+                            found.append((referenced, source, element_path))
+
+                    children = element.get("children")
+
+                    if children is not None:
+                        walk(children, f"{element_path}/children", found)
+
+            for variant_name, variant in data["variants"].items():
+                walk(
+                    variant["elements"],
+                    f"/components/{name}/variants/{variant_name}/elements",
+                )
+
+            references[name] = found
+
+        # Depth-first search: a reference to a component that is still on the
+        # stack closes a cycle. The depth is bounded by the number of
+        # components, which the schema caps well below the recursion limit.
+        on_stack: set[str] = set()
+        done: set[str] = set()
+        errors: list[ErrorDetail] = []
+
+        def visit(name: str) -> None:
+            on_stack.add(name)
+
+            for referenced, source, path in references.get(name, []):
+                if source in on_stack:
+                    errors.append(
+                        {
+                            "instancePath": path,
+                            "message": (
+                                f'references component "{referenced}", which '
+                                f'leads back to "{source}" — component cycles '
+                                "are not allowed"
+                            ),
+                        }
+                    )
+                elif source not in done:
+                    visit(source)
+
+            on_stack.discard(name)
+            done.add(name)
+
+        for name in references:
+            if name not in done:
+                visit(name)
 
         if len(errors) > 0:
             raise StyleValidationError(errors)

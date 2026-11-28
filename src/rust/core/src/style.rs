@@ -20,7 +20,7 @@ pub(crate) use component::Component;
 pub(crate) use element::{Animation, AnimationKeyframe, DynValue, Easing, Element};
 pub(crate) use meta::Meta;
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeSet, HashSet};
 
 use indexmap::IndexMap;
 use serde::Deserialize;
@@ -73,6 +73,7 @@ impl Style {
 
         let def: Definition = serde_json::from_value(value)?;
         validate_aliases(def.components.as_ref())?;
+        validate_component_cycles(def.components.as_ref())?;
         validate_animations(&def)?;
 
         let has_animations = has_animations(&def);
@@ -166,6 +167,126 @@ fn validate_aliases(components: Option<&IndexMap<String, RawComponent>>) -> Resu
                 "/components/{name}/extends references alias \"{extends}\" — alias chains are not allowed"
             )),
             Some(RawComponent::Base(_)) => {}
+        }
+    }
+
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(Error::Validation(errors.join("; ")))
+    }
+}
+
+/// Verifies that no component renders itself, directly or through other
+/// components. The renderer registers a variant's `<defs>` entry only after
+/// its body has rendered, so a cycle would recurse until the stack runs out.
+/// A reference to an alias counts as a reference to its source, since the
+/// alias renders the source's variants. Unknown names render nothing and close
+/// no cycle. Runs after `validate_aliases`, so every alias points at a base
+/// component here.
+fn validate_component_cycles(
+    components: Option<&IndexMap<String, RawComponent>>,
+) -> Result<(), Error> {
+    struct Reference<'a> {
+        name: &'a str,
+        source: &'a str,
+        path: String,
+    }
+
+    fn collect<'a>(
+        components: &'a IndexMap<String, RawComponent>,
+        elements: &'a [Element],
+        path: &str,
+        found: &mut Vec<Reference<'a>>,
+    ) {
+        for (index, element) in elements.iter().enumerate() {
+            let element_path = format!("{path}/{index}");
+
+            if element.kind() == "component" {
+                if let Some(name) = element.name() {
+                    let source = match components.get(name) {
+                        Some(RawComponent::Alias { extends }) => Some(extends.as_str()),
+                        Some(RawComponent::Base(_)) => Some(name),
+                        None => None,
+                    };
+
+                    if let Some(source) = source {
+                        found.push(Reference {
+                            name,
+                            source,
+                            path: element_path.clone(),
+                        });
+                    }
+                }
+            }
+
+            collect(
+                components,
+                element.children(),
+                &format!("{element_path}/children"),
+                found,
+            );
+        }
+    }
+
+    // Depth-first search: a reference to a component that is still on the
+    // stack closes a cycle. The depth is bounded by the number of components.
+    fn visit<'a>(
+        name: &'a str,
+        references: &IndexMap<&'a str, Vec<Reference<'a>>>,
+        on_stack: &mut HashSet<&'a str>,
+        done: &mut HashSet<&'a str>,
+        errors: &mut Vec<String>,
+    ) {
+        on_stack.insert(name);
+
+        for reference in references.get(name).map(Vec::as_slice).unwrap_or(&[]) {
+            if on_stack.contains(reference.source) {
+                errors.push(format!(
+                    "{} references component \"{}\", which leads back to \"{}\" — component cycles are not allowed",
+                    reference.path, reference.name, reference.source
+                ));
+            } else if !done.contains(reference.source) {
+                visit(reference.source, references, on_stack, done, errors);
+            }
+        }
+
+        on_stack.remove(name);
+        done.insert(name);
+    }
+
+    let Some(components) = components else {
+        return Ok(());
+    };
+
+    let mut references: IndexMap<&str, Vec<Reference>> = IndexMap::new();
+
+    for (name, component) in components {
+        let RawComponent::Base(data) = component else {
+            continue;
+        };
+
+        let mut found = Vec::new();
+
+        for (variant_name, variant) in data.variants() {
+            collect(
+                components,
+                variant.elements(),
+                &format!("/components/{name}/variants/{variant_name}/elements"),
+                &mut found,
+            );
+        }
+
+        references.insert(name.as_str(), found);
+    }
+
+    let mut on_stack = HashSet::new();
+    let mut done = HashSet::new();
+    let mut errors: Vec<String> = Vec::new();
+
+    for name in references.keys() {
+        if !done.contains(name) {
+            visit(name, &references, &mut on_stack, &mut done, &mut errors);
         }
     }
 

@@ -61,6 +61,10 @@ func New(definitionJSON []byte) (*Style, error) {
 		return nil, err
 	}
 
+	if err := validateComponentCycles(bases, aliases); err != nil {
+		return nil, err
+	}
+
 	if err := validateAnimations(&def.Canvas, bases); err != nil {
 		return nil, err
 	}
@@ -145,6 +149,93 @@ func validateAliases(bases map[string]*componentData, aliases map[string]string)
 			"/components/%s/extends references unknown component \"%s\"",
 			name, target,
 		))
+	}
+
+	if len(details) > 0 {
+		return &errs.ValidationError{Subject: "style definition", Details: details}
+	}
+	return nil
+}
+
+// validateComponentCycles verifies that no component renders itself, directly
+// or through other components. The renderer registers a variant's <defs> entry
+// only after its body has rendered, so a cycle would recurse until the stack
+// runs out. A reference to an alias counts as a reference to its source, since
+// the alias renders the source's variants. Unknown names render nothing and
+// close no cycle. Runs after validateAliases, so every alias points at a base
+// component here.
+func validateComponentCycles(bases map[string]*componentData, aliases map[string]string) error {
+	type reference struct {
+		name, source, path string
+	}
+
+	references := make(map[string][]reference, len(bases))
+
+	for _, name := range sortedKeys(bases) {
+		var found []reference
+
+		var walk func(elements []Element, path string)
+		walk = func(elements []Element, path string) {
+			for i := range elements {
+				el := &elements[i]
+				elementPath := fmt.Sprintf("%s/%d", path, i)
+
+				if el.Type == "component" && el.Name != nil {
+					referenced := *el.Name
+
+					if source, isAlias := aliases[referenced]; isAlias {
+						found = append(found, reference{referenced, source, elementPath})
+					} else if _, isBase := bases[referenced]; isBase {
+						found = append(found, reference{referenced, referenced, elementPath})
+					}
+				}
+
+				if len(el.Children) > 0 {
+					walk(el.Children, elementPath+"/children")
+				}
+			}
+		}
+
+		variants := bases[name].Variants
+		for _, variantName := range sortedKeys(variants) {
+			walk(
+				variants[variantName].Elements,
+				fmt.Sprintf("/components/%s/variants/%s/elements", name, variantName),
+			)
+		}
+
+		references[name] = found
+	}
+
+	// Depth-first search: a reference to a component that is still on the
+	// stack closes a cycle. The depth is bounded by the number of components.
+	onStack := make(map[string]bool)
+	done := make(map[string]bool)
+	var details []string
+
+	var visit func(name string)
+	visit = func(name string) {
+		onStack[name] = true
+
+		for _, ref := range references[name] {
+			if onStack[ref.source] {
+				details = append(details, fmt.Sprintf(
+					"%s references component \"%s\", which leads back to \"%s\" — component cycles are not allowed",
+					ref.path, ref.name, ref.source,
+				))
+			} else if !done[ref.source] {
+				visit(ref.source)
+			}
+		}
+
+		delete(onStack, name)
+		done[name] = true
+	}
+
+	for _, name := range sortedKeys(bases) {
+		if !done[name] {
+			visit(name)
+		}
 	}
 
 	if len(details) > 0 {

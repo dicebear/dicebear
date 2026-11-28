@@ -49,14 +49,14 @@ Build the modules in the order the parity fixtures can check them, and let each
 fixture pass before moving on. The fixtures are described in
 [Testing your implementation](#testing-your-implementation).
 
-| Step | Build                                                  | Passes                                 | Read                                                                                         |
-| ---- | ------------------------------------------------------ | -------------------------------------- | -------------------------------------------------------------------------------------------- |
-| 1    | `Fnv1a` and `Mulberry32`                               | `fnv1a.json`, `mulberry32.json`        | [PRNG contract](#prng-contract)                                                              |
-| 2    | The `Prng` methods and number formatting               | `prng.json`, `numbers.json`            | [Selection methods](#selection-methods), [Number formatting](#number-formatting)             |
-| 3    | `Style`: schema validation, aliases, animations        | `validation.json`                      | [Definition schema](/create-styles/definition-schema/), [Loading a style](#loading-a-style)  |
-| 4    | The `Color` helpers                                    | `colors.json`                          | [Color options](#color-options)                                                              |
-| 5    | `Initials`                                             | `initials.json`                        | [Initials extraction](#initials-extraction)                                                  |
-| 6    | `Options`, `Resolver`, `Renderer`, `OptionsDescriptor` | `avatars/*.json`, `descriptors/*.json` | [Options resolution](#options-resolution), [SVG rendering pipeline](#svg-rendering-pipeline) |
+| Step | Build                                                   | Passes                                 | Read                                                                                         |
+| ---- | ------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 1    | `Fnv1a` and `Mulberry32`                                | `fnv1a.json`, `mulberry32.json`        | [PRNG contract](#prng-contract)                                                              |
+| 2    | The `Prng` methods and number formatting                | `prng.json`, `numbers.json`            | [Selection methods](#selection-methods), [Number formatting](#number-formatting)             |
+| 3    | `Style`: schema validation, aliases, cycles, animations | `validation.json`                      | [Definition schema](/create-styles/definition-schema/), [Loading a style](#loading-a-style)  |
+| 4    | The `Color` helpers                                     | `colors.json`                          | [Color options](#color-options)                                                              |
+| 5    | `Initials`                                              | `initials.json`                        | [Initials extraction](#initials-extraction)                                                  |
+| 6    | `Options`, `Resolver`, `Renderer`, `OptionsDescriptor`  | `avatars/*.json`, `descriptors/*.json` | [Options resolution](#options-resolution), [SVG rendering pipeline](#svg-rendering-pipeline) |
 
 Steps 1 to 5 are pure functions with small inputs, and most parity bugs sit
 there. Step 6 composes everything: start with the `initials` style, which has
@@ -315,7 +315,7 @@ which creates a fresh PRNG for each key.
 ## Loading a style
 
 `Style` checks a definition once, when it is constructed, and every avatar
-rendered from it relies on that. Three checks run:
+rendered from it relies on that. Four checks run:
 
 1. The definition must pass `definition.json` from the
    [schema package](/create-styles/definition-schema/#schema-package), a JSON
@@ -323,7 +323,14 @@ rendered from it relies on that. Three checks run:
 2. Every component alias must point to a component in the same `components` map
    that is not an alias itself. The schema cannot relate sibling keys, so this
    check lives in the core.
-3. Every animation track must list its keyframes in strictly ascending `at`
+3. No component may render itself, directly or through other components. A
+   component reference inside a variant points at the referenced component, or
+   at its source when the name is an alias. A reference to an unknown name
+   renders nothing and closes no cycle. The check covers every component, also
+   those the canvas never reaches. Without it the renderer recurses until the
+   stack runs out, because a variant's `<defs>` entry is registered only after
+   its body has rendered.
+4. Every animation track must list its keyframes in strictly ascending `at`
    order (see [Validation](#validation) under animation rendering).
 
 The user options pass `options.json` when the `Avatar` is constructed. Circular
@@ -340,7 +347,7 @@ the newline ends up in the SVG. The `validation.json` fixture pins these cases.
 
 The JavaScript package also exports `@dicebear/core/lite`, which skips both
 schema validations. It is meant for definitions and options that come from your
-own code. The alias and keyframe checks still run there.
+own code. The alias, cycle and keyframe checks still run there.
 
 ## Options resolution
 
